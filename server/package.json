@@ -1,0 +1,39 @@
+{
+  "name": "melosys-skjema-web-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc && node dist/index.js",
+    "start": "node dist/index.js",
+    "lint:tsc": "tsc --noemit",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  },
+  "author": "NAV",
+  "license": "MIT",
+  "dependencies": {
+    "@navikt/nav-dekoratoren-moduler": "3.4.0",
+    "@navikt/oasis": "3.8.0",
+    "@navikt/vite-mode": "0.13.6",
+    "express": "5.1.0",
+    "http-proxy-middleware": "3.0.5",
+    "morgan": "1.10.1",
+    "winston": "3.17.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.33.0",
+    "@types/express": "5.0.3",
+    "@types/morgan": "1.9.10",
+    "eslint": "9.33.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.4",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "eslint-plugin-unicorn": "60.0.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.2",
+    "typescript-eslint": "8.40.0"
+  }
+}
