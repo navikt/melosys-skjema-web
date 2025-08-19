@@ -1,0 +1,107 @@
+name: 'deploy'
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/workflows/deploy.yaml'
+      - 'app/**'
+      -  'server/**'
+      - '.nais/**'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: apps
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build:
+    name: "Build app and push docker image to GAR"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for changes in files
+        id: changed-files
+        uses: nais/what-changed@main # https://github.com/nais/what-changed
+        with:
+          files: .nais/apps/**
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: https://npm.pkg.github.com/
+          scope: '@navikt'
+
+      - name: Install app dependencies
+        working-directory: app
+        run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+      - name: Build app
+        working-directory: app
+        run: npm run build
+
+      - name: Copy app dist into public directory of server
+        working-directory: app
+        run: cp -r dist/ ../server/public
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+      - name: Build server
+        working-directory: server
+        run: npm run build
+
+      - name: Build and push Docker image
+        uses: nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: teammelosys
+          image_suffix: orgenhet-kostnadssted-mapping-web
+          docker_context: server
+          dockerfile: server/Dockerfile
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+    outputs:
+      image: ${{ steps.docker-push.outputs.image }}
+
+  deploy-dev:
+    name: Deploy dev-gcp
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yaml
+          WORKLOAD_IMAGE: ${{needs.build.outputs.image}}
+          VARS: .nais/vars-dev.yaml
+
+#  deploy-prod:
+#    name: Deploy prod-gcp
+#    needs: build
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: nais/deploy/actions/deploy@v2
+#        env:
+#          CLUSTER: prod-gcp
+#          RESOURCE: .nais/nais.yaml
+#          VARS: .nais/vars-prod.yaml
+#          WORKLOAD_IMAGE: ${{needs.build.outputs.image}}
