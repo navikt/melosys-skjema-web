@@ -1,4 +1,4 @@
-# Melosys Skjema
+# Melosys Skjema Web
 
 Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 
