@@ -1,32 +1,55 @@
-# Melosys Skjema - Frontend
+# Melosys Skjema
 
-React-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
+Fullstack-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 
 ## Tech Stack
 
+### Frontend (app/)
 - React 19.x
 - TypeScript 5.8.x  
 - TanStack Router 1.130.x
 - Vite 7.x
 
+### Backend (server/)
+- Express 5.x
+- TypeScript 5.9.x
+- Node.js ESModules
+- NAV Oasis & Vite-mode
+
 ## Utvikling
 
 ### Oppstart
 
+**Frontend:**
 ```bash
 cd app
 npm install
 npm run dev
 ```
-
 Åpne http://localhost:5173
+
+**Server:**
+```bash
+docker-compose up -d --build
+```
+Server på http://localhost:8081
 
 ### Kommandoer
 
+**Frontend (app/):**
 ```bash
 npm run dev          # Start dev server
 npm run build        # Bygg for produksjon
 npm run preview      # Forhåndsvis produksjonsbygg
+npm run lint         # Kjør ESLint
+npm run lint:fix     # Fiks ESLint-feil
+```
+
+**Server (server/):**
+```bash
+npm run build        # Bygg TypeScript
+docker-compose up -d --build  # Bygg og start server
+npm run start        # Start bygget server
 npm run lint         # Kjør ESLint
 npm run lint:fix     # Fiks ESLint-feil
 ```
@@ -45,7 +68,17 @@ app/                 # Frontend-applikasjon
 ├── package.json
 ├── vite.config.ts
 └── tsconfig.json
-server/              # Server (kommer senere)
+server/              # Express server
+├── src/
+│   ├── config.ts    # Environment config
+│   ├── server.ts    # Express app setup
+│   └── index.ts     # Server startup
+├── .env             # Environment variables
+├── package.json
+├── tsconfig.json
+├── eslint.config.mjs
+└── .prettierrc.json
+docker-compose.yml   # Docker setup
 ```
 
 ## Kodestandarder
