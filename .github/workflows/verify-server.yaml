@@ -1,0 +1,37 @@
+name: "verify: bff"
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    paths:
+      - 'server/**'
+      - '.github/*/verify-server.yaml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify there are no lint or typescript errors
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: https://npm.pkg.github.com/
+          scope: '@navikt'
+      - name: Install dependencies
+        working-directory: server
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+      - name: Run ESLint
+        working-directory: server
+        run: npm run lint
+
+      - name: Check for typescript errors
+        working-directory: server
+        run: npm run check-types
