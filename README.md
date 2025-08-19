@@ -1,6 +1,6 @@
 # Melosys Skjema
 
-Fullstack-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
+Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 
 ## Tech Stack
 
