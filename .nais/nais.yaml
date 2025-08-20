@@ -40,6 +40,11 @@ spec:
       locale: nb
   tokenx:
     enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: nav-dekoratoren
+          namespace: personbruker
   prometheus:
     enabled: true
     path: internal/prometheus
