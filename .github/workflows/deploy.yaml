@@ -68,6 +68,7 @@ jobs:
 
       - name: Build and push Docker image
         uses: nais/docker-build-push@v0
+        if: steps.changed-files.outputs.changed != 'only-inputs'
         id: docker-push
         with:
           team: teammelosys
