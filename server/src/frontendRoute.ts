@@ -28,7 +28,7 @@ const csp = await buildCspHeader(
   { env: config.app.env },
 );
 
-const dekoratørProps = {
+const decoratorProps = {
   env: config.app.env,
   params: {
     context: "privatperson",
@@ -45,6 +45,8 @@ export function setupStaticRoutes(router: Router) {
     limit: 900,
   });
 
+  console.log("Setter csp");
+
   router.use((request, response, next) => {
     response.setHeader("Content-Security-Policy", csp);
     return next();
@@ -60,10 +62,16 @@ export function setupStaticRoutes(router: Router) {
 
   // Fra Express 5 er wildcard ruten erstattet med *splat: https://expressjs.com/en/guide/migrating-5.html
   router.get("*splat", async (request, response) => {
+    console.log("Henter dekorator");
+
     const html = await injectDecoratorServerSide({
       filePath: spaFilePath,
-      ...dekoratørProps,
+      ...decoratorProps,
     });
+
+    console.log("Sender dekorator");
+
+    console.log(html);
 
     return response.sendFile(html);
   });
