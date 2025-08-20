@@ -9,10 +9,12 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.set("trust proxy", 1);
-
 setupActuators(app);
 
-setupStaticRoutes(app);
+const protectedRouter = express.Router();
+app.set("trust proxy", 1);
+
+// Catch all route, må være sist
+setupStaticRoutes(protectedRouter);
 
 export default app;
