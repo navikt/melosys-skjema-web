@@ -1,0 +1,10 @@
+{
+  "ingresses": [
+    "https://melosys-skjema-web.intern.dev.nav.no/fp-im-dialog"
+  ],
+  "minReplicas": "1",
+  "maxReplicas": "2",
+  "API_SCOPE": "replace-me",
+  "API_URL": "replace-me",
+  "ENV": "dev"
+}

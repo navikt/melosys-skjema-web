@@ -1,5 +1,7 @@
 import express from "express";
 
+import { setupActuators } from "./actuators.js";
+
 const app = express();
 
 // Restricts the server to only accept UTF-8 encoding of bodies
@@ -8,10 +10,7 @@ app.use(express.json());
 
 app.set("trust proxy", 1);
 
-// Basic health check endpoint
-app.get("/health", (req, res) => {
-  res.json({ status: "OK" });
-});
+setupActuators(app);
 
 // Basic route
 app.get("/", (req, res) => {

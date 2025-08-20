@@ -77,8 +77,8 @@ server/              # Express server
 ├── package.json
 ├── tsconfig.json
 ├── eslint.config.mjs
-└── .prettierrc.json
-docker-compose.yml   # Docker setup
+├── .prettierrc.json
+└── docker-compose.yml   # Docker setup
 ```
 
 ## Kodestandarder
