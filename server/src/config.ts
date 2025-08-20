@@ -15,7 +15,6 @@ const proxy = {
 
 const app = {
   env: requireEnvironment("ENV") as "dev" | "prod",
-  nestedPath: requireEnvironment("NESTED_PATH"),
   host: requireEnvironment("EXPRESS_HOST"),
   port: Number(requireEnvironment("EXPRESS_PORT")),
 };
