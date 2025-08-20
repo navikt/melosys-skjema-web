@@ -31,7 +31,7 @@ const csp = await buildCspHeader(
 const dekoratørProps = {
   env: config.app.env,
   params: {
-    context: "arbeidsgiver",
+    context: "privatperson",
     simple: false,
     logoutWarning: true,
     chatbot: false,
