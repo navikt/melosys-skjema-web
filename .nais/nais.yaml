@@ -31,6 +31,15 @@ spec:
     initialDelay: 10
     periodSeconds: 5
     failureThreshold: 30
+  idporten:
+    enabled: true
+    sidecar:
+      autoLogin: true
+      enabled: true
+      level: idporten-loa-high
+      locale: nb
+  tokenx:
+    enabled: true
   prometheus:
     enabled: true
     path: internal/prometheus
