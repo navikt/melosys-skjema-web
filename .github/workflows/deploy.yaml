@@ -71,7 +71,7 @@ jobs:
         id: docker-push
         with:
           team: teammelosys
-          image_suffix: orgenhet-kostnadssted-mapping-web
+          image_suffix: melosys-skjema-web
           docker_context: server
           dockerfile: server/Dockerfile
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
