@@ -61,7 +61,7 @@ export function setupStaticRoutes(router: Router) {
   const spaFilePath = path.resolve("./public", "index.html");
 
   // Fra Express 5 er wildcard ruten erstattet med *splat: https://expressjs.com/en/guide/migrating-5.html
-  router.get("*splat", async (request, response) => {
+  router.get("/*splat", async (request, response) => {
     console.log("Henter dekorator");
 
     const html = await injectDecoratorServerSide({
