@@ -90,7 +90,7 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yaml
           WORKLOAD_IMAGE: ${{needs.build.outputs.image}}
-          VARS: .nais/vars-dev.yaml
+          VARS: .nais/vars-dev.json
 
 #  deploy-prod:
 #    name: Deploy prod-gcp
@@ -103,5 +103,5 @@ jobs:
 #        env:
 #          CLUSTER: prod-gcp
 #          RESOURCE: .nais/nais.yaml
-#          VARS: .nais/vars-prod.yaml
+#          VARS: .nais/vars-prod.json
 #          WORKLOAD_IMAGE: ${{needs.build.outputs.image}}
