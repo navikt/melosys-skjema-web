@@ -1,6 +1,7 @@
 import express from "express";
 
 import { setupActuators } from "./actuators.js";
+import { setupStaticRoutes } from "./frontendRoute.js";
 
 const app = express();
 
@@ -12,9 +13,6 @@ app.set("trust proxy", 1);
 
 setupActuators(app);
 
-// Basic route
-app.get("/", (req, res) => {
-  res.json({ message: "Melosys Skjema Server" });
-});
+setupStaticRoutes(app);
 
 export default app;
