@@ -17,4 +17,6 @@ app.set("trust proxy", 1);
 // Catch all route, må være sist
 setupStaticRoutes(protectedRouter);
 
+app.use(protectedRouter);
+
 export default app;
