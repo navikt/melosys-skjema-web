@@ -9,6 +9,7 @@ import express, { Router } from "express";
 import rateLimit from "express-rate-limit";
 
 import config from "./config.js";
+import logger from "./logger.js";
 
 const csp = await buildCspHeader(
   config.app.env === "prod"
@@ -45,7 +46,7 @@ export function setupStaticRoutes(router: Router) {
     limit: 900,
   });
 
-  console.log("Setter csp");
+  logger.info("Setter csp");
 
   router.use((request, response, next) => {
     response.setHeader("Content-Security-Policy", csp);
@@ -62,16 +63,16 @@ export function setupStaticRoutes(router: Router) {
 
   // Fra Express 5 er wildcard ruten erstattet med *splat: https://expressjs.com/en/guide/migrating-5.html
   router.get("/*splat", async (request, response) => {
-    console.log("Henter dekorator");
+    logger.info("Henter dekorator");
 
     const html = await injectDecoratorServerSide({
       filePath: spaFilePath,
       ...decoratorProps,
     });
 
-    console.log("Sender dekorator");
+    logger.info("Sender dekorator");
 
-    console.log(html);
+    logger.info(html);
 
     return response.send(html);
   });
