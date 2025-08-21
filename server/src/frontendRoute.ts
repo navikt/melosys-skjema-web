@@ -33,7 +33,6 @@ const decoratorProps = {
   env: config.app.env,
   params: {
     context: "privatperson",
-    simple: true,
     logoutWarning: true,
     chatbot: false,
   },
