@@ -20,7 +20,7 @@ app.set("trust proxy", 1);
 // Catch all route, må være sist
 setupStaticRoutes(protectedRouter);
 
-app.use(protectedRouter);
+app.use("/skjema", protectedRouter);
 
 app.use(errorHandling);
 
