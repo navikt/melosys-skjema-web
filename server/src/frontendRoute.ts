@@ -73,6 +73,6 @@ export function setupStaticRoutes(router: Router) {
 
     console.log(html);
 
-    return response.sendFile(html);
+    return response.send(html);
   });
 }
