@@ -70,9 +70,7 @@ export function setupStaticRoutes(router: Router) {
       ...decoratorProps,
     });
 
-    logger.info("Sender dekorator");
-
-    logger.info(html);
+    logger.info("Dekorator hentet");
 
     return response.send(html);
   });
