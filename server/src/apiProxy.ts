@@ -13,7 +13,7 @@ type ProxyOptions = {
 
 export const setupApiProxy = (router: Router) =>
   addProxyHandler(router, {
-    ingoingUrl: "/server",
+    ingoingUrl: "/api",
     outgoingUrl: config.proxy.apiUrl,
     scope: config.proxy.apiScope,
   });
