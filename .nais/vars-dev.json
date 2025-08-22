@@ -4,7 +4,7 @@
   ],
   "minReplicas": "1",
   "maxReplicas": "2",
-  "API_SCOPE": "replace-me",
-  "API_URL": "replace-me",
+  "API_SCOPE": "dev-gcp:teammelosys:melosys-skjema-api",
+  "API_URL": "http://melosys-skjema-api",
   "ENV": "dev"
 }
