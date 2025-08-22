@@ -75,8 +75,7 @@ export function setupStaticRoutes(router: Router) {
     const viteModeHtml = response.viteModeHtml;
 
     if (viteModeHtml) {
-      response.send(await injectViteModeHtml(viteModeHtml));
-      return;
+      return response.send(await injectViteModeHtml(viteModeHtml));
     }
 
     logger.info("Henter dekorator");
