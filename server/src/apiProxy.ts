@@ -53,7 +53,7 @@ function addProxyHandler(
             proxyRequest.setHeader("Authorization", `Bearer ${obo}`);
           } else {
             logger.warning(
-              `Access token var not present in session for scope ${scope}`,
+              `Access token was not present in session for scope ${scope}`,
             );
           }
         },
