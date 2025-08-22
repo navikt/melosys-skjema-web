@@ -1,3 +1,5 @@
+import { ClientRequest } from "node:http";
+
 import { getToken, requestOboToken } from "@navikt/oasis";
 import { NextFunction, Request, Response, Router } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -24,40 +26,55 @@ function addProxyHandler(
 ) {
   router.use(
     ingoingUrl,
-    async (request: Request, response: Response, next: NextFunction) => {
-      const token = getToken(request);
-      if (!token) {
-        response.status(401).send();
-        return;
-      }
-      const obo = await requestOboToken(token, scope);
-      if (obo.ok) {
-        request.headers["obo-token"] = obo.token;
-        return next();
-      } else {
-        logger.error("OBO-veksling feilet", obo.error);
-        response.status(403).send();
-        return;
-      }
-    },
+    async (request: Request, response: Response, next: NextFunction) =>
+      exchangeOboTokenAndStoreInHeader(request, response, next, scope),
     createProxyMiddleware({
       target: outgoingUrl,
       changeOrigin: true,
       logger: logger,
       on: {
-        proxyReq: (proxyRequest, request) => {
-          const obo = request.headers["obo-token"];
-          if (obo) {
-            proxyRequest.removeHeader("obo-token");
-            proxyRequest.removeHeader("cookie");
-            proxyRequest.setHeader("Authorization", `Bearer ${obo}`);
-          } else {
-            logger.warning(
-              `Access token was not present in session for scope ${scope}`,
-            );
-          }
-        },
+        proxyReq: (proxyRequest, request) =>
+          addOboTokenToProxyRequest(proxyRequest, request, scope),
       },
     }),
   );
+}
+
+async function exchangeOboTokenAndStoreInHeader(
+  request: Request,
+  response: Response,
+  next: NextFunction,
+  scope: string,
+) {
+  const token = getToken(request);
+  if (!token) {
+    response.status(401).send();
+    return;
+  }
+  const obo = await requestOboToken(token, scope);
+  if (obo.ok) {
+    request.headers["obo-token"] = obo.token;
+    return next();
+  } else {
+    logger.error("OBO-veksling feilet", obo.error);
+    response.status(403).send();
+    return;
+  }
+}
+
+function addOboTokenToProxyRequest(
+  proxyRequest: ClientRequest,
+  requestWithOboToken: Request,
+  scope: string,
+) {
+  const obo = requestWithOboToken.headers["obo-token"];
+  if (obo) {
+    proxyRequest.removeHeader("obo-token");
+    proxyRequest.removeHeader("cookie");
+    proxyRequest.setHeader("Authorization", `Bearer ${obo}`);
+  } else {
+    logger.warning(
+      `Access token was not present in session for scope ${scope}`,
+    );
+  }
 }
