@@ -3,8 +3,10 @@ import path from "node:path";
 import { DecoratorFetchProps } from "@navikt/nav-dekoratoren-moduler";
 import {
   buildCspHeader,
+  fetchDecoratorHtml,
   injectDecoratorServerSide,
 } from "@navikt/nav-dekoratoren-moduler/ssr/index.js";
+import { addViteModeHtmlToResponse } from "@navikt/vite-mode";
 import express, { Router } from "express";
 import rateLimit from "express-rate-limit";
 
@@ -57,11 +59,26 @@ export function setupStaticRoutes(router: Router) {
 
   router.use(express.static("./public", { index: false }));
 
+  // Only add vite-mode to dev environment
+  if (config.app.env === "dev") {
+    addViteModeHtmlToResponse(router, {
+      port: "5173",
+      useNonce: false,
+    });
+  }
+
   // Når appen er deployet, kopieres det bygde frontend-innholdet til public-mappen. Hvis BFF kjøres lokalt, vil ikke denne mappen eksistere.
   const spaFilePath = path.resolve("./public", "index.html");
 
   // Fra Express 5 er wildcard ruten erstattet med *splat: https://expressjs.com/en/guide/migrating-5.html
   router.get("*splat", async (request, response) => {
+    const viteModeHtml = response.viteModeHtml;
+
+    if (viteModeHtml) {
+      response.send(await injectViteModeHtml(viteModeHtml));
+      return;
+    }
+
     logger.info("Henter dekorator");
 
     const html = await injectDecoratorServerSide({
@@ -73,4 +90,21 @@ export function setupStaticRoutes(router: Router) {
 
     return response.send(html);
   });
+}
+
+async function injectViteModeHtml(html: string) {
+  const {
+    DECORATOR_HEADER,
+    DECORATOR_HEAD_ASSETS,
+    DECORATOR_SCRIPTS,
+    DECORATOR_FOOTER,
+  } = await fetchDecoratorHtml(decoratorProps);
+
+  return [
+    DECORATOR_HEADER,
+    DECORATOR_HEAD_ASSETS,
+    DECORATOR_SCRIPTS,
+    html,
+    DECORATOR_FOOTER,
+  ].join("");
 }
