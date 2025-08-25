@@ -37,6 +37,11 @@ const decoratorProps = {
     context: "privatperson",
     logoutWarning: true,
     chatbot: false,
+    language: "nb",
+    availableLanguages: [
+      { locale: "nb", handleInApp: true },
+      { locale: "en", handleInApp: true },
+    ],
   },
 } satisfies DecoratorFetchProps;
 
