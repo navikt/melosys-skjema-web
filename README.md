@@ -38,6 +38,35 @@ docker-compose up -d --build
 ```
 Server på http://localhost:8081
 
+### Lokal utvikling mot ekte backend i dev-gcp
+
+1. Start react app:
+   ```bash
+   cd app
+   npm run dev
+   ```
+
+2. Åpne url i nettleser:
+   https://melosys-skjema-web.intern.dev.nav.no/vite-on
+
+### Lokal utvikling mot lokal server
+
+Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api) kjører lokalt på http://localhost:8089 og at mock-oauth2-server i [melosys-docker-compose](https://github.com/navikt/melosys-docker-compose) kjører.
+1. Start express-server:
+   Lag en `.env`-fil i `server/` med innhold fra: https://github.com/nais/wonderwalled/blob/master/wonderwalled-idporten/local.env
+   ```bash
+   cd server
+   docker-compose up -d --build
+   ```
+
+2. Start react app (Dersom appen ikke kjører på port 5173 så vil det ikke fungere. Skulle det være tilfellet så har du mest sannsynlig en annen react app som kjører på samme port):
+   ```bash
+    cd app
+    npm run dev
+    ```
+3. Åpne url i nettleser:
+   http://localhost:4000/vite-on
+
 ### Kommandoer
 
 **Frontend (app/):**
