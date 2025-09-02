@@ -26,8 +26,11 @@ function addProxyHandler(
 ) {
   router.use(
     ingoingUrl,
-    async (request: Request, response: Response, next: NextFunction) =>
-      exchangeOboTokenAndStoreInHeader(request, response, next, scope),
+    async (request: Request, response: Response, next: NextFunction) => {
+      logger.debug(`Inngående request url ${ingoingUrl}`);
+      logger.debug(`Utgående request url ${outgoingUrl}`);
+      exchangeOboTokenAndStoreInHeader(request, response, next, scope);
+    },
     createProxyMiddleware({
       target: outgoingUrl,
       changeOrigin: true,
@@ -54,6 +57,7 @@ async function exchangeOboTokenAndStoreInHeader(
   const obo = await requestOboToken(token, scope);
   if (obo.ok) {
     request.headers["obo-token"] = obo.token;
+    logger.debug("OBO-veksling vellykket");
     return next();
   } else {
     logger.error("OBO-veksling feilet", obo.error);
@@ -72,6 +76,7 @@ function addOboTokenToProxyRequest(
     proxyRequest.removeHeader("obo-token");
     proxyRequest.removeHeader("cookie");
     proxyRequest.setHeader("Authorization", `Bearer ${obo}`);
+    logger.debug("OBO-token lagt til i proxy-request");
   } else {
     logger.warning(
       `Access token was not present in session for scope ${scope}`,
