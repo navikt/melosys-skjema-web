@@ -34,9 +34,6 @@ export function RollevelgerPage() {
           href="/arbeidsgiver"
           icon={<Buildings3Icon aria-hidden />}
           key={index}
-          onSelectRole={() => {
-            sessionStorage.setItem("selectedRole", altinnTilgang.orgnr);
-          }}
           title={altinnTilgang.navn}
         />
       ))}
@@ -50,22 +47,15 @@ function VelgRolleCard({
   description,
   href,
   icon,
-  onSelectRole,
 }: {
   className?: string;
   title: string;
   description: string;
   href: string;
   icon: React.ReactNode;
-  onSelectRole?: () => void;
 }) {
   return (
-    <LinkCard
-      className={className}
-      onClick={() => {
-        onSelectRole?.();
-      }}
-    >
+    <LinkCard className={className} onClick={() => {}}>
       <Box
         asChild
         borderRadius="12"
