@@ -9,12 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RollevelgerRouteImport } from './routes/rollevelger'
 import { Route as ArbeidstakerRouteImport } from './routes/arbeidstaker'
+import { Route as ArbeidsgiverRouteImport } from './routes/arbeidsgiver'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RollevelgerRoute = RollevelgerRouteImport.update({
+  id: '/rollevelger',
+  path: '/rollevelger',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArbeidstakerRoute = ArbeidstakerRouteImport.update({
   id: '/arbeidstaker',
   path: '/arbeidstaker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArbeidsgiverRoute = ArbeidsgiverRouteImport.update({
+  id: '/arbeidsgiver',
+  path: '/arbeidsgiver',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,37 +37,59 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/arbeidsgiver': typeof ArbeidsgiverRoute
   '/arbeidstaker': typeof ArbeidstakerRoute
+  '/rollevelger': typeof RollevelgerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/arbeidsgiver': typeof ArbeidsgiverRoute
   '/arbeidstaker': typeof ArbeidstakerRoute
+  '/rollevelger': typeof RollevelgerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/arbeidsgiver': typeof ArbeidsgiverRoute
   '/arbeidstaker': typeof ArbeidstakerRoute
+  '/rollevelger': typeof RollevelgerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/arbeidstaker'
+  fullPaths: '/' | '/arbeidsgiver' | '/arbeidstaker' | '/rollevelger'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/arbeidstaker'
-  id: '__root__' | '/' | '/arbeidstaker'
+  to: '/' | '/arbeidsgiver' | '/arbeidstaker' | '/rollevelger'
+  id: '__root__' | '/' | '/arbeidsgiver' | '/arbeidstaker' | '/rollevelger'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArbeidsgiverRoute: typeof ArbeidsgiverRoute
   ArbeidstakerRoute: typeof ArbeidstakerRoute
+  RollevelgerRoute: typeof RollevelgerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rollevelger': {
+      id: '/rollevelger'
+      path: '/rollevelger'
+      fullPath: '/rollevelger'
+      preLoaderRoute: typeof RollevelgerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/arbeidstaker': {
       id: '/arbeidstaker'
       path: '/arbeidstaker'
       fullPath: '/arbeidstaker'
       preLoaderRoute: typeof ArbeidstakerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arbeidsgiver': {
+      id: '/arbeidsgiver'
+      path: '/arbeidsgiver'
+      fullPath: '/arbeidsgiver'
+      preLoaderRoute: typeof ArbeidsgiverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,7 +104,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArbeidsgiverRoute: ArbeidsgiverRoute,
   ArbeidstakerRoute: ArbeidstakerRoute,
+  RollevelgerRoute: RollevelgerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
