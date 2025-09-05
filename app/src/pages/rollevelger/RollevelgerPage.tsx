@@ -25,6 +25,9 @@ export function RollevelgerPage() {
         description="Deg selv"
         href="/arbeidstaker"
         icon={<PersonIcon aria-hidden />}
+        onSelectRole={() => {
+          sessionStorage.setItem("selectedRole", "12039819284");
+        }}
         title="Navn Navnesen"
       />
       {altinnTilganger?.map((altinnTilgang, index) => (
@@ -34,6 +37,9 @@ export function RollevelgerPage() {
           href="/arbeidsgiver"
           icon={<Buildings3Icon aria-hidden />}
           key={index}
+          onSelectRole={() => {
+            sessionStorage.setItem("selectedRole", altinnTilgang.orgnr);
+          }}
           title={altinnTilgang.navn}
         />
       ))}
@@ -47,15 +53,22 @@ function VelgRolleCard({
   description,
   href,
   icon,
+  onSelectRole,
 }: {
   className?: string;
   title: string;
   description: string;
   href: string;
   icon: React.ReactNode;
+  onSelectRole?: () => void;
 }) {
   return (
-    <LinkCard className={className} onClick={() => {}}>
+    <LinkCard
+      className={className}
+      onClick={() => {
+        onSelectRole?.();
+      }}
+    >
       <Box
         asChild
         borderRadius="12"
