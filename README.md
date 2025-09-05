@@ -76,7 +76,24 @@ npm run build        # Bygg for produksjon
 npm run preview      # Forhåndsvis produksjonsbygg
 npm run lint         # Kjør ESLint
 npm run lint:fix     # Fiks ESLint-feil
+npm run generate-types # Generer TypeScript-typer fra API
 ```
+
+### Typegenerering
+
+Applikasjonen bruker automatisk genererte TypeScript-typer fra API-et:
+
+```bash
+cd app
+npm run generate-types
+```
+
+Dette kommandoen:
+- Henter OpenAPI-spesifikasjonen fra melosys-skjema-api
+- Genererer kun modell-typer (ikke API-kall)
+- Lagrer typene i `./src/types/apiTypes.ts`
+
+Kjør denne kommandoen når API-et har nye eller endrede datamodeller.
 
 **Server (server/):**
 ```bash
