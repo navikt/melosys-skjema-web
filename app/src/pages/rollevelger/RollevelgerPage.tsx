@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { listAltinnTilganger } from "~/api/queries.ts";
 
+const VALGT_ROLLE_KEY = "valgtRolle";
+
 export function RollevelgerPage() {
   const altinnTilgangerQuery = useQuery(listAltinnTilganger());
 
@@ -35,7 +37,10 @@ export function RollevelgerPage() {
           icon={<Buildings3Icon aria-hidden />}
           key={index}
           onSelectRole={() => {
-            sessionStorage.setItem("selectedRole", altinnTilgang.orgnr);
+            sessionStorage.setItem(
+              VALGT_ROLLE_KEY,
+              JSON.stringify(altinnTilgang),
+            );
           }}
           title={altinnTilgang.navn}
         />
