@@ -10,10 +10,12 @@ import { routeTree } from "./routeTree.gen";
 export const queryClient = new QueryClient();
 
 const router = createRouter({
+  scrollRestoration: true,
   routeTree,
   context: {
     queryClient,
   },
+  defaultPreload: "intent",
 });
 
 declare module "@tanstack/react-router" {
