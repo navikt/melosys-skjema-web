@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { listAltinnTilganger } from "~/api/queries.ts";
 
-const VALGT_ROLLE_KEY = "valgtRolle";
+export const VALGT_ROLLE_KEY = "valgtRolle";
 
 export function RollevelgerPage() {
   const altinnTilgangerQuery = useQuery(listAltinnTilganger());
@@ -21,11 +21,11 @@ export function RollevelgerPage() {
 
   return (
     <Page.Block>
-      <Heading size="large">Hvem vil du å fylle ut skjema på vegne av?</Heading>
+      <Heading size="large">Hvem vil du fylle ut skjema på vegne av?</Heading>
       <VelgRolleCard
         className="mt-4"
         description="Deg selv"
-        href="/arbeidstaker"
+        href="/skjema"
         icon={<PersonIcon aria-hidden />}
         title="Navn Navnesen"
       />
@@ -33,7 +33,7 @@ export function RollevelgerPage() {
         <VelgRolleCard
           className="mt-2"
           description={`Org.nr.: ${altinnTilgang.orgnr}`}
-          href="/arbeidsgiver"
+          href="/skjema"
           icon={<Buildings3Icon aria-hidden />}
           key={index}
           onSelectRole={() => {

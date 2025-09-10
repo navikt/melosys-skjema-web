@@ -12,15 +12,27 @@ import {
   Page,
   VStack,
 } from "@navikt/ds-react";
+import { useNavigate } from "@tanstack/react-router";
 
-export function ArbeidstakerPage() {
+import { OrganisasjonDto } from "~/types/apiTypes.ts";
+
+export function Skjema() {
+  const navigate = useNavigate();
+  const organisasjonData = sessionStorage.getItem("valgtRolle");
+
+  const organisasjon: OrganisasjonDto | undefined = organisasjonData
+    ? JSON.parse(organisasjonData)
+    : undefined;
+
+  const navn = organisasjon?.navn || "Navn Navnesen";
+
   return (
     <Page>
       <Page.Block gutters width="text">
         <VStack as="main" gap="8">
           <GuidePanel poster>
             <Heading level="2" size="medium" spacing>
-              Hei, [Navn Navnesen]!
+              Hei, {navn}
             </Heading>
             <BodyLong spacing>
               Seksjonen GuidePanel brukes til en kort, overordnet veiledning til
@@ -157,6 +169,9 @@ export function ArbeidstakerPage() {
             <Button
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
+              onClick={() => {
+                navigate({ to: "/skjema/veiledning" });
+              }}
               variant="primary"
             >
               Start søknad
@@ -164,29 +179,6 @@ export function ArbeidstakerPage() {
           </div>
         </VStack>
       </Page.Block>
-      <Env
-        languages={[
-          { locale: "nb", url: "https://www.nav.no" },
-          { locale: "en", url: "https://www.nav.no/en" },
-        ]}
-      />
     </Page>
-  );
-}
-
-const MILJO_URL = "https://www.nav.no/dekoratoren";
-
-function Env({ languages }: { languages?: { locale: string; url: string }[] }) {
-  return (
-    <div
-      data-src={`${MILJO_URL}/env?context=privatperson&simple=true${
-        languages
-          ? `&availableLanguages=[${languages
-              .map((language) => JSON.stringify(language))
-              .join(",")}]`
-          : ""
-      }`}
-      id="decorator-env"
-    />
   );
 }
