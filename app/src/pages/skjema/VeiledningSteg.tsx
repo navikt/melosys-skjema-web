@@ -17,7 +17,6 @@ export function VeiledningSteg() {
           icon={<ArrowRightIcon />}
           iconPosition="right"
           to="../arbeidstakeren"
-          type="submit"
           variant="primary"
         >
           Neste steg
