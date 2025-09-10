@@ -8,7 +8,9 @@ export function VeiledningSteg() {
   return (
     <section>
       <Fremgangsindikator aktivtSteg={1} />
-      <Heading level="1" size="large" className="mt-8">Veiledning</Heading>
+      <Heading className="mt-8" level="1" size="large">
+        Veiledning
+      </Heading>
       <div className="flex gap-4 justify-center mt-8">
         <Button
           as={Link}

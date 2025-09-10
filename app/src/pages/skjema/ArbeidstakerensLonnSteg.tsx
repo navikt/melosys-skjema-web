@@ -8,7 +8,9 @@ export function ArbeidstakerensLonnSteg() {
   return (
     <section>
       <Fremgangsindikator aktivtSteg={6} />
-      <Heading level="1" size="large" className="mt-8">Arbeidstakerens lønn</Heading>
+      <Heading className="mt-8" level="1" size="large">
+        Arbeidstakerens lønn
+      </Heading>
       <div className="flex gap-4 justify-center mt-8">
         <Button
           as={Link}
