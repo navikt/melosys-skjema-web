@@ -1,36 +1,14 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading } from "@navikt/ds-react";
-import { Link } from "@tanstack/react-router";
-
-import { Fremgangsindikator } from "~/pages/skjema/components/Fremgangsindikator";
+import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
 export function ArbeidstakerensLonnSteg() {
   return (
-    <section>
-      <Fremgangsindikator aktivtSteg={6} />
-      <Heading className="mt-8" level="1" size="large">
-        Arbeidstakerens lønn
-      </Heading>
-      <div className="flex gap-4 justify-center mt-8">
-        <Button
-          as={Link}
-          icon={<ArrowLeftIcon />}
-          to="../utenlandsoppdraget"
-          variant="secondary"
-        >
-          Forrige steg
-        </Button>
-        <Button
-          as={Link}
-          icon={<ArrowRightIcon />}
-          iconPosition="right"
-          to="../du-som-fyller-ut-skjemaet"
-          type="submit"
-          variant="primary"
-        >
-          Neste steg
-        </Button>
-      </div>
-    </section>
+    <SkjemaSteg
+      config={{
+        stegNummer: 6,
+        tittel: "Arbeidstakerens lønn",
+        forrigeRoute: "../utenlandsoppdraget",
+        nesteRoute: "../du-som-fyller-ut-skjemaet",
+      }}
+    />
   );
 }
