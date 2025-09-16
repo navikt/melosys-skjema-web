@@ -13,6 +13,10 @@ import { z } from "zod";
 
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
+import { getNextStep } from "./stepConfig";
+
+const stepKey = "arbeidstakeren";
+
 const arbeidstakerSchema = z
   .object({
     harNorskFodselsnummer: z.boolean(),
@@ -113,16 +117,17 @@ export function ArbeidstakerenSteg() {
     // Fjerner console.log når vi har endepunkt å sende data til
     // eslint-disable-next-line no-console
     console.log("Form submitted", data);
-    navigate({ to: "/skjema/arbeidsgiverens-virksomhet-i-norge" });
+    const nextStep = getNextStep(stepKey);
+    if (nextStep) {
+      navigate({ to: nextStep.route });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <SkjemaSteg
         config={{
-          stegNummer: 3,
-          tittel: "Arbeidstakeren",
-          forrigeRoute: "../arbeidsgiveren",
+          stepKey,
           customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
         }}
       >

@@ -1,12 +1,12 @@
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
+const stepKey = "veiledning";
+
 export function VeiledningSteg() {
   return (
     <SkjemaSteg
       config={{
-        stegNummer: 1,
-        tittel: "Veiledning",
-        nesteRoute: "../arbeidsgiveren",
+        stepKey,
       }}
     />
   );

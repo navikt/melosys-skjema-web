@@ -1,13 +1,12 @@
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
+const stepKey = "utenlandsoppdraget";
+
 export function UtenlandsoppdragetSteg() {
   return (
     <SkjemaSteg
       config={{
-        stegNummer: 5,
-        tittel: "Utenlandsoppdraget",
-        forrigeRoute: "../arbeidsgiverens-virksomhet-i-norge",
-        nesteRoute: "../arbeidstakerens-lonn",
+        stepKey,
       }}
     />
   );

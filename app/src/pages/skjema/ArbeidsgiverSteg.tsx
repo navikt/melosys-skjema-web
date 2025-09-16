@@ -7,6 +7,10 @@ import { z } from "zod";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 
+import { getNextStep } from "./stepConfig";
+
+const stepKey = "arbeidsgiveren";
+
 const arbeidsgiverSchema = z.object({
   organisasjonsnummer: z
     .string()
@@ -35,17 +39,17 @@ export function ArbeidsgiverSteg() {
   const onSubmit = (data: ArbeidsgiverFormData) => {
     // eslint-disable-next-line no-console
     console.log("Form submitted", data);
-    navigate({ to: "/skjema/arbeidstakeren" });
+    const nextStep = getNextStep(stepKey);
+    if (nextStep) {
+      navigate({ to: nextStep.route });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <SkjemaSteg
         config={{
-          stegNummer: 2,
-          tittel: "Arbeidsgiveren",
-          forrigeRoute: "../veiledning",
-          nesteRoute: "../arbeidstakeren",
+          stepKey,
           customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
         }}
       >
