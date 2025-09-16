@@ -6,7 +6,7 @@ export function VeiledningSteg() {
       config={{
         stegNummer: 1,
         tittel: "Veiledning",
-        nesteRoute: "../arbeidstakeren",
+        nesteRoute: "../arbeidsgiveren",
       }}
     />
   );

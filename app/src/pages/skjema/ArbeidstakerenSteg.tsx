@@ -113,7 +113,7 @@ export function ArbeidstakerenSteg() {
     // Fjerner console.log når vi har endepunkt å sende data til
     // eslint-disable-next-line no-console
     console.log("Form submitted", data);
-    navigate({ to: "/skjema/arbeidsgiveren" });
+    navigate({ to: "/skjema/arbeidsgiverens-virksomhet-i-norge" });
   };
 
   return (
@@ -123,7 +123,6 @@ export function ArbeidstakerenSteg() {
           stegNummer: 3,
           tittel: "Arbeidstakeren",
           forrigeRoute: "../arbeidsgiveren",
-          nesteRoute: "../arbeidsgiverens-virksomhet-i-norge",
           customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
         }}
       >

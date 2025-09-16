@@ -6,7 +6,7 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
       config={{
         stegNummer: 4,
         tittel: "Arbeidsgiverens virksomhet i Norge",
-        forrigeRoute: "../arbeidsgiveren",
+        forrigeRoute: "../arbeidstakeren",
         nesteRoute: "../utenlandsoppdraget",
       }}
     />
