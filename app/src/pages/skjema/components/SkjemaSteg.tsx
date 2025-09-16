@@ -12,7 +12,7 @@ interface StegConfig {
   nesteRoute?: string;
   customNesteKnapp?: {
     tekst: string;
-    ikon: ReactNode;
+    ikon?: ReactNode;
     type?: "button" | "submit";
   };
 }
@@ -54,7 +54,7 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
         )}
         {config.customNesteKnapp && (
           <Button
-            icon={config.customNesteKnapp.ikon}
+            icon={config.customNesteKnapp.ikon || <ArrowRightIcon />}
             iconPosition="right"
             type={config.customNesteKnapp.type}
             variant="primary"
