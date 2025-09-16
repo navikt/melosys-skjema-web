@@ -12,8 +12,8 @@ export const Fremgangsindikator = ({ aktivtSteg }: FremgangsindikatorProps) => {
       totalSteps={8}
     >
       <FormProgress.Step>Veiledning</FormProgress.Step>
-      <FormProgress.Step>Arbeidstakeren</FormProgress.Step>
       <FormProgress.Step>Arbeidsgiveren</FormProgress.Step>
+      <FormProgress.Step>Arbeidstakeren</FormProgress.Step>
       <FormProgress.Step>Arbeidsgiverens virksomhet i Norge</FormProgress.Step>
       <FormProgress.Step>Utenlandsoppdraget</FormProgress.Step>
       <FormProgress.Step>Arbeidstakerens lønn</FormProgress.Step>

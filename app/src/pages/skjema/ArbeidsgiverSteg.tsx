@@ -4,10 +4,10 @@ export function ArbeidsgiverSteg() {
   return (
     <SkjemaSteg
       config={{
-        stegNummer: 3,
+        stegNummer: 2,
         tittel: "Arbeidsgiveren",
-        forrigeRoute: "../arbeidstakeren",
-        nesteRoute: "../arbeidsgiverens-virksomhet-i-norge",
+        forrigeRoute: "../veiledning",
+        nesteRoute: "../arbeidstakeren",
       }}
     />
   );

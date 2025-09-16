@@ -120,10 +120,10 @@ export function ArbeidstakerenSteg() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <SkjemaSteg
         config={{
-          stegNummer: 2,
+          stegNummer: 3,
           tittel: "Arbeidstakeren",
-          forrigeRoute: "../veiledning",
-          nesteRoute: "../arbeidsgiveren",
+          forrigeRoute: "../arbeidsgiveren",
+          nesteRoute: "../arbeidsgiverens-virksomhet-i-norge",
           customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
         }}
       >
