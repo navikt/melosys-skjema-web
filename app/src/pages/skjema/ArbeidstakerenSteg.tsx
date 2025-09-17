@@ -1,16 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  DatePicker,
-  Radio,
-  RadioGroup,
-  TextField,
-  useDatepicker,
-} from "@navikt/ds-react";
+import { DatePicker, TextField, useDatepicker } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { formatISO } from "date-fns";
-import { Controller, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
 import { getNextStep } from "./stepConfig";
@@ -19,7 +14,9 @@ const stepKey = "arbeidstakeren";
 
 const arbeidstakerSchema = z
   .object({
-    harNorskFodselsnummer: z.boolean(),
+    harNorskFodselsnummer: z.boolean({
+      message: "Du må svare på om arbeidstakeren har norsk fødselsnummer",
+    }),
     fodselsnummer: z.string().optional(),
     fornavn: z.string().optional(),
     etternavn: z.string().optional(),
@@ -92,16 +89,17 @@ type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
 export function ArbeidstakerenSteg() {
   const navigate = useNavigate();
 
+  const formMethods = useForm<ArbeidstakerFormData>({
+    resolver: zodResolver(arbeidstakerSchema),
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     setValue,
-    control,
-  } = useForm<ArbeidstakerFormData>({
-    resolver: zodResolver(arbeidstakerSchema),
-  });
+  } = formMethods;
 
   const fodselsdatoDatePicker = useDatepicker({
     onDateChange: (date) =>
@@ -124,75 +122,63 @@ export function ArbeidstakerenSteg() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <SkjemaSteg
-        config={{
-          stepKey,
-          customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
-        }}
-      >
-        <Controller
-          control={control}
-          name="harNorskFodselsnummer"
-          render={({ field }) => (
-            <RadioGroup
-              className="mt-4"
-              error={errors.harNorskFodselsnummer?.message}
-              legend="Har arbeidstakeren norsk fødselsnummer eller d-nummer?"
-              onChange={(value) => field.onChange(value === "true")}
-              value={field.value === undefined ? "" : field.value.toString()}
-            >
-              <Radio size="small" value="true">
-                Ja
-              </Radio>
-              <Radio size="small" value="false">
-                Nei
-              </Radio>
-            </RadioGroup>
-          )}
-        />
-
-        {harNorskFodselsnummer && (
-          <TextField
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <SkjemaSteg
+          config={{
+            stepKey,
+            customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
+          }}
+        >
+          <RadioGroupJaNeiFormPart
             className="mt-4"
-            error={errors.fodselsnummer?.message}
-            label="Arbeidstakerens fødselsnummer eller d-nummer"
-            size="medium"
-            style={{ maxWidth: "160px" }}
-            {...register("fodselsnummer")}
+            error={errors.harNorskFodselsnummer?.message}
+            formFieldName="harNorskFodselsnummer"
+            legend="Har arbeidstakeren norsk fødselsnummer eller d-nummer?"
           />
-        )}
 
-        {harNorskFodselsnummer === false && (
-          <>
+          {harNorskFodselsnummer && (
             <TextField
-              className="mt-4 max-w-md"
-              error={errors.fornavn?.message}
-              label="Arbeidstakerens fornavn"
-              {...register("fornavn")}
+              className="mt-4"
+              error={errors.fodselsnummer?.message}
+              label="Arbeidstakerens fødselsnummer eller d-nummer"
+              size="medium"
+              style={{ maxWidth: "160px" }}
+              {...register("fodselsnummer")}
             />
+          )}
 
-            <TextField
-              className="mt-4 max-w-md"
-              error={errors.etternavn?.message}
-              label="Arbeidstakerens etternavn"
-              {...register("etternavn")}
-            />
-
-            <DatePicker
-              {...fodselsdatoDatePicker.datepickerProps}
-              dropdownCaption
-            >
-              <DatePicker.Input
-                {...fodselsdatoDatePicker.inputProps}
-                className="mt-4"
-                error={errors.fodselsdato?.message}
-                label="Arbeidstakerens fødselsdato"
+          {harNorskFodselsnummer === false && (
+            <>
+              <TextField
+                className="mt-4 max-w-md"
+                error={errors.fornavn?.message}
+                label="Arbeidstakerens fornavn"
+                {...register("fornavn")}
               />
-            </DatePicker>
-          </>
-        )}
-      </SkjemaSteg>
-    </form>
+
+              <TextField
+                className="mt-4 max-w-md"
+                error={errors.etternavn?.message}
+                label="Arbeidstakerens etternavn"
+                {...register("etternavn")}
+              />
+
+              <DatePicker
+                {...fodselsdatoDatePicker.datepickerProps}
+                dropdownCaption
+              >
+                <DatePicker.Input
+                  {...fodselsdatoDatePicker.inputProps}
+                  className="mt-4"
+                  error={errors.fodselsdato?.message}
+                  label="Arbeidstakerens fødselsdato"
+                />
+              </DatePicker>
+            </>
+          )}
+        </SkjemaSteg>
+      </form>
+    </FormProvider>
   );
 }
