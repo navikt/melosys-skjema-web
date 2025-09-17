@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
-import { Controller, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
 import { getNextStep } from "./stepConfig";
@@ -12,7 +12,9 @@ const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 
 const arbeidsgiverensVirksomhetSchema = z
   .object({
-    erArbeidsgiverenOffentligVirksomhet: z.boolean(),
+    erArbeidsgiverenOffentligVirksomhet: z.boolean({
+      message: "Du må svare på om arbeidsgiveren er en offentlig virksomhet",
+    }),
     erArbeidsgiverenBemanningsEllerVikarbyraa: z.boolean().optional(),
     opprettholderArbeidsgivereVanligDrift: z.boolean().optional(),
   })
@@ -50,14 +52,15 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
 export function ArbeidsgiverensVirksomhetINorgeSteg() {
   const navigate = useNavigate();
 
+  const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
+    resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
+  });
+
   const {
     handleSubmit,
     formState: { errors },
-    control,
     watch,
-  } = useForm<ArbeidsgiverensVirksomhetFormData>({
-    resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
-  });
+  } = formMethods;
 
   const erArbeidsgiverenOffentligVirksomhet = watch(
     "erArbeidsgiverenOffentligVirksomhet",
@@ -72,91 +75,45 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
     }
   };
 
-  console.log(watch());
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <SkjemaSteg
-        config={{
-          stepKey,
-          customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
-        }}
-      >
-        <Controller
-          control={control}
-          name="erArbeidsgiverenOffentligVirksomhet"
-          render={({ field }) => (
-            <RadioGroup
-              className="mt-4"
-              description="Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter."
-              error={errors.erArbeidsgiverenOffentligVirksomhet?.message}
-              legend="Er arbeidsgiveren en offentlig virksomhet?"
-              onChange={(value) => field.onChange(value === "true")}
-              value={field.value === undefined ? "" : field.value.toString()}
-            >
-              <Radio size="small" value="true">
-                Ja
-              </Radio>
-              <Radio size="small" value="false">
-                Nei
-              </Radio>
-            </RadioGroup>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <SkjemaSteg
+          config={{
+            stepKey,
+            customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
+          }}
+        >
+          <RadioGroupJaNeiFormPart
+            className="mt-4"
+            description="Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter."
+            error={errors.erArbeidsgiverenOffentligVirksomhet?.message}
+            formFieldName="erArbeidsgiverenOffentligVirksomhet"
+            legend="Er arbeidsgiveren en offentlig virksomhet?"
+          />
+
+          {erArbeidsgiverenOffentligVirksomhet === false && (
+            <>
+              <RadioGroupJaNeiFormPart
+                className="mt-4"
+                error={
+                  errors.erArbeidsgiverenBemanningsEllerVikarbyraa?.message
+                }
+                formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
+                legend="Er arbeidsgiveren et bemannings- eller vikarbyrå?"
+              />
+
+              <RadioGroupJaNeiFormPart
+                className="mt-4"
+                description="Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden."
+                error={errors.opprettholderArbeidsgivereVanligDrift?.message}
+                formFieldName="opprettholderArbeidsgivereVanligDrift"
+                legend="Opprettholder arbeidsgiveren vanlig drift i Norge?"
+              />
+            </>
           )}
-        />
-
-        {erArbeidsgiverenOffentligVirksomhet === false && (
-          <>
-            <Controller
-              control={control}
-              name="erArbeidsgiverenBemanningsEllerVikarbyraa"
-              render={({ field }) => (
-                <RadioGroup
-                  className="mt-4"
-                  error={
-                    errors.erArbeidsgiverenBemanningsEllerVikarbyraa?.message
-                  }
-                  legend="Er arbeidsgiveren et bemannings- eller vikarbyrå?"
-                  onChange={(value) => field.onChange(value === "true")}
-                  value={
-                    field.value === undefined ? "" : field.value.toString()
-                  }
-                >
-                  <Radio size="small" value="true">
-                    Ja
-                  </Radio>
-                  <Radio size="small" value="false">
-                    Nei
-                  </Radio>
-                </RadioGroup>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="opprettholderArbeidsgivereVanligDrift"
-              render={({ field }) => (
-                <RadioGroup
-                  className="mt-4"
-                  description="Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden."
-                  error={errors.opprettholderArbeidsgivereVanligDrift?.message}
-                  legend="Opprettholder arbeidsgiveren vanlig drift i Norge?"
-                  onChange={(value) => field.onChange(value === "true")}
-                  value={
-                    field.value === undefined ? "" : field.value.toString()
-                  }
-                >
-                  <Radio size="small" value="true">
-                    Ja
-                  </Radio>
-                  <Radio size="small" value="false">
-                    Nei
-                  </Radio>
-                </RadioGroup>
-              )}
-            />
-          </>
-        )}
-      </SkjemaSteg>
-    </form>
+        </SkjemaSteg>
+      </form>
+    </FormProvider>
   );
 }
