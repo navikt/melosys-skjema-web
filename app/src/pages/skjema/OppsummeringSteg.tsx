@@ -2,14 +2,13 @@ import { PaperplaneIcon } from "@navikt/aksel-icons";
 
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
+const stepKey = "oppsummering";
+
 export function OppsummeringSteg() {
   return (
     <SkjemaSteg
       config={{
-        stegNummer: 8,
-        tittel: "Oppsummering",
-        forrigeRoute: "../du-som-fyller-ut-skjemaet",
-        nesteRoute: "#",
+        stepKey,
         customNesteKnapp: {
           tekst: "Send søknad",
           ikon: <PaperplaneIcon />,

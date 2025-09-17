@@ -1,13 +1,12 @@
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
+const stepKey = "du-som-fyller-ut-skjemaet";
+
 export function DuSomFyllerUtSkjemaetSteg() {
   return (
     <SkjemaSteg
       config={{
-        stegNummer: 7,
-        tittel: "Du som fyller ut skjemaet",
-        forrigeRoute: "../arbeidstakerens-lonn",
-        nesteRoute: "../oppsummering",
+        stepKey,
       }}
     />
   );

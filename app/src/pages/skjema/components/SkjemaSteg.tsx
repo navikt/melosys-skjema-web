@@ -5,11 +5,10 @@ import { ReactNode } from "react";
 
 import { Fremgangsindikator } from "~/pages/skjema/components/Fremgangsindikator";
 
+import { getRelativeRoute, getStepNumber, STEP_CONFIG } from "../stepConfig";
+
 interface StegConfig {
-  stegNummer: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-  tittel: string;
-  forrigeRoute?: string;
-  nesteRoute?: string;
+  stepKey: string;
   customNesteKnapp?: {
     tekst: string;
     ikon?: ReactNode;
@@ -23,30 +22,38 @@ interface SkjemaStegProps {
 }
 
 export function SkjemaSteg({ config, children }: SkjemaStegProps) {
+  const stepNumber = getStepNumber(config.stepKey);
+  const prevRoute = getRelativeRoute(config.stepKey, "prev");
+  const nextRoute = getRelativeRoute(config.stepKey, "next");
+
+  // Get step title from config
+  const stepInfo = STEP_CONFIG.find((step) => step.key === config.stepKey);
+  const title = stepInfo?.title || `Unknown Step: ${config.stepKey}`;
+
   return (
     <section>
-      <Fremgangsindikator aktivtSteg={config.stegNummer} />
+      <Fremgangsindikator aktivtSteg={stepNumber} />
       <Heading className="mt-8" level="1" size="large">
-        {config.tittel}
+        {title}
       </Heading>
       {children}
       <div className="flex gap-4 justify-center mt-8">
-        {config.forrigeRoute && (
+        {prevRoute && (
           <Button
             as={Link}
             icon={<ArrowLeftIcon />}
-            to={config.forrigeRoute}
+            to={prevRoute}
             variant="secondary"
           >
             Forrige steg
           </Button>
         )}
-        {config.nesteRoute && !config.customNesteKnapp && (
+        {nextRoute && !config.customNesteKnapp && (
           <Button
             as={Link}
             icon={<ArrowRightIcon />}
             iconPosition="right"
-            to={config.nesteRoute}
+            to={nextRoute}
             variant="primary"
           >
             Neste steg

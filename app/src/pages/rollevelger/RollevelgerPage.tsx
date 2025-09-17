@@ -3,8 +3,7 @@ import { Box, Heading, LinkCard, Page } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { listAltinnTilganger } from "~/api/queries.ts";
-
-export const VALGT_ROLLE_KEY = "valgtRolle";
+import { setValgtRolle } from "~/utils/sessionStorage.ts";
 
 export function RollevelgerPage() {
   const altinnTilgangerQuery = useQuery(listAltinnTilganger());
@@ -37,10 +36,7 @@ export function RollevelgerPage() {
           icon={<Buildings3Icon aria-hidden />}
           key={index}
           onSelectRole={() => {
-            sessionStorage.setItem(
-              VALGT_ROLLE_KEY,
-              JSON.stringify(altinnTilgang),
-            );
+            setValgtRolle(altinnTilgang);
           }}
           title={altinnTilgang.navn}
         />
