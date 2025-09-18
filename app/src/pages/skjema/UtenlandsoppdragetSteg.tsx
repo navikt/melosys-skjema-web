@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker, Select, useDatepicker } from "@navikt/ds-react";
+import { Select } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
-import { formatISO } from "date-fns";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { DatePickerFormPart } from "~/components/DatePickerFormPart";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
@@ -128,7 +128,6 @@ export function UtenlandsoppdragetSteg() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
     watch,
   } = formMethods;
 
@@ -136,46 +135,6 @@ export function UtenlandsoppdragetSteg() {
     fromDate: new Date(new Date().getFullYear() - 1, 0, 1),
     toDate: new Date(new Date().getFullYear() + 5, 11, 31),
   };
-
-  const fraDatoDatePicker = useDatepicker({
-    onDateChange: (date) =>
-      setValue(
-        "arbeidstakerUtsendelseFraDato",
-        date ? formatISO(date, { representation: "date" }) : "",
-        { shouldValidate: true },
-      ),
-    ...dateLimits,
-  });
-
-  const tilDatoDatePicker = useDatepicker({
-    onDateChange: (date) =>
-      setValue(
-        "arbeidstakerUtsendelseTilDato",
-        date ? formatISO(date, { representation: "date" }) : "",
-        { shouldValidate: true },
-      ),
-    ...dateLimits,
-  });
-
-  const forrigeArbeidstakerFradatoDatePicker = useDatepicker({
-    onDateChange: (date) =>
-      setValue(
-        "forrigeArbeidstakerUtsendelseFradato",
-        date ? formatISO(date, { representation: "date" }) : "",
-        { shouldValidate: true },
-      ),
-    ...dateLimits,
-  });
-
-  const forrigeArbeidstakerTildatoDatePicker = useDatepicker({
-    onDateChange: (date) =>
-      setValue(
-        "forrigeArbeidstakerUtsendelseTilDato",
-        date ? formatISO(date, { representation: "date" }) : "",
-        { shouldValidate: true },
-      ),
-    ...dateLimits,
-  });
 
   const arbeidstakerErstatterAnnenPerson = watch(
     "arbeidstakerErstatterAnnenPerson",
@@ -221,24 +180,20 @@ export function UtenlandsoppdragetSteg() {
           <div className="mt-6">
             <h3 className="mb-4 text-lg font-semibold">Utsendingsperiode</h3>
 
-            <DatePicker {...fraDatoDatePicker.datepickerProps} dropdownCaption>
-              <DatePicker.Input
-                {...fraDatoDatePicker.inputProps}
-                className="mt-4"
-                error={errors.arbeidstakerUtsendelseFraDato?.message}
-                label="Fra dato"
-              />
-            </DatePicker>
+            <DatePickerFormPart
+              className="mt-4"
+              formFieldName="arbeidstakerUtsendelseFraDato"
+              label="Fra dato"
+              {...dateLimits}
+            />
 
-            <DatePicker {...tilDatoDatePicker.datepickerProps} dropdownCaption>
-              <DatePicker.Input
-                {...tilDatoDatePicker.inputProps}
-                className="mt-4"
-                description="Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato."
-                error={errors.arbeidstakerUtsendelseTilDato?.message}
-                label="Til dato"
-              />
-            </DatePicker>
+            <DatePickerFormPart
+              className="mt-4"
+              description="Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato."
+              formFieldName="arbeidstakerUtsendelseTilDato"
+              label="Til dato"
+              {...dateLimits}
+            />
           </div>
 
           <RadioGroupJaNeiFormPart
@@ -275,29 +230,19 @@ export function UtenlandsoppdragetSteg() {
                 Forrige arbeidstakers utsendelse
               </h3>
 
-              <DatePicker
-                {...forrigeArbeidstakerFradatoDatePicker.datepickerProps}
-                dropdownCaption
-              >
-                <DatePicker.Input
-                  {...forrigeArbeidstakerFradatoDatePicker.inputProps}
-                  className="mt-4"
-                  error={errors.forrigeArbeidstakerUtsendelseFradato?.message}
-                  label="Fra dato"
-                />
-              </DatePicker>
+              <DatePickerFormPart
+                className="mt-4"
+                formFieldName="forrigeArbeidstakerUtsendelseFradato"
+                label="Fra dato"
+                {...dateLimits}
+              />
 
-              <DatePicker
-                {...forrigeArbeidstakerTildatoDatePicker.datepickerProps}
-                dropdownCaption
-              >
-                <DatePicker.Input
-                  {...forrigeArbeidstakerTildatoDatePicker.inputProps}
-                  className="mt-4"
-                  error={errors.forrigeArbeidstakerUtsendelseTilDato?.message}
-                  label="Til dato"
-                />
-              </DatePicker>
+              <DatePickerFormPart
+                className="mt-4"
+                formFieldName="forrigeArbeidstakerUtsendelseTilDato"
+                label="Til dato"
+                {...dateLimits}
+              />
             </div>
           )}
         </SkjemaSteg>
