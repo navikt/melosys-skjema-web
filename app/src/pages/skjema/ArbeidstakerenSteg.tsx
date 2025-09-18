@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker, TextField, useDatepicker } from "@navikt/ds-react";
+import { TextField } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
-import { formatISO } from "date-fns";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { DatePickerFormPart } from "~/components/DatePickerFormPart";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
@@ -98,16 +98,7 @@ export function ArbeidstakerenSteg() {
     handleSubmit,
     formState: { errors },
     watch,
-    setValue,
   } = formMethods;
-
-  const fodselsdatoDatePicker = useDatepicker({
-    onDateChange: (date) =>
-      setValue(
-        "fodselsdato",
-        date ? formatISO(date, { representation: "date" }) : undefined,
-      ),
-  });
 
   const harNorskFodselsnummer = watch("harNorskFodselsnummer");
 
@@ -164,17 +155,11 @@ export function ArbeidstakerenSteg() {
                 {...register("etternavn")}
               />
 
-              <DatePicker
-                {...fodselsdatoDatePicker.datepickerProps}
-                dropdownCaption
-              >
-                <DatePicker.Input
-                  {...fodselsdatoDatePicker.inputProps}
-                  className="mt-4"
-                  error={errors.fodselsdato?.message}
-                  label="Arbeidstakerens fødselsdato"
-                />
-              </DatePicker>
+              <DatePickerFormPart
+                className="mt-4"
+                formFieldName="fodselsdato"
+                label="Arbeidstakerens fødselsdato"
+              />
             </>
           )}
         </SkjemaSteg>
