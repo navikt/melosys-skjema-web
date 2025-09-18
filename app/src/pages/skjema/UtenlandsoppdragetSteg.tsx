@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select, Textarea } from "@navikt/ds-react";
+import { Textarea } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart";
+import { LandVelgerFormPart } from "~/components/LandVelgerFormPart";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
 
@@ -195,24 +196,11 @@ export function UtenlandsoppdragetSteg() {
             customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
           }}
         >
-          <Select
+          <LandVelgerFormPart
             className="mt-4"
-            error={errors.utsendelseLand?.message}
+            formFieldName="utsendelseLand"
             label="Hvilket land sendes arbeidstakeren til?"
-            {...register("utsendelseLand")}
-          >
-            <option value="">Velg land</option>
-            <option value="SV">Sverige</option>
-            <option value="DK">Danmark</option>
-            <option value="FI">Finland</option>
-            <option value="DE">Tyskland</option>
-            <option value="FR">Frankrike</option>
-            <option value="ES">Spania</option>
-            <option value="IT">Italia</option>
-            <option value="NL">Nederland</option>
-            <option value="BE">Belgia</option>
-            <option value="AT">Østerrike</option>
-          </Select>
+          />
 
           <div className="mt-6">
             <h3 className="mb-4 text-lg font-semibold">Utsendingsperiode</h3>
