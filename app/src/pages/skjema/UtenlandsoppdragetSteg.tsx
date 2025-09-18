@@ -44,6 +44,9 @@ const utenlandsoppdragSchema = z
     arbeidstakerErstatterAnnenPerson: z.boolean({
       message: "Du må svare på om arbeidstaker erstatter en annen person",
     }),
+    arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z
+      .boolean()
+      .optional(),
     utenlandsoppholdetsBegrunnelse: z.string().optional(),
     ansettelsesforholdBeskrivelse: z.string().optional(),
     forrigeArbeidstakerUtsendelseFradato: z.string().optional(),
@@ -120,6 +123,22 @@ const utenlandsoppdragSchema = z
   )
   .refine(
     (data) => {
+      if (data.arbeidstakerBleAnsattForUtenlandsoppdraget) {
+        return (
+          data.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget !==
+          undefined
+        );
+      }
+      return true;
+    },
+    {
+      message:
+        "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
+      path: ["arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"],
+    },
+  )
+  .refine(
+    (data) => {
       if (data.arbeidstakerErstatterAnnenPerson) {
         return (
           data.forrigeArbeidstakerUtsendelseFradato &&
@@ -176,6 +195,9 @@ export function UtenlandsoppdragetSteg() {
   const arbeidsgiverHarOppdragILandet = watch("arbeidsgiverHarOppdragILandet");
   const arbeidstakerForblirAnsattIHelePerioden = watch(
     "arbeidstakerForblirAnsattIHelePerioden",
+  );
+  const arbeidstakerBleAnsattForUtenlandsoppdraget = watch(
+    "arbeidstakerBleAnsattForUtenlandsoppdraget",
   );
 
   const onSubmit = (data: UtenlandsoppdragFormData) => {
@@ -243,6 +265,18 @@ export function UtenlandsoppdragetSteg() {
             formFieldName="arbeidstakerBleAnsattForUtenlandsoppdraget"
             legend="Ble arbeidstaker ansatt på grunn av dette utenlandsoppdraget?"
           />
+
+          {arbeidstakerBleAnsattForUtenlandsoppdraget === true && (
+            <RadioGroupJaNeiFormPart
+              className="mt-6"
+              error={
+                errors.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget
+                  ?.message
+              }
+              formFieldName="arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"
+              legend="Vil arbeidstakeren arbeide for virksomheten i Norge etter utenlandsoppdraget?"
+            />
+          )}
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
