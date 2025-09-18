@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select } from "@navikt/ds-react";
+import { Select, Textarea } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -43,6 +43,8 @@ const utenlandsoppdragSchema = z
     arbeidstakerErstatterAnnenPerson: z.boolean({
       message: "Du må svare på om arbeidstaker erstatter en annen person",
     }),
+    utenlandsoppholdetsBegrunnelse: z.string().optional(),
+    ansettelsesforholdBeskrivelse: z.string().optional(),
     forrigeArbeidstakerUtsendelseFradato: z.string().optional(),
     forrigeArbeidstakerUtsendelseTilDato: z.string().optional(),
   })
@@ -82,6 +84,37 @@ const utenlandsoppdragSchema = z
     {
       message: "Til dato kan ikke være før fra dato",
       path: ["forrigeArbeidstakerUtsendelseTilDato"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (!data.arbeidsgiverHarOppdragILandet) {
+        return (
+          data.utenlandsoppholdetsBegrunnelse &&
+          data.utenlandsoppholdetsBegrunnelse.trim() !== ""
+        );
+      }
+      return true;
+    },
+    {
+      message:
+        "Begrunnelse er påkrevd når arbeidsgiver ikke har oppdrag i landet",
+      path: ["utenlandsoppholdetsBegrunnelse"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (!data.arbeidstakerForblirAnsattIHelePerioden) {
+        return (
+          data.ansettelsesforholdBeskrivelse &&
+          data.ansettelsesforholdBeskrivelse.trim() !== ""
+        );
+      }
+      return true;
+    },
+    {
+      message: "Beskrivelse av ansettelsesforhold er påkrevd",
+      path: ["ansettelsesforholdBeskrivelse"],
     },
   )
   .refine(
@@ -138,6 +171,10 @@ export function UtenlandsoppdragetSteg() {
 
   const arbeidstakerErstatterAnnenPerson = watch(
     "arbeidstakerErstatterAnnenPerson",
+  );
+  const arbeidsgiverHarOppdragILandet = watch("arbeidsgiverHarOppdragILandet");
+  const arbeidstakerForblirAnsattIHelePerioden = watch(
+    "arbeidstakerForblirAnsattIHelePerioden",
   );
 
   const onSubmit = (data: UtenlandsoppdragFormData) => {
@@ -203,6 +240,15 @@ export function UtenlandsoppdragetSteg() {
             legend="Har du som arbeidsgiver oppdrag i landet arbeidstaker skal sendes ut til?"
           />
 
+          {arbeidsgiverHarOppdragILandet === false && (
+            <Textarea
+              className="mt-6"
+              error={errors.utenlandsoppholdetsBegrunnelse?.message}
+              label="Hvorfor skal arbeidstakeren arbeide i utlandet?"
+              {...register("utenlandsoppholdetsBegrunnelse")}
+            />
+          )}
+
           <RadioGroupJaNeiFormPart
             className="mt-6"
             error={errors.arbeidstakerBleAnsattForUtenlandsoppdraget?.message}
@@ -216,6 +262,15 @@ export function UtenlandsoppdragetSteg() {
             formFieldName="arbeidstakerForblirAnsattIHelePerioden"
             legend="Vil arbeidstaker fortsatt være ansatt hos dere i hele utsendingsperioden?"
           />
+
+          {arbeidstakerForblirAnsattIHelePerioden === false && (
+            <Textarea
+              className="mt-6"
+              error={errors.ansettelsesforholdBeskrivelse?.message}
+              label="Beskriv arbeidstakerens ansettelsesforhold i utsendingsperioden"
+              {...register("ansettelsesforholdBeskrivelse")}
+            />
+          )}
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
