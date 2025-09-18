@@ -14,7 +14,7 @@ const stepKey = "utenlandsoppdraget";
 
 const utenlandsoppdragSchema = z
   .object({
-    land: z
+    utsendelseLand: z
       .string({
         message: "Du må velge hvilket land arbeidstakeren sendes til",
       })
@@ -160,9 +160,9 @@ export function UtenlandsoppdragetSteg() {
         >
           <Select
             className="mt-4"
-            error={errors.land?.message}
+            error={errors.utsendelseLand?.message}
             label="Hvilket land sendes arbeidstakeren til?"
-            {...register("land")}
+            {...register("utsendelseLand")}
           >
             <option value="">Velg land</option>
             <option value="SV">Sverige</option>
