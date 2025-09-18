@@ -19,12 +19,12 @@ const utenlandsoppdragSchema = z
         message: "Du må velge hvilket land arbeidstakeren sendes til",
       })
       .min(1, "Du må velge hvilket land arbeidstakeren sendes til"),
-    fraDato: z
+    arbeidstakerUtsendelseFraDato: z
       .string({
         message: "Fra-dato er påkrevd",
       })
       .min(1, "Fra-dato er påkrevd"),
-    tilDato: z
+    arbeidstakerUtsendelseTilDato: z
       .string({
         message: "Til-dato er påkrevd",
       })
@@ -43,17 +43,75 @@ const utenlandsoppdragSchema = z
     arbeidstakerErstatterAnnenPerson: z.boolean({
       message: "Du må svare på om arbeidstaker erstatter en annen person",
     }),
+    forrigeArbeidstakerUtsendelseFradato: z.string().optional(),
+    forrigeArbeidstakerUtsendelseTilDato: z.string().optional(),
   })
   .refine(
     (data) => {
-      if (data.fraDato && data.tilDato) {
-        return new Date(data.fraDato) <= new Date(data.tilDato);
+      // Always validate main dates if both are present
+      if (
+        data.arbeidstakerUtsendelseFraDato &&
+        data.arbeidstakerUtsendelseTilDato
+      ) {
+        return (
+          new Date(data.arbeidstakerUtsendelseFraDato) <=
+          new Date(data.arbeidstakerUtsendelseTilDato)
+        );
       }
       return true;
     },
     {
       message: "Til dato kan ikke være før fra dato",
-      path: ["tilDato"],
+      path: ["arbeidstakerUtsendelseTilDato"],
+    },
+  )
+  .refine(
+    (data) => {
+      // Always validate forrige arbeidstaker dates if both are present
+      if (
+        data.forrigeArbeidstakerUtsendelseFradato &&
+        data.forrigeArbeidstakerUtsendelseTilDato
+      ) {
+        return (
+          new Date(data.forrigeArbeidstakerUtsendelseFradato) <=
+          new Date(data.forrigeArbeidstakerUtsendelseTilDato)
+        );
+      }
+      return true;
+    },
+    {
+      message: "Til dato kan ikke være før fra dato",
+      path: ["forrigeArbeidstakerUtsendelseTilDato"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.arbeidstakerErstatterAnnenPerson) {
+        return (
+          data.forrigeArbeidstakerUtsendelseFradato &&
+          data.forrigeArbeidstakerUtsendelseFradato !== ""
+        );
+      }
+      return true;
+    },
+    {
+      message: "Fra-dato for forrige arbeidstaker er påkrevd",
+      path: ["forrigeArbeidstakerUtsendelseFradato"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.arbeidstakerErstatterAnnenPerson) {
+        return (
+          data.forrigeArbeidstakerUtsendelseTilDato &&
+          data.forrigeArbeidstakerUtsendelseTilDato !== ""
+        );
+      }
+      return true;
+    },
+    {
+      message: "Til-dato for forrige arbeidstaker er påkrevd",
+      path: ["forrigeArbeidstakerUtsendelseTilDato"],
     },
   );
 
@@ -71,6 +129,7 @@ export function UtenlandsoppdragetSteg() {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = formMethods;
 
   const dateLimits = {
@@ -81,7 +140,7 @@ export function UtenlandsoppdragetSteg() {
   const fraDatoDatePicker = useDatepicker({
     onDateChange: (date) =>
       setValue(
-        "fraDato",
+        "arbeidstakerUtsendelseFraDato",
         date ? formatISO(date, { representation: "date" }) : "",
         { shouldValidate: true },
       ),
@@ -91,12 +150,36 @@ export function UtenlandsoppdragetSteg() {
   const tilDatoDatePicker = useDatepicker({
     onDateChange: (date) =>
       setValue(
-        "tilDato",
+        "arbeidstakerUtsendelseTilDato",
         date ? formatISO(date, { representation: "date" }) : "",
         { shouldValidate: true },
       ),
     ...dateLimits,
   });
+
+  const forrigeArbeidstakerFradatoDatePicker = useDatepicker({
+    onDateChange: (date) =>
+      setValue(
+        "forrigeArbeidstakerUtsendelseFradato",
+        date ? formatISO(date, { representation: "date" }) : "",
+        { shouldValidate: true },
+      ),
+    ...dateLimits,
+  });
+
+  const forrigeArbeidstakerTildatoDatePicker = useDatepicker({
+    onDateChange: (date) =>
+      setValue(
+        "forrigeArbeidstakerUtsendelseTilDato",
+        date ? formatISO(date, { representation: "date" }) : "",
+        { shouldValidate: true },
+      ),
+    ...dateLimits,
+  });
+
+  const arbeidstakerErstatterAnnenPerson = watch(
+    "arbeidstakerErstatterAnnenPerson",
+  );
 
   const onSubmit = (data: UtenlandsoppdragFormData) => {
     // eslint-disable-next-line no-console
@@ -142,7 +225,7 @@ export function UtenlandsoppdragetSteg() {
               <DatePicker.Input
                 {...fraDatoDatePicker.inputProps}
                 className="mt-4"
-                error={errors.fraDato?.message}
+                error={errors.arbeidstakerUtsendelseFraDato?.message}
                 label="Fra dato"
               />
             </DatePicker>
@@ -152,7 +235,7 @@ export function UtenlandsoppdragetSteg() {
                 {...tilDatoDatePicker.inputProps}
                 className="mt-4"
                 description="Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato."
-                error={errors.tilDato?.message}
+                error={errors.arbeidstakerUtsendelseTilDato?.message}
                 label="Til dato"
               />
             </DatePicker>
@@ -185,6 +268,38 @@ export function UtenlandsoppdragetSteg() {
             formFieldName="arbeidstakerErstatterAnnenPerson"
             legend="Erstatter arbeidstaker en annen person som var sendt ut for å gjøre det samme arbeidet?"
           />
+
+          {arbeidstakerErstatterAnnenPerson && (
+            <div className="mt-6">
+              <h3 className="mb-4 text-lg font-semibold">
+                Forrige arbeidstakers utsendelse
+              </h3>
+
+              <DatePicker
+                {...forrigeArbeidstakerFradatoDatePicker.datepickerProps}
+                dropdownCaption
+              >
+                <DatePicker.Input
+                  {...forrigeArbeidstakerFradatoDatePicker.inputProps}
+                  className="mt-4"
+                  error={errors.forrigeArbeidstakerUtsendelseFradato?.message}
+                  label="Fra dato"
+                />
+              </DatePicker>
+
+              <DatePicker
+                {...forrigeArbeidstakerTildatoDatePicker.datepickerProps}
+                dropdownCaption
+              >
+                <DatePicker.Input
+                  {...forrigeArbeidstakerTildatoDatePicker.inputProps}
+                  className="mt-4"
+                  error={errors.forrigeArbeidstakerUtsendelseTilDato?.message}
+                  label="Til dato"
+                />
+              </DatePicker>
+            </div>
+          )}
         </SkjemaSteg>
       </form>
     </FormProvider>
