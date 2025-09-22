@@ -241,6 +241,7 @@ function UtenlandskeVirksomheterSection() {
       navn: "",
       vegnavnOgHusnummer: "",
       land: "",
+      tilhorerSammeKonsern: false,
     });
     clearErrors("virksomheterSomUtbetalerLonnOgNaturalytelser");
   };
