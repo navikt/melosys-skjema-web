@@ -13,6 +13,10 @@ import { getNextStep } from "./stepConfig";
 
 const stepKey = "utenlandsoppdraget";
 
+// Date range constants for assignment period selection
+const YEARS_BACK_FROM_CURRENT = 1;
+const YEARS_FORWARD_FROM_CURRENT = 5;
+
 const utenlandsoppdragSchema = z
   .object({
     utsendelseLand: z
@@ -185,8 +189,16 @@ export function UtenlandsoppdragetSteg() {
   } = formMethods;
 
   const dateLimits = {
-    fromDate: new Date(new Date().getFullYear() - 1, 0, 1),
-    toDate: new Date(new Date().getFullYear() + 5, 11, 31),
+    fromDate: new Date(
+      new Date().getFullYear() - YEARS_BACK_FROM_CURRENT,
+      0,
+      1,
+    ),
+    toDate: new Date(
+      new Date().getFullYear() + YEARS_FORWARD_FROM_CURRENT,
+      11,
+      31,
+    ),
   };
 
   const arbeidstakerErstatterAnnenPerson = watch(

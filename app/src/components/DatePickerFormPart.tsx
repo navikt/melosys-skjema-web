@@ -31,7 +31,7 @@ export function DatePickerFormPart({
     onDateChange: (date) =>
       setValue(
         formFieldName,
-        date ? formatISO(date, { representation: "date" }) : "",
+        date ? formatISO(date, { representation: "date" }) : undefined,
         { shouldValidate: true },
       ),
     ...datePickerOptions,
