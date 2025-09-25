@@ -56,11 +56,7 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
   });
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = formMethods;
+  const { handleSubmit, watch } = formMethods;
 
   const erArbeidsgiverenOffentligVirksomhet = watch(
     "erArbeidsgiverenOffentligVirksomhet",
@@ -87,7 +83,6 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
           <RadioGroupJaNeiFormPart
             className="mt-4"
             description="Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter."
-            error={errors.erArbeidsgiverenOffentligVirksomhet?.message}
             formFieldName="erArbeidsgiverenOffentligVirksomhet"
             legend="Er arbeidsgiveren en offentlig virksomhet?"
           />
@@ -96,9 +91,6 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
             <>
               <RadioGroupJaNeiFormPart
                 className="mt-4"
-                error={
-                  errors.erArbeidsgiverenBemanningsEllerVikarbyraa?.message
-                }
                 formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
                 legend="Er arbeidsgiveren et bemannings- eller vikarbyrå?"
               />
@@ -106,7 +98,6 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
               <RadioGroupJaNeiFormPart
                 className="mt-4"
                 description="Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden."
-                error={errors.opprettholderArbeidsgivereVanligDrift?.message}
                 formFieldName="opprettholderArbeidsgivereVanligDrift"
                 legend="Opprettholder arbeidsgiveren vanlig drift i Norge?"
               />

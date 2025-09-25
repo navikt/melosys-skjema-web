@@ -123,7 +123,6 @@ export function ArbeidstakerenSteg() {
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            error={errors.harNorskFodselsnummer?.message}
             formFieldName="harNorskFodselsnummer"
             legend="Har arbeidstakeren norsk fødselsnummer eller d-nummer?"
           />

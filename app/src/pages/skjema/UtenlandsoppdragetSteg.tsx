@@ -257,7 +257,6 @@ export function UtenlandsoppdragetSteg() {
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
-            error={errors.arbeidsgiverHarOppdragILandet?.message}
             formFieldName="arbeidsgiverHarOppdragILandet"
             legend="Har du som arbeidsgiver oppdrag i landet arbeidstaker skal sendes ut til?"
           />
@@ -273,7 +272,6 @@ export function UtenlandsoppdragetSteg() {
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
-            error={errors.arbeidstakerBleAnsattForUtenlandsoppdraget?.message}
             formFieldName="arbeidstakerBleAnsattForUtenlandsoppdraget"
             legend="Ble arbeidstaker ansatt på grunn av dette utenlandsoppdraget?"
           />
@@ -281,10 +279,6 @@ export function UtenlandsoppdragetSteg() {
           {arbeidstakerBleAnsattForUtenlandsoppdraget === true && (
             <RadioGroupJaNeiFormPart
               className="mt-6"
-              error={
-                errors.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget
-                  ?.message
-              }
               formFieldName="arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"
               legend="Vil arbeidstakeren arbeide for virksomheten i Norge etter utenlandsoppdraget?"
             />
@@ -292,7 +286,6 @@ export function UtenlandsoppdragetSteg() {
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
-            error={errors.arbeidstakerForblirAnsattIHelePerioden?.message}
             formFieldName="arbeidstakerForblirAnsattIHelePerioden"
             legend="Vil arbeidstaker fortsatt være ansatt hos dere i hele utsendingsperioden?"
           />
@@ -308,7 +301,6 @@ export function UtenlandsoppdragetSteg() {
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
-            error={errors.arbeidstakerErstatterAnnenPerson?.message}
             formFieldName="arbeidstakerErstatterAnnenPerson"
             legend="Erstatter arbeidstaker en annen person som var sendt ut for å gjøre det samme arbeidet?"
           />
