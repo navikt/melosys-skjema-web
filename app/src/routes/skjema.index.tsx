@@ -1,7 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import { Skjema } from "~/pages/skjema/Skjema";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/skjema/")({
-  component: Skjema,
+  component: () => <Navigate to="/rollevelger" />,
 });

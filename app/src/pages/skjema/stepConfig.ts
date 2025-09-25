@@ -8,42 +8,37 @@ export const STEP_CONFIG: StepInfo[] = [
   {
     key: "veiledning",
     title: "Veiledning",
-    route: "/skjema/veiledning",
+    route: "/skjema/arbeidsgiver/veiledning",
   },
   {
     key: "arbeidsgiveren",
     title: "Arbeidsgiveren",
-    route: "/skjema/arbeidsgiveren",
+    route: "/skjema/arbeidsgiver/arbeidsgiveren",
   },
   {
     key: "arbeidsgiverens-virksomhet-i-norge",
     title: "Arbeidsgiverens virksomhet i Norge",
-    route: "/skjema/arbeidsgiverens-virksomhet-i-norge",
+    route: "/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge",
   },
   {
     key: "utenlandsoppdraget",
     title: "Utenlandsoppdraget",
-    route: "/skjema/utenlandsoppdraget",
+    route: "/skjema/arbeidsgiver/utenlandsoppdraget",
   },
   {
     key: "arbeidstakeren",
     title: "Arbeidstakeren",
-    route: "/skjema/arbeidstakeren",
+    route: "/skjema/arbeidsgiver/arbeidstakeren",
   },
   {
     key: "arbeidstakerens-lonn",
     title: "Arbeidstakerens lønn",
-    route: "/skjema/arbeidstakerens-lonn",
-  },
-  {
-    key: "du-som-fyller-ut-skjemaet",
-    title: "Du som fyller ut skjemaet",
-    route: "/skjema/du-som-fyller-ut-skjemaet",
+    route: "/skjema/arbeidsgiver/arbeidstakerens-lonn",
   },
   {
     key: "oppsummering",
     title: "Oppsummering",
-    route: "/skjema/oppsummering",
+    route: "/skjema/arbeidsgiver/oppsummering",
   },
 ];
 
