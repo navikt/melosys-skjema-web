@@ -170,7 +170,7 @@ export function Skjema() {
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={() => {
-                navigate({ to: "/skjema/veiledning" });
+                navigate({ to: "/skjema/arbeidsgiver/veiledning" });
               }}
               variant="primary"
             >

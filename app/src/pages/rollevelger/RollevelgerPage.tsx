@@ -24,7 +24,7 @@ export function RollevelgerPage() {
       <VelgRolleCard
         className="mt-4"
         description="Deg selv"
-        href="/skjema"
+        href="/skjema/arbeidstaker"
         icon={<PersonIcon aria-hidden />}
         title="Navn Navnesen"
       />
@@ -32,7 +32,7 @@ export function RollevelgerPage() {
         <VelgRolleCard
           className="mt-2"
           description={`Org.nr.: ${altinnTilgang.orgnr}`}
-          href="/skjema"
+          href="/skjema/arbeidsgiver"
           icon={<Buildings3Icon aria-hidden />}
           key={index}
           onSelectRole={() => {
