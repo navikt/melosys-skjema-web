@@ -130,11 +130,6 @@ export function ArbeidstakerensLonnSteg() {
         >
           <RadioGroupJaNeiFormPart
             className="mt-6"
-            error={
-              errors
-                .arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
-                ?.message
-            }
             formFieldName="arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"
             legend="Utbetaler du som arbeidsgiver all lønn og eventuelle naturalytelser i utsendingsperioden?"
           />
@@ -367,11 +362,6 @@ function UtenlandskeVirksomheterSection() {
             />
 
             <RadioGroupJaNeiFormPart
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.tilhorerSammeKonsern`,
-                ).error?.message
-              }
               formFieldName={`virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.tilhorerSammeKonsern`}
               legend="Tilhører virksomheten samme konsern som den norske arbeidsgiveren?"
               size="small"

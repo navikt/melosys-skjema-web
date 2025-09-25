@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 
 type RadioGroupJaNeiProps = Omit<
   RadioGroupProps,
-  "onChange" | "value" | "children"
+  "onChange" | "value" | "children" | "error"
 > & {
   formFieldName: string;
 };
@@ -18,9 +18,10 @@ export function RadioGroupJaNeiFormPart({
     <Controller
       control={control}
       name={formFieldName}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <RadioGroup
           {...props}
+          error={fieldState.error?.message}
           onChange={(value) => field.onChange(value === "true")}
           value={field.value === undefined ? "" : field.value.toString()}
         >
