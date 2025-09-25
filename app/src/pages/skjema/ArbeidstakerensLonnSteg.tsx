@@ -185,7 +185,6 @@ function NorskeVirksomheterSection() {
           borderRadius="medium"
           className="ml-4"
           key={field.id}
-          maxWidth="var(--a-breakpoint-sm)"
           padding="space-8"
           style={{
             borderLeft: "4px solid var(--a-border-subtle)",
@@ -252,7 +251,6 @@ function UtenlandskeVirksomheterSection() {
           borderRadius="medium"
           className="ml-4"
           key={field.id}
-          maxWidth="var(--a-breakpoint-sm)"
           padding="space-8"
           style={{
             borderLeft: "4px solid var(--a-border-subtle)",
