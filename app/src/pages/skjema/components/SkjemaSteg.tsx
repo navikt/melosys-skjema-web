@@ -3,16 +3,14 @@ import { Button, Heading } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
 
-import { Fremgangsindikator } from "~/pages/skjema/components/Fremgangsindikator";
-
 import {
-  getRelativeRoute,
-  getStepNumber,
-  STEP_CONFIG,
-} from "../arbeidsgiver/stepConfig.ts";
+  Fremgangsindikator,
+  StegRekkefolgeItem,
+} from "~/pages/skjema/components/Fremgangsindikator";
 
 interface StegConfig {
   stepKey: string;
+  stegRekkefolge: StegRekkefolgeItem[];
   customNesteKnapp?: {
     tekst: string;
     ikon?: ReactNode;
@@ -26,17 +24,30 @@ interface SkjemaStegProps {
 }
 
 export function SkjemaSteg({ config, children }: SkjemaStegProps) {
-  const stepNumber = getStepNumber(config.stepKey);
-  const prevRoute = getRelativeRoute(config.stepKey, "prev");
-  const nextRoute = getRelativeRoute(config.stepKey, "next");
+  const stepNumber = getStepNumber(config.stepKey, config.stegRekkefolge);
+  const prevRoute = getRelativeRoute(
+    config.stepKey,
+    "prev",
+    config.stegRekkefolge,
+  );
+  const nextRoute = getRelativeRoute(
+    config.stepKey,
+    "next",
+    config.stegRekkefolge,
+  );
 
   // Get step title from config
-  const stepInfo = STEP_CONFIG.find((step) => step.key === config.stepKey);
+  const stepInfo = config.stegRekkefolge.find(
+    (step) => step.key === config.stepKey,
+  );
   const title = stepInfo?.title || `Unknown Step: ${config.stepKey}`;
 
   return (
     <section>
-      <Fremgangsindikator aktivtSteg={stepNumber} />
+      <Fremgangsindikator
+        aktivtSteg={stepNumber}
+        stegRekkefolge={config.stegRekkefolge}
+      />
       <Heading className="mt-8" level="1" size="large">
         {title}
       </Heading>
@@ -76,6 +87,47 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
       </div>
     </section>
   );
+}
+
+export function getStepNumber(
+  key: string,
+  stegRekkefolge: StegRekkefolgeItem[],
+): number {
+  const index = stegRekkefolge.findIndex((step) => step.key === key);
+  return index + 1;
+}
+
+export function getPreviousStep(
+  key: string,
+  stegRekkefolge: StegRekkefolgeItem[],
+): StegRekkefolgeItem | undefined {
+  const currentIndex = stegRekkefolge.findIndex((step) => step.key === key);
+  return currentIndex > 0 ? stegRekkefolge[currentIndex - 1] : undefined;
+}
+
+export function getNextStep(
+  key: string,
+  stegRekkefolge: StegRekkefolgeItem[],
+): StegRekkefolgeItem | undefined {
+  const currentIndex = stegRekkefolge.findIndex((step) => step.key === key);
+  return currentIndex !== -1 && currentIndex < stegRekkefolge.length - 1
+    ? stegRekkefolge[currentIndex + 1]
+    : undefined;
+}
+
+function getRelativeRoute(
+  key: string,
+  direction: "prev" | "next",
+  stegRekkefolge: StegRekkefolgeItem[],
+): string | undefined {
+  const targetStep =
+    direction === "prev"
+      ? getPreviousStep(key, stegRekkefolge)
+      : getNextStep(key, stegRekkefolge);
+  if (!targetStep) return undefined;
+
+  // Convert absolute route to relative route (remove /skjema/ prefix and add ../)
+  return `../${targetStep.key}`;
 }
 
 export type { StegConfig };

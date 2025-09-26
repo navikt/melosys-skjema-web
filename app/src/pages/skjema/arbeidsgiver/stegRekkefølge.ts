@@ -1,10 +1,6 @@
-export interface StepInfo {
-  key: string;
-  title: string;
-  route: string;
-}
+import { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 
-export const STEP_CONFIG: StepInfo[] = [
+export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
   {
     key: "veiledning",
     title: "Veiledning",
@@ -37,29 +33,41 @@ export const STEP_CONFIG: StepInfo[] = [
   },
 ];
 
-export function getStepNumber(key: string): number {
-  const index = STEP_CONFIG.findIndex((step) => step.key === key);
+export function getStepNumber(
+  key: string,
+  stegRekkefolge: StegRekkefolgeItem[],
+): number {
+  const index = stegRekkefolge.findIndex((step) => step.key === key);
   return index + 1;
 }
 
-export function getPreviousStep(key: string): StepInfo | undefined {
-  const currentIndex = STEP_CONFIG.findIndex((step) => step.key === key);
-  return currentIndex > 0 ? STEP_CONFIG[currentIndex - 1] : undefined;
+export function getPreviousStep(
+  key: string,
+  stegRekkefolge: StegRekkefolgeItem[],
+): StegRekkefolgeItem | undefined {
+  const currentIndex = stegRekkefolge.findIndex((step) => step.key === key);
+  return currentIndex > 0 ? stegRekkefolge[currentIndex - 1] : undefined;
 }
 
-export function getNextStep(key: string): StepInfo | undefined {
-  const currentIndex = STEP_CONFIG.findIndex((step) => step.key === key);
-  return currentIndex !== -1 && currentIndex < STEP_CONFIG.length - 1
-    ? STEP_CONFIG[currentIndex + 1]
+export function getNextStep(
+  key: string,
+  stegRekkefolge: StegRekkefolgeItem[],
+): StegRekkefolgeItem | undefined {
+  const currentIndex = stegRekkefolge.findIndex((step) => step.key === key);
+  return currentIndex !== -1 && currentIndex < stegRekkefolge.length - 1
+    ? stegRekkefolge[currentIndex + 1]
     : undefined;
 }
 
 export function getRelativeRoute(
   key: string,
   direction: "prev" | "next",
+  stegRekkefolge: StegRekkefolgeItem[],
 ): string | undefined {
   const targetStep =
-    direction === "prev" ? getPreviousStep(key) : getNextStep(key);
+    direction === "prev"
+      ? getPreviousStep(key, stegRekkefolge)
+      : getNextStep(key, stegRekkefolge);
   if (!targetStep) return undefined;
 
   // Convert absolute route to relative route (remove /skjema/ prefix and add ../)

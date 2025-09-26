@@ -1,20 +1,28 @@
 import { FormProgress } from "@navikt/ds-react";
 
-import { STEP_CONFIG } from "../arbeidsgiver/stepConfig.ts";
+export interface StegRekkefolgeItem {
+  key: string;
+  title: string;
+  route: string;
+}
 
 type FremgangsindikatorProps = {
   aktivtSteg: number;
+  stegRekkefolge: StegRekkefolgeItem[];
 };
 
-export const Fremgangsindikator = ({ aktivtSteg }: FremgangsindikatorProps) => {
+export const Fremgangsindikator = ({
+  aktivtSteg,
+  stegRekkefolge,
+}: FremgangsindikatorProps) => {
   return (
     <FormProgress
       activeStep={aktivtSteg}
       className="col-span-2"
       interactiveSteps={false}
-      totalSteps={STEP_CONFIG.length}
+      totalSteps={stegRekkefolge.length}
     >
-      {STEP_CONFIG.map((step) => (
+      {stegRekkefolge.map((step) => (
         <FormProgress.Step key={step.key}>{step.title}</FormProgress.Step>
       ))}
     </FormProgress>

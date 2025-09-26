@@ -5,8 +5,9 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
-import { getNextStep } from "./stepConfig.ts";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 
@@ -65,7 +66,7 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
   const onSubmit = (data: ArbeidsgiverensVirksomhetFormData) => {
     // eslint-disable-next-line no-console
     console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey);
+    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
     if (nextStep) {
       navigate({ to: nextStep.route });
     }
@@ -77,6 +78,7 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
         <SkjemaSteg
           config={{
             stepKey,
+            stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
             customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
           }}
         >
