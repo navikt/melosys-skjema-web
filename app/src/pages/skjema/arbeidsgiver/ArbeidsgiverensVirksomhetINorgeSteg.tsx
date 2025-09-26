@@ -3,10 +3,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
-import { getNextStep } from "./stepConfig";
+import { getNextStep } from "./stepConfig.ts";
 
 const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 

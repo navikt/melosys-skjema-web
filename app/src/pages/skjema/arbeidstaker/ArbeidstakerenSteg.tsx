@@ -4,11 +4,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { DatePickerFormPart } from "~/components/DatePickerFormPart";
-import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
+import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
-import { getNextStep } from "./stepConfig";
+import { getNextStep } from "../arbeidsgiver/stepConfig.ts";
 
 const stepKey = "arbeidstakeren";
 

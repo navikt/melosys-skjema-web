@@ -1,6 +1,6 @@
 import { FormProgress } from "@navikt/ds-react";
 
-import { STEP_CONFIG } from "../stepConfig";
+import { STEP_CONFIG } from "../arbeidsgiver/stepConfig.ts";
 
 type FremgangsindikatorProps = {
   aktivtSteg: number;

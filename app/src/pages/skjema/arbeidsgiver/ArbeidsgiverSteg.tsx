@@ -4,10 +4,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
+import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 
-import { getNextStep } from "./stepConfig";
+import { getNextStep } from "./stepConfig.ts";
 
 const stepKey = "arbeidsgiveren";
 
