@@ -7,7 +7,7 @@ import { z } from "zod";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 
-import { getNextStep } from "./stepConfig.ts";
+import { getNextStep } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiveren";
 

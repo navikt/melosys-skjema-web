@@ -6,10 +6,10 @@ import { ReactNode } from "react";
 import { Fremgangsindikator } from "~/pages/skjema/components/Fremgangsindikator";
 
 import {
+  ARBEIDSGIVER_STEG_REKKEFOLGE,
   getRelativeRoute,
   getStepNumber,
-  STEP_CONFIG,
-} from "../arbeidsgiver/stepConfig.ts";
+} from "../arbeidsgiver/stegRekkefølge.ts";
 
 interface StegConfig {
   stepKey: string;
@@ -31,12 +31,17 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
   const nextRoute = getRelativeRoute(config.stepKey, "next");
 
   // Get step title from config
-  const stepInfo = STEP_CONFIG.find((step) => step.key === config.stepKey);
+  const stepInfo = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
+    (step) => step.key === config.stepKey,
+  );
   const title = stepInfo?.title || `Unknown Step: ${config.stepKey}`;
 
   return (
     <section>
-      <Fremgangsindikator aktivtSteg={stepNumber} />
+      <Fremgangsindikator
+        aktivtSteg={stepNumber}
+        stegRekkefolge={ARBEIDSGIVER_STEG_REKKEFOLGE}
+      />
       <Heading className="mt-8" level="1" size="large">
         {title}
       </Heading>

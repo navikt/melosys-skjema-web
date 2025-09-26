@@ -1,10 +1,6 @@
-export interface StepInfo {
-  key: string;
-  title: string;
-  route: string;
-}
+import { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 
-export const STEP_CONFIG: StepInfo[] = [
+export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
   {
     key: "veiledning",
     title: "Veiledning",
@@ -38,19 +34,28 @@ export const STEP_CONFIG: StepInfo[] = [
 ];
 
 export function getStepNumber(key: string): number {
-  const index = STEP_CONFIG.findIndex((step) => step.key === key);
+  const index = ARBEIDSGIVER_STEG_REKKEFOLGE.findIndex(
+    (step) => step.key === key,
+  );
   return index + 1;
 }
 
-export function getPreviousStep(key: string): StepInfo | undefined {
-  const currentIndex = STEP_CONFIG.findIndex((step) => step.key === key);
-  return currentIndex > 0 ? STEP_CONFIG[currentIndex - 1] : undefined;
+export function getPreviousStep(key: string): StegRekkefolgeItem | undefined {
+  const currentIndex = ARBEIDSGIVER_STEG_REKKEFOLGE.findIndex(
+    (step) => step.key === key,
+  );
+  return currentIndex > 0
+    ? ARBEIDSGIVER_STEG_REKKEFOLGE[currentIndex - 1]
+    : undefined;
 }
 
-export function getNextStep(key: string): StepInfo | undefined {
-  const currentIndex = STEP_CONFIG.findIndex((step) => step.key === key);
-  return currentIndex !== -1 && currentIndex < STEP_CONFIG.length - 1
-    ? STEP_CONFIG[currentIndex + 1]
+export function getNextStep(key: string): StegRekkefolgeItem | undefined {
+  const currentIndex = ARBEIDSGIVER_STEG_REKKEFOLGE.findIndex(
+    (step) => step.key === key,
+  );
+  return currentIndex !== -1 &&
+    currentIndex < ARBEIDSGIVER_STEG_REKKEFOLGE.length - 1
+    ? ARBEIDSGIVER_STEG_REKKEFOLGE[currentIndex + 1]
     : undefined;
 }
 
