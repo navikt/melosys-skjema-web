@@ -4,12 +4,12 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { DatePickerFormPart } from "~/components/DatePickerFormPart";
-import { LandVelgerFormPart } from "~/components/LandVelgerFormPart";
-import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
+import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
+import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
-import { getNextStep } from "./stepConfig";
+import { getNextStep } from "./stepConfig.ts";
 
 const stepKey = "utenlandsoppdraget";
 

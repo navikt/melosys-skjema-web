@@ -5,7 +5,11 @@ import { ReactNode } from "react";
 
 import { Fremgangsindikator } from "~/pages/skjema/components/Fremgangsindikator";
 
-import { getRelativeRoute, getStepNumber, STEP_CONFIG } from "../stepConfig";
+import {
+  getRelativeRoute,
+  getStepNumber,
+  STEP_CONFIG,
+} from "../arbeidsgiver/stepConfig.ts";
 
 interface StegConfig {
   stepKey: string;

@@ -17,13 +17,13 @@ import {
 } from "react-hook-form";
 import { z } from "zod";
 
-import { FjernKnapp } from "~/components/FjernKnapp";
-import { LandVelgerFormPart } from "~/components/LandVelgerFormPart";
-import { LeggTilKnapp } from "~/components/LeggTilKnapp";
-import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg";
+import { FjernKnapp } from "~/components/FjernKnapp.tsx";
+import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
+import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
-import { getNextStep } from "./stepConfig";
+import { getNextStep } from "./stepConfig.ts";
 
 const stepKey = "arbeidstakerens-lonn";
 

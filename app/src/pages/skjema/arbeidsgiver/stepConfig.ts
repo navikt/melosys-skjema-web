@@ -26,11 +26,6 @@ export const STEP_CONFIG: StepInfo[] = [
     route: "/skjema/arbeidsgiver/utenlandsoppdraget",
   },
   {
-    key: "arbeidstakeren",
-    title: "Arbeidstakeren",
-    route: "/skjema/arbeidsgiver/arbeidstakeren",
-  },
-  {
     key: "arbeidstakerens-lonn",
     title: "Arbeidstakerens lønn",
     route: "/skjema/arbeidsgiver/arbeidstakerens-lonn",
