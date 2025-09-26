@@ -8,7 +8,7 @@ import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
-import { getNextStep } from "../arbeidsgiver/stegRekkefølge.ts";
+import { getNextStep } from "~/pages/skjema/arbeidsgiver/stegRekkefølge.ts";
 
 const stepKey = "arbeidstakeren";
 
