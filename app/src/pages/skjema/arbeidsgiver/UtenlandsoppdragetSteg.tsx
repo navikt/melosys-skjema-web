@@ -8,8 +8,8 @@ import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-
 import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "utenlandsoppdraget";

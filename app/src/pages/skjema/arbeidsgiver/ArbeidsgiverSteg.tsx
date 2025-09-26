@@ -4,7 +4,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { SkjemaSteg, getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  getNextStep,
+  SkjemaSteg,
+} from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";

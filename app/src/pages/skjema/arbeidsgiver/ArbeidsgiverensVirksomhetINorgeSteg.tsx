@@ -5,8 +5,8 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-
 import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiverens-virksomhet-i-norge";

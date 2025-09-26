@@ -22,8 +22,8 @@ import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-
 import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidstakerens-lonn";
