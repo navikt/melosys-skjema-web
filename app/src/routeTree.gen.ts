@@ -15,8 +15,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SkjemaIndexRouteImport } from './routes/skjema.index'
 import { Route as SkjemaArbeidstakerRouteImport } from './routes/skjema.arbeidstaker'
 import { Route as SkjemaArbeidsgiverRouteImport } from './routes/skjema.arbeidsgiver'
+import { Route as SkjemaArbeidstakerIndexRouteImport } from './routes/skjema.arbeidstaker.index'
 import { Route as SkjemaArbeidsgiverIndexRouteImport } from './routes/skjema.arbeidsgiver.index'
-import { Route as SkjemaArbeidsgiverVeiledningRouteImport } from './routes/skjema.arbeidsgiver.veiledning'
+import { Route as SkjemaArbeidstakerArbeidstakerenRouteImport } from './routes/skjema.arbeidstaker.arbeidstakeren'
 import { Route as SkjemaArbeidsgiverUtenlandsoppdragetRouteImport } from './routes/skjema.arbeidsgiver.utenlandsoppdraget'
 import { Route as SkjemaArbeidsgiverOppsummeringRouteImport } from './routes/skjema.arbeidsgiver.oppsummering'
 import { Route as SkjemaArbeidsgiverArbeidstakerensLonnRouteImport } from './routes/skjema.arbeidsgiver.arbeidstakerens-lonn'
@@ -54,16 +55,21 @@ const SkjemaArbeidsgiverRoute = SkjemaArbeidsgiverRouteImport.update({
   path: '/arbeidsgiver',
   getParentRoute: () => SkjemaRoute,
 } as any)
+const SkjemaArbeidstakerIndexRoute = SkjemaArbeidstakerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SkjemaArbeidstakerRoute,
+} as any)
 const SkjemaArbeidsgiverIndexRoute = SkjemaArbeidsgiverIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => SkjemaArbeidsgiverRoute,
 } as any)
-const SkjemaArbeidsgiverVeiledningRoute =
-  SkjemaArbeidsgiverVeiledningRouteImport.update({
-    id: '/veiledning',
-    path: '/veiledning',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+const SkjemaArbeidstakerArbeidstakerenRoute =
+  SkjemaArbeidstakerArbeidstakerenRouteImport.update({
+    id: '/arbeidstakeren',
+    path: '/arbeidstakeren',
+    getParentRoute: () => SkjemaArbeidstakerRoute,
   } as any)
 const SkjemaArbeidsgiverUtenlandsoppdragetRoute =
   SkjemaArbeidsgiverUtenlandsoppdragetRouteImport.update({
@@ -107,7 +113,7 @@ export interface FileRoutesByFullPath {
   '/rollevelger': typeof RollevelgerRoute
   '/skjema': typeof SkjemaRouteWithChildren
   '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverRouteWithChildren
-  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRoute
+  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRouteWithChildren
   '/skjema/': typeof SkjemaIndexRoute
   '/skjema/arbeidsgiver/arbeidsgiveren': typeof SkjemaArbeidsgiverArbeidsgiverenRoute
   '/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverArbeidsgiverensVirksomhetINorgeRoute
@@ -115,13 +121,13 @@ export interface FileRoutesByFullPath {
   '/skjema/arbeidsgiver/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverArbeidstakerensLonnRoute
   '/skjema/arbeidsgiver/oppsummering': typeof SkjemaArbeidsgiverOppsummeringRoute
   '/skjema/arbeidsgiver/utenlandsoppdraget': typeof SkjemaArbeidsgiverUtenlandsoppdragetRoute
-  '/skjema/arbeidsgiver/veiledning': typeof SkjemaArbeidsgiverVeiledningRoute
+  '/skjema/arbeidstaker/arbeidstakeren': typeof SkjemaArbeidstakerArbeidstakerenRoute
   '/skjema/arbeidsgiver/': typeof SkjemaArbeidsgiverIndexRoute
+  '/skjema/arbeidstaker/': typeof SkjemaArbeidstakerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/rollevelger': typeof RollevelgerRoute
-  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRoute
   '/skjema': typeof SkjemaIndexRoute
   '/skjema/arbeidsgiver/arbeidsgiveren': typeof SkjemaArbeidsgiverArbeidsgiverenRoute
   '/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverArbeidsgiverensVirksomhetINorgeRoute
@@ -129,8 +135,9 @@ export interface FileRoutesByTo {
   '/skjema/arbeidsgiver/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverArbeidstakerensLonnRoute
   '/skjema/arbeidsgiver/oppsummering': typeof SkjemaArbeidsgiverOppsummeringRoute
   '/skjema/arbeidsgiver/utenlandsoppdraget': typeof SkjemaArbeidsgiverUtenlandsoppdragetRoute
-  '/skjema/arbeidsgiver/veiledning': typeof SkjemaArbeidsgiverVeiledningRoute
+  '/skjema/arbeidstaker/arbeidstakeren': typeof SkjemaArbeidstakerArbeidstakerenRoute
   '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverIndexRoute
+  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -138,7 +145,7 @@ export interface FileRoutesById {
   '/rollevelger': typeof RollevelgerRoute
   '/skjema': typeof SkjemaRouteWithChildren
   '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverRouteWithChildren
-  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRoute
+  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRouteWithChildren
   '/skjema/': typeof SkjemaIndexRoute
   '/skjema/arbeidsgiver/arbeidsgiveren': typeof SkjemaArbeidsgiverArbeidsgiverenRoute
   '/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverArbeidsgiverensVirksomhetINorgeRoute
@@ -146,8 +153,9 @@ export interface FileRoutesById {
   '/skjema/arbeidsgiver/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverArbeidstakerensLonnRoute
   '/skjema/arbeidsgiver/oppsummering': typeof SkjemaArbeidsgiverOppsummeringRoute
   '/skjema/arbeidsgiver/utenlandsoppdraget': typeof SkjemaArbeidsgiverUtenlandsoppdragetRoute
-  '/skjema/arbeidsgiver/veiledning': typeof SkjemaArbeidsgiverVeiledningRoute
+  '/skjema/arbeidstaker/arbeidstakeren': typeof SkjemaArbeidstakerArbeidstakerenRoute
   '/skjema/arbeidsgiver/': typeof SkjemaArbeidsgiverIndexRoute
+  '/skjema/arbeidstaker/': typeof SkjemaArbeidstakerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -164,13 +172,13 @@ export interface FileRouteTypes {
     | '/skjema/arbeidsgiver/arbeidstakerens-lonn'
     | '/skjema/arbeidsgiver/oppsummering'
     | '/skjema/arbeidsgiver/utenlandsoppdraget'
-    | '/skjema/arbeidsgiver/veiledning'
+    | '/skjema/arbeidstaker/arbeidstakeren'
     | '/skjema/arbeidsgiver/'
+    | '/skjema/arbeidstaker/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/rollevelger'
-    | '/skjema/arbeidstaker'
     | '/skjema'
     | '/skjema/arbeidsgiver/arbeidsgiveren'
     | '/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge'
@@ -178,8 +186,9 @@ export interface FileRouteTypes {
     | '/skjema/arbeidsgiver/arbeidstakerens-lonn'
     | '/skjema/arbeidsgiver/oppsummering'
     | '/skjema/arbeidsgiver/utenlandsoppdraget'
-    | '/skjema/arbeidsgiver/veiledning'
+    | '/skjema/arbeidstaker/arbeidstakeren'
     | '/skjema/arbeidsgiver'
+    | '/skjema/arbeidstaker'
   id:
     | '__root__'
     | '/'
@@ -194,8 +203,9 @@ export interface FileRouteTypes {
     | '/skjema/arbeidsgiver/arbeidstakerens-lonn'
     | '/skjema/arbeidsgiver/oppsummering'
     | '/skjema/arbeidsgiver/utenlandsoppdraget'
-    | '/skjema/arbeidsgiver/veiledning'
+    | '/skjema/arbeidstaker/arbeidstakeren'
     | '/skjema/arbeidsgiver/'
+    | '/skjema/arbeidstaker/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -248,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkjemaArbeidsgiverRouteImport
       parentRoute: typeof SkjemaRoute
     }
+    '/skjema/arbeidstaker/': {
+      id: '/skjema/arbeidstaker/'
+      path: '/'
+      fullPath: '/skjema/arbeidstaker/'
+      preLoaderRoute: typeof SkjemaArbeidstakerIndexRouteImport
+      parentRoute: typeof SkjemaArbeidstakerRoute
+    }
     '/skjema/arbeidsgiver/': {
       id: '/skjema/arbeidsgiver/'
       path: '/'
@@ -255,12 +272,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkjemaArbeidsgiverIndexRouteImport
       parentRoute: typeof SkjemaArbeidsgiverRoute
     }
-    '/skjema/arbeidsgiver/veiledning': {
-      id: '/skjema/arbeidsgiver/veiledning'
-      path: '/veiledning'
-      fullPath: '/skjema/arbeidsgiver/veiledning'
-      preLoaderRoute: typeof SkjemaArbeidsgiverVeiledningRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+    '/skjema/arbeidstaker/arbeidstakeren': {
+      id: '/skjema/arbeidstaker/arbeidstakeren'
+      path: '/arbeidstakeren'
+      fullPath: '/skjema/arbeidstaker/arbeidstakeren'
+      preLoaderRoute: typeof SkjemaArbeidstakerArbeidstakerenRouteImport
+      parentRoute: typeof SkjemaArbeidstakerRoute
     }
     '/skjema/arbeidsgiver/utenlandsoppdraget': {
       id: '/skjema/arbeidsgiver/utenlandsoppdraget'
@@ -314,7 +331,6 @@ interface SkjemaArbeidsgiverRouteChildren {
   SkjemaArbeidsgiverArbeidstakerensLonnRoute: typeof SkjemaArbeidsgiverArbeidstakerensLonnRoute
   SkjemaArbeidsgiverOppsummeringRoute: typeof SkjemaArbeidsgiverOppsummeringRoute
   SkjemaArbeidsgiverUtenlandsoppdragetRoute: typeof SkjemaArbeidsgiverUtenlandsoppdragetRoute
-  SkjemaArbeidsgiverVeiledningRoute: typeof SkjemaArbeidsgiverVeiledningRoute
   SkjemaArbeidsgiverIndexRoute: typeof SkjemaArbeidsgiverIndexRoute
 }
 
@@ -328,22 +344,34 @@ const SkjemaArbeidsgiverRouteChildren: SkjemaArbeidsgiverRouteChildren = {
   SkjemaArbeidsgiverOppsummeringRoute: SkjemaArbeidsgiverOppsummeringRoute,
   SkjemaArbeidsgiverUtenlandsoppdragetRoute:
     SkjemaArbeidsgiverUtenlandsoppdragetRoute,
-  SkjemaArbeidsgiverVeiledningRoute: SkjemaArbeidsgiverVeiledningRoute,
   SkjemaArbeidsgiverIndexRoute: SkjemaArbeidsgiverIndexRoute,
 }
 
 const SkjemaArbeidsgiverRouteWithChildren =
   SkjemaArbeidsgiverRoute._addFileChildren(SkjemaArbeidsgiverRouteChildren)
 
+interface SkjemaArbeidstakerRouteChildren {
+  SkjemaArbeidstakerArbeidstakerenRoute: typeof SkjemaArbeidstakerArbeidstakerenRoute
+  SkjemaArbeidstakerIndexRoute: typeof SkjemaArbeidstakerIndexRoute
+}
+
+const SkjemaArbeidstakerRouteChildren: SkjemaArbeidstakerRouteChildren = {
+  SkjemaArbeidstakerArbeidstakerenRoute: SkjemaArbeidstakerArbeidstakerenRoute,
+  SkjemaArbeidstakerIndexRoute: SkjemaArbeidstakerIndexRoute,
+}
+
+const SkjemaArbeidstakerRouteWithChildren =
+  SkjemaArbeidstakerRoute._addFileChildren(SkjemaArbeidstakerRouteChildren)
+
 interface SkjemaRouteChildren {
   SkjemaArbeidsgiverRoute: typeof SkjemaArbeidsgiverRouteWithChildren
-  SkjemaArbeidstakerRoute: typeof SkjemaArbeidstakerRoute
+  SkjemaArbeidstakerRoute: typeof SkjemaArbeidstakerRouteWithChildren
   SkjemaIndexRoute: typeof SkjemaIndexRoute
 }
 
 const SkjemaRouteChildren: SkjemaRouteChildren = {
   SkjemaArbeidsgiverRoute: SkjemaArbeidsgiverRouteWithChildren,
-  SkjemaArbeidstakerRoute: SkjemaArbeidstakerRoute,
+  SkjemaArbeidstakerRoute: SkjemaArbeidstakerRouteWithChildren,
   SkjemaIndexRoute: SkjemaIndexRoute,
 }
 

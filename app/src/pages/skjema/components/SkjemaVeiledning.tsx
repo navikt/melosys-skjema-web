@@ -16,7 +16,11 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { OrganisasjonDto } from "~/types/apiTypes.ts";
 
-export function Skjema() {
+interface SkjemaVeiledningProps {
+  startRoute?: string;
+}
+
+export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
   const navigate = useNavigate();
   const organisasjonData = sessionStorage.getItem("valgtRolle");
 
@@ -170,7 +174,7 @@ export function Skjema() {
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={() => {
-                navigate({ to: "/skjema/arbeidsgiver/veiledning" });
+                navigate({ to: startRoute });
               }}
               variant="primary"
             >

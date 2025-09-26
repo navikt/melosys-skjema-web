@@ -1,7 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import { ArbeidstakerSkjema } from "~/pages/skjema/arbeidstaker/ArbeidstakerSkjema.tsx";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/skjema/arbeidstaker")({
-  component: ArbeidstakerSkjema,
+  component: () => <Outlet />,
 });
