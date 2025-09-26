@@ -6,8 +6,11 @@ import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { getNextStep } from "~/pages/skjema/arbeidsgiver/stegRekkefølge.ts";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
+import {
+  getNextStep,
+  SkjemaSteg,
+} from "~/pages/skjema/components/SkjemaSteg.tsx";
 
 const stepKey = "arbeidstakeren";
 
@@ -105,7 +108,7 @@ export function ArbeidstakerenSteg() {
     // Fjerner console.log når vi har endepunkt å sende data til
     // eslint-disable-next-line no-console
     console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, []);
+    const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
     if (nextStep) {
       navigate({ to: nextStep.route });
     }
@@ -118,7 +121,7 @@ export function ArbeidstakerenSteg() {
           config={{
             stepKey,
             customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
-            stegRekkefolge: [],
+            stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
         >
           <RadioGroupJaNeiFormPart
