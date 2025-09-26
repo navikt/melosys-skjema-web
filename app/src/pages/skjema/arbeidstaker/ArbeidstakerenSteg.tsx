@@ -106,7 +106,7 @@ export function ArbeidstakerenSteg() {
     // Fjerner console.log når vi har endepunkt å sende data til
     // eslint-disable-next-line no-console
     console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey);
+    const nextStep = getNextStep(stepKey, []);
     if (nextStep) {
       navigate({ to: nextStep.route });
     }
@@ -119,6 +119,7 @@ export function ArbeidstakerenSteg() {
           config={{
             stepKey,
             customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
+            stegRekkefolge: [],
           }}
         >
           <RadioGroupJaNeiFormPart

@@ -4,10 +4,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { SkjemaSteg, getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 
-import { getNextStep } from "./stegRekkefølge.ts";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiveren";
 
@@ -39,7 +39,7 @@ export function ArbeidsgiverSteg() {
   const onSubmit = (data: ArbeidsgiverFormData) => {
     // eslint-disable-next-line no-console
     console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey);
+    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
     if (nextStep) {
       navigate({ to: nextStep.route });
     }
@@ -50,6 +50,7 @@ export function ArbeidsgiverSteg() {
       <SkjemaSteg
         config={{
           stepKey,
+          stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
           customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
         }}
       >
