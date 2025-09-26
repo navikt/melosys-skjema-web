@@ -31,22 +31,6 @@ Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 
 ## Utvikling
 
-### Oppstart
-
-**Frontend:**
-```bash
-cd app
-npm install
-npm run dev
-```
-Åpne http://localhost:5173
-
-**Server:**
-```bash
-docker-compose up -d --build
-```
-Server på http://localhost:8081
-
 ### Lokal utvikling mot ekte backend i dev-gcp
 
 1. Start react app:
