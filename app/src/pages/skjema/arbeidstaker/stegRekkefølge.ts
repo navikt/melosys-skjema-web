@@ -6,4 +6,9 @@ export const ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
     title: "Arbeidstakeren",
     route: "/skjema/arbeidstaker/arbeidstakeren",
   },
+  {
+    key: "skatteforhold-og-inntekt",
+    title: "Skatteforhold og inntekt",
+    route: "/skjema/arbeidstaker/skatteforhold-og-inntekt",
+  },
 ];
