@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextField } from "@navikt/ds-react";
+import { Select, TextField } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,8 +14,20 @@ import {
 
 const stepKey = "arbeidstakeren";
 
+const AKTIVITET_OPTIONS = [
+  { value: "studier", label: "Studier" },
+  { value: "ferie", label: "Ferie" },
+  { value: "selvstendig-virksomhet", label: "Selvstendig virksomhet" },
+  { value: "kontantytelse-fra-nav", label: "Mottok kontantytelse fra Nav" },
+] as const;
+
 const arbeidstakerSchema = z
   .object({
+    harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean({
+      message:
+        "Du må svare på om du har vært eller skal være i lønnet arbeid i Norge før utsending",
+    }),
+    aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
     harNorskFodselsnummer: z.boolean({
       message: "Du må svare på om arbeidstakeren har norsk fødselsnummer",
     }),
@@ -84,6 +96,26 @@ const arbeidstakerSchema = z
       message: "Fødselsdato er påkrevd",
       path: ["fodselsdato"],
     },
+  )
+  .refine(
+    (data) => {
+      if (!data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending) {
+        const validOptions = AKTIVITET_OPTIONS.map(
+          (aktivitetOption) => aktivitetOption.value,
+        );
+        return (
+          data.aktivitetIMaanedenFoerUtsendingen &&
+          (validOptions as string[]).includes(
+            data.aktivitetIMaanedenFoerUtsendingen,
+          )
+        );
+      }
+      return true;
+    },
+    {
+      message: "Du må velge en aktivitet når du ikke har vært i lønnet arbeid",
+      path: ["aktivitetIMaanedenFoerUtsendingen"],
+    },
   );
 
 type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
@@ -103,6 +135,9 @@ export function ArbeidstakerenSteg() {
   } = formMethods;
 
   const harNorskFodselsnummer = watch("harNorskFodselsnummer");
+  const harVaertEllerSkalVaereILonnetArbeidFoerUtsending = watch(
+    "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
+  );
 
   const onSubmit = (data: ArbeidstakerFormData) => {
     // Fjerner console.log når vi har endepunkt å sende data til
@@ -163,6 +198,32 @@ export function ArbeidstakerenSteg() {
                 label="Arbeidstakerens fødselsdato"
               />
             </>
+          )}
+
+          <RadioGroupJaNeiFormPart
+            className="mt-4"
+            formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
+            legend="Har du vært eller skal du være i lønnet arbeid i Norge i minst én måned rett før utsendingen?"
+          />
+
+          {harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
+            <Select
+              className="mt-4"
+              error={errors.aktivitetIMaanedenFoerUtsendingen?.message}
+              label="Aktivitet (TODO: finne en bra label her)"
+              style={{ width: "fit-content" }}
+              {...register("aktivitetIMaanedenFoerUtsendingen")}
+            >
+              <option value="">Velg aktivitet</option>
+              {AKTIVITET_OPTIONS.map((aktivitetOption) => (
+                <option
+                  key={aktivitetOption.value}
+                  value={aktivitetOption.value}
+                >
+                  {aktivitetOption.label}
+                </option>
+              ))}
+            </Select>
           )}
         </SkjemaSteg>
       </form>
