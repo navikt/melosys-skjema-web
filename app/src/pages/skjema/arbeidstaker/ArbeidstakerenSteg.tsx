@@ -1,11 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select, TextField } from "@navikt/ds-react";
+import { Select, TextField, VStack } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
+import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import {
   getNextStep,
@@ -28,6 +30,39 @@ const arbeidstakerSchema = z
         "Du må svare på om du har vært eller skal være i lønnet arbeid i Norge før utsending",
     }),
     aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
+    skalJobbeForFlereVirksomheter: z.boolean({
+      message:
+        "Du må svare på om du skal jobbe for flere virksomheter i perioden",
+    }),
+    norskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode: z
+      .array(
+        z.object({
+          organisasjonsnummer: z
+            .string()
+            .min(1, "Organisasjonsnummer er påkrevd")
+            .regex(/^\d{9}$/, "Organisasjonsnummer må være 9 siffer"),
+        }),
+      )
+      .optional(),
+    utenlandskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode: z
+      .array(
+        z.object({
+          navn: z.string().min(1, "Navn på virksomhet er påkrevd"),
+          organisasjonsnummer: z.string().optional(),
+          vegnavnOgHusnummer: z
+            .string()
+            .min(1, "Vegnavn og husnummer er påkrevd"),
+          bygning: z.string().optional(),
+          postkode: z.string().optional(),
+          byStedsnavn: z.string().optional(),
+          region: z.string().optional(),
+          land: z.string().min(1, "Land er påkrevd"),
+          tilhorerSammeKonsern: z.boolean({
+            message: "Du må svare på om virksomheten tilhører samme konsern",
+          }),
+        }),
+      )
+      .optional(),
     harNorskFodselsnummer: z.boolean({
       message: "Du må svare på om arbeidstakeren har norsk fødselsnummer",
     }),
@@ -138,6 +173,7 @@ export function ArbeidstakerenSteg() {
   const harVaertEllerSkalVaereILonnetArbeidFoerUtsending = watch(
     "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
   );
+  const skalJobbeForFlereVirksomheter = watch("skalJobbeForFlereVirksomheter");
 
   const onSubmit = (data: ArbeidstakerFormData) => {
     // Fjerner console.log når vi har endepunkt å sende data til
@@ -224,6 +260,20 @@ export function ArbeidstakerenSteg() {
                 </option>
               ))}
             </Select>
+          )}
+
+          <RadioGroupJaNeiFormPart
+            className="mt-4"
+            formFieldName="skalJobbeForFlereVirksomheter"
+            legend="Skal du jobbe for flere virksomheter i perioden du søker for?"
+          />
+
+          {skalJobbeForFlereVirksomheter === true && (
+            <VStack className="mt-4" style={{ gap: "var(--a-spacing-4)" }}>
+              <NorskeVirksomheterFormPart fieldName="norskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode" />
+
+              <UtenlandskeVirksomheterFormPart fieldName="utenlandskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode" />
+            </VStack>
           )}
         </SkjemaSteg>
       </form>
