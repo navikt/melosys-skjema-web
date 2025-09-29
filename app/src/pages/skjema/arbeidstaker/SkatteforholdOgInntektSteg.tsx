@@ -71,7 +71,7 @@ const skatteforholdOgInntektSchema = z
         const amount = Number.parseFloat(
           data.pengestotteSomMottasFraAndreLandBelop,
         );
-        return !isNaN(amount) && amount > 0;
+        return !Number.isNaN(amount) && amount > 0;
       }
       return true;
     },
