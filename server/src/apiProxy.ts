@@ -4,8 +4,8 @@ import { getToken, requestOboToken } from "@navikt/oasis";
 import { NextFunction, Request, Response, Router } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
-import config from "./config.js";
 import logger from "./logger.js";
+import { requireEnvironment } from "./utils.js";
 
 type ProxyOptions = {
   ingoingUrl: string;
@@ -13,14 +13,27 @@ type ProxyOptions = {
   scope: string;
 };
 
-export const setupApiProxy = (router: Router) =>
-  addProxyHandler(router, {
-    ingoingUrl: "/api",
-    outgoingUrl: config.proxy.apiUrl,
-    scope: config.proxy.apiScope,
-  });
+type SimpleProxyOptions = {
+  ingoingUrl: string;
+  outgoingUrl: string;
+};
 
-function addProxyHandler(
+export const setupApiProxy = (router: Router) => {
+  addProxyWithOboExchangeHandler(router, {
+    ingoingUrl: "/api",
+    outgoingUrl: requireEnvironment("API_URL"),
+    scope: requireEnvironment("API_SCOPE"),
+  });
+};
+
+export const setupDekoratorenApiProxy = (router: Router) => {
+  addSimpleProxyHandler(router, {
+    ingoingUrl: "/nav-dekoratoren-api",
+    outgoingUrl: requireEnvironment("DEKORATOREN_API_URL"),
+  });
+};
+
+function addProxyWithOboExchangeHandler(
   router: Router,
   { ingoingUrl, outgoingUrl, scope }: ProxyOptions,
 ) {
@@ -82,4 +95,18 @@ function addOboTokenToProxyRequest(
       `Access token was not present in session for scope ${scope}`,
     );
   }
+}
+
+export function addSimpleProxyHandler(
+  router: Router,
+  { ingoingUrl, outgoingUrl }: SimpleProxyOptions,
+) {
+  router.use(
+    ingoingUrl,
+    createProxyMiddleware({
+      target: outgoingUrl,
+      changeOrigin: true,
+      logger: logger,
+    }),
+  );
 }

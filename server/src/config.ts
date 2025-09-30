@@ -1,17 +1,4 @@
-function requireEnvironment(environmentName: string) {
-  const environmentContent = process.env[environmentName];
-  if (!environmentContent) {
-    throw new Error(
-      "Missing environment variable with name: " + environmentName,
-    );
-  }
-  return environmentContent;
-}
-
-const proxy = {
-  apiScope: requireEnvironment("API_SCOPE"),
-  apiUrl: requireEnvironment("API_URL"),
-};
+import { requireEnvironment } from "./utils.js";
 
 const app = {
   env: requireEnvironment("ENV") as "dev" | "prod",
@@ -19,4 +6,6 @@ const app = {
   port: Number(requireEnvironment("EXPRESS_PORT")),
 };
 
-export default { proxy, app };
+export default {
+  app,
+};
