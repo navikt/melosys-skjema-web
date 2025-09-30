@@ -1,7 +1,7 @@
 import express from "express";
 
 import { setupActuators } from "./actuators.js";
-import { setupApiProxy } from "./apiProxy.js";
+import { setupApiProxy, setupDekoratorenApiProxy } from "./apiProxy.js";
 import { errorHandling } from "./errorHandler.js";
 import { setupStaticRoutes } from "./frontendRoute.js";
 import logger from "./logger.js";
@@ -19,6 +19,7 @@ const protectedRouter = express.Router();
 app.set("trust proxy", 1);
 
 setupApiProxy(protectedRouter);
+setupDekoratorenApiProxy(protectedRouter);
 // Catch all route, må være sist
 setupStaticRoutes(protectedRouter);
 

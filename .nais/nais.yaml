@@ -45,6 +45,8 @@ spec:
       rules:
         - application: nav-dekoratoren
           namespace: personbruker
+        - application: nav-dekoratoren-api
+          namespace: personbruker
         - application: melosys-skjema-api
   prometheus:
     enabled: true
@@ -67,3 +69,5 @@ spec:
       value: {{API_URL}}
     - name: API_SCOPE
       value: {{API_SCOPE}}
+    - name: DEKORATOREN_API_URL
+      value: {{DEKORATOREN_API_URL}}
