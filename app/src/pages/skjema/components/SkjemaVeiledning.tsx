@@ -12,9 +12,10 @@ import {
   Page,
   VStack,
 } from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
-import { OrganisasjonDto } from "~/types/apiTypes.ts";
+import { getUserInfo } from "~/api/userInfo.ts";
 
 interface SkjemaVeiledningProps {
   startRoute?: string;
@@ -22,13 +23,8 @@ interface SkjemaVeiledningProps {
 
 export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
   const navigate = useNavigate();
-  const organisasjonData = sessionStorage.getItem("valgtRolle");
 
-  const organisasjon: OrganisasjonDto | undefined = organisasjonData
-    ? JSON.parse(organisasjonData)
-    : undefined;
-
-  const navn = organisasjon?.navn || "Navn Navnesen";
+  const userInfo = useQuery(getUserInfo());
 
   return (
     <Page>
@@ -36,7 +32,7 @@ export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
         <VStack as="main" gap="8">
           <GuidePanel poster>
             <Heading level="2" size="medium" spacing>
-              Hei, {navn}
+              Hei, {userInfo.data?.name}
             </Heading>
             <BodyLong spacing>
               Seksjonen GuidePanel brukes til en kort, overordnet veiledning til
