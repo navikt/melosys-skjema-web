@@ -1,26 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Box,
-  Detail,
-  ErrorMessage,
-  Label,
-  Tag,
-  TextField,
-  VStack,
-} from "@navikt/ds-react";
+import { Detail, ErrorMessage, Label, VStack } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  FormProvider,
-  useFieldArray,
-  useForm,
-  useFormContext,
-} from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { FjernKnapp } from "~/components/FjernKnapp.tsx";
-import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
-import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
+import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
@@ -145,9 +131,15 @@ export function ArbeidstakerensLonnSteg() {
                 lønnen og eventuelle naturalytelser
               </Detail>
 
-              <NorskeVirksomheterSection />
+              <NorskeVirksomheterFormPart
+                clearErrorsFieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
+                fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter"
+              />
 
-              <UtenlandskeVirksomheterSection />
+              <UtenlandskeVirksomheterFormPart
+                clearErrorsFieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
+                fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter"
+              />
 
               {errors.virksomheterSomUtbetalerLonnOgNaturalytelser && (
                 <ErrorMessage className="mt-2">
@@ -159,226 +151,5 @@ export function ArbeidstakerensLonnSteg() {
         </SkjemaSteg>
       </form>
     </FormProvider>
-  );
-}
-
-function NorskeVirksomheterSection() {
-  const { control, register, getFieldState, clearErrors } = useFormContext();
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter",
-  });
-
-  const leggTilNorskVirksomhet = () => {
-    append({ organisasjonsnummer: "" });
-    clearErrors("virksomheterSomUtbetalerLonnOgNaturalytelser");
-  };
-
-  const fjernNorskVirksomhet = (index: number) => {
-    remove(index);
-  };
-
-  return (
-    <>
-      {fields.map((field, index) => (
-        <Box
-          background="surface-alt-3-subtle"
-          borderRadius="medium"
-          className="ml-4"
-          key={field.id}
-          padding="space-8"
-          style={{
-            borderLeft: "4px solid var(--a-border-subtle)",
-          }}
-        >
-          <Tag size="small" variant="info">
-            Norsk virksomhet
-          </Tag>
-          <TextField
-            className="mt-2"
-            error={
-              getFieldState(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter.${index}.organisasjonsnummer`,
-              ).error?.message
-            }
-            label="Organisasjonsnummer"
-            style={{ maxWidth: "160px" }}
-            {...register(
-              `virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter.${index}.organisasjonsnummer`,
-            )}
-            size="small"
-          />
-          <FjernKnapp
-            className="mt-2"
-            onClick={() => fjernNorskVirksomhet(index)}
-            size="small"
-          />
-        </Box>
-      ))}
-
-      <LeggTilKnapp onClick={leggTilNorskVirksomhet}>
-        Legg til norsk virksomhet
-      </LeggTilKnapp>
-    </>
-  );
-}
-
-function UtenlandskeVirksomheterSection() {
-  const { control, register, getFieldState, clearErrors } = useFormContext();
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter",
-  });
-
-  const leggTilUtenlandskVirksomhet = () => {
-    append({
-      navn: "",
-      vegnavnOgHusnummer: "",
-      land: "",
-    });
-    clearErrors("virksomheterSomUtbetalerLonnOgNaturalytelser");
-  };
-
-  const fjernUtenlandskVirksomhet = (index: number) => {
-    remove(index);
-  };
-
-  return (
-    <>
-      {fields.map((field, index) => (
-        <Box
-          background="surface-alt-3-subtle"
-          borderRadius="medium"
-          className="ml-4"
-          key={field.id}
-          padding="space-8"
-          style={{
-            borderLeft: "4px solid var(--a-border-subtle)",
-          }}
-        >
-          <Tag size="small" variant="info">
-            Utenlandsk virksomhet
-          </Tag>
-
-          <VStack className="mt-4" gap="space-6">
-            <TextField
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.navn`,
-                ).error?.message
-              }
-              label="Navn på virksomhet"
-              {...register(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.navn`,
-              )}
-              size="small"
-            />
-
-            <TextField
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.organisasjonsnummer`,
-                ).error?.message
-              }
-              label="Organisasjonsnummer eller registreringsnummer (valgfritt)"
-              {...register(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.organisasjonsnummer`,
-              )}
-              size="small"
-            />
-
-            <TextField
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.vegnavnOgHusnummer`,
-                ).error?.message
-              }
-              label="Vegnavn og husnummer, evt. postboks"
-              {...register(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.vegnavnOgHusnummer`,
-              )}
-              size="small"
-            />
-
-            <TextField
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.bygning`,
-                ).error?.message
-              }
-              label="Bygning (valgfritt)"
-              {...register(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.bygning`,
-              )}
-              size="small"
-            />
-
-            <TextField
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.postkode`,
-                ).error?.message
-              }
-              label="Postkode (valgfritt)"
-              style={{ maxWidth: "120px" }}
-              {...register(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.postkode`,
-              )}
-              size="small"
-            />
-
-            <TextField
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.byStedsnavn`,
-                ).error?.message
-              }
-              label="By/stedsnavn (valgfritt)"
-              {...register(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.byStedsnavn`,
-              )}
-              size="small"
-            />
-
-            <TextField
-              error={
-                getFieldState(
-                  `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.region`,
-                ).error?.message
-              }
-              label="Region (valgfritt)"
-              {...register(
-                `virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.region`,
-              )}
-              size="small"
-            />
-
-            <LandVelgerFormPart
-              formFieldName={`virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.land`}
-              label="Land"
-              size="small"
-            />
-
-            <RadioGroupJaNeiFormPart
-              formFieldName={`virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.${index}.tilhorerSammeKonsern`}
-              legend="Tilhører virksomheten samme konsern som den norske arbeidsgiveren?"
-              size="small"
-            />
-          </VStack>
-
-          <FjernKnapp
-            className="mt-4"
-            onClick={() => fjernUtenlandskVirksomhet(index)}
-            size="small"
-          />
-        </Box>
-      ))}
-
-      <LeggTilKnapp onClick={leggTilUtenlandskVirksomhet}>
-        Legg til utenlandsk virksomhet
-      </LeggTilKnapp>
-    </>
   );
 }
