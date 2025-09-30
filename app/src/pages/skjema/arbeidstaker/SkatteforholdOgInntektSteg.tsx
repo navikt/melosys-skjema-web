@@ -15,71 +15,75 @@ import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "skatteforhold-og-inntekt";
 
-const skatteforholdOgInntektSchema = z
-  .object({
-    erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean({
-      message:
-        "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
-    }),
-    mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean({
-      message:
-        "Du må svare på om du mottar pengestøtte fra et annet EØS-land eller Sveits",
-    }),
-    pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
-    landSomUtbetalerPengestotte: z.string().optional(),
-    pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
+const baseSkatteforholdOgInntektSchema = z.object({
+  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean({
+    message:
+      "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
+  }),
+  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean({
+    message:
+      "Du må svare på om du mottar pengestøtte fra et annet EØS-land eller Sveits",
+  }),
+  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
+  landSomUtbetalerPengestotte: z.string().optional(),
+  pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
+});
+
+type BaseSkatteforholdOgInntektFormData = z.infer<
+  typeof baseSkatteforholdOgInntektSchema
+>;
+
+function validerPengestotteBeskrivelse(
+  data: BaseSkatteforholdOgInntektFormData,
+) {
+  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
+    return (
+      data.pengestotteSomMottasFraAndreLandBeskrivelse &&
+      data.pengestotteSomMottasFraAndreLandBeskrivelse.trim().length > 0
+    );
+  }
+  return true;
+}
+
+function validerPengestotteLand(data: BaseSkatteforholdOgInntektFormData) {
+  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
+    return (
+      data.landSomUtbetalerPengestotte &&
+      data.landSomUtbetalerPengestotte.trim().length > 0
+    );
+  }
+  return true;
+}
+
+function validerPengestotteBelop(data: BaseSkatteforholdOgInntektFormData) {
+  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
+    if (
+      !data.pengestotteSomMottasFraAndreLandBelop ||
+      data.pengestotteSomMottasFraAndreLandBelop.trim().length === 0
+    ) {
+      return false;
+    }
+    const amount = Number.parseFloat(
+      data.pengestotteSomMottasFraAndreLandBelop,
+    );
+    return !Number.isNaN(amount) && amount > 0;
+  }
+  return true;
+}
+
+const skatteforholdOgInntektSchema = baseSkatteforholdOgInntektSchema
+  .refine(validerPengestotteBeskrivelse, {
+    message: "Du må beskrive hva slags pengestøtte du mottar",
+    path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
   })
-  .refine(
-    (data) => {
-      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-        return (
-          data.pengestotteSomMottasFraAndreLandBeskrivelse &&
-          data.pengestotteSomMottasFraAndreLandBeskrivelse.trim().length > 0
-        );
-      }
-      return true;
-    },
-    {
-      message: "Du må beskrive hva slags pengestøtte du mottar",
-      path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-        return (
-          data.landSomUtbetalerPengestotte &&
-          data.landSomUtbetalerPengestotte.trim().length > 0
-        );
-      }
-      return true;
-    },
-    {
-      message: "Du må velge hvilket land som utbetaler pengestøtten",
-      path: ["landSomUtbetalerPengestotte"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-        if (
-          !data.pengestotteSomMottasFraAndreLandBelop ||
-          data.pengestotteSomMottasFraAndreLandBelop.trim().length === 0
-        ) {
-          return false;
-        }
-        const amount = Number.parseFloat(
-          data.pengestotteSomMottasFraAndreLandBelop,
-        );
-        return !Number.isNaN(amount) && amount > 0;
-      }
-      return true;
-    },
-    {
-      message: "Du må oppgi et gyldig beløp som er større enn 0",
-      path: ["pengestotteSomMottasFraAndreLandBelop"],
-    },
-  );
+  .refine(validerPengestotteLand, {
+    message: "Du må velge hvilket land som utbetaler pengestøtten",
+    path: ["landSomUtbetalerPengestotte"],
+  })
+  .refine(validerPengestotteBelop, {
+    message: "Du må oppgi et gyldig beløp som er større enn 0",
+    path: ["pengestotteSomMottasFraAndreLandBelop"],
+  });
 
 type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
