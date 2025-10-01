@@ -1,55 +1,55 @@
 import { z } from "zod";
 
 export const AKTIVITET_OPTIONS = [
-  { value: "studier", labelKey: "aktiviteter.studier" },
-  { value: "ferie", labelKey: "aktiviteter.ferie" },
+  { value: "studier", labelKey: "arbeidstakerenSteg.studier" },
+  { value: "ferie", labelKey: "arbeidstakerenSteg.ferie" },
   {
     value: "selvstendig-virksomhet",
-    labelKey: "aktiviteter.selvstendingVirksomhet",
+    labelKey: "arbeidstakerenSteg.selvstendingVirksomhet",
   },
   {
     value: "kontantytelse-fra-nav",
-    labelKey: "aktiviteter.kontantytelseFraNav",
+    labelKey: "arbeidstakerenSteg.kontantytelseFraNav",
   },
 ] as const;
 
 const baseArbeidstakerSchema = z.object({
   harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean({
-    message: "validering.maSvarePaLonnetArbeid",
+    message: "arbeidstakerenSteg.duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending",
   }),
   aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
   skalJobbeForFlereVirksomheter: z.boolean({
-    message: "validering.maSvarePaFlereVirksomheter",
+    message: "arbeidstakerenSteg.duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden",
   }),
   norskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode: z
     .array(
       z.object({
         organisasjonsnummer: z
           .string()
-          .min(1, "validering.organisasjonsnummerPakrevd")
-          .regex(/^\d{9}$/, "validering.organisasjonsnummerFormat"),
+          .min(1, "generellValidering.organisasjonsnummerErPakrevd")
+          .regex(/^\d{9}$/, "generellValidering.organisasjonsnummerMaVare9Siffer"),
       }),
     )
     .optional(),
   utenlandskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode: z
     .array(
       z.object({
-        navn: z.string().min(1, "validering.virksomhetsnavnPakrevd"),
+        navn: z.string().min(1, "generellValidering.navnPaVirksomhetErPakrevd"),
         organisasjonsnummer: z.string().optional(),
-        vegnavnOgHusnummer: z.string().min(1, "validering.adressePakrevd"),
+        vegnavnOgHusnummer: z.string().min(1, "generellValidering.vegnavnOgHusnummerErPakrevd"),
         bygning: z.string().optional(),
         postkode: z.string().optional(),
         byStedsnavn: z.string().optional(),
         region: z.string().optional(),
-        land: z.string().min(1, "validering.landPakrevd"),
+        land: z.string().min(1, "generellValidering.landErPakrevd"),
         tilhorerSammeKonsern: z.boolean({
-          message: "validering.maSvarePaSammeKonsern",
+          message: "generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern",
         }),
       }),
     )
     .optional(),
   harNorskFodselsnummer: z.boolean({
-    message: "validering.maSvarePaNorskFodselsnummer",
+    message: "arbeidstakerenSteg.duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer",
   }),
   fodselsnummer: z.string().optional(),
   fornavn: z.string().optional(),
@@ -115,26 +115,26 @@ function validerHarVaertEllerSkalVaereILonnetArbeidFoerUtsending(
 
 export const arbeidstakerSchema = baseArbeidstakerSchema
   .refine(validerFodselsnummer, {
-    message: "validering.fodselsnummerPakrevdNarNorsk",
+    message: "arbeidstakerenSteg.fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer",
     path: ["fodselsnummer"],
   })
   .refine(validerFodselsnummerFormat, {
-    message: "validering.fodselsnummerMaVare11Siffer",
+    message: "arbeidstakerenSteg.fodselsnummerEllerDNummerMaVare11Siffer",
     path: ["fodselsnummer"],
   })
   .refine(validerFornavn, {
-    message: "validering.fornavnPakrevd",
+    message: "arbeidstakerenSteg.fornavnErPakrevdOgMaVareMinst2Tegn",
     path: ["fornavn"],
   })
   .refine(validerEtternavn, {
-    message: "validering.etternavnPakrevd",
+    message: "arbeidstakerenSteg.etternavnErPakrevdOgMaVareMinst2Tegn",
     path: ["etternavn"],
   })
   .refine(validerFodselsdato, {
-    message: "validering.fodselsdatoPakrevd",
+    message: "arbeidstakerenSteg.fodselsdatoErPakrevd",
     path: ["fodselsdato"],
   })
   .refine(validerHarVaertEllerSkalVaereILonnetArbeidFoerUtsending, {
-    message: "validering.maVelgeAktivitetNarIkkeLonnetArbeid",
+    message: "arbeidstakerenSteg.duMaVelgeEnAktivitetNarDuIkkeHarVertILonnetArbeid",
     path: ["aktivitetIMaanedenFoerUtsendingen"],
   });

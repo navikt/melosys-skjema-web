@@ -73,14 +73,14 @@ export function ArbeidstakerenSteg() {
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harNorskFodselsnummer"
-            legend={t("arbeidstaker.harNorskFodselsnummer")}
+            legend={t("arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer")}
           />
 
           {harNorskFodselsnummer && (
             <TextField
               className="mt-4"
               error={translateError(errors.fodselsnummer?.message)}
-              label={t("arbeidstaker.fodselsnummerEllerDNummer")}
+              label={t("arbeidstakerenSteg.arbeidstakerensFodselsnummerEllerDNummer")}
               size="medium"
               style={{ maxWidth: "160px" }}
               {...register("fodselsnummer")}
@@ -92,21 +92,21 @@ export function ArbeidstakerenSteg() {
               <TextField
                 className="mt-4 max-w-md"
                 error={translateError(errors.fornavn?.message)}
-                label={t("arbeidstaker.fornavn")}
+                label={t("arbeidstakerenSteg.arbeidstakerensFornavn")}
                 {...register("fornavn")}
               />
 
               <TextField
                 className="mt-4 max-w-md"
                 error={translateError(errors.etternavn?.message)}
-                label={t("arbeidstaker.etternavn")}
+                label={t("arbeidstakerenSteg.arbeidstakerensEtternavn")}
                 {...register("etternavn")}
               />
 
               <DatePickerFormPart
                 className="mt-4"
                 formFieldName="fodselsdato"
-                label={t("arbeidstaker.fodselsdato")}
+                label={t("arbeidstakerenSteg.arbeidstakerensFodselsdato")}
               />
             </>
           )}
@@ -114,7 +114,7 @@ export function ArbeidstakerenSteg() {
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
-            legend={t("arbeidstaker.harVaertEllerSkalVaereILonnetArbeid")}
+            legend={t("arbeidstakerenSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen")}
           />
 
           {harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
@@ -123,11 +123,11 @@ export function ArbeidstakerenSteg() {
               error={translateError(
                 errors.aktivitetIMaanedenFoerUtsendingen?.message,
               )}
-              label={t("arbeidstaker.aktivitet")}
+              label={t("arbeidstakerenSteg.aktivitet")}
               style={{ width: "fit-content" }}
               {...register("aktivitetIMaanedenFoerUtsendingen")}
             >
-              <option value="">{t("arbeidstaker.velgAktivitet")}</option>
+              <option value="">{t("arbeidstakerenSteg.velgAktivitet")}</option>
               {AKTIVITET_OPTIONS.map((aktivitetOption) => (
                 <option
                   key={aktivitetOption.value}
@@ -142,7 +142,7 @@ export function ArbeidstakerenSteg() {
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="skalJobbeForFlereVirksomheter"
-            legend={t("arbeidstaker.skalJobbeForFlereVirksomheter")}
+            legend={t("arbeidstakerenSteg.skalDuJobbeForFlereVirksomheterIPerioden")}
           />
 
           {skalJobbeForFlereVirksomheter === true && (
