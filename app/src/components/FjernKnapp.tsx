@@ -1,5 +1,6 @@
 import { TrashIcon } from "@navikt/aksel-icons";
 import { Button, ButtonProps } from "@navikt/ds-react";
+import { useTranslation } from "react-i18next";
 
 interface FjernKnappProps
   extends Omit<ButtonProps, "icon" | "type" | "variant"> {
@@ -7,10 +8,11 @@ interface FjernKnappProps
 }
 
 export function FjernKnapp({
-  children = "Fjern",
+  children,
   className,
   ...rest
 }: FjernKnappProps) {
+  const { t } = useTranslation();
   return (
     <Button
       className={className}
@@ -19,7 +21,7 @@ export function FjernKnapp({
       variant="tertiary-neutral"
       {...rest}
     >
-      {children}
+      {children || t("felles.fjern")}
     </Button>
   );
 }
