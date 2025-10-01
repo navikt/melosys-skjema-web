@@ -14,6 +14,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { useTranslateError } from "~/utils/translation.ts";
 
 import {
   AKTIVITET_OPTIONS,
@@ -25,8 +26,7 @@ const stepKey = "arbeidstakeren";
 export function ArbeidstakerenSteg() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  const translateError = (error?: string) => error && t(error);
+  const translateError = useTranslateError();
 
   type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
 

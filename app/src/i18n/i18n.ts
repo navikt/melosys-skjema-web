@@ -16,10 +16,10 @@ export const resources = {
         leggTil: "Legg til",
         pakrevd: "påkrevd",
       },
-      rollevelger: {
-        tittel: "Hvem vil du fylle ut skjema på vegne av?",
+      rollevelgerPage: {
+        hvemVilDuFylleUtSkjemaPaVegneAv: "Hvem vil du fylle ut skjema på vegne av?",
         degSelv: "Deg selv",
-        orgNummer: "Org.nr.",
+        orgNr: "Org.nr.",
       },
       arbeidstakerenSteg: {
         harArbeidstakerenNorskFodselsnummerEllerDNummer:
@@ -57,6 +57,27 @@ export const resources = {
         selvstendingVirksomhet: "Selvstendig virksomhet",
         kontantytelseFraNav: "Mottok kontantytelse fra Nav",
       },
+      skatteforholdOgInntektSteg: {
+        erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
+          "Er du skattepliktig til Norge i hele utsendingsperioden?",
+        mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
+          "Mottar du pengestøtte fra et annet EØS-land eller Sveits?",
+        fraHvilketLandMottarDuPengestotte: "Fra hvilket land mottar du pengestøtte?",
+        hvorMyePengerMottarDuBruttoPerManed:
+          "Hvor mye penger mottar du brutto per måned",
+        oppgiBelopetINorskeKroner: "Oppgi beløpet i norske kroner",
+        hvaSlangsPengestotteMottarDu: "Hva slags pengestøtte mottar du",
+        duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
+          "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
+        duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
+          "Du må svare på om du mottar pengestøtte fra et annet EØS-land eller Sveits",
+        duMaBeskriveHvaSlangsPengestotteDuMottar:
+          "Du må beskrive hva slags pengestøtte du mottar",
+        duMaVelgeHvilketLandSomUtbetalerPengestotten:
+          "Du må velge hvilket land som utbetaler pengestøtten",
+        duMaOppgiEtGyldigBelopSomErStorreEnn0:
+          "Du må oppgi et gyldig beløp som er større enn 0",
+      },
       generellValidering: {
         erPakrevd: "er påkrevd",
         organisasjonsnummerErPakrevd: "Organisasjonsnummer er påkrevd",
@@ -87,10 +108,10 @@ export const resources = {
         leggTil: "Add",
         pakrevd: "required",
       },
-      rollevelger: {
-        tittel: "Who do you want to fill out the form for?",
+      rollevelgerPage: {
+        hvemVilDuFylleUtSkjemaPaVegneAv: "Who do you want to fill out the form for?",
         degSelv: "Yourself",
-        orgNummer: "Org. no.",
+        orgNr: "Org. no.",
       },
       arbeidstakerenSteg: {
         harArbeidstakerenNorskFodselsnummerEllerDNummer:
@@ -127,6 +148,28 @@ export const resources = {
         ferie: "Vacation",
         selvstendingVirksomhet: "Self-employed business",
         kontantytelseFraNav: "Received cash benefits from Nav",
+      },
+      skatteforholdOgInntektSteg: {
+        erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
+          "Are you liable to pay tax to Norway for the entire posting period?",
+        mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
+          "Do you receive financial support from another EEA country or Switzerland?",
+        fraHvilketLandMottarDuPengestotte:
+          "From which country do you receive financial support?",
+        hvorMyePengerMottarDuBruttoPerManed:
+          "How much money do you receive gross per month",
+        oppgiBelopetINorskeKroner: "Enter the amount in Norwegian kroner",
+        hvaSlangsPengestotteMottarDu: "What kind of financial support do you receive",
+        duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
+          "You must answer whether you are liable to pay tax to Norway for the entire posting period",
+        duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
+          "You must answer whether you receive financial support from another EEA country or Switzerland",
+        duMaBeskriveHvaSlangsPengestotteDuMottar:
+          "You must describe what kind of financial support you receive",
+        duMaVelgeHvilketLandSomUtbetalerPengestotten:
+          "You must select which country pays the financial support",
+        duMaOppgiEtGyldigBelopSomErStorreEnn0:
+          "You must enter a valid amount greater than 0",
       },
       generellValidering: {
         erPakrevd: "is required",

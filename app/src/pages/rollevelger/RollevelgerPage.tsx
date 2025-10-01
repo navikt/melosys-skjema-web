@@ -1,29 +1,31 @@
 import { Buildings3Icon, PersonIcon } from "@navikt/aksel-icons";
 import { Box, Heading, LinkCard, Page } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { listAltinnTilganger } from "~/api/queries.ts";
 import { setValgtRolle } from "~/utils/sessionStorage.ts";
 
 export function RollevelgerPage() {
+  const { t } = useTranslation();
   const altinnTilgangerQuery = useQuery(listAltinnTilganger());
 
   if (altinnTilgangerQuery.isLoading) {
-    return <div>Laster...</div>;
+    return <div>{t("felles.laster")}</div>;
   }
 
   if (altinnTilgangerQuery.isError) {
-    return <div>Det oppstod en feil: {`${altinnTilgangerQuery.error}`}</div>;
+    return <div>{t("felles.feil")}: {`${altinnTilgangerQuery.error}`}</div>;
   }
 
   const altinnTilganger = altinnTilgangerQuery.data;
 
   return (
     <Page.Block>
-      <Heading size="large">Hvem vil du fylle ut skjema på vegne av?</Heading>
+      <Heading size="large">{t("rollevelgerPage.hvemVilDuFylleUtSkjemaPaVegneAv")}</Heading>
       <VelgRolleCard
         className="mt-4"
-        description="Deg selv"
+        description={t("rollevelgerPage.degSelv")}
         href="/skjema/arbeidstaker"
         icon={<PersonIcon aria-hidden />}
         title="Navn Navnesen"
@@ -31,7 +33,7 @@ export function RollevelgerPage() {
       {altinnTilganger?.map((altinnTilgang, index) => (
         <VelgRolleCard
           className="mt-2"
-          description={`Org.nr.: ${altinnTilgang.orgnr}`}
+          description={`${t("rollevelgerPage.orgNr")}: ${altinnTilgang.orgnr}`}
           href="/skjema/arbeidsgiver"
           icon={<Buildings3Icon aria-hidden />}
           key={index}
