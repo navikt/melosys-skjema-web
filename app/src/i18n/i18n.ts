@@ -50,6 +50,7 @@ export const resources = {
         orgNr: "Org.nr.",
       },
       arbeidstakerenSteg: {
+        tittel: "Arbeidstakeren",
         harArbeidstakerenNorskFodselsnummerEllerDNummer:
           "Har arbeidstakeren norsk fødselsnummer eller d-nummer?",
         arbeidstakerensFodselsnummerEllerDNummer:
@@ -86,6 +87,7 @@ export const resources = {
         kontantytelseFraNav: "Mottok kontantytelse fra Nav",
       },
       skatteforholdOgInntektSteg: {
+        tittel: "Skatteforhold og inntekt",
         erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
           "Er du skattepliktig til Norge i hele utsendingsperioden?",
         mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
@@ -108,11 +110,16 @@ export const resources = {
           "Du må oppgi et gyldig beløp som er større enn 0",
       },
       arbeidsgiverSteg: {
+        tittel: "Arbeidsgiveren",
         arbeidsgiverensOrganisasjonsnummer:
           "Arbeidsgiverens organisasjonsnummer",
         organisasjonensNavn: "Organisasjonens navn",
       },
+      arbeidsgiverensVirksomhetINorgeSteg: {
+        tittel: "Arbeidsgiverens virksomhet i Norge",
+      },
       utenlandsoppdragetSteg: {
+        tittel: "Utenlandsoppdraget",
         hvilketLandSendesArbeidstakerenTil:
           "Hvilket land sendes arbeidstakeren til?",
         utsendingsperiode: "Utsendingsperiode",
@@ -155,6 +162,12 @@ export const resources = {
           "Fra-dato for forrige arbeidstaker er påkrevd",
         tilDatoForForrigeArbeidstakerErPakrevd:
           "Til-dato for forrige arbeidstaker er påkrevd",
+      },
+      arbeidstakerenslonnSteg: {
+        tittel: "Arbeidstakerens lønn",
+      },
+      oppsummeringSteg: {
+        tittel: "Oppsummering",
       },
       generellValidering: {
         erPakrevd: "er påkrevd",

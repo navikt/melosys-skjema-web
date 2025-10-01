@@ -3,27 +3,27 @@ import { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator
 export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
   {
     key: "arbeidsgiveren",
-    title: "Arbeidsgiveren",
+    title: "arbeidsgiverSteg.tittel",
     route: "/skjema/arbeidsgiver/arbeidsgiveren",
   },
   {
     key: "arbeidsgiverens-virksomhet-i-norge",
-    title: "Arbeidsgiverens virksomhet i Norge",
+    title: "arbeidsgiverensVirksomhetINorgeSteg.tittel",
     route: "/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge",
   },
   {
     key: "utenlandsoppdraget",
-    title: "Utenlandsoppdraget",
+    title: "utenlandsoppdragetSteg.tittel",
     route: "/skjema/arbeidsgiver/utenlandsoppdraget",
   },
   {
     key: "arbeidstakerens-lonn",
-    title: "Arbeidstakerens lønn",
+    title: "arbeidstakerenslonnSteg.tittel",
     route: "/skjema/arbeidsgiver/arbeidstakerens-lonn",
   },
   {
     key: "oppsummering",
-    title: "Oppsummering",
+    title: "oppsummeringSteg.tittel",
     route: "/skjema/arbeidsgiver/oppsummering",
   },
 ];
