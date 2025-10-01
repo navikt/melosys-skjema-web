@@ -6,6 +6,8 @@ import {
 import { formatISO } from "date-fns";
 import { useFormContext } from "react-hook-form";
 
+import { useTranslateError } from "~/utils/translation.ts";
+
 type DatePickerFormPartProps = {
   formFieldName: string;
   label: string;
@@ -24,8 +26,9 @@ export function DatePickerFormPart({
     setValue,
     formState: { errors },
   } = useFormContext();
+  const translateError = useTranslateError();
 
-  const error = errors[formFieldName]?.message as string | undefined;
+  const error = translateError(errors[formFieldName]?.message as string);
 
   const datePicker = useDatepicker({
     onDateChange: (date) =>
