@@ -107,7 +107,9 @@ export function UtenlandsoppdragetSteg() {
 
             <DatePickerFormPart
               className="mt-4"
-              description="Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato."
+              description={t(
+                "utenlandsoppdragetSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
+              )}
               formFieldName="arbeidstakerUtsendelseTilDato"
               label={t("utenlandsoppdragetSteg.tilDato")}
               {...dateLimits}
@@ -185,20 +187,20 @@ export function UtenlandsoppdragetSteg() {
           {arbeidstakerErstatterAnnenPerson && (
             <div className="mt-6">
               <h3 className="mb-4 text-lg font-semibold">
-                Forrige arbeidstakers utsendelse
+                {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")}
               </h3>
 
               <DatePickerFormPart
                 className="mt-4"
                 formFieldName="forrigeArbeidstakerUtsendelseFradato"
-                label="Fra dato"
+                label={t("utenlandsoppdragetSteg.fraDato")}
                 {...dateLimits}
               />
 
               <DatePickerFormPart
                 className="mt-4"
                 formFieldName="forrigeArbeidstakerUtsendelseTilDato"
-                label="Til dato"
+                label={t("utenlandsoppdragetSteg.tilDato")}
                 {...dateLimits}
               />
             </div>

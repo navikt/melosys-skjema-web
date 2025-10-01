@@ -178,6 +178,9 @@ export const resources = {
           "Fra-dato for forrige arbeidstaker er påkrevd",
         tilDatoForForrigeArbeidstakerErPakrevd:
           "Til-dato for forrige arbeidstaker er påkrevd",
+        oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
+          "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
+        forrigeArbeidstakersUtsendelse: "Forrige arbeidstakers utsendelse",
       },
       arbeidstakerenslonnSteg: {
         tittel: "Arbeidstakerens lønn",
@@ -388,6 +391,9 @@ export const resources = {
           "From date for previous employee is required",
         tilDatoForForrigeArbeidstakerErPakrevd:
           "To date for previous employee is required",
+        oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
+          "Enter approximate date if you don't know the exact date.",
+        forrigeArbeidstakersUtsendelse: "Previous employee's assignment",
       },
       arbeidstakerenslonnSteg: {
         tittel: "Employee's salary",
