@@ -21,6 +21,19 @@ export const resources = {
         norskVirksomhet: "Norsk virksomhet",
         organisasjonsnummer: "Organisasjonsnummer",
         leggTilNorskVirksomhet: "Legg til norsk virksomhet",
+        utenlandskVirksomhet: "Utenlandsk virksomhet",
+        navnPaVirksomhet: "Navn på virksomhet",
+        organisasjonsnummerEllerRegistreringsnummerValgfritt:
+          "Organisasjonsnummer eller registreringsnummer (valgfritt)",
+        vegnavnOgHusnummerEvtPostboks: "Vegnavn og husnummer, evt. postboks",
+        bygningValgfritt: "Bygning (valgfritt)",
+        postkodeValgfritt: "Postkode (valgfritt)",
+        byStednavnValgfritt: "By/stedsnavn (valgfritt)",
+        regionValgfritt: "Region (valgfritt)",
+        land: "Land",
+        tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
+          "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
+        leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
       },
       rollevelgerPage: {
         hvemVilDuFylleUtSkjemaPaVegneAv:

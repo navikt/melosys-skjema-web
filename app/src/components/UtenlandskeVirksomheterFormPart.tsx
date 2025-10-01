@@ -1,5 +1,6 @@
 import { Box, Tag, TextField, VStack } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
@@ -18,6 +19,7 @@ export function UtenlandskeVirksomheterFormPart({
   clearErrorsFieldName,
 }: UtenlandskeVirksomheterSectionProps) {
   const { control, register, getFieldState, clearErrors } = useFormContext();
+  const { t } = useTranslation();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -53,13 +55,13 @@ export function UtenlandskeVirksomheterFormPart({
           }}
         >
           <Tag size="small" variant="info">
-            Utenlandsk virksomhet
+            {t("felles.utenlandskVirksomhet")}
           </Tag>
 
           <VStack className="mt-4" gap="space-6">
             <TextField
               error={getFieldState(`${fieldName}.${index}.navn`).error?.message}
-              label="Navn på virksomhet"
+              label={t("felles.navnPaVirksomhet")}
               {...register(`${fieldName}.${index}.navn`)}
               size="small"
             />
@@ -69,7 +71,9 @@ export function UtenlandskeVirksomheterFormPart({
                 getFieldState(`${fieldName}.${index}.organisasjonsnummer`).error
                   ?.message
               }
-              label="Organisasjonsnummer eller registreringsnummer (valgfritt)"
+              label={t(
+                "felles.organisasjonsnummerEllerRegistreringsnummerValgfritt",
+              )}
               {...register(`${fieldName}.${index}.organisasjonsnummer`)}
               size="small"
             />
@@ -79,7 +83,7 @@ export function UtenlandskeVirksomheterFormPart({
                 getFieldState(`${fieldName}.${index}.vegnavnOgHusnummer`).error
                   ?.message
               }
-              label="Vegnavn og husnummer, evt. postboks"
+              label={t("felles.vegnavnOgHusnummerEvtPostboks")}
               {...register(`${fieldName}.${index}.vegnavnOgHusnummer`)}
               size="small"
             />
@@ -88,7 +92,7 @@ export function UtenlandskeVirksomheterFormPart({
               error={
                 getFieldState(`${fieldName}.${index}.bygning`).error?.message
               }
-              label="Bygning (valgfritt)"
+              label={t("felles.bygningValgfritt")}
               {...register(`${fieldName}.${index}.bygning`)}
               size="small"
             />
@@ -97,7 +101,7 @@ export function UtenlandskeVirksomheterFormPart({
               error={
                 getFieldState(`${fieldName}.${index}.postkode`).error?.message
               }
-              label="Postkode (valgfritt)"
+              label={t("felles.postkodeValgfritt")}
               style={{ maxWidth: "120px" }}
               {...register(`${fieldName}.${index}.postkode`)}
               size="small"
@@ -108,7 +112,7 @@ export function UtenlandskeVirksomheterFormPart({
                 getFieldState(`${fieldName}.${index}.byStedsnavn`).error
                   ?.message
               }
-              label="By/stedsnavn (valgfritt)"
+              label={t("felles.byStednavnValgfritt")}
               {...register(`${fieldName}.${index}.byStedsnavn`)}
               size="small"
             />
@@ -117,20 +121,22 @@ export function UtenlandskeVirksomheterFormPart({
               error={
                 getFieldState(`${fieldName}.${index}.region`).error?.message
               }
-              label="Region (valgfritt)"
+              label={t("felles.regionValgfritt")}
               {...register(`${fieldName}.${index}.region`)}
               size="small"
             />
 
             <LandVelgerFormPart
               formFieldName={`${fieldName}.${index}.land`}
-              label="Land"
+              label={t("felles.land")}
               size="small"
             />
 
             <RadioGroupJaNeiFormPart
               formFieldName={`${fieldName}.${index}.tilhorerSammeKonsern`}
-              legend="Tilhører virksomheten samme konsern som den norske arbeidsgiveren?"
+              legend={t(
+                "felles.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
+              )}
               size="small"
             />
           </VStack>
@@ -144,7 +150,7 @@ export function UtenlandskeVirksomheterFormPart({
       ))}
 
       <LeggTilKnapp onClick={leggTilUtenlandskVirksomhet}>
-        Legg til utenlandsk virksomhet
+        {t("felles.leggTilUtenlandskVirksomhet")}
       </LeggTilKnapp>
     </>
   );
