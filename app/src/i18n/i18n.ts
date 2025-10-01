@@ -85,6 +85,50 @@ export const resources = {
           "Arbeidsgiverens organisasjonsnummer",
         organisasjonensNavn: "Organisasjonens navn",
       },
+      utenlandsoppdragetSteg: {
+        hvilketLandSendesArbeidstakerenTil:
+          "Hvilket land sendes arbeidstakeren til?",
+        utsendingsperiode: "Utsendingsperiode",
+        fraDato: "Fra dato",
+        tilDato: "Til dato",
+        harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil:
+          "Har du som arbeidsgiver oppdrag i landet arbeidstaker skal sendes ut til?",
+        hvorforSkalArbeidstakerenArbeideIUtlandet:
+          "Hvorfor skal arbeidstakeren arbeide i utlandet?",
+        bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget:
+          "Ble arbeidstaker ansatt på grunn av dette utenlandsoppdraget?",
+        vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget:
+          "Vil arbeidstakeren arbeide for virksomheten i Norge etter utenlandsoppdraget?",
+        vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden:
+          "Vil arbeidstaker fortsatt være ansatt hos dere i hele utsendingsperioden?",
+        beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden:
+          "Beskriv arbeidstakerens ansettelsesforhold i utsendingsperioden",
+        erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet:
+          "Erstatter arbeidstaker en annen person som var sendt ut for å gjøre det samme arbeidet?",
+        duMaVelgeHvilketLandArbeidstakerenSendesTil:
+          "Du må velge hvilket land arbeidstakeren sendes til",
+        fraDatoErPakrevd: "Fra-dato er påkrevd",
+        tilDatoErPakrevd: "Til-dato er påkrevd",
+        duMaSvarePaOmDereHarOppdragILandet:
+          "Du må svare på om dere har oppdrag i landet",
+        duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget:
+          "Du må svare på om arbeidstaker ble ansatt på grunn av dette utenlandsoppdraget",
+        duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden:
+          "Du må svare på om arbeidstaker vil fortsatt være ansatt i hele utsendingsperioden",
+        duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson:
+          "Du må svare på om arbeidstaker erstatter en annen person",
+        tilDatoKanIkkeVareForFraDato: "Til dato kan ikke være før fra dato",
+        begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet:
+          "Begrunnelse er påkrevd når arbeidsgiver ikke har oppdrag i landet",
+        beskrivelseAvAnsettelsesforholdErPakrevd:
+          "Beskrivelse av ansettelsesforhold er påkrevd",
+        duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
+          "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
+        fraDatoForForrigeArbeidstakerErPakrevd:
+          "Fra-dato for forrige arbeidstaker er påkrevd",
+        tilDatoForForrigeArbeidstakerErPakrevd:
+          "Til-dato for forrige arbeidstaker er påkrevd",
+      },
       generellValidering: {
         erPakrevd: "er påkrevd",
         organisasjonsnummerErPakrevd: "Organisasjonsnummer er påkrevd",
@@ -183,6 +227,50 @@ export const resources = {
       arbeidsgiverSteg: {
         arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
         organisasjonensNavn: "Organization name",
+      },
+      utenlandsoppdragetSteg: {
+        hvilketLandSendesArbeidstakerenTil:
+          "To which country is the employee being sent?",
+        utsendingsperiode: "Assignment period",
+        fraDato: "From date",
+        tilDato: "To date",
+        harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil:
+          "Do you as an employer have assignments in the country where the employee will be sent?",
+        hvorforSkalArbeidstakerenArbeideIUtlandet:
+          "Why should the employee work abroad?",
+        bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget:
+          "Was the employee hired because of this foreign assignment?",
+        vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget:
+          "Will the employee work for the company in Norway after the foreign assignment?",
+        vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden:
+          "Will the employee still be employed by you during the entire assignment period?",
+        beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden:
+          "Describe the employee's employment relationship during the assignment period",
+        erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet:
+          "Is the employee replacing another person who was sent out to do the same work?",
+        duMaVelgeHvilketLandArbeidstakerenSendesTil:
+          "You must select which country the employee is being sent to",
+        fraDatoErPakrevd: "From date is required",
+        tilDatoErPakrevd: "To date is required",
+        duMaSvarePaOmDereHarOppdragILandet:
+          "You must answer whether you have assignments in the country",
+        duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget:
+          "You must answer whether the employee was hired because of this foreign assignment",
+        duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden:
+          "You must answer whether the employee will still be employed during the entire assignment period",
+        duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson:
+          "You must answer whether the employee is replacing another person",
+        tilDatoKanIkkeVareForFraDato: "To date cannot be before from date",
+        begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet:
+          "Justification is required when employer does not have assignments in the country",
+        beskrivelseAvAnsettelsesforholdErPakrevd:
+          "Description of employment relationship is required",
+        duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
+          "You must answer whether the employee will work for the company in Norway after the assignment",
+        fraDatoForForrigeArbeidstakerErPakrevd:
+          "From date for previous employee is required",
+        tilDatoForForrigeArbeidstakerErPakrevd:
+          "To date for previous employee is required",
       },
       generellValidering: {
         erPakrevd: "is required",
