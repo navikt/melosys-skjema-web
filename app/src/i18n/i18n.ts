@@ -15,12 +15,20 @@ export const resources = {
         fjern: "Fjern",
         leggTil: "Legg til",
         pakrevd: "påkrevd",
+      },
+      soknadHeader: {
         soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
           "Søknad for utsendt arbeidstaker innen EU/EØS og sveits",
+      },
+      landVelgerFormPart: {
         velgLand: "Velg land",
+      },
+      norskeVirksomheterFormPart: {
         norskVirksomhet: "Norsk virksomhet",
         organisasjonsnummer: "Organisasjonsnummer",
         leggTilNorskVirksomhet: "Legg til norsk virksomhet",
+      },
+      utenlandskeVirksomheterFormPart: {
         utenlandskVirksomhet: "Utenlandsk virksomhet",
         navnPaVirksomhet: "Navn på virksomhet",
         organisasjonsnummerEllerRegistreringsnummerValgfritt:

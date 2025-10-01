@@ -55,13 +55,13 @@ export function UtenlandskeVirksomheterFormPart({
           }}
         >
           <Tag size="small" variant="info">
-            {t("felles.utenlandskVirksomhet")}
+            {t("utenlandskeVirksomheterFormPart.utenlandskVirksomhet")}
           </Tag>
 
           <VStack className="mt-4" gap="space-6">
             <TextField
               error={getFieldState(`${fieldName}.${index}.navn`).error?.message}
-              label={t("felles.navnPaVirksomhet")}
+              label={t("utenlandskeVirksomheterFormPart.navnPaVirksomhet")}
               {...register(`${fieldName}.${index}.navn`)}
               size="small"
             />
@@ -72,7 +72,7 @@ export function UtenlandskeVirksomheterFormPart({
                   ?.message
               }
               label={t(
-                "felles.organisasjonsnummerEllerRegistreringsnummerValgfritt",
+                "utenlandskeVirksomheterFormPart.organisasjonsnummerEllerRegistreringsnummerValgfritt",
               )}
               {...register(`${fieldName}.${index}.organisasjonsnummer`)}
               size="small"
@@ -83,7 +83,9 @@ export function UtenlandskeVirksomheterFormPart({
                 getFieldState(`${fieldName}.${index}.vegnavnOgHusnummer`).error
                   ?.message
               }
-              label={t("felles.vegnavnOgHusnummerEvtPostboks")}
+              label={t(
+                "utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks",
+              )}
               {...register(`${fieldName}.${index}.vegnavnOgHusnummer`)}
               size="small"
             />
@@ -92,7 +94,7 @@ export function UtenlandskeVirksomheterFormPart({
               error={
                 getFieldState(`${fieldName}.${index}.bygning`).error?.message
               }
-              label={t("felles.bygningValgfritt")}
+              label={t("utenlandskeVirksomheterFormPart.bygningValgfritt")}
               {...register(`${fieldName}.${index}.bygning`)}
               size="small"
             />
@@ -101,7 +103,7 @@ export function UtenlandskeVirksomheterFormPart({
               error={
                 getFieldState(`${fieldName}.${index}.postkode`).error?.message
               }
-              label={t("felles.postkodeValgfritt")}
+              label={t("utenlandskeVirksomheterFormPart.postkodeValgfritt")}
               style={{ maxWidth: "120px" }}
               {...register(`${fieldName}.${index}.postkode`)}
               size="small"
@@ -112,7 +114,7 @@ export function UtenlandskeVirksomheterFormPart({
                 getFieldState(`${fieldName}.${index}.byStedsnavn`).error
                   ?.message
               }
-              label={t("felles.byStednavnValgfritt")}
+              label={t("utenlandskeVirksomheterFormPart.byStednavnValgfritt")}
               {...register(`${fieldName}.${index}.byStedsnavn`)}
               size="small"
             />
@@ -121,21 +123,21 @@ export function UtenlandskeVirksomheterFormPart({
               error={
                 getFieldState(`${fieldName}.${index}.region`).error?.message
               }
-              label={t("felles.regionValgfritt")}
+              label={t("utenlandskeVirksomheterFormPart.regionValgfritt")}
               {...register(`${fieldName}.${index}.region`)}
               size="small"
             />
 
             <LandVelgerFormPart
               formFieldName={`${fieldName}.${index}.land`}
-              label={t("felles.land")}
+              label={t("utenlandskeVirksomheterFormPart.land")}
               size="small"
             />
 
             <RadioGroupJaNeiFormPart
               formFieldName={`${fieldName}.${index}.tilhorerSammeKonsern`}
               legend={t(
-                "felles.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
+                "utenlandskeVirksomheterFormPart.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
               )}
               size="small"
             />
@@ -150,7 +152,7 @@ export function UtenlandskeVirksomheterFormPart({
       ))}
 
       <LeggTilKnapp onClick={leggTilUtenlandskVirksomhet}>
-        {t("felles.leggTilUtenlandskVirksomhet")}
+        {t("utenlandskeVirksomheterFormPart.leggTilUtenlandskVirksomhet")}
       </LeggTilKnapp>
     </>
   );

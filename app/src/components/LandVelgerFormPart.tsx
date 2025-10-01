@@ -48,7 +48,7 @@ export function LandVelgerFormPart({
       {...register(formFieldName)}
       {...selectProps}
     >
-      <option value="">{t("felles.velgLand")}</option>
+      <option value="">{t("landVelgerFormPart.velgLand")}</option>
       {landOptions.map((land) => (
         <option key={land.value} value={land.value}>
           {land.label}

@@ -49,7 +49,7 @@ export function NorskeVirksomheterFormPart({
           }}
         >
           <Tag size="small" variant="info">
-            {t("felles.norskVirksomhet")}
+            {t("norskeVirksomheterFormPart.norskVirksomhet")}
           </Tag>
           <TextField
             className="mt-2"
@@ -57,7 +57,7 @@ export function NorskeVirksomheterFormPart({
               getFieldState(`${fieldName}.${index}.organisasjonsnummer`).error
                 ?.message
             }
-            label={t("felles.organisasjonsnummer")}
+            label={t("norskeVirksomheterFormPart.organisasjonsnummer")}
             style={{ maxWidth: "160px" }}
             {...register(`${fieldName}.${index}.organisasjonsnummer`)}
             size="small"
@@ -71,7 +71,7 @@ export function NorskeVirksomheterFormPart({
       ))}
 
       <LeggTilKnapp onClick={leggTilNorskVirksomhet}>
-        {t("felles.leggTilNorskVirksomhet")}
+        {t("norskeVirksomheterFormPart.leggTilNorskVirksomhet")}
       </LeggTilKnapp>
     </>
   );

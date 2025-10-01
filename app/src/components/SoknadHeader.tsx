@@ -19,7 +19,7 @@ export function SoknadHeader() {
         </Show>
         <VStack gap="1">
           <Heading level="1" size="xlarge">
-            {t("felles.soknadForUtsendtArbeidstakerInnenEuEosOgSveits")}
+            {t("soknadHeader.soknadForUtsendtArbeidstakerInnenEuEosOgSveits")}
           </Heading>
         </VStack>
       </Stack>
