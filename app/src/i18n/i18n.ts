@@ -199,6 +199,34 @@ export const resources = {
         leggTil: "Add",
         pakrevd: "required",
       },
+      soknadHeader: {
+        soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
+          "Application for posted worker within EU/EEA and Switzerland",
+      },
+      landVelgerFormPart: {
+        velgLand: "Select country",
+      },
+      norskeVirksomheterFormPart: {
+        norskVirksomhet: "Norwegian company",
+        organisasjonsnummer: "Organization number",
+        leggTilNorskVirksomhet: "Add Norwegian company",
+      },
+      utenlandskeVirksomheterFormPart: {
+        utenlandskVirksomhet: "Foreign company",
+        navnPaVirksomhet: "Company name",
+        organisasjonsnummerEllerRegistreringsnummerValgfritt:
+          "Organization number or registration number (optional)",
+        vegnavnOgHusnummerEvtPostboks:
+          "Street address and house number, or P.O. box",
+        bygningValgfritt: "Building (optional)",
+        postkodeValgfritt: "Postal code (optional)",
+        byStednavnValgfritt: "City/place name (optional)",
+        regionValgfritt: "Region (optional)",
+        land: "Country",
+        tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
+          "Does the company belong to the same consortium as the Norwegian employer?",
+        leggTilUtenlandskVirksomhet: "Add foreign company",
+      },
       rollevelgerPage: {
         hvemVilDuFylleUtSkjemaPaVegneAv:
           "Who do you want to fill out the form for?",
@@ -206,6 +234,7 @@ export const resources = {
         orgNr: "Org. no.",
       },
       arbeidstakerenSteg: {
+        tittel: "The Employee",
         harArbeidstakerenNorskFodselsnummerEllerDNummer:
           "Does the employee have a Norwegian social security number or D-number?",
         arbeidstakerensFodselsnummerEllerDNummer:
@@ -242,6 +271,7 @@ export const resources = {
         kontantytelseFraNav: "Received cash benefits from Nav",
       },
       skatteforholdOgInntektSteg: {
+        tittel: "Tax conditions and income",
         erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
           "Are you liable to pay tax to Norway for the entire posting period?",
         mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
@@ -265,10 +295,15 @@ export const resources = {
           "You must enter a valid amount greater than 0",
       },
       arbeidsgiverSteg: {
+        tittel: "The Employer",
         arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
         organisasjonensNavn: "Organization name",
       },
+      arbeidsgiverensVirksomhetINorgeSteg: {
+        tittel: "Employer's business in Norway",
+      },
       utenlandsoppdragetSteg: {
+        tittel: "The Foreign Assignment",
         hvilketLandSendesArbeidstakerenTil:
           "To which country is the employee being sent?",
         utsendingsperiode: "Assignment period",
@@ -311,6 +346,12 @@ export const resources = {
           "From date for previous employee is required",
         tilDatoForForrigeArbeidstakerErPakrevd:
           "To date for previous employee is required",
+      },
+      arbeidstakerenslonnSteg: {
+        tittel: "Employee's salary",
+      },
+      oppsummeringSteg: {
+        tittel: "Summary",
       },
       generellValidering: {
         erPakrevd: "is required",
