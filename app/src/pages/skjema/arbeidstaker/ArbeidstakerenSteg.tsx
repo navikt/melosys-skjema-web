@@ -73,14 +73,18 @@ export function ArbeidstakerenSteg() {
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harNorskFodselsnummer"
-            legend={t("arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer")}
+            legend={t(
+              "arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer",
+            )}
           />
 
           {harNorskFodselsnummer && (
             <TextField
               className="mt-4"
               error={translateError(errors.fodselsnummer?.message)}
-              label={t("arbeidstakerenSteg.arbeidstakerensFodselsnummerEllerDNummer")}
+              label={t(
+                "arbeidstakerenSteg.arbeidstakerensFodselsnummerEllerDNummer",
+              )}
               size="medium"
               style={{ maxWidth: "160px" }}
               {...register("fodselsnummer")}
@@ -114,7 +118,9 @@ export function ArbeidstakerenSteg() {
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
-            legend={t("arbeidstakerenSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen")}
+            legend={t(
+              "arbeidstakerenSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen",
+            )}
           />
 
           {harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
@@ -142,7 +148,9 @@ export function ArbeidstakerenSteg() {
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="skalJobbeForFlereVirksomheter"
-            legend={t("arbeidstakerenSteg.skalDuJobbeForFlereVirksomheterIPerioden")}
+            legend={t(
+              "arbeidstakerenSteg.skalDuJobbeForFlereVirksomheterIPerioden",
+            )}
           />
 
           {skalJobbeForFlereVirksomheter === true && (

@@ -15,11 +15,13 @@ export const AKTIVITET_OPTIONS = [
 
 const baseArbeidstakerSchema = z.object({
   harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean({
-    message: "arbeidstakerenSteg.duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending",
+    message:
+      "arbeidstakerenSteg.duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending",
   }),
   aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
   skalJobbeForFlereVirksomheter: z.boolean({
-    message: "arbeidstakerenSteg.duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden",
+    message:
+      "arbeidstakerenSteg.duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden",
   }),
   norskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode: z
     .array(
@@ -27,7 +29,10 @@ const baseArbeidstakerSchema = z.object({
         organisasjonsnummer: z
           .string()
           .min(1, "generellValidering.organisasjonsnummerErPakrevd")
-          .regex(/^\d{9}$/, "generellValidering.organisasjonsnummerMaVare9Siffer"),
+          .regex(
+            /^\d{9}$/,
+            "generellValidering.organisasjonsnummerMaVare9Siffer",
+          ),
       }),
     )
     .optional(),
@@ -36,20 +41,24 @@ const baseArbeidstakerSchema = z.object({
       z.object({
         navn: z.string().min(1, "generellValidering.navnPaVirksomhetErPakrevd"),
         organisasjonsnummer: z.string().optional(),
-        vegnavnOgHusnummer: z.string().min(1, "generellValidering.vegnavnOgHusnummerErPakrevd"),
+        vegnavnOgHusnummer: z
+          .string()
+          .min(1, "generellValidering.vegnavnOgHusnummerErPakrevd"),
         bygning: z.string().optional(),
         postkode: z.string().optional(),
         byStedsnavn: z.string().optional(),
         region: z.string().optional(),
         land: z.string().min(1, "generellValidering.landErPakrevd"),
         tilhorerSammeKonsern: z.boolean({
-          message: "generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern",
+          message:
+            "generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern",
         }),
       }),
     )
     .optional(),
   harNorskFodselsnummer: z.boolean({
-    message: "arbeidstakerenSteg.duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer",
+    message:
+      "arbeidstakerenSteg.duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer",
   }),
   fodselsnummer: z.string().optional(),
   fornavn: z.string().optional(),
@@ -115,7 +124,8 @@ function validerHarVaertEllerSkalVaereILonnetArbeidFoerUtsending(
 
 export const arbeidstakerSchema = baseArbeidstakerSchema
   .refine(validerFodselsnummer, {
-    message: "arbeidstakerenSteg.fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer",
+    message:
+      "arbeidstakerenSteg.fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer",
     path: ["fodselsnummer"],
   })
   .refine(validerFodselsnummerFormat, {
@@ -135,6 +145,7 @@ export const arbeidstakerSchema = baseArbeidstakerSchema
     path: ["fodselsdato"],
   })
   .refine(validerHarVaertEllerSkalVaereILonnetArbeidFoerUtsending, {
-    message: "arbeidstakerenSteg.duMaVelgeEnAktivitetNarDuIkkeHarVertILonnetArbeid",
+    message:
+      "arbeidstakerenSteg.duMaVelgeEnAktivitetNarDuIkkeHarVertILonnetArbeid",
     path: ["aktivitetIMaanedenFoerUtsendingen"],
   });

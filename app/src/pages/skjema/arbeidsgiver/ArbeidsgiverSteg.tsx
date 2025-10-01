@@ -17,7 +17,6 @@ import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiveren";
 
-
 type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
 
 export function ArbeidsgiverSteg() {
@@ -69,7 +68,9 @@ export function ArbeidsgiverSteg() {
           readOnly={valgtRolle?.orgnr !== undefined}
         />
         <FormSummary.Answer className="mt-4">
-          <FormSummary.Label>{t("arbeidsgiverSteg.organisasjonensNavn")}</FormSummary.Label>
+          <FormSummary.Label>
+            {t("arbeidsgiverSteg.organisasjonensNavn")}
+          </FormSummary.Label>
           <FormSummary.Value>{valgtRolle?.navn}</FormSummary.Value>
         </FormSummary.Answer>
       </SkjemaSteg>

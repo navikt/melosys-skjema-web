@@ -17,7 +17,8 @@ export const resources = {
         pakrevd: "påkrevd",
       },
       rollevelgerPage: {
-        hvemVilDuFylleUtSkjemaPaVegneAv: "Hvem vil du fylle ut skjema på vegne av?",
+        hvemVilDuFylleUtSkjemaPaVegneAv:
+          "Hvem vil du fylle ut skjema på vegne av?",
         degSelv: "Deg selv",
         orgNr: "Org.nr.",
       },
@@ -62,7 +63,8 @@ export const resources = {
           "Er du skattepliktig til Norge i hele utsendingsperioden?",
         mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
           "Mottar du pengestøtte fra et annet EØS-land eller Sveits?",
-        fraHvilketLandMottarDuPengestotte: "Fra hvilket land mottar du pengestøtte?",
+        fraHvilketLandMottarDuPengestotte:
+          "Fra hvilket land mottar du pengestøtte?",
         hvorMyePengerMottarDuBruttoPerManed:
           "Hvor mye penger mottar du brutto per måned",
         oppgiBelopetINorskeKroner: "Oppgi beløpet i norske kroner",
@@ -79,7 +81,8 @@ export const resources = {
           "Du må oppgi et gyldig beløp som er større enn 0",
       },
       arbeidsgiverSteg: {
-        arbeidsgiverensOrganisasjonsnummer: "Arbeidsgiverens organisasjonsnummer",
+        arbeidsgiverensOrganisasjonsnummer:
+          "Arbeidsgiverens organisasjonsnummer",
         organisasjonensNavn: "Organisasjonens navn",
       },
       generellValidering: {
@@ -113,7 +116,8 @@ export const resources = {
         pakrevd: "required",
       },
       rollevelgerPage: {
-        hvemVilDuFylleUtSkjemaPaVegneAv: "Who do you want to fill out the form for?",
+        hvemVilDuFylleUtSkjemaPaVegneAv:
+          "Who do you want to fill out the form for?",
         degSelv: "Yourself",
         orgNr: "Org. no.",
       },
@@ -163,7 +167,8 @@ export const resources = {
         hvorMyePengerMottarDuBruttoPerManed:
           "How much money do you receive gross per month",
         oppgiBelopetINorskeKroner: "Enter the amount in Norwegian kroner",
-        hvaSlangsPengestotteMottarDu: "What kind of financial support do you receive",
+        hvaSlangsPengestotteMottarDu:
+          "What kind of financial support do you receive",
         duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
           "You must answer whether you are liable to pay tax to Norway for the entire posting period",
         duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:

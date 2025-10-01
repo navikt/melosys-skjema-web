@@ -15,14 +15,20 @@ export function RollevelgerPage() {
   }
 
   if (altinnTilgangerQuery.isError) {
-    return <div>{t("felles.feil")}: {`${altinnTilgangerQuery.error}`}</div>;
+    return (
+      <div>
+        {t("felles.feil")}: {`${altinnTilgangerQuery.error}`}
+      </div>
+    );
   }
 
   const altinnTilganger = altinnTilgangerQuery.data;
 
   return (
     <Page.Block>
-      <Heading size="large">{t("rollevelgerPage.hvemVilDuFylleUtSkjemaPaVegneAv")}</Heading>
+      <Heading size="large">
+        {t("rollevelgerPage.hvemVilDuFylleUtSkjemaPaVegneAv")}
+      </Heading>
       <VelgRolleCard
         className="mt-4"
         description={t("rollevelgerPage.degSelv")}

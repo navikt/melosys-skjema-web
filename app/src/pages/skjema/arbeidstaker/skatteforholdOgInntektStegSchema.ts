@@ -58,11 +58,13 @@ function validerPengestotteBelop(data: BaseSkatteforholdOgInntektFormData) {
 
 export const skatteforholdOgInntektSchema = baseSkatteforholdOgInntektSchema
   .refine(validerPengestotteBeskrivelse, {
-    message: "skatteforholdOgInntektSteg.duMaBeskriveHvaSlangsPengestotteDuMottar",
+    message:
+      "skatteforholdOgInntektSteg.duMaBeskriveHvaSlangsPengestotteDuMottar",
     path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
   })
   .refine(validerPengestotteLand, {
-    message: "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
+    message:
+      "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
     path: ["landSomUtbetalerPengestotte"],
   })
   .refine(validerPengestotteBelop, {

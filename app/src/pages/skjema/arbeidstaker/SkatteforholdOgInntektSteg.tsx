@@ -11,10 +11,10 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { useTranslateError } from "~/utils/translation.ts";
 
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { useTranslateError } from "~/utils/translation.ts";
 
 const stepKey = "skatteforhold-og-inntekt";
 
