@@ -7,11 +7,7 @@ interface FjernKnappProps
   children?: React.ReactNode;
 }
 
-export function FjernKnapp({
-  children,
-  className,
-  ...rest
-}: FjernKnappProps) {
+export function FjernKnapp({ children, className, ...rest }: FjernKnappProps) {
   const { t } = useTranslation();
   return (
     <Button
