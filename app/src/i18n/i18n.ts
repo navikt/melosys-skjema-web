@@ -165,6 +165,16 @@ export const resources = {
       },
       arbeidstakerenslonnSteg: {
         tittel: "Arbeidstakerens lønn",
+        utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
+          "Utbetaler du som arbeidsgiver all lønn og eventuelle naturalytelser i utsendingsperioden?",
+        hvemUtbetalerLonnenOgEventuelleNaturalytelser:
+          "Hvem utbetaler lønnen og eventuelle naturalytelser?",
+        leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser:
+          "Legg til norske og/eller utenlandske virksomheter som utbetaler lønnen og eventuelle naturalytelser",
+        duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
+          "Du må svare på om du betaler all lønn og eventuelle naturalytelser i utsendingsperioden",
+        duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
+          "Du må legge til minst én virksomhet når du ikke betaler all lønn selv",
       },
       oppsummeringSteg: {
         tittel: "Oppsummering",
@@ -349,6 +359,16 @@ export const resources = {
       },
       arbeidstakerenslonnSteg: {
         tittel: "Employee's salary",
+        utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
+          "Do you as an employer pay all salary and any benefits in kind during the posting period?",
+        hvemUtbetalerLonnenOgEventuelleNaturalytelser:
+          "Who pays the salary and any benefits in kind?",
+        leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser:
+          "Add Norwegian and/or foreign companies that pay the salary and any benefits in kind",
+        duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
+          "You must answer whether you pay all salary and any benefits in kind during the posting period",
+        duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
+          "You must add at least one company when you do not pay all salary yourself",
       },
       oppsummeringSteg: {
         tittel: "Summary",
