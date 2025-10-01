@@ -1,5 +1,8 @@
 import { Select, SelectProps } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+
+import { useTranslateError } from "~/utils/translation.ts";
 
 type LandVelgerFormPartProps = {
   formFieldName: string;
@@ -32,8 +35,10 @@ export function LandVelgerFormPart({
     register,
     formState: { errors },
   } = useFormContext();
+  const { t } = useTranslation();
+  const translateError = useTranslateError();
 
-  const error = errors[formFieldName]?.message as string | undefined;
+  const error = translateError(errors[formFieldName]?.message as string);
 
   return (
     <Select
@@ -43,7 +48,7 @@ export function LandVelgerFormPart({
       {...register(formFieldName)}
       {...selectProps}
     >
-      <option value="">Velg land</option>
+      <option value="">{t("felles.velgLand")}</option>
       {landOptions.map((land) => (
         <option key={land.value} value={land.value}>
           {land.label}

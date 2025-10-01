@@ -16,6 +16,7 @@ export const resources = {
         leggTil: "Legg til",
         pakrevd: "påkrevd",
         soknadForUtsendtArbeidstakerInnenEuEosOgSveits: "Søknad for utsendt arbeidstaker innen EU/EØS og sveits",
+        velgLand: "Velg land",
       },
       rollevelgerPage: {
         hvemVilDuFylleUtSkjemaPaVegneAv:
