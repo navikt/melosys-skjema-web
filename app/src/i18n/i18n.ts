@@ -78,6 +78,10 @@ export const resources = {
         duMaOppgiEtGyldigBelopSomErStorreEnn0:
           "Du må oppgi et gyldig beløp som er større enn 0",
       },
+      arbeidsgiverSteg: {
+        arbeidsgiverensOrganisasjonsnummer: "Arbeidsgiverens organisasjonsnummer",
+        organisasjonensNavn: "Organisasjonens navn",
+      },
       generellValidering: {
         erPakrevd: "er påkrevd",
         organisasjonsnummerErPakrevd: "Organisasjonsnummer er påkrevd",
@@ -170,6 +174,10 @@ export const resources = {
           "You must select which country pays the financial support",
         duMaOppgiEtGyldigBelopSomErStorreEnn0:
           "You must enter a valid amount greater than 0",
+      },
+      arbeidsgiverSteg: {
+        arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
+        organisasjonensNavn: "Organization name",
       },
       generellValidering: {
         erPakrevd: "is required",
