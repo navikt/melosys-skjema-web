@@ -117,6 +117,22 @@ export const resources = {
       },
       arbeidsgiverensVirksomhetINorgeSteg: {
         tittel: "Arbeidsgiverens virksomhet i Norge",
+        erArbeidsgiverenEnOffentligVirksomhet:
+          "Er arbeidsgiveren en offentlig virksomhet?",
+        offentligeVirksomheterErStatsorganerOgUnderliggendeVirksomheter:
+          "Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter.",
+        erArbeidsgiverenEtBemanningsEllerVikarbyra:
+          "Er arbeidsgiveren et bemannings- eller vikarbyrå?",
+        opprettholderArbeidsgivereVanligDriftINorge:
+          "Opprettholder arbeidsgiveren vanlig drift i Norge?",
+        medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
+          "Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden.",
+        duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
+          "Du må svare på om arbeidsgiveren er en offentlig virksomhet",
+        duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
+          "Du må svare på om arbeidsgiveren er et bemannings- eller vikarbyrå",
+        duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
+          "Du må svare på om arbeidsgiveren opprettholder vanlig drift i Norge",
       },
       utenlandsoppdragetSteg: {
         tittel: "Utenlandsoppdraget",
@@ -311,6 +327,22 @@ export const resources = {
       },
       arbeidsgiverensVirksomhetINorgeSteg: {
         tittel: "Employer's business in Norway",
+        erArbeidsgiverenEnOffentligVirksomhet:
+          "Is the employer a public enterprise?",
+        offentligeVirksomheterErStatsorganerOgUnderliggendeVirksomheter:
+          "Public enterprises are state bodies and subordinate enterprises, for example ministries and universities.",
+        erArbeidsgiverenEtBemanningsEllerVikarbyra:
+          "Is the employer a staffing or temporary work agency?",
+        opprettholderArbeidsgivereVanligDriftINorge:
+          "Does the employer maintain normal operations in Norway?",
+        medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
+          "By this we mean that the employer still has activity and employees working in Norway during the period.",
+        duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
+          "You must answer whether the employer is a public enterprise",
+        duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
+          "You must answer whether the employer is a staffing or temporary work agency",
+        duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
+          "You must answer whether the employer maintains normal operations in Norway",
       },
       utenlandsoppdragetSteg: {
         tittel: "The Foreign Assignment",
