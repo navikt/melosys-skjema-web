@@ -15,6 +15,8 @@ export const resources = {
         fjern: "Fjern",
         leggTil: "Legg til",
         pakrevd: "påkrevd",
+        forrigeSteg: "Forrige steg",
+        nesteSteg: "Neste steg",
       },
       soknadHeader: {
         soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
@@ -227,6 +229,8 @@ export const resources = {
         fjern: "Remove",
         leggTil: "Add",
         pakrevd: "required",
+        forrigeSteg: "Previous step",
+        nesteSteg: "Next step",
       },
       soknadHeader: {
         soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
