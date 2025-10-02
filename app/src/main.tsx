@@ -14,15 +14,30 @@ import { initReactI18next } from "react-i18next";
 import { resources } from "./i18n/i18n.ts";
 import { routeTree } from "./routeTree.gen";
 
-// Initialize i18n
+// Initialize i18n with language from decorator cookie
+const getDecoratorLangFromCookie = () => {
+  return (
+    document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("decorator-language="))
+      ?.split("=")[1] || "nb"
+  );
+};
+
 i18n.use(initReactI18next).init({
-  lng: "nb",
+  lng: getDecoratorLangFromCookie(),
   fallbackLng: "nb",
   resources,
   interpolation: {
     escapeValue: false,
   },
 });
+
+// Set up language support
+setAvailableLanguages([
+  { locale: "nb", handleInApp: true },
+  { locale: "en", handleInApp: true },
+]);
 
 export const queryClient = new QueryClient();
 
@@ -40,12 +55,6 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
-
-// Set up language support
-setAvailableLanguages([
-  { locale: "nb", handleInApp: true },
-  { locale: "en", handleInApp: true },
-]);
 
 onLanguageSelect((language) => {
   i18n.changeLanguage(language.locale);
