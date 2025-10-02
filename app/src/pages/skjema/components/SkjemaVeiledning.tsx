@@ -14,6 +14,7 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/api/userInfo.ts";
 
@@ -23,6 +24,7 @@ interface SkjemaVeiledningProps {
 
 export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const userInfo = useQuery(getUserInfo());
 
@@ -32,75 +34,52 @@ export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
         <VStack as="main" gap="8">
           <GuidePanel poster>
             <Heading level="2" size="medium" spacing>
-              Hei, {userInfo.data?.name}
+              {t("skjemaVeiledning.hei")}, {userInfo.data?.name}
             </Heading>
             <BodyLong spacing>
-              Seksjonen GuidePanel brukes til en kort, overordnet veiledning til
-              søkeren. Seksjonen henter inn søkerens navn, og gir en komprimert
-              forklaring av pengestøtten, tiltaket eller hjelpemiddelet. Denne
-              teksten hentes fra ingressen til produktsiden på nav.no.
+              {t("skjemaVeiledning.guidePanelTekst1")}
             </BodyLong>
-            <BodyLong>
-              Avslutt teksten i seksjonen med en lenke til produktsiden på
-              nav.no som åpnes i en ny fane.
-            </BodyLong>
+            <BodyLong>{t("skjemaVeiledning.guidePanelTekst2")}</BodyLong>
           </GuidePanel>
           <div>
             <Heading level="2" size="large" spacing>
-              Før du søker
+              {t("skjemaVeiledning.forDuSoker")}
             </Heading>
             <BodyLong spacing>
-              Denne seksjonen brukes til å gi søkerne informasjon de vil ha stor
-              nytte av før de går i gang med søknaden. Eksempler på nyttig
-              informasjon:
+              {t("skjemaVeiledning.denneSeksjonenBrukesTil")}
             </BodyLong>
             <List>
               <List.Item>
-                Oppgaver brukeren må ha gjort før de søker.{" "}
+                {t("skjemaVeiledning.oppgaverBrukerenMaHaGjort")}{" "}
+                <i>{t("skjemaVeiledning.duMaHaMeldtDegSomArbeidssøker")}</i>
+              </List.Item>
+              <List.Item>
+                {t("skjemaVeiledning.dokumentasjonBrukerenKanBliBedtOm")}{" "}
                 <i>
-                  Du må ha meldt deg som arbeidssøker før du kan søke om
-                  dagpenger.
+                  {t("skjemaVeiledning.noenAvOpplysningeneViBeOmDokumentation")}
                 </i>
               </List.Item>
               <List.Item>
-                Dokumentasjon brukeren kan bli bedt om.{" "}
-                <i>
-                  Noen av opplysningene du gir underveis vil du bli bedt om å
-                  dokumentere. Du vil trenge xx og xx for å fullføre denne
-                  søknaden.
-                </i>
+                {t("skjemaVeiledning.automatiskLagring")}{" "}
+                <i>{t("skjemaVeiledning.viLagrerSvarene")}</i>
               </List.Item>
               <List.Item>
-                Automatisk lagring.{" "}
-                <i>
-                  Vi lagrer svarene dine (xx timer) mens du fyller ut, så du kan
-                  ta pauser underveis.
-                </i>
+                {t("skjemaVeiledning.antallStegOgEstimertTidsbruk")}{" "}
+                <i>{t("skjemaVeiledning.detErXXStegISoknaden")}</i>
               </List.Item>
               <List.Item>
-                Antall steg og estimert tidsbruk.{" "}
-                <i>
-                  Det er XX steg i søknaden, og du kan regne med å bruke ca. XX
-                  minutter.
-                </i>
+                {t("skjemaVeiledning.soknadsfrist")}{" "}
+                <i>{t("skjemaVeiledning.huskAtDuMaSokeOmXX")}</i>
               </List.Item>
               <List.Item>
-                Søknadsfrister. <i>Husk at du må søke om xx innen xx dager.</i>
-              </List.Item>
-              <List.Item>
-                Saksbehandlingstider og info om gyldighet, krav osv.{" "}
-                <i>
-                  Vi bruker ca. xx uker på å behandle søknaden din. Husk at du
-                  må sende meldekort xx ofte selv om du ikke har fått svar på
-                  søknaden din om dagpenger ennå.
-                </i>
+                {t("skjemaVeiledning.saksbehandlingstiderOgInfo")}{" "}
+                <i>{t("skjemaVeiledning.viBrukerCaXXUker")}</i>
               </List.Item>
             </List>
             <BodyLong>
-              For annen, utfyllende informasjon om søknaden bør du lenke direkte
-              til søknadskapittelet i produktsiden, som{" "}
+              {t("skjemaVeiledning.forAnnenUtfyllendeInformasjon")}{" "}
               <Link href="https://www.nav.no/dagpenger#sok">
-                dette eksempelet for dagpenger
+                {t("skjemaVeiledning.detteEksempeletForDagpenger")}
               </Link>
               .
             </BodyLong>
@@ -109,45 +88,45 @@ export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
             <Accordion>
               <Accordion.Item>
                 <Accordion.Header>
-                  Informasjon vi henter om deg
+                  {t("skjemaVeiledning.informasjonViHenterOmDeg")}
                 </Accordion.Header>
                 <Accordion.Content>
                   <BodyLong>
-                    Her skal det så informasjon om hvor vi vil hente
-                    opplysninger om søkeren og hva slags opplysninger vi henter.
+                    {t("skjemaVeiledning.herSkalDetStaInformasjonOmHvorVi")}
                   </BodyLong>
                 </Accordion.Content>
               </Accordion.Item>
               <Accordion.Item>
                 <Accordion.Header>
-                  Hvordan vi behandler personopplysninger
+                  {t("skjemaVeiledning.hvordanViBehandlerPersonopplysninger")}
                 </Accordion.Header>
                 <Accordion.Content>
                   <BodyLong>
-                    Her skal det stå informasjon om hvordan vi behandler
-                    personopplysningene til søkeren.
+                    {t("skjemaVeiledning.herSkalDetStaInformasjonOmHvordanVi")}
                   </BodyLong>
                 </Accordion.Content>
               </Accordion.Item>
               <Accordion.Item>
-                <Accordion.Header>Automatisk saksbehandling</Accordion.Header>
+                <Accordion.Header>
+                  {t("skjemaVeiledning.automatiskSaksbehandling")}
+                </Accordion.Header>
                 <Accordion.Content>
                   <BodyLong>
-                    Her skal det stå informasjon om hva automatisk behandling
-                    er, hva det betyr for søkeren og informasjon om søkerens
-                    rettigheter ved automatisk avslag.
+                    {t(
+                      "skjemaVeiledning.herSkalDetStaInformasjonOmHvaAutomatisk",
+                    )}
                   </BodyLong>
                 </Accordion.Content>
               </Accordion.Item>
               <Accordion.Item>
-                <Accordion.Header>Vi lagrer svar underveis</Accordion.Header>
+                <Accordion.Header>
+                  {t("skjemaVeiledning.viLagrerSvarUnderveis")}
+                </Accordion.Header>
                 <Accordion.Content>
                   <BodyLong>
-                    Her skal det stå informasjon om hvordan denne søknaden
-                    mellomlagrer informasjonen til søkeren og hvor lenge
-                    informasjonen lagres. Vi skal informere om mellomlagring ved
-                    både automatisk lagring og ved samtykke til lagring med
-                    lagre-knapp.
+                    {t(
+                      "skjemaVeiledning.herSkalDetStaInformasjonOmHvordanDenne",
+                    )}
                   </BodyLong>
                 </Accordion.Content>
               </Accordion.Item>
@@ -155,16 +134,13 @@ export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
           </div>
           <div>
             <BodyLong>
-              Det er viktig at du gir oss riktige opplysninger slik at vi kan
-              behandle saken din.{" "}
+              {t("skjemaVeiledning.detErViktigAtDuGirOss")}{" "}
               <Link href="https://www.nav.no/endringer">
-                Les mer om viktigheten av å gi riktige opplysninger.
+                {t("skjemaVeiledning.lesMerOmViktigheten")}
               </Link>
             </BodyLong>
             <Box paddingBlock="4 8">
-              <Checkbox>
-                Jeg bekrefter at jeg vil svare så riktig som jeg kan.
-              </Checkbox>
+              <Checkbox>{t("skjemaVeiledning.jegBekrefter")}</Checkbox>
             </Box>
             <Button
               icon={<ArrowRightIcon aria-hidden />}
@@ -174,7 +150,7 @@ export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
               }}
               variant="primary"
             >
-              Start søknad
+              {t("felles.startSoknad")}
             </Button>
           </div>
         </VStack>

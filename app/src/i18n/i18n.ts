@@ -17,6 +17,58 @@ export const resources = {
         pakrevd: "påkrevd",
         forrigeSteg: "Forrige steg",
         nesteSteg: "Neste steg",
+        startSoknad: "Start søknad",
+      },
+      skjemaVeiledning: {
+        hei: "Hei",
+        guidePanelTekst1:
+          "Seksjonen GuidePanel brukes til en kort, overordnet veiledning til søkeren. Seksjonen henter inn søkerens navn, og gir en komprimert forklaring av pengestøtten, tiltaket eller hjelpemiddelet. Denne teksten hentes fra ingressen til produktsiden på nav.no.",
+        guidePanelTekst2:
+          "Avslutt teksten i seksjonen med en lenke til produktsiden på nav.no som åpnes i en ny fane.",
+        forDuSoker: "Før du søker",
+        denneSeksjonenBrukesTil:
+          "Denne seksjonen brukes til å gi søkerne informasjon de vil ha stor nytte av før de går i gang med søknaden. Eksempler på nyttig informasjon:",
+        oppgaverBrukerenMaHaGjort:
+          "Oppgaver brukeren må ha gjort før de søker.",
+        duMaHaMeldtDegSomArbeidssøker:
+          "Du må ha meldt deg som arbeidssøker før du kan søke om dagpenger.",
+        dokumentasjonBrukerenKanBliBedtOm:
+          "Dokumentasjon brukeren kan bli bedt om.",
+        noenAvOpplysningeneViBeOmDokumentation:
+          "Noen av opplysningene du gir underveis vil du bli bedt om å dokumentere. Du vil trenge xx og xx for å fullføre denne søknaden.",
+        automatiskLagring: "Automatisk lagring.",
+        viLagrerSvarene:
+          "Vi lagrer svarene dine (xx timer) mens du fyller ut, så du kan ta pauser underveis.",
+        antallStegOgEstimertTidsbruk: "Antall steg og estimert tidsbruk.",
+        detErXXStegISoknaden:
+          "Det er XX steg i søknaden, og du kan regne med å bruke ca. XX minutter.",
+        soknadsfrist: "Søknadsfrister.",
+        huskAtDuMaSokeOmXX: "Husk at du må søke om xx innen xx dager.",
+        saksbehandlingstiderOgInfo:
+          "Saksbehandlingstider og info om gyldighet, krav osv.",
+        viBrukerCaXXUker:
+          "Vi bruker ca. xx uker på å behandle søknaden din. Husk at du må sende meldekort xx ofte selv om du ikke har fått svar på søknaden din om dagpenger ennå.",
+        forAnnenUtfyllendeInformasjon:
+          "For annen, utfyllende informasjon om søknaden bør du lenke direkte til søknadskapittelet i produktsiden, som",
+        detteEksempeletForDagpenger: "dette eksempelet for dagpenger",
+        informasjonViHenterOmDeg: "Informasjon vi henter om deg",
+        herSkalDetStaInformasjonOmHvorVi:
+          "Her skal det så informasjon om hvor vi vil hente opplysninger om søkeren og hva slags opplysninger vi henter.",
+        hvordanViBehandlerPersonopplysninger:
+          "Hvordan vi behandler personopplysninger",
+        herSkalDetStaInformasjonOmHvordanVi:
+          "Her skal det stå informasjon om hvordan vi behandler personopplysningene til søkeren.",
+        automatiskSaksbehandling: "Automatisk saksbehandling",
+        herSkalDetStaInformasjonOmHvaAutomatisk:
+          "Her skal det stå informasjon om hva automatisk behandling er, hva det betyr for søkeren og informasjon om søkerens rettigheter ved automatisk avslag.",
+        viLagrerSvarUnderveis: "Vi lagrer svar underveis",
+        herSkalDetStaInformasjonOmHvordanDenne:
+          "Her skal det stå informasjon om hvordan denne søknaden mellomlagrer informasjonen til søkeren og hvor lenge informasjonen lagres. Vi skal informere om mellomlagring ved både automatisk lagring og ved samtykke til lagring med lagre-knapp.",
+        detErViktigAtDuGirOss:
+          "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken din.",
+        lesMerOmViktigheten:
+          "Les mer om viktigheten av å gi riktige opplysninger.",
+        jegBekrefter: "Jeg bekrefter at jeg vil svare så riktig som jeg kan.",
       },
       soknadHeader: {
         soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
@@ -231,6 +283,59 @@ export const resources = {
         pakrevd: "required",
         forrigeSteg: "Previous step",
         nesteSteg: "Next step",
+        startSoknad: "Start application",
+      },
+      skjemaVeiledning: {
+        hei: "Hello",
+        guidePanelTekst1:
+          "The GuidePanel section is used for brief, high-level guidance to the applicant. The section retrieves the applicant's name and provides a condensed explanation of the financial support, measure, or aid. This text is taken from the introduction to the product page on nav.no.",
+        guidePanelTekst2:
+          "End the text in the section with a link to the product page on nav.no that opens in a new tab.",
+        forDuSoker: "Before you apply",
+        denneSeksjonenBrukesTil:
+          "This section is used to give applicants information they will find very useful before starting the application. Examples of useful information:",
+        oppgaverBrukerenMaHaGjort:
+          "Tasks the user must have completed before applying.",
+        duMaHaMeldtDegSomArbeidssøker:
+          "You must have registered as a job seeker before you can apply for unemployment benefits.",
+        dokumentasjonBrukerenKanBliBedtOm:
+          "Documentation the user may be asked for.",
+        noenAvOpplysningeneViBeOmDokumentation:
+          "Some of the information you provide along the way you will be asked to document. You will need xx and xx to complete this application.",
+        automatiskLagring: "Automatic saving.",
+        viLagrerSvarene:
+          "We save your answers (xx hours) while you fill out, so you can take breaks along the way.",
+        antallStegOgEstimertTidsbruk: "Number of steps and estimated time.",
+        detErXXStegISoknaden:
+          "There are XX steps in the application, and you can expect to spend about XX minutes.",
+        soknadsfrist: "Application deadlines.",
+        huskAtDuMaSokeOmXX:
+          "Remember that you must apply for xx within xx days.",
+        saksbehandlingstiderOgInfo:
+          "Processing times and info about validity, requirements, etc.",
+        viBrukerCaXXUker:
+          "We use about xx weeks to process your application. Remember that you must send status reports xx often even if you haven't received a response to your unemployment benefit application yet.",
+        forAnnenUtfyllendeInformasjon:
+          "For other, detailed information about the application, you should link directly to the application chapter in the product page, like",
+        detteEksempeletForDagpenger: "this example for unemployment benefits",
+        informasjonViHenterOmDeg: "Information we collect about you",
+        herSkalDetStaInformasjonOmHvorVi:
+          "Here should be information about where we will obtain information about the applicant and what kind of information we collect.",
+        hvordanViBehandlerPersonopplysninger:
+          "How we process personal information",
+        herSkalDetStaInformasjonOmHvordanVi:
+          "Here should be information about how we process the applicant's personal information.",
+        automatiskSaksbehandling: "Automatic case processing",
+        herSkalDetStaInformasjonOmHvaAutomatisk:
+          "Here should be information about what automatic processing is, what it means for the applicant and information about the applicant's rights in case of automatic rejection.",
+        viLagrerSvarUnderveis: "We save answers along the way",
+        herSkalDetStaInformasjonOmHvordanDenne:
+          "Here should be information about how this application temporarily stores the applicant's information and how long the information is stored. We should inform about temporary storage both for automatic saving and for consent to saving with the save button.",
+        detErViktigAtDuGirOss:
+          "It is important that you give us correct information so that we can process your case.",
+        lesMerOmViktigheten:
+          "Read more about the importance of providing correct information.",
+        jegBekrefter: "I confirm that I will answer as accurately as I can.",
       },
       soknadHeader: {
         soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
