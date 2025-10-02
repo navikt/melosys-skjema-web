@@ -2,6 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   Fremgangsindikator,
@@ -24,6 +25,7 @@ interface SkjemaStegProps {
 }
 
 export function SkjemaSteg({ config, children }: SkjemaStegProps) {
+  const { t } = useTranslation();
   const stepNumber = getStepNumber(config.stepKey, config.stegRekkefolge);
   const prevRoute = getRelativeRoute(
     config.stepKey,
@@ -40,7 +42,9 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
   const stepInfo = config.stegRekkefolge.find(
     (step) => step.key === config.stepKey,
   );
-  const title = stepInfo?.title || `Unknown Step: ${config.stepKey}`;
+  const title = stepInfo?.title
+    ? t(stepInfo.title)
+    : `Unknown Step: ${config.stepKey}`;
 
   return (
     <section>
@@ -60,7 +64,7 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
             to={prevRoute}
             variant="secondary"
           >
-            Forrige steg
+            {t("felles.forrigeSteg")}
           </Button>
         )}
         {nextRoute && !config.customNesteKnapp && (
@@ -71,7 +75,7 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
             to={nextRoute}
             variant="primary"
           >
-            Neste steg
+            {t("felles.nesteSteg")}
           </Button>
         )}
         {config.customNesteKnapp && (

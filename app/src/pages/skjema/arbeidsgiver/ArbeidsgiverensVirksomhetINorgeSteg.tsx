@@ -1,50 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
+import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiverens-virksomhet-i-norge";
-
-const arbeidsgiverensVirksomhetSchema = z
-  .object({
-    erArbeidsgiverenOffentligVirksomhet: z.boolean({
-      message: "Du må svare på om arbeidsgiveren er en offentlig virksomhet",
-    }),
-    erArbeidsgiverenBemanningsEllerVikarbyraa: z.boolean().optional(),
-    opprettholderArbeidsgivereVanligDrift: z.boolean().optional(),
-  })
-  .refine(
-    (data) => {
-      if (!data.erArbeidsgiverenOffentligVirksomhet) {
-        return data.erArbeidsgiverenBemanningsEllerVikarbyraa !== undefined;
-      }
-      return true;
-    },
-    {
-      message:
-        "Du må svare på om arbeidsgiveren er et bemannings- eller vikarbyrå",
-      path: ["erArbeidsgiverenBemanningsEllerVikarbyraa"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (!data.erArbeidsgiverenOffentligVirksomhet) {
-        return data.opprettholderArbeidsgivereVanligDrift !== undefined;
-      }
-      return true;
-    },
-    {
-      message:
-        "Du må svare på om arbeidsgiveren opprettholder vanlig drift i Norge",
-      path: ["opprettholderArbeidsgivereVanligDrift"],
-    },
-  );
 
 type ArbeidsgiverensVirksomhetFormData = z.infer<
   typeof arbeidsgiverensVirksomhetSchema
@@ -52,6 +19,7 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
 
 export function ArbeidsgiverensVirksomhetINorgeSteg() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
@@ -79,14 +47,21 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
-            customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
+            customNesteKnapp: {
+              tekst: t("felles.lagreOgFortsett"),
+              type: "submit",
+            },
           }}
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            description="Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter."
+            description={t(
+              "arbeidsgiverensVirksomhetINorgeSteg.offentligeVirksomheterErStatsorganerOgUnderliggendeVirksomheter",
+            )}
             formFieldName="erArbeidsgiverenOffentligVirksomhet"
-            legend="Er arbeidsgiveren en offentlig virksomhet?"
+            legend={t(
+              "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet",
+            )}
           />
 
           {erArbeidsgiverenOffentligVirksomhet === false && (
@@ -94,14 +69,20 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
               <RadioGroupJaNeiFormPart
                 className="mt-4"
                 formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
-                legend="Er arbeidsgiveren et bemannings- eller vikarbyrå?"
+                legend={t(
+                  "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra",
+                )}
               />
 
               <RadioGroupJaNeiFormPart
                 className="mt-4"
-                description="Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden."
+                description={t(
+                  "arbeidsgiverensVirksomhetINorgeSteg.medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden",
+                )}
                 formFieldName="opprettholderArbeidsgivereVanligDrift"
-                legend="Opprettholder arbeidsgiveren vanlig drift i Norge?"
+                legend={t(
+                  "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgivereVanligDriftINorge",
+                )}
               />
             </>
           )}

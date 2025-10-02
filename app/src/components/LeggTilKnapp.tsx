@@ -1,9 +1,10 @@
 import { PlusIcon } from "@navikt/aksel-icons";
 import { Button, ButtonProps } from "@navikt/ds-react";
+import { useTranslation } from "react-i18next";
 
 interface LeggTilKnappProps
   extends Omit<ButtonProps, "icon" | "size" | "variant"> {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export function LeggTilKnapp({
@@ -11,6 +12,7 @@ export function LeggTilKnapp({
   className,
   ...rest
 }: LeggTilKnappProps) {
+  const { t } = useTranslation();
   return (
     <Button
       className={`w-fit ${className || ""}`}
@@ -20,7 +22,7 @@ export function LeggTilKnapp({
       variant="secondary"
       {...rest}
     >
-      {children}
+      {children || t("felles.leggTil")}
     </Button>
   );
 }

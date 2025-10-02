@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSummary, TextField } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import {
@@ -9,22 +10,19 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
+import { useTranslateError } from "~/utils/translation.ts";
 
+import { arbeidsgiverSchema } from "./arbeidsgiverStegSchema.ts";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiveren";
-
-const arbeidsgiverSchema = z.object({
-  organisasjonsnummer: z
-    .string()
-    .min(1, "Organisasjonsnummer er påkrevd")
-    .regex(/^\d{9}$/, "Organisasjonsnummer må være 9 siffer"),
-});
 
 type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
 
 export function ArbeidsgiverSteg() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const translateError = useTranslateError();
 
   const valgtRolle = getValgtRolle();
 
@@ -54,20 +52,25 @@ export function ArbeidsgiverSteg() {
         config={{
           stepKey,
           stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
-          customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
+          customNesteKnapp: {
+            tekst: t("felles.lagreOgFortsett"),
+            type: "submit",
+          },
         }}
       >
         <TextField
           className="mt-4"
-          error={errors.organisasjonsnummer?.message}
-          label="Arbeidsgiverens organisasjonsnummer"
+          error={translateError(errors.organisasjonsnummer?.message)}
+          label={t("arbeidsgiverSteg.arbeidsgiverensOrganisasjonsnummer")}
           size="medium"
           style={{ maxWidth: "160px" }}
           {...register("organisasjonsnummer")}
           readOnly={valgtRolle?.orgnr !== undefined}
         />
         <FormSummary.Answer className="mt-4">
-          <FormSummary.Label>Organisasjonens navn</FormSummary.Label>
+          <FormSummary.Label>
+            {t("arbeidsgiverSteg.organisasjonensNavn")}
+          </FormSummary.Label>
           <FormSummary.Value>{valgtRolle?.navn}</FormSummary.Value>
         </FormSummary.Answer>
       </SkjemaSteg>

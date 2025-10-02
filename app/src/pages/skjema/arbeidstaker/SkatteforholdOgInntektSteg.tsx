@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea, TextField } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
@@ -10,80 +11,12 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { useTranslateError } from "~/utils/translation.ts";
 
+import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "skatteforhold-og-inntekt";
-
-const baseSkatteforholdOgInntektSchema = z.object({
-  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean({
-    message:
-      "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
-  }),
-  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean({
-    message:
-      "Du må svare på om du mottar pengestøtte fra et annet EØS-land eller Sveits",
-  }),
-  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
-  landSomUtbetalerPengestotte: z.string().optional(),
-  pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
-});
-
-type BaseSkatteforholdOgInntektFormData = z.infer<
-  typeof baseSkatteforholdOgInntektSchema
->;
-
-function validerPengestotteBeskrivelse(
-  data: BaseSkatteforholdOgInntektFormData,
-) {
-  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-    return (
-      data.pengestotteSomMottasFraAndreLandBeskrivelse &&
-      data.pengestotteSomMottasFraAndreLandBeskrivelse.trim().length > 0
-    );
-  }
-  return true;
-}
-
-function validerPengestotteLand(data: BaseSkatteforholdOgInntektFormData) {
-  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-    return (
-      data.landSomUtbetalerPengestotte &&
-      data.landSomUtbetalerPengestotte.trim().length > 0
-    );
-  }
-  return true;
-}
-
-function validerPengestotteBelop(data: BaseSkatteforholdOgInntektFormData) {
-  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-    if (
-      !data.pengestotteSomMottasFraAndreLandBelop ||
-      data.pengestotteSomMottasFraAndreLandBelop.trim().length === 0
-    ) {
-      return false;
-    }
-    const amount = Number.parseFloat(
-      data.pengestotteSomMottasFraAndreLandBelop,
-    );
-    return !Number.isNaN(amount) && amount > 0;
-  }
-  return true;
-}
-
-const skatteforholdOgInntektSchema = baseSkatteforholdOgInntektSchema
-  .refine(validerPengestotteBeskrivelse, {
-    message: "Du må beskrive hva slags pengestøtte du mottar",
-    path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
-  })
-  .refine(validerPengestotteLand, {
-    message: "Du må velge hvilket land som utbetaler pengestøtten",
-    path: ["landSomUtbetalerPengestotte"],
-  })
-  .refine(validerPengestotteBelop, {
-    message: "Du må oppgi et gyldig beløp som er større enn 0",
-    path: ["pengestotteSomMottasFraAndreLandBelop"],
-  });
 
 type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
@@ -91,6 +24,8 @@ type SkatteforholdOgInntektFormData = z.infer<
 
 export function SkatteforholdOgInntektSteg() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const translateError = useTranslateError();
 
   const formMethods = useForm<SkatteforholdOgInntektFormData>({
     resolver: zodResolver(skatteforholdOgInntektSchema),
@@ -123,19 +58,26 @@ export function SkatteforholdOgInntektSteg() {
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
-            customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
+            customNesteKnapp: {
+              tekst: t("felles.lagreOgFortsett"),
+              type: "submit",
+            },
           }}
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="erSkattepliktigTilNorgeIHeleutsendingsperioden"
-            legend="Er du skattepliktig til Norge i hele utsendingsperioden?"
+            legend={t(
+              "skatteforholdOgInntektSteg.erDuSkattepliktigTilNorgeIHeleUtsendingsperioden",
+            )}
           />
 
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="mottarPengestotteFraAnnetEosLandEllerSveits"
-            legend="Mottar du pengestøtte fra et annet EØS-land eller Sveits?"
+            legend={t(
+              "skatteforholdOgInntektSteg.mottarDuPengestotteFraEtAnnetEosLandEllerSveits",
+            )}
           />
 
           {mottarPengestotteFraAnnetEosLandEllerSveits === true && (
@@ -143,24 +85,34 @@ export function SkatteforholdOgInntektSteg() {
               <LandVelgerFormPart
                 className="mt-4"
                 formFieldName="landSomUtbetalerPengestotte"
-                label="Fra hvilket land mottar du pengestøtte?"
+                label={t(
+                  "skatteforholdOgInntektSteg.fraHvilketLandMottarDuPengestotte",
+                )}
               />
 
               <TextField
                 className="mt-4"
-                description="Oppgi beløpet i norske kroner"
-                error={errors.pengestotteSomMottasFraAndreLandBelop?.message}
+                description={t(
+                  "skatteforholdOgInntektSteg.oppgiBelopetINorskeKroner",
+                )}
+                error={translateError(
+                  errors.pengestotteSomMottasFraAndreLandBelop?.message,
+                )}
                 inputMode="decimal"
-                label="Hvor mye penger mottar du brutto per måned"
+                label={t(
+                  "skatteforholdOgInntektSteg.hvorMyePengerMottarDuBruttoPerManed",
+                )}
                 {...register("pengestotteSomMottasFraAndreLandBelop")}
               />
 
               <Textarea
                 className="mt-4"
-                error={
-                  errors.pengestotteSomMottasFraAndreLandBeskrivelse?.message
-                }
-                label="Hva slags pengestøtte mottar du"
+                error={translateError(
+                  errors.pengestotteSomMottasFraAndreLandBeskrivelse?.message,
+                )}
+                label={t(
+                  "skatteforholdOgInntektSteg.hvaSlangsPengestotteMottarDu",
+                )}
                 {...register("pengestotteSomMottasFraAndreLandBeskrivelse")}
               />
             </>

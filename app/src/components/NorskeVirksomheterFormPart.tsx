@@ -1,5 +1,6 @@
 import { Box, Tag, TextField } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
@@ -16,6 +17,7 @@ export function NorskeVirksomheterFormPart({
   clearErrorsFieldName,
 }: NorskeVirksomheterSectionProps) {
   const { control, register, getFieldState, clearErrors } = useFormContext();
+  const { t } = useTranslation();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -47,7 +49,7 @@ export function NorskeVirksomheterFormPart({
           }}
         >
           <Tag size="small" variant="info">
-            Norsk virksomhet
+            {t("norskeVirksomheterFormPart.norskVirksomhet")}
           </Tag>
           <TextField
             className="mt-2"
@@ -55,7 +57,7 @@ export function NorskeVirksomheterFormPart({
               getFieldState(`${fieldName}.${index}.organisasjonsnummer`).error
                 ?.message
             }
-            label="Organisasjonsnummer"
+            label={t("norskeVirksomheterFormPart.organisasjonsnummer")}
             style={{ maxWidth: "160px" }}
             {...register(`${fieldName}.${index}.organisasjonsnummer`)}
             size="small"
@@ -69,7 +71,7 @@ export function NorskeVirksomheterFormPart({
       ))}
 
       <LeggTilKnapp onClick={leggTilNorskVirksomhet}>
-        Legg til norsk virksomhet
+        {t("norskeVirksomheterFormPart.leggTilNorskVirksomhet")}
       </LeggTilKnapp>
     </>
   );

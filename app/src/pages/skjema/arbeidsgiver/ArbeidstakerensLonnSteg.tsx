@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Detail, ErrorMessage, Label, VStack } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
@@ -9,55 +10,19 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { useTranslateError } from "~/utils/translation.ts";
 
+import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidstakerens-lonn";
-
-const arbeidstakerensLonnSchema = z.object({
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z.boolean({
-    message:
-      "Du må svare på om du betaler all lønn og eventuelle naturalytelser i utsendingsperioden",
-  }),
-  virksomheterSomUtbetalerLonnOgNaturalytelser: z
-    .object({
-      norskeVirksomheter: z
-        .array(
-          z.object({
-            organisasjonsnummer: z
-              .string()
-              .min(1, "Organisasjonsnummer er påkrevd")
-              .regex(/^\d{9}$/, "Organisasjonsnummer må være 9 siffer"),
-          }),
-        )
-        .optional(),
-      utenlandskeVirksomheter: z
-        .array(
-          z.object({
-            navn: z.string().min(1, "Navn på virksomhet er påkrevd"),
-            organisasjonsnummer: z.string().optional(),
-            vegnavnOgHusnummer: z
-              .string()
-              .min(1, "Vegnavn og husnummer er påkrevd"),
-            bygning: z.string().optional(),
-            postkode: z.string().optional(),
-            byStedsnavn: z.string().optional(),
-            region: z.string().optional(),
-            land: z.string().min(1, "Land er påkrevd"),
-            tilhorerSammeKonsern: z.boolean({
-              message: "Du må svare på om virksomheten tilhører samme konsern",
-            }),
-          }),
-        )
-        .optional(),
-    })
-    .optional(),
-});
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
 export function ArbeidstakerensLonnSteg() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const translateError = useTranslateError();
 
   const formMethods = useForm<ArbeidstakerensLonnFormData>({
     resolver: zodResolver(arbeidstakerensLonnSchema),
@@ -88,8 +53,9 @@ export function ArbeidstakerensLonnSteg() {
       if (antallNorskeVirksomheter + antallUtenlandskeVirksomheter === 0) {
         setError("virksomheterSomUtbetalerLonnOgNaturalytelser", {
           type: "required",
-          message:
-            "Du må legge til minst én virksomhet når du ikke betaler all lønn selv",
+          message: t(
+            "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
+          ),
         });
         return;
       }
@@ -113,22 +79,32 @@ export function ArbeidstakerensLonnSteg() {
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
-            customNesteKnapp: { tekst: "Lagre og fortsett", type: "submit" },
+            customNesteKnapp: {
+              tekst: t("felles.lagreOgFortsett"),
+              type: "submit",
+            },
           }}
         >
           <RadioGroupJaNeiFormPart
             className="mt-6"
             formFieldName="arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"
-            legend="Utbetaler du som arbeidsgiver all lønn og eventuelle naturalytelser i utsendingsperioden?"
+            legend={t(
+              "arbeidstakerenslonnSteg.utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden",
+            )}
           />
 
           {arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden ===
             false && (
             <VStack className="mt-4" gap="space-8">
-              <Label>Hvem utbetaler lønnen og eventuelle naturalytelser?</Label>
+              <Label>
+                {t(
+                  "arbeidstakerenslonnSteg.hvemUtbetalerLonnenOgEventuelleNaturalytelser",
+                )}
+              </Label>
               <Detail>
-                Legg til norske og/eller utenlandske virksomheter som utbetaler
-                lønnen og eventuelle naturalytelser
+                {t(
+                  "arbeidstakerenslonnSteg.leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser",
+                )}
               </Detail>
 
               <NorskeVirksomheterFormPart
@@ -143,7 +119,9 @@ export function ArbeidstakerensLonnSteg() {
 
               {errors.virksomheterSomUtbetalerLonnOgNaturalytelser && (
                 <ErrorMessage className="mt-2">
-                  {errors.virksomheterSomUtbetalerLonnOgNaturalytelser.message}
+                  {translateError(
+                    errors.virksomheterSomUtbetalerLonnOgNaturalytelser.message,
+                  )}
                 </ErrorMessage>
               )}
             </VStack>
