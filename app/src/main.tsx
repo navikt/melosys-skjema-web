@@ -1,6 +1,9 @@
 import "./index.css";
 
-import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
+import {
+  onLanguageSelect,
+  setAvailableLanguages,
+} from "@navikt/nav-dekoratoren-moduler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import i18n from "i18next";
@@ -37,6 +40,12 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+// Set up language support
+setAvailableLanguages([
+  { locale: "nb", handleInApp: true },
+  { locale: "en", handleInApp: true },
+]);
 
 onLanguageSelect((language) => {
   i18n.changeLanguage(language.locale);
