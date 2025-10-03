@@ -103,6 +103,15 @@ export const en = {
       degSelv: "Yourself",
       orgNr: "Org. no.",
     },
+    familiemedlemmerSteg: {
+      tittel: "Family Members",
+      sokerDuForBarnUnder18SomSkalVaereMed: "Are you applying for children under 18 who will accompany you?",
+      duMaSvarePaOmDuSokerForBarnUnder18SomSkalVaereMed: "You must answer whether you are applying for children under 18 who will accompany you",
+      harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: "Do you have a spouse, partner, cohabitant or children over 18 who are submitting their own application?",
+      duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: "You must answer whether you have a spouse, partner, cohabitant or children over 18 who are submitting their own application",
+      duMaLageEgenSoknadForBarna: "You must create separate applications for your children",
+      duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18: "You must create a separate application for spouse, partner, cohabitant or children over 18",
+    },
     arbeidstakerenSteg: {
       tittel: "The Employee",
       harArbeidstakerenNorskFodselsnummerEllerDNummer:
