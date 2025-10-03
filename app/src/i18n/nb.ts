@@ -103,12 +103,31 @@ export const nb = {
     },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
-      sokerDuForBarnUnder18SomSkalVaereMed: "Søker du for barn under 18 år som skal være med deg?",
-      duMaSvarePaOmDuSokerForBarnUnder18SomSkalVaereMed: "Du må svare på om du søker for barn under 18 år som skal være med deg",
-      harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: "Har du ektefelle partner, samboer eller barn over 18 år som sender egen søknad?",
-      duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: "Du må svare på om du har ektefelle partner, samboer eller barn over 18 år som sender egen søknad",
+      sokerDuForBarnUnder18SomSkalVaereMed:
+        "Søker du for barn under 18 år som skal være med deg?",
+      duMaSvarePaOmDuSokerForBarnUnder18SomSkalVaereMed:
+        "Du må svare på om du søker for barn under 18 år som skal være med deg",
+      harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
+        "Har du ektefelle partner, samboer eller barn over 18 år som sender egen søknad?",
+      duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
+        "Du må svare på om du har ektefelle partner, samboer eller barn over 18 år som sender egen søknad",
       duMaLageEgenSoknadForBarna: "Du må lage egen søknad for barna dine",
-      duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18: "Du må lage en egen søknad for ektefelle, partner, samboer eller barn over 18 år",
+      duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18:
+        "Du må lage en egen søknad for ektefelle, partner, samboer eller barn over 18 år",
+    },
+    tilleggsopplysningerSteg: {
+      tittel: "Tilleggsopplysninger",
+      harDuNoenFlereOpplysningerTilSoknaden:
+        "Har du noen flere opplysninger til søknaden?",
+      duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden:
+        "Du må svare på om du har flere opplysninger til søknaden",
+      beskriveFlereOpplysningerTilSoknaden:
+        "Beskriv de flere opplysningene du har til søknaden",
+      tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger:
+        "Tilleggsopplysninger er påkrevd når du har flere opplysninger",
+      lastOppVedlegg: "Last opp vedlegg (valgfritt)",
+      lastOppVedleggBeskrivelse:
+        "Du kan laste opp PDF, Word-dokumenter eller bilder. Maks filstørrelse 10 MB per fil.",
     },
     arbeidstakerenSteg: {
       tittel: "Arbeidstakeren",
