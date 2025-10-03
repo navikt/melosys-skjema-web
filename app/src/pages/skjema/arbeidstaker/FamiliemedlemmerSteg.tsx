@@ -65,7 +65,7 @@ export function FamiliemedlemmerSteg() {
             )}
           />
 
-          {sokerForBarnUnder18SomSkalVaereMed === true && (
+          {sokerForBarnUnder18SomSkalVaereMed && (
             <GuidePanel className="mt-4">
               {t("familiemedlemmerSteg.duMaLageEgenSoknadForBarna")}
             </GuidePanel>
@@ -79,8 +79,7 @@ export function FamiliemedlemmerSteg() {
             )}
           />
 
-          {harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad ===
-            true && (
+          {harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad && (
             <GuidePanel className="mt-4">
               {t(
                 "familiemedlemmerSteg.duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18",
