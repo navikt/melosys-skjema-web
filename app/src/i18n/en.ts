@@ -103,6 +103,35 @@ export const en = {
       degSelv: "Yourself",
       orgNr: "Org. no.",
     },
+    familiemedlemmerSteg: {
+      tittel: "Family Members",
+      sokerDuForBarnUnder18SomSkalVaereMed:
+        "Are you applying for children under 18 who will accompany you?",
+      duMaSvarePaOmDuSokerForBarnUnder18SomSkalVaereMed:
+        "You must answer whether you are applying for children under 18 who will accompany you",
+      harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
+        "Do you have a spouse, partner, cohabitant or children over 18 who are submitting their own application?",
+      duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
+        "You must answer whether you have a spouse, partner, cohabitant or children over 18 who are submitting their own application",
+      duMaLageEgenSoknadForBarna:
+        "You must create separate applications for your children",
+      duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18:
+        "You must create a separate application for spouse, partner, cohabitant or children over 18",
+    },
+    tilleggsopplysningerSteg: {
+      tittel: "Additional Information",
+      harDuNoenFlereOpplysningerTilSoknaden:
+        "Do you have any additional information for the application?",
+      duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden:
+        "You must answer whether you have additional information for the application",
+      beskriveFlereOpplysningerTilSoknaden:
+        "Describe the additional information you have for the application",
+      tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger:
+        "Additional information is required when you have additional information",
+      lastOppVedlegg: "Upload attachments (optional)",
+      lastOppVedleggBeskrivelse:
+        "You can upload PDF, Word documents or images. Maximum file size 10 MB per file.",
+    },
     arbeidstakerenSteg: {
       tittel: "The Employee",
       harArbeidstakerenNorskFodselsnummerEllerDNummer:
