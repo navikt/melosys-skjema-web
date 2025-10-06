@@ -6,18 +6,23 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 type RadioGroupJaNeiProps = Omit<
   RadioGroupProps,
-  "onChange" | "value" | "children" | "error"
+  "onChange" | "children" | "error"
 > & {
   formFieldName: string;
+  lockedValue?: boolean;
 };
 
 export function RadioGroupJaNeiFormPart({
   formFieldName,
+  lockedValue,
   ...props
 }: RadioGroupJaNeiProps) {
   const { control } = useFormContext();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+
+  const lockedValueString =
+    lockedValue === undefined ? undefined : lockedValue.toString();
 
   return (
     <Controller
@@ -28,7 +33,13 @@ export function RadioGroupJaNeiFormPart({
           {...props}
           error={translateError(fieldState.error?.message)}
           onChange={(value) => field.onChange(value === "true")}
-          value={field.value === undefined ? "" : field.value.toString()}
+          value={
+            lockedValueString === undefined
+              ? field.value === undefined
+                ? ""
+                : field.value.toString()
+              : lockedValueString
+          }
         >
           <Radio size="small" value="true">
             {t("felles.ja")}
