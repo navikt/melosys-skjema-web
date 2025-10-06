@@ -1,4 +1,5 @@
 import { Radio, RadioGroup, RadioGroupProps } from "@navikt/ds-react";
+import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -17,12 +18,25 @@ export function RadioGroupJaNeiFormPart({
   lockedValue,
   ...props
 }: RadioGroupJaNeiProps) {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
-  const lockedValueString =
-    lockedValue === undefined ? undefined : lockedValue.toString();
+  useEffect(() => {
+    if (lockedValue !== undefined) {
+      setValue(formFieldName, lockedValue);
+    }
+  }, [lockedValue, formFieldName, setValue]);
+
+  const lockedValueOrElseFieldValue = (fieldValue: boolean) => {
+    if (lockedValue !== undefined) {
+      return lockedValue.toString();
+    }
+    if (fieldValue === undefined) {
+      return "";
+    }
+    return fieldValue.toString();
+  };
 
   return (
     <Controller
@@ -33,13 +47,7 @@ export function RadioGroupJaNeiFormPart({
           {...props}
           error={translateError(fieldState.error?.message)}
           onChange={(value) => field.onChange(value === "true")}
-          value={
-            lockedValueString === undefined
-              ? field.value === undefined
-                ? ""
-                : field.value.toString()
-              : lockedValueString
-          }
+          value={lockedValueOrElseFieldValue(field.value)}
         >
           <Radio size="small" value="true">
             {t("felles.ja")}

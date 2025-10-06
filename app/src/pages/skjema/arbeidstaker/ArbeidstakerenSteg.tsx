@@ -30,11 +30,11 @@ export function ArbeidstakerenSteg() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
-  const userInfo = useQuery(getUserInfo()).data;
-
-  const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId
-    ? /^\d{11}$/.test(userInfo.userId)
-    : false;
+  const {
+    data: userInfo,
+    isLoading: userInfoIsLoading,
+    error: userinfoIsError,
+  } = useQuery(getUserInfo());
 
   type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
 
@@ -48,6 +48,8 @@ export function ArbeidstakerenSteg() {
     formState: { errors },
     watch,
   } = formMethods;
+
+  const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId !== undefined;
 
   const harNorskFodselsnummer =
     watch("harNorskFodselsnummer") || innloggetBrukerHarNorskFodselsnummer;
@@ -65,6 +67,14 @@ export function ArbeidstakerenSteg() {
       navigate({ to: nextStep.route });
     }
   };
+
+  if (userInfoIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (userinfoIsError) {
+    return <div>Error loading user info</div>;
+  }
 
   return (
     <FormProvider {...formMethods}>
@@ -100,7 +110,9 @@ export function ArbeidstakerenSteg() {
               style={{ maxWidth: "160px" }}
               {...register("fodselsnummer")}
               disabled={innloggetBrukerHarNorskFodselsnummer}
-              value={userInfo?.userId}
+              {...(innloggetBrukerHarNorskFodselsnummer
+                ? { value: userInfo?.userId }
+                : {})}
             />
           )}
 
