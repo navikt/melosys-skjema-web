@@ -10,7 +10,7 @@
     "check-types": "tsc --noemit",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "generate-types": "swagger-typescript-api generate --path https://melosys-skjema-api.intern.dev.nav.no/v3/api-docs --output ./src/types --no-client -n apiTypes"
+    "generate-types": "swagger-typescript-api generate --path https://melosys-skjema-api.intern.dev.nav.no/v3/api-docs --output ./src/types --no-client -n melosysSkjemaTypes"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",

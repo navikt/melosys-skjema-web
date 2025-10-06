@@ -3,7 +3,7 @@ import { Box, Heading, LinkCard, Page } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
-import { listAltinnTilganger } from "~/api/queries.ts";
+import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { setValgtRolle } from "~/utils/sessionStorage.ts";
 
 export function RollevelgerPage() {

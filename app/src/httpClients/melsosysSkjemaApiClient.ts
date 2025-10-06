@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { OrganisasjonDto } from "~/types/apiTypes";
+import { OrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 const API_PROXY_URL = "/api";
 

@@ -1,4 +1,4 @@
-import type { OrganisasjonDto } from "~/types/apiTypes";
+import type { OrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 export function getValgtRolle(): OrganisasjonDto | undefined {
   const organisasjonData = sessionStorage.getItem("valgtRolle");
