@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, TextField, VStack } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -47,9 +48,16 @@ export function ArbeidstakerenSteg() {
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = formMethods;
 
   const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId !== undefined;
+
+  useEffect(() => {
+    if (innloggetBrukerHarNorskFodselsnummer) {
+      setValue("fodselsnummer", userInfo.userId);
+    }
+  }, [innloggetBrukerHarNorskFodselsnummer, userInfo?.userId, setValue]);
 
   const harNorskFodselsnummer =
     watch("harNorskFodselsnummer") || innloggetBrukerHarNorskFodselsnummer;
@@ -110,9 +118,6 @@ export function ArbeidstakerenSteg() {
               style={{ maxWidth: "160px" }}
               {...register("fodselsnummer")}
               disabled={innloggetBrukerHarNorskFodselsnummer}
-              {...(innloggetBrukerHarNorskFodselsnummer
-                ? { value: userInfo?.userId }
-                : {})}
             />
           )}
 
