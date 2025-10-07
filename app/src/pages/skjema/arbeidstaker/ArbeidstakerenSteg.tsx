@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, TextField, VStack } from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -9,6 +11,7 @@ import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
+import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import {
   getNextStep,
@@ -28,6 +31,12 @@ export function ArbeidstakerenSteg() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
+  const {
+    data: userInfo,
+    isLoading: userInfoIsLoading,
+    error: userinfoIsError,
+  } = useQuery(getUserInfo());
+
   type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
 
   const formMethods = useForm<ArbeidstakerFormData>({
@@ -39,9 +48,19 @@ export function ArbeidstakerenSteg() {
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = formMethods;
 
-  const harNorskFodselsnummer = watch("harNorskFodselsnummer");
+  const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId !== undefined;
+
+  useEffect(() => {
+    if (innloggetBrukerHarNorskFodselsnummer) {
+      setValue("fodselsnummer", userInfo.userId);
+    }
+  }, [innloggetBrukerHarNorskFodselsnummer, userInfo?.userId, setValue]);
+
+  const harNorskFodselsnummer =
+    watch("harNorskFodselsnummer") || innloggetBrukerHarNorskFodselsnummer;
   const harVaertEllerSkalVaereILonnetArbeidFoerUtsending = watch(
     "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
   );
@@ -56,6 +75,14 @@ export function ArbeidstakerenSteg() {
       navigate({ to: nextStep.route });
     }
   };
+
+  if (userInfoIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (userinfoIsError) {
+    return <div>Error loading user info</div>;
+  }
 
   return (
     <FormProvider {...formMethods}>
@@ -72,10 +99,12 @@ export function ArbeidstakerenSteg() {
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
+            disabled={innloggetBrukerHarNorskFodselsnummer}
             formFieldName="harNorskFodselsnummer"
             legend={t(
               "arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer",
             )}
+            lockedValue={innloggetBrukerHarNorskFodselsnummer}
           />
 
           {harNorskFodselsnummer && (
@@ -88,6 +117,7 @@ export function ArbeidstakerenSteg() {
               size="medium"
               style={{ maxWidth: "160px" }}
               {...register("fodselsnummer")}
+              disabled={innloggetBrukerHarNorskFodselsnummer}
             />
           )}
 
