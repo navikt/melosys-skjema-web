@@ -28,16 +28,6 @@ export function RadioGroupJaNeiFormPart({
     }
   }, [lockedValue, formFieldName, setValue]);
 
-  const lockedValueOrElseFieldValue = (fieldValue: boolean) => {
-    if (lockedValue !== undefined) {
-      return lockedValue.toString();
-    }
-    if (fieldValue === undefined) {
-      return "";
-    }
-    return fieldValue.toString();
-  };
-
   return (
     <Controller
       control={control}
@@ -47,7 +37,7 @@ export function RadioGroupJaNeiFormPart({
           {...props}
           error={translateError(fieldState.error?.message)}
           onChange={(value) => field.onChange(value === "true")}
-          value={lockedValueOrElseFieldValue(field.value)}
+          value={field.value === undefined ? "" : field.value.toString()}
         >
           <Radio size="small" value="true">
             {t("felles.ja")}
