@@ -5,9 +5,11 @@ import { toast } from "react-hot-toast";
 import { createArbeidsgiverSkjema } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidsgiver/stegRekkefølge.ts";
 import { SkjemaVeiledning } from "~/pages/skjema/components/SkjemaVeiledning.tsx";
+import { getValgtRolle } from "~/utils/sessionStorage.ts";
 
 export function ArbeidsgiverSkjemaVeiledning() {
   const navigate = useNavigate();
+  const valgtRolle = getValgtRolle();
 
   const createSkjemaMutation = useMutation({
     mutationFn: createArbeidsgiverSkjema,
@@ -25,11 +27,12 @@ export function ArbeidsgiverSkjemaVeiledning() {
   });
 
   const handleStartSoknad = () => {
-    // You'll need to get the organization number from somewhere
-    // For now, using a placeholder - you might get this from user context/selection
-    const orgnr = "123456789"; // TODO: Get actual org number
+    if (!valgtRolle?.orgnr) {
+      toast.error("Mangler organisasjonsnummer");
+      return;
+    }
 
-    createSkjemaMutation.mutate({ orgnr });
+    createSkjemaMutation.mutate({ orgnr: valgtRolle.orgnr });
   };
 
   return <SkjemaVeiledning onStartSoknad={handleStartSoknad} />;

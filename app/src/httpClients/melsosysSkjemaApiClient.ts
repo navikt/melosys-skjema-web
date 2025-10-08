@@ -39,6 +39,23 @@ async function fetchAltinnTilganger(): Promise<OrganisasjonDto[]> {
 }
 
 // ========== SCHEMA API FUNCTIONS ==========
+// Get Skjema by ID
+export async function getSkjemaAsArbeidsgiver(
+  skjemaId: string,
+): Promise<SkjemaResponse> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
 
 // 1. Create Skjema for Arbeidstaker
 export async function createArbeidstakerSkjema(
