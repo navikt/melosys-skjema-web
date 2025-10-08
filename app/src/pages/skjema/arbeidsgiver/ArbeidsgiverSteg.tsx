@@ -1,10 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSummary, TextField } from "@navikt/ds-react";
-import { useNavigate } from "@tanstack/react-router";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import {
+  getSkjemaAsArbeidsgiver,
+  registerArbeidsgiverInfo,
+  SkjemaResponse,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -19,7 +26,11 @@ const stepKey = "arbeidsgiveren";
 
 type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
 
-export function ArbeidsgiverSteg() {
+interface ArbeidsgiverStegContentProps {
+  skjema: SkjemaResponse;
+}
+
+function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -37,13 +48,27 @@ export function ArbeidsgiverSteg() {
     },
   });
 
+  const registerArbeidsgiverMutation = useMutation({
+    mutationFn: (data: ArbeidsgiverFormData) =>
+      registerArbeidsgiverInfo(skjema.id, {
+        organisasjonsnummer: data.organisasjonsnummer,
+        organisasjonNavn: valgtRolle?.navn || "",
+      }),
+    onSuccess: () => {
+      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        // TODO: lage noe felles utils eller noe cleanere enn nextStep.route.replace("$id", skjema.id);
+        const nextRoute = nextStep.route.replace("$id", skjema.id);
+        navigate({ to: nextRoute });
+      }
+    },
+    onError: () => {
+      toast.error("Kunne ikke lagre arbeidsgiverinfo. Prøv igjen.");
+    },
+  });
+
   const onSubmit = (data: ArbeidsgiverFormData) => {
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    registerArbeidsgiverMutation.mutate(data);
   };
 
   return (
@@ -76,4 +101,31 @@ export function ArbeidsgiverSteg() {
       </SkjemaSteg>
     </form>
   );
+}
+
+export function ArbeidsgiverSteg() {
+  const { id } = useParams({ from: "/skjema/arbeidsgiver/$id/arbeidsgiveren" });
+
+  const {
+    data: skjema,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["skjema", id],
+    queryFn: () => getSkjemaAsArbeidsgiver(id),
+  });
+
+  if (isLoading) {
+    return <div>Laster skjema...</div>;
+  }
+
+  if (error) {
+    return <div>Feil ved lasting av skjema</div>;
+  }
+
+  if (!skjema) {
+    return <div>Fant ikke skjema</div>;
+  }
+
+  return <ArbeidsgiverStegContent skjema={skjema} />;
 }
