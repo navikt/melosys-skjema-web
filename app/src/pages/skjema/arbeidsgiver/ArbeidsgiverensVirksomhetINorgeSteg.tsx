@@ -1,12 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  getSkjemaAsArbeidsgiver,
+  registerVirksomhetInfo,
+  SkjemaResponse,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getNextStep,
+  SkjemaSteg,
+} from "~/pages/skjema/components/SkjemaSteg.tsx";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
@@ -17,7 +26,13 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
   typeof arbeidsgiverensVirksomhetSchema
 >;
 
-export function ArbeidsgiverensVirksomhetINorgeSteg() {
+interface ArbeidsgiverensVirksomhetINorgeStegContentProps {
+  skjema: SkjemaResponse;
+}
+
+function ArbeidsgiverensVirksomhetINorgeStegContent({
+  skjema,
+}: ArbeidsgiverensVirksomhetINorgeStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -31,13 +46,30 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
     "erArbeidsgiverenOffentligVirksomhet",
   );
 
+  const registerVirksomhetMutation = useMutation({
+    mutationFn: (data: ArbeidsgiverensVirksomhetFormData) =>
+      registerVirksomhetInfo(skjema.id, {
+        erArbeidsgiverenOffentligVirksomhet:
+          data.erArbeidsgiverenOffentligVirksomhet,
+        erArbeidsgiverenBemanningsEllerVikarbyraa:
+          data.erArbeidsgiverenBemanningsEllerVikarbyraa || false,
+        opprettholderArbeidsgivereVanligDrift:
+          data.opprettholderArbeidsgivereVanligDrift || false,
+      }),
+    onSuccess: () => {
+      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        const nextRoute = nextStep.route.replace("$id", skjema.id);
+        navigate({ to: nextRoute });
+      }
+    },
+    onError: () => {
+      toast.error("Kunne ikke lagre virksomhetsinformasjon. Prøv igjen.");
+    },
+  });
+
   const onSubmit = (data: ArbeidsgiverensVirksomhetFormData) => {
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    registerVirksomhetMutation.mutate(data);
   };
 
   return (
@@ -90,4 +122,33 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
       </form>
     </FormProvider>
   );
+}
+
+export function ArbeidsgiverensVirksomhetINorgeSteg() {
+  const { id } = useParams({
+    from: "/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge",
+  });
+
+  const {
+    data: skjema,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["skjema", id],
+    queryFn: () => getSkjemaAsArbeidsgiver(id),
+  });
+
+  if (isLoading) {
+    return <div>Laster skjema...</div>;
+  }
+
+  if (error) {
+    return <div>Feil ved lasting av skjema</div>;
+  }
+
+  if (!skjema) {
+    return <div>Fant ikke skjema</div>;
+  }
+
+  return <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />;
 }

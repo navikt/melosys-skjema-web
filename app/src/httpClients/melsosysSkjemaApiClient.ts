@@ -170,7 +170,7 @@ export async function registerVirksomhetInfo(
   request: VirksomhetRequest,
 ): Promise<void> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidsgiverens-virksomhet-i-norge`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/virksomhet-i-norge`,
     {
       method: "POST",
       headers: {
