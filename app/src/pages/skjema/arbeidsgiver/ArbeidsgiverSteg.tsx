@@ -1,16 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSummary, TextField } from "@navikt/ds-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import {
-  getSkjemaAsArbeidsgiverQuery,
-  registerArbeidsgiverInfo,
-} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { registerArbeidsgiverInfo } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -20,6 +17,7 @@ import { getValgtRolle } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsgiverSchema } from "./arbeidsgiverStegSchema.ts";
+import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiveren";
@@ -103,26 +101,14 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverStegContentProps) {
   );
 }
 
-export function ArbeidsgiverSteg() {
-  const { id } = useParams({ from: "/skjema/arbeidsgiver/$id/arbeidsgiveren" });
+interface ArbeidsgiverStegProps {
+  id: string;
+}
 
-  const {
-    data: skjema,
-    isLoading,
-    error,
-  } = useQuery(getSkjemaAsArbeidsgiverQuery(id));
-
-  if (isLoading) {
-    return <div>Laster skjema...</div>;
-  }
-
-  if (error) {
-    return <div>Feil ved lasting av skjema</div>;
-  }
-
-  if (!skjema) {
-    return <div>Fant ikke skjema</div>;
-  }
-
-  return <ArbeidsgiverStegContent skjema={skjema} />;
+export function ArbeidsgiverSteg({ id }: ArbeidsgiverStegProps) {
+  return (
+    <ArbeidsgiverStegLoader id={id}>
+      {(skjema) => <ArbeidsgiverStegContent skjema={skjema} />}
+    </ArbeidsgiverStegLoader>
+  );
 }

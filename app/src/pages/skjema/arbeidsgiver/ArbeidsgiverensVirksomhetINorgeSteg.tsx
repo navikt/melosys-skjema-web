@@ -1,16 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import {
-  getSkjemaAsArbeidsgiverQuery,
-  registerVirksomhetInfo,
-} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { registerVirksomhetInfo } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -18,6 +15,7 @@ import {
 import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiverens-virksomhet-i-norge";
@@ -129,28 +127,18 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   );
 }
 
-export function ArbeidsgiverensVirksomhetINorgeSteg() {
-  const { id } = useParams({
-    from: "/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge",
-  });
+interface ArbeidsgiverensVirksomhetINorgeStegProps {
+  id: string;
+}
 
-  const {
-    data: skjema,
-    isLoading,
-    error,
-  } = useQuery(getSkjemaAsArbeidsgiverQuery(id));
-
-  if (isLoading) {
-    return <div>Laster skjema...</div>;
-  }
-
-  if (error) {
-    return <div>Feil ved lasting av skjema</div>;
-  }
-
-  if (!skjema) {
-    return <div>Fant ikke skjema</div>;
-  }
-
-  return <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />;
+export function ArbeidsgiverensVirksomhetINorgeSteg({
+  id,
+}: ArbeidsgiverensVirksomhetINorgeStegProps) {
+  return (
+    <ArbeidsgiverStegLoader id={id}>
+      {(skjema) => (
+        <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />
+      )}
+    </ArbeidsgiverStegLoader>
+  );
 }
