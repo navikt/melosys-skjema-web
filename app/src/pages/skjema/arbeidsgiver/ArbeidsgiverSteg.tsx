@@ -8,14 +8,14 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import {
-  getSkjemaAsArbeidsgiver,
+  getSkjemaAsArbeidsgiverQuery,
   registerArbeidsgiverInfo,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -110,10 +110,7 @@ export function ArbeidsgiverSteg() {
     data: skjema,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["skjema", id],
-    queryFn: () => getSkjemaAsArbeidsgiver(id),
-  });
+  } = useQuery(getSkjemaAsArbeidsgiverQuery(id));
 
   if (isLoading) {
     return <div>Laster skjema...</div>;

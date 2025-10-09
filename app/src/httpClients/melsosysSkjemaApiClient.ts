@@ -40,8 +40,16 @@ async function fetchAltinnTilganger(): Promise<OrganisasjonDto[]> {
 }
 
 // ========== SCHEMA API FUNCTIONS ==========
+export const getSkjemaAsArbeidsgiverQuery = (skjemaId: string) =>
+  queryOptions<ArbeidsgiversSkjemaDto>({
+    queryKey: ["skjema", skjemaId],
+    queryFn: () => fetchSkjemaAsArbeidsgiver(skjemaId),
+    staleTime: 0,
+    gcTime: 0,
+  });
+
 // Get Skjema by ID
-export async function getSkjemaAsArbeidsgiver(
+async function fetchSkjemaAsArbeidsgiver(
   skjemaId: string,
 ): Promise<ArbeidsgiversSkjemaDto> {
   const response = await fetch(

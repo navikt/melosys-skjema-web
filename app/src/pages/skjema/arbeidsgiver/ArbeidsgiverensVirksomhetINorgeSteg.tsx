@@ -8,7 +8,7 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import {
-  getSkjemaAsArbeidsgiver,
+  getSkjemaAsArbeidsgiverQuery,
   registerVirksomhetInfo,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
@@ -138,10 +138,7 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
     data: skjema,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["skjema", id],
-    queryFn: () => getSkjemaAsArbeidsgiver(id),
-  });
+  } = useQuery(getSkjemaAsArbeidsgiverQuery(id));
 
   if (isLoading) {
     return <div>Laster skjema...</div>;
