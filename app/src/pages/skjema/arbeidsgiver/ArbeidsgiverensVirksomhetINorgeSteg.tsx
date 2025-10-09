@@ -10,12 +10,12 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import {
   getSkjemaAsArbeidsgiver,
   registerVirksomhetInfo,
-  SkjemaResponse,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
@@ -27,7 +27,7 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
 >;
 
 interface ArbeidsgiverensVirksomhetINorgeStegContentProps {
-  skjema: SkjemaResponse;
+  skjema: ArbeidsgiversSkjemaDto;
 }
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
@@ -36,8 +36,13 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
+
   const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const { handleSubmit, watch } = formMethods;
