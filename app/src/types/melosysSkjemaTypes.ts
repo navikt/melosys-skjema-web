@@ -112,7 +112,7 @@ export interface ArbeidsgiversSkjemaDto {
   id: string;
   orgnr: string;
   status: "UTKAST" | "SENDT" | "MOTTATT";
-  data?: ArbeidsgiversSkjemaDataDto;
+  data: ArbeidsgiversSkjemaDataDto;
 }
 
 export interface OrganisasjonDto {

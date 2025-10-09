@@ -35,11 +35,11 @@ const baseUtenlandsoppdragSchema = z.object({
     message:
       "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson",
   }),
-  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z.boolean().optional(),
-  utenlandsoppholdetsBegrunnelse: z.string().optional(),
-  ansettelsesforholdBeskrivelse: z.string().optional(),
-  forrigeArbeidstakerUtsendelseFradato: z.string().optional(),
-  forrigeArbeidstakerUtsendelseTilDato: z.string().optional(),
+  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z.boolean().nullish(),
+  utenlandsoppholdetsBegrunnelse: z.string().nullish(),
+  ansettelsesforholdBeskrivelse: z.string().nullish(),
+  forrigeArbeidstakerUtsendelseFradato: z.string().nullish(),
+  forrigeArbeidstakerUtsendelseTilDato: z.string().nullish(),
 });
 
 type BaseUtenlandsoppdragFormData = z.infer<typeof baseUtenlandsoppdragSchema>;
@@ -134,6 +134,26 @@ function validerForrigeArbeidstakerTilDatoPakrevd(
 }
 
 export const utenlandsoppdragSchema = baseUtenlandsoppdragSchema
+  .transform((data) => ({
+    ...data,
+    // Clear conditional fields when their conditions are false
+    arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget:
+      data.arbeidstakerBleAnsattForUtenlandsoppdraget
+        ? data.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget
+        : undefined,
+    utenlandsoppholdetsBegrunnelse: data.arbeidsgiverHarOppdragILandet
+      ? undefined
+      : data.utenlandsoppholdetsBegrunnelse,
+    ansettelsesforholdBeskrivelse: data.arbeidstakerForblirAnsattIHelePerioden
+      ? undefined
+      : data.ansettelsesforholdBeskrivelse,
+    forrigeArbeidstakerUtsendelseFradato: data.arbeidstakerErstatterAnnenPerson
+      ? data.forrigeArbeidstakerUtsendelseFradato
+      : undefined,
+    forrigeArbeidstakerUtsendelseTilDato: data.arbeidstakerErstatterAnnenPerson
+      ? data.forrigeArbeidstakerUtsendelseTilDato
+      : undefined,
+  }))
   .refine(validerArbeidstakerUtsendelseDatoer, {
     message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
     path: ["arbeidstakerUtsendelseTilDato"],
