@@ -10,8 +10,8 @@ import { z } from "zod";
 import {
   getSkjemaAsArbeidsgiver,
   registerArbeidsgiverInfo,
-  SkjemaResponse,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -27,7 +27,7 @@ const stepKey = "arbeidsgiveren";
 type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
 
 interface ArbeidsgiverStegContentProps {
-  skjema: SkjemaResponse;
+  skjema: ArbeidsgiversSkjemaDto;
 }
 
 function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverStegContentProps) {

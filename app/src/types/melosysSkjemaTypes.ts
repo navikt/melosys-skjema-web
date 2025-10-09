@@ -12,7 +12,7 @@ export interface CreateArbeidstakerSkjemaRequest {
   fnr: string;
 }
 
-export interface SkatteforholdOgInntektRequest {
+export interface SkatteforholdOgInntektDto {
   erSkattepliktigTilNorgeIHeleutsendingsperioden: boolean;
   mottarPengestotteFraAnnetEosLandEllerSveits: boolean;
   landSomUtbetalerPengestotte?: string;
@@ -20,7 +20,7 @@ export interface SkatteforholdOgInntektRequest {
   pengestotteSomMottasFraAndreLandBeskrivelse?: string;
 }
 
-export interface ArbeidstakerRequest {
+export interface ArbeidstakerenDto {
   harNorskFodselsnummer: boolean;
   fodselsnummer?: string;
   fornavn?: string;
@@ -54,13 +54,7 @@ export interface CreateArbeidsgiverSkjemaRequest {
   orgnr: string;
 }
 
-export interface VirksomhetRequest {
-  erArbeidsgiverenOffentligVirksomhet: boolean;
-  erArbeidsgiverenBemanningsEllerVikarbyraa: boolean;
-  opprettholderArbeidsgivereVanligDrift: boolean;
-}
-
-export interface UtenlandsoppdragRequest {
+export interface UtenlandsoppdragetDto {
   utsendelseLand: string;
   /** @format date */
   arbeidstakerUtsendelseFraDato: string;
@@ -85,7 +79,7 @@ export interface SubmitSkjemaRequest {
   submittedAt: string;
 }
 
-export interface ArbeidstakerLonnRequest {
+export interface ArbeidstakerensLonnDto {
   arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: boolean;
   virksomheterSomUtbetalerLonnOgNaturalytelser?: VirksomheterSomUtbetalerLonnOgNaturalytelser;
 }
@@ -95,9 +89,30 @@ export interface VirksomheterSomUtbetalerLonnOgNaturalytelser {
   utenlandskeVirksomheter?: UtenlandskVirksomhet[];
 }
 
-export interface ArbeidsgiverRequest {
+export interface ArbeidsgiverensVirksomhetINorgeDto {
+  erArbeidsgiverenOffentligVirksomhet: boolean;
+  erArbeidsgiverenBemanningsEllerVikarbyraa: boolean;
+  opprettholderArbeidsgivereVanligDrift: boolean;
+}
+
+export interface ArbeidsgiverenDto {
   organisasjonsnummer: string;
   organisasjonNavn: string;
+}
+
+export interface ArbeidsgiversSkjemaDataDto {
+  arbeidsgiveren?: ArbeidsgiverenDto;
+  arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
+  utenlandsoppdraget?: UtenlandsoppdragetDto;
+  arbeidstakerensLonn?: ArbeidstakerensLonnDto;
+}
+
+export interface ArbeidsgiversSkjemaDto {
+  /** @format uuid */
+  id: string;
+  orgnr: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+  data?: ArbeidsgiversSkjemaDataDto;
 }
 
 export interface OrganisasjonDto {

@@ -1,21 +1,22 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import {
-  ArbeidsgiverRequest,
-  ArbeidstakerLonnRequest,
-  ArbeidstakerRequest,
+  ArbeidsgiverenDto,
+  ArbeidsgiverensVirksomhetINorgeDto,
+  ArbeidsgiversSkjemaDto,
+  ArbeidstakerenDto,
+  ArbeidstakerensLonnDto,
   CreateArbeidsgiverSkjemaRequest,
   CreateArbeidstakerSkjemaRequest,
   OrganisasjonDto,
-  SkatteforholdOgInntektRequest,
+  SkatteforholdOgInntektDto,
   SubmitSkjemaRequest,
-  UtenlandsoppdragRequest,
-  VirksomhetRequest,
+  UtenlandsoppdragetDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
 const API_PROXY_URL = "/api";
 
-// Schema response type (you may need to adjust based on actual API response)
+// Har bare denne som en fallback inntil jeg starter på arbeidstakers del
 export interface SkjemaResponse {
   id: string;
   // Add other fields as returned by the API
@@ -42,7 +43,7 @@ async function fetchAltinnTilganger(): Promise<OrganisasjonDto[]> {
 // Get Skjema by ID
 export async function getSkjemaAsArbeidsgiver(
   skjemaId: string,
-): Promise<SkjemaResponse> {
+): Promise<ArbeidsgiversSkjemaDto> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}`,
     {
@@ -82,7 +83,7 @@ export async function createArbeidstakerSkjema(
 // 2. Create Skjema for Arbeidsgiver
 export async function createArbeidsgiverSkjema(
   request: CreateArbeidsgiverSkjemaRequest,
-): Promise<SkjemaResponse> {
+): Promise<ArbeidsgiversSkjemaDto> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver`,
     {
@@ -104,7 +105,7 @@ export async function createArbeidsgiverSkjema(
 // 3. Register Arbeidstaker Information
 export async function registerArbeidstakerInfo(
   skjemaId: string,
-  request: ArbeidstakerRequest,
+  request: ArbeidstakerenDto,
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidstakeren`,
@@ -125,7 +126,7 @@ export async function registerArbeidstakerInfo(
 // 4. Register Skatteforhold og Inntekt
 export async function registerSkatteforholdOgInntekt(
   skjemaId: string,
-  request: SkatteforholdOgInntektRequest,
+  request: SkatteforholdOgInntektDto,
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/skatteforhold-og-inntekt`,
@@ -146,7 +147,7 @@ export async function registerSkatteforholdOgInntekt(
 // 5. Register Arbeidsgiver Information
 export async function registerArbeidsgiverInfo(
   skjemaId: string,
-  request: ArbeidsgiverRequest,
+  request: ArbeidsgiverenDto,
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidsgiveren`,
@@ -167,10 +168,10 @@ export async function registerArbeidsgiverInfo(
 // 6. Register Virksomhet Information
 export async function registerVirksomhetInfo(
   skjemaId: string,
-  request: VirksomhetRequest,
+  request: ArbeidsgiverensVirksomhetINorgeDto,
 ): Promise<void> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/virksomhet-i-norge`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidsgiverens-virksomhet-i-norge`,
     {
       method: "POST",
       headers: {
@@ -188,7 +189,7 @@ export async function registerVirksomhetInfo(
 // 7. Register Utenlandsoppdrag Information
 export async function registerUtenlandsoppdragInfo(
   skjemaId: string,
-  request: UtenlandsoppdragRequest,
+  request: UtenlandsoppdragetDto,
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/utenlandsoppdraget`,
@@ -209,7 +210,7 @@ export async function registerUtenlandsoppdragInfo(
 // 8. Register Arbeidstaker Lønn Information
 export async function registerArbeidstakerLonnInfo(
   skjemaId: string,
-  request: ArbeidstakerLonnRequest,
+  request: ArbeidstakerensLonnDto,
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidstakerens-lonn`,
