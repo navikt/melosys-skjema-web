@@ -10,7 +10,7 @@ import { z } from "zod";
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { registerUtenlandsoppdragInfo } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -87,7 +87,7 @@ function UtenlandsoppdragetStegContent({
   const registerUtenlandsoppdragMutation = useMutation({
     mutationFn: (data: UtenlandsoppdragFormData) => {
       const apiPayload = data as UtenlandsoppdragetDto;
-      return registerUtenlandsoppdragInfo(skjema.id, apiPayload);
+      return postUtenlandsoppdraget(skjema.id, apiPayload);
     },
     onSuccess: () => {
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);

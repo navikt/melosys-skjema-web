@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { registerVirksomhetInfo } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -54,7 +54,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
 
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
-      return registerVirksomhetInfo(
+      return postArbeidsgiverensVirksomhetINorge(
         skjema.id,
         data as ArbeidsgiverensVirksomhetINorgeDto,
       );

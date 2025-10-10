@@ -153,7 +153,7 @@ export async function registerSkatteforholdOgInntekt(
 }
 
 // 5. Register Arbeidsgiver Information
-export async function registerArbeidsgiverInfo(
+export async function postArbeidsgiveren(
   skjemaId: string,
   request: ArbeidsgiverenDto,
 ): Promise<void> {
@@ -174,7 +174,7 @@ export async function registerArbeidsgiverInfo(
 }
 
 // 6. Register Virksomhet Information
-export async function registerVirksomhetInfo(
+export async function postArbeidsgiverensVirksomhetINorge(
   skjemaId: string,
   request: ArbeidsgiverensVirksomhetINorgeDto,
 ): Promise<void> {
@@ -195,7 +195,7 @@ export async function registerVirksomhetInfo(
 }
 
 // 7. Register Utenlandsoppdrag Information
-export async function registerUtenlandsoppdragInfo(
+export async function postUtenlandsoppdraget(
   skjemaId: string,
   request: UtenlandsoppdragetDto,
 ): Promise<void> {
@@ -216,7 +216,7 @@ export async function registerUtenlandsoppdragInfo(
 }
 
 // 8. Register Arbeidstaker Lønn Information
-export async function registerArbeidstakerLonnInfo(
+export async function postArbeidstakerensLonn(
   skjemaId: string,
   request: ArbeidstakerensLonnDto,
 ): Promise<void> {

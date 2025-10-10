@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { registerArbeidsgiverInfo } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { postArbeidsgiveren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -48,7 +48,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverStegContentProps) {
 
   const registerArbeidsgiverMutation = useMutation({
     mutationFn: (data: ArbeidsgiverFormData) =>
-      registerArbeidsgiverInfo(skjema.id, {
+      postArbeidsgiveren(skjema.id, {
         organisasjonsnummer: data.organisasjonsnummer,
         organisasjonNavn: valgtRolle?.navn || "",
       }),

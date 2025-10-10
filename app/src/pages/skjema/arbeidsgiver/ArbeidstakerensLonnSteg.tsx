@@ -10,7 +10,7 @@ import { z } from "zod";
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
-import { registerArbeidstakerLonnInfo } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -63,10 +63,7 @@ function ArbeidstakerensLonnStegContent({
 
   const registerArbeidstakerLonnMutation = useMutation({
     mutationFn: (data: ArbeidstakerensLonnFormData) => {
-      return registerArbeidstakerLonnInfo(
-        skjema.id,
-        data as ArbeidstakerensLonnDto,
-      );
+      return postArbeidstakerensLonn(skjema.id, data as ArbeidstakerensLonnDto);
     },
     onSuccess: () => {
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
