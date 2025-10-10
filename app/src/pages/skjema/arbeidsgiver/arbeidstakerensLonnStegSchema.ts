@@ -159,8 +159,8 @@ export const arbeidstakerensLonnSchema = baseArbeidstakerensLonnSchema
         virksomheter.utenlandskeVirksomheter = undefined;
       } else if (virksomheter.utenlandskeVirksomheter) {
         virksomheter.utenlandskeVirksomheter =
-          virksomheter.utenlandskeVirksomheter.map(
-            convertNullToUndefinedForUtenlandskVirksomhet,
+          virksomheter.utenlandskeVirksomheter.map((element) =>
+            convertNullToUndefinedForUtenlandskVirksomhet(element),
           );
       }
 
