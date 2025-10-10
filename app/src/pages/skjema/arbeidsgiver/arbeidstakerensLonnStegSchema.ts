@@ -13,17 +13,17 @@ const baseArbeidstakerensLonnSchema = z.object({
             organisasjonsnummer: z.string(),
           }),
         )
-        .optional(),
+        .nullish(),
       utenlandskeVirksomheter: z
         .array(
           z.object({
             navn: z.string(),
-            organisasjonsnummer: z.string().optional(),
+            organisasjonsnummer: z.string().nullish(),
             vegnavnOgHusnummer: z.string(),
-            bygning: z.string().optional(),
-            postkode: z.string().optional(),
-            byStedsnavn: z.string().optional(),
-            region: z.string().optional(),
+            bygning: z.string().nullish(),
+            postkode: z.string().nullish(),
+            byStedsnavn: z.string().nullish(),
+            region: z.string().nullish(),
             land: z.string(),
             tilhorerSammeKonsern: z.boolean({
               message:
@@ -31,9 +31,9 @@ const baseArbeidstakerensLonnSchema = z.object({
             }),
           }),
         )
-        .optional(),
+        .nullish(),
     })
-    .optional(),
+    .nullish(),
 });
 
 type BaseArbeidstakerensLonnFormData = z.infer<
@@ -118,7 +118,57 @@ function validerUtenlandskeVirksomheterLand(
   return true;
 }
 
+function convertNullToUndefinedForUtenlandskVirksomhet(virksomhet: any) {
+  return {
+    ...virksomhet,
+    organisasjonsnummer:
+      virksomhet.organisasjonsnummer === null
+        ? undefined
+        : virksomhet.organisasjonsnummer,
+    bygning: virksomhet.bygning === null ? undefined : virksomhet.bygning,
+    postkode: virksomhet.postkode === null ? undefined : virksomhet.postkode,
+    byStedsnavn:
+      virksomhet.byStedsnavn === null ? undefined : virksomhet.byStedsnavn,
+    region: virksomhet.region === null ? undefined : virksomhet.region,
+  };
+}
+
 export const arbeidstakerensLonnSchema = baseArbeidstakerensLonnSchema
+  .transform((data) => {
+    const result = { ...data };
+
+    // Clear conditional field when arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden is true
+    if (data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
+      result.virksomheterSomUtbetalerLonnOgNaturalytelser = undefined;
+      return result;
+    }
+
+    // Convert null to undefined for API compatibility
+    if (data.virksomheterSomUtbetalerLonnOgNaturalytelser === null) {
+      result.virksomheterSomUtbetalerLonnOgNaturalytelser = undefined;
+    } else if (data.virksomheterSomUtbetalerLonnOgNaturalytelser) {
+      const virksomheter = {
+        ...data.virksomheterSomUtbetalerLonnOgNaturalytelser,
+      };
+
+      if (virksomheter.norskeVirksomheter === null) {
+        virksomheter.norskeVirksomheter = undefined;
+      }
+
+      if (virksomheter.utenlandskeVirksomheter === null) {
+        virksomheter.utenlandskeVirksomheter = undefined;
+      } else if (virksomheter.utenlandskeVirksomheter) {
+        virksomheter.utenlandskeVirksomheter =
+          virksomheter.utenlandskeVirksomheter.map(
+            convertNullToUndefinedForUtenlandskVirksomhet,
+          );
+      }
+
+      result.virksomheterSomUtbetalerLonnOgNaturalytelser = virksomheter;
+    }
+
+    return result;
+  })
   .refine(validerVirksomheterPakrevd, {
     message:
       "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",

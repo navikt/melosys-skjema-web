@@ -1,31 +1,52 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Detail, ErrorMessage, Label, VStack } from "@navikt/ds-react";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { registerArbeidstakerLonnInfo } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getNextStep,
+  SkjemaSteg,
+} from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  ArbeidsgiversSkjemaDto,
+  ArbeidstakerensLonnDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
+import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidstakerens-lonn";
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
-export function ArbeidstakerensLonnSteg() {
+interface ArbeidstakerensLonnStegContentProps {
+  skjema: ArbeidsgiversSkjemaDto;
+}
+
+function ArbeidstakerensLonnStegContent({
+  skjema,
+}: ArbeidstakerensLonnStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
-  const formMethods = useForm<ArbeidstakerensLonnFormData>({
+  const lagretSkjemadataForSteg = skjema.data?.arbeidstakerensLonn;
+
+  const formMethods = useForm({
     resolver: zodResolver(arbeidstakerensLonnSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const {
@@ -39,6 +60,25 @@ export function ArbeidstakerensLonnSteg() {
   const arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden = watch(
     "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
   );
+
+  const registerArbeidstakerLonnMutation = useMutation({
+    mutationFn: (data: ArbeidstakerensLonnFormData) => {
+      return registerArbeidstakerLonnInfo(
+        skjema.id,
+        data as ArbeidstakerensLonnDto,
+      );
+    },
+    onSuccess: () => {
+      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        const nextRoute = nextStep.route.replace("$id", skjema.id);
+        navigate({ to: nextRoute });
+      }
+    },
+    onError: () => {
+      toast.error("Kunne ikke lagre lønn-informasjon. Prøv igjen.");
+    },
+  });
 
   const onSubmit = (data: ArbeidstakerensLonnFormData) => {
     // Custom validation - require at least one company (Norwegian or foreign)
@@ -64,12 +104,7 @@ export function ArbeidstakerensLonnSteg() {
     // Clear any previous errors
     clearErrors("virksomheterSomUtbetalerLonnOgNaturalytelser");
 
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    registerArbeidstakerLonnMutation.mutate(data);
   };
 
   return (
@@ -129,5 +164,17 @@ export function ArbeidstakerensLonnSteg() {
         </SkjemaSteg>
       </form>
     </FormProvider>
+  );
+}
+
+interface ArbeidstakerensLonnStegProps {
+  id: string;
+}
+
+export function ArbeidstakerensLonnSteg({ id }: ArbeidstakerensLonnStegProps) {
+  return (
+    <ArbeidsgiverStegLoader id={id}>
+      {(skjema) => <ArbeidstakerensLonnStegContent skjema={skjema} />}
+    </ArbeidsgiverStegLoader>
   );
 }
