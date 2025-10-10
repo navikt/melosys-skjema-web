@@ -7,6 +7,8 @@ function UtenlandsoppdragetStegRoute() {
   return <UtenlandsoppdragetSteg id={id} />;
 }
 
-export const Route = createFileRoute("/skjema/arbeidsgiver/$id/utenlandsoppdraget")({
+export const Route = createFileRoute(
+  "/skjema/arbeidsgiver/$id/utenlandsoppdraget",
+)({
   component: UtenlandsoppdragetStegRoute,
 });

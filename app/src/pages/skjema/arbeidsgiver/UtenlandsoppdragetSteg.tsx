@@ -86,7 +86,6 @@ function UtenlandsoppdragetStegContent({
 
   const registerUtenlandsoppdragMutation = useMutation({
     mutationFn: (data: UtenlandsoppdragFormData) => {
-      // The Zod schema transform converts null to undefined for API compatibility
       const apiPayload = data as UtenlandsoppdragetDto;
       return registerUtenlandsoppdragInfo(skjema.id, apiPayload);
     },

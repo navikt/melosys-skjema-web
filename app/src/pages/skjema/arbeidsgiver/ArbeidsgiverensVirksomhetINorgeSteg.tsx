@@ -12,7 +12,10 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
+import {
+  ArbeidsgiverensVirksomhetINorgeDto,
+  ArbeidsgiversSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
@@ -36,7 +39,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
 
-  const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
+  const formMethods = useForm({
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
     defaultValues: {
       ...lagretSkjemadataForSteg,
@@ -50,15 +53,12 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   );
 
   const registerVirksomhetMutation = useMutation({
-    mutationFn: (data: ArbeidsgiverensVirksomhetFormData) =>
-      registerVirksomhetInfo(skjema.id, {
-        erArbeidsgiverenOffentligVirksomhet:
-          data.erArbeidsgiverenOffentligVirksomhet,
-        erArbeidsgiverenBemanningsEllerVikarbyraa:
-          data.erArbeidsgiverenBemanningsEllerVikarbyraa || false,
-        opprettholderArbeidsgivereVanligDrift:
-          data.opprettholderArbeidsgivereVanligDrift || false,
-      }),
+    mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
+      return registerVirksomhetInfo(
+        skjema.id,
+        data as ArbeidsgiverensVirksomhetINorgeDto,
+      );
+    },
     onSuccess: () => {
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
