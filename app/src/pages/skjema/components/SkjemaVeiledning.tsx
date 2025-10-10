@@ -13,17 +13,15 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 
 interface SkjemaVeiledningProps {
-  startRoute?: string;
+  onStartSoknad: () => void;
 }
 
-export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
-  const navigate = useNavigate();
+export function SkjemaVeiledning({ onStartSoknad }: SkjemaVeiledningProps) {
   const { t } = useTranslation();
 
   const userInfo = useQuery(getUserInfo());
@@ -145,9 +143,7 @@ export function SkjemaVeiledning({ startRoute }: SkjemaVeiledningProps) {
             <Button
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
-              onClick={() => {
-                navigate({ to: startRoute });
-              }}
+              onClick={onStartSoknad}
               variant="primary"
             >
               {t("felles.startSoknad")}

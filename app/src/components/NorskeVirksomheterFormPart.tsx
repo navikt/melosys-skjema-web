@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
+import { useTranslateError } from "~/utils/translation.ts";
 
 // TODO: Denne gjøres på et senere tidspunkt om til en modal med eget schema for å validere input
 
@@ -18,6 +19,7 @@ export function NorskeVirksomheterFormPart({
 }: NorskeVirksomheterSectionProps) {
   const { control, register, getFieldState, clearErrors } = useFormContext();
   const { t } = useTranslation();
+  const translateError = useTranslateError();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -53,10 +55,10 @@ export function NorskeVirksomheterFormPart({
           </Tag>
           <TextField
             className="mt-2"
-            error={
+            error={translateError(
               getFieldState(`${fieldName}.${index}.organisasjonsnummer`).error
-                ?.message
-            }
+                ?.message,
+            )}
             label={t("norskeVirksomheterFormPart.organisasjonsnummer")}
             style={{ maxWidth: "160px" }}
             {...register(`${fieldName}.${index}.organisasjonsnummer`)}

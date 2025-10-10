@@ -6,6 +6,7 @@ import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { useTranslateError } from "~/utils/translation.ts";
 
 // TODO: Denne gjøres på et senere tidspunkt om til en modal med eget schema for å validere input
 
@@ -20,6 +21,7 @@ export function UtenlandskeVirksomheterFormPart({
 }: UtenlandskeVirksomheterSectionProps) {
   const { control, register, getFieldState, clearErrors } = useFormContext();
   const { t } = useTranslation();
+  const translateError = useTranslateError();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -60,17 +62,19 @@ export function UtenlandskeVirksomheterFormPart({
 
           <VStack className="mt-4" gap="space-6">
             <TextField
-              error={getFieldState(`${fieldName}.${index}.navn`).error?.message}
+              error={translateError(
+                getFieldState(`${fieldName}.${index}.navn`).error?.message,
+              )}
               label={t("utenlandskeVirksomheterFormPart.navnPaVirksomhet")}
               {...register(`${fieldName}.${index}.navn`)}
               size="small"
             />
 
             <TextField
-              error={
+              error={translateError(
                 getFieldState(`${fieldName}.${index}.organisasjonsnummer`).error
-                  ?.message
-              }
+                  ?.message,
+              )}
               label={t(
                 "utenlandskeVirksomheterFormPart.organisasjonsnummerEllerRegistreringsnummerValgfritt",
               )}
@@ -79,10 +83,10 @@ export function UtenlandskeVirksomheterFormPart({
             />
 
             <TextField
-              error={
+              error={translateError(
                 getFieldState(`${fieldName}.${index}.vegnavnOgHusnummer`).error
-                  ?.message
-              }
+                  ?.message,
+              )}
               label={t(
                 "utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks",
               )}
@@ -91,18 +95,18 @@ export function UtenlandskeVirksomheterFormPart({
             />
 
             <TextField
-              error={
-                getFieldState(`${fieldName}.${index}.bygning`).error?.message
-              }
+              error={translateError(
+                getFieldState(`${fieldName}.${index}.bygning`).error?.message,
+              )}
               label={t("utenlandskeVirksomheterFormPart.bygningValgfritt")}
               {...register(`${fieldName}.${index}.bygning`)}
               size="small"
             />
 
             <TextField
-              error={
-                getFieldState(`${fieldName}.${index}.postkode`).error?.message
-              }
+              error={translateError(
+                getFieldState(`${fieldName}.${index}.postkode`).error?.message,
+              )}
               label={t("utenlandskeVirksomheterFormPart.postkodeValgfritt")}
               style={{ maxWidth: "120px" }}
               {...register(`${fieldName}.${index}.postkode`)}
@@ -110,19 +114,19 @@ export function UtenlandskeVirksomheterFormPart({
             />
 
             <TextField
-              error={
+              error={translateError(
                 getFieldState(`${fieldName}.${index}.byStedsnavn`).error
-                  ?.message
-              }
+                  ?.message,
+              )}
               label={t("utenlandskeVirksomheterFormPart.byStednavnValgfritt")}
               {...register(`${fieldName}.${index}.byStedsnavn`)}
               size="small"
             />
 
             <TextField
-              error={
-                getFieldState(`${fieldName}.${index}.region`).error?.message
-              }
+              error={translateError(
+                getFieldState(`${fieldName}.${index}.region`).error?.message,
+              )}
               label={t("utenlandskeVirksomheterFormPart.regionValgfritt")}
               {...register(`${fieldName}.${index}.region`)}
               size="small"

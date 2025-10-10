@@ -1,14 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getNextStep,
+  SkjemaSteg,
+} from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  ArbeidsgiverensVirksomhetINorgeDto,
+  ArbeidsgiversSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiverens-virksomhet-i-norge";
@@ -17,12 +27,23 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
   typeof arbeidsgiverensVirksomhetSchema
 >;
 
-export function ArbeidsgiverensVirksomhetINorgeSteg() {
+interface ArbeidsgiverensVirksomhetINorgeStegContentProps {
+  skjema: ArbeidsgiversSkjemaDto;
+}
+
+function ArbeidsgiverensVirksomhetINorgeStegContent({
+  skjema,
+}: ArbeidsgiverensVirksomhetINorgeStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
+  const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
+
+  const formMethods = useForm({
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const { handleSubmit, watch } = formMethods;
@@ -31,13 +52,27 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
     "erArbeidsgiverenOffentligVirksomhet",
   );
 
+  const registerVirksomhetMutation = useMutation({
+    mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
+      return postArbeidsgiverensVirksomhetINorge(
+        skjema.id,
+        data as ArbeidsgiverensVirksomhetINorgeDto,
+      );
+    },
+    onSuccess: () => {
+      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        const nextRoute = nextStep.route.replace("$id", skjema.id);
+        navigate({ to: nextRoute });
+      }
+    },
+    onError: () => {
+      toast.error("Kunne ikke lagre virksomhetsinformasjon. Prøv igjen.");
+    },
+  });
+
   const onSubmit = (data: ArbeidsgiverensVirksomhetFormData) => {
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    registerVirksomhetMutation.mutate(data);
   };
 
   return (
@@ -89,5 +124,21 @@ export function ArbeidsgiverensVirksomhetINorgeSteg() {
         </SkjemaSteg>
       </form>
     </FormProvider>
+  );
+}
+
+interface ArbeidsgiverensVirksomhetINorgeStegProps {
+  id: string;
+}
+
+export function ArbeidsgiverensVirksomhetINorgeSteg({
+  id,
+}: ArbeidsgiverensVirksomhetINorgeStegProps) {
+  return (
+    <ArbeidsgiverStegLoader id={id}>
+      {(skjema) => (
+        <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />
+      )}
+    </ArbeidsgiverStegLoader>
   );
 }

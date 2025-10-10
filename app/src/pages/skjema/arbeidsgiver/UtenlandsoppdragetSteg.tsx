@@ -1,17 +1,27 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@navikt/ds-react";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { getNextStep } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getNextStep,
+  SkjemaSteg,
+} from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  ArbeidsgiversSkjemaDto,
+  UtenlandsoppdragetDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
+import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
@@ -23,13 +33,24 @@ const YEARS_FORWARD_FROM_CURRENT = 5;
 
 type UtenlandsoppdragFormData = z.infer<typeof utenlandsoppdragSchema>;
 
-export function UtenlandsoppdragetSteg() {
+interface UtenlandsoppdragetStegContentProps {
+  skjema: ArbeidsgiversSkjemaDto;
+}
+
+function UtenlandsoppdragetStegContent({
+  skjema,
+}: UtenlandsoppdragetStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
-  const formMethods = useForm<UtenlandsoppdragFormData>({
+  const lagretSkjemadataForSteg = skjema.data?.utenlandsoppdraget;
+
+  const formMethods = useForm({
     resolver: zodResolver(utenlandsoppdragSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const {
@@ -63,13 +84,25 @@ export function UtenlandsoppdragetSteg() {
     "arbeidstakerBleAnsattForUtenlandsoppdraget",
   );
 
+  const registerUtenlandsoppdragMutation = useMutation({
+    mutationFn: (data: UtenlandsoppdragFormData) => {
+      const apiPayload = data as UtenlandsoppdragetDto;
+      return postUtenlandsoppdraget(skjema.id, apiPayload);
+    },
+    onSuccess: () => {
+      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        const nextRoute = nextStep.route.replace("$id", skjema.id);
+        navigate({ to: nextRoute });
+      }
+    },
+    onError: () => {
+      toast.error("Kunne ikke lagre utenlandsoppdrag-informasjon. Prøv igjen.");
+    },
+  });
+
   const onSubmit = (data: UtenlandsoppdragFormData) => {
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    registerUtenlandsoppdragMutation.mutate(data);
   };
 
   return (
@@ -100,6 +133,13 @@ export function UtenlandsoppdragetSteg() {
 
             <DatePickerFormPart
               className="mt-4"
+              defaultSelected={
+                lagretSkjemadataForSteg?.arbeidstakerUtsendelseFraDato
+                  ? new Date(
+                      lagretSkjemadataForSteg.arbeidstakerUtsendelseFraDato,
+                    )
+                  : undefined
+              }
               formFieldName="arbeidstakerUtsendelseFraDato"
               label={t("utenlandsoppdragetSteg.fraDato")}
               {...dateLimits}
@@ -107,6 +147,13 @@ export function UtenlandsoppdragetSteg() {
 
             <DatePickerFormPart
               className="mt-4"
+              defaultSelected={
+                lagretSkjemadataForSteg?.arbeidstakerUtsendelseTilDato
+                  ? new Date(
+                      lagretSkjemadataForSteg.arbeidstakerUtsendelseTilDato,
+                    )
+                  : undefined
+              }
               description={t(
                 "utenlandsoppdragetSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
               )}
@@ -192,6 +239,13 @@ export function UtenlandsoppdragetSteg() {
 
               <DatePickerFormPart
                 className="mt-4"
+                defaultSelected={
+                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelseFradato
+                    ? new Date(
+                        lagretSkjemadataForSteg.forrigeArbeidstakerUtsendelseFradato,
+                      )
+                    : undefined
+                }
                 formFieldName="forrigeArbeidstakerUtsendelseFradato"
                 label={t("utenlandsoppdragetSteg.fraDato")}
                 {...dateLimits}
@@ -199,6 +253,13 @@ export function UtenlandsoppdragetSteg() {
 
               <DatePickerFormPart
                 className="mt-4"
+                defaultSelected={
+                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelseTilDato
+                    ? new Date(
+                        lagretSkjemadataForSteg.forrigeArbeidstakerUtsendelseTilDato,
+                      )
+                    : undefined
+                }
                 formFieldName="forrigeArbeidstakerUtsendelseTilDato"
                 label={t("utenlandsoppdragetSteg.tilDato")}
                 {...dateLimits}
@@ -208,5 +269,17 @@ export function UtenlandsoppdragetSteg() {
         </SkjemaSteg>
       </form>
     </FormProvider>
+  );
+}
+
+interface UtenlandsoppdragetStegProps {
+  id: string;
+}
+
+export function UtenlandsoppdragetSteg({ id }: UtenlandsoppdragetStegProps) {
+  return (
+    <ArbeidsgiverStegLoader id={id}>
+      {(skjema) => <UtenlandsoppdragetStegContent skjema={skjema} />}
+    </ArbeidsgiverStegLoader>
   );
 }
