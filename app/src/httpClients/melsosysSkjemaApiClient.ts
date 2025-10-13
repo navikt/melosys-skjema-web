@@ -6,11 +6,14 @@ import {
   ArbeidsgiversSkjemaDto,
   ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
+  ArbeidstakersSkjemaDto,
   CreateArbeidsgiverSkjemaRequest,
   CreateArbeidstakerSkjemaRequest,
+  FamiliemedlemmerDto,
   OrganisasjonDto,
   SkatteforholdOgInntektDto,
   SubmitSkjemaRequest,
+  TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
@@ -111,7 +114,7 @@ export async function createArbeidsgiverSkjema(
 }
 
 // 3. Register Arbeidstaker Information
-export async function registerArbeidstakerInfo(
+export async function postArbeidstakeren(
   skjemaId: string,
   request: ArbeidstakerenDto,
 ): Promise<void> {
@@ -132,7 +135,7 @@ export async function registerArbeidstakerInfo(
 }
 
 // 4. Register Skatteforhold og Inntekt
-export async function registerSkatteforholdOgInntekt(
+export async function postSkatteforholdOgInntekt(
   skjemaId: string,
   request: SkatteforholdOgInntektDto,
 ): Promise<void> {
@@ -243,6 +246,82 @@ export async function submitSkjema(
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/submit`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
+// ========== ARBEIDSTAKER API FUNCTIONS ==========
+
+// Get Skjema by ID for Arbeidstaker
+export const getSkjemaAsArbeidstakerQuery = (skjemaId: string) =>
+  queryOptions<ArbeidstakersSkjemaDto>({
+    queryKey: ["arbeidstaker-skjema", skjemaId],
+    queryFn: () => fetchSkjemaAsArbeidstaker(skjemaId),
+    staleTime: 0,
+    gcTime: 0,
+  });
+
+async function fetchSkjemaAsArbeidstaker(
+  skjemaId: string,
+): Promise<ArbeidstakersSkjemaDto> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+// 1. Create Skjema for Arbeidstaker - see createArbeidstakerSkjema above
+
+// 2. Post Arbeidstaker Information - see postArbeidstakeren above
+
+// 3. Post Skatteforhold og Inntekt - see postSkatteforholdOgInntekt above
+
+// 4. Post Familiemedlemmer Information
+export async function postFamiliemedlemmer(
+  skjemaId: string,
+  request: FamiliemedlemmerDto,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/familiemedlemmer`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
+// 5. Post Tilleggsopplysninger Information
+export async function postTilleggsopplysninger(
+  skjemaId: string,
+  request: TilleggsopplysningerDto,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/tilleggsopplysninger`,
     {
       method: "POST",
       headers: {

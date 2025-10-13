@@ -1,4 +1,5 @@
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -12,12 +13,22 @@ export interface CreateArbeidstakerSkjemaRequest {
   fnr: string;
 }
 
+export interface TilleggsopplysningerDto {
+  harFlereOpplysningerTilSoknaden: boolean;
+  tilleggsopplysningerTilSoknad?: string;
+}
+
 export interface SkatteforholdOgInntektDto {
   erSkattepliktigTilNorgeIHeleutsendingsperioden: boolean;
   mottarPengestotteFraAnnetEosLandEllerSveits: boolean;
   landSomUtbetalerPengestotte?: string;
   pengestotteSomMottasFraAndreLandBelop?: string;
   pengestotteSomMottasFraAndreLandBeskrivelse?: string;
+}
+
+export interface FamiliemedlemmerDto {
+  sokerForBarnUnder18SomSkalVaereMed: boolean;
+  harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: boolean;
 }
 
 export interface ArbeidstakerenDto {
@@ -30,22 +41,26 @@ export interface ArbeidstakerenDto {
   harVaertEllerSkalVaereILonnetArbeidFoerUtsending: boolean;
   aktivitetIMaanedenFoerUtsendingen: string;
   skalJobbeForFlereVirksomheter: boolean;
-  norskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskVirksomhet[];
-  utenlandskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode?: UtenlandskVirksomhet[];
+  virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheter;
 }
 
 export interface NorskVirksomhet {
   organisasjonsnummer: string;
 }
 
+export interface NorskeOgUtenlandskeVirksomheter {
+  norskeVirksomheter?: NorskVirksomhet[];
+  utenlandskeVirksomheter?: UtenlandskVirksomhet[];
+}
+
 export interface UtenlandskVirksomhet {
   navn: string;
-  organisasjonsnummer: string;
+  organisasjonsnummer?: string;
   vegnavnOgHusnummer: string;
   bygning?: string;
-  postkode: string;
-  byStedsnavn: string;
-  region: string;
+  postkode?: string;
+  byStedsnavn?: string;
+  region?: string;
   land: string;
   tilhorerSammeKonsern: boolean;
 }
@@ -81,12 +96,7 @@ export interface SubmitSkjemaRequest {
 
 export interface ArbeidstakerensLonnDto {
   arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: boolean;
-  virksomheterSomUtbetalerLonnOgNaturalytelser?: VirksomheterSomUtbetalerLonnOgNaturalytelser;
-}
-
-export interface VirksomheterSomUtbetalerLonnOgNaturalytelser {
-  norskeVirksomheter?: NorskVirksomhet[];
-  utenlandskeVirksomheter?: UtenlandskVirksomhet[];
+  virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
 }
 
 export interface ArbeidsgiverensVirksomhetINorgeDto {
@@ -98,6 +108,21 @@ export interface ArbeidsgiverensVirksomhetINorgeDto {
 export interface ArbeidsgiverenDto {
   organisasjonsnummer: string;
   organisasjonNavn: string;
+}
+
+export interface ArbeidstakersSkjemaDataDto {
+  arbeidstakeren?: ArbeidstakerenDto;
+  skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
+  familiemedlemmer?: FamiliemedlemmerDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
+}
+
+export interface ArbeidstakersSkjemaDto {
+  /** @format uuid */
+  id: string;
+  fnr: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+  data: ArbeidstakersSkjemaDataDto;
 }
 
 export interface ArbeidsgiversSkjemaDataDto {
