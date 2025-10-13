@@ -7,6 +7,8 @@ function FamiliemedlemmerStegRoute() {
   return <FamiliemedlemmerSteg id={id} />;
 }
 
-export const Route = createFileRoute("/skjema/arbeidstaker/$id/familiemedlemmer")({
+export const Route = createFileRoute(
+  "/skjema/arbeidstaker/$id/familiemedlemmer",
+)({
   component: FamiliemedlemmerStegRoute,
 });
