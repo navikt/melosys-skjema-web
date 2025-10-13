@@ -1,22 +1,34 @@
 import { z } from "zod";
 
 const baseSkatteforholdOgInntektSchema = z.object({
-  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean({
-    message:
-      "skatteforholdOgInntektSteg.duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden",
-  }),
-  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean({
-    message:
-      "skatteforholdOgInntektSteg.duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits",
-  }),
-  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
-  landSomUtbetalerPengestotte: z.string().optional(),
-  pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
+  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean().nullish(),
+  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean().nullish(),
+  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().nullish(),
+  landSomUtbetalerPengestotte: z.string().nullish(),
+  pengestotteSomMottasFraAndreLandBelop: z.string().nullish(),
 });
 
 type BaseSkatteforholdOgInntektFormData = z.infer<
   typeof baseSkatteforholdOgInntektSchema
 >;
+
+function validerErSkattepliktigPakrevd(
+  data: BaseSkatteforholdOgInntektFormData,
+) {
+  return (
+    data.erSkattepliktigTilNorgeIHeleutsendingsperioden !== undefined &&
+    data.erSkattepliktigTilNorgeIHeleutsendingsperioden !== null
+  );
+}
+
+function validerMottarPengestottePakrevd(
+  data: BaseSkatteforholdOgInntektFormData,
+) {
+  return (
+    data.mottarPengestotteFraAnnetEosLandEllerSveits !== undefined &&
+    data.mottarPengestotteFraAnnetEosLandEllerSveits !== null
+  );
+}
 
 function validerPengestotteBeskrivelse(
   data: BaseSkatteforholdOgInntektFormData,
@@ -57,6 +69,32 @@ function validerPengestotteBelop(data: BaseSkatteforholdOgInntektFormData) {
 }
 
 export const skatteforholdOgInntektSchema = baseSkatteforholdOgInntektSchema
+  .transform((data) => ({
+    ...data,
+    // Clear conditional fields when mottarPengestotteFraAnnetEosLandEllerSveits is false
+    pengestotteSomMottasFraAndreLandBeskrivelse:
+      data.mottarPengestotteFraAnnetEosLandEllerSveits
+        ? data.pengestotteSomMottasFraAndreLandBeskrivelse
+        : undefined,
+    landSomUtbetalerPengestotte:
+      data.mottarPengestotteFraAnnetEosLandEllerSveits
+        ? data.landSomUtbetalerPengestotte
+        : undefined,
+    pengestotteSomMottasFraAndreLandBelop:
+      data.mottarPengestotteFraAnnetEosLandEllerSveits
+        ? data.pengestotteSomMottasFraAndreLandBelop
+        : undefined,
+  }))
+  .refine(validerErSkattepliktigPakrevd, {
+    message:
+      "skatteforholdOgInntektSteg.duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden",
+    path: ["erSkattepliktigTilNorgeIHeleutsendingsperioden"],
+  })
+  .refine(validerMottarPengestottePakrevd, {
+    message:
+      "skatteforholdOgInntektSteg.duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits",
+    path: ["mottarPengestotteFraAnnetEosLandEllerSveits"],
+  })
   .refine(validerPengestotteBeskrivelse, {
     message:
       "skatteforholdOgInntektSteg.duMaBeskriveHvaSlangsPengestotteDuMottar",

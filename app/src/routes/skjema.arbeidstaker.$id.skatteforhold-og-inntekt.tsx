@@ -7,6 +7,8 @@ function SkatteforholdOgInntektStegRoute() {
   return <SkatteforholdOgInntektSteg id={id} />;
 }
 
-export const Route = createFileRoute("/skjema/arbeidstaker/$id/skatteforhold-og-inntekt")({
+export const Route = createFileRoute(
+  "/skjema/arbeidstaker/$id/skatteforhold-og-inntekt",
+)({
   component: SkatteforholdOgInntektStegRoute,
 });

@@ -1,18 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea, TextField } from "@navikt/ds-react";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { postSkatteforholdOgInntekt } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  ArbeidstakersSkjemaDto,
+  SkatteforholdOgInntektDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
+import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
@@ -22,13 +30,24 @@ type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
 >;
 
-export function SkatteforholdOgInntektSteg() {
+interface SkatteforholdOgInntektStegContentProps {
+  skjema: ArbeidstakersSkjemaDto;
+}
+
+function SkatteforholdOgInntektStegContent({
+  skjema,
+}: SkatteforholdOgInntektStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
-  const formMethods = useForm<SkatteforholdOgInntektFormData>({
+  const lagretSkjemadataForSteg = skjema.data?.skatteforholdOgInntekt;
+
+  const formMethods = useForm({
     resolver: zodResolver(skatteforholdOgInntektSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const {
@@ -42,13 +61,29 @@ export function SkatteforholdOgInntektSteg() {
     "mottarPengestotteFraAnnetEosLandEllerSveits",
   );
 
+  const postSkatteforholdMutation = useMutation({
+    mutationFn: (data: SkatteforholdOgInntektFormData) => {
+      return postSkatteforholdOgInntekt(
+        skjema.id,
+        data as SkatteforholdOgInntektDto,
+      );
+    },
+    onSuccess: () => {
+      const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        const nextRoute = nextStep.route.replace("$id", skjema.id);
+        navigate({ to: nextRoute });
+      }
+    },
+    onError: () => {
+      toast.error(
+        "Kunne ikke lagre skatteforhold og inntekt informasjon. Prøv igjen.",
+      );
+    },
+  });
+
   const onSubmit = (data: SkatteforholdOgInntektFormData) => {
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    postSkatteforholdMutation.mutate(data);
   };
 
   return (
@@ -120,5 +155,19 @@ export function SkatteforholdOgInntektSteg() {
         </SkjemaSteg>
       </form>
     </FormProvider>
+  );
+}
+
+interface SkatteforholdOgInntektStegProps {
+  id: string;
+}
+
+export function SkatteforholdOgInntektSteg({
+  id,
+}: SkatteforholdOgInntektStegProps) {
+  return (
+    <ArbeidstakerStegLoader id={id}>
+      {(skjema) => <SkatteforholdOgInntektStegContent skjema={skjema} />}
+    </ArbeidstakerStegLoader>
   );
 }
