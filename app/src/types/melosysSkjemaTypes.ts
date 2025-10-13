@@ -1,5 +1,4 @@
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -39,7 +38,7 @@ export interface ArbeidstakerenDto {
   /** @format date */
   fodselsdato?: string;
   harVaertEllerSkalVaereILonnetArbeidFoerUtsending: boolean;
-  aktivitetIMaanedenFoerUtsendingen: string;
+  aktivitetIMaanedenFoerUtsendingen?: string;
   skalJobbeForFlereVirksomheter: boolean;
   virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheter;
 }
