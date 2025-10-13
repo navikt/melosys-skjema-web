@@ -7,6 +7,8 @@ function TilleggsopplysningerStegRoute() {
   return <TilleggsopplysningerSteg id={id} />;
 }
 
-export const Route = createFileRoute("/skjema/arbeidstaker/$id/tilleggsopplysninger")({
+export const Route = createFileRoute(
+  "/skjema/arbeidstaker/$id/tilleggsopplysninger",
+)({
   component: TilleggsopplysningerStegRoute,
 });
