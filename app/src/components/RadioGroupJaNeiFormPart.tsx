@@ -37,7 +37,11 @@ export function RadioGroupJaNeiFormPart({
           {...props}
           error={translateError(fieldState.error?.message)}
           onChange={(value) => field.onChange(value === "true")}
-          value={field.value === undefined ? "" : field.value.toString()}
+          value={
+            field.value === null || field.value === undefined
+              ? ""
+              : field.value.toString()
+          }
         >
           <Radio size="small" value="true">
             {t("felles.ja")}

@@ -1,25 +1,34 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSummary, TextField } from "@navikt/ds-react";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { postArbeidsgiveren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsgiverSchema } from "./arbeidsgiverStegSchema.ts";
+import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 const stepKey = "arbeidsgiveren";
 
 type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
 
-export function ArbeidsgiverSteg() {
+interface ArbeidsgiverStegContentProps {
+  skjema: ArbeidsgiversSkjemaDto;
+}
+
+function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -37,13 +46,27 @@ export function ArbeidsgiverSteg() {
     },
   });
 
+  const registerArbeidsgiverMutation = useMutation({
+    mutationFn: (data: ArbeidsgiverFormData) =>
+      postArbeidsgiveren(skjema.id, {
+        organisasjonsnummer: data.organisasjonsnummer,
+        organisasjonNavn: valgtRolle?.navn || "",
+      }),
+    onSuccess: () => {
+      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        // TODO: lage noe felles utils eller noe cleanere enn nextStep.route.replace("$id", skjema.id);
+        const nextRoute = nextStep.route.replace("$id", skjema.id);
+        navigate({ to: nextRoute });
+      }
+    },
+    onError: () => {
+      toast.error("Kunne ikke lagre arbeidsgiverinfo. Prøv igjen.");
+    },
+  });
+
   const onSubmit = (data: ArbeidsgiverFormData) => {
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    registerArbeidsgiverMutation.mutate(data);
   };
 
   return (
@@ -75,5 +98,17 @@ export function ArbeidsgiverSteg() {
         </FormSummary.Answer>
       </SkjemaSteg>
     </form>
+  );
+}
+
+interface ArbeidsgiverStegProps {
+  id: string;
+}
+
+export function ArbeidsgiverSteg({ id }: ArbeidsgiverStegProps) {
+  return (
+    <ArbeidsgiverStegLoader id={id}>
+      {(skjema) => <ArbeidsgiverStegContent skjema={skjema} />}
+    </ArbeidsgiverStegLoader>
   );
 }
