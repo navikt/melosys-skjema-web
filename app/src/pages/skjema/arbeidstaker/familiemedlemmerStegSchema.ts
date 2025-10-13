@@ -2,7 +2,9 @@ import { z } from "zod";
 
 const baseFamiliemedlemmerSchema = z.object({
   sokerForBarnUnder18SomSkalVaereMed: z.boolean().nullish(),
-  harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: z.boolean().nullish(),
+  harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: z
+    .boolean()
+    .nullish(),
 });
 
 type BaseFamiliemedlemmerFormData = z.infer<typeof baseFamiliemedlemmerSchema>;
@@ -14,9 +16,12 @@ function validerSokerForBarnUnder18Pakrevd(data: BaseFamiliemedlemmerFormData) {
   );
 }
 
-function validerHarEktefelleEllerBarnOver18Pakrevd(data: BaseFamiliemedlemmerFormData) {
+function validerHarEktefelleEllerBarnOver18Pakrevd(
+  data: BaseFamiliemedlemmerFormData,
+) {
   return (
-    data.harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad !== undefined &&
+    data.harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad !==
+      undefined &&
     data.harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad !== null
   );
 }

@@ -7,6 +7,8 @@ function ArbeidstakerenStegRoute() {
   return <ArbeidstakerenSteg id={id} />;
 }
 
-export const Route = createFileRoute("/skjema/arbeidstaker/$id/arbeidstakeren")({
-  component: ArbeidstakerenStegRoute,
-});
+export const Route = createFileRoute("/skjema/arbeidstaker/$id/arbeidstakeren")(
+  {
+    component: ArbeidstakerenStegRoute,
+  },
+);

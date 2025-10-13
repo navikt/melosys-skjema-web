@@ -14,7 +14,10 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { ArbeidstakersSkjemaDto, FamiliemedlemmerDto } from "~/types/melosysSkjemaTypes.ts";
+import {
+  ArbeidstakersSkjemaDto,
+  FamiliemedlemmerDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 import { familiemedlemmerSchema } from "./familiemedlemmerStegSchema.ts";
@@ -27,7 +30,9 @@ interface FamiliemedlemmerStegContentProps {
   skjema: ArbeidstakersSkjemaDto;
 }
 
-function FamiliemedlemmerStegContent({ skjema }: FamiliemedlemmerStegContentProps) {
+function FamiliemedlemmerStegContent({
+  skjema,
+}: FamiliemedlemmerStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
