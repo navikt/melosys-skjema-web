@@ -21,7 +21,7 @@ import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINor
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
-const stepKey = "arbeidsgiverens-virksomhet-i-norge";
+export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 
 type ArbeidsgiverensVirksomhetFormData = z.infer<
   typeof arbeidsgiverensVirksomhetSchema
