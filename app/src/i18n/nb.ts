@@ -204,7 +204,7 @@ export const nb = {
         "Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter.",
       erArbeidsgiverenEtBemanningsEllerVikarbyra:
         "Er arbeidsgiveren et bemannings- eller vikarbyrå?",
-      opprettholderArbeidsgivereVanligDriftINorge:
+      opprettholderArbeidsgiverenVanligDriftINorge:
         "Opprettholder arbeidsgiveren vanlig drift i Norge?",
       medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
         "Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden.",

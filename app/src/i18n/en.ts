@@ -208,7 +208,7 @@ export const en = {
         "Public enterprises are state bodies and subordinate enterprises, for example ministries and universities.",
       erArbeidsgiverenEtBemanningsEllerVikarbyra:
         "Is the employer a staffing or temporary work agency?",
-      opprettholderArbeidsgivereVanligDriftINorge:
+      opprettholderArbeidsgiverenVanligDriftINorge:
         "Does the employer maintain normal operations in Norway?",
       medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
         "By this we mean that the employer still has activity and employees working in Norway during the period.",

@@ -171,16 +171,16 @@ function ArbeidsgiverensVirksomhetINorgeSummary({
           </FormSummary.Answer>
         )}
 
-        {virksomhetData.opprettholderArbeidsgivereVanligDrift != null && (
+        {virksomhetData.opprettholderArbeidsgiverenVanligDrift != null && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t(
-                "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgivereVanligDriftINorge",
+                "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge",
               )}
             </FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
-                virksomhetData.opprettholderArbeidsgivereVanligDrift,
+                virksomhetData.opprettholderArbeidsgiverenVanligDrift,
                 t,
               )}
             </FormSummary.Value>

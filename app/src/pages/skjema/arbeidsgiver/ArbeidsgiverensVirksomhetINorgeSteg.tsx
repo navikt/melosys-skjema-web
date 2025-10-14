@@ -114,9 +114,9 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
                 description={t(
                   "arbeidsgiverensVirksomhetINorgeSteg.medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden",
                 )}
-                formFieldName="opprettholderArbeidsgivereVanligDrift"
+                formFieldName="opprettholderArbeidsgiverenVanligDrift"
                 legend={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgivereVanligDriftINorge",
+                  "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge",
                 )}
               />
             </>

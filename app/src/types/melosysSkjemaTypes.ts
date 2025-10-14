@@ -92,7 +92,7 @@ export interface VirksomheterSomUtbetalerLonnOgNaturalytelser {
 export interface ArbeidsgiverensVirksomhetINorgeDto {
   erArbeidsgiverenOffentligVirksomhet: boolean;
   erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
-  opprettholderArbeidsgivereVanligDrift?: boolean;
+  opprettholderArbeidsgiverenVanligDrift?: boolean;
 }
 
 export interface ArbeidsgiverenDto {
