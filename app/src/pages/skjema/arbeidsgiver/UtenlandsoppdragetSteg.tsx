@@ -25,7 +25,7 @@ import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx"
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
-const stepKey = "utenlandsoppdraget";
+export const stepKey = "utenlandsoppdraget";
 
 // Date range constants for assignment period selection
 const YEARS_BACK_FROM_CURRENT = 1;
