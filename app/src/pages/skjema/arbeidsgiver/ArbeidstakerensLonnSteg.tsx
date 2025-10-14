@@ -25,7 +25,7 @@ import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
-const stepKey = "arbeidstakerens-lonn";
+export const stepKey = "arbeidstakerens-lonn";
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
