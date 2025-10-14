@@ -20,7 +20,7 @@ import { arbeidsgiverSchema } from "./arbeidsgiverStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
-const stepKey = "arbeidsgiveren";
+export const stepKey = "arbeidsgiveren";
 
 type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
 

@@ -13,6 +13,7 @@ export const nb = {
       neste: "Neste",
       fjern: "Fjern",
       leggTil: "Legg til",
+      endreSvar: "Endre svar",
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
@@ -189,6 +190,7 @@ export const nb = {
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
     },
+    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
     arbeidsgiverSteg: {
       tittel: "Arbeidsgiveren",
       arbeidsgiverensOrganisasjonsnummer: "Arbeidsgiverens organisasjonsnummer",

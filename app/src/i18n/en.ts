@@ -13,6 +13,7 @@ export const en = {
       neste: "Next",
       fjern: "Remove",
       leggTil: "Add",
+      endreSvar: "Edit answers",
       pakrevd: "required",
       forrigeSteg: "Previous step",
       nesteSteg: "Next step",
@@ -193,6 +194,7 @@ export const en = {
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
     },
+    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
     arbeidsgiverSteg: {
       tittel: "The Employer",
       arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
