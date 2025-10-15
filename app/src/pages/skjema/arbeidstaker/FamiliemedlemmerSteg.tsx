@@ -82,6 +82,7 @@ function FamiliemedlemmerStegContent({
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: postFamiliemedlemmerMutation.isPending,
             },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}

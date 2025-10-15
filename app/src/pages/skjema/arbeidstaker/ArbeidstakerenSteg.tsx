@@ -119,6 +119,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: postArbeidstakerMutation.isPending,
             },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}

@@ -16,6 +16,7 @@ interface StegConfig {
     tekst: string;
     ikon?: ReactNode;
     type?: "button" | "submit";
+    loading?: boolean;
   };
 }
 
@@ -82,6 +83,7 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
           <Button
             icon={config.customNesteKnapp.ikon || <ArrowRightIcon />}
             iconPosition="right"
+            loading={config.customNesteKnapp.loading}
             type={config.customNesteKnapp.type}
             variant="primary"
           >
