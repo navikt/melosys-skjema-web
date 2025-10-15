@@ -431,129 +431,157 @@ function ArbeidstakerensLonnSummary({ skjema }: ArbeidsgiverSkjemaProps) {
                 )}
               </FormSummary.Label>
               <FormSummary.Value>
-                {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser?.norskeVirksomheter?.map(
-                  (virksomhet, index) => (
-                    <FormSummary.Answer key={`norsk-${index}`}>
+                {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser
+                  ?.norskeVirksomheter != null &&
+                  lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser
+                    .norskeVirksomheter.length > 0 && (
+                    <FormSummary.Answer>
+                      <FormSummary.Label>
+                        {t("norskeVirksomheterFormPart.norskeVirksomheter")}
+                      </FormSummary.Label>
                       <FormSummary.Value>
-                        <FormSummary.Answers>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "norskeVirksomheterFormPart.organisasjonsnummer",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.organisasjonsnummer}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                        </FormSummary.Answers>
-                      </FormSummary.Value>
-                    </FormSummary.Answer>
-                  ),
-                )}
-                {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser?.utenlandskeVirksomheter?.map(
-                  (virksomhet, index) => (
-                    <FormSummary.Answer key={`utenlandsk-${index}`}>
-                      <FormSummary.Value>
-                        <FormSummary.Answers>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "utenlandskeVirksomheterFormPart.navnPaVirksomhet",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.navn}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "norskeVirksomheterFormPart.organisasjonsnummer",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.organisasjonsnummer}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.vegnavnOgHusnummer}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          {virksomhet.bygning && (
-                            <FormSummary.Answer>
-                              <FormSummary.Label>
-                                {t(
-                                  "utenlandskeVirksomheterFormPart.bygningValgfritt",
-                                )}
-                              </FormSummary.Label>
+                        {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter.map(
+                          (virksomhet, index) => (
+                            <FormSummary.Answer key={`norsk-${index}`}>
                               <FormSummary.Value>
-                                {virksomhet.bygning}
+                                <FormSummary.Answers>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "norskeVirksomheterFormPart.organisasjonsnummer",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.organisasjonsnummer}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                </FormSummary.Answers>
                               </FormSummary.Value>
                             </FormSummary.Answer>
-                          )}
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "utenlandskeVirksomheterFormPart.postkodeValgfritt",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.postkode}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "utenlandskeVirksomheterFormPart.byStednavnValgfritt",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.byStedsnavn}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "utenlandskeVirksomheterFormPart.regionValgfritt",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.region}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t("utenlandskeVirksomheterFormPart.land")}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {virksomhet.land}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>
-                              {t(
-                                "utenlandskeVirksomheterFormPart.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
-                              )}
-                            </FormSummary.Label>
-                            <FormSummary.Value>
-                              {booleanToJaNei(
-                                virksomhet.tilhorerSammeKonsern,
-                                t,
-                              )}
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                        </FormSummary.Answers>
+                          ),
+                        )}
                       </FormSummary.Value>
                     </FormSummary.Answer>
-                  ),
-                )}
+                  )}
+                {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser
+                  ?.utenlandskeVirksomheter != null &&
+                  lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser
+                    .utenlandskeVirksomheter.length > 0 && (
+                    <FormSummary.Answer>
+                      <FormSummary.Label>
+                        {t(
+                          "utenlandskeVirksomheterFormPart.utenlandskeVirksomheter",
+                        )}
+                      </FormSummary.Label>
+                      <FormSummary.Value>
+                        {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.map(
+                          (virksomhet, index) => (
+                            <FormSummary.Answer key={`utenlandsk-${index}`}>
+                              <FormSummary.Value>
+                                <FormSummary.Answers>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "utenlandskeVirksomheterFormPart.navnPaVirksomhet",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.navn}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "norskeVirksomheterFormPart.organisasjonsnummer",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.organisasjonsnummer}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.vegnavnOgHusnummer}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                  {virksomhet.bygning && (
+                                    <FormSummary.Answer>
+                                      <FormSummary.Label>
+                                        {t(
+                                          "utenlandskeVirksomheterFormPart.bygningValgfritt",
+                                        )}
+                                      </FormSummary.Label>
+                                      <FormSummary.Value>
+                                        {virksomhet.bygning}
+                                      </FormSummary.Value>
+                                    </FormSummary.Answer>
+                                  )}
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "utenlandskeVirksomheterFormPart.postkodeValgfritt",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.postkode}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "utenlandskeVirksomheterFormPart.byStednavnValgfritt",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.byStedsnavn}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "utenlandskeVirksomheterFormPart.regionValgfritt",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.region}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "utenlandskeVirksomheterFormPart.land",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {virksomhet.land}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                  <FormSummary.Answer>
+                                    <FormSummary.Label>
+                                      {t(
+                                        "utenlandskeVirksomheterFormPart.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
+                                      )}
+                                    </FormSummary.Label>
+                                    <FormSummary.Value>
+                                      {booleanToJaNei(
+                                        virksomhet.tilhorerSammeKonsern,
+                                        t,
+                                      )}
+                                    </FormSummary.Value>
+                                  </FormSummary.Answer>
+                                </FormSummary.Answers>
+                              </FormSummary.Value>
+                            </FormSummary.Answer>
+                          ),
+                        )}
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                  )}
               </FormSummary.Value>
             </FormSummary.Answer>
           )}

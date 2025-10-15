@@ -78,11 +78,13 @@ export const nb = {
     },
     norskeVirksomheterFormPart: {
       norskVirksomhet: "Norsk virksomhet",
+      norskeVirksomheter: "Norske virksomheter",
       organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk virksomhet",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",
+      utenlandskeVirksomheter: "Utenlandske virksomheter",
       navnPaVirksomhet: "Navn på virksomhet",
       organisasjonsnummerEllerRegistreringsnummerValgfritt:
         "Organisasjonsnummer eller registreringsnummer (valgfritt)",

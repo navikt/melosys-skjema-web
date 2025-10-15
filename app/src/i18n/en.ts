@@ -79,11 +79,13 @@ export const en = {
     },
     norskeVirksomheterFormPart: {
       norskVirksomhet: "Norwegian company",
+      norskeVirksomheter: "Norwegian companies",
       organisasjonsnummer: "Organization number",
       leggTilNorskVirksomhet: "Add Norwegian company",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",
+      utenlandskeVirksomheter: "Foreign companies",
       navnPaVirksomhet: "Company name",
       organisasjonsnummerEllerRegistreringsnummerValgfritt:
         "Organization number or registration number (optional)",
