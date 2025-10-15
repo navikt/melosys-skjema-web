@@ -76,9 +76,7 @@ function SkatteforholdOgInntektStegContent({
       }
     },
     onError: () => {
-      toast.error(
-        "Kunne ikke lagre skatteforhold og inntekt informasjon. Prøv igjen.",
-      );
+      toast.error(t("felles.feil"));
     },
   });
 

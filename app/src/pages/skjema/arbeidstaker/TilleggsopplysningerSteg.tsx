@@ -70,7 +70,7 @@ function TilleggsopplysningerStegContent({
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre tilleggsopplysninger. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 

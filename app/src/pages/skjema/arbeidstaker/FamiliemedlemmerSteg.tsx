@@ -65,7 +65,7 @@ function FamiliemedlemmerStegContent({
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre familiemedlemmer informasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 

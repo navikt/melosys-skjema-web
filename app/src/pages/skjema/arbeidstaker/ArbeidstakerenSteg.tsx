@@ -94,7 +94,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre arbeidstaker-informasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 
