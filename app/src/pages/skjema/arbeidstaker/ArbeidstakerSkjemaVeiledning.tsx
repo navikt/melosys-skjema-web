@@ -16,11 +16,13 @@ export function ArbeidstakerSkjemaVeiledning() {
   const createSkjemaMutation = useMutation({
     mutationFn: createArbeidstakerSkjema,
     onSuccess: (skjemaResponse) => {
-      const firstStepRoute = ARBEIDSTAKER_STEG_REKKEFOLGE[0]?.route.replace(
-        "$id",
-        skjemaResponse.id,
-      );
-      navigate({ to: firstStepRoute });
+      const firstStep = ARBEIDSTAKER_STEG_REKKEFOLGE[0];
+      if (firstStep) {
+        navigate({
+          to: firstStep.route,
+          params: { id: skjemaResponse.id },
+        });
+      }
     },
     onError: () => {
       toast.error(t("felles.feil"));

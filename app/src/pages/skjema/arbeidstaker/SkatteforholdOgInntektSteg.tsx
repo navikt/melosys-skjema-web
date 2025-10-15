@@ -71,8 +71,10 @@ function SkatteforholdOgInntektStegContent({
     onSuccess: () => {
       const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
       if (nextStep) {
-        const nextRoute = nextStep.route.replace("$id", skjema.id);
-        navigate({ to: nextRoute });
+        navigate({
+          to: nextStep.route,
+          params: { id: skjema.id },
+        });
       }
     },
     onError: () => {
