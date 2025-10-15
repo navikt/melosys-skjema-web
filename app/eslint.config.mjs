@@ -38,7 +38,7 @@ export default tseslint.config(
   eslintPluginUnicorn.configs["flat/recommended"],
   {
     rules: {
-      eqeqeq: ["error", "always", {"null": "ignore"}],
+      eqeqeq: ["error", "always", { null: "ignore" }],
       "react/jsx-key": "error",
       "react/jsx-sort-props": "error",
       "react/react-in-jsx-scope": "off",
