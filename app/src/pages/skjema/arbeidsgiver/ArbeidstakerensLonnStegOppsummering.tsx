@@ -1,18 +1,17 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { useBooleanToJaNei } from "~/utils/translation.ts";
+
 import { stepKey as arbeidstakerensLonnStepKey } from "./ArbeidstakerensLonnSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "./types.ts";
-
-function booleanToJaNei(value: boolean, t: (key: string) => string): string {
-  return value ? t("felles.ja") : t("felles.nei");
-}
 
 export function ArbeidstakerensLonnStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
+  const booleanToJaNei = useBooleanToJaNei();
 
   const lonnData = skjema.data.arbeidstakerensLonn;
   const lonnSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
@@ -38,7 +37,6 @@ export function ArbeidstakerensLonnStegOppsummering({
           <FormSummary.Value>
             {booleanToJaNei(
               lonnData.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden,
-              t,
             )}
           </FormSummary.Value>
         </FormSummary.Answer>
@@ -198,7 +196,6 @@ export function ArbeidstakerensLonnStegOppsummering({
                                     <FormSummary.Value>
                                       {booleanToJaNei(
                                         virksomhet.tilhorerSammeKonsern,
-                                        t,
                                       )}
                                     </FormSummary.Value>
                                   </FormSummary.Answer>

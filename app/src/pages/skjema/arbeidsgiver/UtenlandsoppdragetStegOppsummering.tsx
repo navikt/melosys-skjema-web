@@ -1,18 +1,17 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { useBooleanToJaNei } from "~/utils/translation.ts";
+
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "./types.ts";
 import { stepKey as utenlandsoppdragetStepKey } from "./UtenlandsoppdragetSteg.tsx";
-
-function booleanToJaNei(value: boolean, t: (key: string) => string): string {
-  return value ? t("felles.ja") : t("felles.nei");
-}
 
 export function UtenlandsoppdragetStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
+  const booleanToJaNei = useBooleanToJaNei();
 
   const utenlandsoppdragData = skjema.data.utenlandsoppdraget;
   const utenlandsoppdragSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
@@ -63,10 +62,7 @@ export function UtenlandsoppdragetStegOppsummering({
             )}
           </FormSummary.Label>
           <FormSummary.Value>
-            {booleanToJaNei(
-              utenlandsoppdragData.arbeidsgiverHarOppdragILandet,
-              t,
-            )}
+            {booleanToJaNei(utenlandsoppdragData.arbeidsgiverHarOppdragILandet)}
           </FormSummary.Value>
         </FormSummary.Answer>
 
@@ -92,7 +88,6 @@ export function UtenlandsoppdragetStegOppsummering({
           <FormSummary.Value>
             {booleanToJaNei(
               utenlandsoppdragData.arbeidstakerBleAnsattForUtenlandsoppdraget,
-              t,
             )}
           </FormSummary.Value>
         </FormSummary.Answer>
@@ -108,7 +103,6 @@ export function UtenlandsoppdragetStegOppsummering({
             <FormSummary.Value>
               {booleanToJaNei(
                 utenlandsoppdragData.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget,
-                t,
               )}
             </FormSummary.Value>
           </FormSummary.Answer>
@@ -123,7 +117,6 @@ export function UtenlandsoppdragetStegOppsummering({
           <FormSummary.Value>
             {booleanToJaNei(
               utenlandsoppdragData.arbeidstakerForblirAnsattIHelePerioden,
-              t,
             )}
           </FormSummary.Value>
         </FormSummary.Answer>
@@ -150,7 +143,6 @@ export function UtenlandsoppdragetStegOppsummering({
           <FormSummary.Value>
             {booleanToJaNei(
               utenlandsoppdragData.arbeidstakerErstatterAnnenPerson,
-              t,
             )}
           </FormSummary.Value>
         </FormSummary.Answer>

@@ -1,18 +1,17 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { useBooleanToJaNei } from "~/utils/translation.ts";
+
 import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "./ArbeidsgiverensVirksomhetINorgeSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "./types.ts";
-
-function booleanToJaNei(value: boolean, t: (key: string) => string): string {
-  return value ? t("felles.ja") : t("felles.nei");
-}
 
 export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
+  const booleanToJaNei = useBooleanToJaNei();
 
   const virksomhetData = skjema.data.arbeidsgiverensVirksomhetINorge;
   const virksomhetSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
@@ -39,7 +38,6 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
             <FormSummary.Value>
               {booleanToJaNei(
                 virksomhetData.erArbeidsgiverenOffentligVirksomhet,
-                t,
               )}
             </FormSummary.Value>
           </FormSummary.Answer>
@@ -55,7 +53,6 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
             <FormSummary.Value>
               {booleanToJaNei(
                 virksomhetData.erArbeidsgiverenBemanningsEllerVikarbyraa,
-                t,
               )}
             </FormSummary.Value>
           </FormSummary.Answer>
@@ -71,7 +68,6 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
             <FormSummary.Value>
               {booleanToJaNei(
                 virksomhetData.opprettholderArbeidsgiverenVanligDrift,
-                t,
               )}
             </FormSummary.Value>
           </FormSummary.Answer>
