@@ -19,10 +19,6 @@ import {
 
 const API_PROXY_URL = "/api";
 
-export interface SkjemaResponse {
-  id: string;
-}
-
 export function listAltinnTilganger() {
   return queryOptions({
     queryKey: ["ALTINNTILGANGER"],
@@ -67,7 +63,7 @@ async function fetchSkjemaAsArbeidsgiver(
 
 export async function createArbeidstakerSkjema(
   request: CreateArbeidstakerSkjemaRequest,
-): Promise<SkjemaResponse> {
+): Promise<ArbeidstakersSkjemaDto> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker`,
     {
