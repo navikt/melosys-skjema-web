@@ -12,14 +12,12 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import {
-  ArbeidsgiverensVirksomhetINorgeDto,
-  ArbeidsgiversSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "./types.ts";
 
 export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 
@@ -27,13 +25,9 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
   typeof arbeidsgiverensVirksomhetSchema
 >;
 
-interface ArbeidsgiverensVirksomhetINorgeStegContentProps {
-  skjema: ArbeidsgiversSkjemaDto;
-}
-
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
-}: ArbeidsgiverensVirksomhetINorgeStegContentProps) {
+}: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 

@@ -15,27 +15,19 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import {
-  ArbeidsgiversSkjemaDto,
-  ArbeidstakerensLonnDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "./types.ts";
 
 export const stepKey = "arbeidstakerens-lonn";
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
-interface ArbeidstakerensLonnStegContentProps {
-  skjema: ArbeidsgiversSkjemaDto;
-}
-
-function ArbeidstakerensLonnStegContent({
-  skjema,
-}: ArbeidstakerensLonnStegContentProps) {
+function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
