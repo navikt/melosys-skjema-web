@@ -19,10 +19,8 @@ import {
 
 const API_PROXY_URL = "/api";
 
-// Har bare denne som en fallback inntil jeg starter på arbeidstakers del
 export interface SkjemaResponse {
   id: string;
-  // Add other fields as returned by the API
 }
 
 export function listAltinnTilganger() {
@@ -42,7 +40,6 @@ async function fetchAltinnTilganger(): Promise<OrganisasjonDto[]> {
   return response.json();
 }
 
-// ========== SCHEMA API FUNCTIONS ==========
 export const getSkjemaAsArbeidsgiverQuery = (skjemaId: string) =>
   queryOptions<ArbeidsgiversSkjemaDto>({
     queryKey: ["skjema", skjemaId],
@@ -51,7 +48,6 @@ export const getSkjemaAsArbeidsgiverQuery = (skjemaId: string) =>
     gcTime: 0,
   });
 
-// Get Skjema by ID
 async function fetchSkjemaAsArbeidsgiver(
   skjemaId: string,
 ): Promise<ArbeidsgiversSkjemaDto> {
@@ -69,7 +65,6 @@ async function fetchSkjemaAsArbeidsgiver(
   return response.json();
 }
 
-// 1. Create Skjema for Arbeidstaker
 export async function createArbeidstakerSkjema(
   request: CreateArbeidstakerSkjemaRequest,
 ): Promise<SkjemaResponse> {
@@ -91,7 +86,6 @@ export async function createArbeidstakerSkjema(
   return response.json();
 }
 
-// 2. Create Skjema for Arbeidsgiver
 export async function createArbeidsgiverSkjema(
   request: CreateArbeidsgiverSkjemaRequest,
 ): Promise<ArbeidsgiversSkjemaDto> {
@@ -113,7 +107,6 @@ export async function createArbeidsgiverSkjema(
   return response.json();
 }
 
-// 3. Register Arbeidstaker Information
 export async function postArbeidstakeren(
   skjemaId: string,
   request: ArbeidstakerenDto,
@@ -134,7 +127,6 @@ export async function postArbeidstakeren(
   }
 }
 
-// 4. Register Skatteforhold og Inntekt
 export async function postSkatteforholdOgInntekt(
   skjemaId: string,
   request: SkatteforholdOgInntektDto,
@@ -155,7 +147,6 @@ export async function postSkatteforholdOgInntekt(
   }
 }
 
-// 5. Register Arbeidsgiver Information
 export async function postArbeidsgiveren(
   skjemaId: string,
   request: ArbeidsgiverenDto,
@@ -176,7 +167,6 @@ export async function postArbeidsgiveren(
   }
 }
 
-// 6. Register Virksomhet Information
 export async function postArbeidsgiverensVirksomhetINorge(
   skjemaId: string,
   request: ArbeidsgiverensVirksomhetINorgeDto,
@@ -197,7 +187,6 @@ export async function postArbeidsgiverensVirksomhetINorge(
   }
 }
 
-// 7. Register Utenlandsoppdrag Information
 export async function postUtenlandsoppdraget(
   skjemaId: string,
   request: UtenlandsoppdragetDto,
@@ -218,7 +207,6 @@ export async function postUtenlandsoppdraget(
   }
 }
 
-// 8. Register Arbeidstaker Lønn Information
 export async function postArbeidstakerensLonn(
   skjemaId: string,
   request: ArbeidstakerensLonnDto,
@@ -239,7 +227,6 @@ export async function postArbeidstakerensLonn(
   }
 }
 
-// 9. Submit Skjema
 export async function submitSkjema(
   skjemaId: string,
   request: SubmitSkjemaRequest,
@@ -260,9 +247,6 @@ export async function submitSkjema(
   }
 }
 
-// ========== ARBEIDSTAKER API FUNCTIONS ==========
-
-// Get Skjema by ID for Arbeidstaker
 export const getSkjemaAsArbeidstakerQuery = (skjemaId: string) =>
   queryOptions<ArbeidstakersSkjemaDto>({
     queryKey: ["arbeidstaker-skjema", skjemaId],
@@ -288,13 +272,6 @@ async function fetchSkjemaAsArbeidstaker(
   return response.json();
 }
 
-// 1. Create Skjema for Arbeidstaker - see createArbeidstakerSkjema above
-
-// 2. Post Arbeidstaker Information - see postArbeidstakeren above
-
-// 3. Post Skatteforhold og Inntekt - see postSkatteforholdOgInntekt above
-
-// 4. Post Familiemedlemmer Information
 export async function postFamiliemedlemmer(
   skjemaId: string,
   request: FamiliemedlemmerDto,
@@ -315,7 +292,6 @@ export async function postFamiliemedlemmer(
   }
 }
 
-// 5. Post Tilleggsopplysninger Information
 export async function postTilleggsopplysninger(
   skjemaId: string,
   request: TilleggsopplysningerDto,
