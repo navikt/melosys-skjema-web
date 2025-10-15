@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, TextField, VStack } from "@navikt/ds-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -43,6 +43,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const queryClient = useQueryClient();
 
   const {
     data: userInfo,
@@ -87,6 +88,9 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
       return postArbeidstakeren(skjema.id, data as ArbeidstakerenDto);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["arbeidstaker-skjema", skjema.id],
+      });
       const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({

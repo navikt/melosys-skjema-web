@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GuidePanel } from "@navikt/ds-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -35,6 +35,7 @@ function FamiliemedlemmerStegContent({
 }: FamiliemedlemmerStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const lagretSkjemadataForSteg = skjema.data?.familiemedlemmer;
 
@@ -58,6 +59,9 @@ function FamiliemedlemmerStegContent({
       return postFamiliemedlemmer(skjema.id, data as FamiliemedlemmerDto);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["arbeidstaker-skjema", skjema.id],
+      });
       const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
