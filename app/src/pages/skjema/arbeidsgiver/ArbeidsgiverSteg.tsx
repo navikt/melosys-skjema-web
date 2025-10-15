@@ -55,9 +55,10 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverStegContentProps) {
     onSuccess: () => {
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
-        // TODO: lage noe felles utils eller noe cleanere enn nextStep.route.replace("$id", skjema.id);
-        const nextRoute = nextStep.route.replace("$id", skjema.id);
-        navigate({ to: nextRoute });
+        navigate({
+          to: nextStep.route,
+          params: { id: skjema.id },
+        });
       }
     },
     onError: () => {
