@@ -1,0 +1,190 @@
+import { FormSummary } from "@navikt/ds-react";
+import { useTranslation } from "react-i18next";
+
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "./types.ts";
+import { stepKey as utenlandsoppdragetStepKey } from "./UtenlandsoppdragetSteg.tsx";
+
+function booleanToJaNei(value: boolean, t: (key: string) => string): string {
+  return value ? t("felles.ja") : t("felles.nei");
+}
+
+export function UtenlandsoppdragetStegOppsummering({
+  skjema,
+}: ArbeidsgiverSkjemaProps) {
+  const { t } = useTranslation();
+
+  const utenlandsoppdragData = skjema.data.utenlandsoppdraget;
+  const utenlandsoppdragSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
+    (steg) => steg.key === utenlandsoppdragetStepKey,
+  );
+  const editHref = utenlandsoppdragSteg?.route.replace("$id", skjema.id) || "";
+
+  return utenlandsoppdragData ? (
+    <FormSummary className="mt-8">
+      <FormSummary.Header>
+        <FormSummary.Heading level="2">
+          {t("utenlandsoppdragetSteg.tittel")}
+        </FormSummary.Heading>
+      </FormSummary.Header>
+
+      <FormSummary.Answers>
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t("utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil")}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {utenlandsoppdragData.utsendelseLand}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t("utenlandsoppdragetSteg.fraDato")}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {utenlandsoppdragData.arbeidstakerUtsendelseFraDato}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t("utenlandsoppdragetSteg.tilDato")}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {utenlandsoppdragData.arbeidstakerUtsendelseTilDato}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t(
+              "utenlandsoppdragetSteg.harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil",
+            )}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {booleanToJaNei(
+              utenlandsoppdragData.arbeidsgiverHarOppdragILandet,
+              t,
+            )}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+
+        {utenlandsoppdragData.utenlandsoppholdetsBegrunnelse != null && (
+          <FormSummary.Answer>
+            <FormSummary.Label>
+              {t(
+                "utenlandsoppdragetSteg.hvorforSkalArbeidstakerenArbeideIUtlandet",
+              )}
+            </FormSummary.Label>
+            <FormSummary.Value>
+              {utenlandsoppdragData.utenlandsoppholdetsBegrunnelse}
+            </FormSummary.Value>
+          </FormSummary.Answer>
+        )}
+
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t(
+              "utenlandsoppdragetSteg.bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget",
+            )}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {booleanToJaNei(
+              utenlandsoppdragData.arbeidstakerBleAnsattForUtenlandsoppdraget,
+              t,
+            )}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+
+        {utenlandsoppdragData.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget !=
+          null && (
+          <FormSummary.Answer>
+            <FormSummary.Label>
+              {t(
+                "utenlandsoppdragetSteg.vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget",
+              )}
+            </FormSummary.Label>
+            <FormSummary.Value>
+              {booleanToJaNei(
+                utenlandsoppdragData.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget,
+                t,
+              )}
+            </FormSummary.Value>
+          </FormSummary.Answer>
+        )}
+
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t(
+              "utenlandsoppdragetSteg.vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden",
+            )}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {booleanToJaNei(
+              utenlandsoppdragData.arbeidstakerForblirAnsattIHelePerioden,
+              t,
+            )}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+
+        {utenlandsoppdragData.ansettelsesforholdBeskrivelse != null && (
+          <FormSummary.Answer>
+            <FormSummary.Label>
+              {t(
+                "utenlandsoppdragetSteg.beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden",
+              )}
+            </FormSummary.Label>
+            <FormSummary.Value>
+              {utenlandsoppdragData.ansettelsesforholdBeskrivelse}
+            </FormSummary.Value>
+          </FormSummary.Answer>
+        )}
+
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t(
+              "utenlandsoppdragetSteg.erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet",
+            )}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {booleanToJaNei(
+              utenlandsoppdragData.arbeidstakerErstatterAnnenPerson,
+              t,
+            )}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+
+        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseFradato != null && (
+          <FormSummary.Answer>
+            <FormSummary.Label>
+              {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
+              {t("utenlandsoppdragetSteg.fraDato")}
+            </FormSummary.Label>
+            <FormSummary.Value>
+              {utenlandsoppdragData.forrigeArbeidstakerUtsendelseFradato}
+            </FormSummary.Value>
+          </FormSummary.Answer>
+        )}
+
+        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseTilDato != null && (
+          <FormSummary.Answer>
+            <FormSummary.Label>
+              {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
+              {t("utenlandsoppdragetSteg.tilDato")}
+            </FormSummary.Label>
+            <FormSummary.Value>
+              {utenlandsoppdragData.forrigeArbeidstakerUtsendelseTilDato}
+            </FormSummary.Value>
+          </FormSummary.Answer>
+        )}
+      </FormSummary.Answers>
+
+      <FormSummary.Footer>
+        <FormSummary.EditLink href={editHref}>
+          {t("felles.endreSvar")}
+        </FormSummary.EditLink>
+      </FormSummary.Footer>
+    </FormSummary>
+  ) : null;
+}
