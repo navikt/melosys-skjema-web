@@ -1,29 +1,49 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GuidePanel } from "@navikt/ds-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { postFamiliemedlemmer } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  ArbeidstakersSkjemaDto,
+  FamiliemedlemmerDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
+import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 import { familiemedlemmerSchema } from "./familiemedlemmerStegSchema.ts";
 
 const stepKey = "familiemedlemmer";
 
-export function FamiliemedlemmerSteg() {
+type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
+
+interface FamiliemedlemmerStegContentProps {
+  skjema: ArbeidstakersSkjemaDto;
+}
+
+function FamiliemedlemmerStegContent({
+  skjema,
+}: FamiliemedlemmerStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
+  const lagretSkjemadataForSteg = skjema.data?.familiemedlemmer;
 
-  const formMethods = useForm<FamiliemedlemmerFormData>({
+  const formMethods = useForm({
     resolver: zodResolver(familiemedlemmerSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const { handleSubmit, watch } = formMethods;
@@ -34,14 +54,29 @@ export function FamiliemedlemmerSteg() {
     "harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad",
   );
 
+  const postFamiliemedlemmerMutation = useMutation({
+    mutationFn: (data: FamiliemedlemmerFormData) => {
+      return postFamiliemedlemmer(skjema.id, data as FamiliemedlemmerDto);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["arbeidstaker-skjema", skjema.id],
+      });
+      const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        navigate({
+          to: nextStep.route,
+          params: { id: skjema.id },
+        });
+      }
+    },
+    onError: () => {
+      toast.error(t("felles.feil"));
+    },
+  });
+
   const onSubmit = (data: FamiliemedlemmerFormData) => {
-    // Fjerner console.log når vi har endepunkt å sende data til
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    postFamiliemedlemmerMutation.mutate(data);
   };
 
   return (
@@ -53,6 +88,7 @@ export function FamiliemedlemmerSteg() {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: postFamiliemedlemmerMutation.isPending,
             },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
@@ -89,5 +125,17 @@ export function FamiliemedlemmerSteg() {
         </SkjemaSteg>
       </form>
     </FormProvider>
+  );
+}
+
+interface FamiliemedlemmerStegProps {
+  id: string;
+}
+
+export function FamiliemedlemmerSteg({ id }: FamiliemedlemmerStegProps) {
+  return (
+    <ArbeidstakerStegLoader id={id}>
+      {(skjema) => <FamiliemedlemmerStegContent skjema={skjema} />}
+    </ArbeidstakerStegLoader>
   );
 }

@@ -3,6 +3,7 @@ export const en = {
     felles: {
       laster: "Loading...",
       feil: "An error occurred",
+      brukerinfoMangler: "User information missing",
       lagre: "Save",
       lagreOgFortsett: "Save and continue",
       sendSoknad: "Submit application",

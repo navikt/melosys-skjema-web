@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, TextField, VStack } from "@navikt/ds-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -12,24 +13,37 @@ import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormP
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
+import { postArbeidstakeren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  ArbeidstakerenDto,
+  ArbeidstakersSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import {
   AKTIVITET_OPTIONS,
   arbeidstakerSchema,
 } from "./arbeidstakerenStegSchema.ts";
+import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 
 const stepKey = "arbeidstakeren";
 
-export function ArbeidstakerenSteg() {
+type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
+
+interface ArbeidstakerenStegContentProps {
+  skjema: ArbeidstakersSkjemaDto;
+}
+
+function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const queryClient = useQueryClient();
 
   const {
     data: userInfo,
@@ -37,10 +51,13 @@ export function ArbeidstakerenSteg() {
     error: userinfoIsError,
   } = useQuery(getUserInfo());
 
-  type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
+  const lagretSkjemadataForSteg = skjema.data?.arbeidstakeren;
 
-  const formMethods = useForm<ArbeidstakerFormData>({
+  const formMethods = useForm({
     resolver: zodResolver(arbeidstakerSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const {
@@ -66,14 +83,29 @@ export function ArbeidstakerenSteg() {
   );
   const skalJobbeForFlereVirksomheter = watch("skalJobbeForFlereVirksomheter");
 
+  const postArbeidstakerMutation = useMutation({
+    mutationFn: (data: ArbeidstakerFormData) => {
+      return postArbeidstakeren(skjema.id, data as ArbeidstakerenDto);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["arbeidstaker-skjema", skjema.id],
+      });
+      const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        navigate({
+          to: nextStep.route,
+          params: { id: skjema.id },
+        });
+      }
+    },
+    onError: () => {
+      toast.error(t("felles.feil"));
+    },
+  });
+
   const onSubmit = (data: ArbeidstakerFormData) => {
-    // Fjerner console.log når vi har endepunkt å sende data til
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    postArbeidstakerMutation.mutate(data);
   };
 
   if (userInfoIsLoading) {
@@ -93,6 +125,7 @@ export function ArbeidstakerenSteg() {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: postArbeidstakerMutation.isPending,
             },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
@@ -185,13 +218,25 @@ export function ArbeidstakerenSteg() {
 
           {skalJobbeForFlereVirksomheter === true && (
             <VStack className="mt-4" style={{ gap: "var(--a-spacing-4)" }}>
-              <NorskeVirksomheterFormPart fieldName="norskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode" />
+              <NorskeVirksomheterFormPart fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode.norskeVirksomheter" />
 
-              <UtenlandskeVirksomheterFormPart fieldName="utenlandskeVirksomheterArbeidstakerJobberForIutsendelsesPeriode" />
+              <UtenlandskeVirksomheterFormPart fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode.utenlandskeVirksomheter" />
             </VStack>
           )}
         </SkjemaSteg>
       </form>
     </FormProvider>
+  );
+}
+
+interface ArbeidstakerenStegProps {
+  id: string;
+}
+
+export function ArbeidstakerenSteg({ id }: ArbeidstakerenStegProps) {
+  return (
+    <ArbeidstakerStegLoader id={id}>
+      {(skjema) => <ArbeidstakerenStegContent skjema={skjema} />}
+    </ArbeidstakerStegLoader>
   );
 }

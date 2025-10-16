@@ -3,6 +3,7 @@ export const nb = {
     felles: {
       laster: "Laster...",
       feil: "Det oppstod en feil",
+      brukerinfoMangler: "Brukerinfo mangler",
       lagre: "Lagre",
       lagreOgFortsett: "Lagre og fortsett",
       sendSoknad: "Send søknad",

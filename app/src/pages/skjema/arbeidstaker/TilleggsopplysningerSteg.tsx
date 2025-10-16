@@ -1,31 +1,49 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FileUpload, Textarea } from "@navikt/ds-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { postTilleggsopplysninger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import {
+  ArbeidstakersSkjemaDto,
+  TilleggsopplysningerDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
+import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 import { tilleggsopplysningerSchema } from "./tilleggsopplysningerStegSchema.ts";
 
 const stepKey = "tilleggsopplysninger";
 
-export function TilleggsopplysningerSteg() {
+type TilleggsopplysningerFormData = z.infer<typeof tilleggsopplysningerSchema>;
+
+interface TilleggsopplysningerStegContentProps {
+  skjema: ArbeidstakersSkjemaDto;
+}
+
+function TilleggsopplysningerStegContent({
+  skjema,
+}: TilleggsopplysningerStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  type TilleggsopplysningerFormData = z.infer<
-    typeof tilleggsopplysningerSchema
-  >;
+  const lagretSkjemadataForSteg = skjema.data?.tilleggsopplysninger;
 
-  const formMethods = useForm<TilleggsopplysningerFormData>({
+  const formMethods = useForm({
     resolver: zodResolver(tilleggsopplysningerSchema),
+    defaultValues: {
+      ...lagretSkjemadataForSteg,
+    },
   });
 
   const {
@@ -38,14 +56,32 @@ export function TilleggsopplysningerSteg() {
     "harFlereOpplysningerTilSoknaden",
   );
 
+  const postTilleggsopplysningerMutation = useMutation({
+    mutationFn: (data: TilleggsopplysningerFormData) => {
+      return postTilleggsopplysninger(
+        skjema.id,
+        data as TilleggsopplysningerDto,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["arbeidstaker-skjema", skjema.id],
+      });
+      const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        navigate({
+          to: nextStep.route,
+          params: { id: skjema.id },
+        });
+      }
+    },
+    onError: () => {
+      toast.error(t("felles.feil"));
+    },
+  });
+
   const onSubmit = (data: TilleggsopplysningerFormData) => {
-    // Fjerner console.log når vi har endepunkt å sende data til
-    // eslint-disable-next-line no-console
-    console.log("Form submitted", data);
-    const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
-    if (nextStep) {
-      navigate({ to: nextStep.route });
-    }
+    postTilleggsopplysningerMutation.mutate(data);
   };
 
   return (
@@ -57,6 +93,7 @@ export function TilleggsopplysningerSteg() {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: postTilleggsopplysningerMutation.isPending,
             },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
@@ -94,5 +131,19 @@ export function TilleggsopplysningerSteg() {
         </SkjemaSteg>
       </form>
     </FormProvider>
+  );
+}
+
+interface TilleggsopplysningerStegProps {
+  id: string;
+}
+
+export function TilleggsopplysningerSteg({
+  id,
+}: TilleggsopplysningerStegProps) {
+  return (
+    <ArbeidstakerStegLoader id={id}>
+      {(skjema) => <TilleggsopplysningerStegContent skjema={skjema} />}
+    </ArbeidstakerStegLoader>
   );
 }
