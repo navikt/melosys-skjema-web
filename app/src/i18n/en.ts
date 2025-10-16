@@ -14,6 +14,7 @@ export const en = {
       neste: "Next",
       fjern: "Remove",
       leggTil: "Add",
+      endreSvar: "Edit answers",
       pakrevd: "required",
       forrigeSteg: "Previous step",
       nesteSteg: "Next step",
@@ -79,11 +80,13 @@ export const en = {
     },
     norskeVirksomheterFormPart: {
       norskVirksomhet: "Norwegian company",
+      norskeVirksomheter: "Norwegian companies",
       organisasjonsnummer: "Organization number",
       leggTilNorskVirksomhet: "Add Norwegian company",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",
+      utenlandskeVirksomheter: "Foreign companies",
       navnPaVirksomhet: "Company name",
       organisasjonsnummerEllerRegistreringsnummerValgfritt:
         "Organization number or registration number (optional)",
@@ -194,6 +197,7 @@ export const en = {
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
     },
+    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
     arbeidsgiverSteg: {
       tittel: "The Employer",
       arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
@@ -207,7 +211,7 @@ export const en = {
         "Public enterprises are state bodies and subordinate enterprises, for example ministries and universities.",
       erArbeidsgiverenEtBemanningsEllerVikarbyra:
         "Is the employer a staffing or temporary work agency?",
-      opprettholderArbeidsgivereVanligDriftINorge:
+      opprettholderArbeidsgiverenVanligDriftINorge:
         "Does the employer maintain normal operations in Norway?",
       medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
         "By this we mean that the employer still has activity and employees working in Norway during the period.",

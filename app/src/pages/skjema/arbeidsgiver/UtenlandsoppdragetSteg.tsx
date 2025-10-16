@@ -15,17 +15,15 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import {
-  ArbeidsgiversSkjemaDto,
-  UtenlandsoppdragetDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "./types.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
-const stepKey = "utenlandsoppdraget";
+export const stepKey = "utenlandsoppdraget";
 
 // Date range constants for assignment period selection
 const YEARS_BACK_FROM_CURRENT = 1;
@@ -33,13 +31,7 @@ const YEARS_FORWARD_FROM_CURRENT = 5;
 
 type UtenlandsoppdragFormData = z.infer<typeof utenlandsoppdragSchema>;
 
-interface UtenlandsoppdragetStegContentProps {
-  skjema: ArbeidsgiversSkjemaDto;
-}
-
-function UtenlandsoppdragetStegContent({
-  skjema,
-}: UtenlandsoppdragetStegContentProps) {
+function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();

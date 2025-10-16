@@ -101,7 +101,7 @@ export interface ArbeidstakerensLonnDto {
 export interface ArbeidsgiverensVirksomhetINorgeDto {
   erArbeidsgiverenOffentligVirksomhet: boolean;
   erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
-  opprettholderArbeidsgivereVanligDrift?: boolean;
+  opprettholderArbeidsgiverenVanligDrift?: boolean;
 }
 
 export interface ArbeidsgiverenDto {

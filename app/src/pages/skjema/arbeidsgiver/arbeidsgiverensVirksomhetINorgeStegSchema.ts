@@ -8,7 +8,7 @@ const baseArbeidsgiverensVirksomhetSchema = z.object({
     })
     .nullish(),
   erArbeidsgiverenBemanningsEllerVikarbyraa: z.boolean().nullish(),
-  opprettholderArbeidsgivereVanligDrift: z.boolean().nullish(),
+  opprettholderArbeidsgiverenVanligDrift: z.boolean().nullish(),
 });
 
 type BaseArbeidsgiverensVirksomhetFormData = z.infer<
@@ -32,8 +32,8 @@ function validerVanligDriftPakrevd(
 ) {
   if (data.erArbeidsgiverenOffentligVirksomhet === false) {
     return (
-      data.opprettholderArbeidsgivereVanligDrift !== undefined &&
-      data.opprettholderArbeidsgivereVanligDrift !== null
+      data.opprettholderArbeidsgiverenVanligDrift !== undefined &&
+      data.opprettholderArbeidsgiverenVanligDrift !== null
     );
   }
   return true;
@@ -48,10 +48,10 @@ export const arbeidsgiverensVirksomhetSchema =
         data.erArbeidsgiverenOffentligVirksomhet === true
           ? undefined
           : data.erArbeidsgiverenBemanningsEllerVikarbyraa,
-      opprettholderArbeidsgivereVanligDrift:
+      opprettholderArbeidsgiverenVanligDrift:
         data.erArbeidsgiverenOffentligVirksomhet === true
           ? undefined
-          : data.opprettholderArbeidsgivereVanligDrift,
+          : data.opprettholderArbeidsgiverenVanligDrift,
     }))
     .refine(validerBemanningsEllerVikarbyraaPakrevd, {
       message:
@@ -61,5 +61,5 @@ export const arbeidsgiverensVirksomhetSchema =
     .refine(validerVanligDriftPakrevd, {
       message:
         "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge",
-      path: ["opprettholderArbeidsgivereVanligDrift"],
+      path: ["opprettholderArbeidsgiverenVanligDrift"],
     });

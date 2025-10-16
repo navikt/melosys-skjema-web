@@ -14,6 +14,7 @@ export const nb = {
       neste: "Neste",
       fjern: "Fjern",
       leggTil: "Legg til",
+      endreSvar: "Endre svar",
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
@@ -78,11 +79,13 @@ export const nb = {
     },
     norskeVirksomheterFormPart: {
       norskVirksomhet: "Norsk virksomhet",
+      norskeVirksomheter: "Norske virksomheter",
       organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk virksomhet",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",
+      utenlandskeVirksomheter: "Utenlandske virksomheter",
       navnPaVirksomhet: "Navn på virksomhet",
       organisasjonsnummerEllerRegistreringsnummerValgfritt:
         "Organisasjonsnummer eller registreringsnummer (valgfritt)",
@@ -190,6 +193,7 @@ export const nb = {
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
     },
+    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
     arbeidsgiverSteg: {
       tittel: "Arbeidsgiveren",
       arbeidsgiverensOrganisasjonsnummer: "Arbeidsgiverens organisasjonsnummer",
@@ -203,7 +207,7 @@ export const nb = {
         "Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter.",
       erArbeidsgiverenEtBemanningsEllerVikarbyra:
         "Er arbeidsgiveren et bemannings- eller vikarbyrå?",
-      opprettholderArbeidsgivereVanligDriftINorge:
+      opprettholderArbeidsgiverenVanligDriftINorge:
         "Opprettholder arbeidsgiveren vanlig drift i Norge?",
       medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
         "Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden.",

@@ -12,23 +12,19 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsgiverSchema } from "./arbeidsgiverStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "./types.ts";
 
-const stepKey = "arbeidsgiveren";
+export const stepKey = "arbeidsgiveren";
 
 type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
 
-interface ArbeidsgiverStegContentProps {
-  skjema: ArbeidsgiversSkjemaDto;
-}
-
-function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverStegContentProps) {
+function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();

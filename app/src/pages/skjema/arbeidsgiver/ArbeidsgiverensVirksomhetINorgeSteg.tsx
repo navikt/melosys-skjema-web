@@ -12,28 +12,22 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import {
-  ArbeidsgiverensVirksomhetINorgeDto,
-  ArbeidsgiversSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "./types.ts";
 
-const stepKey = "arbeidsgiverens-virksomhet-i-norge";
+export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 
 type ArbeidsgiverensVirksomhetFormData = z.infer<
   typeof arbeidsgiverensVirksomhetSchema
 >;
 
-interface ArbeidsgiverensVirksomhetINorgeStegContentProps {
-  skjema: ArbeidsgiversSkjemaDto;
-}
-
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
-}: ArbeidsgiverensVirksomhetINorgeStegContentProps) {
+}: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -116,9 +110,9 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
                 description={t(
                   "arbeidsgiverensVirksomhetINorgeSteg.medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden",
                 )}
-                formFieldName="opprettholderArbeidsgivereVanligDrift"
+                formFieldName="opprettholderArbeidsgiverenVanligDrift"
                 legend={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgivereVanligDriftINorge",
+                  "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge",
                 )}
               />
             </>

@@ -5,3 +5,9 @@ export function useTranslateError() {
 
   return (error?: string) => error && t(error);
 }
+
+export function useBooleanToJaNei() {
+  const { t } = useTranslation();
+
+  return (value: boolean) => (value ? t("felles.ja") : t("felles.nei"));
+}
