@@ -58,7 +58,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre arbeidsgiverinfo. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 

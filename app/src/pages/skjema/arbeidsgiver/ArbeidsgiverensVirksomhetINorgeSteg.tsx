@@ -63,7 +63,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre virksomhetsinformasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 

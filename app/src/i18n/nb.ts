@@ -4,6 +4,8 @@ export const nb = {
       laster: "Laster...",
       feil: "Det oppstod en feil",
       brukerinfoMangler: "Brukerinfo mangler",
+      kunneIkkeOppretteSkjema: "Kunne ikke opprette skjema. Prøv igjen.",
+      manglerOrganisasjonsnummer: "Mangler organisasjonsnummer",
       lagre: "Lagre",
       lagreOgFortsett: "Lagre og fortsett",
       sendSoknad: "Send søknad",

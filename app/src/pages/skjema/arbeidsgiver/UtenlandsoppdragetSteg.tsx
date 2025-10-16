@@ -91,7 +91,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre utenlandsoppdrag-informasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 

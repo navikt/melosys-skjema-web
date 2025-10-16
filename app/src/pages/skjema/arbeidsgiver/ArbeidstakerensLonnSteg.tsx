@@ -67,7 +67,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre lønn-informasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 
