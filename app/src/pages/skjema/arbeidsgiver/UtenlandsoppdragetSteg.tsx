@@ -109,6 +109,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: registerUtenlandsoppdragMutation.isPending,
             },
           }}
         >

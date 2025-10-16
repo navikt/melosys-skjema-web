@@ -81,6 +81,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: registerVirksomhetMutation.isPending,
             },
           }}
         >

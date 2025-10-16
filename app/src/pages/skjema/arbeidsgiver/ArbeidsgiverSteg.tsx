@@ -75,6 +75,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           customNesteKnapp: {
             tekst: t("felles.lagreOgFortsett"),
             type: "submit",
+            loading: registerArbeidsgiverMutation.isPending,
           },
         }}
       >
