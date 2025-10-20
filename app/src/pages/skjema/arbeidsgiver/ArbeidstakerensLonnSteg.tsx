@@ -10,6 +10,7 @@ import { z } from "zod";
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
+import { useInvalidateArbeidsgiverSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiverSkjemaQuery.ts";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -31,6 +32,8 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const invalidateArbeidsgiverSkjemaQuery =
+    useInvalidateArbeidsgiverSkjemaQuery();
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakerensLonn;
 
@@ -58,6 +61,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       return postArbeidstakerensLonn(skjema.id, data as ArbeidstakerensLonnDto);
     },
     onSuccess: () => {
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({

@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { useInvalidateArbeidsgiverSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiverSkjemaQuery.ts";
 import { postArbeidsgiveren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -28,6 +29,8 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const invalidateArbeidsgiverSkjemaQuery =
+    useInvalidateArbeidsgiverSkjemaQuery();
 
   const valgtRolle = getValgtRolle();
 
@@ -49,6 +52,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
         organisasjonNavn: valgtRolle?.navn || "",
       }),
     onSuccess: () => {
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
