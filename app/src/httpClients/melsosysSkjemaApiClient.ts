@@ -40,8 +40,8 @@ export const getSkjemaAsArbeidsgiverQuery = (skjemaId: string) =>
   queryOptions<ArbeidsgiversSkjemaDto>({
     queryKey: ["skjema", skjemaId],
     queryFn: () => fetchSkjemaAsArbeidsgiver(skjemaId),
-    staleTime: 0,
-    gcTime: 0,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
 async function fetchSkjemaAsArbeidsgiver(

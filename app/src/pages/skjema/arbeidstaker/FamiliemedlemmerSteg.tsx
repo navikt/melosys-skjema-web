@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GuidePanel } from "@navikt/ds-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postFamiliemedlemmer } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import {
@@ -35,7 +36,8 @@ function FamiliemedlemmerStegContent({
 }: FamiliemedlemmerStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
+  const invalidateArbeidstakerSkjemaQuery =
+    useInvalidateArbeidstakersSkjemaQuery();
 
   const lagretSkjemadataForSteg = skjema.data?.familiemedlemmer;
 
@@ -59,9 +61,7 @@ function FamiliemedlemmerStegContent({
       return postFamiliemedlemmer(skjema.id, data as FamiliemedlemmerDto);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["arbeidstaker-skjema", skjema.id],
-      });
+      invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({

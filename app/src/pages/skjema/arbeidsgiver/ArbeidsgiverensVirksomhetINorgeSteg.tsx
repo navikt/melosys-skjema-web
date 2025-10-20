@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -30,6 +31,8 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
 }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const invalidateArbeidsgiverSkjemaQuery =
+    useInvalidateArbeidsgiversSkjemaQuery();
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
 
@@ -54,6 +57,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
       );
     },
     onSuccess: () => {
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
@@ -63,7 +67,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre virksomhetsinformasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 
@@ -81,6 +85,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: registerVirksomhetMutation.isPending,
             },
           }}
         >

@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidsgiveren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -28,6 +29,8 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const invalidateArbeidsgiverSkjemaQuery =
+    useInvalidateArbeidsgiversSkjemaQuery();
 
   const valgtRolle = getValgtRolle();
 
@@ -49,6 +52,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
         organisasjonNavn: valgtRolle?.navn || "",
       }),
     onSuccess: () => {
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
@@ -58,7 +62,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre arbeidsgiverinfo. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 
@@ -75,6 +79,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           customNesteKnapp: {
             tekst: t("felles.lagreOgFortsett"),
             type: "submit",
+            loading: registerArbeidsgiverMutation.isPending,
           },
         }}
       >

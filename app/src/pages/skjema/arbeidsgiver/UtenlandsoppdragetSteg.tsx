@@ -10,6 +10,7 @@ import { z } from "zod";
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -35,6 +36,8 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const invalidateArbeidsgiverSkjemaQuery =
+    useInvalidateArbeidsgiversSkjemaQuery();
 
   const lagretSkjemadataForSteg = skjema.data?.utenlandsoppdraget;
 
@@ -82,6 +85,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       return postUtenlandsoppdraget(skjema.id, apiPayload);
     },
     onSuccess: () => {
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
@@ -91,7 +95,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre utenlandsoppdrag-informasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 
@@ -109,6 +113,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: registerUtenlandsoppdragMutation.isPending,
             },
           }}
         >

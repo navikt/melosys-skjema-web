@@ -10,6 +10,7 @@ import { z } from "zod";
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
+import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -31,6 +32,8 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const invalidateArbeidsgiverSkjemaQuery =
+    useInvalidateArbeidsgiversSkjemaQuery();
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakerensLonn;
 
@@ -58,6 +61,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       return postArbeidstakerensLonn(skjema.id, data as ArbeidstakerensLonnDto);
     },
     onSuccess: () => {
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
@@ -67,7 +71,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       }
     },
     onError: () => {
-      toast.error("Kunne ikke lagre lønn-informasjon. Prøv igjen.");
+      toast.error(t("felles.feil"));
     },
   });
 
@@ -108,6 +112,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
+              loading: registerArbeidstakerLonnMutation.isPending,
             },
           }}
         >

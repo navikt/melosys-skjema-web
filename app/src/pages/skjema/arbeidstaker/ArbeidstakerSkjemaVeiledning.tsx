@@ -25,7 +25,7 @@ export function ArbeidstakerSkjemaVeiledning() {
       }
     },
     onError: () => {
-      toast.error(t("felles.feil"));
+      toast.error(t("felles.kunneIkkeOppretteSkjema"));
     },
   });
 
