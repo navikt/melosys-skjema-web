@@ -10,7 +10,7 @@ import { z } from "zod";
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
-import { useInvalidateArbeidsgiverSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiverSkjemaQuery.ts";
+import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -33,7 +33,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery =
-    useInvalidateArbeidsgiverSkjemaQuery();
+    useInvalidateArbeidsgiversSkjemaQuery();
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakerensLonn;
 

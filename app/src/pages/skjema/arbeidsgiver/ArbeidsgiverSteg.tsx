@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { useInvalidateArbeidsgiverSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiverSkjemaQuery.ts";
+import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidsgiveren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -30,7 +30,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery =
-    useInvalidateArbeidsgiverSkjemaQuery();
+    useInvalidateArbeidsgiversSkjemaQuery();
 
   const valgtRolle = getValgtRolle();
 

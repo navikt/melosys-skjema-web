@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { useInvalidateArbeidsgiverSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiverSkjemaQuery.ts";
+import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
@@ -32,7 +32,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery =
-    useInvalidateArbeidsgiverSkjemaQuery();
+    useInvalidateArbeidsgiversSkjemaQuery();
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
 

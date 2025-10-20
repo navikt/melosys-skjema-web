@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, TextField, VStack } from "@navikt/ds-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
+import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { postArbeidstakeren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
@@ -43,7 +44,8 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const queryClient = useQueryClient();
+  const invalidateArbeidstakerSkjemaQuery =
+    useInvalidateArbeidstakersSkjemaQuery();
 
   const {
     data: userInfo,
@@ -88,9 +90,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
       return postArbeidstakeren(skjema.id, data as ArbeidstakerenDto);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["arbeidstaker-skjema", skjema.id],
-      });
+      invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
