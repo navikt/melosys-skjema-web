@@ -36,6 +36,10 @@ jobs:
         working-directory: app
         run: npm run check-types
 
+      - name: Install Playwright Browsers
+        working-directory: app
+        run: npx playwright install chromium
+
       - name: Run tests
         working-directory: app
         run: npm run test:e2e
