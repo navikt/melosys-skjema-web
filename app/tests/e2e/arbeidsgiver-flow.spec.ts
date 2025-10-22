@@ -417,20 +417,4 @@ test.describe("Arbeidsgiver komplett flyt", () => {
         : nb.translation.felles.nei,
     );
   });
-
-  // test("skal vise valideringsfeil for påkrevde felt", async ({ page }) => {
-  //   await page.goto("/skjema/arbeidsgiver");
-  //   await page.getByRole("button", { name: "Start søknad" }).click();
-  //
-  //   // Prøv å sende inn uten å fylle ut påkrevde felt
-  //   await page.getByRole("button", { name: "Lagre og fortsett" }).click();
-  //
-  //   // Skal vise valideringsfeil
-  //   await expect(page.getByText("påkrevd")).toBeVisible();
-  //
-  //   // Skal forbli på samme side
-  //   await expect(page).toHaveURL(
-  //     `/skjema/arbeidsgiver/${testArbeidsgiverSkjema.id}/arbeidsgiveren`,
-  //   );
-  // });
 });
