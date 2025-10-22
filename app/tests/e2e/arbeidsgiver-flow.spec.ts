@@ -295,8 +295,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
     page,
   }) => {
-    const skjemaBaseRoute = `/skjema/arbeidsgiver/${testArbeidsgiverSkjema.id}`;
-
     const arbeidsgiverenData: ArbeidsgiverenDto = {
       organisasjonsnummer: testOrganization.orgnr,
       organisasjonNavn: testOrganization.navn,
