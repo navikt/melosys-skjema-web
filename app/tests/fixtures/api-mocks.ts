@@ -165,13 +165,6 @@ export async function mockFetchArbeidstakerSkjema(
           contentType: "application/json",
           body: JSON.stringify(skjemaDto),
         });
-      } else if (route.request().method() === "POST") {
-        // Mock all POST endpoints for arbeidstaker steps
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
       }
     },
   );
