@@ -9,7 +9,7 @@ import {
 } from "../../src/types/melosysSkjemaTypes";
 import {
   mockFetchArbeidsgiverSkjema,
-  setupApiMocks,
+  setupApiMocksForArbeidsgiver,
 } from "../fixtures/api-mocks";
 import {
   formFieldValues,
@@ -19,7 +19,9 @@ import {
 
 test.describe("Arbeidsgiver komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
-    await setupApiMocks(page, testArbeidsgiverSkjema.id);
+    await setupApiMocksForArbeidsgiver(page, testArbeidsgiverSkjema, [
+      testOrganization,
+    ]);
   });
 
   const skjemaBaseRoute = `/skjema/arbeidsgiver/${testArbeidsgiverSkjema.id}`;

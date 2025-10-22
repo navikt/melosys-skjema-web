@@ -8,7 +8,6 @@ import type {
 import {
   testArbeidsgiverSkjema,
   testArbeidstakerSkjema,
-  testOrganization,
   testUserInfo,
 } from "./test-data";
 
@@ -183,16 +182,18 @@ export async function mockSubmitSkjema(page: Page) {
   );
 }
 
-export async function setupApiMocks(page: Page, skjemaId: string) {
-  await mockHentTilganger(page, [testOrganization]);
+export async function setupApiMocksForArbeidsgiver(
+  page: Page,
+  skjema: ArbeidsgiversSkjemaDto,
+  tilganger: OrganisasjonDto[],
+) {
+  await mockHentTilganger(page, tilganger);
   await mockUserInfo(page);
   await mockCreateArbeidsgiverSkjema(page);
-  await mockCreateArbeidstakerSkjema(page);
-  await mockFetchArbeidsgiverSkjema(page, testArbeidsgiverSkjema);
-  await mockPostArbeidsgiveren(page, skjemaId);
-  await mockPostVirksomhetINorge(page, skjemaId);
-  await mockPostUtenlandsoppdraget(page, skjemaId);
-  await mockPostArbeidstakerensLonn(page, skjemaId);
-  await mockFetchArbeidstakerSkjema(page, testArbeidstakerSkjema);
+  await mockFetchArbeidsgiverSkjema(page, skjema);
+  await mockPostArbeidsgiveren(page, skjema.id);
+  await mockPostVirksomhetINorge(page, skjema.id);
+  await mockPostUtenlandsoppdraget(page, skjema.id);
+  await mockPostArbeidstakerensLonn(page, skjema.id);
   await mockSubmitSkjema(page);
 }
