@@ -142,3 +142,5 @@ vite.config.ts.timestamp-*
 
 # IntelliJ IDEA
 .idea
+/app/playwright-report/
+/app/test-results/
