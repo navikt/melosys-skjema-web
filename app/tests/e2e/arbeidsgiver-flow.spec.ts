@@ -18,6 +18,7 @@ import {
 } from "../fixtures/test-data";
 import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
+import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 
 test.describe("Arbeidsgiver komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
@@ -53,35 +54,27 @@ test.describe("Arbeidsgiver komplett flyt", () => {
   test("skal fylle ut arbeidsgiveren steg og gjøre forventet POST request", async ({
     page,
   }) => {
+    const arbeidsgiverStegPage = new ArbeidsgiverenStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
     // Sett valgt rolle i session storage
-    await page.goto("/");
-    await page.evaluate((org) => {
-      sessionStorage.setItem("valgtRolle", JSON.stringify(org));
-    }, testOrganization);
+    await arbeidsgiverStegPage.setValgtRolle(testOrganization);
 
     // Naviger direkte til steget
-    await page.goto(`${skjemaBaseRoute}/arbeidsgiveren`);
+    await arbeidsgiverStegPage.goto();
 
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.arbeidsgiverSteg.tittel,
-      }),
-    ).toBeVisible();
+    await arbeidsgiverStegPage.assertIsVisible();
 
     // Verifiser at organisasjonsnummer er forhåndsutfylt
-    await expect(
-      page.getByLabel(
-        nb.translation.arbeidsgiverSteg.arbeidsgiverensOrganisasjonsnummer,
-      ),
-    ).toHaveValue(testOrganization.orgnr);
+    await arbeidsgiverStegPage.assertOrganisasjonsnummerValue(
+      testOrganization.orgnr,
+    );
 
     // Lagre og fortsett
-    const lagreArbeidsgiverenRequest = page.waitForRequest(
-      `${apiBaseUrlWithSkjemaId}/arbeidsgiveren`,
-    );
-    await page
-      .getByRole("button", { name: nb.translation.felles.lagreOgFortsett })
-      .click();
+    const lagreArbeidsgiverenRequest = arbeidsgiverStegPage.waitForApiRequest();
+    await arbeidsgiverStegPage.lagreOgFortsett();
 
     // Verifiser forventet API kall
     const lagreArbeidsgiverenApiCall = await lagreArbeidsgiverenRequest;
@@ -96,9 +89,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     );
 
     // Verifiser navigerering til neste steg
-    await expect(page).toHaveURL(
-      `${skjemaBaseRoute}/arbeidsgiverens-virksomhet-i-norge`,
-    );
+    await arbeidsgiverStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut arbeidsgiverens virksomhet i Norge steg og gjøre forventet POST request", async ({
