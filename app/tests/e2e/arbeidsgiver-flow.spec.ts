@@ -20,6 +20,7 @@ import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
 import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
+import { ArbeidstakerensLonnStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
 import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidsgiver/utenlandsoppdraget-steg.page";
 
 test.describe("Arbeidsgiver komplett flyt", () => {
@@ -181,36 +182,22 @@ test.describe("Arbeidsgiver komplett flyt", () => {
   test("skal fylle ut arbeidstakerens lønn steg og gjøre forventet POST request", async ({
     page,
   }) => {
-    // Naviger direkte til steget
-    await page.goto(`${skjemaBaseRoute}/arbeidstakerens-lonn`);
-
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.arbeidstakerenslonnSteg.tittel,
-      }),
-    ).toBeVisible();
-
-    // Svar på spørsmål
-    await page
-      .getByRole("group", {
-        name: nb.translation.arbeidstakerenslonnSteg
-          .utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden,
-      })
-      .getByRole("radio", { name: nb.translation.felles.ja })
-      .click();
-
-    // Lagre og fortsett
-    const lagreArbeidstakerensLonnRequest = page.waitForRequest(
-      `${apiBaseUrlWithSkjemaId}/arbeidstakerens-lonn`,
+    const arbeidstakerensLonnStegPage = new ArbeidstakerensLonnStegPage(
+      page,
+      testArbeidsgiverSkjema,
     );
 
-    await page
-      .getByRole("button", { name: nb.translation.felles.lagreOgFortsett })
-      .click();
+    // Naviger direkte til steget
+    await arbeidstakerensLonnStegPage.goto();
 
-    // Verifiser forventet API kall
+    await arbeidstakerensLonnStegPage.assertIsVisible();
+
+    // Svar på spørsmål
+    await arbeidstakerensLonnStegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.JA.click();
+
+    // Lagre og fortsett
     const lagreArbeidstakerensLonnApiCall =
-      await lagreArbeidstakerensLonnRequest;
+      await arbeidstakerensLonnStegPage.lagreOgFortsettAndWaitForApiRequest();
 
     const expectedArbeidstakerensLonnPayload: ArbeidstakerensLonnDto = {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
@@ -221,7 +208,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     );
 
     // Verifiser navigerering til neste steg
-    await expect(page).toHaveURL(`${skjemaBaseRoute}/oppsummering`);
+    await arbeidstakerensLonnStegPage.assertNavigatedToNextStep();
   });
 
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({

@@ -24,41 +24,72 @@ export class UtenlandsoppdragetStegPage {
       name: nb.translation.utenlandsoppdragetSteg.tittel,
     });
     this.utsendelseLandCombobox = page.getByRole("combobox", {
-      name: nb.translation.utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil,
+      name: nb.translation.utenlandsoppdragetSteg
+        .hvilketLandSendesArbeidstakerenTil,
     });
-    this.fraDatoInput = page.getByLabel(nb.translation.utenlandsoppdragetSteg.fraDato);
-    this.tilDatoInput = page.getByLabel(nb.translation.utenlandsoppdragetSteg.tilDato);
+    this.fraDatoInput = page.getByLabel(
+      nb.translation.utenlandsoppdragetSteg.fraDato,
+    );
+    this.tilDatoInput = page.getByLabel(
+      nb.translation.utenlandsoppdragetSteg.tilDato,
+    );
 
     const arbeidsgiverHarOppdragILandetGroup = page.getByRole("group", {
-      name: nb.translation.utenlandsoppdragetSteg.harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil,
+      name: nb.translation.utenlandsoppdragetSteg
+        .harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil,
     });
     this.arbeidsgiverHarOppdragILandetRadioGroup = {
-      JA: arbeidsgiverHarOppdragILandetGroup.getByRole("radio", { name: nb.translation.felles.ja }),
-      NEI: arbeidsgiverHarOppdragILandetGroup.getByRole("radio", { name: nb.translation.felles.nei }),
+      JA: arbeidsgiverHarOppdragILandetGroup.getByRole("radio", {
+        name: nb.translation.felles.ja,
+      }),
+      NEI: arbeidsgiverHarOppdragILandetGroup.getByRole("radio", {
+        name: nb.translation.felles.nei,
+      }),
     };
 
-    const arbeidstakerBleAnsattForUtenlandsoppdragetGroup = page.getByRole("group", {
-      name: nb.translation.utenlandsoppdragetSteg.bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget,
-    });
+    const arbeidstakerBleAnsattForUtenlandsoppdragetGroup = page.getByRole(
+      "group",
+      {
+        name: nb.translation.utenlandsoppdragetSteg
+          .bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget,
+      },
+    );
     this.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup = {
-      JA: arbeidstakerBleAnsattForUtenlandsoppdragetGroup.getByRole("radio", { name: nb.translation.felles.ja }),
-      NEI: arbeidstakerBleAnsattForUtenlandsoppdragetGroup.getByRole("radio", { name: nb.translation.felles.nei }),
+      JA: arbeidstakerBleAnsattForUtenlandsoppdragetGroup.getByRole("radio", {
+        name: nb.translation.felles.ja,
+      }),
+      NEI: arbeidstakerBleAnsattForUtenlandsoppdragetGroup.getByRole("radio", {
+        name: nb.translation.felles.nei,
+      }),
     };
 
-    const arbeidstakerForblirAnsattIHelePeriodenGroup = page.getByRole("group", {
-      name: nb.translation.utenlandsoppdragetSteg.vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden,
-    });
+    const arbeidstakerForblirAnsattIHelePeriodenGroup = page.getByRole(
+      "group",
+      {
+        name: nb.translation.utenlandsoppdragetSteg
+          .vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden,
+      },
+    );
     this.arbeidstakerForblirAnsattIHelePeriodenRadioGroup = {
-      JA: arbeidstakerForblirAnsattIHelePeriodenGroup.getByRole("radio", { name: nb.translation.felles.ja }),
-      NEI: arbeidstakerForblirAnsattIHelePeriodenGroup.getByRole("radio", { name: nb.translation.felles.nei }),
+      JA: arbeidstakerForblirAnsattIHelePeriodenGroup.getByRole("radio", {
+        name: nb.translation.felles.ja,
+      }),
+      NEI: arbeidstakerForblirAnsattIHelePeriodenGroup.getByRole("radio", {
+        name: nb.translation.felles.nei,
+      }),
     };
 
     const arbeidstakerErstatterAnnenPersonGroup = page.getByRole("group", {
-      name: nb.translation.utenlandsoppdragetSteg.erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet,
+      name: nb.translation.utenlandsoppdragetSteg
+        .erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet,
     });
     this.arbeidstakerErstatterAnnenPersonRadioGroup = {
-      JA: arbeidstakerErstatterAnnenPersonGroup.getByRole("radio", { name: nb.translation.felles.ja }),
-      NEI: arbeidstakerErstatterAnnenPersonGroup.getByRole("radio", { name: nb.translation.felles.nei }),
+      JA: arbeidstakerErstatterAnnenPersonGroup.getByRole("radio", {
+        name: nb.translation.felles.ja,
+      }),
+      NEI: arbeidstakerErstatterAnnenPersonGroup.getByRole("radio", {
+        name: nb.translation.felles.nei,
+      }),
     };
 
     this.lagreOgFortsettButton = page.getByRole("button", {
@@ -67,7 +98,9 @@ export class UtenlandsoppdragetStegPage {
   }
 
   async goto() {
-    await this.page.goto(`/skjema/arbeidsgiver/${this.skjema.id}/utenlandsoppdraget`);
+    await this.page.goto(
+      `/skjema/arbeidsgiver/${this.skjema.id}/utenlandsoppdraget`,
+    );
   }
 
   async assertIsVisible() {
