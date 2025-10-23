@@ -1,6 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { test } from "@playwright/test";
 
-import { nb } from "../../src/i18n/nb";
 import {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
@@ -16,6 +15,13 @@ import {
   testArbeidsgiverSkjema,
   testOrganization,
 } from "../fixtures/test-data";
+import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
+import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
+import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
+import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
+import { ArbeidstakerensLonnStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
+import { OppsummeringStegPage } from "../pages/skjema/arbeidsgiver/oppsummering-steg.page";
+import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidsgiver/utenlandsoppdraget-steg.page";
 
 test.describe("Arbeidsgiver komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
@@ -24,212 +30,125 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     ]);
   });
 
-  const skjemaBaseRoute = `/skjema/arbeidsgiver/${testArbeidsgiverSkjema.id}`;
-  const apiBaseUrlWithSkjemaId = `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${testArbeidsgiverSkjema.id}`;
-
   test("skal velge rolle som arbeidsgiver og starte søknad", async ({
     page,
   }) => {
-    // Start fra rollevelger og velg organisasjon
-    await page.goto("/rollevelger");
+    const rollevelgerPage = new RollevelgerPage(page);
+    const veiledningPage = new ArbeidsgiverSkjemaVeiledningPage(page);
+
+    // Start fra rollevelger og velg organisasjons
+    await rollevelgerPage.goto();
 
     // Velg test organisasjonen (navigerer direkte)
-    await page.getByText(testOrganization.navn).click();
+    await rollevelgerPage.selectOrganization(testOrganization.navn);
 
     // Skal vise veiledningsside
-    await expect(
-      page.getByRole("button", { name: nb.translation.felles.startSoknad }),
-    ).toBeVisible();
-    await page
-      .getByRole("button", { name: nb.translation.felles.startSoknad })
-      .click();
+    await veiledningPage.assertStartSoknadButtonVisible();
+    await veiledningPage.startSoknad();
 
-    await expect(page).toHaveURL(`${skjemaBaseRoute}/arbeidsgiveren`);
+    await veiledningPage.assertNavigatedToArbeidsgiveren(
+      testArbeidsgiverSkjema.id,
+    );
   });
 
   test("skal fylle ut arbeidsgiveren steg og gjøre forventet POST request", async ({
     page,
   }) => {
+    const arbeidsgiverStegPage = new ArbeidsgiverenStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
     // Sett valgt rolle i session storage
-    await page.goto("/");
-    await page.evaluate((org) => {
-      sessionStorage.setItem("valgtRolle", JSON.stringify(org));
-    }, testOrganization);
+    await arbeidsgiverStegPage.setValgtRolle(testOrganization);
 
     // Naviger direkte til steget
-    await page.goto(`${skjemaBaseRoute}/arbeidsgiveren`);
+    await arbeidsgiverStegPage.goto();
 
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.arbeidsgiverSteg.tittel,
-      }),
-    ).toBeVisible();
+    await arbeidsgiverStegPage.assertIsVisible();
 
     // Verifiser at organisasjonsnummer er forhåndsutfylt
-    await expect(
-      page.getByLabel(
-        nb.translation.arbeidsgiverSteg.arbeidsgiverensOrganisasjonsnummer,
-      ),
-    ).toHaveValue(testOrganization.orgnr);
-
-    // Lagre og fortsett
-    const lagreArbeidsgiverenRequest = page.waitForRequest(
-      `${apiBaseUrlWithSkjemaId}/arbeidsgiveren`,
+    await arbeidsgiverStegPage.assertOrganisasjonsnummerValue(
+      testOrganization.orgnr,
     );
-    await page
-      .getByRole("button", { name: nb.translation.felles.lagreOgFortsett })
-      .click();
 
-    // Verifiser forventet API kall
-    const lagreArbeidsgiverenApiCall = await lagreArbeidsgiverenRequest;
-
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedArbeidsgiverPayload: ArbeidsgiverenDto = {
       organisasjonsnummer: testOrganization.orgnr,
       organisasjonNavn: testOrganization.navn,
     };
 
-    expect(lagreArbeidsgiverenApiCall.postDataJSON()).toStrictEqual(
+    await arbeidsgiverStegPage.lagreOgFortsettAndExpectPayload(
       expectedArbeidsgiverPayload,
     );
 
     // Verifiser navigerering til neste steg
-    await expect(page).toHaveURL(
-      `${skjemaBaseRoute}/arbeidsgiverens-virksomhet-i-norge`,
-    );
+    await arbeidsgiverStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut arbeidsgiverens virksomhet i Norge steg og gjøre forventet POST request", async ({
     page,
   }) => {
-    // Naviger direkte til steget
-    await page.goto(`${skjemaBaseRoute}/arbeidsgiverens-virksomhet-i-norge`);
+    const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
 
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg.tittel,
-      }),
-    ).toBeVisible();
+    // Naviger direkte til steget
+    await virksomhetStegPage.goto();
+
+    await virksomhetStegPage.assertIsVisible();
 
     // Svar på spørsmål
-    await page
-      .getByRole("group", {
-        name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg
-          .erArbeidsgiverenEnOffentligVirksomhet,
-      })
-      .getByRole("radio", { name: nb.translation.felles.nei })
-      .click();
+    await virksomhetStegPage.offentligVirksomhetRadioGroup.NEI.click();
+    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
 
-    await page
-      .getByRole("group", {
-        name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg
-          .erArbeidsgiverenEtBemanningsEllerVikarbyra,
-      })
-      .getByRole("radio", { name: nb.translation.felles.nei })
-      .click();
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg
-          .opprettholderArbeidsgiverenVanligDriftINorge,
-      })
-      .getByRole("radio", { name: nb.translation.felles.ja })
-      .click();
-
-    // Lagre og fortsett
-    const lagreArbeidsgiverensVirksomhetINorgeRequest = page.waitForRequest(
-      `${apiBaseUrlWithSkjemaId}/arbeidsgiverens-virksomhet-i-norge`,
-    );
-    await page
-      .getByRole("button", { name: nb.translation.felles.lagreOgFortsett })
-      .click();
-
-    // Verifiser forventet API kall
-    const lagreArbeidsgiverensVirksomhetINorgeApiCall =
-      await lagreArbeidsgiverensVirksomhetINorgeRequest;
-
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedVirksomhetPayload: ArbeidsgiverensVirksomhetINorgeDto = {
       erArbeidsgiverenOffentligVirksomhet: false,
       erArbeidsgiverenBemanningsEllerVikarbyraa: false,
       opprettholderArbeidsgiverenVanligDrift: true,
     };
 
-    expect(
-      lagreArbeidsgiverensVirksomhetINorgeApiCall.postDataJSON(),
-    ).toStrictEqual(expectedVirksomhetPayload);
+    await virksomhetStegPage.lagreOgFortsettAndExpectPayload(
+      expectedVirksomhetPayload,
+    );
 
     // Verifiser navigerering til neste steg
-    await expect(page).toHaveURL(`${skjemaBaseRoute}/utenlandsoppdraget`);
+    await virksomhetStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut utenlandsoppdraget steg og gjøre forventet POST request", async ({
     page,
   }) => {
-    // Naviger direkte til steget
-    await page.goto(`${skjemaBaseRoute}/utenlandsoppdraget`);
+    const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
 
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.utenlandsoppdragetSteg.tittel,
-      }),
-    ).toBeVisible();
+    // Naviger direkte til steget
+    await utenlandsoppdragetStegPage.goto();
+
+    await utenlandsoppdragetStegPage.assertIsVisible();
 
     // Svar på spørsmål
-    await page
-      .getByRole("combobox", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .hvilketLandSendesArbeidstakerenTil,
-      })
-      .selectOption(formFieldValues.utsendelseLand);
-    await page
-      .getByLabel(nb.translation.utenlandsoppdragetSteg.fraDato)
-      .fill(formFieldValues.periodeFra);
-    await page
-      .getByLabel(nb.translation.utenlandsoppdragetSteg.tilDato)
-      .fill(formFieldValues.periodeTil);
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil,
-      })
-      .getByRole("radio", { name: nb.translation.felles.ja })
-      .click();
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget,
-      })
-      .getByRole("radio", { name: nb.translation.felles.nei })
-      .click();
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden,
-      })
-      .getByRole("radio", { name: nb.translation.felles.ja })
-      .click();
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet,
-      })
-      .getByRole("radio", { name: nb.translation.felles.nei })
-      .click();
-
-    // Lagre og fortsett
-    const lagreUtenlandsoppdragetRequest = page.waitForRequest(
-      `${apiBaseUrlWithSkjemaId}/utenlandsoppdraget`,
+    await utenlandsoppdragetStegPage.utsendelseLandCombobox.selectOption(
+      formFieldValues.utsendelseLand,
     );
-    await page
-      .getByRole("button", { name: nb.translation.felles.lagreOgFortsett })
-      .click();
+    await utenlandsoppdragetStegPage.fraDatoInput.fill(
+      formFieldValues.periodeFra,
+    );
+    await utenlandsoppdragetStegPage.tilDatoInput.fill(
+      formFieldValues.periodeTil,
+    );
 
-    // Verifiser forventet API kall
-    const lagreUtenlandsoppdragetApiCall = await lagreUtenlandsoppdragetRequest;
+    await utenlandsoppdragetStegPage.arbeidsgiverHarOppdragILandetRadioGroup.JA.click();
+    await utenlandsoppdragetStegPage.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup.NEI.click();
+    await utenlandsoppdragetStegPage.arbeidstakerForblirAnsattIHelePeriodenRadioGroup.JA.click();
+    await utenlandsoppdragetStegPage.arbeidstakerErstatterAnnenPersonRadioGroup.NEI.click();
 
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetDto = {
       utsendelseLand: formFieldValues.utsendelseLand.value,
       arbeidstakerUtsendelseFraDato: formFieldValues.periodeFraIso,
@@ -240,63 +159,51 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       arbeidstakerErstatterAnnenPerson: false,
     };
 
-    expect(lagreUtenlandsoppdragetApiCall.postDataJSON()).toStrictEqual(
+    await utenlandsoppdragetStegPage.lagreOgFortsettAndExpectPayload(
       expectedUtenlandsoppdragetPayload,
     );
 
     // Verifiser navigerering til neste steg
-    await expect(page).toHaveURL(`${skjemaBaseRoute}/arbeidstakerens-lonn`);
+    await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut arbeidstakerens lønn steg og gjøre forventet POST request", async ({
     page,
   }) => {
-    // Naviger direkte til steget
-    await page.goto(`${skjemaBaseRoute}/arbeidstakerens-lonn`);
-
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.arbeidstakerenslonnSteg.tittel,
-      }),
-    ).toBeVisible();
-
-    // Svar på spørsmål
-    await page
-      .getByRole("group", {
-        name: nb.translation.arbeidstakerenslonnSteg
-          .utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden,
-      })
-      .getByRole("radio", { name: nb.translation.felles.ja })
-      .click();
-
-    // Lagre og fortsett
-    const lagreArbeidstakerensLonnRequest = page.waitForRequest(
-      `${apiBaseUrlWithSkjemaId}/arbeidstakerens-lonn`,
+    const arbeidstakerensLonnStegPage = new ArbeidstakerensLonnStegPage(
+      page,
+      testArbeidsgiverSkjema,
     );
 
-    await page
-      .getByRole("button", { name: nb.translation.felles.lagreOgFortsett })
-      .click();
+    // Naviger direkte til steget
+    await arbeidstakerensLonnStegPage.goto();
 
-    // Verifiser forventet API kall
-    const lagreArbeidstakerensLonnApiCall =
-      await lagreArbeidstakerensLonnRequest;
+    await arbeidstakerensLonnStegPage.assertIsVisible();
 
+    // Svar på spørsmål
+    await arbeidstakerensLonnStegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.JA.click();
+
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedArbeidstakerensLonnPayload: ArbeidstakerensLonnDto = {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
 
-    expect(lagreArbeidstakerensLonnApiCall.postDataJSON()).toStrictEqual(
+    await arbeidstakerensLonnStegPage.lagreOgFortsettAndExpectPayload(
       expectedArbeidstakerensLonnPayload,
     );
 
     // Verifiser navigerering til neste steg
-    await expect(page).toHaveURL(`${skjemaBaseRoute}/oppsummering`);
+    await arbeidstakerensLonnStegPage.assertNavigatedToNextStep();
   });
 
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
     page,
   }) => {
+    const oppsummeringStegPage = new OppsummeringStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
     const arbeidsgiverenData: ArbeidsgiverenDto = {
       organisasjonsnummer: testOrganization.orgnr,
       organisasjonNavn: testOrganization.navn,
@@ -335,88 +242,20 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     });
 
     // Naviger direkte til oppsummering
-    await page.goto(`${skjemaBaseRoute}/oppsummering`);
+    await oppsummeringStegPage.goto();
 
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.oppsummeringSteg.tittel,
-      }),
-    ).toBeVisible();
+    await oppsummeringStegPage.assertIsVisible();
 
     // Verifiser at oppsummeringen viser utfylte data
-
-    // Arbeidsgiveren
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverSteg.arbeidsgiverensOrganisasjonsnummer}") + dd`,
-      ),
-    ).toHaveText(arbeidsgiverenData.organisasjonsnummer);
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverSteg.organisasjonensNavn}") + dd`,
-      ),
-    ).toHaveText(arbeidsgiverenData.organisasjonNavn);
-
-    // Arbeidsgiverens virksomhet i Norge
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidsgiverensVirksomhetINorgeData.erArbeidsgiverenOffentligVirksomhet
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+    await oppsummeringStegPage.assertArbeidsgiverenData(arbeidsgiverenData);
+    await oppsummeringStegPage.assertArbeidsgiverensVirksomhetINorgeData(
+      arbeidsgiverensVirksomhetINorgeData,
     );
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidsgiverensVirksomhetINorgeData.erArbeidsgiverenBemanningsEllerVikarbyraa
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+    await oppsummeringStegPage.assertUtenlandsoppdragetData(
+      utenlandsoppdragetData,
     );
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidsgiverensVirksomhetINorgeData.opprettholderArbeidsgiverenVanligDrift
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
-    );
-
-    // Utenlandsoppdraget
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil}") + dd`,
-      ),
-    ).toHaveText(utenlandsoppdragetData.utsendelseLand);
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.fraDato}") + dd`,
-      ),
-    ).toHaveText(utenlandsoppdragetData.arbeidstakerUtsendelseFraDato);
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.tilDato}") + dd`,
-      ),
-    ).toHaveText(utenlandsoppdragetData.arbeidstakerUtsendelseTilDato);
-
-    // Arbeidstakerens lønn
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidstakerenslonnSteg.utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidstakerensLonnData.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+    await oppsummeringStegPage.assertArbeidstakerensLonnData(
+      arbeidstakerensLonnData,
     );
   });
 });
