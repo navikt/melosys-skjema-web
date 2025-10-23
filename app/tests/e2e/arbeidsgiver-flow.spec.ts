@@ -20,6 +20,7 @@ import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
 import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
+import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidsgiver/utenlandsoppdraget-steg.page";
 
 test.describe("Arbeidsgiver komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
@@ -129,71 +130,35 @@ test.describe("Arbeidsgiver komplett flyt", () => {
   test("skal fylle ut utenlandsoppdraget steg og gjøre forventet POST request", async ({
     page,
   }) => {
-    // Naviger direkte til steget
-    await page.goto(`${skjemaBaseRoute}/utenlandsoppdraget`);
+    const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
 
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.utenlandsoppdragetSteg.tittel,
-      }),
-    ).toBeVisible();
+    // Naviger direkte til steget
+    await utenlandsoppdragetStegPage.goto();
+
+    await utenlandsoppdragetStegPage.assertIsVisible();
 
     // Svar på spørsmål
-    await page
-      .getByRole("combobox", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .hvilketLandSendesArbeidstakerenTil,
-      })
-      .selectOption(formFieldValues.utsendelseLand);
-    await page
-      .getByLabel(nb.translation.utenlandsoppdragetSteg.fraDato)
-      .fill(formFieldValues.periodeFra);
-    await page
-      .getByLabel(nb.translation.utenlandsoppdragetSteg.tilDato)
-      .fill(formFieldValues.periodeTil);
+    await utenlandsoppdragetStegPage.utsendelseLandCombobox.selectOption(
+      formFieldValues.utsendelseLand,
+    );
+    await utenlandsoppdragetStegPage.fraDatoInput.fill(
+      formFieldValues.periodeFra,
+    );
+    await utenlandsoppdragetStegPage.tilDatoInput.fill(
+      formFieldValues.periodeTil,
+    );
 
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil,
-      })
-      .getByRole("radio", { name: nb.translation.felles.ja })
-      .click();
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget,
-      })
-      .getByRole("radio", { name: nb.translation.felles.nei })
-      .click();
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden,
-      })
-      .getByRole("radio", { name: nb.translation.felles.ja })
-      .click();
-
-    await page
-      .getByRole("group", {
-        name: nb.translation.utenlandsoppdragetSteg
-          .erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet,
-      })
-      .getByRole("radio", { name: nb.translation.felles.nei })
-      .click();
+    await utenlandsoppdragetStegPage.arbeidsgiverHarOppdragILandetRadioGroup.JA.click();
+    await utenlandsoppdragetStegPage.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup.NEI.click();
+    await utenlandsoppdragetStegPage.arbeidstakerForblirAnsattIHelePeriodenRadioGroup.JA.click();
+    await utenlandsoppdragetStegPage.arbeidstakerErstatterAnnenPersonRadioGroup.NEI.click();
 
     // Lagre og fortsett
-    const lagreUtenlandsoppdragetRequest = page.waitForRequest(
-      `${apiBaseUrlWithSkjemaId}/utenlandsoppdraget`,
-    );
-    await page
-      .getByRole("button", { name: nb.translation.felles.lagreOgFortsett })
-      .click();
-
-    // Verifiser forventet API kall
-    const lagreUtenlandsoppdragetApiCall = await lagreUtenlandsoppdragetRequest;
+    const lagreUtenlandsoppdragetApiCall =
+      await utenlandsoppdragetStegPage.lagreOgFortsettAndWaitForApiRequest();
 
     const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetDto = {
       utsendelseLand: formFieldValues.utsendelseLand.value,
@@ -210,7 +175,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     );
 
     // Verifiser navigerering til neste steg
-    await expect(page).toHaveURL(`${skjemaBaseRoute}/arbeidstakerens-lonn`);
+    await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut arbeidstakerens lønn steg og gjøre forventet POST request", async ({
