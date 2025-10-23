@@ -16,6 +16,8 @@ import {
   testArbeidsgiverSkjema,
   testOrganization,
 } from "../fixtures/test-data";
+import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
+import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
 
 test.describe("Arbeidsgiver komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
@@ -30,21 +32,22 @@ test.describe("Arbeidsgiver komplett flyt", () => {
   test("skal velge rolle som arbeidsgiver og starte søknad", async ({
     page,
   }) => {
-    // Start fra rollevelger og velg organisasjon
-    await page.goto("/rollevelger");
+    const rollevelgerPage = new RollevelgerPage(page);
+    const veiledningPage = new ArbeidsgiverSkjemaVeiledningPage(page);
+
+    // Start fra rollevelger og velg organisasjons
+    await rollevelgerPage.goto();
 
     // Velg test organisasjonen (navigerer direkte)
-    await page.getByText(testOrganization.navn).click();
+    await rollevelgerPage.selectOrganization(testOrganization.navn);
 
     // Skal vise veiledningsside
-    await expect(
-      page.getByRole("button", { name: nb.translation.felles.startSoknad }),
-    ).toBeVisible();
-    await page
-      .getByRole("button", { name: nb.translation.felles.startSoknad })
-      .click();
+    await veiledningPage.assertStartSoknadButtonVisible();
+    await veiledningPage.startSoknad();
 
-    await expect(page).toHaveURL(`${skjemaBaseRoute}/arbeidsgiveren`);
+    await veiledningPage.assertNavigatedToArbeidsgiveren(
+      testArbeidsgiverSkjema.id,
+    );
   });
 
   test("skal fylle ut arbeidsgiveren steg og gjøre forventet POST request", async ({
