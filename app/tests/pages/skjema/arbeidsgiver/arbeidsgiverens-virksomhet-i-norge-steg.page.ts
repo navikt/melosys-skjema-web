@@ -1,7 +1,10 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../src/i18n/nb";
-import type { ArbeidsgiversSkjemaDto } from "../../../../src/types/melosysSkjemaTypes";
+import type {
+  ArbeidsgiverensVirksomhetINorgeDto,
+  ArbeidsgiversSkjemaDto,
+} from "../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
 export class ArbeidsgiverensVirksomhetINorgeStegPage {
@@ -84,6 +87,14 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     );
     await this.lagreOgFortsett();
     return await requestPromise;
+  }
+
+  async lagreOgFortsettAndExpectPayload(
+    expectedPayload: ArbeidsgiverensVirksomhetINorgeDto,
+  ) {
+    const apiCall = await this.lagreOgFortsettAndWaitForApiRequest();
+    expect(apiCall.postDataJSON()).toStrictEqual(expectedPayload);
+    return apiCall;
   }
 
   async assertNavigatedToNextStep() {

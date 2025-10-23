@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { test } from "@playwright/test";
 
 import {
   ArbeidsgiverenDto,
@@ -72,16 +72,13 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       testOrganization.orgnr,
     );
 
-    // Lagre og fortsett
-    const lagreArbeidsgiverenApiCall =
-      await arbeidsgiverStegPage.lagreOgFortsettAndWaitForApiRequest();
-
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedArbeidsgiverPayload: ArbeidsgiverenDto = {
       organisasjonsnummer: testOrganization.orgnr,
       organisasjonNavn: testOrganization.navn,
     };
 
-    expect(lagreArbeidsgiverenApiCall.postDataJSON()).toStrictEqual(
+    await arbeidsgiverStegPage.lagreOgFortsettAndExpectPayload(
       expectedArbeidsgiverPayload,
     );
 
@@ -107,19 +104,16 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
     await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
 
-    // Lagre og fortsett
-    const lagreArbeidsgiverensVirksomhetINorgeApiCall =
-      await virksomhetStegPage.lagreOgFortsettAndWaitForApiRequest();
-
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedVirksomhetPayload: ArbeidsgiverensVirksomhetINorgeDto = {
       erArbeidsgiverenOffentligVirksomhet: false,
       erArbeidsgiverenBemanningsEllerVikarbyraa: false,
       opprettholderArbeidsgiverenVanligDrift: true,
     };
 
-    expect(
-      lagreArbeidsgiverensVirksomhetINorgeApiCall.postDataJSON(),
-    ).toStrictEqual(expectedVirksomhetPayload);
+    await virksomhetStegPage.lagreOgFortsettAndExpectPayload(
+      expectedVirksomhetPayload,
+    );
 
     // Verifiser navigerering til neste steg
     await virksomhetStegPage.assertNavigatedToNextStep();
@@ -154,10 +148,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await utenlandsoppdragetStegPage.arbeidstakerForblirAnsattIHelePeriodenRadioGroup.JA.click();
     await utenlandsoppdragetStegPage.arbeidstakerErstatterAnnenPersonRadioGroup.NEI.click();
 
-    // Lagre og fortsett
-    const lagreUtenlandsoppdragetApiCall =
-      await utenlandsoppdragetStegPage.lagreOgFortsettAndWaitForApiRequest();
-
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetDto = {
       utsendelseLand: formFieldValues.utsendelseLand.value,
       arbeidstakerUtsendelseFraDato: formFieldValues.periodeFraIso,
@@ -168,7 +159,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       arbeidstakerErstatterAnnenPerson: false,
     };
 
-    expect(lagreUtenlandsoppdragetApiCall.postDataJSON()).toStrictEqual(
+    await utenlandsoppdragetStegPage.lagreOgFortsettAndExpectPayload(
       expectedUtenlandsoppdragetPayload,
     );
 
@@ -192,15 +183,12 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     // Svar på spørsmål
     await arbeidstakerensLonnStegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.JA.click();
 
-    // Lagre og fortsett
-    const lagreArbeidstakerensLonnApiCall =
-      await arbeidstakerensLonnStegPage.lagreOgFortsettAndWaitForApiRequest();
-
+    // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedArbeidstakerensLonnPayload: ArbeidstakerensLonnDto = {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
 
-    expect(lagreArbeidstakerensLonnApiCall.postDataJSON()).toStrictEqual(
+    await arbeidstakerensLonnStegPage.lagreOgFortsettAndExpectPayload(
       expectedArbeidstakerensLonnPayload,
     );
 

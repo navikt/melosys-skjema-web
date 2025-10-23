@@ -2,6 +2,7 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../src/i18n/nb";
 import type {
+  ArbeidsgiverenDto,
   ArbeidsgiversSkjemaDto,
   OrganisasjonDto,
 } from "../../../../src/types/melosysSkjemaTypes";
@@ -58,6 +59,12 @@ export class ArbeidsgiverenStegPage {
     );
     await this.lagreOgFortsettButton.click();
     return await requestPromise;
+  }
+
+  async lagreOgFortsettAndExpectPayload(expectedPayload: ArbeidsgiverenDto) {
+    const apiCall = await this.lagreOgFortsettAndWaitForApiRequest();
+    expect(apiCall.postDataJSON()).toStrictEqual(expectedPayload);
+    return apiCall;
   }
 
   async assertNavigatedToNextStep() {
