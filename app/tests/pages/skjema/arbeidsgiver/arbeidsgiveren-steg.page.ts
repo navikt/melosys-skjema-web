@@ -1,7 +1,10 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../src/i18n/nb";
-import type { ArbeidsgiversSkjemaDto, OrganisasjonDto } from "../../../../src/types/melosysSkjemaTypes";
+import type {
+  ArbeidsgiversSkjemaDto,
+  OrganisasjonDto,
+} from "../../../../src/types/melosysSkjemaTypes";
 
 export class ArbeidsgiverenStegPage {
   readonly page: Page;
@@ -49,10 +52,12 @@ export class ArbeidsgiverenStegPage {
     await this.lagreOgFortsettButton.click();
   }
 
-  async waitForApiRequest() {
-    return this.page.waitForRequest(
+  async lagreOgFortsettAndWaitForApiRequest() {
+    const requestPromise = this.page.waitForRequest(
       `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidsgiveren`,
     );
+    await this.lagreOgFortsettButton.click();
+    return await requestPromise;
   }
 
   async assertNavigatedToNextStep() {
