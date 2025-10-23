@@ -1,6 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-import { nb } from "../../src/i18n/nb";
 import {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
@@ -21,6 +20,7 @@ import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/a
 import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
 import { ArbeidstakerensLonnStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
+import { OppsummeringStegPage } from "../pages/skjema/arbeidsgiver/oppsummering-steg.page";
 import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidsgiver/utenlandsoppdraget-steg.page";
 
 test.describe("Arbeidsgiver komplett flyt", () => {
@@ -29,9 +29,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       testOrganization,
     ]);
   });
-
-  const skjemaBaseRoute = `/skjema/arbeidsgiver/${testArbeidsgiverSkjema.id}`;
-  const apiBaseUrlWithSkjemaId = `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${testArbeidsgiverSkjema.id}`;
 
   test("skal velge rolle som arbeidsgiver og starte søknad", async ({
     page,
@@ -214,6 +211,11 @@ test.describe("Arbeidsgiver komplett flyt", () => {
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
     page,
   }) => {
+    const oppsummeringStegPage = new OppsummeringStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
     const arbeidsgiverenData: ArbeidsgiverenDto = {
       organisasjonsnummer: testOrganization.orgnr,
       organisasjonNavn: testOrganization.navn,
@@ -252,88 +254,20 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     });
 
     // Naviger direkte til oppsummering
-    await page.goto(`${skjemaBaseRoute}/oppsummering`);
+    await oppsummeringStegPage.goto();
 
-    await expect(
-      page.getByRole("heading", {
-        name: nb.translation.oppsummeringSteg.tittel,
-      }),
-    ).toBeVisible();
+    await oppsummeringStegPage.assertIsVisible();
 
     // Verifiser at oppsummeringen viser utfylte data
-
-    // Arbeidsgiveren
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverSteg.arbeidsgiverensOrganisasjonsnummer}") + dd`,
-      ),
-    ).toHaveText(arbeidsgiverenData.organisasjonsnummer);
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverSteg.organisasjonensNavn}") + dd`,
-      ),
-    ).toHaveText(arbeidsgiverenData.organisasjonNavn);
-
-    // Arbeidsgiverens virksomhet i Norge
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidsgiverensVirksomhetINorgeData.erArbeidsgiverenOffentligVirksomhet
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+    await oppsummeringStegPage.assertArbeidsgiverenData(arbeidsgiverenData);
+    await oppsummeringStegPage.assertArbeidsgiverensVirksomhetINorgeData(
+      arbeidsgiverensVirksomhetINorgeData,
     );
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidsgiverensVirksomhetINorgeData.erArbeidsgiverenBemanningsEllerVikarbyraa
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+    await oppsummeringStegPage.assertUtenlandsoppdragetData(
+      utenlandsoppdragetData,
     );
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidsgiverensVirksomhetINorgeData.opprettholderArbeidsgiverenVanligDrift
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
-    );
-
-    // Utenlandsoppdraget
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil}") + dd`,
-      ),
-    ).toHaveText(utenlandsoppdragetData.utsendelseLand);
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.fraDato}") + dd`,
-      ),
-    ).toHaveText(utenlandsoppdragetData.arbeidstakerUtsendelseFraDato);
-
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.tilDato}") + dd`,
-      ),
-    ).toHaveText(utenlandsoppdragetData.arbeidstakerUtsendelseTilDato);
-
-    // Arbeidstakerens lønn
-    await expect(
-      page.locator(
-        `dt:has-text("${nb.translation.arbeidstakerenslonnSteg.utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden}") + dd`,
-      ),
-    ).toHaveText(
-      arbeidstakerensLonnData.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+    await oppsummeringStegPage.assertArbeidstakerensLonnData(
+      arbeidstakerensLonnData,
     );
   });
 });
