@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 const baseTilleggsopplysningerSchema = z.object({
-  harFlereOpplysningerTilSoknaden: z.boolean().nullish(),
-  tilleggsopplysningerTilSoknad: z.string().nullish(),
+  harFlereOpplysningerTilSoknaden: z.boolean().optional(),
+  tilleggsopplysningerTilSoknad: z.string().optional(),
 });
 
 type BaseTilleggsopplysningerFormData = z.infer<
@@ -12,10 +12,7 @@ type BaseTilleggsopplysningerFormData = z.infer<
 function validerHarFlereOpplysningerPakrevd(
   data: BaseTilleggsopplysningerFormData,
 ) {
-  return (
-    data.harFlereOpplysningerTilSoknaden !== undefined &&
-    data.harFlereOpplysningerTilSoknaden !== null
-  );
+  return data.harFlereOpplysningerTilSoknaden !== undefined;
 }
 
 function validerTilleggsopplysningerPakrevd(
