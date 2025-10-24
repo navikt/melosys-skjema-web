@@ -14,7 +14,12 @@ const IGNORED_UNICORN_RULES = {
 
 export default tseslint.config(
   {
-    ignores: ["src/routeTree.gen.ts", "dist/*"],
+    ignores: [
+      "src/routeTree.gen.ts",
+      "dist/*",
+      "playwright-report/**",
+      ".tanstack/**",
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -38,7 +43,7 @@ export default tseslint.config(
   eslintPluginUnicorn.configs["flat/recommended"],
   {
     rules: {
-      eqeqeq: ["error", "always", { null: "ignore" }],
+      eqeqeq: ["error", "always"],
       "react/jsx-key": "error",
       "react/jsx-sort-props": "error",
       "react/react-in-jsx-scope": "off",

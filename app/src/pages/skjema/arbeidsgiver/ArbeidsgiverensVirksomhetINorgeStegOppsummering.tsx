@@ -28,7 +28,7 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
       </FormSummary.Header>
 
       <FormSummary.Answers>
-        {virksomhetData.erArbeidsgiverenOffentligVirksomhet != null && (
+        {virksomhetData.erArbeidsgiverenOffentligVirksomhet !== undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t(
@@ -43,7 +43,8 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
           </FormSummary.Answer>
         )}
 
-        {virksomhetData.erArbeidsgiverenBemanningsEllerVikarbyraa != null && (
+        {virksomhetData.erArbeidsgiverenBemanningsEllerVikarbyraa !==
+          undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t(
@@ -58,7 +59,8 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
           </FormSummary.Answer>
         )}
 
-        {virksomhetData.opprettholderArbeidsgiverenVanligDrift != null && (
+        {virksomhetData.opprettholderArbeidsgiverenVanligDrift !==
+          undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t(

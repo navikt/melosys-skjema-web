@@ -66,7 +66,7 @@ export function UtenlandsoppdragetStegOppsummering({
           </FormSummary.Value>
         </FormSummary.Answer>
 
-        {utenlandsoppdragData.utenlandsoppholdetsBegrunnelse != null && (
+        {utenlandsoppdragData.utenlandsoppholdetsBegrunnelse !== undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t(
@@ -92,8 +92,8 @@ export function UtenlandsoppdragetStegOppsummering({
           </FormSummary.Value>
         </FormSummary.Answer>
 
-        {utenlandsoppdragData.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget !=
-          null && (
+        {utenlandsoppdragData.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget !==
+          undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t(
@@ -121,7 +121,7 @@ export function UtenlandsoppdragetStegOppsummering({
           </FormSummary.Value>
         </FormSummary.Answer>
 
-        {utenlandsoppdragData.ansettelsesforholdBeskrivelse != null && (
+        {utenlandsoppdragData.ansettelsesforholdBeskrivelse !== undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t(
@@ -147,7 +147,8 @@ export function UtenlandsoppdragetStegOppsummering({
           </FormSummary.Value>
         </FormSummary.Answer>
 
-        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseFradato != null && (
+        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseFradato !==
+          undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
@@ -159,7 +160,8 @@ export function UtenlandsoppdragetStegOppsummering({
           </FormSummary.Answer>
         )}
 
-        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseTilDato != null && (
+        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseTilDato !==
+          undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}

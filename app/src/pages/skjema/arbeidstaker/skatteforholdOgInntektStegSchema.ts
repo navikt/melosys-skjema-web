@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 const baseSkatteforholdOgInntektSchema = z.object({
-  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean().nullish(),
-  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean().nullish(),
-  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().nullish(),
-  landSomUtbetalerPengestotte: z.string().nullish(),
-  pengestotteSomMottasFraAndreLandBelop: z.string().nullish(),
+  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean().optional(),
+  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean().optional(),
+  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
+  landSomUtbetalerPengestotte: z.string().optional(),
+  pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
 });
 
 type BaseSkatteforholdOgInntektFormData = z.infer<
@@ -15,19 +15,13 @@ type BaseSkatteforholdOgInntektFormData = z.infer<
 function validerErSkattepliktigPakrevd(
   data: BaseSkatteforholdOgInntektFormData,
 ) {
-  return (
-    data.erSkattepliktigTilNorgeIHeleutsendingsperioden !== undefined &&
-    data.erSkattepliktigTilNorgeIHeleutsendingsperioden !== null
-  );
+  return data.erSkattepliktigTilNorgeIHeleutsendingsperioden !== undefined;
 }
 
 function validerMottarPengestottePakrevd(
   data: BaseSkatteforholdOgInntektFormData,
 ) {
-  return (
-    data.mottarPengestotteFraAnnetEosLandEllerSveits !== undefined &&
-    data.mottarPengestotteFraAnnetEosLandEllerSveits !== null
-  );
+  return data.mottarPengestotteFraAnnetEosLandEllerSveits !== undefined;
 }
 
 function validerPengestotteBeskrivelse(

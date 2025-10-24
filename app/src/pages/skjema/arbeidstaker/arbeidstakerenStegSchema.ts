@@ -13,54 +13,66 @@ export const AKTIVITET_OPTIONS = [
   },
 ] as const;
 
+const norskVirksomhetSchema = z.object({
+  organisasjonsnummer: z
+    .string({
+      message: "generellValidering.organisasjonsnummerErPakrevd",
+    })
+    .min(1, {
+      message: "generellValidering.organisasjonsnummerErPakrevd",
+    })
+    .regex(/^\d{9}$/, {
+      message: "generellValidering.organisasjonsnummerMaVare9Siffer",
+    }),
+});
+
+const utenlandskVirksomhetSchema = z.object({
+  navn: z
+    .string({
+      message: "generellValidering.navnPaVirksomhetErPakrevd",
+    })
+    .min(1, {
+      message: "generellValidering.navnPaVirksomhetErPakrevd",
+    }),
+  organisasjonsnummer: z.string().optional(),
+  vegnavnOgHusnummer: z
+    .string({
+      message: "generellValidering.vegnavnOgHusnummerErPakrevd",
+    })
+    .min(1, {
+      message: "generellValidering.vegnavnOgHusnummerErPakrevd",
+    }),
+  bygning: z.string().optional(),
+  postkode: z.string().optional(),
+  byStedsnavn: z.string().optional(),
+  region: z.string().optional(),
+  land: z
+    .string({
+      message: "generellValidering.landErPakrevd",
+    })
+    .min(1, {
+      message: "generellValidering.landErPakrevd",
+    }),
+  tilhorerSammeKonsern: z.boolean({
+    message: "generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern",
+  }),
+});
+
 const baseArbeidstakerSchema = z.object({
-  harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean().nullish(),
-  aktivitetIMaanedenFoerUtsendingen: z.string().nullish(),
-  skalJobbeForFlereVirksomheter: z.boolean().nullish(),
+  harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean().optional(),
+  aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
+  skalJobbeForFlereVirksomheter: z.boolean().optional(),
   virksomheterArbeidstakerJobberForIutsendelsesPeriode: z
     .object({
-      norskeVirksomheter: z
-        .array(
-          z.object({
-            organisasjonsnummer: z
-              .string()
-              .min(1, "generellValidering.organisasjonsnummerErPakrevd")
-              .regex(
-                /^\d{9}$/,
-                "generellValidering.organisasjonsnummerMaVare9Siffer",
-              ),
-          }),
-        )
-        .optional(),
-      utenlandskeVirksomheter: z
-        .array(
-          z.object({
-            navn: z
-              .string()
-              .min(1, "generellValidering.navnPaVirksomhetErPakrevd"),
-            organisasjonsnummer: z.string().optional(),
-            vegnavnOgHusnummer: z
-              .string()
-              .min(1, "generellValidering.vegnavnOgHusnummerErPakrevd"),
-            bygning: z.string().optional(),
-            postkode: z.string().optional(),
-            byStedsnavn: z.string().optional(),
-            region: z.string().optional(),
-            land: z.string().min(1, "generellValidering.landErPakrevd"),
-            tilhorerSammeKonsern: z.boolean({
-              message:
-                "generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern",
-            }),
-          }),
-        )
-        .optional(),
+      norskeVirksomheter: z.array(norskVirksomhetSchema).optional(),
+      utenlandskeVirksomheter: z.array(utenlandskVirksomhetSchema).optional(),
     })
     .optional(),
-  harNorskFodselsnummer: z.boolean().nullish(),
-  fodselsnummer: z.string().nullish(),
-  fornavn: z.string().nullish(),
-  etternavn: z.string().nullish(),
-  fodselsdato: z.string().nullish(),
+  harNorskFodselsnummer: z.boolean().optional(),
+  fodselsnummer: z.string().optional(),
+  fornavn: z.string().optional(),
+  etternavn: z.string().optional(),
+  fodselsdato: z.string().optional(),
 });
 
 type BaseArbeidstakerFormData = z.infer<typeof baseArbeidstakerSchema>;
@@ -103,26 +115,17 @@ function validerFornavn(data: BaseArbeidstakerFormData) {
 function validerHarVaertEllerSkalVaereILonnetArbeidFoerUtsendingerPakrevd(
   data: BaseArbeidstakerFormData,
 ) {
-  return (
-    data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending !== undefined &&
-    data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending !== null
-  );
+  return data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending !== undefined;
 }
 
 function validerSkalJobbeForFlereVirksomheterPakrevd(
   data: BaseArbeidstakerFormData,
 ) {
-  return (
-    data.skalJobbeForFlereVirksomheter !== undefined &&
-    data.skalJobbeForFlereVirksomheter !== null
-  );
+  return data.skalJobbeForFlereVirksomheter !== undefined;
 }
 
 function validerHarNorskFodselsnummerPakrevd(data: BaseArbeidstakerFormData) {
-  return (
-    data.harNorskFodselsnummer !== undefined &&
-    data.harNorskFodselsnummer !== null
-  );
+  return data.harNorskFodselsnummer !== undefined;
 }
 
 function validerHarVaertEllerSkalVaereILonnetArbeidFoerUtsending(
@@ -142,6 +145,24 @@ function validerHarVaertEllerSkalVaereILonnetArbeidFoerUtsending(
     data.aktivitetIMaanedenFoerUtsendingen &&
     (validOptions as string[]).includes(data.aktivitetIMaanedenFoerUtsendingen)
   );
+}
+
+function validerVirksomheterPakrevd(data: BaseArbeidstakerFormData) {
+  if (data.skalJobbeForFlereVirksomheter) {
+    const harNorskeVirksomheter =
+      data.virksomheterArbeidstakerJobberForIutsendelsesPeriode
+        ?.norskeVirksomheter &&
+      data.virksomheterArbeidstakerJobberForIutsendelsesPeriode
+        .norskeVirksomheter.length > 0;
+    const harUtenlandskeVirksomheter =
+      data.virksomheterArbeidstakerJobberForIutsendelsesPeriode
+        ?.utenlandskeVirksomheter &&
+      data.virksomheterArbeidstakerJobberForIutsendelsesPeriode
+        .utenlandskeVirksomheter.length > 0;
+
+    return harNorskeVirksomheter || harUtenlandskeVirksomheter;
+  }
+  return true;
 }
 
 export const arbeidstakerSchema = baseArbeidstakerSchema
@@ -198,4 +219,9 @@ export const arbeidstakerSchema = baseArbeidstakerSchema
     message:
       "arbeidstakerenSteg.duMaVelgeEnAktivitetNarDuIkkeHarVertILonnetArbeid",
     path: ["aktivitetIMaanedenFoerUtsendingen"],
+  })
+  .refine(validerVirksomheterPakrevd, {
+    message:
+      "arbeidstakerenSteg.duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter",
+    path: ["virksomheterArbeidstakerJobberForIutsendelsesPeriode"],
   });
