@@ -15,6 +15,7 @@ export const en = {
       tilbake: "Back",
       neste: "Next",
       fjern: "Remove",
+      endre: "Edit",
       leggTil: "Add",
       endreSvar: "Edit answers",
       pakrevd: "required",

@@ -15,6 +15,7 @@ export const nb = {
       tilbake: "Tilbake",
       neste: "Neste",
       fjern: "Fjern",
+      endre: "Endre",
       leggTil: "Legg til",
       endreSvar: "Endre svar",
       pakrevd: "påkrevd",

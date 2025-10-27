@@ -18,6 +18,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { norskVirksomhetSchema } from "~/components/virksomheterSchema";
@@ -38,7 +39,7 @@ export function NorskeVirksomheterFormPart({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { fields, remove, append } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: fieldName,
   });
@@ -59,14 +60,13 @@ export function NorskeVirksomheterFormPart({
         <NorskVirksomhet
           key={field.id}
           onRemove={() => remove(index)}
-          virksomhetField={field}
+          onUpdate={(data) => update(index, data)}
+          virksomhet={field}
         />
       ))}
-
       <LeggTilKnapp onClick={apneModal}>
         {t("norskeVirksomheterFormPart.leggTilNorskVirksomhet")}
       </LeggTilKnapp>
-
       <Modal
         header={{
           heading: t("norskeVirksomheterFormPart.leggTilNorskVirksomhet"),
@@ -76,9 +76,9 @@ export function NorskeVirksomheterFormPart({
         width="medium"
       >
         {isModalOpen && (
-          <LeggTilNorskVirksomhetModalContent
-            append={append}
+          <LeggTilEllerEndreNorskVirksomhetModalContent
             onCancel={lukkModal}
+            onSubmit={append}
           />
         )}
       </Modal>
@@ -86,27 +86,29 @@ export function NorskeVirksomheterFormPart({
   );
 }
 
-interface LeggTilNorskVirksomhetModalContentProps {
-  append: (data: NorskVirksomhetFormData) => void;
+interface LeggTilEllerEndreNorskVirksomhetModalContentProps {
+  onSubmit: (data: NorskVirksomhetFormData) => void;
   onCancel: () => void;
+  virksomhet?: NorskVirksomhetFormData;
 }
 
-function LeggTilNorskVirksomhetModalContent({
-  append,
+function LeggTilEllerEndreNorskVirksomhetModalContent({
+  onSubmit,
   onCancel,
-}: LeggTilNorskVirksomhetModalContentProps) {
+  virksomhet,
+}: LeggTilEllerEndreNorskVirksomhetModalContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
   const modalForm = useForm<NorskVirksomhetFormData>({
     resolver: zodResolver(norskVirksomhetSchema),
-    defaultValues: {
+    defaultValues: virksomhet || {
       organisasjonsnummer: "",
     },
   });
 
   const handleSubmit = modalForm.handleSubmit((data) => {
-    append(data);
+    onSubmit(data);
     onCancel();
   });
 
@@ -124,10 +126,10 @@ function LeggTilNorskVirksomhetModalContent({
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleSubmit} type="button">
-          {t("norskeVirksomheterFormPart.leggTilNorskVirksomhet")}
+          {t("felles.lagre")}
         </Button>
         <Button onClick={onCancel} type="button" variant="secondary">
-          {t("generellValidering.avbryt")}
+          {t("felles.avbryt")}
         </Button>
       </Modal.Footer>
     </FormProvider>
@@ -135,35 +137,67 @@ function LeggTilNorskVirksomhetModalContent({
 }
 
 interface NorskVirksomhetProps {
-  virksomhetField: NorskVirksomhetField;
+  virksomhet: NorskVirksomhetFormData;
   onRemove: () => void;
+  onUpdate: (data: NorskVirksomhetFormData) => void;
 }
 
-function NorskVirksomhet({ virksomhetField, onRemove }: NorskVirksomhetProps) {
+function NorskVirksomhet({
+  virksomhet,
+  onRemove,
+  onUpdate,
+}: NorskVirksomhetProps) {
   const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const apneModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const lukkModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <Box
-      background="surface-alt-3-subtle"
-      borderRadius="medium"
-      className="ml-4"
-      padding="space-8"
-      style={{
-        borderLeft: "4px solid var(--a-border-subtle)",
-      }}
-    >
-      <Tag size="small" variant="info">
-        {t("norskeVirksomheterFormPart.norskVirksomhet")}
-      </Tag>
-      <div className="mt-2">
-        <Label size="small">
-          {t("norskeVirksomheterFormPart.organisasjonsnummer")}
-        </Label>
-        <BodyShort size="small">
-          {virksomhetField.organisasjonsnummer}
-        </BodyShort>
-      </div>
-      <FjernKnapp className="mt-2" onClick={onRemove} size="small" />
-    </Box>
+    <>
+      <Box
+        background="surface-alt-3-subtle"
+        borderRadius="medium"
+        className="ml-4"
+        padding="space-8"
+        style={{
+          borderLeft: "4px solid var(--a-border-subtle)",
+        }}
+      >
+        <Tag size="small" variant="info">
+          {t("norskeVirksomheterFormPart.norskVirksomhet")}
+        </Tag>
+        <div className="mt-2">
+          <Label size="small">
+            {t("norskeVirksomheterFormPart.organisasjonsnummer")}
+          </Label>
+          <BodyShort size="small">{virksomhet.organisasjonsnummer}</BodyShort>
+        </div>
+        <EndreKnapp className="mt-2" onClick={apneModal} size="small" />
+        <FjernKnapp className="mt-2" onClick={onRemove} size="small" />
+      </Box>
+
+      <Modal
+        header={{
+          heading: t("norskeVirksomheterFormPart.endreNorskVirksomhet"),
+        }}
+        onClose={lukkModal}
+        open={isModalOpen}
+        width="medium"
+      >
+        {isModalOpen && (
+          <LeggTilEllerEndreNorskVirksomhetModalContent
+            onCancel={lukkModal}
+            onSubmit={onUpdate}
+            virksomhet={virksomhet}
+          />
+        )}
+      </Modal>
+    </>
   );
 }
