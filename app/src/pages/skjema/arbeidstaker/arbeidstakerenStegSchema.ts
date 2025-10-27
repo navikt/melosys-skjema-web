@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheterSchema";
+
 export const AKTIVITET_OPTIONS = [
   { value: "studier", labelKey: "arbeidstakerenSteg.studier" },
   { value: "ferie", labelKey: "arbeidstakerenSteg.ferie" },
@@ -13,61 +15,12 @@ export const AKTIVITET_OPTIONS = [
   },
 ] as const;
 
-const norskVirksomhetSchema = z.object({
-  organisasjonsnummer: z
-    .string({
-      message: "generellValidering.organisasjonsnummerErPakrevd",
-    })
-    .min(1, {
-      message: "generellValidering.organisasjonsnummerErPakrevd",
-    })
-    .regex(/^\d{9}$/, {
-      message: "generellValidering.organisasjonsnummerMaVare9Siffer",
-    }),
-});
-
-const utenlandskVirksomhetSchema = z.object({
-  navn: z
-    .string({
-      message: "generellValidering.navnPaVirksomhetErPakrevd",
-    })
-    .min(1, {
-      message: "generellValidering.navnPaVirksomhetErPakrevd",
-    }),
-  organisasjonsnummer: z.string().optional(),
-  vegnavnOgHusnummer: z
-    .string({
-      message: "generellValidering.vegnavnOgHusnummerErPakrevd",
-    })
-    .min(1, {
-      message: "generellValidering.vegnavnOgHusnummerErPakrevd",
-    }),
-  bygning: z.string().optional(),
-  postkode: z.string().optional(),
-  byStedsnavn: z.string().optional(),
-  region: z.string().optional(),
-  land: z
-    .string({
-      message: "generellValidering.landErPakrevd",
-    })
-    .min(1, {
-      message: "generellValidering.landErPakrevd",
-    }),
-  tilhorerSammeKonsern: z.boolean({
-    message: "generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern",
-  }),
-});
-
 const baseArbeidstakerSchema = z.object({
   harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean().optional(),
   aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
   skalJobbeForFlereVirksomheter: z.boolean().optional(),
-  virksomheterArbeidstakerJobberForIutsendelsesPeriode: z
-    .object({
-      norskeVirksomheter: z.array(norskVirksomhetSchema).optional(),
-      utenlandskeVirksomheter: z.array(utenlandskVirksomhetSchema).optional(),
-    })
-    .optional(),
+  virksomheterArbeidstakerJobberForIutsendelsesPeriode:
+    norskeOgUtenlandskeVirksomheterSchema.optional(),
   harNorskFodselsnummer: z.boolean().optional(),
   fodselsnummer: z.string().optional(),
   fornavn: z.string().optional(),
