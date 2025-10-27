@@ -45,11 +45,11 @@ export const arbeidsgiverensVirksomhetSchema =
       ...data,
       // Clear conditional fields when erArbeidsgiverenOffentligVirksomhet is true
       erArbeidsgiverenBemanningsEllerVikarbyraa:
-        data.erArbeidsgiverenOffentligVirksomhet === true
+        data.erArbeidsgiverenOffentligVirksomhet
           ? undefined
           : data.erArbeidsgiverenBemanningsEllerVikarbyraa,
       opprettholderArbeidsgiverenVanligDrift:
-        data.erArbeidsgiverenOffentligVirksomhet === true
+        data.erArbeidsgiverenOffentligVirksomhet
           ? undefined
           : data.opprettholderArbeidsgiverenVanligDrift,
     }))
