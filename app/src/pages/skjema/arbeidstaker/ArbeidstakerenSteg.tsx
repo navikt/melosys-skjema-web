@@ -216,7 +216,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
             )}
           />
 
-          {skalJobbeForFlereVirksomheter === true && (
+          {skalJobbeForFlereVirksomheter && (
             <VStack className="mt-4" style={{ gap: "var(--a-spacing-4)" }}>
               <NorskeVirksomheterFormPart fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode.norskeVirksomheter" />
 

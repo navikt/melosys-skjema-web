@@ -106,7 +106,7 @@ function TilleggsopplysningerStegContent({
             )}
           />
 
-          {harFlereOpplysningerTilSoknaden === true && (
+          {harFlereOpplysningerTilSoknaden && (
             <Textarea
               {...register("tilleggsopplysningerTilSoknad")}
               className="mt-4"

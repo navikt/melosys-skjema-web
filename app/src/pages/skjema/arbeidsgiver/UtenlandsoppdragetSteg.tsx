@@ -191,7 +191,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             )}
           />
 
-          {arbeidstakerBleAnsattForUtenlandsoppdraget === true && (
+          {arbeidstakerBleAnsattForUtenlandsoppdraget && (
             <RadioGroupJaNeiFormPart
               className="mt-6"
               formFieldName="arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"

@@ -21,7 +21,7 @@ const utenlandskVirksomhetSchema = z.object({
     .min(1, {
       message: "generellValidering.navnPaVirksomhetErPakrevd",
     }),
-  organisasjonsnummer: z.string().nullish(),
+  organisasjonsnummer: z.string().optional(),
   vegnavnOgHusnummer: z
     .string({
       message: "generellValidering.vegnavnOgHusnummerErPakrevd",
@@ -29,10 +29,10 @@ const utenlandskVirksomhetSchema = z.object({
     .min(1, {
       message: "generellValidering.vegnavnOgHusnummerErPakrevd",
     }),
-  bygning: z.string().nullish(),
-  postkode: z.string().nullish(),
-  byStedsnavn: z.string().nullish(),
-  region: z.string().nullish(),
+  bygning: z.string().optional(),
+  postkode: z.string().optional(),
+  byStedsnavn: z.string().optional(),
+  region: z.string().optional(),
   land: z
     .string({
       message: "generellValidering.landErPakrevd",
@@ -46,21 +46,29 @@ const utenlandskVirksomhetSchema = z.object({
 });
 
 const baseArbeidstakerensLonnSchema = z.object({
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z.boolean({
-    message:
-      "arbeidstakerenslonnSteg.duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden",
-  }),
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z
+    .boolean()
+    .optional(),
   virksomheterSomUtbetalerLonnOgNaturalytelser: z
     .object({
-      norskeVirksomheter: z.array(norskVirksomhetSchema).nullish(),
-      utenlandskeVirksomheter: z.array(utenlandskVirksomhetSchema).nullish(),
+      norskeVirksomheter: z.array(norskVirksomhetSchema).optional(),
+      utenlandskeVirksomheter: z.array(utenlandskVirksomhetSchema).optional(),
     })
-    .nullish(),
+    .optional(),
 });
 
 type BaseArbeidstakerensLonnFormData = z.infer<
   typeof baseArbeidstakerensLonnSchema
 >;
+
+function validerArbeidsgiverBetalerAllLonnPakrevd(
+  data: BaseArbeidstakerensLonnFormData,
+) {
+  return (
+    data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden !==
+    undefined
+  );
+}
 
 function validerVirksomheterPakrevd(data: BaseArbeidstakerensLonnFormData) {
   if (!data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
@@ -79,58 +87,19 @@ function validerVirksomheterPakrevd(data: BaseArbeidstakerensLonnFormData) {
   return true;
 }
 
-function convertNullToUndefinedForUtenlandskVirksomhet(
-  virksomhet: z.infer<typeof utenlandskVirksomhetSchema>,
-) {
-  return {
-    ...virksomhet,
-    organisasjonsnummer:
-      virksomhet.organisasjonsnummer === null
-        ? undefined
-        : virksomhet.organisasjonsnummer,
-    bygning: virksomhet.bygning === null ? undefined : virksomhet.bygning,
-    postkode: virksomhet.postkode === null ? undefined : virksomhet.postkode,
-    byStedsnavn:
-      virksomhet.byStedsnavn === null ? undefined : virksomhet.byStedsnavn,
-    region: virksomhet.region === null ? undefined : virksomhet.region,
-  };
-}
-
 export const arbeidstakerensLonnSchema = baseArbeidstakerensLonnSchema
-  .transform((data) => {
-    const result = { ...data };
-
+  .transform((data) => ({
+    ...data,
     // Clear conditional field when arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden is true
-    if (data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
-      result.virksomheterSomUtbetalerLonnOgNaturalytelser = undefined;
-      return result;
-    }
-
-    // Convert null to undefined for API compatibility
-    if (data.virksomheterSomUtbetalerLonnOgNaturalytelser === null) {
-      result.virksomheterSomUtbetalerLonnOgNaturalytelser = undefined;
-    } else if (data.virksomheterSomUtbetalerLonnOgNaturalytelser) {
-      const virksomheter = {
-        ...data.virksomheterSomUtbetalerLonnOgNaturalytelser,
-      };
-
-      if (virksomheter.norskeVirksomheter === null) {
-        virksomheter.norskeVirksomheter = undefined;
-      }
-
-      if (virksomheter.utenlandskeVirksomheter === null) {
-        virksomheter.utenlandskeVirksomheter = undefined;
-      } else if (virksomheter.utenlandskeVirksomheter) {
-        virksomheter.utenlandskeVirksomheter =
-          virksomheter.utenlandskeVirksomheter.map((element) =>
-            convertNullToUndefinedForUtenlandskVirksomhet(element),
-          );
-      }
-
-      result.virksomheterSomUtbetalerLonnOgNaturalytelser = virksomheter;
-    }
-
-    return result;
+    virksomheterSomUtbetalerLonnOgNaturalytelser:
+      data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
+        ? undefined
+        : data.virksomheterSomUtbetalerLonnOgNaturalytelser,
+  }))
+  .refine(validerArbeidsgiverBetalerAllLonnPakrevd, {
+    message:
+      "arbeidstakerenslonnSteg.duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden",
+    path: ["arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"],
   })
   .refine(validerVirksomheterPakrevd, {
     message:

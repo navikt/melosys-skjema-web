@@ -120,7 +120,7 @@ function SkatteforholdOgInntektStegContent({
             )}
           />
 
-          {mottarPengestotteFraAnnetEosLandEllerSveits === true && (
+          {mottarPengestotteFraAnnetEosLandEllerSveits && (
             <>
               <LandVelgerFormPart
                 className="mt-4"

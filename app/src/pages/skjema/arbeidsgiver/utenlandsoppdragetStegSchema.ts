@@ -6,43 +6,96 @@ const baseUtenlandsoppdragSchema = z.object({
       message:
         "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
     })
-    .min(
-      1,
-      "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
-    ),
+    .optional(),
   arbeidstakerUtsendelseFraDato: z
     .string({
       message: "utenlandsoppdragetSteg.fraDatoErPakrevd",
     })
-    .min(1, "utenlandsoppdragetSteg.fraDatoErPakrevd"),
+    .optional(),
   arbeidstakerUtsendelseTilDato: z
     .string({
       message: "utenlandsoppdragetSteg.tilDatoErPakrevd",
     })
-    .min(1, "utenlandsoppdragetSteg.tilDatoErPakrevd"),
-  arbeidsgiverHarOppdragILandet: z.boolean({
-    message: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
-  }),
-  arbeidstakerBleAnsattForUtenlandsoppdraget: z.boolean({
-    message:
-      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget",
-  }),
-  arbeidstakerForblirAnsattIHelePerioden: z.boolean({
-    message:
-      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden",
-  }),
-  arbeidstakerErstatterAnnenPerson: z.boolean({
-    message:
-      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson",
-  }),
-  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z.boolean().nullish(),
-  utenlandsoppholdetsBegrunnelse: z.string().nullish(),
-  ansettelsesforholdBeskrivelse: z.string().nullish(),
-  forrigeArbeidstakerUtsendelseFradato: z.string().nullish(),
-  forrigeArbeidstakerUtsendelseTilDato: z.string().nullish(),
+    .optional(),
+  arbeidsgiverHarOppdragILandet: z
+    .boolean({
+      message: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
+    })
+    .optional(),
+  arbeidstakerBleAnsattForUtenlandsoppdraget: z
+    .boolean({
+      message:
+        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget",
+    })
+    .optional(),
+  arbeidstakerForblirAnsattIHelePerioden: z
+    .boolean({
+      message:
+        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden",
+    })
+    .optional(),
+  arbeidstakerErstatterAnnenPerson: z
+    .boolean({
+      message:
+        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson",
+    })
+    .optional(),
+  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z.boolean().optional(),
+  utenlandsoppholdetsBegrunnelse: z.string().optional(),
+  ansettelsesforholdBeskrivelse: z.string().optional(),
+  forrigeArbeidstakerUtsendelseFradato: z.string().optional(),
+  forrigeArbeidstakerUtsendelseTilDato: z.string().optional(),
 });
 
 type BaseUtenlandsoppdragFormData = z.infer<typeof baseUtenlandsoppdragSchema>;
+
+function validerUtsendelseLandPakrevd(data: BaseUtenlandsoppdragFormData) {
+  return (
+    data.utsendelseLand !== undefined && data.utsendelseLand.trim().length > 0
+  );
+}
+
+function validerArbeidstakerUtsendelseFraDatoPakrevd(
+  data: BaseUtenlandsoppdragFormData,
+) {
+  return (
+    data.arbeidstakerUtsendelseFraDato !== undefined &&
+    data.arbeidstakerUtsendelseFraDato.trim().length > 0
+  );
+}
+
+function validerArbeidstakerUtsendelseTilDatoPakrevd(
+  data: BaseUtenlandsoppdragFormData,
+) {
+  return (
+    data.arbeidstakerUtsendelseTilDato !== undefined &&
+    data.arbeidstakerUtsendelseTilDato.trim().length > 0
+  );
+}
+
+function validerArbeidsgiverHarOppdragILandetPakrevd(
+  data: BaseUtenlandsoppdragFormData,
+) {
+  return data.arbeidsgiverHarOppdragILandet !== undefined;
+}
+
+function validerArbeidstakerBleAnsattForUtenlandsoppdragetPakrevd(
+  data: BaseUtenlandsoppdragFormData,
+) {
+  return data.arbeidstakerBleAnsattForUtenlandsoppdraget !== undefined;
+}
+
+function validerArbeidstakerForblirAnsattIHelePerioden(
+  data: BaseUtenlandsoppdragFormData,
+) {
+  return data.arbeidstakerForblirAnsattIHelePerioden !== undefined;
+}
+
+function validerArbeidstakerErstatterAnnenPersonPakrevd(
+  data: BaseUtenlandsoppdragFormData,
+) {
+  return data.arbeidstakerErstatterAnnenPerson !== undefined;
+}
 
 function validerArbeidstakerUtsendelseDatoer(
   data: BaseUtenlandsoppdragFormData,
@@ -154,6 +207,38 @@ export const utenlandsoppdragSchema = baseUtenlandsoppdragSchema
       ? data.forrigeArbeidstakerUtsendelseTilDato
       : undefined,
   }))
+  .refine(validerUtsendelseLandPakrevd, {
+    message:
+      "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
+    path: ["utsendelseLand"],
+  })
+  .refine(validerArbeidstakerUtsendelseFraDatoPakrevd, {
+    message: "utenlandsoppdragetSteg.fraDatoErPakrevd",
+    path: ["arbeidstakerUtsendelseFraDato"],
+  })
+  .refine(validerArbeidstakerUtsendelseTilDatoPakrevd, {
+    message: "utenlandsoppdragetSteg.tilDatoErPakrevd",
+    path: ["arbeidstakerUtsendelseTilDato"],
+  })
+  .refine(validerArbeidsgiverHarOppdragILandetPakrevd, {
+    message: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
+    path: ["arbeidsgiverHarOppdragILandet"],
+  })
+  .refine(validerArbeidstakerBleAnsattForUtenlandsoppdragetPakrevd, {
+    message:
+      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget",
+    path: ["arbeidstakerBleAnsattForUtenlandsoppdraget"],
+  })
+  .refine(validerArbeidstakerForblirAnsattIHelePerioden, {
+    message:
+      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden",
+    path: ["arbeidstakerForblirAnsattIHelePerioden"],
+  })
+  .refine(validerArbeidstakerErstatterAnnenPersonPakrevd, {
+    message:
+      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson",
+    path: ["arbeidstakerErstatterAnnenPerson"],
+  })
   .refine(validerArbeidstakerUtsendelseDatoer, {
     message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
     path: ["arbeidstakerUtsendelseTilDato"],
