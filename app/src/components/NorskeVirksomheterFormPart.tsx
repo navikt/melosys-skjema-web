@@ -1,5 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, ExpansionCard, Modal, TextField } from "@navikt/ds-react";
+import {
+  Button,
+  ExpansionCard,
+  Label,
+  Modal,
+  TextField,
+} from "@navikt/ds-react";
 import { useState } from "react";
 import {
   FormProvider,
@@ -49,6 +55,7 @@ export function NorskeVirksomheterFormPart({
 
   return (
     <>
+      <Label className="mt-4">Norske virksomheter</Label>
       {typedFields.map((field, index) => (
         <NorskVirksomhet
           key={field.id}

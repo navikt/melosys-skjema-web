@@ -1,11 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  BodyShort,
-  Box,
   Button,
+  ExpansionCard,
   Label,
   Modal,
-  Tag,
   TextField,
   VStack,
 } from "@navikt/ds-react";
@@ -24,6 +22,7 @@ import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { UtenlandskVirksomhetOppsummering } from "~/components/UtenlandskeVirksomheterOppsummering.tsx";
 import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -32,6 +31,7 @@ type UtenlandskVirksomhetField = UtenlandskVirksomhetFormData & { id: string };
 
 interface UtenlandskeVirksomheterSectionProps {
   fieldName: string;
+  className?: string;
 }
 
 export function UtenlandskeVirksomheterFormPart({
@@ -59,6 +59,7 @@ export function UtenlandskeVirksomheterFormPart({
 
   return (
     <>
+      <Label className="mt-4">Utenlandske virksomheter</Label>
       {typedFields.map((field, index) => (
         <UtenlandskVirksomhet
           key={field.id}
@@ -223,91 +224,18 @@ function UtenlandskVirksomhet({
 
   return (
     <>
-      <Box
-        background="surface-alt-3-subtle"
-        borderRadius="medium"
-        className="ml-4"
-        padding="space-8"
-        style={{
-          borderLeft: "4px solid var(--a-border-subtle)",
-        }}
-      >
-        <Tag size="small" variant="info">
-          {t("utenlandskeVirksomheterFormPart.utenlandskVirksomhet")}
-        </Tag>
-        <div className="mt-2">
-          <Label size="small">
-            {t("utenlandskeVirksomheterFormPart.navnPaVirksomhet")}
-          </Label>
-          <BodyShort size="small">{virksomhet.navn}</BodyShort>
-        </div>
-        {virksomhet.organisasjonsnummer && (
-          <div className="mt-2">
-            <Label size="small">
-              {t(
-                "utenlandskeVirksomheterFormPart.organisasjonsnummerEllerRegistreringsnummerValgfritt",
-              )}
-            </Label>
-            <BodyShort size="small">{virksomhet.organisasjonsnummer}</BodyShort>
-          </div>
-        )}
-        <div className="mt-2">
-          <Label size="small">
-            {t("utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks")}
-          </Label>
-          <BodyShort size="small">{virksomhet.vegnavnOgHusnummer}</BodyShort>
-        </div>
-        {virksomhet.bygning && (
-          <div className="mt-2">
-            <Label size="small">
-              {t("utenlandskeVirksomheterFormPart.bygningValgfritt")}
-            </Label>
-            <BodyShort size="small">{virksomhet.bygning}</BodyShort>
-          </div>
-        )}
-        {virksomhet.postkode && (
-          <div className="mt-2">
-            <Label size="small">
-              {t("utenlandskeVirksomheterFormPart.postkodeValgfritt")}
-            </Label>
-            <BodyShort size="small">{virksomhet.postkode}</BodyShort>
-          </div>
-        )}
-        {virksomhet.byStedsnavn && (
-          <div className="mt-2">
-            <Label size="small">
-              {t("utenlandskeVirksomheterFormPart.byStednavnValgfritt")}
-            </Label>
-            <BodyShort size="small">{virksomhet.byStedsnavn}</BodyShort>
-          </div>
-        )}
-        {virksomhet.region && (
-          <div className="mt-2">
-            <Label size="small">
-              {t("utenlandskeVirksomheterFormPart.regionValgfritt")}
-            </Label>
-            <BodyShort size="small">{virksomhet.region}</BodyShort>
-          </div>
-        )}
-        <div className="mt-2">
-          <Label size="small">
-            {t("utenlandskeVirksomheterFormPart.land")}
-          </Label>
-          <BodyShort size="small">{virksomhet.land}</BodyShort>
-        </div>
-        <div className="mt-2">
-          <Label size="small">
-            {t(
-              "utenlandskeVirksomheterFormPart.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
-            )}
-          </Label>
-          <BodyShort size="small">
-            {virksomhet.tilhorerSammeKonsern ? t("felles.ja") : t("felles.nei")}
-          </BodyShort>
-        </div>
-        <EndreKnapp className="mt-2" onClick={apneModal} size="small" />
-        <FjernKnapp className="mt-2" onClick={onRemove} size="small" />
-      </Box>
+      <ExpansionCard aria-label="Valgt utenlandsk virksomhet" size="small">
+        <ExpansionCard.Header>
+          <ExpansionCard.Title size="small">
+            {virksomhet.navn}
+          </ExpansionCard.Title>
+        </ExpansionCard.Header>
+        <ExpansionCard.Content>
+          <UtenlandskVirksomhetOppsummering virksomhet={virksomhet} />
+        </ExpansionCard.Content>
+        <EndreKnapp className="mt-1" onClick={apneModal} size="small" />
+        <FjernKnapp className="mt-1" onClick={onRemove} size="small" />
+      </ExpansionCard>
 
       <Modal
         header={{
