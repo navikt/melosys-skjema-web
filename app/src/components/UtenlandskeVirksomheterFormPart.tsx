@@ -224,7 +224,10 @@ function UtenlandskVirksomhet({
 
   return (
     <>
-      <ExpansionCard aria-label="Valgt utenlandsk virksomhet" size="small">
+      <ExpansionCard
+        aria-label={`t("felles.valgtVirksomhet"): ${virksomhet.navn}`}
+        size="small"
+      >
         <ExpansionCard.Header>
           <ExpansionCard.Title size="small">
             {virksomhet.navn}

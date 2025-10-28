@@ -159,7 +159,7 @@ function NorskVirksomhet({
   return (
     <>
       <ExpansionCard
-        aria-label="Valgt organisasjon Gjør oppslag på orgnr"
+        aria-label={`${t("felles.valgtVirksomhet")}: Gjør oppslag på orgnr AS`}
         size="small"
       >
         <ExpansionCard.Header>

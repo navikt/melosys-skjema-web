@@ -22,6 +22,7 @@ export const nb = {
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
       startSoknad: "Start søknad",
+      valgtVirksomhet: "Valgt virksomhet",
     },
     skjemaVeiledning: {
       hei: "Hei",
