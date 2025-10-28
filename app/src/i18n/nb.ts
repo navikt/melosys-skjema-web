@@ -85,6 +85,7 @@ export const nb = {
       norskeVirksomheter: "Norske virksomheter",
       organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk virksomhet",
+      endreNorskVirksomhet: "Endre norsk virksomhet",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",
@@ -101,6 +102,7 @@ export const nb = {
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
         "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
+      endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
     },
     rollevelgerPage: {
       hvemVilDuFylleUtSkjemaPaVegneAv:

@@ -140,10 +140,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
               <NorskeVirksomheterFormPart fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter" />
 
-              <UtenlandskeVirksomheterFormPart
-                clearErrorsFieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
-                fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter"
-              />
+              <UtenlandskeVirksomheterFormPart fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter" />
 
               {errors.virksomheterSomUtbetalerLonnOgNaturalytelser && (
                 <ErrorMessage className="mt-2">

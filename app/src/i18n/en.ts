@@ -86,6 +86,7 @@ export const en = {
       norskeVirksomheter: "Norwegian companies",
       organisasjonsnummer: "Organization number",
       leggTilNorskVirksomhet: "Add Norwegian company",
+      endreNorskVirksomhet: "Edit Norwegian company",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",
@@ -103,6 +104,7 @@ export const en = {
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
         "Does the company belong to the same consortium as the Norwegian employer?",
       leggTilUtenlandskVirksomhet: "Add foreign company",
+      endreUtenlandskVirksomhet: "Edit foreign company",
     },
     rollevelgerPage: {
       hvemVilDuFylleUtSkjemaPaVegneAv:
