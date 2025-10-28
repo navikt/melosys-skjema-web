@@ -1,13 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  BodyShort,
-  Box,
-  Button,
-  Label,
-  Modal,
-  Tag,
-  TextField,
-} from "@navikt/ds-react";
+import { Button, ExpansionCard, Modal, TextField } from "@navikt/ds-react";
 import { useState } from "react";
 import {
   FormProvider,
@@ -21,6 +13,7 @@ import { z } from "zod";
 import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
+import { NorskVirksomhetOppsummering } from "~/components/NorskeVirksomheterOppsummering.tsx";
 import { norskVirksomhetSchema } from "~/components/virksomheterSchema";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -158,27 +151,21 @@ function NorskVirksomhet({
 
   return (
     <>
-      <Box
-        background="surface-alt-3-subtle"
-        borderRadius="medium"
-        className="ml-4"
-        padding="space-8"
-        style={{
-          borderLeft: "4px solid var(--a-border-subtle)",
-        }}
+      <ExpansionCard
+        aria-label="Valgt organisasjon Gjør oppslag på orgnr"
+        size="small"
       >
-        <Tag size="small" variant="info">
-          {t("norskeVirksomheterFormPart.norskVirksomhet")}
-        </Tag>
-        <div className="mt-2">
-          <Label size="small">
-            {t("norskeVirksomheterFormPart.organisasjonsnummer")}
-          </Label>
-          <BodyShort size="small">{virksomhet.organisasjonsnummer}</BodyShort>
-        </div>
-        <EndreKnapp className="mt-2" onClick={apneModal} size="small" />
-        <FjernKnapp className="mt-2" onClick={onRemove} size="small" />
-      </Box>
+        <ExpansionCard.Header>
+          <ExpansionCard.Title size="small">
+            Gjør Oppslag På Orgnr AS
+          </ExpansionCard.Title>
+        </ExpansionCard.Header>
+        <ExpansionCard.Content>
+          <NorskVirksomhetOppsummering virksomhet={virksomhet} />
+        </ExpansionCard.Content>
+        <EndreKnapp className="mt-1" onClick={apneModal} size="small" />
+        <FjernKnapp className="mt-1" onClick={onRemove} size="small" />
+      </ExpansionCard>
 
       <Modal
         header={{

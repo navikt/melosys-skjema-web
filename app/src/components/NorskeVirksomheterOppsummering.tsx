@@ -10,7 +10,7 @@ interface NorskVirksomhetOppsummeringProps {
   virksomhet: NorskVirksomhetFormData;
 }
 
-function NorskVirksomhetOppsummering({
+export function NorskVirksomhetOppsummering({
   virksomhet,
 }: NorskVirksomhetOppsummeringProps) {
   const { t } = useTranslation();
