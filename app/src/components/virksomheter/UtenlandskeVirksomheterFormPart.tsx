@@ -23,8 +23,8 @@ import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { UtenlandskVirksomhetOppsummering } from "~/components/UtenlandskeVirksomheterOppsummering.tsx";
-import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema";
+import { UtenlandskVirksomhetOppsummering } from "~/components/virksomheter/UtenlandskeVirksomheterOppsummering.tsx";
+import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 // Midlertidig switch for å kunne vise frem to forskjellige alternativer av visning av valgte virksomheter

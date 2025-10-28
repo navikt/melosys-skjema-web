@@ -20,8 +20,8 @@ import { z } from "zod";
 import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
-import { NorskVirksomhetOppsummering } from "~/components/NorskeVirksomheterOppsummering.tsx";
-import { norskVirksomhetSchema } from "~/components/virksomheterSchema";
+import { NorskVirksomhetOppsummering } from "~/components/virksomheter/NorskeVirksomheterOppsummering.tsx";
+import { norskVirksomhetSchema } from "~/components/virksomheterSchema.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 // Midlertidig switch for å kunne vise frem to forskjellige alternativer av visning av valgte virksomheter

@@ -2,7 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema";
+import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 type UtenlandskVirksomhetFormData = z.infer<typeof utenlandskVirksomhetSchema>;

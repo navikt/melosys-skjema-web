@@ -6,8 +6,8 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {

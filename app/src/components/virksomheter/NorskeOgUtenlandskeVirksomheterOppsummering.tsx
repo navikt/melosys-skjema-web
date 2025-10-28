@@ -1,7 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 
-import { NorskeVirksomheterOppsummering } from "~/components/NorskeVirksomheterOppsummering.tsx";
-import { UtenlandskeVirksomheterOppsummering } from "~/components/UtenlandskeVirksomheterOppsummering.tsx";
+import { NorskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeVirksomheterOppsummering.tsx";
+import { UtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/UtenlandskeVirksomheterOppsummering.tsx";
 import { NorskeOgUtenlandskeVirksomheter } from "~/types/melosysSkjemaTypes.ts";
 
 type NorskeOgUtenlandskeVirksomheterOppsummeringProps = {

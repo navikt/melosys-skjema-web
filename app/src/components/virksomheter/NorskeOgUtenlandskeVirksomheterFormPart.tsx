@@ -2,8 +2,8 @@ import { Detail, ErrorMessage, Label, VStack } from "@navikt/ds-react";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
-import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
+import { NorskeVirksomheterFormPart } from "~/components/virksomheter/NorskeVirksomheterFormPart.tsx";
+import { UtenlandskeVirksomheterFormPart } from "~/components/virksomheter/UtenlandskeVirksomheterFormPart.tsx";
 import { useTranslateError } from "~/utils/translation.ts";
 
 interface NorskeOgUtenlandskeVirksomheterFormPartProps {

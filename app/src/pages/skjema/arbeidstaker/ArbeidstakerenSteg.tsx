@@ -9,8 +9,8 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
-import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { postArbeidstakeren } from "~/httpClients/melsosysSkjemaApiClient.ts";
