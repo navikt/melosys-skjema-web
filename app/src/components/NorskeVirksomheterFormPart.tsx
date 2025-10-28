@@ -102,9 +102,7 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
 
   const modalForm = useForm<NorskVirksomhetFormData>({
     resolver: zodResolver(norskVirksomhetSchema),
-    defaultValues: virksomhet || {
-      organisasjonsnummer: "",
-    },
+    defaultValues: { ...virksomhet },
   });
 
   const handleSubmit = modalForm.handleSubmit((data) => {

@@ -107,16 +107,8 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
 
   const modalForm = useForm<UtenlandskVirksomhetFormData>({
     resolver: zodResolver(utenlandskVirksomhetSchema),
-    defaultValues: virksomhet || {
-      navn: "",
-      organisasjonsnummer: "",
-      vegnavnOgHusnummer: "",
-      bygning: "",
-      postkode: "",
-      byStedsnavn: "",
-      region: "",
-      land: "",
-      tilhorerSammeKonsern: undefined,
+    defaultValues: {
+      ...virksomhet,
     },
   });
 

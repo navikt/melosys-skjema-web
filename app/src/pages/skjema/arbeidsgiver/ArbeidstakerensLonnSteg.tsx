@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Detail, ErrorMessage, Label, VStack } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
@@ -7,9 +6,8 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
+import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
@@ -17,7 +15,6 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
-import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
@@ -31,7 +28,6 @@ type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
 
@@ -44,13 +40,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     },
   });
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setError,
-    clearErrors,
-  } = formMethods;
+  const { handleSubmit, watch, setError, clearErrors } = formMethods;
 
   const arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden = watch(
     "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
@@ -126,30 +116,15 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
           {arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden ===
             false && (
-            <VStack className="mt-4" gap="space-8">
-              <Label>
-                {t(
-                  "arbeidstakerenslonnSteg.hvemUtbetalerLonnenOgEventuelleNaturalytelser",
-                )}
-              </Label>
-              <Detail>
-                {t(
-                  "arbeidstakerenslonnSteg.leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser",
-                )}
-              </Detail>
-
-              <NorskeVirksomheterFormPart fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter" />
-
-              <UtenlandskeVirksomheterFormPart fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter" />
-
-              {errors.virksomheterSomUtbetalerLonnOgNaturalytelser && (
-                <ErrorMessage className="mt-2">
-                  {translateError(
-                    errors.virksomheterSomUtbetalerLonnOgNaturalytelser.message,
-                  )}
-                </ErrorMessage>
+            <NorskeOgUtenlandskeVirksomheterFormPart
+              description={t(
+                "arbeidstakerenslonnSteg.leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser",
               )}
-            </VStack>
+              fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
+              label={t(
+                "arbeidstakerenslonnSteg.hvemUtbetalerLonnenOgEventuelleNaturalytelser",
+              )}
+            />
           )}
         </SkjemaSteg>
       </form>
