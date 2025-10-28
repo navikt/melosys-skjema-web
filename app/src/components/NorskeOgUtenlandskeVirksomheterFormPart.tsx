@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
+import { NorskeVirksomheterOppsummering } from "~/components/NorskeVirksomheterOppsummering.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -55,6 +56,7 @@ export function NorskeOgUtenlandskeVirksomheterFormPart({
           {translateError(error.message as string | undefined)}
         </ErrorMessage>
       )}
+      <NorskeVirksomheterOppsummering virksomheter={norskeVirksomheter} />
     </VStack>
   );
 }

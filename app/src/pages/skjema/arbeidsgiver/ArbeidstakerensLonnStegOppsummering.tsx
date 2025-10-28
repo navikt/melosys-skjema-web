@@ -1,6 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { NorskeVirksomheterOppsummering } from "~/components/NorskeVirksomheterOppsummering.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidstakerensLonnStepKey } from "./ArbeidstakerensLonnSteg.tsx";
@@ -55,35 +56,9 @@ export function ArbeidstakerensLonnStegOppsummering({
               )}
             </FormSummary.Label>
             <FormSummary.Value>
-              {norskeVirksomheter && norskeVirksomheter.length > 0 && (
-                <FormSummary.Answer>
-                  <FormSummary.Label>
-                    {t("norskeVirksomheterFormPart.norskeVirksomheter")}
-                  </FormSummary.Label>
-                  <FormSummary.Value>
-                    {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter?.map(
-                      (virksomhet, index) => (
-                        <FormSummary.Answer key={`norsk-${index}`}>
-                          <FormSummary.Value>
-                            <FormSummary.Answers>
-                              <FormSummary.Answer>
-                                <FormSummary.Label>
-                                  {t(
-                                    "norskeVirksomheterFormPart.organisasjonsnummer",
-                                  )}
-                                </FormSummary.Label>
-                                <FormSummary.Value>
-                                  {virksomhet.organisasjonsnummer}
-                                </FormSummary.Value>
-                              </FormSummary.Answer>
-                            </FormSummary.Answers>
-                          </FormSummary.Value>
-                        </FormSummary.Answer>
-                      ),
-                    )}
-                  </FormSummary.Value>
-                </FormSummary.Answer>
-              )}
+              <NorskeVirksomheterOppsummering
+                virksomheter={norskeVirksomheter}
+              />
               {utenlandskeVirksomheter &&
                 utenlandskeVirksomheter.length > 0 && (
                   <FormSummary.Answer>
