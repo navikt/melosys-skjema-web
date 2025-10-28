@@ -47,10 +47,7 @@ export function NorskeVirksomheterOppsummering({
       </FormSummary.Label>
       <FormSummary.Value>
         {virksomheter.map((virksomhet, index) => (
-          <NorskVirksomhetOppsummering
-            key={`norsk-${index}`}
-            virksomhet={virksomhet}
-          />
+          <NorskVirksomhetOppsummering key={`norsk-${index}`} virksomhet={virksomhet} />
         ))}
       </FormSummary.Value>
     </FormSummary.Answer>
