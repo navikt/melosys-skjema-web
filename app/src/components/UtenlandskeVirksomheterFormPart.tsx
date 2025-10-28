@@ -4,6 +4,7 @@ import {
   ExpansionCard,
   Label,
   Modal,
+  Table,
   TextField,
   VStack,
 } from "@navikt/ds-react";
@@ -25,6 +26,10 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import { UtenlandskVirksomhetOppsummering } from "~/components/UtenlandskeVirksomheterOppsummering.tsx";
 import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema";
 import { useTranslateError } from "~/utils/translation.ts";
+
+// Midlertidig switch for å kunne vise frem to forskjellige alternativer av visning av valgte virksomheter
+// Denne fjernes og vi lander på ett av alternativene før merging til main
+const useTableView = true;
 
 type UtenlandskVirksomhetFormData = z.infer<typeof utenlandskVirksomhetSchema>;
 type UtenlandskVirksomhetField = UtenlandskVirksomhetFormData & { id: string };
@@ -60,14 +65,30 @@ export function UtenlandskeVirksomheterFormPart({
   return (
     <>
       <Label className="mt-4">Utenlandske virksomheter</Label>
-      {typedFields.map((field, index) => (
-        <UtenlandskVirksomhet
-          key={field.id}
-          onRemove={() => remove(index)}
-          onUpdate={(data) => update(index, data)}
-          virksomhet={field}
-        />
-      ))}
+      {
+        // Denne conditionalen er kun midlertidig for å kunne demonstrere to alternative visninger
+        useTableView ? (
+          <Table size="small">
+            {typedFields.map((field, index) => (
+              <UtenlandskVirksomhetRow
+                key={field.id}
+                onRemove={() => remove(index)}
+                onUpdate={(data) => update(index, data)}
+                virksomhet={field}
+              />
+            ))}
+          </Table>
+        ) : (
+          typedFields.map((field, index) => (
+            <UtenlandskVirksomhet
+              key={field.id}
+              onRemove={() => remove(index)}
+              onUpdate={(data) => update(index, data)}
+              virksomhet={field}
+            />
+          ))
+        )
+      }
       <LeggTilKnapp onClick={apneModal}>
         {t("utenlandskeVirksomheterFormPart.leggTilUtenlandskVirksomhet")}
       </LeggTilKnapp>
@@ -225,7 +246,7 @@ function UtenlandskVirksomhet({
   return (
     <>
       <ExpansionCard
-        aria-label={`t("felles.valgtVirksomhet"): ${virksomhet.navn}`}
+        aria-label={`${t("felles.valgtVirksomhet")}: ${virksomhet.navn}`}
         size="small"
       >
         <ExpansionCard.Header>
@@ -240,6 +261,59 @@ function UtenlandskVirksomhet({
         <FjernKnapp className="mt-1" onClick={onRemove} size="small" />
       </ExpansionCard>
 
+      <Modal
+        header={{
+          heading: t(
+            "utenlandskeVirksomheterFormPart.endreUtenlandskVirksomhet",
+          ),
+        }}
+        onClose={lukkModal}
+        open={isModalOpen}
+        width="medium"
+      >
+        {isModalOpen && (
+          <LeggTilEllerEndreUtenlandskVirksomhetModalContent
+            onCancel={lukkModal}
+            onSubmit={onUpdate}
+            virksomhet={virksomhet}
+          />
+        )}
+      </Modal>
+    </>
+  );
+}
+
+function UtenlandskVirksomhetRow({
+  virksomhet,
+  onRemove,
+  onUpdate,
+}: UtenlandskVirksomhetProps) {
+  const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const apneModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const lukkModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Table.ExpandableRow
+        content={
+          <div className="-my-4">
+            <UtenlandskVirksomhetOppsummering virksomhet={virksomhet} />
+          </div>
+        }
+      >
+        <Table.HeaderCell>{virksomhet.navn}</Table.HeaderCell>
+        <Table.DataCell>
+          <EndreKnapp onClick={apneModal} size="small" />
+          <FjernKnapp onClick={onRemove} size="small" />
+        </Table.DataCell>
+      </Table.ExpandableRow>
       <Modal
         header={{
           heading: t(

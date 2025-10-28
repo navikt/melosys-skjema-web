@@ -4,6 +4,7 @@ import {
   ExpansionCard,
   Label,
   Modal,
+  Table,
   TextField,
 } from "@navikt/ds-react";
 import { useState } from "react";
@@ -22,6 +23,10 @@ import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { NorskVirksomhetOppsummering } from "~/components/NorskeVirksomheterOppsummering.tsx";
 import { norskVirksomhetSchema } from "~/components/virksomheterSchema";
 import { useTranslateError } from "~/utils/translation.ts";
+
+// Midlertidig switch for å kunne vise frem to forskjellige alternativer av visning av valgte virksomheter
+// Denne fjernes og vi lander på ett av alternativene før merging til main
+const useTableView = true;
 
 type NorskVirksomhetFormData = z.infer<typeof norskVirksomhetSchema>;
 type NorskVirksomhetField = NorskVirksomhetFormData & { id: string };
@@ -56,14 +61,30 @@ export function NorskeVirksomheterFormPart({
   return (
     <>
       <Label className="mt-4">Norske virksomheter</Label>
-      {typedFields.map((field, index) => (
-        <NorskVirksomhet
-          key={field.id}
-          onRemove={() => remove(index)}
-          onUpdate={(data) => update(index, data)}
-          virksomhet={field}
-        />
-      ))}
+      {
+        // Denne conditionalen er kun midlertidig for å kunne demonstrere to alternative visninger
+        useTableView ? (
+          <Table size="small">
+            {typedFields.map((field, index) => (
+              <NorskVirksomhetRow
+                key={field.id}
+                onRemove={() => remove(index)}
+                onUpdate={(data) => update(index, data)}
+                virksomhet={field}
+              />
+            ))}
+          </Table>
+        ) : (
+          typedFields.map((field, index) => (
+            <NorskVirksomhet
+              key={field.id}
+              onRemove={() => remove(index)}
+              onUpdate={(data) => update(index, data)}
+              virksomhet={field}
+            />
+          ))
+        )
+      }
       <LeggTilKnapp onClick={apneModal}>
         {t("norskeVirksomheterFormPart.leggTilNorskVirksomhet")}
       </LeggTilKnapp>
@@ -174,6 +195,57 @@ function NorskVirksomhet({
         <FjernKnapp className="mt-1" onClick={onRemove} size="small" />
       </ExpansionCard>
 
+      <Modal
+        header={{
+          heading: t("norskeVirksomheterFormPart.endreNorskVirksomhet"),
+        }}
+        onClose={lukkModal}
+        open={isModalOpen}
+        width="medium"
+      >
+        {isModalOpen && (
+          <LeggTilEllerEndreNorskVirksomhetModalContent
+            onCancel={lukkModal}
+            onSubmit={onUpdate}
+            virksomhet={virksomhet}
+          />
+        )}
+      </Modal>
+    </>
+  );
+}
+
+function NorskVirksomhetRow({
+  virksomhet,
+  onRemove,
+  onUpdate,
+}: NorskVirksomhetProps) {
+  const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const apneModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const lukkModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Table.ExpandableRow
+        content={
+          <div className="-my-4">
+            <NorskVirksomhetOppsummering virksomhet={virksomhet} />
+          </div>
+        }
+      >
+        <Table.HeaderCell>Gjør oppslag på orgnr AS</Table.HeaderCell>
+        <Table.DataCell>
+          <EndreKnapp onClick={apneModal} size="small" />
+          <FjernKnapp onClick={onRemove} size="small" />
+        </Table.DataCell>
+      </Table.ExpandableRow>
       <Modal
         header={{
           heading: t("norskeVirksomheterFormPart.endreNorskVirksomhet"),
