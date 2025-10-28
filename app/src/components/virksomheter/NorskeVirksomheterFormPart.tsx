@@ -24,19 +24,17 @@ import { NorskVirksomhetOppsummering } from "~/components/virksomheter/NorskeVir
 import { norskVirksomhetSchema } from "~/components/virksomheterSchema.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-// Midlertidig switch for å kunne vise frem to forskjellige alternativer av visning av valgte virksomheter
-// Denne fjernes og vi lander på ett av alternativene før merging til main
-const useTableView = true;
-
 type NorskVirksomhetFormData = z.infer<typeof norskVirksomhetSchema>;
 type NorskVirksomhetField = NorskVirksomhetFormData & { id: string };
 
 interface NorskeVirksomheterFormPartProps {
   fieldName: string;
+  useTableView?: boolean;
 }
 
 export function NorskeVirksomheterFormPart({
   fieldName,
+  useTableView,
 }: NorskeVirksomheterFormPartProps) {
   const { control } = useFormContext();
   const { t } = useTranslation();

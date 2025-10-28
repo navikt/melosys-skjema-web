@@ -27,20 +27,18 @@ import { UtenlandskVirksomhetOppsummering } from "~/components/virksomheter/Uten
 import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-// Midlertidig switch for å kunne vise frem to forskjellige alternativer av visning av valgte virksomheter
-// Denne fjernes og vi lander på ett av alternativene før merging til main
-const useTableView = true;
-
 type UtenlandskVirksomhetFormData = z.infer<typeof utenlandskVirksomhetSchema>;
 type UtenlandskVirksomhetField = UtenlandskVirksomhetFormData & { id: string };
 
 interface UtenlandskeVirksomheterSectionProps {
   fieldName: string;
   className?: string;
+  useTableView?: boolean;
 }
 
 export function UtenlandskeVirksomheterFormPart({
   fieldName,
+  useTableView,
 }: UtenlandskeVirksomheterSectionProps) {
   const { control } = useFormContext();
   const { t } = useTranslation();

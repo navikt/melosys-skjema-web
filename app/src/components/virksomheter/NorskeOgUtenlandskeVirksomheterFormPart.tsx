@@ -6,6 +6,10 @@ import { NorskeVirksomheterFormPart } from "~/components/virksomheter/NorskeVirk
 import { UtenlandskeVirksomheterFormPart } from "~/components/virksomheter/UtenlandskeVirksomheterFormPart.tsx";
 import { useTranslateError } from "~/utils/translation.ts";
 
+// Midlertidig switch for å kunne vise frem to forskjellige alternativer av visning av valgte virksomheter
+// Denne fjernes og vi lander på ett av alternativene før merging til main
+const useTableView = true;
+
 interface NorskeOgUtenlandskeVirksomheterFormPartProps {
   fieldName: string;
   label?: string;
@@ -44,10 +48,12 @@ export function NorskeOgUtenlandskeVirksomheterFormPart({
 
       <NorskeVirksomheterFormPart
         fieldName={`${fieldName}.norskeVirksomheter`}
+        useTableView={useTableView}
       />
 
       <UtenlandskeVirksomheterFormPart
         fieldName={`${fieldName}.utenlandskeVirksomheter`}
+        useTableView={useTableView}
       />
 
       {error && (
