@@ -1,8 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { NorskeVirksomheterOppsummering } from "~/components/NorskeVirksomheterOppsummering.tsx";
-import { UtenlandskeVirksomheterOppsummering } from "~/components/UtenlandskeVirksomheterOppsummering.tsx";
+import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidstakerensLonnStepKey } from "./ArbeidstakerensLonnSteg.tsx";
@@ -20,12 +19,6 @@ export function ArbeidstakerensLonnStegOppsummering({
     (steg) => steg.key === arbeidstakerensLonnStepKey,
   );
   const editHref = lonnSteg?.route.replace("$id", skjema.id) || "";
-
-  const norskeVirksomheter =
-    lonnData?.virksomheterSomUtbetalerLonnOgNaturalytelser?.norskeVirksomheter;
-  const utenlandskeVirksomheter =
-    lonnData?.virksomheterSomUtbetalerLonnOgNaturalytelser
-      ?.utenlandskeVirksomheter;
 
   return lonnData ? (
     <FormSummary className="mt-8">
@@ -48,24 +41,14 @@ export function ArbeidstakerensLonnStegOppsummering({
             )}
           </FormSummary.Value>
         </FormSummary.Answer>
-
-        {lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser && (
-          <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidstakerenslonnSteg.hvemUtbetalerLonnenOgEventuelleNaturalytelser",
-              )}
-            </FormSummary.Label>
-            <FormSummary.Value>
-              <NorskeVirksomheterOppsummering
-                virksomheter={norskeVirksomheter}
-              />
-              <UtenlandskeVirksomheterOppsummering
-                virksomheter={utenlandskeVirksomheter}
-              />
-            </FormSummary.Value>
-          </FormSummary.Answer>
-        )}
+        <NorskeOgUtenlandskeVirksomheterOppsummering
+          label={t(
+            "arbeidstakerenslonnSteg.hvemUtbetalerLonnenOgEventuelleNaturalytelser",
+          )}
+          norskeOgUtenlandskeVirksomheter={
+            lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser
+          }
+        />
       </FormSummary.Answers>
 
       <FormSummary.Footer>

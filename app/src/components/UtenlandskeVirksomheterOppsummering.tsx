@@ -109,13 +109,22 @@ export function UtenlandskeVirksomheterOppsummering({
   }
 
   return (
-    <FormSummary.Answer>
+    <FormSummary.Answer className="mt-4" style={{}}>
       <FormSummary.Label>
         {t("utenlandskeVirksomheterFormPart.utenlandskeVirksomheter")}
       </FormSummary.Label>
-      <FormSummary.Value>
+      <FormSummary.Value
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--a-spacing-2)",
+        }}
+      >
         {virksomheter.map((virksomhet, index) => (
-          <UtenlandskVirksomhetOppsummering key={`utenlandsk-${index}`} virksomhet={virksomhet} />
+          <UtenlandskVirksomhetOppsummering
+            key={`utenlandsk-${index}`}
+            virksomhet={virksomhet}
+          />
         ))}
       </FormSummary.Value>
     </FormSummary.Answer>

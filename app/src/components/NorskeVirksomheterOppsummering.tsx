@@ -41,13 +41,22 @@ export function NorskeVirksomheterOppsummering({
   }
 
   return (
-    <FormSummary.Answer>
+    <FormSummary.Answer className="mt-4">
       <FormSummary.Label>
         {t("norskeVirksomheterFormPart.norskeVirksomheter")}
       </FormSummary.Label>
-      <FormSummary.Value>
+      <FormSummary.Value
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--a-spacing-2)",
+        }}
+      >
         {virksomheter.map((virksomhet, index) => (
-          <NorskVirksomhetOppsummering key={`norsk-${index}`} virksomhet={virksomhet} />
+          <NorskVirksomhetOppsummering
+            key={`norsk-${index}`}
+            virksomhet={virksomhet}
+          />
         ))}
       </FormSummary.Value>
     </FormSummary.Answer>
