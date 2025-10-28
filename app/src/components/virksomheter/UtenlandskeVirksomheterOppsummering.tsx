@@ -109,7 +109,7 @@ export function UtenlandskeVirksomheterOppsummering({
   }
 
   return (
-    <FormSummary.Answer className="mt-4" style={{}}>
+    <FormSummary.Answer className="mt-4">
       <FormSummary.Label>
         {t("utenlandskeVirksomheterFormPart.utenlandskeVirksomheter")}
       </FormSummary.Label>

@@ -62,7 +62,9 @@ export function UtenlandskeVirksomheterFormPart({
 
   return (
     <>
-      <Label className="mt-4">Utenlandske virksomheter</Label>
+      {fields.length > 0 && (
+        <Label className="mt-2">Utenlandske virksomheter</Label>
+      )}
       {
         // Denne conditionalen er kun midlertidig for å kunne demonstrere to alternative visninger
         useTableView ? (

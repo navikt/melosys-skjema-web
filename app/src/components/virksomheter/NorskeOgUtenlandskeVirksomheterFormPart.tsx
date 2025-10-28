@@ -42,7 +42,7 @@ export function NorskeOgUtenlandskeVirksomheterFormPart({
     }
   }, [norskeVirksomheter, utenlandskeVirksomheter, fieldName, clearErrors]);
   return (
-    <VStack className="mt-4" gap="space-8">
+    <VStack className="mt-4" gap="space-4">
       {label && <Label>{label}</Label>}
       {description && <Detail>{description}</Detail>}
 

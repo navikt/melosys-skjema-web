@@ -58,7 +58,7 @@ export function NorskeVirksomheterFormPart({
 
   return (
     <>
-      <Label className="mt-4">Norske virksomheter</Label>
+      {fields.length > 0 && <Label>Norske virksomheter</Label>}
       {
         // Denne conditionalen er kun midlertidig for å kunne demonstrere to alternative visninger
         useTableView ? (
