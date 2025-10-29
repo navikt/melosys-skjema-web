@@ -41,14 +41,11 @@ export function UtenlandskeVirksomheterFormPart({
   const { t } = useTranslation();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: fieldName,
   });
-
-  const typedFields = fields as Array<UtenlandskVirksomhetField>;
 
   const apneAddModal = () => {
     setIsAddModalOpen(true);
@@ -58,31 +55,13 @@ export function UtenlandskeVirksomheterFormPart({
     setIsAddModalOpen(false);
   };
 
-  const apneEditModal = (index: number) => {
-    setEditingIndex(index);
-  };
-
-  const lukkEditModal = () => {
-    setEditingIndex(null);
-  };
-
   return (
     <>
-      {fields.length > 0 && (
-        <Label className="mt-2">Utenlandske virksomheter</Label>
-      )}
-      <Table size="small">
-        <Table.Body>
-          {typedFields.map((field, index) => (
-            <UtenlandskVirksomhetRow
-              key={field.id}
-              onEdit={() => apneEditModal(index)}
-              onRemove={() => remove(index)}
-              virksomhet={field}
-            />
-          ))}
-        </Table.Body>
-      </Table>
+      <ValgteUtenlandskeVirksomheter
+        remove={remove}
+        update={update}
+        virksomheter={fields as Array<UtenlandskVirksomhetField>}
+      />
       <LeggTilKnapp onClick={apneAddModal}>
         {t("utenlandskeVirksomheterFormPart.leggTilUtenlandskVirksomhet")}
       </LeggTilKnapp>
@@ -105,29 +84,74 @@ export function UtenlandskeVirksomheterFormPart({
           />
         )}
       </Modal>
+    </>
+  );
+}
 
-      {/* Edit Modal */}
-      {editingIndex !== null && (
-        <Modal
-          header={{
-            heading: t(
-              "utenlandskeVirksomheterFormPart.endreUtenlandskVirksomhet",
-            ),
-          }}
-          onClose={lukkEditModal}
-          open={true}
-          width="medium"
-        >
+type ValgteUtenlandskeVirksomheterProps = {
+  virksomheter: Array<UtenlandskVirksomhetField>;
+  update: (index: number, data: UtenlandskVirksomhetFormData) => void;
+  remove: (index: number) => void;
+};
+
+function ValgteUtenlandskeVirksomheter({
+  virksomheter,
+  update,
+  remove,
+}: ValgteUtenlandskeVirksomheterProps) {
+  const { t } = useTranslation();
+
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  const lukkEditModal = () => {
+    setEditingIndex(null);
+  };
+
+  const openEditModal = (index: number) => {
+    setEditingIndex(index);
+  };
+
+  if (virksomheter.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <Label className="mt-2">Utenlandske virksomheter</Label>
+      <Table size="small">
+        <Table.Body>
+          {virksomheter.map((virksomhet, index) => (
+            <UtenlandskVirksomhetRow
+              key={virksomhet.id}
+              onEdit={() => openEditModal(index)}
+              onRemove={() => remove(index)}
+              virksomhet={virksomhet}
+            />
+          ))}
+        </Table.Body>
+      </Table>
+
+      <Modal
+        header={{
+          heading: t(
+            "utenlandskeVirksomheterFormPart.endreUtenlandskVirksomhet",
+          ),
+        }}
+        onClose={lukkEditModal}
+        open={editingIndex !== null}
+        width="medium"
+      >
+        {editingIndex !== null && (
           <LeggTilEllerEndreUtenlandskVirksomhetModalContent
             onCancel={lukkEditModal}
             onSubmit={(data) => {
               update(editingIndex, data);
               lukkEditModal();
             }}
-            virksomhet={typedFields[editingIndex]}
+            virksomhet={virksomheter[editingIndex]}
           />
-        </Modal>
-      )}
+        )}
+      </Modal>
     </>
   );
 }
@@ -241,7 +265,7 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
 }
 
 interface UtenlandskVirksomhetRowProps {
-  virksomhet: UtenlandskVirksomhetFormData;
+  virksomhet: UtenlandskVirksomhetField;
   onRemove: () => void;
   onEdit: () => void;
 }

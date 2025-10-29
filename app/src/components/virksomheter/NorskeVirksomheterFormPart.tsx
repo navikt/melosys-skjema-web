@@ -31,14 +31,11 @@ export function NorskeVirksomheterFormPart({
   const { t } = useTranslation();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: fieldName,
   });
-
-  const typedFields = fields as Array<NorskVirksomhetField>;
 
   const apneAddModal = () => {
     setIsAddModalOpen(true);
@@ -48,29 +45,13 @@ export function NorskeVirksomheterFormPart({
     setIsAddModalOpen(false);
   };
 
-  const apneEditModal = (index: number) => {
-    setEditingIndex(index);
-  };
-
-  const lukkEditModal = () => {
-    setEditingIndex(null);
-  };
-
   return (
     <>
-      {fields.length > 0 && <Label>Norske virksomheter</Label>}
-      <Table size="small">
-        <Table.Body>
-          {typedFields.map((field, index) => (
-            <NorskVirksomhetRow
-              key={field.id}
-              onEdit={() => apneEditModal(index)}
-              onRemove={() => remove(index)}
-              virksomhet={field}
-            />
-          ))}
-        </Table.Body>
-      </Table>
+      <ValgteNorskeVirksomheter
+        remove={remove}
+        update={update}
+        virksomheter={fields as Array<NorskVirksomhetField>}
+      />
       <LeggTilKnapp onClick={apneAddModal}>
         {t("norskeVirksomheterFormPart.leggTilNorskVirksomhet")}
       </LeggTilKnapp>
@@ -91,27 +72,71 @@ export function NorskeVirksomheterFormPart({
           />
         )}
       </Modal>
+    </>
+  );
+}
 
-      {/* Edit Modal */}
-      {editingIndex !== null && (
-        <Modal
-          header={{
-            heading: t("norskeVirksomheterFormPart.endreNorskVirksomhet"),
-          }}
-          onClose={lukkEditModal}
-          open={true}
-          width="medium"
-        >
+type ValgteNorskeVirksomheterProps = {
+  virksomheter: Array<NorskVirksomhetField>;
+  update: (index: number, data: NorskVirksomhetFormData) => void;
+  remove: (index: number) => void;
+};
+
+function ValgteNorskeVirksomheter({
+  virksomheter,
+  update,
+  remove,
+}: ValgteNorskeVirksomheterProps) {
+  const { t } = useTranslation();
+
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  const lukkEditModal = () => {
+    setEditingIndex(null);
+  };
+
+  const openEditModal = (index: number) => {
+    setEditingIndex(index);
+  };
+
+  if (virksomheter.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <Label>Norske virksomheter</Label>
+      <Table size="small">
+        <Table.Body>
+          {virksomheter.map((virksomhet, index) => (
+            <NorskVirksomhetRow
+              key={virksomhet.id}
+              onEdit={() => openEditModal(index)}
+              onRemove={() => remove(index)}
+              virksomhet={virksomhet}
+            />
+          ))}
+        </Table.Body>
+      </Table>
+      <Modal
+        header={{
+          heading: t("norskeVirksomheterFormPart.endreNorskVirksomhet"),
+        }}
+        onClose={lukkEditModal}
+        open={editingIndex !== null}
+        width="medium"
+      >
+        {editingIndex !== null && (
           <LeggTilEllerEndreNorskVirksomhetModalContent
             onCancel={lukkEditModal}
             onSubmit={(data) => {
               update(editingIndex, data);
               lukkEditModal();
             }}
-            virksomhet={typedFields[editingIndex]}
+            virksomhet={virksomheter[editingIndex]}
           />
-        </Modal>
-      )}
+        )}
+      </Modal>
     </>
   );
 }
@@ -165,7 +190,7 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
 }
 
 interface NorskVirksomhetRowProps {
-  virksomhet: NorskVirksomhetFormData;
+  virksomhet: NorskVirksomhetField;
   onRemove: () => void;
   onEdit: () => void;
 }
