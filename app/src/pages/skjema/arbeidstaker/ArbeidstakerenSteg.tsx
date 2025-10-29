@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select, TextField, VStack } from "@navikt/ds-react";
+import { Select, TextField } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -9,9 +9,8 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
-import { NorskeVirksomheterFormPart } from "~/components/NorskeVirksomheterFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { UtenlandskeVirksomheterFormPart } from "~/components/UtenlandskeVirksomheterFormPart.tsx";
+import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { postArbeidstakeren } from "~/httpClients/melsosysSkjemaApiClient.ts";
@@ -217,11 +216,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
           />
 
           {skalJobbeForFlereVirksomheter && (
-            <VStack className="mt-4" style={{ gap: "var(--a-spacing-4)" }}>
-              <NorskeVirksomheterFormPart fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode.norskeVirksomheter" />
-
-              <UtenlandskeVirksomheterFormPart fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode.utenlandskeVirksomheter" />
-            </VStack>
+            <NorskeOgUtenlandskeVirksomheterFormPart fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode" />
           )}
         </SkjemaSteg>
       </form>

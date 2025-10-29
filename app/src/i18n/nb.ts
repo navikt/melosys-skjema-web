@@ -15,12 +15,14 @@ export const nb = {
       tilbake: "Tilbake",
       neste: "Neste",
       fjern: "Fjern",
+      endre: "Endre",
       leggTil: "Legg til",
       endreSvar: "Endre svar",
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
       startSoknad: "Start søknad",
+      valgtVirksomhet: "Valgt virksomhet",
     },
     skjemaVeiledning: {
       hei: "Hei",
@@ -84,6 +86,7 @@ export const nb = {
       norskeVirksomheter: "Norske virksomheter",
       organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk virksomhet",
+      endreNorskVirksomhet: "Endre norsk virksomhet",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",
@@ -100,6 +103,7 @@ export const nb = {
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
         "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
+      endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
     },
     rollevelgerPage: {
       hvemVilDuFylleUtSkjemaPaVegneAv:

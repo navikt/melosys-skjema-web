@@ -15,12 +15,14 @@ export const en = {
       tilbake: "Back",
       neste: "Next",
       fjern: "Remove",
+      endre: "Edit",
       leggTil: "Add",
       endreSvar: "Edit answers",
       pakrevd: "required",
       forrigeSteg: "Previous step",
       nesteSteg: "Next step",
       startSoknad: "Start application",
+      valgtVirksomhet: "Selected company",
     },
     skjemaVeiledning: {
       hei: "Hello",
@@ -85,6 +87,7 @@ export const en = {
       norskeVirksomheter: "Norwegian companies",
       organisasjonsnummer: "Organization number",
       leggTilNorskVirksomhet: "Add Norwegian company",
+      endreNorskVirksomhet: "Edit Norwegian company",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",
@@ -102,6 +105,7 @@ export const en = {
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
         "Does the company belong to the same consortium as the Norwegian employer?",
       leggTilUtenlandskVirksomhet: "Add foreign company",
+      endreUtenlandskVirksomhet: "Edit foreign company",
     },
     rollevelgerPage: {
       hvemVilDuFylleUtSkjemaPaVegneAv:
