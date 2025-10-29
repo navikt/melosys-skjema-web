@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
-  ExpansionCard,
   Label,
   Modal,
   Table,
@@ -33,12 +32,10 @@ type UtenlandskVirksomhetField = UtenlandskVirksomhetFormData & { id: string };
 interface UtenlandskeVirksomheterSectionProps {
   fieldName: string;
   className?: string;
-  useTableView?: boolean;
 }
 
 export function UtenlandskeVirksomheterFormPart({
   fieldName,
-  useTableView,
 }: UtenlandskeVirksomheterSectionProps) {
   const { control } = useFormContext();
   const { t } = useTranslation();
@@ -74,32 +71,18 @@ export function UtenlandskeVirksomheterFormPart({
       {fields.length > 0 && (
         <Label className="mt-2">Utenlandske virksomheter</Label>
       )}
-      {
-        // Denne conditionalen er kun midlertidig for å kunne demonstrere to alternative visninger
-        useTableView ? (
-          <Table size="small">
-            <Table.Body>
-              {typedFields.map((field, index) => (
-                <UtenlandskVirksomhetRow
-                  key={field.id}
-                  onEdit={() => apneEditModal(index)}
-                  onRemove={() => remove(index)}
-                  virksomhet={field}
-                />
-              ))}
-            </Table.Body>
-          </Table>
-        ) : (
-          typedFields.map((field, index) => (
-            <UtenlandskVirksomhet
+      <Table size="small">
+        <Table.Body>
+          {typedFields.map((field, index) => (
+            <UtenlandskVirksomhetRow
               key={field.id}
+              onEdit={() => apneEditModal(index)}
               onRemove={() => remove(index)}
-              onUpdate={(data) => update(index, data)}
               virksomhet={field}
             />
-          ))
-        )
-      }
+          ))}
+        </Table.Body>
+      </Table>
       <LeggTilKnapp onClick={apneAddModal}>
         {t("utenlandskeVirksomheterFormPart.leggTilUtenlandskVirksomhet")}
       </LeggTilKnapp>
@@ -257,72 +240,10 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
   );
 }
 
-interface UtenlandskVirksomhetProps {
-  virksomhet: UtenlandskVirksomhetFormData;
-  onRemove: () => void;
-  onUpdate: (data: UtenlandskVirksomhetFormData) => void;
-}
-
 interface UtenlandskVirksomhetRowProps {
   virksomhet: UtenlandskVirksomhetFormData;
   onRemove: () => void;
   onEdit: () => void;
-}
-
-function UtenlandskVirksomhet({
-  virksomhet,
-  onRemove,
-  onUpdate,
-}: UtenlandskVirksomhetProps) {
-  const { t } = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const apneModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const lukkModal = () => {
-    setIsModalOpen(false);
-  };
-
-  return (
-    <>
-      <ExpansionCard
-        aria-label={`${t("felles.valgtVirksomhet")}: ${virksomhet.navn}`}
-        size="small"
-      >
-        <ExpansionCard.Header>
-          <ExpansionCard.Title size="small">
-            {virksomhet.navn}
-          </ExpansionCard.Title>
-        </ExpansionCard.Header>
-        <ExpansionCard.Content>
-          <UtenlandskVirksomhetOppsummering virksomhet={virksomhet} />
-        </ExpansionCard.Content>
-        <EndreKnapp className="mt-1" onClick={apneModal} size="small" />
-        <FjernKnapp className="mt-1" onClick={onRemove} size="small" />
-      </ExpansionCard>
-
-      <Modal
-        header={{
-          heading: t(
-            "utenlandskeVirksomheterFormPart.endreUtenlandskVirksomhet",
-          ),
-        }}
-        onClose={lukkModal}
-        open={isModalOpen}
-        width="medium"
-      >
-        {isModalOpen && (
-          <LeggTilEllerEndreUtenlandskVirksomhetModalContent
-            onCancel={lukkModal}
-            onSubmit={onUpdate}
-            virksomhet={virksomhet}
-          />
-        )}
-      </Modal>
-    </>
-  );
 }
 
 function UtenlandskVirksomhetRow({

@@ -1,12 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Button,
-  ExpansionCard,
-  Label,
-  Modal,
-  Table,
-  TextField,
-} from "@navikt/ds-react";
+import { Button, Label, Modal, Table, TextField } from "@navikt/ds-react";
 import { useState } from "react";
 import {
   FormProvider,
@@ -29,12 +22,10 @@ type NorskVirksomhetField = NorskVirksomhetFormData & { id: string };
 
 interface NorskeVirksomheterFormPartProps {
   fieldName: string;
-  useTableView?: boolean;
 }
 
 export function NorskeVirksomheterFormPart({
   fieldName,
-  useTableView,
 }: NorskeVirksomheterFormPartProps) {
   const { control } = useFormContext();
   const { t } = useTranslation();
@@ -68,32 +59,18 @@ export function NorskeVirksomheterFormPart({
   return (
     <>
       {fields.length > 0 && <Label>Norske virksomheter</Label>}
-      {
-        // Denne conditionalen er kun midlertidig for å kunne demonstrere to alternative visninger
-        useTableView ? (
-          <Table size="small">
-            <Table.Body>
-              {typedFields.map((field, index) => (
-                <NorskVirksomhetRow
-                  key={field.id}
-                  onEdit={() => apneEditModal(index)}
-                  onRemove={() => remove(index)}
-                  virksomhet={field}
-                />
-              ))}
-            </Table.Body>
-          </Table>
-        ) : (
-          typedFields.map((field, index) => (
-            <NorskVirksomhet
+      <Table size="small">
+        <Table.Body>
+          {typedFields.map((field, index) => (
+            <NorskVirksomhetRow
               key={field.id}
+              onEdit={() => apneEditModal(index)}
               onRemove={() => remove(index)}
-              onUpdate={(data) => update(index, data)}
               virksomhet={field}
             />
-          ))
-        )
-      }
+          ))}
+        </Table.Body>
+      </Table>
       <LeggTilKnapp onClick={apneAddModal}>
         {t("norskeVirksomheterFormPart.leggTilNorskVirksomhet")}
       </LeggTilKnapp>
@@ -187,70 +164,10 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
   );
 }
 
-interface NorskVirksomhetProps {
-  virksomhet: NorskVirksomhetFormData;
-  onRemove: () => void;
-  onUpdate: (data: NorskVirksomhetFormData) => void;
-}
-
 interface NorskVirksomhetRowProps {
   virksomhet: NorskVirksomhetFormData;
   onRemove: () => void;
   onEdit: () => void;
-}
-
-function NorskVirksomhet({
-  virksomhet,
-  onRemove,
-  onUpdate,
-}: NorskVirksomhetProps) {
-  const { t } = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const apneModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const lukkModal = () => {
-    setIsModalOpen(false);
-  };
-
-  return (
-    <>
-      <ExpansionCard
-        aria-label={`${t("felles.valgtVirksomhet")}: Gjør oppslag på orgnr AS`}
-        size="small"
-      >
-        <ExpansionCard.Header>
-          <ExpansionCard.Title size="small">
-            Gjør Oppslag På Orgnr AS
-          </ExpansionCard.Title>
-        </ExpansionCard.Header>
-        <ExpansionCard.Content>
-          <NorskVirksomhetOppsummering virksomhet={virksomhet} />
-        </ExpansionCard.Content>
-        <EndreKnapp className="mt-1" onClick={apneModal} size="small" />
-        <FjernKnapp className="mt-1" onClick={onRemove} size="small" />
-      </ExpansionCard>
-
-      <Modal
-        header={{
-          heading: t("norskeVirksomheterFormPart.endreNorskVirksomhet"),
-        }}
-        onClose={lukkModal}
-        open={isModalOpen}
-        width="medium"
-      >
-        {isModalOpen && (
-          <LeggTilEllerEndreNorskVirksomhetModalContent
-            onCancel={lukkModal}
-            onSubmit={onUpdate}
-            virksomhet={virksomhet}
-          />
-        )}
-      </Modal>
-    </>
-  );
 }
 
 function NorskVirksomhetRow({
