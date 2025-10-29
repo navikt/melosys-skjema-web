@@ -14,7 +14,7 @@ import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { NorskVirksomhetOppsummering } from "~/components/virksomheter/NorskeVirksomheterOppsummering.tsx";
-import { norskVirksomhetSchema } from "~/components/virksomheterSchema.ts";
+import { norskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 type NorskVirksomhetFormData = z.infer<typeof norskVirksomhetSchema>;

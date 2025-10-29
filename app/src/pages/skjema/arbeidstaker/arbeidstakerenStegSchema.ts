@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheterSchema";
+import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
 export const AKTIVITET_OPTIONS = [
   { value: "studier", labelKey: "arbeidstakerenSteg.studier" },
