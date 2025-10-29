@@ -23,7 +23,7 @@ import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskVirksomhetOppsummering } from "~/components/virksomheter/UtenlandskeVirksomheterOppsummering.tsx";
-import { utenlandskVirksomhetSchema } from "~/components/virksomheterSchema.ts";
+import { utenlandskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 type UtenlandskVirksomhetFormData = z.infer<typeof utenlandskVirksomhetSchema>;

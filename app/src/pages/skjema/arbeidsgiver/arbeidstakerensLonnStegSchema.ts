@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheterSchema";
+import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
 const baseArbeidstakerensLonnSchema = z.object({
   arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z
