@@ -43,7 +43,8 @@ export function UtenlandskeVirksomheterFormPart({
   const { control } = useFormContext();
   const { t } = useTranslation();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const { fields, append, remove, update } = useFieldArray({
     control,
@@ -52,12 +53,20 @@ export function UtenlandskeVirksomheterFormPart({
 
   const typedFields = fields as Array<UtenlandskVirksomhetField>;
 
-  const apneModal = () => {
-    setIsModalOpen(true);
+  const apneAddModal = () => {
+    setIsAddModalOpen(true);
   };
 
-  const lukkModal = () => {
-    setIsModalOpen(false);
+  const lukkAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const apneEditModal = (index: number) => {
+    setEditingIndex(index);
+  };
+
+  const lukkEditModal = () => {
+    setEditingIndex(null);
   };
 
   return (
@@ -69,14 +78,16 @@ export function UtenlandskeVirksomheterFormPart({
         // Denne conditionalen er kun midlertidig for å kunne demonstrere to alternative visninger
         useTableView ? (
           <Table size="small">
-            {typedFields.map((field, index) => (
-              <UtenlandskVirksomhetRow
-                key={field.id}
-                onRemove={() => remove(index)}
-                onUpdate={(data) => update(index, data)}
-                virksomhet={field}
-              />
-            ))}
+            <Table.Body>
+              {typedFields.map((field, index) => (
+                <UtenlandskVirksomhetRow
+                  key={field.id}
+                  onEdit={() => apneEditModal(index)}
+                  onRemove={() => remove(index)}
+                  virksomhet={field}
+                />
+              ))}
+            </Table.Body>
           </Table>
         ) : (
           typedFields.map((field, index) => (
@@ -89,26 +100,51 @@ export function UtenlandskeVirksomheterFormPart({
           ))
         )
       }
-      <LeggTilKnapp onClick={apneModal}>
+      <LeggTilKnapp onClick={apneAddModal}>
         {t("utenlandskeVirksomheterFormPart.leggTilUtenlandskVirksomhet")}
       </LeggTilKnapp>
+
+      {/* Add Modal */}
       <Modal
         header={{
           heading: t(
             "utenlandskeVirksomheterFormPart.leggTilUtenlandskVirksomhet",
           ),
         }}
-        onClose={lukkModal}
-        open={isModalOpen}
+        onClose={lukkAddModal}
+        open={isAddModalOpen}
         width="medium"
       >
-        {isModalOpen && (
+        {isAddModalOpen && (
           <LeggTilEllerEndreUtenlandskVirksomhetModalContent
-            onCancel={lukkModal}
+            onCancel={lukkAddModal}
             onSubmit={append}
           />
         )}
       </Modal>
+
+      {/* Edit Modal */}
+      {editingIndex !== null && (
+        <Modal
+          header={{
+            heading: t(
+              "utenlandskeVirksomheterFormPart.endreUtenlandskVirksomhet",
+            ),
+          }}
+          onClose={lukkEditModal}
+          open={true}
+          width="medium"
+        >
+          <LeggTilEllerEndreUtenlandskVirksomhetModalContent
+            onCancel={lukkEditModal}
+            onSubmit={(data) => {
+              update(editingIndex, data);
+              lukkEditModal();
+            }}
+            virksomhet={typedFields[editingIndex]}
+          />
+        </Modal>
+      )}
     </>
   );
 }
@@ -227,6 +263,12 @@ interface UtenlandskVirksomhetProps {
   onUpdate: (data: UtenlandskVirksomhetFormData) => void;
 }
 
+interface UtenlandskVirksomhetRowProps {
+  virksomhet: UtenlandskVirksomhetFormData;
+  onRemove: () => void;
+  onEdit: () => void;
+}
+
 function UtenlandskVirksomhet({
   virksomhet,
   onRemove,
@@ -286,52 +328,21 @@ function UtenlandskVirksomhet({
 function UtenlandskVirksomhetRow({
   virksomhet,
   onRemove,
-  onUpdate,
-}: UtenlandskVirksomhetProps) {
-  const { t } = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const apneModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const lukkModal = () => {
-    setIsModalOpen(false);
-  };
-
+  onEdit,
+}: UtenlandskVirksomhetRowProps) {
   return (
-    <>
-      <Table.ExpandableRow
-        content={
-          <div className="-my-4">
-            <UtenlandskVirksomhetOppsummering virksomhet={virksomhet} />
-          </div>
-        }
-      >
-        <Table.HeaderCell>{virksomhet.navn}</Table.HeaderCell>
-        <Table.DataCell>
-          <EndreKnapp onClick={apneModal} size="small" />
-          <FjernKnapp onClick={onRemove} size="small" />
-        </Table.DataCell>
-      </Table.ExpandableRow>
-      <Modal
-        header={{
-          heading: t(
-            "utenlandskeVirksomheterFormPart.endreUtenlandskVirksomhet",
-          ),
-        }}
-        onClose={lukkModal}
-        open={isModalOpen}
-        width="medium"
-      >
-        {isModalOpen && (
-          <LeggTilEllerEndreUtenlandskVirksomhetModalContent
-            onCancel={lukkModal}
-            onSubmit={onUpdate}
-            virksomhet={virksomhet}
-          />
-        )}
-      </Modal>
-    </>
+    <Table.ExpandableRow
+      content={
+        <div className="-my-4">
+          <UtenlandskVirksomhetOppsummering virksomhet={virksomhet} />
+        </div>
+      }
+    >
+      <Table.HeaderCell>{virksomhet.navn}</Table.HeaderCell>
+      <Table.DataCell>
+        <EndreKnapp onClick={onEdit} size="small" />
+        <FjernKnapp onClick={onRemove} size="small" />
+      </Table.DataCell>
+    </Table.ExpandableRow>
   );
 }
