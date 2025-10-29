@@ -105,7 +105,7 @@ function ValgteNorskeVirksomheter({
 
   return (
     <>
-      <Label>Norske virksomheter</Label>
+      <Label>{t("norskeVirksomheterFormPart.norskeVirksomheter")}</Label>
       <Table size="small">
         <Table.Body>
           {virksomheter.map((virksomhet, index) => (

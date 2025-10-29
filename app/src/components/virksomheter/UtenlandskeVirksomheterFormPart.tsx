@@ -117,7 +117,9 @@ function ValgteUtenlandskeVirksomheter({
 
   return (
     <>
-      <Label className="mt-2">Utenlandske virksomheter</Label>
+      <Label className="mt-2">
+        {t("utenlandskeVirksomheterFormPart.utenlandskeVirksomheter")}
+      </Label>
       <Table size="small">
         <Table.Body>
           {virksomheter.map((virksomhet, index) => (
