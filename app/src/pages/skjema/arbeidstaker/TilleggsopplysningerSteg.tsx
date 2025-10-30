@@ -23,7 +23,7 @@ import {
 import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 import { tilleggsopplysningerSchema } from "./tilleggsopplysningerStegSchema.ts";
 
-const stepKey = "tilleggsopplysninger";
+export const stepKey = "tilleggsopplysninger";
 
 type TilleggsopplysningerFormData = z.infer<typeof tilleggsopplysningerSchema>;
 

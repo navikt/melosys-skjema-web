@@ -31,7 +31,7 @@ import {
 } from "./arbeidstakerenStegSchema.ts";
 import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 
-const stepKey = "arbeidstakeren";
+export const stepKey = "arbeidstakeren";
 
 type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
 
