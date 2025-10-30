@@ -14,6 +14,7 @@ import {
   formFieldValues,
   testArbeidsgiverSkjema,
   testOrganization,
+  testUserInfo,
 } from "../fixtures/test-data";
 import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
@@ -25,9 +26,12 @@ import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidsgiver/utenlan
 
 test.describe("Arbeidsgiver komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
-    await setupApiMocksForArbeidsgiver(page, testArbeidsgiverSkjema, [
-      testOrganization,
-    ]);
+    await setupApiMocksForArbeidsgiver(
+      page,
+      testArbeidsgiverSkjema,
+      [testOrganization],
+      testUserInfo,
+    );
   });
 
   test("skal velge rolle som arbeidsgiver og starte søknad", async ({

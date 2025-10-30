@@ -1,41 +1,54 @@
 import { Buildings3Icon, PersonIcon } from "@navikt/aksel-icons";
-import { Box, Heading, LinkCard, Page } from "@navikt/ds-react";
+import { Box, ErrorMessage, Heading, LinkCard, Page } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
+import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { setValgtRolle } from "~/utils/sessionStorage.ts";
 
 export function RollevelgerPage() {
   const { t } = useTranslation();
   const altinnTilgangerQuery = useQuery(listAltinnTilganger());
+  const userInfoQuery = useQuery(getUserInfo());
 
-  if (altinnTilgangerQuery.isLoading) {
+  if (altinnTilgangerQuery.isLoading || userInfoQuery.isLoading) {
     return <div>{t("felles.laster")}</div>;
   }
 
   if (altinnTilgangerQuery.isError) {
     return (
-      <div>
+      <ErrorMessage>
         {t("felles.feil")}: {`${altinnTilgangerQuery.error}`}
-      </div>
+      </ErrorMessage>
+    );
+  }
+
+  if (userInfoQuery.isError) {
+    return (
+      <ErrorMessage>
+        {t("felles.feil")}: {`${userInfoQuery.error}`}
+      </ErrorMessage>
     );
   }
 
   const altinnTilganger = altinnTilgangerQuery.data;
+  const userInfo = userInfoQuery.data;
 
   return (
     <Page.Block>
       <Heading size="large">
         {t("rollevelgerPage.hvemVilDuFylleUtSkjemaPaVegneAv")}
       </Heading>
-      <VelgRolleCard
-        className="mt-4"
-        description={t("rollevelgerPage.degSelv")}
-        href="/skjema/arbeidstaker"
-        icon={<PersonIcon aria-hidden />}
-        title="Navn Navnesen"
-      />
+      {userInfo && (
+        <VelgRolleCard
+          className="mt-4"
+          description={t("rollevelgerPage.degSelv")}
+          href="/skjema/arbeidstaker"
+          icon={<PersonIcon aria-hidden />}
+          title={userInfo.name}
+        />
+      )}
       {altinnTilganger?.map((altinnTilgang, index) => (
         <VelgRolleCard
           className="mt-2"

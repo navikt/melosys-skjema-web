@@ -14,4 +14,8 @@ export class RollevelgerPage {
   async selectOrganization(organizationName: string) {
     await this.page.getByText(organizationName).click();
   }
+
+  async selectArbeidstaker(name: string) {
+    await this.page.getByText(name).click();
+  }
 }

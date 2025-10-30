@@ -1,15 +1,12 @@
 import { Page } from "@playwright/test";
 
+import { UserInfo } from "../../src/httpClients/dekoratorenClient";
 import type {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
   OrganisasjonDto,
 } from "../../src/types/melosysSkjemaTypes";
-import {
-  testArbeidsgiverSkjema,
-  testArbeidstakerSkjema,
-  testUserInfo,
-} from "./test-data";
+import { testArbeidsgiverSkjema, testArbeidstakerSkjema } from "./test-data";
 
 export async function mockHentTilganger(
   page: Page,
@@ -24,12 +21,15 @@ export async function mockHentTilganger(
   });
 }
 
-export async function mockUserInfo(page: Page) {
-  await page.route("/api/userinfo", async (route) => {
+export async function mockUserInfo(page: Page, userInfo: UserInfo) {
+  await page.route("/nav-dekoratoren-api/auth", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(testUserInfo),
+      body: JSON.stringify({
+        authenticated: true,
+        ...userInfo,
+      }),
     });
   });
 }
@@ -169,6 +169,72 @@ export async function mockFetchArbeidstakerSkjema(
   );
 }
 
+export async function mockPostArbeidstakeren(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidstakeren`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostFamiliemedlemmer(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/familiemedlemmer`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostSkatteforholdOgInntekt(
+  page: Page,
+  skjemaId: string,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/skatteforhold-og-inntekt`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostTilleggsopplysninger(
+  page: Page,
+  skjemaId: string,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/tilleggsopplysninger`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
 export async function mockSubmitSkjema(page: Page) {
   await page.route(
     "/api/skjema/utsendt-arbeidstaker/*/submit",
@@ -186,14 +252,31 @@ export async function setupApiMocksForArbeidsgiver(
   page: Page,
   skjema: ArbeidsgiversSkjemaDto,
   tilganger: OrganisasjonDto[],
+  testUserInfo: UserInfo,
 ) {
   await mockHentTilganger(page, tilganger);
-  await mockUserInfo(page);
+  await mockUserInfo(page, testUserInfo);
   await mockCreateArbeidsgiverSkjema(page);
   await mockFetchArbeidsgiverSkjema(page, skjema);
   await mockPostArbeidsgiveren(page, skjema.id);
   await mockPostVirksomhetINorge(page, skjema.id);
   await mockPostUtenlandsoppdraget(page, skjema.id);
   await mockPostArbeidstakerensLonn(page, skjema.id);
+  await mockSubmitSkjema(page);
+}
+
+export async function setupApiMocksForArbeidstaker(
+  page: Page,
+  skjema: ArbeidstakersSkjemaDto,
+  userInfo: UserInfo,
+) {
+  await mockUserInfo(page, userInfo);
+  await mockHentTilganger(page, []);
+  await mockCreateArbeidstakerSkjema(page);
+  await mockFetchArbeidstakerSkjema(page, skjema);
+  await mockPostArbeidstakeren(page, skjema.id);
+  await mockPostFamiliemedlemmer(page, skjema.id);
+  await mockPostSkatteforholdOgInntekt(page, skjema.id);
+  await mockPostTilleggsopplysninger(page, skjema.id);
   await mockSubmitSkjema(page);
 }

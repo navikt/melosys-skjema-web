@@ -187,7 +187,7 @@ export const nb = {
       hvorMyePengerMottarDuBruttoPerManed:
         "Hvor mye penger mottar du brutto per måned",
       oppgiBelopetINorskeKroner: "Oppgi beløpet i norske kroner",
-      hvaSlangsPengestotteMottarDu: "Hva slags pengestøtte mottar du",
+      hvaSlagsPengestotteMottarDu: "Hva slags pengestøtte mottar du",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
