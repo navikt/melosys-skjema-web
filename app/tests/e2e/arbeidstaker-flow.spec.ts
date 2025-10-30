@@ -19,6 +19,7 @@ import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidstakerSkjemaVeiledningPage } from "../pages/skjema/arbeidstaker/arbeidstaker-skjema-veiledning.page";
 import { ArbeidstakerenStegPage } from "../pages/skjema/arbeidstaker/arbeidstakeren-steg.page";
 import { FamiliemedlemmerStegPage } from "../pages/skjema/arbeidstaker/familiemedlemmer-steg.page";
+import { OppsummeringStegPage } from "../pages/skjema/arbeidstaker/oppsummering-steg.page";
 import { SkatteforholdOgInntektStegPage } from "../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";
 import { TilleggsopplysningerStegPage } from "../pages/skjema/arbeidstaker/tilleggsopplysninger-steg.page";
 
@@ -176,9 +177,8 @@ test.describe("Arbeidstaker komplett flyt", () => {
       expectedTilleggsopplysningerPayload,
     );
 
-    // TODO: uncomment når oppsummering page er laget
-    // Verifiser navigerering til oppsummering
-    // await tilleggsopplysningerStegPage.assertNavigatedToOppsummering();
+    // Verifiser navigering til neste steg
+    await tilleggsopplysningerStegPage.assertNavigatedToOppsummering();
   });
 
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
@@ -219,11 +219,31 @@ test.describe("Arbeidstaker komplett flyt", () => {
       },
     });
 
-    // Naviger direkte til oppsummering
-    await page.goto(
-      `/skjema/arbeidstaker/${testArbeidstakerSkjema.id}/oppsummering`,
+    const oppsummeringPage = new OppsummeringStegPage(
+      page,
+      testArbeidstakerSkjema,
     );
 
-    // TODO: gjøre assertions når oppsummering page er laget
+    // Naviger direkte til oppsummering
+    await oppsummeringPage.goto();
+
+    // Verifiser at oppsummeringssiden vises
+    await oppsummeringPage.assertIsVisible();
+
+    // Verifiser data fra arbeidstakeren-steget
+    await oppsummeringPage.assertArbeidstakerenData(arbeidstakerenData);
+
+    // Verifiser data fra skatteforhold og inntekt-steget
+    await oppsummeringPage.assertSkatteforholdOgInntektData(
+      skatteforholdOgInntektData,
+    );
+
+    // Verifiser data fra familiemedlemmer-steget
+    await oppsummeringPage.assertFamiliemedlemmerData(familiemedlemmerData);
+
+    // Verifiser data fra tilleggsopplysninger-steget
+    await oppsummeringPage.assertTilleggsopplysningerData(
+      tilleggsopplysningerData,
+    );
   });
 });
