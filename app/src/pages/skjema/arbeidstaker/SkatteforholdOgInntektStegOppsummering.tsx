@@ -84,7 +84,7 @@ export function SkatteforholdOgInntektStegOppsummering({
           {skatteforholdData.pengestotteSomMottasFraAndreLandBeskrivelse && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t("skatteforholdOgInntektSteg.hvaSlangsPengestotteMottarDu")}
+                {t("skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu")}
               </FormSummary.Label>
               <FormSummary.Value>
                 {skatteforholdData.pengestotteSomMottasFraAndreLandBeskrivelse}
