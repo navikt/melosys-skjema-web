@@ -176,7 +176,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
       expectedTilleggsopplysningerPayload,
     );
 
-    // TODO: uncomment når oppsumemring page er laget
+    // TODO: uncomment når oppsummering page er laget
     // Verifiser navigerering til oppsummering
     // await tilleggsopplysningerStegPage.assertNavigatedToOppsummering();
   });
