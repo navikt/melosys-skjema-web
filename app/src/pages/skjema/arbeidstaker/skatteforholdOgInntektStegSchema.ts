@@ -91,7 +91,7 @@ export const skatteforholdOgInntektSchema = baseSkatteforholdOgInntektSchema
   })
   .refine(validerPengestotteBeskrivelse, {
     message:
-      "skatteforholdOgInntektSteg.duMaBeskriveHvaSlangsPengestotteDuMottar",
+      "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
     path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
   })
   .refine(validerPengestotteLand, {

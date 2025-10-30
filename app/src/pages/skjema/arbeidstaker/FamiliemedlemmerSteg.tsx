@@ -23,7 +23,7 @@ import {
 import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 import { familiemedlemmerSchema } from "./familiemedlemmerStegSchema.ts";
 
-const stepKey = "familiemedlemmer";
+export const stepKey = "familiemedlemmer";
 
 type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
 

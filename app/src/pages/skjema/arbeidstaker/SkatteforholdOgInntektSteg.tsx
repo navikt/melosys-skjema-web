@@ -25,7 +25,7 @@ import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx"
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
-const stepKey = "skatteforhold-og-inntekt";
+export const stepKey = "skatteforhold-og-inntekt";
 
 type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
