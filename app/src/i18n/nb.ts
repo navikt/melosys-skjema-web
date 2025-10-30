@@ -196,7 +196,7 @@ export const nb = {
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
         "Du må svare på om du mottar pengestøtte fra et annet EØS-land eller Sveits",
-      duMaBeskrivehvaSlagsPengestotteDuMottar:
+      duMaBeskriveHvaSlagsPengestotteDuMottar:
         "Du må beskrive hva slags pengestøtte du mottar",
       duMaVelgeHvilketLandSomUtbetalerPengestotten:
         "Du må velge hvilket land som utbetaler pengestøtten",

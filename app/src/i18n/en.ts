@@ -200,7 +200,7 @@ export const en = {
         "You must answer whether you are liable to pay tax to Norway for the entire posting period",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
         "You must answer whether you receive financial support from another EEA country or Switzerland",
-      duMaBeskrivehvaSlagsPengestotteDuMottar:
+      duMaBeskriveHvaSlagsPengestotteDuMottar:
         "You must describe what kind of financial support you receive",
       duMaVelgeHvilketLandSomUtbetalerPengestotten:
         "You must select which country pays the financial support",
