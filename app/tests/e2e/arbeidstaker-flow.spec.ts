@@ -85,7 +85,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
       expectedArbeidstakerenPayload,
     );
 
-    // Verifiser navigerering til neste steg
+    // Verifiser navigering til neste steg
     await arbeidstakerenStegPage.assertNavigatedToNextStep();
   });
 
@@ -116,7 +116,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
       expectedSkatteforholdOgInntektPayload,
     );
 
-    // Verifiser navigerering til neste steg
+    // Verifiser navigering til neste steg
     await skatteforholdOgInntektStegPage.assertNavigatedToNextStep();
   });
 
@@ -147,7 +147,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
       expectedFamiliemedlemmerPayload,
     );
 
-    // Verifiser navigerering til neste steg
+    // Verifiser navigering til neste steg
     await familiemedlemmerStegPage.assertNavigatedToNextStep();
   });
 
@@ -224,6 +224,6 @@ test.describe("Arbeidstaker komplett flyt", () => {
       `/skjema/arbeidstaker/${testArbeidstakerSkjema.id}/oppsummering`,
     );
 
-    // TODO: gjøre assertoions når oppsummering page er laget
+    // TODO: gjøre assertions når oppsummering page er laget
   });
 });
