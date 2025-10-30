@@ -151,7 +151,7 @@ function SkatteforholdOgInntektStegContent({
                   errors.pengestotteSomMottasFraAndreLandBeskrivelse?.message,
                 )}
                 label={t(
-                  "skatteforholdOgInntektSteg.hvaSlangsPengestotteMottarDu",
+                  "skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu",
                 )}
                 {...register("pengestotteSomMottasFraAndreLandBeskrivelse")}
               />

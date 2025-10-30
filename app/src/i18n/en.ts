@@ -186,7 +186,7 @@ export const en = {
       hvorMyePengerMottarDuBruttoPerManed:
         "How much money do you receive gross per month",
       oppgiBelopetINorskeKroner: "Enter the amount in Norwegian kroner",
-      hvaSlangsPengestotteMottarDu:
+      hvaSlagsPengestotteMottarDu:
         "What kind of financial support do you receive",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "You must answer whether you are liable to pay tax to Norway for the entire posting period",

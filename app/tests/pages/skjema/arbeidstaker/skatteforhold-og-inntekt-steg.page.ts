@@ -60,7 +60,7 @@ export class SkatteforholdOgInntektStegPage {
         .hvorMyePengerMottarDuBruttoPerManed,
     );
     this.pengestotteBeskrivelseInput = page.getByLabel(
-      nb.translation.skatteforholdOgInntektSteg.hvaSlangsPengestotteMottarDu,
+      nb.translation.skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu,
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {
