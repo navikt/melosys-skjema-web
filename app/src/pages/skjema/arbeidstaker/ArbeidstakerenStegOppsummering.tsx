@@ -129,7 +129,7 @@ export function ArbeidstakerenStegOppsummering({
 
           <NorskeOgUtenlandskeVirksomheterOppsummering
             label={t(
-              "arbeidstakerenSteg.virksomheterArbeidstakerJobberForIutsendelsesPeriode",
+              "arbeidstakerenSteg.hvemSkalDuJobbeForIUtsendelsesPerioden",
             )}
             norskeOgUtenlandskeVirksomheter={
               arbeidstakerenData.virksomheterArbeidstakerJobberForIutsendelsesPeriode

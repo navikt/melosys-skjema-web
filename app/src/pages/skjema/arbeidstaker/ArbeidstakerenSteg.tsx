@@ -216,7 +216,15 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
           />
 
           {skalJobbeForFlereVirksomheter && (
-            <NorskeOgUtenlandskeVirksomheterFormPart fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode" />
+            <NorskeOgUtenlandskeVirksomheterFormPart
+              description={t(
+                "arbeidstakerenSteg.hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse",
+              )}
+              fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode"
+              label={t(
+                "arbeidstakerenSteg.hvemSkalDuJobbeForIUtsendelsesPerioden",
+              )}
+            />
           )}
         </SkjemaSteg>
       </form>
