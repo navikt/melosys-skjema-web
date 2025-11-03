@@ -5,7 +5,7 @@ import {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidstakerensLonnDto,
   UtenlandsoppdragetDto,
-} from "../../src/types/melosysSkjemaTypes";
+} from "../../../src/types/melosysSkjemaTypes";
 import {
   mockFetchArbeidsgiverSkjema,
   setupApiMocksForArbeidsgiver,

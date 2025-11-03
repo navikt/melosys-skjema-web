@@ -1,11 +1,11 @@
 import { Page } from "@playwright/test";
 
-import { UserInfo } from "../../src/httpClients/dekoratorenClient";
+import { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import type {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
   OrganisasjonDto,
-} from "../../src/types/melosysSkjemaTypes";
+} from "../../../src/types/melosysSkjemaTypes";
 import { testArbeidsgiverSkjema, testArbeidstakerSkjema } from "./test-data";
 
 export async function mockHentTilganger(

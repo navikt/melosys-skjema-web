@@ -1,11 +1,11 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "../../../../src/i18n/nb";
+import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiverenDto,
   ArbeidsgiversSkjemaDto,
   OrganisasjonDto,
-} from "../../../../src/types/melosysSkjemaTypes";
+} from "../../../../../src/types/melosysSkjemaTypes";
 
 export class ArbeidsgiverenStegPage {
   readonly page: Page;

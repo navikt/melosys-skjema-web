@@ -5,7 +5,7 @@ import {
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
-} from "../../src/types/melosysSkjemaTypes";
+} from "../../../src/types/melosysSkjemaTypes";
 import {
   mockFetchArbeidstakerSkjema,
   setupApiMocksForArbeidstaker,

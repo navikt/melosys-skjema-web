@@ -1,11 +1,11 @@
 // Test data constants that can be reused across tests
 
-import type { UserInfo } from "../../src/httpClients/dekoratorenClient";
+import type { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import type {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
   OrganisasjonDto,
-} from "../../src/types/melosysSkjemaTypes";
+} from "../../../src/types/melosysSkjemaTypes";
 
 export const testOrganization: OrganisasjonDto = {
   orgnr: "123456789",

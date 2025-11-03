@@ -1,11 +1,11 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "../../../../src/i18n/nb";
+import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiversSkjemaDto,
   UtenlandsoppdragetDto,
-} from "../../../../src/types/melosysSkjemaTypes";
-import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+} from "../../../../../src/types/melosysSkjemaTypes";
+import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
