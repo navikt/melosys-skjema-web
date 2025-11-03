@@ -5,7 +5,10 @@ const baseSkatteforholdOgInntektSchema = z.object({
   mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean().optional(),
   pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
   landSomUtbetalerPengestotte: z.string().optional(),
-  pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
+  pengestotteSomMottasFraAndreLandBelop: z
+    .string()
+    .optional()
+    .transform((val) => val?.trim().replace(",", ".")),
 });
 
 type BaseSkatteforholdOgInntektFormData = z.infer<
@@ -48,16 +51,19 @@ function validerPengestotteLand(data: BaseSkatteforholdOgInntektFormData) {
 
 function validerPengestotteBelop(data: BaseSkatteforholdOgInntektFormData) {
   if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-    if (
-      !data.pengestotteSomMottasFraAndreLandBelop ||
-      data.pengestotteSomMottasFraAndreLandBelop.trim().length === 0
-    ) {
+    if (!data.pengestotteSomMottasFraAndreLandBelop) {
+      return false;
+    }
+    // Allow formats: 123, 123.4, 123,4 (comma already normalized to dot in transform)
+    // Reject multiple dots/commas or non-numeric characters
+    const regex = /^\d+([.]\d+)?$/;
+    if (!regex.test(data.pengestotteSomMottasFraAndreLandBelop)) {
       return false;
     }
     const amount = Number.parseFloat(
       data.pengestotteSomMottasFraAndreLandBelop,
     );
-    return !Number.isNaN(amount) && amount > 0;
+    return amount > 0;
   }
   return true;
 }
