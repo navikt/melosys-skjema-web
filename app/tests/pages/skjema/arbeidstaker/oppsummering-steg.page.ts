@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { landKodeTilNavn } from "../../../../src/components/LandVelgerFormPart";
 import { nb } from "../../../../src/i18n/nb";
 import type {
   ArbeidstakerenDto,
@@ -126,7 +127,7 @@ export class OppsummeringStegPage {
         this.page.locator(
           `dt:has-text("${nb.translation.skatteforholdOgInntektSteg.fraHvilketLandMottarDuPengestotte}") + dd`,
         ),
-      ).toHaveText(data.landSomUtbetalerPengestotte);
+      ).toHaveText(landKodeTilNavn(data.landSomUtbetalerPengestotte));
     }
 
     if (data.pengestotteSomMottasFraAndreLandBelop !== undefined) {
