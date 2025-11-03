@@ -21,4 +21,9 @@ export const ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
     title: "tilleggsopplysningerSteg.tittel",
     route: "/skjema/arbeidstaker/$id/tilleggsopplysninger",
   },
+  {
+    key: "oppsummering",
+    title: "oppsummeringSteg.tittel",
+    route: "/skjema/arbeidstaker/$id/oppsummering",
+  },
 ];

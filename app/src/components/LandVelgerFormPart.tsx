@@ -57,3 +57,9 @@ export function LandVelgerFormPart({
     </Select>
   );
 }
+
+export function landKodeTilNavn(landkode: string): string {
+  const land = defaultLandOptions.find((land) => land.value === landkode);
+
+  return land ? land.label : landkode;
+}

@@ -1,6 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
@@ -33,7 +34,7 @@ export function UtenlandsoppdragetStegOppsummering({
             {t("utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil")}
           </FormSummary.Label>
           <FormSummary.Value>
-            {utenlandsoppdragData.utsendelseLand}
+            {landKodeTilNavn(utenlandsoppdragData.utsendelseLand)}
           </FormSummary.Value>
         </FormSummary.Answer>
 

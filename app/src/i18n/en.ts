@@ -174,6 +174,12 @@ export const en = {
         "You must answer whether you have been or will be in paid employment in Norway before assignment",
       duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden:
         "You must answer whether you will work for multiple companies during the period",
+      duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter:
+        "You must add at least one company when you will work for multiple companies",
+      hvemSkalDuJobbeForIUtsendelsesPerioden:
+        "Who will you work for during the assignment period?",
+      hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse:
+        "Add Norwegian and/or foreign companies you will work for during the assignment period.",
       studier: "Studies",
       ferie: "Vacation",
       selvstendingVirksomhet: "Self-employed business",
@@ -196,7 +202,7 @@ export const en = {
         "You must answer whether you are liable to pay tax to Norway for the entire posting period",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
         "You must answer whether you receive financial support from another EEA country or Switzerland",
-      duMaBeskriveHvaSlangsPengestotteDuMottar:
+      duMaBeskriveHvaSlagsPengestotteDuMottar:
         "You must describe what kind of financial support you receive",
       duMaVelgeHvilketLandSomUtbetalerPengestotten:
         "You must select which country pays the financial support",

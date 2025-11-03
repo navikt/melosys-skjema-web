@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { landKodeTilNavn } from "../../../../src/components/LandVelgerFormPart";
 import { nb } from "../../../../src/i18n/nb";
 import type {
   ArbeidsgiverenDto,
@@ -88,7 +89,7 @@ export class OppsummeringStegPage {
       this.page.locator(
         `dt:has-text("${nb.translation.utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil}") + dd`,
       ),
-    ).toHaveText(data.utsendelseLand);
+    ).toHaveText(landKodeTilNavn(data.utsendelseLand));
 
     await expect(
       this.page.locator(
