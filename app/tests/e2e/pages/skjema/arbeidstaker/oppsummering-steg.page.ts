@@ -1,14 +1,14 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { landKodeTilNavn } from "../../../../src/components/LandVelgerFormPart";
-import { nb } from "../../../../src/i18n/nb";
+import { landKodeTilNavn } from "../../../../../src/components/LandVelgerFormPart";
+import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidstakerenDto,
   ArbeidstakersSkjemaDto,
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
-} from "../../../../src/types/melosysSkjemaTypes";
+} from "../../../../../src/types/melosysSkjemaTypes";
 
 export class OppsummeringStegPage {
   readonly page: Page;

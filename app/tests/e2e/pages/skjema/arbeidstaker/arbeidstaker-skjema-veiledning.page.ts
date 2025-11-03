@@ -1,8 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "../../../../src/i18n/nb";
+import { nb } from "../../../../../src/i18n/nb";
 
-export class ArbeidsgiverSkjemaVeiledningPage {
+export class ArbeidstakerSkjemaVeiledningPage {
   readonly page: Page;
   readonly startSoknadButton: Locator;
 
@@ -21,9 +21,9 @@ export class ArbeidsgiverSkjemaVeiledningPage {
     await this.startSoknadButton.click();
   }
 
-  async assertNavigatedToArbeidsgiveren(skjemaId: string) {
+  async assertNavigatedToArbeidstakeren(skjemaId: string) {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${skjemaId}/arbeidsgiveren`,
+      `/skjema/arbeidstaker/${skjemaId}/arbeidstakeren`,
     );
   }
 }
