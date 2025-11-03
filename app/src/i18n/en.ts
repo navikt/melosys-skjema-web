@@ -174,6 +174,8 @@ export const en = {
         "You must answer whether you have been or will be in paid employment in Norway before assignment",
       duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden:
         "You must answer whether you will work for multiple companies during the period",
+      duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter:
+        "You must add at least one company when you will work for multiple companies",
       hvemSkalDuJobbeForIUtsendelsesPerioden:
         "Who will you work for during the assignment period?",
       hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse:

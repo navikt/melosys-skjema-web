@@ -2,6 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
 import { utenlandskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
@@ -79,7 +80,9 @@ export function UtenlandskVirksomhetOppsummering({
         <FormSummary.Label>
           {t("utenlandskeVirksomheterFormPart.land")}
         </FormSummary.Label>
-        <FormSummary.Value>{virksomhet.land}</FormSummary.Value>
+        <FormSummary.Value>
+          {landKodeTilNavn(virksomhet.land)}
+        </FormSummary.Value>
       </FormSummary.Answer>
       <FormSummary.Answer>
         <FormSummary.Label>

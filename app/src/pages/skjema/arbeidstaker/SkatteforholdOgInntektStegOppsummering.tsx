@@ -1,6 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as skatteforholdOgInntektStepKey } from "./SkatteforholdOgInntektSteg.tsx";
@@ -63,7 +64,7 @@ export function SkatteforholdOgInntektStegOppsummering({
                 )}
               </FormSummary.Label>
               <FormSummary.Value>
-                {skatteforholdData.landSomUtbetalerPengestotte}
+                {landKodeTilNavn(skatteforholdData.landSomUtbetalerPengestotte)}
               </FormSummary.Value>
             </FormSummary.Answer>
           )}
@@ -86,7 +87,7 @@ export function SkatteforholdOgInntektStegOppsummering({
               <FormSummary.Label>
                 {t("skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu")}
               </FormSummary.Label>
-              <FormSummary.Value>
+              <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
                 {skatteforholdData.pengestotteSomMottasFraAndreLandBeskrivelse}
               </FormSummary.Value>
             </FormSummary.Answer>

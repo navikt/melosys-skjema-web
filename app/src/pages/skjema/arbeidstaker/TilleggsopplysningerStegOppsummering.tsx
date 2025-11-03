@@ -50,7 +50,7 @@ export function TilleggsopplysningerStegOppsummering({
                   "tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden",
                 )}
               </FormSummary.Label>
-              <FormSummary.Value>
+              <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
                 {tilleggsopplysningerData.tilleggsopplysningerTilSoknad}
               </FormSummary.Value>
             </FormSummary.Answer>

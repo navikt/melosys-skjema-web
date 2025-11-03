@@ -171,6 +171,8 @@ export const nb = {
         "Du må svare på om du har vært eller skal være i lønnet arbeid i Norge før utsending",
       duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden:
         "Du må svare på om du skal jobbe for flere virksomheter i perioden",
+      duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter:
+        "Du må legge til minst én virksomhet når du skal jobbe for flere virksomheter",
       hvemSkalDuJobbeForIUtsendelsesPerioden:
         "Hvem skal du jobbe for i utsendelsesperioden?",
       hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse:
