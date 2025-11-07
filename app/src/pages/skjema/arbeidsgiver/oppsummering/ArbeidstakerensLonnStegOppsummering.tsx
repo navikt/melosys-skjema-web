@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { stepKey as arbeidstakerensLonnStepKey } from "./ArbeidstakerensLonnSteg.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
+import { stepKey as arbeidstakerensLonnStepKey } from "../arbeidstakerens-lonn/ArbeidstakerensLonnSteg.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
 
 export function ArbeidstakerensLonnStegOppsummering({
   skjema,

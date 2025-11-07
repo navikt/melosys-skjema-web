@@ -1,9 +1,9 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { stepKey as arbeidsgiverStepKey } from "./ArbeidsgiverSteg.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
+import { stepKey as arbeidsgiverStepKey } from "../arbeidsgiveren/ArbeidsgiverenSteg.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
 
 export function ArbeidsgiverenStegOppsummering({
   skjema,

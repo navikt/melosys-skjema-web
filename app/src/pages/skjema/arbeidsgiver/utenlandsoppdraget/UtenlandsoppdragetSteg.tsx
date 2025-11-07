@@ -19,9 +19,9 @@ import {
 import { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
+import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
 export const stepKey = "utenlandsoppdraget";

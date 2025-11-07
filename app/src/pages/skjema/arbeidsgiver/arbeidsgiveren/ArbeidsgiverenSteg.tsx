@@ -16,16 +16,16 @@ import {
 import { getValgtRolle } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import { arbeidsgiverSchema } from "./arbeidsgiverStegSchema.ts";
-import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
+import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
+import { arbeidsgiverenSchema } from "./arbeidsgiverenStegSchema.ts";
 
 export const stepKey = "arbeidsgiveren";
 
-type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverSchema>;
+type ArbeidsgiverFormData = z.infer<typeof arbeidsgiverenSchema>;
 
-function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
+function ArbeidsgiverenStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -39,7 +39,7 @@ function ArbeidsgiverStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<ArbeidsgiverFormData>({
-    resolver: zodResolver(arbeidsgiverSchema),
+    resolver: zodResolver(arbeidsgiverenSchema),
     defaultValues: {
       organisasjonsnummer: valgtRolle?.orgnr || "",
     },
@@ -107,10 +107,10 @@ interface ArbeidsgiverStegProps {
   id: string;
 }
 
-export function ArbeidsgiverSteg({ id }: ArbeidsgiverStegProps) {
+export function ArbeidsgiverenSteg({ id }: ArbeidsgiverStegProps) {
   return (
     <ArbeidsgiverStegLoader id={id}>
-      {(skjema) => <ArbeidsgiverStegContent skjema={skjema} />}
+      {(skjema) => <ArbeidsgiverenStegContent skjema={skjema} />}
     </ArbeidsgiverStegLoader>
   );
 }

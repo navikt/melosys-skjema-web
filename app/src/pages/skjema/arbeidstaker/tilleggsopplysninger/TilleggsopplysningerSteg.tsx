@@ -20,7 +20,7 @@ import {
   TilleggsopplysningerDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
+import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { tilleggsopplysningerSchema } from "./tilleggsopplysningerStegSchema.ts";
 
 export const stepKey = "tilleggsopplysninger";

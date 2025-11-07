@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { stepKey as arbeidstakerenStepKey } from "./ArbeidstakerenSteg.tsx";
-import { AKTIVITET_OPTIONS } from "./arbeidstakerenStegSchema.ts";
-import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidstakerSkjemaProps } from "./types.ts";
+import { stepKey as arbeidstakerenStepKey } from "../arbeidstakeren/ArbeidstakerenSteg.tsx";
+import { AKTIVITET_OPTIONS } from "../arbeidstakeren/arbeidstakerenStegSchema.ts";
+import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidstakerSkjemaProps } from "../types.ts";
 
 export function ArbeidstakerenStegOppsummering({
   skjema,

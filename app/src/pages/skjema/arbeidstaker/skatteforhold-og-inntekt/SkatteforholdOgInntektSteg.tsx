@@ -21,9 +21,9 @@ import {
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
+import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
+import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
-import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
 
 export const stepKey = "skatteforhold-og-inntekt";
 

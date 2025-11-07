@@ -3,16 +3,16 @@ import { useTranslation } from "react-i18next";
 
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 
+import { stepKey as arbeidsgiverStepKey } from "../arbeidsgiveren/ArbeidsgiverenSteg.tsx";
+import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
+import { stepKey as arbeidstakerensLonnStepKey } from "../arbeidstakerens-lonn/ArbeidstakerensLonnSteg.tsx";
+import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
+import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
 import { ArbeidsgiverenStegOppsummering } from "./ArbeidsgiverenStegOppsummering.tsx";
-import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "./ArbeidsgiverensVirksomhetINorgeSteg.tsx";
 import { ArbeidsgiverensVirksomhetINorgeStegOppsummering } from "./ArbeidsgiverensVirksomhetINorgeStegOppsummering.tsx";
-import { stepKey as arbeidsgiverStepKey } from "./ArbeidsgiverSteg.tsx";
-import { stepKey as arbeidstakerensLonnStepKey } from "./ArbeidstakerensLonnSteg.tsx";
 import { ArbeidstakerensLonnStegOppsummering } from "./ArbeidstakerensLonnStegOppsummering.tsx";
-import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
-import { stepKey as utenlandsoppdragetStepKey } from "./UtenlandsoppdragetSteg.tsx";
 import { UtenlandsoppdragetStegOppsummering } from "./UtenlandsoppdragetStegOppsummering.tsx";
 
 const oppsummeringStepKey = "oppsummering";

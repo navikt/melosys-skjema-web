@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ArbeidstakerOppsummeringSteg } from "~/pages/skjema/arbeidstaker/ArbeidstakerOppsummeringSteg.tsx";
+import { ArbeidstakerOppsummeringSteg } from "~/pages/skjema/arbeidstaker/oppsummering/ArbeidstakerOppsummeringSteg.tsx";
 
 export const Route = createFileRoute("/skjema/arbeidstaker/$id/oppsummering")({
   component: ArbeidstakerOppsummeringStegRoute,

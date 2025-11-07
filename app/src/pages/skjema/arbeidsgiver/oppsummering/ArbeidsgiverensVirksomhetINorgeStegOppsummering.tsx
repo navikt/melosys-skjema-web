@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "./ArbeidsgiverensVirksomhetINorgeSteg.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
+import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
 
 export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
   skjema,

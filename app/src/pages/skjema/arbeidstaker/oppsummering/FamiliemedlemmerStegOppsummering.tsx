@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { stepKey as familiemedlemmerStepKey } from "./FamiliemedlemmerSteg.tsx";
-import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidstakerSkjemaProps } from "./types.ts";
+import { stepKey as familiemedlemmerStepKey } from "../familiemedlemmer/FamiliemedlemmerSteg.tsx";
+import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidstakerSkjemaProps } from "../types.ts";
 
 export function FamiliemedlemmerStegOppsummering({
   skjema,
