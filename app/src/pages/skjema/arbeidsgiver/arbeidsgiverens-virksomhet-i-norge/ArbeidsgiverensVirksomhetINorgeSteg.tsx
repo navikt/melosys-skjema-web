@@ -1,131 +1,50 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { ErrorMessage, Loader } from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
-import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
-import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import {
-  getNextStep,
-  SkjemaSteg,
-} from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
+import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { VirksomhetINorgeStegContent } from "~/pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge/VirksomhetINorgeStegContent.tsx";
+import { OrganisasjonMedJuridiskEnhet } from "~/types/melosysSkjemaTypes.ts";
 
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
-import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 
 export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
-
-type ArbeidsgiverensVirksomhetFormData = z.infer<
-  typeof arbeidsgiverensVirksomhetSchema
->;
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
-  const { t } = useTranslation();
-  const invalidateArbeidsgiverSkjemaQuery =
-    useInvalidateArbeidsgiversSkjemaQuery();
 
-  const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
+  const organisasjonMedJuridiskEnhet =
+    skjema.data.arbeidsgiveren &&
+    useQuery(
+      getOrganisasjonQuery(skjema.data.arbeidsgiveren?.organisasjonsnummer),
+    );
 
-  const formMethods = useForm({
-    resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
-  });
+  const erOffentligVirksomhet =
+    organisasjonMedJuridiskEnhet?.data &&
+    erOrganisasjonOffentligVirksomhet(organisasjonMedJuridiskEnhet.data);
 
-  const { handleSubmit, watch } = formMethods;
+  if (organisasjonMedJuridiskEnhet === undefined) {
+    navigate({ to: `/skjema/arbeidsgiver/${skjema.id}/arbeidsgiveren` });
+  }
 
-  const erArbeidsgiverenOffentligVirksomhet = watch(
-    "erArbeidsgiverenOffentligVirksomhet",
-  );
+  if (organisasjonMedJuridiskEnhet?.error) {
+    return <ErrorMessage>Feil ved henting av registerdata</ErrorMessage>;
+  }
 
-  const registerVirksomhetMutation = useMutation({
-    mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
-      return postArbeidsgiverensVirksomhetINorge(
-        skjema.id,
-        data as ArbeidsgiverensVirksomhetINorgeDto,
-      );
-    },
-    onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjema.id);
-      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
-      if (nextStep) {
-        navigate({
-          to: nextStep.route,
-          params: { id: skjema.id },
-        });
-      }
-    },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
-  });
+  if (organisasjonMedJuridiskEnhet?.isPending) return <Loader />;
 
-  const onSubmit = (data: ArbeidsgiverensVirksomhetFormData) => {
-    registerVirksomhetMutation.mutate(data);
-  };
-
-  return (
-    <FormProvider {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <SkjemaSteg
-          config={{
-            stepKey,
-            stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: registerVirksomhetMutation.isPending,
-            },
-          }}
-        >
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            description={t(
-              "arbeidsgiverensVirksomhetINorgeSteg.offentligeVirksomheterErStatsorganerOgUnderliggendeVirksomheter",
-            )}
-            formFieldName="erArbeidsgiverenOffentligVirksomhet"
-            legend={t(
-              "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet",
-            )}
-          />
-
-          {erArbeidsgiverenOffentligVirksomhet === false && (
-            <>
-              <RadioGroupJaNeiFormPart
-                className="mt-4"
-                formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
-                legend={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra",
-                )}
-              />
-
-              <RadioGroupJaNeiFormPart
-                className="mt-4"
-                description={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden",
-                )}
-                formFieldName="opprettholderArbeidsgiverenVanligDrift"
-                legend={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge",
-                )}
-              />
-            </>
-          )}
-        </SkjemaSteg>
-      </form>
-    </FormProvider>
-  );
+  /*
+    På et punkt så skal vi implementere en alternativ flyt dersom det er offentlig virksomhet.
+    Dette var så langt jeg kom før vi måtte reprioritere litt. Lar allikevel denne nå litt unødvendige sjekken
+    være igjen for å gjøre det enklere å plukke opp igjen senere.
+   */
+  if (erOffentligVirksomhet) {
+    return <VirksomhetINorgeStegContent skjema={skjema} />;
+  }
+  return <VirksomhetINorgeStegContent skjema={skjema} />;
 }
 
 interface ArbeidsgiverensVirksomhetINorgeStegProps {
@@ -141,5 +60,14 @@ export function ArbeidsgiverensVirksomhetINorgeSteg({
         <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />
       )}
     </ArbeidsgiverStegLoader>
+  );
+}
+
+function erOrganisasjonOffentligVirksomhet(
+  organisasjon: OrganisasjonMedJuridiskEnhet,
+) {
+  return (
+    organisasjon.juridiskEnhet.juridiskEnhetDetaljer?.enhetstype === "STAT" &&
+    organisasjon.juridiskEnhet.juridiskEnhetDetaljer?.sektorkode === "6100"
   );
 }

@@ -11,6 +11,7 @@ import {
   CreateArbeidstakerSkjemaRequest,
   FamiliemedlemmerDto,
   OrganisasjonDto,
+  OrganisasjonMedJuridiskEnhet,
   SkatteforholdOgInntektDto,
   SubmitSkjemaRequest,
   TilleggsopplysningerDto,
@@ -306,4 +307,29 @@ export async function postTilleggsopplysninger(
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
+}
+
+export const getOrganisasjonQuery = (orgnummer: string) =>
+  queryOptions<OrganisasjonMedJuridiskEnhet>({
+    queryKey: ["ereg", "organisasjon", orgnummer],
+    queryFn: () => fetchOrganisasjon(orgnummer),
+    staleTime: 60 * 60 * 1000,
+    gcTime: 120 * 60 * 1000,
+  });
+
+async function fetchOrganisasjon(
+  orgnummer: string,
+): Promise<OrganisasjonMedJuridiskEnhet> {
+  const response = await fetch(
+    `${API_PROXY_URL}/ereg/organisasjon/${orgnummer}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
 }

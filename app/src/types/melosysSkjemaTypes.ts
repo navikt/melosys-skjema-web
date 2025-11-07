@@ -1,4 +1,3 @@
-/* tslint:disable */
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -8,26 +7,16 @@
  * ---------------------------------------------------------------
  */
 
+type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+
+export interface Organisasjon {
+  type: string;
+  organisasjonsnummer: string;
+  navn?: Navn;
+}
+
 export interface CreateArbeidstakerSkjemaRequest {
   fnr: string;
-}
-
-export interface TilleggsopplysningerDto {
-  harFlereOpplysningerTilSoknaden: boolean;
-  tilleggsopplysningerTilSoknad?: string;
-}
-
-export interface SkatteforholdOgInntektDto {
-  erSkattepliktigTilNorgeIHeleutsendingsperioden: boolean;
-  mottarPengestotteFraAnnetEosLandEllerSveits: boolean;
-  landSomUtbetalerPengestotte?: string;
-  pengestotteSomMottasFraAndreLandBelop?: string;
-  pengestotteSomMottasFraAndreLandBeskrivelse?: string;
-}
-
-export interface FamiliemedlemmerDto {
-  sokerForBarnUnder18SomSkalVaereMed: boolean;
-  harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: boolean;
 }
 
 export interface ArbeidstakerenDto {
@@ -43,6 +32,26 @@ export interface ArbeidstakerenDto {
   virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheter;
 }
 
+export interface ArbeidstakersSkjemaDataDto {
+  arbeidstakeren?: ArbeidstakerenDto;
+  skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
+  familiemedlemmer?: FamiliemedlemmerDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
+}
+
+export interface ArbeidstakersSkjemaDto {
+  /** @format uuid */
+  id: string;
+  fnr: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+  data: ArbeidstakersSkjemaDataDto;
+}
+
+export interface FamiliemedlemmerDto {
+  sokerForBarnUnder18SomSkalVaereMed: boolean;
+  harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: boolean;
+}
+
 export interface NorskVirksomhet {
   organisasjonsnummer: string;
 }
@@ -50,6 +59,19 @@ export interface NorskVirksomhet {
 export interface NorskeOgUtenlandskeVirksomheter {
   norskeVirksomheter?: NorskVirksomhet[];
   utenlandskeVirksomheter?: UtenlandskVirksomhet[];
+}
+
+export interface SkatteforholdOgInntektDto {
+  erSkattepliktigTilNorgeIHeleutsendingsperioden: boolean;
+  mottarPengestotteFraAnnetEosLandEllerSveits: boolean;
+  landSomUtbetalerPengestotte?: string;
+  pengestotteSomMottasFraAndreLandBelop?: string;
+  pengestotteSomMottasFraAndreLandBeskrivelse?: string;
+}
+
+export interface TilleggsopplysningerDto {
+  harFlereOpplysningerTilSoknaden: boolean;
+  tilleggsopplysningerTilSoknad?: string;
 }
 
 export interface UtenlandskVirksomhet {
@@ -66,6 +88,37 @@ export interface UtenlandskVirksomhet {
 
 export interface CreateArbeidsgiverSkjemaRequest {
   orgnr: string;
+}
+
+export interface ArbeidsgiverenDto {
+  organisasjonsnummer: string;
+  organisasjonNavn: string;
+}
+
+export interface ArbeidsgiverensVirksomhetINorgeDto {
+  erArbeidsgiverenOffentligVirksomhet: boolean;
+  erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
+  opprettholderArbeidsgiverenVanligDrift?: boolean;
+}
+
+export interface ArbeidsgiversSkjemaDataDto {
+  arbeidsgiveren?: ArbeidsgiverenDto;
+  arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
+  utenlandsoppdraget?: UtenlandsoppdragetDto;
+  arbeidstakerensLonn?: ArbeidstakerensLonnDto;
+}
+
+export interface ArbeidsgiversSkjemaDto {
+  /** @format uuid */
+  id: string;
+  orgnr: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+  data: ArbeidsgiversSkjemaDataDto;
+}
+
+export interface ArbeidstakerensLonnDto {
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: boolean;
+  virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
 }
 
 export interface UtenlandsoppdragetDto {
@@ -93,54 +146,136 @@ export interface SubmitSkjemaRequest {
   submittedAt: string;
 }
 
-export interface ArbeidstakerensLonnDto {
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: boolean;
-  virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
-}
-
-export interface ArbeidsgiverensVirksomhetINorgeDto {
-  erArbeidsgiverenOffentligVirksomhet: boolean;
-  erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
-  opprettholderArbeidsgiverenVanligDrift?: boolean;
-}
-
-export interface ArbeidsgiverenDto {
-  organisasjonsnummer: string;
-  organisasjonNavn: string;
-}
-
-export interface ArbeidstakersSkjemaDataDto {
-  arbeidstakeren?: ArbeidstakerenDto;
-  skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
-  familiemedlemmer?: FamiliemedlemmerDto;
-  tilleggsopplysninger?: TilleggsopplysningerDto;
-}
-
-export interface ArbeidstakersSkjemaDto {
-  /** @format uuid */
-  id: string;
-  fnr: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
-  data: ArbeidstakersSkjemaDataDto;
-}
-
-export interface ArbeidsgiversSkjemaDataDto {
-  arbeidsgiveren?: ArbeidsgiverenDto;
-  arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
-  utenlandsoppdraget?: UtenlandsoppdragetDto;
-  arbeidstakerensLonn?: ArbeidstakerensLonnDto;
-}
-
-export interface ArbeidsgiversSkjemaDto {
-  /** @format uuid */
-  id: string;
-  orgnr: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
-  data: ArbeidsgiversSkjemaDataDto;
-}
-
 export interface OrganisasjonDto {
   orgnr: string;
   navn: string;
   organisasjonsform: string;
+}
+
+export interface Adresse {
+  adresselinje1?: string;
+  adresselinje2?: string;
+  adresselinje3?: string;
+  postnummer?: string;
+  poststed?: string;
+  landkode?: string;
+  kommunenummer?: string;
+}
+
+export interface BestaarAvOrganisasjonsledd {
+  organisasjonsledd?: Organisasjonsledd;
+  bruksperiode?: Bruksperiode;
+  gyldighetsperiode?: Gyldighetsperiode;
+}
+
+export interface Bruksperiode {
+  fom?: string;
+  tom?: string;
+}
+
+export interface DriverVirksomhet {
+  organisasjonsnummer?: string;
+  navn?: Navn;
+  bruksperiode?: Bruksperiode;
+  gyldighetsperiode?: Gyldighetsperiode;
+}
+
+export interface Enhetstype {
+  enhetstype?: string;
+}
+
+export interface Gyldighetsperiode {
+  /** @format date */
+  fom?: string;
+  /** @format date */
+  tom?: string;
+}
+
+export interface InngaarIJuridiskEnhet {
+  organisasjonsnummer?: string;
+  navn?: Navn;
+  bruksperiode?: Bruksperiode;
+  gyldighetsperiode?: Gyldighetsperiode;
+}
+
+export interface JuridiskEnhet {
+  organisasjonsnummer: string;
+  navn?: Navn;
+  type: string;
+  organisasjonDetaljer?: OrganisasjonDetaljer;
+  juridiskEnhetDetaljer?: JuridiskEnhetDetaljer;
+}
+
+export interface JuridiskEnhetDetaljer {
+  enhetstype?: string;
+  harAnsatte?: boolean;
+  sektorkode?: string;
+}
+
+export interface Naering {
+  naeringskode?: string;
+  hjelpeenhet?: boolean;
+}
+
+export interface Navn {
+  sammensattnavn?: string;
+  navnelinje1?: string;
+  navnelinje2?: string;
+  navnelinje3?: string;
+  navnelinje4?: string;
+  navnelinje5?: string;
+}
+
+export interface OrganisasjonDetaljer {
+  registreringsdato?: string;
+  /** @format date */
+  stiftelsesdato?: string;
+  /** @format date */
+  opphoersdato?: string;
+  enhetstyper?: Enhetstype[];
+  navn?: Navn[];
+  naeringer?: Naering[];
+  forretningsadresser?: Adresse[];
+  postadresser?: Adresse[];
+}
+
+export interface OrganisasjonMedJuridiskEnhet {
+  organisasjon: JuridiskEnhet | Organisasjonsledd | Virksomhet;
+  juridiskEnhet: JuridiskEnhet;
+}
+
+export type Organisasjonsledd = UtilRequiredKeys<
+  Organisasjon,
+  "type" | "organisasjonsnummer"
+> & {
+  organisasjonDetaljer?: OrganisasjonDetaljer;
+  organisasjonsleddDetaljer?: OrganisasjonsleddDetaljer;
+  driverVirksomheter?: DriverVirksomhet[];
+  inngaarIJuridiskEnheter?: InngaarIJuridiskEnhet[];
+  organisasjonsleddUnder?: BestaarAvOrganisasjonsledd[];
+  organisasjonsleddOver?: BestaarAvOrganisasjonsledd[];
+};
+
+export interface OrganisasjonsleddDetaljer {
+  enhetstype?: string;
+  sektorkode?: string;
+}
+
+export type Virksomhet = UtilRequiredKeys<
+  Organisasjon,
+  "type" | "organisasjonsnummer"
+> & {
+  organisasjonDetaljer?: OrganisasjonDetaljer;
+  virksomhetDetaljer?: VirksomhetDetaljer;
+  bestaarAvOrganisasjonsledd?: BestaarAvOrganisasjonsledd[];
+  inngaarIJuridiskEnheter?: InngaarIJuridiskEnhet[];
+};
+
+export interface VirksomhetDetaljer {
+  enhetstype?: string;
+  ubemannetVirksomhet?: boolean;
+  /** @format date */
+  oppstartsdato?: string;
+  /** @format date */
+  nedleggelsesdato?: string;
 }
