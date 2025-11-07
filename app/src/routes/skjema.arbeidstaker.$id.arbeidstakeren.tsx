@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ArbeidstakerenSteg } from "~/pages/skjema/arbeidstaker/ArbeidstakerenSteg.tsx";
+import { ArbeidstakerenSteg } from "~/pages/skjema/arbeidstaker/arbeidstakeren/ArbeidstakerenSteg.tsx";
 
 function ArbeidstakerenStegRoute() {
   const { id } = Route.useParams();

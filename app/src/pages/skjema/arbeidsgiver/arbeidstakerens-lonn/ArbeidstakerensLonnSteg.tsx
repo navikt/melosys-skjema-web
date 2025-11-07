@@ -16,10 +16,10 @@ import {
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
 
+import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
-import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
 
 export const stepKey = "arbeidstakerens-lonn";
 

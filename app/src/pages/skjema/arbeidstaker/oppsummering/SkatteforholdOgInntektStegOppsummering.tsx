@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { stepKey as skatteforholdOgInntektStepKey } from "./SkatteforholdOgInntektSteg.tsx";
-import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidstakerSkjemaProps } from "./types.ts";
+import { stepKey as skatteforholdOgInntektStepKey } from "../skatteforhold-og-inntekt/SkatteforholdOgInntektSteg.tsx";
+import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidstakerSkjemaProps } from "../types.ts";
 
 export function SkatteforholdOgInntektStegOppsummering({
   skjema,

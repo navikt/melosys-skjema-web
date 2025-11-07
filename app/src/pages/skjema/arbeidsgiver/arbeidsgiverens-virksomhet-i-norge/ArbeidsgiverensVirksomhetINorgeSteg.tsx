@@ -15,10 +15,10 @@ import {
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
 
+import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
-import { ArbeidsgiverStegLoader } from "./components/ArbeidsgiverStegLoader.tsx";
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
 
 export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 

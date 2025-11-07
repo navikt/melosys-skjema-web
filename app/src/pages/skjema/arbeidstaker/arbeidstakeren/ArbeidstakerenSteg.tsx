@@ -25,11 +25,11 @@ import {
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
+import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import {
   AKTIVITET_OPTIONS,
   arbeidstakerSchema,
 } from "./arbeidstakerenStegSchema.ts";
-import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
 
 export const stepKey = "arbeidstakeren";
 

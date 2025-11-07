@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "./stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "./types.ts";
-import { stepKey as utenlandsoppdragetStepKey } from "./UtenlandsoppdragetSteg.tsx";
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
+import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
 
 export function UtenlandsoppdragetStegOppsummering({
   skjema,

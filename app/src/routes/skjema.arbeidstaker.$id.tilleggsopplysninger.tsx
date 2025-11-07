@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { TilleggsopplysningerSteg } from "~/pages/skjema/arbeidstaker/TilleggsopplysningerSteg.tsx";
+import { TilleggsopplysningerSteg } from "~/pages/skjema/arbeidstaker/tilleggsopplysninger/TilleggsopplysningerSteg.tsx";
 
 function TilleggsopplysningerStegRoute() {
   const { id } = Route.useParams();

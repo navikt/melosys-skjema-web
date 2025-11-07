@@ -20,7 +20,7 @@ import {
   FamiliemedlemmerDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-import { ArbeidstakerStegLoader } from "./components/ArbeidstakerStegLoader.tsx";
+import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { familiemedlemmerSchema } from "./familiemedlemmerStegSchema.ts";
 
 export const stepKey = "familiemedlemmer";

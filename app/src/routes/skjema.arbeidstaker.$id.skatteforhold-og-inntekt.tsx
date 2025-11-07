@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { SkatteforholdOgInntektSteg } from "~/pages/skjema/arbeidstaker/SkatteforholdOgInntektSteg.tsx";
+import { SkatteforholdOgInntektSteg } from "~/pages/skjema/arbeidstaker/skatteforhold-og-inntekt/SkatteforholdOgInntektSteg.tsx";
 
 function SkatteforholdOgInntektStegRoute() {
   const { id } = Route.useParams();

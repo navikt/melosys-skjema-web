@@ -1,23 +1,23 @@
 import { z } from "zod";
 
-const baseArbeidsgiverSchema = z.object({
+const baseArbeidsgiverenSchema = z.object({
   organisasjonsnummer: z.string(),
 });
 
-type BaseArbeidsgiverFormData = z.infer<typeof baseArbeidsgiverSchema>;
+type BaseArbeidsgiverenFormData = z.infer<typeof baseArbeidsgiverenSchema>;
 
-function validerOrganisasjonsnummerPakrevd(data: BaseArbeidsgiverFormData) {
+function validerOrganisasjonsnummerPakrevd(data: BaseArbeidsgiverenFormData) {
   return data.organisasjonsnummer && data.organisasjonsnummer.length > 0;
 }
 
-function validerOrganisasjonsnummerFormat(data: BaseArbeidsgiverFormData) {
+function validerOrganisasjonsnummerFormat(data: BaseArbeidsgiverenFormData) {
   if (data.organisasjonsnummer && data.organisasjonsnummer.length > 0) {
     return /^\d{9}$/.test(data.organisasjonsnummer);
   }
   return true;
 }
 
-export const arbeidsgiverSchema = baseArbeidsgiverSchema
+export const arbeidsgiverenSchema = baseArbeidsgiverenSchema
   .refine(validerOrganisasjonsnummerPakrevd, {
     message: "generellValidering.organisasjonsnummerErPakrevd",
     path: ["organisasjonsnummer"],
