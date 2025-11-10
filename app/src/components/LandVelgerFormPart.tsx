@@ -31,14 +31,12 @@ export function LandVelgerFormPart({
   landOptions = defaultLandOptions,
   ...selectProps
 }: LandVelgerFormPartProps) {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+  const { register, getFieldState, formState } = useFormContext();
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
-  const error = translateError(errors[formFieldName]?.message as string);
+  const fieldState = getFieldState(formFieldName, formState);
+  const error = translateError(fieldState.error?.message as string);
 
   return (
     <Select

@@ -215,6 +215,82 @@ export const en = {
       arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
       organisasjonensNavn: "Organization name",
     },
+    arbeidsstedIUtlandetSteg: {
+      tittel: "Place of work abroad",
+      hvorSkalArbeidetUtfores: "Where will the work be performed?",
+      velgArbeidssted: "Select workplace",
+      paLand: "On land",
+      offshore: "Offshore",
+      paSkip: "On ship",
+      omBordPaFly: "On board an aircraft",
+      harFastArbeidsstedEllerVeksler:
+        "Does the employee have a fixed place of work in this country or does it vary frequently?",
+      fastArbeidssted: "Fixed place of work",
+      vekslerOfte: "Varies frequently",
+      vegadresse: "Street address",
+      nummer: "Number",
+      postkode: "Postal code",
+      bySted: "City/place/region",
+      beskriv: "Describe where the employee will work",
+      erHjemmekontor: "Is the employee posted to work from home office?",
+      navnPaInnretning: "Name of installation",
+      hvilkenTypeInnretning: "What type of installation is this?",
+      plattformEllerFast: "Platform or other fixed installation",
+      boreskipEllerFlyttbar: "Drilling ship or other mobile installation",
+      hvilketLandsSokkel: "Which country's continental shelf is this?",
+      navnPaSkip: "What is the name of the ship the employee will work on?",
+      yrketTilArbeidstaker: "What is the employee's occupation?",
+      yrketTilArbeidstakerBeskrivelse:
+        "We need information about what kind of work the employee performs on board the ship",
+      hvorSkalSkipetSeile: "Where will the ship sail?",
+      internasjonaltFarvann: "International waters",
+      territorialfarvann: "Within territorial waters",
+      flaggland: "What is the flag country of the ship?",
+      hvilketLandsTerritorialfarvann: "Which country's territorial waters?",
+      hjemmebaseLand:
+        "In which country does the employee have their home base during the application period?",
+      hjemmebaseLandBeskrivelse:
+        "By home base we mean the airport where the employee starts and ends their flights",
+      hjemmebaseNavn: "What is the name of the home base?",
+      erVanligHjemmebase:
+        "Is this the home base the employee usually works from?",
+      vanligHjemmebaseLand:
+        "In which country is the home base the employee usually works from located?",
+      vanligHjemmebaseNavn:
+        "What is the name of the home base the employee usually works from?",
+      // Error messages
+      duMaVelgeArbeidsstedType:
+        "You must select where the work will be performed",
+      duMaVelgeFastEllerVekslende:
+        "You must select whether the employee has a fixed place of work or if it varies frequently",
+      duMaSvarePaOmDetErHjemmekontor:
+        "You must answer whether the employee is posted to work from home office",
+      vegadresseErPakrevd: "Street address is required",
+      nummerErPakrevd: "Number is required",
+      postkodeErPakrevd: "Postal code is required",
+      byStedErPakrevd: "City/place/region is required",
+      beskrivelseErPakrevd: "Description is required",
+      navnPaInnretningErPakrevd: "Name of installation is required",
+      duMaVelgeTypeInnretning:
+        "You must select what type of installation this is",
+      sokkelLandErPakrevd:
+        "You must select which country's continental shelf this is",
+      navnPaSkipErPakrevd: "Name of the ship is required",
+      yrketTilArbeidstakerErPakrevd: "Employee's occupation is required",
+      duMaVelgeHvorSkipetSeiler: "You must select where the ship will sail",
+      flagglandErPakrevd: "Flag country is required",
+      territorialfarvannLandErPakrevd:
+        "You must select which country's territorial waters the ship sails in",
+      hjemmebaseLandErPakrevd:
+        "You must select which country the employee has their home base in",
+      hjemmebaseNavnErPakrevd: "The name of the home base is required",
+      duMaSvarePaOmDetErVanligHjemmebase:
+        "You must answer whether this is the home base the employee usually works from",
+      vanligHjemmebaseLandErPakrevd:
+        "You must select which country the usual home base is located in",
+      vanligHjemmebaseNavnErPakrevd:
+        "The name of the usual home base is required",
+    },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Employer's business in Norway",
       erArbeidsgiverenEnOffentligVirksomhet:

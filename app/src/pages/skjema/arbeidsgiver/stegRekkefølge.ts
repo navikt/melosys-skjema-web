@@ -27,6 +27,11 @@ export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
     route: "/skjema/arbeidsgiver/$id/arbeidstakerens-lonn",
   },
   {
+    key: "arbeidssted-i-utlandet",
+    title: "arbeidsstedIUtlandetSteg.tittel",
+    route: "/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet",
+  },
+  {
     key: "oppsummering",
     title: "oppsummeringSteg.tittel",
     route: "/skjema/arbeidsgiver/$id/oppsummering",
