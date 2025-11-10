@@ -5,8 +5,8 @@ import { getSkjemaAsArbeidsgiverQuery } from "~/httpClients/melsosysSkjemaApiCli
 export function useInvalidateArbeidsgiversSkjemaQuery() {
   const queryClient = useQueryClient();
 
-  return (skjemaId: string) => {
-    queryClient.invalidateQueries({
+  return async (skjemaId: string) => {
+    await queryClient.invalidateQueries({
       queryKey: getSkjemaAsArbeidsgiverQuery(skjemaId).queryKey,
     });
   };

@@ -2,10 +2,12 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
 import type {
+  ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
 
 export class ArbeidsgiverensVirksomhetINorgeStegPage {
   readonly page: Page;
@@ -71,6 +73,16 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     await this.page.goto(
       `/skjema/arbeidsgiver/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
     );
+  }
+
+  async mockArbeidsgiverenStegData(arbeidsgiverenData: ArbeidsgiverenDto) {
+    await mockFetchArbeidsgiverSkjema(this.page, {
+      ...this.skjema,
+      data: {
+        ...this.skjema.data,
+        arbeidsgiveren: arbeidsgiverenData,
+      },
+    });
   }
 
   async assertIsVisible() {

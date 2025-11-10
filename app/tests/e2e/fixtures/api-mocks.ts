@@ -248,6 +248,29 @@ export async function mockSubmitSkjema(page: Page) {
   );
 }
 
+export async function mockGetEregOrganisasjon(page: Page) {
+  await page.route("/api/ereg/organisasjon/*", async (route) => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          organisasjon: {
+            organisasjonsnummer: "123456789",
+            navn: "Test Organisasjon AS",
+            type: "Virksomhet",
+          },
+          juridiskEnhet: {
+            organisasjonsnummer: "123456789",
+            navn: "Test Organisasjon AS",
+            type: "AS",
+          },
+        }),
+      });
+    }
+  });
+}
+
 export async function setupApiMocksForArbeidsgiver(
   page: Page,
   skjema: ArbeidsgiversSkjemaDto,
@@ -259,6 +282,7 @@ export async function setupApiMocksForArbeidsgiver(
   await mockCreateArbeidsgiverSkjema(page);
   await mockFetchArbeidsgiverSkjema(page, skjema);
   await mockPostArbeidsgiveren(page, skjema.id);
+  await mockGetEregOrganisasjon(page);
   await mockPostVirksomhetINorge(page, skjema.id);
   await mockPostUtenlandsoppdraget(page, skjema.id);
   await mockPostArbeidstakerensLonn(page, skjema.id);
@@ -275,6 +299,7 @@ export async function setupApiMocksForArbeidstaker(
   await mockCreateArbeidstakerSkjema(page);
   await mockFetchArbeidstakerSkjema(page, skjema);
   await mockPostArbeidstakeren(page, skjema.id);
+  await mockGetEregOrganisasjon(page);
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
   await mockPostTilleggsopplysninger(page, skjema.id);
