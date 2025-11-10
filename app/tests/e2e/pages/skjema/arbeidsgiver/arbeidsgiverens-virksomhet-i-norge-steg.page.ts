@@ -7,10 +7,7 @@ import type {
   ArbeidsgiversSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import {
-  mockFetchArbeidsgiverSkjema,
-  mockGetEregOrganisasjon,
-} from "../../../fixtures/api-mocks";
+import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
 
 export class ArbeidsgiverensVirksomhetINorgeStegPage {
   readonly page: Page;

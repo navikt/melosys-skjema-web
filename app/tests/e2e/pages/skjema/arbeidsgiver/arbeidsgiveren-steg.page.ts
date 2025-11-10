@@ -6,6 +6,7 @@ import type {
   ArbeidsgiversSkjemaDto,
   OrganisasjonDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
+import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
 
 export class ArbeidsgiverenStegPage {
   readonly page: Page;
@@ -57,13 +58,23 @@ export class ArbeidsgiverenStegPage {
     const requestPromise = this.page.waitForRequest(
       `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidsgiveren`,
     );
-    await this.lagreOgFortsettButton.click();
+    await this.lagreOgFortsett();
     return await requestPromise;
   }
 
   async lagreOgFortsettAndExpectPayload(expectedPayload: ArbeidsgiverenDto) {
+    // Mock skjema with arbeidsgiveren data BEFORE clicking button
+    // so the refetch after POST gets the updated data
+    await mockFetchArbeidsgiverSkjema(this.page, {
+      ...this.skjema,
+      data: {
+        arbeidsgiveren: expectedPayload,
+      },
+    });
+
     const apiCall = await this.lagreOgFortsettAndWaitForApiRequest();
     expect(apiCall.postDataJSON()).toStrictEqual(expectedPayload);
+
     return apiCall;
   }
 
