@@ -2,6 +2,7 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
 import type {
+  ArbeidsgiverenDto,
   ArbeidsgiversSkjemaDto,
   ArbeidstakerenArbeidsgiversDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
@@ -59,10 +60,14 @@ export class ArbeidstakerenStegPage {
     expectedPayload: ArbeidstakerenArbeidsgiversDelDto,
   ) {
     // Mock skjema with arbeidstakeren data BEFORE clicking button
+    // Need to include arbeidsgiveren data for next step validation
     await mockFetchArbeidsgiverSkjema(this.page, {
       ...this.skjema,
       data: {
-        ...this.skjema.data,
+        arbeidsgiveren: {
+          organisasjonsnummer: "123456789",
+          organisasjonNavn: "Test Organisasjon AS",
+        },
         arbeidstakeren: expectedPayload,
       },
     });

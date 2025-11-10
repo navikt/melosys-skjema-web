@@ -49,8 +49,8 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       postArbeidstakerenArbeidsgiversDel(skjema.id, {
         fodselsnummer: data.fodselsnummer,
       }),
-    onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
