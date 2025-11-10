@@ -1,6 +1,7 @@
 import { ErrorMessage, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { VirksomhetINorgeStegContent } from "~/pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge/VirksomhetINorgeStegContent.tsx";
@@ -23,6 +24,8 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     );
   }
 
+  const { t } = useTranslation();
+
   const organisasjonMedJuridiskEnhet = useQuery(
     getOrganisasjonQuery(skjema.data.arbeidsgiveren.organisasjonsnummer),
   );
@@ -32,7 +35,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     erOrganisasjonOffentligVirksomhet(organisasjonMedJuridiskEnhet.data);
 
   if (organisasjonMedJuridiskEnhet?.error) {
-    return <ErrorMessage>Feil ved henting av registerdata</ErrorMessage>;
+    return <ErrorMessage>{t("felles.feil")}</ErrorMessage>;
   }
 
   if (organisasjonMedJuridiskEnhet?.isPending) return <Loader />;
