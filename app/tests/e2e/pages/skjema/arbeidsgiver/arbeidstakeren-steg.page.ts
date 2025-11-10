@@ -2,7 +2,6 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidsgiverenDto,
   ArbeidsgiversSkjemaDto,
   ArbeidstakerenArbeidsgiversDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
