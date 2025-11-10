@@ -2,43 +2,36 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidsgiverenDto,
   ArbeidsgiversSkjemaDto,
-  OrganisasjonDto,
+  ArbeidstakerenArbeidsgiversDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
 
-export class ArbeidsgiverenStegPage {
+export class ArbeidstakerenStegPage {
   readonly page: Page;
   readonly skjema: ArbeidsgiversSkjemaDto;
   readonly heading: Locator;
-  readonly organisasjonsnummerInput: Locator;
+  readonly fodselsnummerInput: Locator;
   readonly lagreOgFortsettButton: Locator;
 
   constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.arbeidsgiverSteg.tittel,
+      name: nb.translation.arbeidstakerenSteg.tittel,
     });
-    this.organisasjonsnummerInput = page.getByLabel(
-      nb.translation.arbeidsgiverSteg.arbeidsgiverensOrganisasjonsnummer,
+    this.fodselsnummerInput = page.getByLabel(
+      nb.translation.arbeidstakerenSteg
+        .harArbeidstakerenNorskFodselsnummerEllerDNummer,
     );
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
     });
   }
 
-  async setValgtRolle(organisasjon: OrganisasjonDto) {
-    await this.page.goto("/");
-    await this.page.evaluate((org) => {
-      sessionStorage.setItem("valgtRolle", JSON.stringify(org));
-    }, organisasjon);
-  }
-
   async goto() {
     await this.page.goto(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidsgiveren`,
+      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidstakeren`,
     );
   }
 
@@ -46,8 +39,8 @@ export class ArbeidsgiverenStegPage {
     await expect(this.heading).toBeVisible();
   }
 
-  async assertOrganisasjonsnummerValue(expectedValue: string) {
-    await expect(this.organisasjonsnummerInput).toHaveValue(expectedValue);
+  async fillFodselsnummer(fodselsnummer: string) {
+    await this.fodselsnummerInput.fill(fodselsnummer);
   }
 
   async lagreOgFortsett() {
@@ -56,19 +49,21 @@ export class ArbeidsgiverenStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidsgiveren`,
+      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidstakeren`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
   }
 
-  async lagreOgFortsettAndExpectPayload(expectedPayload: ArbeidsgiverenDto) {
-    // Mock skjema with arbeidsgiveren data BEFORE clicking button
-    // so the refetch after POST gets the updated data
+  async lagreOgFortsettAndExpectPayload(
+    expectedPayload: ArbeidstakerenArbeidsgiversDelDto,
+  ) {
+    // Mock skjema with arbeidstakeren data BEFORE clicking button
     await mockFetchArbeidsgiverSkjema(this.page, {
       ...this.skjema,
       data: {
-        arbeidsgiveren: expectedPayload,
+        ...this.skjema.data,
+        arbeidstakeren: expectedPayload,
       },
     });
 
@@ -80,7 +75,7 @@ export class ArbeidsgiverenStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidstakeren`,
+      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
     );
   }
 }

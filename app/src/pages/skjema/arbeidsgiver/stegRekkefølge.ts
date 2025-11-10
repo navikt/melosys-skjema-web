@@ -7,6 +7,11 @@ export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
     route: "/skjema/arbeidsgiver/$id/arbeidsgiveren",
   },
   {
+    key: "arbeidstakeren",
+    title: "arbeidstakerenSteg.tittel",
+    route: "/skjema/arbeidsgiver/$id/arbeidstakeren",
+  },
+  {
     key: "arbeidsgiverens-virksomhet-i-norge",
     title: "arbeidsgiverensVirksomhetINorgeSteg.tittel",
     route: "/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge",

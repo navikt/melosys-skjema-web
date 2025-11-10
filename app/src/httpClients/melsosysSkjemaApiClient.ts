@@ -4,6 +4,7 @@ import {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
+  ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
   ArbeidstakersSkjemaDto,
@@ -150,6 +151,26 @@ export async function postArbeidsgiveren(
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidsgiveren`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
+export async function postArbeidstakerenArbeidsgiversDel(
+  skjemaId: string,
+  request: ArbeidstakerenArbeidsgiversDelDto,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidstakeren`,
     {
       method: "POST",
       headers: {
