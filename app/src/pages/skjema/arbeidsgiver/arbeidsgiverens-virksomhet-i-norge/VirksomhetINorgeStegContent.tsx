@@ -55,8 +55,8 @@ export function VirksomhetINorgeStegContent({
         data as ArbeidsgiverensVirksomhetINorgeDto,
       );
     },
-    onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
