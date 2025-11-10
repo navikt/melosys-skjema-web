@@ -1,6 +1,6 @@
 import { ErrorMessage, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { Navigate } from "@tanstack/react-router";
 
 import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { VirksomhetINorgeStegContent } from "~/pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge/VirksomhetINorgeStegContent.tsx";
@@ -14,21 +14,22 @@ export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
-  const navigate = useNavigate();
-
-  const organisasjonMedJuridiskEnhet =
-    skjema.data.arbeidsgiveren &&
-    useQuery(
-      getOrganisasjonQuery(skjema.data.arbeidsgiveren?.organisasjonsnummer),
+  if (!skjema.data.arbeidsgiveren) {
+    return (
+      <Navigate
+        params={{ id: skjema.id }}
+        to="/skjema/arbeidsgiver/$id/arbeidsgiveren"
+      />
     );
+  }
+
+  const organisasjonMedJuridiskEnhet = useQuery(
+    getOrganisasjonQuery(skjema.data.arbeidsgiveren.organisasjonsnummer),
+  );
 
   const erOffentligVirksomhet =
     organisasjonMedJuridiskEnhet?.data &&
     erOrganisasjonOffentligVirksomhet(organisasjonMedJuridiskEnhet.data);
-
-  if (organisasjonMedJuridiskEnhet === undefined) {
-    navigate({ to: `/skjema/arbeidsgiver/${skjema.id}/arbeidsgiveren` });
-  }
 
   if (organisasjonMedJuridiskEnhet?.error) {
     return <ErrorMessage>Feil ved henting av registerdata</ErrorMessage>;

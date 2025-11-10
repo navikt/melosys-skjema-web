@@ -51,8 +51,8 @@ function ArbeidsgiverenStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
         organisasjonsnummer: data.organisasjonsnummer,
         organisasjonNavn: valgtRolle?.navn || "",
       }),
-    onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
