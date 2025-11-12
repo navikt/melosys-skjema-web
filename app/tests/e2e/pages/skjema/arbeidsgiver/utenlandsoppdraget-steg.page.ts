@@ -132,7 +132,7 @@ export class UtenlandsoppdragetStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidstakerens-lonn`,
+      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
     );
   }
 }
