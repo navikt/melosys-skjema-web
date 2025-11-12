@@ -103,6 +103,7 @@ export interface ArbeidsgiverensVirksomhetINorgeDto {
 
 export interface ArbeidsgiversSkjemaDataDto {
   arbeidsgiveren?: ArbeidsgiverenDto;
+  arbeidstakeren?: ArbeidstakerenArbeidsgiversDelDto;
   arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
   utenlandsoppdraget?: UtenlandsoppdragetDto;
   arbeidstakerensLonn?: ArbeidstakerensLonnDto;
@@ -114,6 +115,10 @@ export interface ArbeidsgiversSkjemaDto {
   orgnr: string;
   status: "UTKAST" | "SENDT" | "MOTTATT";
   data: ArbeidsgiversSkjemaDataDto;
+}
+
+export interface ArbeidstakerenArbeidsgiversDelDto {
+  fodselsnummer: string;
 }
 
 export interface ArbeidstakerensLonnDto {

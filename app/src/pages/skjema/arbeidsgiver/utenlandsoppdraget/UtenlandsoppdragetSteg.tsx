@@ -84,8 +84,8 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
       const apiPayload = data as UtenlandsoppdragetDto;
       return postUtenlandsoppdraget(skjema.id, apiPayload);
     },
-    onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({

@@ -3,6 +3,7 @@ import { test } from "@playwright/test";
 import {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
+  ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerensLonnDto,
   UtenlandsoppdragetDto,
 } from "../../../src/types/melosysSkjemaTypes";
@@ -20,6 +21,7 @@ import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
 import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
+import { ArbeidstakerenStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakeren-steg.page";
 import { ArbeidstakerensLonnStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
 import { OppsummeringStegPage } from "../pages/skjema/arbeidsgiver/oppsummering-steg.page";
 import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidsgiver/utenlandsoppdraget-steg.page";
@@ -88,6 +90,35 @@ test.describe("Arbeidsgiver komplett flyt", () => {
 
     // Verifiser navigerering til neste steg
     await arbeidsgiverStegPage.assertNavigatedToNextStep();
+  });
+
+  test("skal fylle ut arbeidstakeren steg og gjøre forventet POST request", async ({
+    page,
+  }) => {
+    const arbeidstakerenStegPage = new ArbeidstakerenStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    // Naviger direkte til steget
+    await arbeidstakerenStegPage.goto();
+
+    await arbeidstakerenStegPage.assertIsVisible();
+
+    // Fyll ut fødselsnummer
+    await arbeidstakerenStegPage.fillFodselsnummer("12345678901");
+
+    // Lagre og fortsett og verifiser forventet payload i POST request
+    const expectedArbeidstakerPayload: ArbeidstakerenArbeidsgiversDelDto = {
+      fodselsnummer: "12345678901",
+    };
+
+    await arbeidstakerenStegPage.lagreOgFortsettAndExpectPayload(
+      expectedArbeidstakerPayload,
+    );
+
+    // Verifiser navigerering til neste steg
+    await arbeidstakerenStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut arbeidsgiverens virksomhet i Norge steg og gjøre forventet POST request", async ({
