@@ -27,6 +27,13 @@ import { PaSkipForm } from "./PaSkipForm.tsx";
 
 export const stepKey = "arbeidssted-i-utlandet";
 
+export const arbeidsstedTypeOptions = [
+  { value: "PA_LAND", labelKey: "arbeidsstedIUtlandetSteg.paLand" },
+  { value: "OFFSHORE", labelKey: "arbeidsstedIUtlandetSteg.offshore" },
+  { value: "PA_SKIP", labelKey: "arbeidsstedIUtlandetSteg.paSkip" },
+  { value: "OM_BORD_PA_FLY", labelKey: "arbeidsstedIUtlandetSteg.omBordPaFly" },
+];
+
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
@@ -38,7 +45,7 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidsstedIUtlandet;
 
-  const formMethods = useForm<ArbeidsstedIUtlandetFormData>({
+  const formMethods = useForm({
     resolver: zodResolver(arbeidsstedIUtlandetSchema),
     defaultValues: {
       ...lagretSkjemadataForSteg,
@@ -102,18 +109,11 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <option value="">
               {t("arbeidsstedIUtlandetSteg.velgArbeidssted")}
             </option>
-            <option value="PA_LAND">
-              {t("arbeidsstedIUtlandetSteg.paLand")}
-            </option>
-            <option value="OFFSHORE">
-              {t("arbeidsstedIUtlandetSteg.offshore")}
-            </option>
-            <option value="PA_SKIP">
-              {t("arbeidsstedIUtlandetSteg.paSkip")}
-            </option>
-            <option value="OM_BORD_PA_FLY">
-              {t("arbeidsstedIUtlandetSteg.omBordPaFly")}
-            </option>
+            {arbeidsstedTypeOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {t(option.labelKey)}
+              </option>
+            ))}
           </Select>
 
           {arbeidsstedType === "PA_LAND" && <PaLandForm />}
