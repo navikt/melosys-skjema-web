@@ -2,6 +2,7 @@ import { PaperplaneIcon } from "@navikt/aksel-icons";
 import { useTranslation } from "react-i18next";
 
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegOppsummering.tsx";
 
 import { stepKey as arbeidstakerenStepKey } from "../arbeidstakeren/ArbeidstakerenSteg.tsx";
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
@@ -13,7 +14,6 @@ import { ArbeidstakerSkjemaProps } from "../types.ts";
 import { ArbeidstakerenStegOppsummering } from "./ArbeidstakerenStegOppsummering.tsx";
 import { FamiliemedlemmerStegOppsummering } from "./FamiliemedlemmerStegOppsummering.tsx";
 import { SkatteforholdOgInntektStegOppsummering } from "./SkatteforholdOgInntektStegOppsummering.tsx";
-import { TilleggsopplysningerStegOppsummering } from "./TilleggsopplysningerStegOppsummering.tsx";
 
 const oppsummeringStepKey = "oppsummering";
 
@@ -56,7 +56,11 @@ function ArbeidstakerOppsummeringStegContent({
       }
       case tilleggsopplysningerStepKey: {
         return (
-          <TilleggsopplysningerStegOppsummering key={stepKey} skjema={skjema} />
+          <TilleggsopplysningerStegOppsummering
+            key={stepKey}
+            skjema={skjema}
+            stegRekkefolge={ARBEIDSTAKER_STEG_REKKEFOLGE}
+          />
         );
       }
       default: {

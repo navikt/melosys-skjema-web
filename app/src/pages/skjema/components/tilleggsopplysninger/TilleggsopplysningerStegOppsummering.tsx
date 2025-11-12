@@ -1,21 +1,31 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import {
+  ArbeidsgiversSkjemaDto,
+  ArbeidstakersSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { stepKey as tilleggsopplysningerStepKey } from "../tilleggsopplysninger/TilleggsopplysningerSteg.tsx";
-import { ArbeidstakerSkjemaProps } from "../types.ts";
+import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
+
+export const stepKey = "tilleggsopplysninger";
+
+interface TilleggsopplysningerStegOppsummeringProps {
+  skjema: ArbeidsgiversSkjemaDto | ArbeidstakersSkjemaDto;
+  stegRekkefolge: StegRekkefolgeItem[];
+}
 
 export function TilleggsopplysningerStegOppsummering({
   skjema,
-}: ArbeidstakerSkjemaProps) {
+  stegRekkefolge,
+}: TilleggsopplysningerStegOppsummeringProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
 
   const tilleggsopplysningerData = skjema.data.tilleggsopplysninger;
-  const tilleggsopplysningerSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(
-    (steg) => steg.key === tilleggsopplysningerStepKey,
+  const tilleggsopplysningerSteg = stegRekkefolge.find(
+    (steg) => steg.key === stepKey,
   );
   const editHref =
     tilleggsopplysningerSteg?.route.replace("$id", skjema.id) || "";

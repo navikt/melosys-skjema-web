@@ -138,6 +138,10 @@ export const en = {
         "Describe the additional information you have for the application",
       tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger:
         "Additional information is required when you have additional information",
+    },
+    vedleggSteg: {
+      tittel: "Attachments",
+      ingenVedleggLastetOpp: "No attachments uploaded",
       lastOppVedlegg: "Upload attachments (optional)",
       lastOppVedleggBeskrivelse:
         "You can upload PDF, Word documents or images. Maximum file size 10 MB per file.",
