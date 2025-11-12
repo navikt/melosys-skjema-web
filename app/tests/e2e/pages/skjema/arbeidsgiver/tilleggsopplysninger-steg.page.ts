@@ -2,20 +2,20 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidstakersSkjemaDto,
+  ArbeidsgiversSkjemaDto,
   TilleggsopplysningerDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 
 export class TilleggsopplysningerStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidstakersSkjemaDto;
+  readonly skjema: ArbeidsgiversSkjemaDto;
   readonly heading: Locator;
   readonly harFlereOpplysningerRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly tilleggsopplysningerTextarea: Locator;
   readonly lagreOgFortsettButton: Locator;
 
-  constructor(page: Page, skjema: ArbeidstakersSkjemaDto) {
+  constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
@@ -47,7 +47,7 @@ export class TilleggsopplysningerStegPage {
 
   async goto() {
     await this.page.goto(
-      `/skjema/arbeidstaker/${this.skjema.id}/tilleggsopplysninger`,
+      `/skjema/arbeidsgiver/${this.skjema.id}/tilleggsopplysninger`,
     );
   }
 
@@ -61,9 +61,9 @@ export class TilleggsopplysningerStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${this.skjema.id}/tilleggsopplysninger`,
+      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/tilleggsopplysninger`,
     );
-    await this.lagreOgFortsettButton.click();
+    await this.lagreOgFortsett();
     return await requestPromise;
   }
 
@@ -77,7 +77,7 @@ export class TilleggsopplysningerStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/vedlegg`,
+      `/skjema/arbeidsgiver/${this.skjema.id}/vedlegg`,
     );
   }
 }

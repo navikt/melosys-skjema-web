@@ -6,6 +6,7 @@ import {
   ArbeidsstedIUtlandetDto,
   ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerensLonnDto,
+  TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import {
@@ -26,7 +27,9 @@ import { ArbeidsstedIUtlandetStegPage } from "../pages/skjema/arbeidsgiver/arbei
 import { ArbeidstakerenStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakeren-steg.page";
 import { ArbeidstakerensLonnStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
 import { OppsummeringStegPage } from "../pages/skjema/arbeidsgiver/oppsummering-steg.page";
+import { TilleggsopplysningerStegPage } from "../pages/skjema/arbeidsgiver/tilleggsopplysninger-steg.page";
 import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidsgiver/utenlandsoppdraget-steg.page";
+import { VedleggStegPage } from "../pages/skjema/arbeidsgiver/vedlegg-steg.page";
 
 test.describe("Arbeidsgiver komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
@@ -292,6 +295,50 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await arbeidstakerensLonnStegPage.assertNavigatedToNextStep();
   });
 
+  test("skal fylle ut tilleggsopplysninger steg og gjøre forventet POST request", async ({
+    page,
+  }) => {
+    const tilleggsopplysningerStegPage = new TilleggsopplysningerStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    // Naviger direkte til steget
+    await tilleggsopplysningerStegPage.goto();
+
+    await tilleggsopplysningerStegPage.assertIsVisible();
+
+    // Svar på spørsmål
+    await tilleggsopplysningerStegPage.harFlereOpplysningerRadioGroup.NEI.click();
+
+    // Lagre og fortsett og verifiser forventet payload i POST request
+    const expectedTilleggsopplysningerPayload: TilleggsopplysningerDto = {
+      harFlereOpplysningerTilSoknaden: false,
+    };
+
+    await tilleggsopplysningerStegPage.lagreOgFortsettAndExpectPayload(
+      expectedTilleggsopplysningerPayload,
+    );
+
+    // Verifiser navigerering til neste steg
+    await tilleggsopplysningerStegPage.assertNavigatedToNextStep();
+  });
+
+  test("skal navigere gjennom vedlegg steg", async ({ page }) => {
+    const vedleggStegPage = new VedleggStegPage(page, testArbeidsgiverSkjema);
+
+    // Naviger direkte til steget
+    await vedleggStegPage.goto();
+
+    await vedleggStegPage.assertIsVisible();
+
+    // Lagre og fortsett (ingen API kall for vedlegg ennå)
+    await vedleggStegPage.lagreOgFortsett();
+
+    // Verifiser navigerering til neste steg
+    await vedleggStegPage.assertNavigatedToNextStep();
+  });
+
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
     page,
   }) => {
@@ -340,6 +387,10 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
 
+    const tilleggsopplysningerData: TilleggsopplysningerDto = {
+      harFlereOpplysningerTilSoknaden: false,
+    };
+
     // Mock komplett skjema data for oppsummering
     await mockFetchArbeidsgiverSkjema(page, {
       ...testArbeidsgiverSkjema,
@@ -349,6 +400,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
         utenlandsoppdraget: utenlandsoppdragetData,
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
         arbeidstakerensLonn: arbeidstakerensLonnData,
+        tilleggsopplysninger: tilleggsopplysningerData,
       },
     });
 
@@ -370,6 +422,9 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     );
     await oppsummeringStegPage.assertArbeidstakerensLonnData(
       arbeidstakerensLonnData,
+    );
+    await oppsummeringStegPage.assertTilleggsopplysningerData(
+      tilleggsopplysningerData,
     );
   });
 });
