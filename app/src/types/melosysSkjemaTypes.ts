@@ -108,6 +108,7 @@ export interface ArbeidsgiversSkjemaDataDto {
   utenlandsoppdraget?: UtenlandsoppdragetDto;
   arbeidstakerensLonn?: ArbeidstakerensLonnDto;
   arbeidsstedIUtlandet?: ArbeidsstedIUtlandetDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
 }
 
 export interface ArbeidsgiversSkjemaDto {
