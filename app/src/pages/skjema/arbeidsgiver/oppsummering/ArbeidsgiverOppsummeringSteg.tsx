@@ -58,10 +58,7 @@ function ArbeidsgiverOppsummeringStegContent({
       }
       case arbeidsstedIUtlandetStepKey: {
         return (
-          <ArbeidsstedIUtlandetStegOppsummering
-            key={stepKey}
-            skjema={skjema}
-          />
+          <ArbeidsstedIUtlandetStegOppsummering key={stepKey} skjema={skjema} />
         );
       }
       case arbeidstakerensLonnStepKey: {
