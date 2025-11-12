@@ -77,7 +77,7 @@ export class TilleggsopplysningerStegPage {
 
   async assertNavigatedToOppsummering() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/oppsummering`,
+      `/skjema/arbeidstaker/${this.skjema.id}/vedlegg`,
     );
   }
 }
