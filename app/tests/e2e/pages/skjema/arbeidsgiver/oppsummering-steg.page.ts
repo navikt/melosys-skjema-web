@@ -6,6 +6,7 @@ import type {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
+  ArbeidsstedIUtlandetDto,
   ArbeidstakerensLonnDto,
   NorskeOgUtenlandskeVirksomheter,
   UtenlandsoppdragetDto,
@@ -171,6 +172,49 @@ export class OppsummeringStegPage {
           `dt:has-text("${nb.translation.utenlandsoppdragetSteg.beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden}") + dd`,
         ),
       ).toHaveText(data.ansettelsesforholdBeskrivelse);
+    }
+  }
+
+  async assertArbeidsstedIUtlandetData(data: ArbeidsstedIUtlandetDto) {
+    // Verifiser arbeidssted type
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.hvorSkalArbeidetUtfores}") + dd`,
+      ),
+    ).toBeVisible();
+
+    // Verifiser på land data hvis det finnes
+    if (data.paLand) {
+      if (data.paLand.fastEllerVekslendeArbeidssted) {
+        await expect(
+          this.page.locator(
+            `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.harFastArbeidsstedEllerVeksler}") + dd`,
+          ),
+        ).toBeVisible();
+      }
+
+      if (
+        data.paLand.fastArbeidssted &&
+        data.paLand.fastArbeidssted.vegadresse
+      ) {
+        await expect(
+          this.page.locator(
+            `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.vegadresse}") + dd`,
+          ),
+        ).toHaveText(data.paLand.fastArbeidssted.vegadresse);
+      }
+
+      if (data.paLand.erHjemmekontor !== undefined) {
+        await expect(
+          this.page.locator(
+            `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.erHjemmekontor}") + dd`,
+          ),
+        ).toHaveText(
+          data.paLand.erHjemmekontor
+            ? nb.translation.felles.ja
+            : nb.translation.felles.nei,
+        );
+      }
     }
   }
 

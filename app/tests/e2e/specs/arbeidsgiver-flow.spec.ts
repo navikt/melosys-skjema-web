@@ -3,6 +3,7 @@ import { test } from "@playwright/test";
 import {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
+  ArbeidsstedIUtlandetDto,
   ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerensLonnDto,
   UtenlandsoppdragetDto,
@@ -21,6 +22,7 @@ import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
 import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
+import { ArbeidsstedIUtlandetStegPage } from "../pages/skjema/arbeidsgiver/arbeidssted-i-utlandet-steg.page";
 import { ArbeidstakerenStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakeren-steg.page";
 import { ArbeidstakerensLonnStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
 import { OppsummeringStegPage } from "../pages/skjema/arbeidsgiver/oppsummering-steg.page";
@@ -208,6 +210,59 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
   });
 
+  test("skal fylle ut arbeidssted i utlandet steg og gjøre forventet POST request", async ({
+    page,
+  }) => {
+    const arbeidsstedIUtlandetStegPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    // Naviger direkte til steget
+    await arbeidsstedIUtlandetStegPage.goto();
+
+    await arbeidsstedIUtlandetStegPage.assertIsVisible();
+
+    // Velg "På land" som arbeidssted type
+    await arbeidsstedIUtlandetStegPage.arbeidsstedTypeSelect.selectOption(
+      "PA_LAND",
+    );
+
+    // Velg fast arbeidssted
+    await arbeidsstedIUtlandetStegPage.fastEllerVekslendeRadioGroup.FAST.click();
+
+    // Fyll ut adresse
+    await arbeidsstedIUtlandetStegPage.vegadresseInput.fill("Storgata");
+    await arbeidsstedIUtlandetStegPage.nummerInput.fill("1");
+    await arbeidsstedIUtlandetStegPage.postkodeInput.fill("0123");
+    await arbeidsstedIUtlandetStegPage.byStedInput.fill("Stockholm");
+
+    // Svar nei på hjemmekontor
+    await arbeidsstedIUtlandetStegPage.erHjemmekontorRadioGroup.NEI.click();
+
+    // Lagre og fortsett og verifiser forventet payload i POST request
+    const expectedArbeidsstedIUtlandetPayload: ArbeidsstedIUtlandetDto = {
+      arbeidsstedType: "PA_LAND",
+      paLand: {
+        fastEllerVekslendeArbeidssted: "FAST",
+        fastArbeidssted: {
+          vegadresse: "Storgata",
+          nummer: "1",
+          postkode: "0123",
+          bySted: "Stockholm",
+        },
+        erHjemmekontor: false,
+      },
+    };
+
+    await arbeidsstedIUtlandetStegPage.lagreOgFortsettAndExpectPayload(
+      expectedArbeidsstedIUtlandetPayload,
+    );
+
+    // Verifiser navigerering til neste steg
+    await arbeidsstedIUtlandetStegPage.assertNavigatedToNextStep();
+  });
+
   test("skal fylle ut arbeidstakerens lønn steg og gjøre forventet POST request", async ({
     page,
   }) => {
@@ -267,6 +322,20 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       arbeidstakerErstatterAnnenPerson: false,
     };
 
+    const arbeidsstedIUtlandetData: ArbeidsstedIUtlandetDto = {
+      arbeidsstedType: "PA_LAND",
+      paLand: {
+        fastEllerVekslendeArbeidssted: "FAST",
+        fastArbeidssted: {
+          vegadresse: "Storgata",
+          nummer: "1",
+          postkode: "0123",
+          bySted: "Stockholm",
+        },
+        erHjemmekontor: false,
+      },
+    };
+
     const arbeidstakerensLonnData: ArbeidstakerensLonnDto = {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
@@ -278,6 +347,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
         arbeidsgiveren: arbeidsgiverenData,
         arbeidsgiverensVirksomhetINorge: arbeidsgiverensVirksomhetINorgeData,
         utenlandsoppdraget: utenlandsoppdragetData,
+        arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
         arbeidstakerensLonn: arbeidstakerensLonnData,
       },
     });
@@ -294,6 +364,9 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     );
     await oppsummeringStegPage.assertUtenlandsoppdragetData(
       utenlandsoppdragetData,
+    );
+    await oppsummeringStegPage.assertArbeidsstedIUtlandetData(
+      arbeidsstedIUtlandetData,
     );
     await oppsummeringStegPage.assertArbeidstakerensLonnData(
       arbeidstakerensLonnData,
