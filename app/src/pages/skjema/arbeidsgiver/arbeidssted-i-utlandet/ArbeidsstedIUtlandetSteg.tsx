@@ -8,10 +8,12 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { postArbeidsstedIUtlandet } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { ArbeidsstedIUtlandetDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
@@ -34,7 +36,7 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
 
-  const lagretSkjemadataForSteg = {}; //skjema.data?.arbeidsstedIUtlandet;
+  const lagretSkjemadataForSteg = skjema.data?.arbeidsstedIUtlandet;
 
   const formMethods = useForm<ArbeidsstedIUtlandetFormData>({
     resolver: zodResolver(arbeidsstedIUtlandetSchema),
@@ -54,12 +56,11 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const registerArbeidsstedMutation = useMutation({
     mutationFn: (data: ArbeidsstedIUtlandetFormData) => {
-      // TODO: Implement API call when backend is ready
-      console.log("Form data:", data);
-      return Promise.resolve();
+      const apiPayload = data as ArbeidsstedIUtlandetDto;
+      return postArbeidsstedIUtlandet(skjema.id, apiPayload);
     },
-    onSuccess: async () => {
-      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
+    onSuccess: () => {
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
       if (nextStep) {
         navigate({
@@ -76,8 +77,6 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const onSubmit = (data: ArbeidsstedIUtlandetFormData) => {
     registerArbeidsstedMutation.mutate(data);
   };
-
-  console.log(watch());
 
   return (
     <FormProvider {...formMethods}>

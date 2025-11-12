@@ -206,7 +206,56 @@ export const arbeidsstedIUtlandetSchema = baseArbeidsstedIUtlandetSchema
   .refine(validerOmBordPaFlyVanligHjemmebaseNavnPakrevd, {
     message: "arbeidsstedIUtlandetSteg.vanligHjemmebaseNavnErPakrevd",
     path: ["omBordPaFly", "vanligHjemmebaseNavn"],
+  })
+  .transform((data) => {
+    // Fjern betingede felter som ikke er relevante basert på arbeidsstedType
+    return {
+      arbeidsstedType: data.arbeidsstedType,
+      paLand:
+        data.arbeidsstedType === "PA_LAND"
+          ? transformPaLand(data.paLand)
+          : undefined,
+      offshore: data.arbeidsstedType === "OFFSHORE" ? data.offshore : undefined,
+      paSkip:
+        data.arbeidsstedType === "PA_SKIP"
+          ? transformPaSkip(data.paSkip)
+          : undefined,
+      omBordPaFly:
+        data.arbeidsstedType === "OM_BORD_PA_FLY"
+          ? transformOmBordPaFly(data.omBordPaFly)
+          : undefined,
+    };
   });
+
+// Transform functions - convert empty strings to undefined for conditional fields
+function transformPaLand(paLand: z.infer<typeof paLandSchema> | undefined) {
+  if (!paLand) return;
+  return {
+    ...paLand,
+    fastArbeidssted: paLand.fastArbeidssted || undefined,
+    beskrivelseVekslende: paLand.beskrivelseVekslende || undefined,
+  };
+}
+
+function transformPaSkip(paSkip: z.infer<typeof paSkipSchema> | undefined) {
+  if (!paSkip) return;
+  return {
+    ...paSkip,
+    flaggland: paSkip.flaggland || undefined,
+    territorialfarvannLand: paSkip.territorialfarvannLand || undefined,
+  };
+}
+
+function transformOmBordPaFly(
+  omBordPaFly: z.infer<typeof omBordPaFlySchema> | undefined,
+) {
+  if (!omBordPaFly) return;
+  return {
+    ...omBordPaFly,
+    vanligHjemmebaseLand: omBordPaFly.vanligHjemmebaseLand || undefined,
+    vanligHjemmebaseNavn: omBordPaFly.vanligHjemmebaseNavn || undefined,
+  };
+}
 
 // Validation functions
 function validerArbeidsstedTypePakrevd(data: ArbeidsstedIUtlandetFormData) {

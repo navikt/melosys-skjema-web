@@ -107,6 +107,7 @@ export interface ArbeidsgiversSkjemaDataDto {
   arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
   utenlandsoppdraget?: UtenlandsoppdragetDto;
   arbeidstakerensLonn?: ArbeidstakerensLonnDto;
+  arbeidsstedIUtlandet?: ArbeidsstedIUtlandetDto;
 }
 
 export interface ArbeidsgiversSkjemaDto {
@@ -117,6 +118,14 @@ export interface ArbeidsgiversSkjemaDto {
   data: ArbeidsgiversSkjemaDataDto;
 }
 
+export interface ArbeidsstedIUtlandetDto {
+  arbeidsstedType: "PA_LAND" | "OFFSHORE" | "PA_SKIP" | "OM_BORD_PA_FLY";
+  paLand?: PaLandDto;
+  offshore?: OffshoreDto;
+  paSkip?: PaSkipDto;
+  omBordPaFly?: OmBordPaFlyDto;
+}
+
 export interface ArbeidstakerenArbeidsgiversDelDto {
   fodselsnummer: string;
 }
@@ -124,6 +133,44 @@ export interface ArbeidstakerenArbeidsgiversDelDto {
 export interface ArbeidstakerensLonnDto {
   arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: boolean;
   virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
+}
+
+export interface OffshoreDto {
+  navnPaInnretning: string;
+  typeInnretning:
+    | "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING"
+    | "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING";
+  sokkelLand: string;
+}
+
+export interface OmBordPaFlyDto {
+  hjemmebaseLand: string;
+  hjemmebaseNavn: string;
+  erVanligHjemmebase: boolean;
+  vanligHjemmebaseLand?: string;
+  vanligHjemmebaseNavn?: string;
+}
+
+export interface PaLandDto {
+  fastEllerVekslendeArbeidssted: "FAST" | "VEKSLENDE";
+  fastArbeidssted?: PaLandFastArbeidsstedDto;
+  beskrivelseVekslende?: string;
+  erHjemmekontor: boolean;
+}
+
+export interface PaLandFastArbeidsstedDto {
+  vegadresse: string;
+  nummer: string;
+  postkode: string;
+  bySted: string;
+}
+
+export interface PaSkipDto {
+  navnPaSkip: string;
+  yrketTilArbeidstaker: string;
+  seilerI: "INTERNASJONALT_FARVANN" | "TERRITORIALFARVANN";
+  flaggland?: string;
+  territorialfarvannLand?: string;
 }
 
 export interface UtenlandsoppdragetDto {
