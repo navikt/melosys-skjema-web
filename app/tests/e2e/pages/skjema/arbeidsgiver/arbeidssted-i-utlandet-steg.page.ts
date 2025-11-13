@@ -33,7 +33,7 @@ export class ArbeidsstedIUtlandetStegPage {
     PLATTFORM: Locator;
     BORESKIP: Locator;
   };
-  readonly sokkelLandCombobox: Locator;
+  readonly sokkelLandSelect: Locator;
 
   // På skip felter
   readonly navnPaSkipInput: Locator;
@@ -42,14 +42,14 @@ export class ArbeidsstedIUtlandetStegPage {
     INTERNASJONALT: Locator;
     TERRITORIALFARVANN: Locator;
   };
-  readonly flagglandCombobox: Locator;
-  readonly territorialfarvannLandCombobox: Locator;
+  readonly flagglandSelect: Locator;
+  readonly territorialfarvannLandSelect: Locator;
 
   // Om bord på fly felter
-  readonly hjemmebaseLandCombobox: Locator;
+  readonly hjemmebaseLandSelect: Locator;
   readonly hjemmebaseNavnInput: Locator;
   readonly erVanligHjemmebaseRadioGroup: RadioButtonGroupJaNeiLocator;
-  readonly vanligHjemmebaseLandCombobox: Locator;
+  readonly vanligHjemmebaseLandSelect: Locator;
   readonly vanligHjemmebaseNavnInput: Locator;
 
   constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
@@ -121,9 +121,9 @@ export class ArbeidsstedIUtlandetStegPage {
       }),
     };
 
-    this.sokkelLandCombobox = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.hvilketLandsSokkel,
-    );
+    this.sokkelLandSelect = page.getByRole("combobox", {
+      name: nb.translation.arbeidsstedIUtlandetSteg.hvilketLandsSokkel,
+    });
 
     // På skip
     this.navnPaSkipInput = page.getByLabel(
@@ -145,17 +145,18 @@ export class ArbeidsstedIUtlandetStegPage {
       }),
     };
 
-    this.flagglandCombobox = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.flaggland,
-    );
-    this.territorialfarvannLandCombobox = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.hvilketLandsTerritorialfarvann,
-    );
+    this.flagglandSelect = page.getByRole("combobox", {
+      name: nb.translation.arbeidsstedIUtlandetSteg.flaggland,
+    });
+    this.territorialfarvannLandSelect = page.getByRole("combobox", {
+      name: nb.translation.arbeidsstedIUtlandetSteg
+        .hvilketLandsTerritorialfarvann,
+    });
 
     // Om bord på fly
-    this.hjemmebaseLandCombobox = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseLand,
-    );
+    this.hjemmebaseLandSelect = page.getByRole("combobox", {
+      name: nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseLand,
+    });
     this.hjemmebaseNavnInput = page.getByLabel(
       nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseNavn,
     );
@@ -172,9 +173,9 @@ export class ArbeidsstedIUtlandetStegPage {
       }),
     };
 
-    this.vanligHjemmebaseLandCombobox = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseLand,
-    );
+    this.vanligHjemmebaseLandSelect = page.getByRole("combobox", {
+      name: nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseLand,
+    });
     this.vanligHjemmebaseNavnInput = page.getByLabel(
       nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseNavn,
     );

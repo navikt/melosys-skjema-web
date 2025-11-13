@@ -157,8 +157,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
 
       await arbeidsstedPage.seilerIRadioGroup.INTERNASJONALT.click();
 
-      await arbeidsstedPage.flagglandCombobox.fill("Norge");
-      await page.getByRole("option", { name: "Norge" }).click();
+      await arbeidsstedPage.flagglandSelect.selectOption("SV");
 
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: "PA_SKIP",
@@ -166,7 +165,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
           navnPaSkip: "MS Test Ship",
           yrketTilArbeidstaker: "Kaptein",
           seilerI: "INTERNASJONALT_FARVANN",
-          flaggland: "NO",
+          flaggland: "SV",
         },
       };
 
@@ -196,8 +195,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
 
       await arbeidsstedPage.seilerIRadioGroup.TERRITORIALFARVANN.click();
 
-      await arbeidsstedPage.territorialfarvannLandCombobox.fill("Sverige");
-      await page.getByRole("option", { name: "Sverige" }).click();
+      await arbeidsstedPage.territorialfarvannLandSelect.selectOption("SV");
 
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: "PA_SKIP",
@@ -205,7 +203,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
           navnPaSkip: "MS Test Ship",
           yrketTilArbeidstaker: "Kaptein",
           seilerI: "TERRITORIALFARVANN",
-          territorialfarvannLand: "SE",
+          territorialfarvannLand: "SV",
         },
       };
 
@@ -232,18 +230,17 @@ test.describe("ArbeidsstedIUtlandet", () => {
         "OM_BORD_PA_FLY",
       );
 
-      await arbeidsstedPage.hjemmebaseLandCombobox.fill("Norge");
-      await page.getByRole("option", { name: "Norge" }).click();
+      await arbeidsstedPage.hjemmebaseLandSelect.selectOption("DK");
 
-      await arbeidsstedPage.hjemmebaseNavnInput.fill("Oslo Airport");
+      await arbeidsstedPage.hjemmebaseNavnInput.fill("Aarhus Airport");
 
       await arbeidsstedPage.erVanligHjemmebaseRadioGroup.JA.click();
 
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: "OM_BORD_PA_FLY",
         omBordPaFly: {
-          hjemmebaseLand: "NO",
-          hjemmebaseNavn: "Oslo Airport",
+          hjemmebaseLand: "DK",
+          hjemmebaseNavn: "Aarhus Airport",
           erVanligHjemmebase: true,
         },
       };
@@ -271,25 +268,23 @@ test.describe("ArbeidsstedIUtlandet", () => {
         "OM_BORD_PA_FLY",
       );
 
-      await arbeidsstedPage.hjemmebaseLandCombobox.fill("Norge");
-      await page.getByRole("option", { name: "Norge" }).click();
+      await arbeidsstedPage.hjemmebaseLandSelect.selectOption("DK");
 
-      await arbeidsstedPage.hjemmebaseNavnInput.fill("Oslo Airport");
+      await arbeidsstedPage.hjemmebaseNavnInput.fill("Skagen Airport");
 
       await arbeidsstedPage.erVanligHjemmebaseRadioGroup.NEI.click();
 
-      await arbeidsstedPage.vanligHjemmebaseLandCombobox.fill("Sverige");
-      await page.getByRole("option", { name: "Sverige" }).click();
+      await arbeidsstedPage.vanligHjemmebaseLandSelect.selectOption("SV");
 
       await arbeidsstedPage.vanligHjemmebaseNavnInput.fill("Stockholm Airport");
 
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: "OM_BORD_PA_FLY",
         omBordPaFly: {
-          hjemmebaseLand: "NO",
-          hjemmebaseNavn: "Oslo Airport",
+          hjemmebaseLand: "DK",
+          hjemmebaseNavn: "Skagen Airport",
           erVanligHjemmebase: false,
-          vanligHjemmebaseLand: "SE",
+          vanligHjemmebaseLand: "SV",
           vanligHjemmebaseNavn: "Stockholm Airport",
         },
       };
