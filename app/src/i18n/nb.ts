@@ -211,6 +211,79 @@ export const nb = {
       arbeidsgiverensOrganisasjonsnummer: "Arbeidsgiverens organisasjonsnummer",
       organisasjonensNavn: "Organisasjonens navn",
     },
+    arbeidsstedIUtlandetSteg: {
+      tittel: "Arbeidssted i utlandet",
+      hvorSkalArbeidetUtfores: "Hvor skal arbeidet utføres?",
+      velgArbeidssted: "Velg arbeidssted",
+      paLand: "På land",
+      offshore: "Offshore",
+      paSkip: "På skip",
+      omBordPaFly: "Om bord på fly",
+      harFastArbeidsstedEllerVeksler:
+        "Har arbeidstakeren fast arbeidssted i dette landet eller veksler det ofte?",
+      fastArbeidssted: "Fast arbeidssted",
+      vekslerOfte: "Veksler ofte",
+      vegadresse: "Vegadresse",
+      nummer: "Nummer",
+      postkode: "Postkode",
+      bySted: "By/sted/region",
+      beskriv: "Beskriv hvor arbeidstakeren skal jobbe",
+      erHjemmekontor: "Er arbeidstakeren utsendt for å jobbe på hjemmekontor?",
+      navnPaInnretning: "Navn på innretning",
+      hvilkenTypeInnretning: "Hvilken type innretning er dette?",
+      plattformEllerFast: "Plattform eller annen fast innretning",
+      boreskipEllerFlyttbar: "Boreskip eller annen flyttbar innretning",
+      hvilketLandsSokkel: "Hvilket lands sokkel er dette?",
+      navnPaSkip: "Hva er navnet på skipet arbeidstakeren skal jobbe på?",
+      yrketTilArbeidstaker: "Hva er yrket til arbeidstakeren?",
+      yrketTilArbeidstakerBeskrivelse:
+        "Vi trenger informasjon om hva slags arbeid arbeidstakeren utfører om bord på skipet",
+      hvorSkalSkipetSeile: "Hvor skal skipet seile?",
+      internasjonaltFarvann: "Internasjonalt farvann",
+      territorialfarvann: "Innenfor territorialfarvann",
+      flaggland: "Hva er flagglandet til skipet?",
+      hvilketLandsTerritorialfarvann: "Hvilket lands territorialfarvann?",
+      hjemmebaseLand:
+        "I hvilket land har arbeidstakeren hjemmebase i søknadsperioden?",
+      hjemmebaseLandBeskrivelse:
+        "Med hjemmebase mener vi flyplassen der arbeidstakeren starter og avslutter flyvningene sine",
+      hjemmebaseNavn: "Hva er navnet på hjemmebasen?",
+      erVanligHjemmebase:
+        "Er dette hjemmebasen arbeidstakeren jobber fra til vanlig?",
+      vanligHjemmebaseLand:
+        "I hvilket land ligger hjemmebasen arbeidstakeren vanligvis jobber fra?",
+      vanligHjemmebaseNavn:
+        "Hva er navnet på hjemmebasen arbeidstakeren vanligvis jobber fra?",
+      // Feilmeldinger
+      duMaVelgeArbeidsstedType: "Du må velge hvor arbeidet skal utføres",
+      duMaVelgeFastEllerVekslende:
+        "Du må velge om arbeidstakeren har fast arbeidssted eller om det veksler ofte",
+      duMaSvarePaOmDetErHjemmekontor:
+        "Du må svare på om arbeidstakeren er utsendt for å jobbe på hjemmekontor",
+      vegadresseErPakrevd: "Vegadresse er påkrevd",
+      nummerErPakrevd: "Nummer er påkrevd",
+      postkodeErPakrevd: "Postkode er påkrevd",
+      byStedErPakrevd: "By/sted/region er påkrevd",
+      beskrivelseErPakrevd: "Beskrivelse er påkrevd",
+      navnPaInnretningErPakrevd: "Navn på innretning er påkrevd",
+      duMaVelgeTypeInnretning: "Du må velge hvilken type innretning dette er",
+      sokkelLandErPakrevd: "Du må velge hvilket lands sokkel dette er",
+      navnPaSkipErPakrevd: "Navn på skipet er påkrevd",
+      yrketTilArbeidstakerErPakrevd: "Yrket til arbeidstakeren er påkrevd",
+      duMaVelgeHvorSkipetSeiler: "Du må velge hvor skipet skal seile",
+      flagglandErPakrevd: "Flaggland er påkrevd",
+      territorialfarvannLandErPakrevd:
+        "Du må velge hvilket lands territorialfarvann skipet seiler i",
+      hjemmebaseLandErPakrevd:
+        "Du må velge hvilket land arbeidstakeren har hjemmebase i",
+      hjemmebaseNavnErPakrevd: "Navnet på hjemmebasen er påkrevd",
+      duMaSvarePaOmDetErVanligHjemmebase:
+        "Du må svare på om dette er hjemmebasen arbeidstakeren jobber fra til vanlig",
+      vanligHjemmebaseLandErPakrevd:
+        "Du må velge hvilket land den vanlige hjemmebasen ligger i",
+      vanligHjemmebaseNavnErPakrevd:
+        "Navnet på den vanlige hjemmebasen er påkrevd",
+    },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Arbeidsgiverens virksomhet i Norge",
       erArbeidsgiverenEnOffentligVirksomhet:
