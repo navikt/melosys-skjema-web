@@ -266,6 +266,26 @@ export async function postArbeidstakerensLonn(
   }
 }
 
+export async function postTilleggsopplysningerArbeidsgiver(
+  skjemaId: string,
+  request: TilleggsopplysningerDto,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/tilleggsopplysninger`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
 export async function submitSkjema(
   skjemaId: string,
   request: SubmitSkjemaRequest,

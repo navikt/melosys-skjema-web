@@ -135,6 +135,10 @@ export const nb = {
         "Beskriv de flere opplysningene du har til søknaden",
       tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger:
         "Tilleggsopplysninger er påkrevd når du har flere opplysninger",
+    },
+    vedleggSteg: {
+      tittel: "Vedlegg",
+      ingenVedleggLastetOpp: "Ingen vedlegg lastet opp",
       lastOppVedlegg: "Last opp vedlegg (valgfritt)",
       lastOppVedleggBeskrivelse:
         "Du kan laste opp PDF, Word-dokumenter eller bilder. Maks filstørrelse 10 MB per fil.",

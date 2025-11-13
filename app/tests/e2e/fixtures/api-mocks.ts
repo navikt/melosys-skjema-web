@@ -187,6 +187,24 @@ export async function mockPostArbeidstakerensLonn(
   );
 }
 
+export async function mockPostTilleggsopplysningerArbeidsgiver(
+  page: Page,
+  skjemaId: string,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/tilleggsopplysninger`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
 export async function mockFetchArbeidstakerSkjema(
   page: Page,
   skjemaDto: ArbeidstakersSkjemaDto,
@@ -324,6 +342,7 @@ export async function setupApiMocksForArbeidsgiver(
   await mockPostUtenlandsoppdraget(page, skjema.id);
   await mockPostArbeidsstedIUtlandet(page, skjema.id);
   await mockPostArbeidstakerensLonn(page, skjema.id);
+  await mockPostTilleggsopplysningerArbeidsgiver(page, skjema.id);
   await mockSubmitSkjema(page);
 }
 

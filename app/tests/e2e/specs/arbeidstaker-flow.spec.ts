@@ -22,6 +22,7 @@ import { FamiliemedlemmerStegPage } from "../pages/skjema/arbeidstaker/familieme
 import { OppsummeringStegPage } from "../pages/skjema/arbeidstaker/oppsummering-steg.page";
 import { SkatteforholdOgInntektStegPage } from "../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";
 import { TilleggsopplysningerStegPage } from "../pages/skjema/arbeidstaker/tilleggsopplysninger-steg.page";
+import { VedleggStegPage } from "../pages/skjema/arbeidstaker/vedlegg-steg.page";
 
 test.describe("Arbeidstaker komplett flyt", () => {
   test.beforeEach(async ({ page }) => {
@@ -178,7 +179,22 @@ test.describe("Arbeidstaker komplett flyt", () => {
     );
 
     // Verifiser navigering til neste steg
-    await tilleggsopplysningerStegPage.assertNavigatedToOppsummering();
+    await tilleggsopplysningerStegPage.assertNavigatedToNextStep();
+  });
+
+  test("skal navigere gjennom vedlegg steg", async ({ page }) => {
+    const vedleggStegPage = new VedleggStegPage(page, testArbeidstakerSkjema);
+
+    // Naviger direkte til steget
+    await vedleggStegPage.goto();
+
+    await vedleggStegPage.assertIsVisible();
+
+    // Lagre og fortsett (ingen API kall for vedlegg ennå)
+    await vedleggStegPage.lagreOgFortsett();
+
+    // Verifiser navigering til neste steg
+    await vedleggStegPage.assertNavigatedToNextStep();
   });
 
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({

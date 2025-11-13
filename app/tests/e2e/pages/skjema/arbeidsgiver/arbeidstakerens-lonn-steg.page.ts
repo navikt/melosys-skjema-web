@@ -74,7 +74,7 @@ export class ArbeidstakerensLonnStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/oppsummering`,
+      `/skjema/arbeidsgiver/${this.skjema.id}/tilleggsopplysninger`,
     );
   }
 }

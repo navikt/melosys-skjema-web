@@ -28,13 +28,6 @@ function validerTilleggsopplysningerPakrevd(
 }
 
 export const tilleggsopplysningerSchema = baseTilleggsopplysningerSchema
-  .transform((data) => ({
-    ...data,
-    // Clear tilleggsopplysninger field when harFlereOpplysningerTilSoknaden is false
-    tilleggsopplysningerTilSoknad: data.harFlereOpplysningerTilSoknaden
-      ? data.tilleggsopplysningerTilSoknad
-      : undefined,
-  }))
   .refine(validerHarFlereOpplysningerPakrevd, {
     message:
       "tilleggsopplysningerSteg.duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden",
@@ -44,4 +37,15 @@ export const tilleggsopplysningerSchema = baseTilleggsopplysningerSchema
     message:
       "tilleggsopplysningerSteg.tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger",
     path: ["tilleggsopplysningerTilSoknad"],
-  });
+  })
+  .transform((data) => ({
+    ...data,
+    // Clear tilleggsopplysninger field when harFlereOpplysningerTilSoknaden is false
+    tilleggsopplysningerTilSoknad: data.harFlereOpplysningerTilSoknaden
+      ? data.tilleggsopplysningerTilSoknad
+      : undefined,
+  }));
+
+export type TilleggsopplysningerFormData = z.infer<
+  typeof tilleggsopplysningerSchema
+>;

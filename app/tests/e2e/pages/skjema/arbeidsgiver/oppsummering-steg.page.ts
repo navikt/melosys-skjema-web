@@ -9,6 +9,7 @@ import type {
   ArbeidsstedIUtlandetDto,
   ArbeidstakerensLonnDto,
   NorskeOgUtenlandskeVirksomheter,
+  TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 
@@ -252,6 +253,26 @@ export class OppsummeringStegPage {
         await expect(this.page.getByText(virksomhet.navn)).toBeVisible();
         await expect(this.page.getByText(virksomhet.land)).toBeVisible();
       }
+    }
+  }
+
+  async assertTilleggsopplysningerData(data: TilleggsopplysningerDto) {
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.tilleggsopplysningerSteg.harDuNoenFlereOpplysningerTilSoknaden}") + dd`,
+      ),
+    ).toHaveText(
+      data.harFlereOpplysningerTilSoknaden
+        ? nb.translation.felles.ja
+        : nb.translation.felles.nei,
+    );
+
+    if (data.tilleggsopplysningerTilSoknad !== undefined) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${nb.translation.tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden}") + dd`,
+        ),
+      ).toHaveText(data.tilleggsopplysningerTilSoknad);
     }
   }
 }
