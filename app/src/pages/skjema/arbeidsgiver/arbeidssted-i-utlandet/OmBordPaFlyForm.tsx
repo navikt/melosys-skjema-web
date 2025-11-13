@@ -1,5 +1,5 @@
 import { TextField } from "@navikt/ds-react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -14,14 +14,13 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 export function OmBordPaFlyForm() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const {
-    register,
-    watch,
-    formState: { errors },
-  } = useFormContext<ArbeidsstedIUtlandetFormData>();
+  const { control, watch } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const erVanligHjemmebase = watch("omBordPaFly.erVanligHjemmebase");
 
+  // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
+  // This is a known design limitation (react-hook-form/react-hook-form#9287)
+  // We use Controller's fieldState.error for type-safe error handling
   return (
     <div className="mt-6">
       <LandVelgerFormPart
@@ -30,11 +29,18 @@ export function OmBordPaFlyForm() {
         label={t("arbeidsstedIUtlandetSteg.hjemmebaseLand")}
       />
 
-      <TextField
-        className="mt-4"
-        error={translateError(errors.omBordPaFly?.hjemmebaseNavn?.message)}
-        label={t("arbeidsstedIUtlandetSteg.hjemmebaseNavn")}
-        {...register("omBordPaFly.hjemmebaseNavn")}
+      <Controller
+        control={control}
+        name="omBordPaFly.hjemmebaseNavn"
+        render={({ field, fieldState }) => (
+          <TextField
+            {...field}
+            className="mt-4"
+            error={translateError(fieldState.error?.message)}
+            label={t("arbeidsstedIUtlandetSteg.hjemmebaseNavn")}
+            value={field.value ?? ""}
+          />
+        )}
       />
 
       <RadioGroupJaNeiFormPart
@@ -51,13 +57,18 @@ export function OmBordPaFlyForm() {
             label={t("arbeidsstedIUtlandetSteg.vanligHjemmebaseLand")}
           />
 
-          <TextField
-            className="mt-4"
-            error={translateError(
-              errors.omBordPaFly?.vanligHjemmebaseNavn?.message,
+          <Controller
+            control={control}
+            name="omBordPaFly.vanligHjemmebaseNavn"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                className="mt-4"
+                error={translateError(fieldState.error?.message)}
+                label={t("arbeidsstedIUtlandetSteg.vanligHjemmebaseNavn")}
+                value={field.value ?? ""}
+              />
             )}
-            label={t("arbeidsstedIUtlandetSteg.vanligHjemmebaseNavn")}
-            {...register("omBordPaFly.vanligHjemmebaseNavn")}
           />
         </>
       )}

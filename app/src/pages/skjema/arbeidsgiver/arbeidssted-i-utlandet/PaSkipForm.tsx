@@ -13,31 +13,43 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 export function PaSkipForm() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const {
-    control,
-    register,
-    watch,
-    formState: { errors },
-  } = useFormContext<ArbeidsstedIUtlandetFormData>();
+  const { control, watch } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const seilerI = watch("paSkip.seilerI");
 
+  // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
+  // This is a known design limitation (react-hook-form/react-hook-form#9287)
+  // We use Controller's fieldState.error for type-safe error handling
   return (
     <div className="mt-6">
-      <TextField
-        error={translateError(errors.paSkip?.navnPaSkip?.message)}
-        label={t("arbeidsstedIUtlandetSteg.navnPaSkip")}
-        {...register("paSkip.navnPaSkip")}
+      <Controller
+        control={control}
+        name="paSkip.navnPaSkip"
+        render={({ field, fieldState }) => (
+          <TextField
+            {...field}
+            error={translateError(fieldState.error?.message)}
+            label={t("arbeidsstedIUtlandetSteg.navnPaSkip")}
+            value={field.value ?? ""}
+          />
+        )}
       />
 
-      <TextField
-        className="mt-4"
-        description={t(
-          "arbeidsstedIUtlandetSteg.yrketTilArbeidstakerBeskrivelse",
+      <Controller
+        control={control}
+        name="paSkip.yrketTilArbeidstaker"
+        render={({ field, fieldState }) => (
+          <TextField
+            {...field}
+            className="mt-4"
+            description={t(
+              "arbeidsstedIUtlandetSteg.yrketTilArbeidstakerBeskrivelse",
+            )}
+            error={translateError(fieldState.error?.message)}
+            label={t("arbeidsstedIUtlandetSteg.yrketTilArbeidstaker")}
+            value={field.value ?? ""}
+          />
         )}
-        error={translateError(errors.paSkip?.yrketTilArbeidstaker?.message)}
-        label={t("arbeidsstedIUtlandetSteg.yrketTilArbeidstaker")}
-        {...register("paSkip.yrketTilArbeidstaker")}
       />
 
       <Controller

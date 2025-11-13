@@ -13,17 +13,15 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 export function PaLandForm() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const {
-    control,
-    register,
-    watch,
-    formState: { errors },
-  } = useFormContext<ArbeidsstedIUtlandetFormData>();
+  const { control, watch } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const fastEllerVekslendeArbeidssted = watch(
     "paLand.fastEllerVekslendeArbeidssted",
   );
 
+  // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
+  // This is a known design limitation (react-hook-form/react-hook-form#9287)
+  // We use Controller's fieldState.error for individual field errors when available
   return (
     <div className="mt-6">
       <Controller
@@ -50,47 +48,74 @@ export function PaLandForm() {
 
       {fastEllerVekslendeArbeidssted === "FAST" && (
         <div className="mt-4">
-          <TextField
-            className="mt-4"
-            error={translateError(
-              errors.paLand?.fastArbeidssted?.vegadresse?.message,
+          <Controller
+            control={control}
+            name="paLand.fastArbeidssted.vegadresse"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                className="mt-4"
+                error={translateError(fieldState.error?.message)}
+                label={t("arbeidsstedIUtlandetSteg.vegadresse")}
+                value={field.value ?? ""}
+              />
             )}
-            label={t("arbeidsstedIUtlandetSteg.vegadresse")}
-            {...register("paLand.fastArbeidssted.vegadresse")}
           />
-          <TextField
-            className="mt-4"
-            error={translateError(
-              errors.paLand?.fastArbeidssted?.nummer?.message,
+          <Controller
+            control={control}
+            name="paLand.fastArbeidssted.nummer"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                className="mt-4"
+                error={translateError(fieldState.error?.message)}
+                label={t("arbeidsstedIUtlandetSteg.nummer")}
+                value={field.value ?? ""}
+              />
             )}
-            label={t("arbeidsstedIUtlandetSteg.nummer")}
-            {...register("paLand.fastArbeidssted.nummer")}
           />
-          <TextField
-            className="mt-4"
-            error={translateError(
-              errors.paLand?.fastArbeidssted?.postkode?.message,
+          <Controller
+            control={control}
+            name="paLand.fastArbeidssted.postkode"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                className="mt-4"
+                error={translateError(fieldState.error?.message)}
+                label={t("arbeidsstedIUtlandetSteg.postkode")}
+                value={field.value ?? ""}
+              />
             )}
-            label={t("arbeidsstedIUtlandetSteg.postkode")}
-            {...register("paLand.fastArbeidssted.postkode")}
           />
-          <TextField
-            className="mt-4"
-            error={translateError(
-              errors.paLand?.fastArbeidssted?.bySted?.message,
+          <Controller
+            control={control}
+            name="paLand.fastArbeidssted.bySted"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                className="mt-4"
+                error={translateError(fieldState.error?.message)}
+                label={t("arbeidsstedIUtlandetSteg.bySted")}
+                value={field.value ?? ""}
+              />
             )}
-            label={t("arbeidsstedIUtlandetSteg.bySted")}
-            {...register("paLand.fastArbeidssted.bySted")}
           />
         </div>
       )}
 
       {fastEllerVekslendeArbeidssted === "VEKSLENDE" && (
-        <Textarea
-          className="mt-4"
-          error={translateError(errors.paLand?.beskrivelseVekslende?.message)}
-          label={t("arbeidsstedIUtlandetSteg.beskriv")}
-          {...register("paLand.beskrivelseVekslende")}
+        <Controller
+          control={control}
+          name="paLand.beskrivelseVekslende"
+          render={({ field, fieldState }) => (
+            <Textarea
+              {...field}
+              className="mt-4"
+              error={translateError(fieldState.error?.message)}
+              label={t("arbeidsstedIUtlandetSteg.beskriv")}
+              value={field.value ?? ""}
+            />
+          )}
         />
       )}
 

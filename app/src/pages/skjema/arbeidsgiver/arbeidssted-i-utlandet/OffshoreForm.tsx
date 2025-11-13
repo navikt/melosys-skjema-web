@@ -13,18 +13,24 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 export function OffshoreForm() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const {
-    control,
-    register,
-    formState: { errors },
-  } = useFormContext<ArbeidsstedIUtlandetFormData>();
+  const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
+  // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
+  // This is a known design limitation (react-hook-form/react-hook-form#9287)
+  // We use Controller's fieldState.error for type-safe error handling
   return (
     <div className="mt-6">
-      <TextField
-        error={translateError(errors.offshore?.navnPaInnretning?.message)}
-        label={t("arbeidsstedIUtlandetSteg.navnPaInnretning")}
-        {...register("offshore.navnPaInnretning")}
+      <Controller
+        control={control}
+        name="offshore.navnPaInnretning"
+        render={({ field, fieldState }) => (
+          <TextField
+            {...field}
+            error={translateError(fieldState.error?.message)}
+            label={t("arbeidsstedIUtlandetSteg.navnPaInnretning")}
+            value={field.value ?? ""}
+          />
+        )}
       />
 
       <Controller
