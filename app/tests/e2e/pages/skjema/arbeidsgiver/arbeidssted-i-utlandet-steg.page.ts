@@ -6,6 +6,7 @@ import type {
   ArbeidsstedIUtlandetDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
 
 export class ArbeidsstedIUtlandetStegPage {
   readonly page: Page;
@@ -187,6 +188,18 @@ export class ArbeidsstedIUtlandetStegPage {
     await this.page.goto(
       `/skjema/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
     );
+  }
+
+  async mockArbeidsstedIUtlandetData(
+    arbeidsstedIUtlandetData: ArbeidsstedIUtlandetDto,
+  ) {
+    await mockFetchArbeidsgiverSkjema(this.page, {
+      ...this.skjema,
+      data: {
+        ...this.skjema.data,
+        arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
+      },
+    });
   }
 
   async assertIsVisible() {
