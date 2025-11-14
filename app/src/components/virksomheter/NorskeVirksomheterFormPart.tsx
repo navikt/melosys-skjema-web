@@ -208,7 +208,7 @@ function NorskVirksomhetRow({
         </div>
       }
     >
-      <Table.HeaderCell>Gjør oppslag på orgnr AS</Table.HeaderCell>
+      <Table.HeaderCell>Placeholder Verdi AS</Table.HeaderCell>
       <Table.DataCell>
         <EndreKnapp onClick={onEdit} size="small" />
         <FjernKnapp onClick={onRemove} size="small" />

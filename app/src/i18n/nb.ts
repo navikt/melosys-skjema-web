@@ -164,6 +164,27 @@ export const nb = {
         "Etternavn er påkrevd og må være minst 2 tegn",
       fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
     },
+    arbeidstakerenSteg: {
+      tittel: "Arbeidstakeren",
+      harArbeidstakerenNorskFodselsnummerEllerDNummer:
+        "Har arbeidstakeren norsk fødselsnummer eller d-nummer?",
+      arbeidstakerensFodselsnummerEllerDNummer:
+        "Arbeidstakerens fødselsnummer eller d-nummer",
+      arbeidstakerensFornavn: "Arbeidstakerens fornavn",
+      arbeidstakerensEtternavn: "Arbeidstakerens etternavn",
+      arbeidstakerensFodselsdato: "Arbeidstakerens fødselsdato",
+      duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer:
+        "Du må svare på om arbeidstakeren har norsk fødselsnummer",
+      fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer:
+        "Fødselsnummer eller d-nummer er påkrevd når arbeidstakeren har norsk fødselsnummer",
+      fodselsnummerEllerDNummerMaVare11Siffer:
+        "Fødselsnummer eller d-nummer må være 11 siffer",
+      fornavnErPakrevdOgMaVareMinst2Tegn:
+        "Fornavn er påkrevd og må være minst 2 tegn",
+      etternavnErPakrevdOgMaVareMinst2Tegn:
+        "Etternavn er påkrevd og må være minst 2 tegn",
+      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
+    },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
       harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
