@@ -4,13 +4,14 @@ import {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
+  ArbeidssituasjonDto,
   ArbeidsstedIUtlandetDto,
-  ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
   ArbeidstakersSkjemaDto,
   CreateArbeidsgiverSkjemaRequest,
   CreateArbeidstakerSkjemaRequest,
+  DineOpplysningerDto,
   FamiliemedlemmerDto,
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhet,
@@ -106,12 +107,32 @@ export async function createArbeidsgiverSkjema(
   return response.json();
 }
 
-export async function postArbeidstakeren(
+export async function postDineOpplysninger(
   skjemaId: string,
-  request: ArbeidstakerenDto,
+  request: DineOpplysningerDto,
 ): Promise<void> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidstakeren`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/dine-opplysninger`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
+export async function postArbeidssituasjon(
+  skjemaId: string,
+  request: ArbeidssituasjonDto,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidssituasjon`,
     {
       method: "POST",
       headers: {
@@ -166,9 +187,9 @@ export async function postArbeidsgiveren(
   }
 }
 
-export async function postArbeidstakerenArbeidsgiversDel(
+export async function postArbeidstakeren(
   skjemaId: string,
-  request: ArbeidstakerenArbeidsgiversDelDto,
+  request: ArbeidstakerenDto,
 ): Promise<void> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidstakeren`,

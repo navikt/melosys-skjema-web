@@ -1,15 +1,13 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import { stepKey as arbeidstakerenStepKey } from "../arbeidstakeren/ArbeidstakerenSteg.tsx";
-import { AKTIVITET_OPTIONS } from "../arbeidstakeren/arbeidstakerenStegSchema.ts";
+import { stepKey as arbeidstakerenStepKey } from "../dine-opplysninger/DineOpplysningerSteg.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
 
-export function ArbeidstakerenStegOppsummering({
+export function DineOpplysningerStegOppsummering({
   skjema,
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
@@ -26,16 +24,14 @@ export function ArbeidstakerenStegOppsummering({
       <FormSummary className="mt-8">
         <FormSummary.Header>
           <FormSummary.Heading level="2">
-            {t("arbeidstakerenSteg.tittel")}
+            {t("dineOpplysningerSteg.tittel")}
           </FormSummary.Heading>
         </FormSummary.Header>
 
         <FormSummary.Answers>
           <FormSummary.Answer>
             <FormSummary.Label>
-              {t(
-                "arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer",
-              )}
+              {t("dineOpplysningerSteg.harDuNorskFodselsnummerEllerDNummer")}
             </FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(arbeidstakerenData.harNorskFodselsnummer)}
@@ -45,9 +41,7 @@ export function ArbeidstakerenStegOppsummering({
           {arbeidstakerenData.fodselsnummer && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t(
-                  "arbeidstakerenSteg.arbeidstakerensFodselsnummerEllerDNummer",
-                )}
+                {t("dineOpplysningerSteg.dittFodselsnummerEllerDNummer")}
               </FormSummary.Label>
               <FormSummary.Value>
                 {arbeidstakerenData.fodselsnummer}
@@ -58,7 +52,7 @@ export function ArbeidstakerenStegOppsummering({
           {arbeidstakerenData.fornavn && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t("arbeidstakerenSteg.arbeidstakerensFornavn")}
+                {t("dineOpplysningerSteg.dittFornavn")}
               </FormSummary.Label>
               <FormSummary.Value>
                 {arbeidstakerenData.fornavn}
@@ -69,7 +63,7 @@ export function ArbeidstakerenStegOppsummering({
           {arbeidstakerenData.etternavn && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t("arbeidstakerenSteg.arbeidstakerensEtternavn")}
+                {t("dineOpplysningerSteg.dittEtternavn")}
               </FormSummary.Label>
               <FormSummary.Value>
                 {arbeidstakerenData.etternavn}
@@ -80,61 +74,13 @@ export function ArbeidstakerenStegOppsummering({
           {arbeidstakerenData.fodselsdato && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t("arbeidstakerenSteg.arbeidstakerensFodselsdato")}
+                {t("dineOpplysningerSteg.dinFodselsdato")}
               </FormSummary.Label>
               <FormSummary.Value>
                 {arbeidstakerenData.fodselsdato}
               </FormSummary.Value>
             </FormSummary.Answer>
           )}
-
-          <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidstakerenSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen",
-              )}
-            </FormSummary.Label>
-            <FormSummary.Value>
-              {booleanToJaNei(
-                arbeidstakerenData.harVaertEllerSkalVaereILonnetArbeidFoerUtsending,
-              )}
-            </FormSummary.Value>
-          </FormSummary.Answer>
-
-          {arbeidstakerenData.aktivitetIMaanedenFoerUtsendingen && (
-            <FormSummary.Answer>
-              <FormSummary.Label>
-                {t("arbeidstakerenSteg.aktivitet")}
-              </FormSummary.Label>
-              <FormSummary.Value>
-                {t(
-                  AKTIVITET_OPTIONS.find(
-                    (opt) =>
-                      opt.value ===
-                      arbeidstakerenData.aktivitetIMaanedenFoerUtsendingen,
-                  )?.labelKey || "",
-                )}
-              </FormSummary.Value>
-            </FormSummary.Answer>
-          )}
-
-          <FormSummary.Answer>
-            <FormSummary.Label>
-              {t("arbeidstakerenSteg.skalDuJobbeForFlereVirksomheterIPerioden")}
-            </FormSummary.Label>
-            <FormSummary.Value>
-              {booleanToJaNei(arbeidstakerenData.skalJobbeForFlereVirksomheter)}
-            </FormSummary.Value>
-          </FormSummary.Answer>
-
-          <NorskeOgUtenlandskeVirksomheterOppsummering
-            label={t(
-              "arbeidstakerenSteg.hvemSkalDuJobbeForIUtsendelsesPerioden",
-            )}
-            norskeOgUtenlandskeVirksomheter={
-              arbeidstakerenData.virksomheterArbeidstakerJobberForIutsendelsesPeriode
-            }
-          />
         </FormSummary.Answers>
 
         <FormSummary.Footer>
