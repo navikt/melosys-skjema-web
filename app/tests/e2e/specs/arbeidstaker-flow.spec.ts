@@ -1,7 +1,8 @@
 import { test } from "@playwright/test";
 
 import {
-  ArbeidstakerenDto,
+  DineOpplysningerDto,
+  ArbeidssituasjonDto,
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
@@ -17,7 +18,7 @@ import {
 } from "../fixtures/test-data";
 import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
 import { ArbeidstakerSkjemaVeiledningPage } from "../pages/skjema/arbeidstaker/arbeidstaker-skjema-veiledning.page";
-import { ArbeidstakerenStegPage } from "../pages/skjema/arbeidstaker/arbeidstakeren-steg.page";
+import { DineOpplysningerStegPage } from "../pages/skjema/arbeidstaker/dine-opplysninger-steg.page";
 import { FamiliemedlemmerStegPage } from "../pages/skjema/arbeidstaker/familiemedlemmer-steg.page";
 import { OppsummeringStegPage } from "../pages/skjema/arbeidstaker/oppsummering-steg.page";
 import { SkatteforholdOgInntektStegPage } from "../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";
@@ -49,46 +50,40 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await veiledningPage.assertStartSoknadButtonVisible();
     await veiledningPage.startSoknad();
 
-    await veiledningPage.assertNavigatedToArbeidstakeren(
+    await veiledningPage.assertNavigatedToDineOpplysninger(
       testArbeidstakerSkjema.id,
     );
   });
 
-  test("skal fylle ut arbeidstakeren steg og gjøre forventet POST request", async ({
+  test("skal fylle ut dine opplysninger steg og gjøre forventet POST request", async ({
     page,
   }) => {
-    const arbeidstakerenStegPage = new ArbeidstakerenStegPage(
+    const dineOpplysningerStegPage = new DineOpplysningerStegPage(
       page,
       testArbeidstakerSkjema,
     );
 
     // Naviger direkte til steget
-    await arbeidstakerenStegPage.goto();
+    await dineOpplysningerStegPage.goto();
 
-    await arbeidstakerenStegPage.assertIsVisible();
+    await dineOpplysningerStegPage.assertIsVisible();
 
     // Verifiser at fødselsnummer-felter er forhåndsutfylt
-    await arbeidstakerenStegPage.assertHarNorskFodselsnummerIsJa();
-    await arbeidstakerenStegPage.assertFodselsnummerValue(testUserInfo.userId);
-
-    // Svar på spørsmål
-    await arbeidstakerenStegPage.harVaertEllerSkalVaereILonnetArbeidRadioGroup.JA.click();
-    await arbeidstakerenStegPage.skalJobbeForFlereVirksomheterRadioGroup.NEI.click();
+    await dineOpplysningerStegPage.assertHarNorskFodselsnummerIsJa();
+    await dineOpplysningerStegPage.assertFodselsnummerValue(testUserInfo.userId);
 
     // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedArbeidstakerenPayload: ArbeidstakerenDto = {
+    const expectedDineOpplysningerPayload: DineOpplysningerDto = {
       harNorskFodselsnummer: true,
       fodselsnummer: testUserInfo.userId,
-      harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
-      skalJobbeForFlereVirksomheter: false,
     };
 
-    await arbeidstakerenStegPage.lagreOgFortsettAndExpectPayload(
-      expectedArbeidstakerenPayload,
+    await dineOpplysningerStegPage.lagreOgFortsettAndExpectPayload(
+      expectedDineOpplysningerPayload,
     );
 
     // Verifiser navigering til neste steg
-    await arbeidstakerenStegPage.assertNavigatedToNextStep();
+    await dineOpplysningerStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut skatteforhold og inntekt steg og gjøre forventet POST request", async ({
@@ -200,12 +195,15 @@ test.describe("Arbeidstaker komplett flyt", () => {
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
     page,
   }) => {
-    const arbeidstakerenData: ArbeidstakerenDto = {
+    const dineOpplysningerData: DineOpplysningerDto = {
       harNorskFodselsnummer: true,
       fodselsnummer: testUserInfo.userId,
       fornavn: formFieldValues.fornavn,
       etternavn: formFieldValues.etternavn,
       fodselsdato: formFieldValues.periodeFraIso,
+    };
+
+    const arbeidssituasjonData: ArbeidssituasjonDto = {
       harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
       skalJobbeForFlereVirksomheter: false,
     };
@@ -228,7 +226,8 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await mockFetchArbeidstakerSkjema(page, {
       ...testArbeidstakerSkjema,
       data: {
-        arbeidstakeren: arbeidstakerenData,
+        arbeidstakeren: dineOpplysningerData,
+        arbeidssituasjon: arbeidssituasjonData,
         familiemedlemmer: familiemedlemmerData,
         skatteforholdOgInntekt: skatteforholdOgInntektData,
         tilleggsopplysninger: tilleggsopplysningerData,
@@ -246,8 +245,11 @@ test.describe("Arbeidstaker komplett flyt", () => {
     // Verifiser at oppsummeringssiden vises
     await oppsummeringPage.assertIsVisible();
 
-    // Verifiser data fra arbeidstakeren-steget
-    await oppsummeringPage.assertArbeidstakerenData(arbeidstakerenData);
+    // Verifiser data fra dine opplysninger-steget
+    await oppsummeringPage.assertDineOpplysningerData(dineOpplysningerData);
+
+    // Verifiser data fra arbeidssituasjon-steget
+    await oppsummeringPage.assertArbeidssituasjonData(arbeidssituasjonData);
 
     // Verifiser data fra skatteforhold og inntekt-steget
     await oppsummeringPage.assertSkatteforholdOgInntektData(
