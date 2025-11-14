@@ -103,10 +103,7 @@ export async function mockPostArbeidsgiveren(page: Page, skjemaId: string) {
   );
 }
 
-export async function mockPostArbeidstakerenArbeidsgiversDel(
-  page: Page,
-  skjemaId: string,
-) {
+export async function mockPostArbeidstakeren(page: Page, skjemaId: string) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidstakeren`,
     async (route) => {
@@ -223,9 +220,24 @@ export async function mockFetchArbeidstakerSkjema(
   );
 }
 
-export async function mockPostArbeidstakeren(page: Page, skjemaId: string) {
+export async function mockPostDineOpplysninger(page: Page, skjemaId: string) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidstakeren`,
+    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/dine-opplysninger`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostArbeidssituasjon(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidssituasjon`,
     async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
@@ -336,7 +348,7 @@ export async function setupApiMocksForArbeidsgiver(
   await mockCreateArbeidsgiverSkjema(page);
   await mockFetchArbeidsgiverSkjema(page, skjema);
   await mockPostArbeidsgiveren(page, skjema.id);
-  await mockPostArbeidstakerenArbeidsgiversDel(page, skjema.id);
+  await mockPostArbeidstakeren(page, skjema.id);
   await mockGetEregOrganisasjon(page);
   await mockPostVirksomhetINorge(page, skjema.id);
   await mockPostUtenlandsoppdraget(page, skjema.id);
@@ -355,7 +367,8 @@ export async function setupApiMocksForArbeidstaker(
   await mockHentTilganger(page, []);
   await mockCreateArbeidstakerSkjema(page);
   await mockFetchArbeidstakerSkjema(page, skjema);
-  await mockPostArbeidstakeren(page, skjema.id);
+  await mockPostDineOpplysninger(page, skjema.id);
+  await mockPostArbeidssituasjon(page, skjema.id);
   await mockGetEregOrganisasjon(page);
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
