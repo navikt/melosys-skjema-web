@@ -7,6 +7,7 @@ import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/
 import { stepKey as arbeidsgiverStepKey } from "../arbeidsgiveren/ArbeidsgiverenSteg.tsx";
 import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
 import { stepKey as arbeidsstedIUtlandetStepKey } from "../arbeidssted-i-utlandet/ArbeidsstedIUtlandetSteg.tsx";
+import { stepKey as arbeidstakerenStepKey } from "../arbeidstakeren/ArbeidstakerenSteg.tsx";
 import { stepKey as arbeidstakerensLonnStepKey } from "../arbeidstakerens-lonn/ArbeidstakerensLonnSteg.tsx";
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
@@ -17,6 +18,7 @@ import { ArbeidsgiverenStegOppsummering } from "./ArbeidsgiverenStegOppsummering
 import { ArbeidsgiverensVirksomhetINorgeStegOppsummering } from "./ArbeidsgiverensVirksomhetINorgeStegOppsummering.tsx";
 import { ArbeidsstedIUtlandetStegOppsummering } from "./ArbeidsstedIUtlandetStegOppsummering.tsx";
 import { ArbeidstakerensLonnStegOppsummering } from "./ArbeidstakerensLonnStegOppsummering.tsx";
+import { ArbeidstakerenStegOppsummering } from "./ArbeidstakerenStegOppsummering.tsx";
 import { UtenlandsoppdragetStegOppsummering } from "./UtenlandsoppdragetStegOppsummering.tsx";
 
 const oppsummeringStepKey = "oppsummering";
@@ -62,6 +64,9 @@ function ArbeidsgiverOppsummeringStegContent({
         return (
           <ArbeidsstedIUtlandetStegOppsummering key={stepKey} skjema={skjema} />
         );
+      }
+      case arbeidstakerenStepKey: {
+        return <ArbeidstakerenStegOppsummering key={stepKey} skjema={skjema} />;
       }
       case arbeidstakerensLonnStepKey: {
         return (
