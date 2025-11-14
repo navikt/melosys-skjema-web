@@ -7,6 +7,7 @@ import type {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
   ArbeidsstedIUtlandetDto,
+  ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerensLonnDto,
   NorskeOgUtenlandskeVirksomheter,
   TilleggsopplysningerDto,
@@ -217,6 +218,14 @@ export class OppsummeringStegPage {
         );
       }
     }
+  }
+
+  async assertArbeidstakerenData(data: ArbeidstakerenArbeidsgiversDelDto) {
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer}") + dd`,
+      ),
+    ).toHaveText(data.fodselsnummer);
   }
 
   async assertArbeidstakerensLonnData(data: ArbeidstakerensLonnDto) {

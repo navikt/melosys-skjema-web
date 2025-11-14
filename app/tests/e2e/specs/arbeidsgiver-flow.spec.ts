@@ -383,6 +383,10 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       },
     };
 
+    const arbeidstakerenData: ArbeidstakerenArbeidsgiversDelDto = {
+      fodselsnummer: "12345678901",
+    };
+
     const arbeidstakerensLonnData: ArbeidstakerensLonnDto = {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
@@ -399,6 +403,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
         arbeidsgiverensVirksomhetINorge: arbeidsgiverensVirksomhetINorgeData,
         utenlandsoppdraget: utenlandsoppdragetData,
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
+        arbeidstakeren: arbeidstakerenData,
         arbeidstakerensLonn: arbeidstakerensLonnData,
         tilleggsopplysninger: tilleggsopplysningerData,
       },
@@ -420,6 +425,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await oppsummeringStegPage.assertArbeidsstedIUtlandetData(
       arbeidsstedIUtlandetData,
     );
+    await oppsummeringStegPage.assertArbeidstakerenData(arbeidstakerenData);
     await oppsummeringStegPage.assertArbeidstakerensLonnData(
       arbeidstakerensLonnData,
     );
