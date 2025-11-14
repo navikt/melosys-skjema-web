@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegOppsummering.tsx";
 
+import { stepKey as arbeidssituasjonStepKey } from "../arbeidssituasjon/ArbeidssituasjonSteg.tsx";
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { stepKey as arbeidstakerenStepKey } from "../dine-opplysninger/DineOpplysningerSteg.tsx";
 import { stepKey as familiemedlemmerStepKey } from "../familiemedlemmer/FamiliemedlemmerSteg.tsx";
@@ -11,6 +12,7 @@ import { stepKey as skatteforholdOgInntektStepKey } from "../skatteforhold-og-in
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { stepKey as tilleggsopplysningerStepKey } from "../tilleggsopplysninger/TilleggsopplysningerSteg.tsx";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
+import { ArbeidssituasjonStegOppsummering } from "./ArbeidssituasjonStegOppsummering.tsx";
 import { DineOpplysningerStegOppsummering } from "./DineOpplysningerStegOppsummering.tsx";
 import { FamiliemedlemmerStegOppsummering } from "./FamiliemedlemmerStegOppsummering.tsx";
 import { SkatteforholdOgInntektStegOppsummering } from "./SkatteforholdOgInntektStegOppsummering.tsx";
@@ -41,6 +43,11 @@ function ArbeidstakerOppsummeringStegContent({
       case arbeidstakerenStepKey: {
         return (
           <DineOpplysningerStegOppsummering key={stepKey} skjema={skjema} />
+        );
+      }
+      case arbeidssituasjonStepKey: {
+        return (
+          <ArbeidssituasjonStegOppsummering key={stepKey} skjema={skjema} />
         );
       }
       case skatteforholdOgInntektStepKey: {
