@@ -45,7 +45,9 @@ function validerFornavn(data: BaseDineOpplysningerFormData) {
   return true;
 }
 
-function validerHarNorskFodselsnummerPakrevd(data: BaseDineOpplysningerFormData) {
+function validerHarNorskFodselsnummerPakrevd(
+  data: BaseDineOpplysningerFormData,
+) {
   return data.harNorskFodselsnummer !== undefined;
 }
 

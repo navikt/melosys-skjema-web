@@ -3,9 +3,9 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { landKodeTilNavn } from "../../../../../src/components/LandVelgerFormPart";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  DineOpplysningerDto,
   ArbeidssituasjonDto,
   ArbeidstakersSkjemaDto,
+  DineOpplysningerDto,
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,

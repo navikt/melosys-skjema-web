@@ -19,8 +19,8 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import {
-  ArbeidstakerenDto,
   ArbeidstakersSkjemaDto,
+  DineOpplysningerDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -80,7 +80,7 @@ function DineOpplysningerStegContent({
 
   const postDineOpplysningerMutation = useMutation({
     mutationFn: (data: DineOpplysningerFormData) => {
-      return postDineOpplysninger(skjema.id, data as ArbeidstakerenDto);
+      return postDineOpplysninger(skjema.id, data as DineOpplysningerDto);
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);

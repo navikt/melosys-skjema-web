@@ -2,8 +2,8 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  DineOpplysningerDto,
   ArbeidstakersSkjemaDto,
+  DineOpplysningerDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 

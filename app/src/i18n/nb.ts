@@ -147,8 +147,7 @@ export const nb = {
       tittel: "Dine opplysninger",
       harDuNorskFodselsnummerEllerDNummer:
         "Har du norsk fødselsnummer eller d-nummer?",
-      dittFodselsnummerEllerDNummer:
-        "Ditt fødselsnummer eller d-nummer",
+      dittFodselsnummerEllerDNummer: "Ditt fødselsnummer eller d-nummer",
       dittFornavn: "Ditt fornavn",
       dittEtternavn: "Ditt etternavn",
       dinFodselsdato: "Din fødselsdato",
