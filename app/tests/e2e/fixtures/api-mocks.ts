@@ -235,6 +235,21 @@ export async function mockPostDineOpplysninger(page: Page, skjemaId: string) {
   );
 }
 
+export async function mockPostArbeidssituasjon(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidssituasjon`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
 export async function mockPostFamiliemedlemmer(page: Page, skjemaId: string) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/familiemedlemmer`,
@@ -353,6 +368,7 @@ export async function setupApiMocksForArbeidstaker(
   await mockCreateArbeidstakerSkjema(page);
   await mockFetchArbeidstakerSkjema(page, skjema);
   await mockPostDineOpplysninger(page, skjema.id);
+  await mockPostArbeidssituasjon(page, skjema.id);
   await mockGetEregOrganisasjon(page);
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
