@@ -4,7 +4,7 @@ import {
   ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsstedIUtlandetDto,
-  ArbeidstakerenArbeidsgiversDelDto,
+  ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
@@ -114,7 +114,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await arbeidstakerenStegPage.fillFodselsnummer("12345678901");
 
     // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedArbeidstakerPayload: ArbeidstakerenArbeidsgiversDelDto = {
+    const expectedArbeidstakerPayload: ArbeidstakerenDto = {
       fodselsnummer: "12345678901",
     };
 
@@ -383,7 +383,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       },
     };
 
-    const arbeidstakerenData: ArbeidstakerenArbeidsgiversDelDto = {
+    const arbeidstakerenData: ArbeidstakerenDto = {
       fodselsnummer: "12345678901",
     };
 

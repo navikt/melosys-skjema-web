@@ -9,6 +9,7 @@ import type {
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
+  UtenlandsoppdragetArbeidstakersDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 
 export class OppsummeringStegPage {
@@ -74,6 +75,28 @@ export class OppsummeringStegPage {
         ),
       ).toHaveText(data.fodselsdato);
     }
+  }
+
+  async assertUtenlandsoppdragetData(
+    data: UtenlandsoppdragetArbeidstakersDelDto,
+  ) {
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.iHvilketLandSkalDuUtforeArbeid}") + dd`,
+      ),
+    ).toHaveText(landKodeTilNavn(data.utsendelsesLand));
+
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.fraDato}") + dd`,
+      ),
+    ).toHaveText(data.utsendelseFraDato);
+
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.tilDato}") + dd`,
+      ),
+    ).toHaveText(data.utsendelseTilDato);
   }
 
   async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {

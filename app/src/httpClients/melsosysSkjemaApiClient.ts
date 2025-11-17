@@ -181,6 +181,26 @@ export async function postArbeidssituasjon(
   return postArbeidstakerStegData(skjemaId, "arbeidssituasjon", request);
 }
 
+export async function postUtenlandsoppdragetArbeidstaker(
+  skjemaId: string,
+  request: UtenlandsoppdragetArbeidstakersDelDto,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/utenlandsoppdraget`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
 export async function postSkatteforholdOgInntekt(
   skjemaId: string,
   request: SkatteforholdOgInntektDto,

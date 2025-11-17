@@ -6,6 +6,7 @@ import {
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
+  UtenlandsoppdragetArbeidstakersDelDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import {
   mockFetchArbeidstakerSkjema,
@@ -24,6 +25,7 @@ import { FamiliemedlemmerStegPage } from "../pages/skjema/arbeidstaker/familieme
 import { OppsummeringStegPage } from "../pages/skjema/arbeidstaker/oppsummering-steg.page";
 import { SkatteforholdOgInntektStegPage } from "../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";
 import { TilleggsopplysningerStegPage } from "../pages/skjema/arbeidstaker/tilleggsopplysninger-steg.page";
+import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidstaker/utenlandsoppdraget-steg.page";
 import { VedleggStegPage } from "../pages/skjema/arbeidstaker/vedlegg-steg.page";
 
 test.describe("Arbeidstaker komplett flyt", () => {
@@ -51,7 +53,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await veiledningPage.assertStartSoknadButtonVisible();
     await veiledningPage.startSoknad();
 
-    await veiledningPage.assertNavigatedToDineOpplysninger(
+    await veiledningPage.assertNavigatedToArbeidstakeren(
       testArbeidstakerSkjema.id,
     );
   });
@@ -87,6 +89,47 @@ test.describe("Arbeidstaker komplett flyt", () => {
 
     // Verifiser navigering til neste steg
     await dineOpplysningerStegPage.assertNavigatedToNextStep();
+  });
+
+  test("skal fylle ut utenlandsoppdraget steg og gjøre forventet POST request", async ({
+    page,
+  }) => {
+    const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
+      page,
+      testArbeidstakerSkjema,
+    );
+
+    // Naviger direkte til steget
+    await utenlandsoppdragetStegPage.goto();
+
+    await utenlandsoppdragetStegPage.assertIsVisible();
+
+    // Svar på spørsmål
+    await utenlandsoppdragetStegPage.utsendelsesLandCombobox.selectOption(
+      formFieldValues.utsendelseLand,
+    );
+
+    await utenlandsoppdragetStegPage.fraDatoInput.fill(
+      formFieldValues.periodeFra,
+    );
+    await utenlandsoppdragetStegPage.tilDatoInput.fill(
+      formFieldValues.periodeTil,
+    );
+
+    // Lagre og fortsett og verifiser forventet payload i POST request
+    const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetArbeidstakersDelDto =
+      {
+        utsendelsesLand: formFieldValues.utsendelseLand.value,
+        utsendelseFraDato: formFieldValues.periodeFraIso,
+        utsendelseTilDato: formFieldValues.periodeTilIso,
+      };
+
+    await utenlandsoppdragetStegPage.lagreOgFortsettAndExpectPayload(
+      expectedUtenlandsoppdragetPayload,
+    );
+
+    // Verifiser navigering til neste steg
+    await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut arbeidssituasjon steg og gjøre forventet POST request", async ({
@@ -237,6 +280,12 @@ test.describe("Arbeidstaker komplett flyt", () => {
       fodselsdato: formFieldValues.periodeFraIso,
     };
 
+    const utenlandsoppdragetData: UtenlandsoppdragetArbeidstakersDelDto = {
+      utsendelsesLand: formFieldValues.utsendelseLand.value,
+      utsendelseFraDato: formFieldValues.periodeFraIso,
+      utsendelseTilDato: formFieldValues.periodeTilIso,
+    };
+
     const arbeidssituasjonData: ArbeidssituasjonDto = {
       harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
       skalJobbeForFlereVirksomheter: false,
@@ -262,6 +311,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
       data: {
         arbeidstakeren: dineOpplysningerData,
         arbeidssituasjon: arbeidssituasjonData,
+        utenlandsoppdraget: utenlandsoppdragetData,
         familiemedlemmer: familiemedlemmerData,
         skatteforholdOgInntekt: skatteforholdOgInntektData,
         tilleggsopplysninger: tilleggsopplysningerData,
@@ -284,6 +334,9 @@ test.describe("Arbeidstaker komplett flyt", () => {
 
     // Verifiser data fra arbeidssituasjon-steget
     await oppsummeringPage.assertArbeidssituasjonData(arbeidssituasjonData);
+
+    // Verifiser data fra utenlandsoppdraget-steget
+    await oppsummeringPage.assertUtenlandsoppdragetData(utenlandsoppdragetData);
 
     // Verifiser data fra skatteforhold og inntekt-steget
     await oppsummeringPage.assertSkatteforholdOgInntektData(
