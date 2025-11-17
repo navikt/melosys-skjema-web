@@ -16,10 +16,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import {
-  ArbeidssituasjonDto,
-  ArbeidstakersSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
@@ -65,7 +62,7 @@ function ArbeidssituasjonStegContent({
 
   const postArbeidssituasjonMutation = useMutation({
     mutationFn: (data: ArbeidssituasjonFormData) => {
-      return postArbeidssituasjon(skjema.id, data as ArbeidssituasjonDto);
+      return postArbeidssituasjon(skjema.id, data);
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);
