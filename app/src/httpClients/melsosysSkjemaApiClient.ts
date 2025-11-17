@@ -18,10 +18,70 @@ import {
   SkatteforholdOgInntektDto,
   SubmitSkjemaRequest,
   TilleggsopplysningerDto,
+  UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
 const API_PROXY_URL = "/api";
+
+type ArbeidsgiverStegData =
+  | ArbeidsgiverenDto
+  | ArbeidstakerenDto
+  | ArbeidsgiverensVirksomhetINorgeDto
+  | UtenlandsoppdragetDto
+  | ArbeidsstedIUtlandetDto
+  | ArbeidstakerensLonnDto
+  | TilleggsopplysningerDto;
+
+type ArbeidstakerStegData =
+  | DineOpplysningerDto
+  | ArbeidssituasjonDto
+  | UtenlandsoppdragetArbeidstakersDelDto
+  | SkatteforholdOgInntektDto
+  | FamiliemedlemmerDto
+  | TilleggsopplysningerDto;
+
+async function postArbeidsgiverStegData(
+  skjemaId: string,
+  stegNavn: string,
+  data: ArbeidsgiverStegData,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/${stegNavn}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
+async function postArbeidstakerStegData(
+  skjemaId: string,
+  stegNavn: string,
+  data: ArbeidstakerStegData,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/${stegNavn}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
 
 export function listAltinnTilganger() {
   return queryOptions({
@@ -111,200 +171,78 @@ export async function postDineOpplysninger(
   skjemaId: string,
   request: DineOpplysningerDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/dine-opplysninger`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidstakerStegData(skjemaId, "dine-opplysninger", request);
 }
 
 export async function postArbeidssituasjon(
   skjemaId: string,
   request: ArbeidssituasjonDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidssituasjon`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidstakerStegData(skjemaId, "arbeidssituasjon", request);
 }
 
 export async function postSkatteforholdOgInntekt(
   skjemaId: string,
   request: SkatteforholdOgInntektDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/skatteforhold-og-inntekt`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
+  return postArbeidstakerStegData(
+    skjemaId,
+    "skatteforhold-og-inntekt",
+    request,
   );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
 }
 
 export async function postArbeidsgiveren(
   skjemaId: string,
   request: ArbeidsgiverenDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidsgiveren`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidsgiverStegData(skjemaId, "arbeidsgiveren", request);
 }
 
 export async function postArbeidstakeren(
   skjemaId: string,
   request: ArbeidstakerenDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidstakeren`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidsgiverStegData(skjemaId, "arbeidstakeren", request);
 }
 
 export async function postArbeidsgiverensVirksomhetINorge(
   skjemaId: string,
   request: ArbeidsgiverensVirksomhetINorgeDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidsgiverens-virksomhet-i-norge`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
+  return postArbeidsgiverStegData(
+    skjemaId,
+    "arbeidsgiverens-virksomhet-i-norge",
+    request,
   );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
 }
 
 export async function postUtenlandsoppdraget(
   skjemaId: string,
   request: UtenlandsoppdragetDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/utenlandsoppdraget`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidsgiverStegData(skjemaId, "utenlandsoppdraget", request);
 }
 
 export async function postArbeidsstedIUtlandet(
   skjemaId: string,
   request: ArbeidsstedIUtlandetDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidssted-i-utlandet`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidsgiverStegData(skjemaId, "arbeidssted-i-utlandet", request);
 }
 
 export async function postArbeidstakerensLonn(
   skjemaId: string,
   request: ArbeidstakerensLonnDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidstakerens-lonn`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidsgiverStegData(skjemaId, "arbeidstakerens-lonn", request);
 }
 
 export async function postTilleggsopplysningerArbeidsgiver(
   skjemaId: string,
   request: TilleggsopplysningerDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/tilleggsopplysninger`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidsgiverStegData(skjemaId, "tilleggsopplysninger", request);
 }
 
 export async function submitSkjema(
@@ -352,44 +290,25 @@ async function fetchSkjemaAsArbeidstaker(
   return response.json();
 }
 
+export async function postUtenlandsoppdragetArbeidstaker(
+  skjemaId: string,
+  request: UtenlandsoppdragetArbeidstakersDelDto,
+): Promise<void> {
+  return postArbeidstakerStegData(skjemaId, "utenlandsoppdraget", request);
+}
+
 export async function postFamiliemedlemmer(
   skjemaId: string,
   request: FamiliemedlemmerDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/familiemedlemmer`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidstakerStegData(skjemaId, "familiemedlemmer", request);
 }
 
 export async function postTilleggsopplysninger(
   skjemaId: string,
   request: TilleggsopplysningerDto,
 ): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/tilleggsopplysninger`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  return postArbeidstakerStegData(skjemaId, "tilleggsopplysninger", request);
 }
 
 export const getOrganisasjonQuery = (orgnummer: string) =>
