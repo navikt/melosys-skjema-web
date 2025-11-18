@@ -48,9 +48,7 @@ function SkatteforholdOgInntektStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(skatteforholdOgInntektSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const {
@@ -138,7 +136,7 @@ function SkatteforholdOgInntektStegContent({
                 error={translateError(
                   "pengestotteSomMottasFraAndreLandBelop" in errors
                     ? errors.pengestotteSomMottasFraAndreLandBelop?.message
-                    : undefined
+                    : undefined,
                 )}
                 inputMode="decimal"
                 label={t(
@@ -151,8 +149,9 @@ function SkatteforholdOgInntektStegContent({
                 className="mt-4"
                 error={translateError(
                   "pengestotteSomMottasFraAndreLandBeskrivelse" in errors
-                    ? errors.pengestotteSomMottasFraAndreLandBeskrivelse?.message
-                    : undefined
+                    ? errors.pengestotteSomMottasFraAndreLandBeskrivelse
+                        ?.message
+                    : undefined,
                 )}
                 label={t(
                   "skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu",

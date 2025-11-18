@@ -1,35 +1,53 @@
 import { z } from "zod";
 
-// Discriminated union approach - clean and direct validation
-const harNorskFodselsnummerSchema = z.object({
-  harNorskFodselsnummer: z.literal(true),
-  fodselsnummer: z
-    .string()
-    .regex(/^\d{11}$/, "dineOpplysningerSteg.fodselsnummerEllerDNummerMaVare11Siffer"),
+const baseDineOpplysningerSchema = z.object({
+  harNorskFodselsnummer: z.boolean(),
+  fodselsnummer: z.string().optional(),
+  fornavn: z.string().optional(),
+  etternavn: z.string().optional(),
+  fodselsdato: z.string().optional(),
 });
 
-const harIkkeNorskFodselsnummerSchema = z.object({
-  harNorskFodselsnummer: z.literal(false),
-  fornavn: z
-    .string()
-    .min(2, "dineOpplysningerSteg.fornavnErPakrevdOgMaVareMinst2Tegn"),
-  etternavn: z
-    .string()
-    .min(2, "dineOpplysningerSteg.etternavnErPakrevdOgMaVareMinst2Tegn"),
-  fodselsdato: z
-    .string()
-    .min(1, "dineOpplysningerSteg.fodselsdatoErPakrevd"),
-});
-
-export const dineOpplysningerSchema = z
-  .discriminatedUnion("harNorskFodselsnummer", [
-    harNorskFodselsnummerSchema,
-    harIkkeNorskFodselsnummerSchema,
-  ])
-  .transform((data) => ({
-    harNorskFodselsnummer: data.harNorskFodselsnummer,
-    fodselsnummer: data.harNorskFodselsnummer ? data.fodselsnummer : undefined,
-    fornavn: !data.harNorskFodselsnummer ? data.fornavn : undefined,
-    etternavn: !data.harNorskFodselsnummer ? data.etternavn : undefined,
-    fodselsdato: !data.harNorskFodselsnummer ? data.fodselsdato : undefined,
-  }));
+export const dineOpplysningerSchema = baseDineOpplysningerSchema.superRefine(
+  (data, ctx) => {
+    if (data.harNorskFodselsnummer) {
+      if (!data.fodselsnummer?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            "dineOpplysningerSteg.fodselsnummerEllerDNummerErPakrevdNarDuHarNorskFodselsnummer",
+          path: ["fodselsnummer"],
+        });
+      } else if (!/^\d{11}$/.test(data.fodselsnummer)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            "dineOpplysningerSteg.fodselsnummerEllerDNummerMaVare11Siffer",
+          path: ["fodselsnummer"],
+        });
+      }
+    } else {
+      if (!data.fornavn || data.fornavn.length < 2) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "dineOpplysningerSteg.fornavnErPakrevdOgMaVareMinst2Tegn",
+          path: ["fornavn"],
+        });
+      }
+      if (!data.etternavn || data.etternavn.length < 2) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "dineOpplysningerSteg.etternavnErPakrevdOgMaVareMinst2Tegn",
+          path: ["etternavn"],
+        });
+      }
+      if (!data.fodselsdato?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "dineOpplysningerSteg.fodselsdatoErPakrevd",
+          path: ["fodselsdato"],
+        });
+      }
+    }
+  },
+);

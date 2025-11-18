@@ -1,28 +1,49 @@
 import { z } from "zod";
 
-// Discriminated union approach - clean and direct validation
-const harFlereOpplysningerFalseSchema = z.object({
-  harFlereOpplysningerTilSoknaden: z.literal(false),
+const baseTilleggsopplysningerSchema = z.object({
+  harFlereOpplysningerTilSoknaden: z.boolean().optional(),
+  tilleggsopplysningerTilSoknad: z.string().optional(),
 });
 
-const harFlereOpplysningerTrueSchema = z.object({
-  harFlereOpplysningerTilSoknaden: z.literal(true),
-  tilleggsopplysningerTilSoknad: z
-    .string()
-    .min(1, "tilleggsopplysningerSteg.tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger"),
-});
+type BaseTilleggsopplysningerFormData = z.infer<
+  typeof baseTilleggsopplysningerSchema
+>;
 
-export const tilleggsopplysningerSchema = z
-  .discriminatedUnion("harFlereOpplysningerTilSoknaden", [
-    harFlereOpplysningerFalseSchema,
-    harFlereOpplysningerTrueSchema,
-  ])
+function validerHarFlereOpplysningerPakrevd(
+  data: BaseTilleggsopplysningerFormData,
+) {
+  return data.harFlereOpplysningerTilSoknaden !== undefined;
+}
+
+function validerTilleggsopplysningerPakrevd(
+  data: BaseTilleggsopplysningerFormData,
+) {
+  if (data.harFlereOpplysningerTilSoknaden) {
+    return (
+      data.tilleggsopplysningerTilSoknad &&
+      data.tilleggsopplysningerTilSoknad.trim().length > 0
+    );
+  }
+  return true;
+}
+
+export const tilleggsopplysningerSchema = baseTilleggsopplysningerSchema
+  .refine(validerHarFlereOpplysningerPakrevd, {
+    message:
+      "tilleggsopplysningerSteg.duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden",
+    path: ["harFlereOpplysningerTilSoknaden"],
+  })
+  .refine(validerTilleggsopplysningerPakrevd, {
+    message:
+      "tilleggsopplysningerSteg.tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger",
+    path: ["tilleggsopplysningerTilSoknad"],
+  })
   .transform((data) => ({
-    harFlereOpplysningerTilSoknaden: data.harFlereOpplysningerTilSoknaden,
-    tilleggsopplysningerTilSoknad:
-      data.harFlereOpplysningerTilSoknaden === true
-        ? data.tilleggsopplysningerTilSoknad
-        : undefined,
+    ...data,
+    // Clear tilleggsopplysninger field when harFlereOpplysningerTilSoknaden is false
+    tilleggsopplysningerTilSoknad: data.harFlereOpplysningerTilSoknaden
+      ? data.tilleggsopplysningerTilSoknad
+      : undefined,
   }));
 
 export type TilleggsopplysningerFormData = z.infer<

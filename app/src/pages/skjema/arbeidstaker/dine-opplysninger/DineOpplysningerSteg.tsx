@@ -51,9 +51,7 @@ function DineOpplysningerStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(dineOpplysningerSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const {
@@ -136,7 +134,7 @@ function DineOpplysningerStegContent({
               error={translateError(
                 "fodselsnummer" in errors
                   ? errors.fodselsnummer?.message
-                  : undefined
+                  : undefined,
               )}
               label={t("dineOpplysningerSteg.dittFodselsnummerEllerDNummer")}
               size="medium"
@@ -151,7 +149,7 @@ function DineOpplysningerStegContent({
               <TextField
                 className="mt-4 max-w-md"
                 error={translateError(
-                  "fornavn" in errors ? errors.fornavn?.message : undefined
+                  "fornavn" in errors ? errors.fornavn?.message : undefined,
                 )}
                 label={t("dineOpplysningerSteg.dittFornavn")}
                 {...register("fornavn")}
@@ -160,7 +158,7 @@ function DineOpplysningerStegContent({
               <TextField
                 className="mt-4 max-w-md"
                 error={translateError(
-                  "etternavn" in errors ? errors.etternavn?.message : undefined
+                  "etternavn" in errors ? errors.etternavn?.message : undefined,
                 )}
                 label={t("dineOpplysningerSteg.dittEtternavn")}
                 {...register("etternavn")}

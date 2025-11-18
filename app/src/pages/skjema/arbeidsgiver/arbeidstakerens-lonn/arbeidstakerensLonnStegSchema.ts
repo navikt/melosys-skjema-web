@@ -2,40 +2,60 @@ import { z } from "zod";
 
 import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
-// Discriminated union approach - clean and direct validation
-const arbeidsgiverBetalerAlleLonnSchema = z.object({
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z.literal(true),
+const baseArbeidstakerensLonnSchema = z.object({
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z
+    .boolean()
+    .optional(),
+  virksomheterSomUtbetalerLonnOgNaturalytelser:
+    norskeOgUtenlandskeVirksomheterSchema.optional(),
 });
 
-const andreBetalerLonnSchema = z.object({
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z.literal(false),
-  virksomheterSomUtbetalerLonnOgNaturalytelser: norskeOgUtenlandskeVirksomheterSchema,
-}).refine(
-  (data) => {
-    const harNorskeVirksomheter =
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter &&
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter.length > 0;
-    const harUtenlandskeVirksomheter =
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter &&
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter.length > 0;
-    return harNorskeVirksomheter || harUtenlandskeVirksomheter;
-  },
-  {
-    message: "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
-    path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
-  }
-);
+type BaseArbeidstakerensLonnFormData = z.infer<
+  typeof baseArbeidstakerensLonnSchema
+>;
 
-export const arbeidstakerensLonnSchema = z
-  .discriminatedUnion("arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden", [
-    arbeidsgiverBetalerAlleLonnSchema,
-    andreBetalerLonnSchema,
-  ])
+function validerArbeidsgiverBetalerAllLonnPakrevd(
+  data: BaseArbeidstakerensLonnFormData,
+) {
+  return (
+    data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden !==
+    undefined
+  );
+}
+
+function validerVirksomheterPakrevd(data: BaseArbeidstakerensLonnFormData) {
+  if (!data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
+    const harNorskeVirksomheter =
+      data.virksomheterSomUtbetalerLonnOgNaturalytelser?.norskeVirksomheter &&
+      data.virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter
+        .length > 0;
+    const harUtenlandskeVirksomheter =
+      data.virksomheterSomUtbetalerLonnOgNaturalytelser
+        ?.utenlandskeVirksomheter &&
+      data.virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter
+        .length > 0;
+
+    return harNorskeVirksomheter || harUtenlandskeVirksomheter;
+  }
+  return true;
+}
+
+export const arbeidstakerensLonnSchema = baseArbeidstakerensLonnSchema
   .transform((data) => ({
-    arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden:
-      data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden,
+    ...data,
+    // Clear conditional field when arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden is true
     virksomheterSomUtbetalerLonnOgNaturalytelser:
       data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
         ? undefined
         : data.virksomheterSomUtbetalerLonnOgNaturalytelser,
-  }));
+  }))
+  .refine(validerArbeidsgiverBetalerAllLonnPakrevd, {
+    message:
+      "arbeidstakerenslonnSteg.duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden",
+    path: ["arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"],
+  })
+  .refine(validerVirksomheterPakrevd, {
+    message:
+      "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
+    path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
+  });
