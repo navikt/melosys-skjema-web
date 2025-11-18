@@ -61,6 +61,7 @@ function DineOpplysningerStegContent({
     handleSubmit,
     formState: { errors },
     setValue,
+    control,
   } = formMethods;
 
   const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId !== undefined;
@@ -72,7 +73,7 @@ function DineOpplysningerStegContent({
   }, [innloggetBrukerHarNorskFodselsnummer, userInfo?.userId, setValue]);
 
   const harNorskFodselsnummer =
-    useWatch({ name: "harNorskFodselsnummer" }) ||
+    useWatch({ control, name: "harNorskFodselsnummer" }) ||
     innloggetBrukerHarNorskFodselsnummer;
 
   const postDineOpplysningerMutation = useMutation({

@@ -57,9 +57,11 @@ function SkatteforholdOgInntektStegContent({
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = formMethods;
 
   const mottarPengestotteFraAnnetEosLandEllerSveits = useWatch({
+    control,
     name: "mottarPengestotteFraAnnetEosLandEllerSveits",
   });
 

@@ -54,8 +54,10 @@ export function TilleggsopplysningerStegContent({
     handleSubmit,
     register,
     formState: { errors },
+    control,
   } = formMethods;
   const harFlereOpplysningerTilSoknaden = useWatch({
+    control,
     name: "harFlereOpplysningerTilSoknaden",
   });
 

@@ -48,12 +48,14 @@ function FamiliemedlemmerStegContent({
     },
   });
 
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, control } = formMethods;
   const sokerForBarnUnder18SomSkalVaereMed = useWatch({
+    control,
     name: "sokerForBarnUnder18SomSkalVaereMed",
   });
   const harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad = useWatch(
     {
+      control,
       name: "harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad",
     },
   );

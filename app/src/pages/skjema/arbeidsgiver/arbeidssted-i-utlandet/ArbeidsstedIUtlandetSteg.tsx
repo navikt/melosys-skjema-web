@@ -56,9 +56,10 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = formMethods;
 
-  const arbeidsstedType = useWatch({ name: "arbeidsstedType" });
+  const arbeidsstedType = useWatch({ control, name: "arbeidsstedType" });
 
   const registerArbeidsstedMutation = useMutation({
     mutationFn: (data: ArbeidsstedIUtlandetFormData) => {

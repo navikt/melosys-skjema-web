@@ -52,12 +52,15 @@ function ArbeidssituasjonStegContent({
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = formMethods;
 
   const harVaertEllerSkalVaereILonnetArbeidFoerUtsending = useWatch({
+    control,
     name: "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
   });
   const skalJobbeForFlereVirksomheter = useWatch({
+    control,
     name: "skalJobbeForFlereVirksomheter",
   });
 

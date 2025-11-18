@@ -52,6 +52,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = formMethods;
 
   const dateLimits = {
@@ -68,15 +69,19 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   };
 
   const arbeidstakerErstatterAnnenPerson = useWatch({
+    control,
     name: "arbeidstakerErstatterAnnenPerson",
   });
   const arbeidsgiverHarOppdragILandet = useWatch({
+    control,
     name: "arbeidsgiverHarOppdragILandet",
   });
   const arbeidstakerForblirAnsattIHelePerioden = useWatch({
+    control,
     name: "arbeidstakerForblirAnsattIHelePerioden",
   });
   const arbeidstakerBleAnsattForUtenlandsoppdraget = useWatch({
+    control,
     name: "arbeidstakerBleAnsattForUtenlandsoppdraget",
   });
 

@@ -42,9 +42,10 @@ export function VirksomhetINorgeStegContent({
     },
   });
 
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, control } = formMethods;
 
   const erArbeidsgiverenOffentligVirksomhet = useWatch({
+    control,
     name: "erArbeidsgiverenOffentligVirksomhet",
   });
 

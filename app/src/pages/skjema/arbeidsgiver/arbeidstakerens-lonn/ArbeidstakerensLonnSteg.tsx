@@ -40,10 +40,11 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     },
   });
 
-  const { handleSubmit, setError, clearErrors } = formMethods;
+  const { handleSubmit, setError, clearErrors, control } = formMethods;
 
   const arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden = useWatch(
     {
+      control,
       name: "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
     },
   );
