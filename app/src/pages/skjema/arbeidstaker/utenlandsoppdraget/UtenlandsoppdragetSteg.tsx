@@ -4,7 +4,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
@@ -28,8 +27,6 @@ export const stepKey = "utenlandsoppdraget";
 // Date range constants for assignment period selection
 const YEARS_BACK_FROM_CURRENT = 1;
 const YEARS_FORWARD_FROM_CURRENT = 5;
-
-type UtenlandsoppdragFormData = z.infer<typeof utenlandsoppdragSchema>;
 
 interface UtenlandsoppdragetStegContentProps {
   skjema: ArbeidstakersSkjemaDto;
@@ -68,9 +65,8 @@ function UtenlandsoppdragetStegContent({
   };
 
   const registerUtenlandsoppdragMutation = useMutation({
-    mutationFn: (data: UtenlandsoppdragFormData) => {
-      const apiPayload = data as UtenlandsoppdragetArbeidstakersDelDto;
-      return postUtenlandsoppdragetArbeidstaker(skjema.id, apiPayload);
+    mutationFn: (data: UtenlandsoppdragetArbeidstakersDelDto) => {
+      return postUtenlandsoppdragetArbeidstaker(skjema.id, data);
     },
     onSuccess: async () => {
       await invalidateArbeidstakerSkjemaQuery(skjema.id);
@@ -87,7 +83,7 @@ function UtenlandsoppdragetStegContent({
     },
   });
 
-  const onSubmit = (data: UtenlandsoppdragFormData) => {
+  const onSubmit = (data: UtenlandsoppdragetArbeidstakersDelDto) => {
     registerUtenlandsoppdragMutation.mutate(data);
   };
 

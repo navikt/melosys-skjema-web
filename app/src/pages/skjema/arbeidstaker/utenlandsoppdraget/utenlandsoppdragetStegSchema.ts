@@ -65,4 +65,9 @@ export const utenlandsoppdragSchema = baseUtenlandsoppdragSchema
   .refine(validerUtsendelseDatoer, {
     message: "utenlandsoppdragetArbeidstakerSteg.tilDatoKanIkkeVareForFraDato",
     path: ["utsendelseTilDato"],
-  });
+  })
+  .transform((data) => ({
+    utsendelsesLand: data.utsendelsesLand!,
+    utsendelseFraDato: data.utsendelseFraDato!,
+    utsendelseTilDato: data.utsendelseTilDato!,
+  }));
