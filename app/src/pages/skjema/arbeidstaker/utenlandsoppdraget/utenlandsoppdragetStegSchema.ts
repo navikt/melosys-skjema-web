@@ -10,39 +10,25 @@ export const utenlandsoppdragSchema = z
       .min(
         1,
         "utenlandsoppdragetArbeidstakerSteg.duMaVelgeHvilketLandDuSkalUtforeArbeid",
-      )
-      .optional(),
+      ),
 
     utsendelseFraDato: z
-      .string()
-      .min(1, "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd")
-      .optional(),
+      .string({
+        error: "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd",
+      })
+      .min(1, "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd"),
 
     utsendelseTilDato: z
-      .string()
-      .min(1, "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd")
-      .optional(),
-  })
-  .refine((data) => data.utsendelseFraDato !== undefined, {
-    error: "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd",
-    path: ["utsendelseFraDato"],
-  })
-  .refine((data) => data.utsendelseTilDato !== undefined, {
-    error: "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd",
-    path: ["utsendelseTilDato"],
+      .string({
+        error: "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd",
+      })
+      .min(1, "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd"),
   })
   .refine(
     (data) =>
-      data.utsendelseFraDato &&
-      data.utsendelseTilDato &&
       new Date(data.utsendelseFraDato) <= new Date(data.utsendelseTilDato),
     {
       error: "utenlandsoppdragetArbeidstakerSteg.tilDatoKanIkkeVareForFraDato",
       path: ["utsendelseTilDato"],
     },
-  )
-  .transform((data) => ({
-    utsendelsesLand: data.utsendelsesLand!,
-    utsendelseFraDato: data.utsendelseFraDato!,
-    utsendelseTilDato: data.utsendelseTilDato!,
-  }));
+  );

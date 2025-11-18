@@ -44,9 +44,7 @@ function UtenlandsoppdragetStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(utenlandsoppdragSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const { handleSubmit } = formMethods;
