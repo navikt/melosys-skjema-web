@@ -1,71 +1,46 @@
 import { z } from "zod";
 
-const baseUtenlandsoppdragSchema = z.object({
-  utsendelsesLand: z
-    .string({
-      message:
+export const utenlandsoppdragSchema = z
+  .object({
+    utsendelsesLand: z
+      .string({
+        error:
+          "utenlandsoppdragetArbeidstakerSteg.duMaVelgeHvilketLandDuSkalUtforeArbeid",
+      })
+      .min(
+        1,
         "utenlandsoppdragetArbeidstakerSteg.duMaVelgeHvilketLandDuSkalUtforeArbeid",
-    })
-    .optional(),
-  utsendelseFraDato: z
-    .string({
-      message: "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd",
-    })
-    .optional(),
-  utsendelseTilDato: z
-    .string({
-      message: "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd",
-    })
-    .optional(),
-});
+      )
+      .optional(),
 
-type BaseUtenlandsoppdragFormData = z.infer<typeof baseUtenlandsoppdragSchema>;
+    utsendelseFraDato: z
+      .string()
+      .min(1, "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd")
+      .optional(),
 
-function validerUtsendelsesLandPakrevd(data: BaseUtenlandsoppdragFormData) {
-  return (
-    data.utsendelsesLand !== undefined && data.utsendelsesLand.trim().length > 0
-  );
-}
-
-function validerUtsendelseFraDatoPakrevd(data: BaseUtenlandsoppdragFormData) {
-  return (
-    data.utsendelseFraDato !== undefined &&
-    data.utsendelseFraDato.trim().length > 0
-  );
-}
-
-function validerUtsendelseTilDatoPakrevd(data: BaseUtenlandsoppdragFormData) {
-  return (
-    data.utsendelseTilDato !== undefined &&
-    data.utsendelseTilDato.trim().length > 0
-  );
-}
-
-function validerUtsendelseDatoer(data: BaseUtenlandsoppdragFormData) {
-  if (data.utsendelseFraDato && data.utsendelseTilDato) {
-    return new Date(data.utsendelseFraDato) <= new Date(data.utsendelseTilDato);
-  }
-  return true;
-}
-
-export const utenlandsoppdragSchema = baseUtenlandsoppdragSchema
-  .refine(validerUtsendelsesLandPakrevd, {
-    message:
-      "utenlandsoppdragetArbeidstakerSteg.duMaVelgeHvilketLandDuSkalUtforeArbeid",
-    path: ["utsendelsesLand"],
+    utsendelseTilDato: z
+      .string()
+      .min(1, "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd")
+      .optional(),
   })
-  .refine(validerUtsendelseFraDatoPakrevd, {
-    message: "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd",
+  .refine((data) => data.utsendelseFraDato !== undefined, {
+    error: "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd",
     path: ["utsendelseFraDato"],
   })
-  .refine(validerUtsendelseTilDatoPakrevd, {
-    message: "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd",
+  .refine((data) => data.utsendelseTilDato !== undefined, {
+    error: "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd",
     path: ["utsendelseTilDato"],
   })
-  .refine(validerUtsendelseDatoer, {
-    message: "utenlandsoppdragetArbeidstakerSteg.tilDatoKanIkkeVareForFraDato",
-    path: ["utsendelseTilDato"],
-  })
+  .refine(
+    (data) =>
+      data.utsendelseFraDato &&
+      data.utsendelseTilDato &&
+      new Date(data.utsendelseFraDato) <= new Date(data.utsendelseTilDato),
+    {
+      error: "utenlandsoppdragetArbeidstakerSteg.tilDatoKanIkkeVareForFraDato",
+      path: ["utsendelseTilDato"],
+    },
+  )
   .transform((data) => ({
     utsendelsesLand: data.utsendelsesLand!,
     utsendelseFraDato: data.utsendelseFraDato!,
