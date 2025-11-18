@@ -2,12 +2,12 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidstakerenDto,
   ArbeidstakersSkjemaDto,
+  DineOpplysningerDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 
-export class ArbeidstakerenStegPage {
+export class DineOpplysningerStegPage {
   readonly page: Page;
   readonly skjema: ArbeidstakersSkjemaDto;
   readonly heading: Locator;
@@ -16,20 +16,18 @@ export class ArbeidstakerenStegPage {
   readonly fornavnInput: Locator;
   readonly etternavnInput: Locator;
   readonly fodselsdatoInput: Locator;
-  readonly harVaertEllerSkalVaereILonnetArbeidRadioGroup: RadioButtonGroupJaNeiLocator;
-  readonly skalJobbeForFlereVirksomheterRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly lagreOgFortsettButton: Locator;
 
   constructor(page: Page, skjema: ArbeidstakersSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.arbeidstakerenSteg.tittel,
+      name: nb.translation.dineOpplysningerSteg.tittel,
     });
 
     const harNorskFodselsnummerGroup = page.getByRole("group", {
-      name: nb.translation.arbeidstakerenSteg
-        .harArbeidstakerenNorskFodselsnummerEllerDNummer,
+      name: nb.translation.dineOpplysningerSteg
+        .harDuNorskFodselsnummerEllerDNummer,
     });
     this.harNorskFodselsnummerRadioGroup = {
       JA: harNorskFodselsnummerGroup.getByRole("radio", {
@@ -41,44 +39,17 @@ export class ArbeidstakerenStegPage {
     };
 
     this.fodselsnummerInput = page.getByLabel(
-      nb.translation.arbeidstakerenSteg
-        .arbeidstakerensFodselsnummerEllerDNummer,
+      nb.translation.dineOpplysningerSteg.dittFodselsnummerEllerDNummer,
     );
     this.fornavnInput = page.getByLabel(
-      nb.translation.arbeidstakerenSteg.arbeidstakerensFornavn,
+      nb.translation.dineOpplysningerSteg.dittFornavn,
     );
     this.etternavnInput = page.getByLabel(
-      nb.translation.arbeidstakerenSteg.arbeidstakerensEtternavn,
+      nb.translation.dineOpplysningerSteg.dittEtternavn,
     );
     this.fodselsdatoInput = page.getByLabel(
-      nb.translation.arbeidstakerenSteg.arbeidstakerensFodselsdato,
+      nb.translation.dineOpplysningerSteg.dinFodselsdato,
     );
-
-    const harVaertEllerSkalVaereILonnetArbeidGroup = page.getByRole("group", {
-      name: nb.translation.arbeidstakerenSteg
-        .harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen,
-    });
-    this.harVaertEllerSkalVaereILonnetArbeidRadioGroup = {
-      JA: harVaertEllerSkalVaereILonnetArbeidGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
-      }),
-      NEI: harVaertEllerSkalVaereILonnetArbeidGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
-      }),
-    };
-
-    const skalJobbeForFlereVirksomheterGroup = page.getByRole("group", {
-      name: nb.translation.arbeidstakerenSteg
-        .skalDuJobbeForFlereVirksomheterIPerioden,
-    });
-    this.skalJobbeForFlereVirksomheterRadioGroup = {
-      JA: skalJobbeForFlereVirksomheterGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
-      }),
-      NEI: skalJobbeForFlereVirksomheterGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
-      }),
-    };
 
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
@@ -87,7 +58,7 @@ export class ArbeidstakerenStegPage {
 
   async goto() {
     await this.page.goto(
-      `/skjema/arbeidstaker/${this.skjema.id}/arbeidstakeren`,
+      `/skjema/arbeidstaker/${this.skjema.id}/dine-opplysninger`,
     );
   }
 
@@ -101,13 +72,13 @@ export class ArbeidstakerenStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${this.skjema.id}/arbeidstakeren`,
+      `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${this.skjema.id}/dine-opplysninger`,
     );
     await this.lagreOgFortsettButton.click();
     return await requestPromise;
   }
 
-  async lagreOgFortsettAndExpectPayload(expectedPayload: ArbeidstakerenDto) {
+  async lagreOgFortsettAndExpectPayload(expectedPayload: DineOpplysningerDto) {
     const apiCall = await this.lagreOgFortsettAndWaitForApiRequest();
     expect(apiCall.postDataJSON()).toStrictEqual(expectedPayload);
     return apiCall;
@@ -115,7 +86,7 @@ export class ArbeidstakerenStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/skatteforhold-og-inntekt`,
+      `/skjema/arbeidstaker/${this.skjema.id}/arbeidssituasjon`,
     );
   }
 

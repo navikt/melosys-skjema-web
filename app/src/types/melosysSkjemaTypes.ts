@@ -19,13 +19,7 @@ export interface CreateArbeidstakerSkjemaRequest {
   fnr: string;
 }
 
-export interface ArbeidstakerenDto {
-  harNorskFodselsnummer: boolean;
-  fodselsnummer?: string;
-  fornavn?: string;
-  etternavn?: string;
-  /** @format date */
-  fodselsdato?: string;
+export interface ArbeidssituasjonDto {
   harVaertEllerSkalVaereILonnetArbeidFoerUtsending: boolean;
   aktivitetIMaanedenFoerUtsendingen?: string;
   skalJobbeForFlereVirksomheter: boolean;
@@ -33,7 +27,9 @@ export interface ArbeidstakerenDto {
 }
 
 export interface ArbeidstakersSkjemaDataDto {
-  arbeidstakeren?: ArbeidstakerenDto;
+  arbeidstakeren?: DineOpplysningerDto;
+  utenlandsoppdraget?: UtenlandsoppdragetArbeidstakersDelDto;
+  arbeidssituasjon?: ArbeidssituasjonDto;
   skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
   familiemedlemmer?: FamiliemedlemmerDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
@@ -45,6 +41,15 @@ export interface ArbeidstakersSkjemaDto {
   fnr: string;
   status: "UTKAST" | "SENDT" | "MOTTATT";
   data: ArbeidstakersSkjemaDataDto;
+}
+
+export interface DineOpplysningerDto {
+  harNorskFodselsnummer: boolean;
+  fodselsnummer?: string;
+  fornavn?: string;
+  etternavn?: string;
+  /** @format date */
+  fodselsdato?: string;
 }
 
 export interface FamiliemedlemmerDto {
@@ -86,6 +91,14 @@ export interface UtenlandskVirksomhet {
   tilhorerSammeKonsern: boolean;
 }
 
+export interface UtenlandsoppdragetArbeidstakersDelDto {
+  utsendelsesLand: string;
+  /** @format date */
+  utsendelseFraDato: string;
+  /** @format date */
+  utsendelseTilDato: string;
+}
+
 export interface CreateArbeidsgiverSkjemaRequest {
   orgnr: string;
 }
@@ -103,7 +116,7 @@ export interface ArbeidsgiverensVirksomhetINorgeDto {
 
 export interface ArbeidsgiversSkjemaDataDto {
   arbeidsgiveren?: ArbeidsgiverenDto;
-  arbeidstakeren?: ArbeidstakerenArbeidsgiversDelDto;
+  arbeidstakeren?: ArbeidstakerenDto;
   arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
   utenlandsoppdraget?: UtenlandsoppdragetDto;
   arbeidstakerensLonn?: ArbeidstakerensLonnDto;
@@ -127,7 +140,7 @@ export interface ArbeidsstedIUtlandetDto {
   omBordPaFly?: OmBordPaFlyDto;
 }
 
-export interface ArbeidstakerenArbeidsgiversDelDto {
+export interface ArbeidstakerenDto {
   fodselsnummer: string;
 }
 

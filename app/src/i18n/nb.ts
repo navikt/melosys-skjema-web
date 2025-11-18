@@ -143,6 +143,26 @@ export const nb = {
       lastOppVedleggBeskrivelse:
         "Du kan laste opp PDF, Word-dokumenter eller bilder. Maks filstørrelse 10 MB per fil.",
     },
+    dineOpplysningerSteg: {
+      tittel: "Dine opplysninger",
+      harDuNorskFodselsnummerEllerDNummer:
+        "Har du norsk fødselsnummer eller d-nummer?",
+      dittFodselsnummerEllerDNummer: "Ditt fødselsnummer eller d-nummer",
+      dittFornavn: "Ditt fornavn",
+      dittEtternavn: "Ditt etternavn",
+      dinFodselsdato: "Din fødselsdato",
+      duMaSvarePaOmDuHarNorskFodselsnummer:
+        "Du må svare på om du har norsk fødselsnummer",
+      fodselsnummerEllerDNummerErPakrevdNarDuHarNorskFodselsnummer:
+        "Fødselsnummer eller d-nummer er påkrevd når du har norsk fødselsnummer",
+      fodselsnummerEllerDNummerMaVare11Siffer:
+        "Fødselsnummer eller d-nummer må være 11 siffer",
+      fornavnErPakrevdOgMaVareMinst2Tegn:
+        "Fornavn er påkrevd og må være minst 2 tegn",
+      etternavnErPakrevdOgMaVareMinst2Tegn:
+        "Etternavn er påkrevd og må være minst 2 tegn",
+      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
+    },
     arbeidstakerenSteg: {
       tittel: "Arbeidstakeren",
       harArbeidstakerenNorskFodselsnummerEllerDNummer:
@@ -152,12 +172,6 @@ export const nb = {
       arbeidstakerensFornavn: "Arbeidstakerens fornavn",
       arbeidstakerensEtternavn: "Arbeidstakerens etternavn",
       arbeidstakerensFodselsdato: "Arbeidstakerens fødselsdato",
-      harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
-        "Har du vært eller skal du være i lønnet arbeid i Norge i minst én måned rett før utsendingen?",
-      aktivitet: "Aktivitet (TODO: finne en bra label her)",
-      velgAktivitet: "Velg aktivitet",
-      skalDuJobbeForFlereVirksomheterIPerioden:
-        "Skal du jobbe for flere virksomheter i perioden du søker for?",
       duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer:
         "Du må svare på om arbeidstakeren har norsk fødselsnummer",
       fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer:
@@ -169,22 +183,29 @@ export const nb = {
       etternavnErPakrevdOgMaVareMinst2Tegn:
         "Etternavn er påkrevd og må være minst 2 tegn",
       fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
-      duMaVelgeEnAktivitetNarDuIkkeHarVertILonnetArbeid:
-        "Du må velge en aktivitet når du ikke har vært i lønnet arbeid",
+    },
+    arbeidssituasjonSteg: {
+      tittel: "Arbeidssituasjon",
+      harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
+        "Har du vært eller skal du være i lønnet arbeid i Norge i minst én måned rett før utsendingen?",
+      beskriveAktivitetFoerUtsending:
+        "Beskriv aktiviteten din måneden før utsendingen",
+      beskriveAktivitetFoerUtsendingBeskrivelse:
+        "For eksempel studier, ferie eller selvstendig virksomhet",
+      skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver:
+        "Skal du også drive selvstendig virksomhet eller arbeide for en annen arbeidsgiver i utsendingsperioden?",
+      leggTilVirksomheterDuSkalJobbeForBeskrivelse:
+        "Legg til norske og/eller utenlandske virksomheter du skal jobbe for i utsendingsperioden.",
+      hvemSkalDuJobbeForIUtsendelsesPerioden:
+        "Hvem skal du jobbe for i utsendelsesperioden?",
       duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
         "Du må svare på om du har vært eller skal være i lønnet arbeid i Norge før utsending",
+      duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid:
+        "Du må beskrive aktiviteten din når du ikke har vært i lønnet arbeid",
       duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden:
         "Du må svare på om du skal jobbe for flere virksomheter i perioden",
       duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter:
         "Du må legge til minst én virksomhet når du skal jobbe for flere virksomheter",
-      hvemSkalDuJobbeForIUtsendelsesPerioden:
-        "Hvem skal du jobbe for i utsendelsesperioden?",
-      hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse:
-        "Legg til norske og/eller utenlandske virksomheter du skal jobbe for i utsendelsesperioden.",
-      studier: "Studier",
-      ferie: "Ferie",
-      selvstendingVirksomhet: "Selvstendig virksomhet",
-      kontantytelseFraNav: "Mottok kontantytelse fra Nav",
     },
     skatteforholdOgInntektSteg: {
       tittel: "Skatteforhold og inntekt",

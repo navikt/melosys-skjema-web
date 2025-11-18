@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
-import { postArbeidstakerenArbeidsgiversDel } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { postArbeidstakeren } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   getNextStep,
   SkjemaSteg,
@@ -46,7 +46,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const registerArbeidstakerMutation = useMutation({
     mutationFn: (data: ArbeidstakerenFormData) =>
-      postArbeidstakerenArbeidsgiversDel(skjema.id, {
+      postArbeidstakeren(skjema.id, {
         fodselsnummer: data.fodselsnummer,
       }),
     onSuccess: async () => {

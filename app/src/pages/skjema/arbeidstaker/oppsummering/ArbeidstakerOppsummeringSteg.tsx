@@ -4,14 +4,16 @@ import { useTranslation } from "react-i18next";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegOppsummering.tsx";
 
-import { stepKey as arbeidstakerenStepKey } from "../arbeidstakeren/ArbeidstakerenSteg.tsx";
+import { stepKey as arbeidssituasjonStepKey } from "../arbeidssituasjon/ArbeidssituasjonSteg.tsx";
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
+import { stepKey as arbeidstakerenStepKey } from "../dine-opplysninger/DineOpplysningerSteg.tsx";
 import { stepKey as familiemedlemmerStepKey } from "../familiemedlemmer/FamiliemedlemmerSteg.tsx";
 import { stepKey as skatteforholdOgInntektStepKey } from "../skatteforhold-og-inntekt/SkatteforholdOgInntektSteg.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { stepKey as tilleggsopplysningerStepKey } from "../tilleggsopplysninger/TilleggsopplysningerSteg.tsx";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
-import { ArbeidstakerenStegOppsummering } from "./ArbeidstakerenStegOppsummering.tsx";
+import { ArbeidssituasjonStegOppsummering } from "./ArbeidssituasjonStegOppsummering.tsx";
+import { DineOpplysningerStegOppsummering } from "./DineOpplysningerStegOppsummering.tsx";
 import { FamiliemedlemmerStegOppsummering } from "./FamiliemedlemmerStegOppsummering.tsx";
 import { SkatteforholdOgInntektStegOppsummering } from "./SkatteforholdOgInntektStegOppsummering.tsx";
 
@@ -39,7 +41,14 @@ function ArbeidstakerOppsummeringStegContent({
   const renderStepSummary = (stepKey: string) => {
     switch (stepKey) {
       case arbeidstakerenStepKey: {
-        return <ArbeidstakerenStegOppsummering key={stepKey} skjema={skjema} />;
+        return (
+          <DineOpplysningerStegOppsummering key={stepKey} skjema={skjema} />
+        );
+      }
+      case arbeidssituasjonStepKey: {
+        return (
+          <ArbeidssituasjonStegOppsummering key={stepKey} skjema={skjema} />
+        );
       }
       case skatteforholdOgInntektStepKey: {
         return (

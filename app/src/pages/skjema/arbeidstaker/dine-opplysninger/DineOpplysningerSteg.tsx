@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select, TextField } from "@navikt/ds-react";
+import { TextField } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -10,36 +10,31 @@ import { z } from "zod";
 
 import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
-import { postArbeidstakeren } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { postDineOpplysninger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import {
-  ArbeidstakerenDto,
-  ArbeidstakersSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
-import {
-  AKTIVITET_OPTIONS,
-  arbeidstakerSchema,
-} from "./arbeidstakerenStegSchema.ts";
+import { dineOpplysningerSchema } from "./dineOpplysningerStegSchema.ts";
 
-export const stepKey = "arbeidstakeren";
+export const stepKey = "dine-opplysninger";
 
-type ArbeidstakerFormData = z.infer<typeof arbeidstakerSchema>;
+type DineOpplysningerFormData = z.infer<typeof dineOpplysningerSchema>;
 
-interface ArbeidstakerenStegContentProps {
+interface DineOpplysningerStegContentProps {
   skjema: ArbeidstakersSkjemaDto;
 }
 
-function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
+function DineOpplysningerStegContent({
+  skjema,
+}: DineOpplysningerStegContentProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -55,7 +50,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakeren;
 
   const formMethods = useForm({
-    resolver: zodResolver(arbeidstakerSchema),
+    resolver: zodResolver(dineOpplysningerSchema),
     defaultValues: {
       ...lagretSkjemadataForSteg,
     },
@@ -79,14 +74,10 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
 
   const harNorskFodselsnummer =
     watch("harNorskFodselsnummer") || innloggetBrukerHarNorskFodselsnummer;
-  const harVaertEllerSkalVaereILonnetArbeidFoerUtsending = watch(
-    "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
-  );
-  const skalJobbeForFlereVirksomheter = watch("skalJobbeForFlereVirksomheter");
 
-  const postArbeidstakerMutation = useMutation({
-    mutationFn: (data: ArbeidstakerFormData) => {
-      return postArbeidstakeren(skjema.id, data as ArbeidstakerenDto);
+  const postDineOpplysningerMutation = useMutation({
+    mutationFn: (data: DineOpplysningerFormData) => {
+      return postDineOpplysninger(skjema.id, data);
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);
@@ -103,8 +94,8 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
     },
   });
 
-  const onSubmit = (data: ArbeidstakerFormData) => {
-    postArbeidstakerMutation.mutate(data);
+  const onSubmit = (data: DineOpplysningerFormData) => {
+    postDineOpplysningerMutation.mutate(data);
   };
 
   if (userInfoIsLoading) {
@@ -124,7 +115,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
             customNesteKnapp: {
               tekst: t("felles.lagreOgFortsett"),
               type: "submit",
-              loading: postArbeidstakerMutation.isPending,
+              loading: postDineOpplysningerMutation.isPending,
             },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
@@ -134,7 +125,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
             disabled={innloggetBrukerHarNorskFodselsnummer}
             formFieldName="harNorskFodselsnummer"
             legend={t(
-              "arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer",
+              "dineOpplysningerSteg.harDuNorskFodselsnummerEllerDNummer",
             )}
             lockedValue={innloggetBrukerHarNorskFodselsnummer}
           />
@@ -143,9 +134,7 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
             <TextField
               className="mt-4"
               error={translateError(errors.fodselsnummer?.message)}
-              label={t(
-                "arbeidstakerenSteg.arbeidstakerensFodselsnummerEllerDNummer",
-              )}
+              label={t("dineOpplysningerSteg.dittFodselsnummerEllerDNummer")}
               size="medium"
               style={{ maxWidth: "160px" }}
               {...register("fodselsnummer")}
@@ -158,73 +147,23 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
               <TextField
                 className="mt-4 max-w-md"
                 error={translateError(errors.fornavn?.message)}
-                label={t("arbeidstakerenSteg.arbeidstakerensFornavn")}
+                label={t("dineOpplysningerSteg.dittFornavn")}
                 {...register("fornavn")}
               />
 
               <TextField
                 className="mt-4 max-w-md"
                 error={translateError(errors.etternavn?.message)}
-                label={t("arbeidstakerenSteg.arbeidstakerensEtternavn")}
+                label={t("dineOpplysningerSteg.dittEtternavn")}
                 {...register("etternavn")}
               />
 
               <DatePickerFormPart
                 className="mt-4"
                 formFieldName="fodselsdato"
-                label={t("arbeidstakerenSteg.arbeidstakerensFodselsdato")}
+                label={t("dineOpplysningerSteg.dinFodselsdato")}
               />
             </>
-          )}
-
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
-            legend={t(
-              "arbeidstakerenSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen",
-            )}
-          />
-
-          {harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
-            <Select
-              className="mt-4"
-              error={translateError(
-                errors.aktivitetIMaanedenFoerUtsendingen?.message,
-              )}
-              label={t("arbeidstakerenSteg.aktivitet")}
-              style={{ width: "fit-content" }}
-              {...register("aktivitetIMaanedenFoerUtsendingen")}
-            >
-              <option value="">{t("arbeidstakerenSteg.velgAktivitet")}</option>
-              {AKTIVITET_OPTIONS.map((aktivitetOption) => (
-                <option
-                  key={aktivitetOption.value}
-                  value={aktivitetOption.value}
-                >
-                  {t(aktivitetOption.labelKey)}
-                </option>
-              ))}
-            </Select>
-          )}
-
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            formFieldName="skalJobbeForFlereVirksomheter"
-            legend={t(
-              "arbeidstakerenSteg.skalDuJobbeForFlereVirksomheterIPerioden",
-            )}
-          />
-
-          {skalJobbeForFlereVirksomheter && (
-            <NorskeOgUtenlandskeVirksomheterFormPart
-              description={t(
-                "arbeidstakerenSteg.hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse",
-              )}
-              fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode"
-              label={t(
-                "arbeidstakerenSteg.hvemSkalDuJobbeForIUtsendelsesPerioden",
-              )}
-            />
           )}
         </SkjemaSteg>
       </form>
@@ -232,14 +171,14 @@ function ArbeidstakerenStegContent({ skjema }: ArbeidstakerenStegContentProps) {
   );
 }
 
-interface ArbeidstakerenStegProps {
+interface DineOpplysningerStegProps {
   id: string;
 }
 
-export function ArbeidstakerenSteg({ id }: ArbeidstakerenStegProps) {
+export function DineOpplysningerSteg({ id }: DineOpplysningerStegProps) {
   return (
     <ArbeidstakerStegLoader id={id}>
-      {(skjema) => <ArbeidstakerenStegContent skjema={skjema} />}
+      {(skjema) => <DineOpplysningerStegContent skjema={skjema} />}
     </ArbeidstakerStegLoader>
   );
 }
