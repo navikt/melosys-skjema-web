@@ -46,6 +46,7 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const lagretSkjemadataForSteg = skjema.data?.arbeidsstedIUtlandet;
 
   const formMethods = useForm({
+    // @ts-expect-error - discriminated union type narrowing incompatible with DTO boolean types
     resolver: zodResolver(arbeidsstedIUtlandetSchema),
     ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
