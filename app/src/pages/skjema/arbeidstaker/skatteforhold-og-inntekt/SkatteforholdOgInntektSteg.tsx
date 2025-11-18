@@ -136,7 +136,9 @@ function SkatteforholdOgInntektStegContent({
                   "skatteforholdOgInntektSteg.oppgiBelopetINorskeKroner",
                 )}
                 error={translateError(
-                  errors.pengestotteSomMottasFraAndreLandBelop?.message,
+                  "pengestotteSomMottasFraAndreLandBelop" in errors
+                    ? errors.pengestotteSomMottasFraAndreLandBelop?.message
+                    : undefined
                 )}
                 inputMode="decimal"
                 label={t(
@@ -148,7 +150,9 @@ function SkatteforholdOgInntektStegContent({
               <Textarea
                 className="mt-4"
                 error={translateError(
-                  errors.pengestotteSomMottasFraAndreLandBeskrivelse?.message,
+                  "pengestotteSomMottasFraAndreLandBeskrivelse" in errors
+                    ? errors.pengestotteSomMottasFraAndreLandBeskrivelse?.message
+                    : undefined
                 )}
                 label={t(
                   "skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu",

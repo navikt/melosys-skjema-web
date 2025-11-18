@@ -133,7 +133,11 @@ function DineOpplysningerStegContent({
           {harNorskFodselsnummer && (
             <TextField
               className="mt-4"
-              error={translateError(errors.fodselsnummer?.message)}
+              error={translateError(
+                "fodselsnummer" in errors
+                  ? errors.fodselsnummer?.message
+                  : undefined
+              )}
               label={t("dineOpplysningerSteg.dittFodselsnummerEllerDNummer")}
               size="medium"
               style={{ maxWidth: "160px" }}
@@ -146,14 +150,18 @@ function DineOpplysningerStegContent({
             <>
               <TextField
                 className="mt-4 max-w-md"
-                error={translateError(errors.fornavn?.message)}
+                error={translateError(
+                  "fornavn" in errors ? errors.fornavn?.message : undefined
+                )}
                 label={t("dineOpplysningerSteg.dittFornavn")}
                 {...register("fornavn")}
               />
 
               <TextField
                 className="mt-4 max-w-md"
-                error={translateError(errors.etternavn?.message)}
+                error={translateError(
+                  "etternavn" in errors ? errors.etternavn?.message : undefined
+                )}
                 label={t("dineOpplysningerSteg.dittEtternavn")}
                 {...register("etternavn")}
               />

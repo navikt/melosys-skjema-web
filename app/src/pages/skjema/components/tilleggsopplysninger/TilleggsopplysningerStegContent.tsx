@@ -112,7 +112,11 @@ export function TilleggsopplysningerStegContent({
             <Textarea
               {...register("tilleggsopplysningerTilSoknad")}
               className="mt-4"
-              error={errors.tilleggsopplysningerTilSoknad?.message}
+              error={
+                "tilleggsopplysningerTilSoknad" in errors
+                  ? errors.tilleggsopplysningerTilSoknad?.message
+                  : undefined
+              }
               label={t(
                 "tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden",
               )}

@@ -45,7 +45,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     resolver: zodResolver(utenlandsoppdragSchema),
     defaultValues: {
       ...lagretSkjemadataForSteg,
-    },
+    } as any,
   });
 
   const {
@@ -174,7 +174,9 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <Textarea
               className="mt-6"
               error={translateError(
-                errors.utenlandsoppholdetsBegrunnelse?.message,
+                ("utenlandsoppholdetsBegrunnelse" in errors
+                  ? errors.utenlandsoppholdetsBegrunnelse?.message
+                  : undefined) as string | undefined
               )}
               label={t(
                 "utenlandsoppdragetSteg.hvorforSkalArbeidstakerenArbeideIUtlandet",
@@ -213,7 +215,9 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <Textarea
               className="mt-6"
               error={translateError(
-                errors.ansettelsesforholdBeskrivelse?.message,
+                ("ansettelsesforholdBeskrivelse" in errors
+                  ? errors.ansettelsesforholdBeskrivelse?.message
+                  : undefined) as string | undefined
               )}
               label={t(
                 "utenlandsoppdragetSteg.beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden",
