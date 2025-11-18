@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GuidePanel } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -48,12 +48,14 @@ function FamiliemedlemmerStegContent({
     },
   });
 
-  const { handleSubmit, watch } = formMethods;
-  const sokerForBarnUnder18SomSkalVaereMed = watch(
-    "sokerForBarnUnder18SomSkalVaereMed",
-  );
-  const harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad = watch(
-    "harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad",
+  const { handleSubmit } = formMethods;
+  const sokerForBarnUnder18SomSkalVaereMed = useWatch({
+    name: "sokerForBarnUnder18SomSkalVaereMed",
+  });
+  const harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad = useWatch(
+    {
+      name: "harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad",
+    },
   );
 
   const postFamiliemedlemmerMutation = useMutation({

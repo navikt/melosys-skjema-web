@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
@@ -53,12 +53,11 @@ export function TilleggsopplysningerStegContent({
   const {
     handleSubmit,
     register,
-    watch,
     formState: { errors },
   } = formMethods;
-  const harFlereOpplysningerTilSoknaden = watch(
-    "harFlereOpplysningerTilSoknaden",
-  );
+  const harFlereOpplysningerTilSoknaden = useWatch({
+    name: "harFlereOpplysningerTilSoknaden",
+  });
 
   const postTilleggsopplysningerMutation = useMutation({
     mutationFn: (data: TilleggsopplysningerFormData) => {

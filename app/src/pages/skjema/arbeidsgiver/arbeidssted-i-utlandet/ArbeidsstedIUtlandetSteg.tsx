@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Select } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -56,10 +56,9 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = formMethods;
 
-  const arbeidsstedType = watch("arbeidsstedType");
+  const arbeidsstedType = useWatch({ name: "arbeidsstedType" });
 
   const registerArbeidsstedMutation = useMutation({
     mutationFn: (data: ArbeidsstedIUtlandetFormData) => {
