@@ -88,7 +88,7 @@ export class ArbeidssituasjonStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/utenlandsoppdraget`,
+      `/skjema/arbeidstaker/${this.skjema.id}/skatteforhold-og-inntekt`,
     );
   }
 }

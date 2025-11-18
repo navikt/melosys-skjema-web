@@ -68,7 +68,7 @@ export class UtenlandsoppdragetStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/skatteforhold-og-inntekt`,
+      `/skjema/arbeidstaker/${this.skjema.id}/arbeidssituasjon`,
     );
   }
 }

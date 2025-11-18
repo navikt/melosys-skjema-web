@@ -7,14 +7,14 @@ export const ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
     route: "/skjema/arbeidstaker/$id/dine-opplysninger",
   },
   {
-    key: "arbeidssituasjon",
-    title: "arbeidssituasjonSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/arbeidssituasjon",
-  },
-  {
     key: "utenlandsoppdraget",
     title: "utenlandsoppdragetArbeidstakerSteg.tittel",
     route: "/skjema/arbeidstaker/$id/utenlandsoppdraget",
+  },
+  {
+    key: "arbeidssituasjon",
+    title: "arbeidssituasjonSteg.tittel",
+    route: "/skjema/arbeidstaker/$id/arbeidssituasjon",
   },
   {
     key: "skatteforhold-og-inntekt",

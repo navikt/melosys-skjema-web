@@ -53,7 +53,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await veiledningPage.assertStartSoknadButtonVisible();
     await veiledningPage.startSoknad();
 
-    await veiledningPage.assertNavigatedToArbeidstakeren(
+    await veiledningPage.assertNavigatedToDineOpplysninger(
       testArbeidstakerSkjema.id,
     );
   });
