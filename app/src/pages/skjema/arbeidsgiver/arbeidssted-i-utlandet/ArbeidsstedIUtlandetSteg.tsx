@@ -46,7 +46,14 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const lagretSkjemadataForSteg = skjema.data?.arbeidsstedIUtlandet;
 
   const formMethods = useForm({
-    // @ts-expect-error - discriminated union type narrowing incompatible with DTO boolean types
+    /**
+     * Type incompatibility between DTO and Zod schema:
+     * - Schema uses discriminated unions with z.literal(true) and z.literal(false) for type safety
+     * - DTO uses plain `boolean` type which TypeScript sees as `true | false` without narrowing
+     * - This is a known limitation when mixing discriminated unions with external data sources
+     * - Runtime validation handles this correctly, only type-checking is affected
+     */
+    // @ts-expect-error - discriminated union literals vs DTO boolean types
     resolver: zodResolver(arbeidsstedIUtlandetSchema),
     ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });

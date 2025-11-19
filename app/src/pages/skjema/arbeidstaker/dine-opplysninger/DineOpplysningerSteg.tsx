@@ -19,6 +19,7 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
+import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
@@ -50,6 +51,7 @@ function DineOpplysningerStegContent({
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakeren;
 
   const formMethods = useForm({
+    // @ts-expect-error - discriminated union literals vs DTO boolean types
     resolver: zodResolver(dineOpplysningerSchema),
     ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
@@ -131,11 +133,7 @@ function DineOpplysningerStegContent({
           {harNorskFodselsnummer && (
             <TextField
               className="mt-4"
-              error={translateError(
-                "fodselsnummer" in errors
-                  ? errors.fodselsnummer?.message
-                  : undefined,
-              )}
+              error={translateError(getFieldError(errors, "fodselsnummer"))}
               label={t("dineOpplysningerSteg.dittFodselsnummerEllerDNummer")}
               size="medium"
               style={{ maxWidth: "160px" }}
@@ -148,18 +146,14 @@ function DineOpplysningerStegContent({
             <>
               <TextField
                 className="mt-4 max-w-md"
-                error={translateError(
-                  "fornavn" in errors ? errors.fornavn?.message : undefined,
-                )}
+                error={translateError(getFieldError(errors, "fornavn"))}
                 label={t("dineOpplysningerSteg.dittFornavn")}
                 {...register("fornavn")}
               />
 
               <TextField
                 className="mt-4 max-w-md"
-                error={translateError(
-                  "etternavn" in errors ? errors.etternavn?.message : undefined,
-                )}
+                error={translateError(getFieldError(errors, "etternavn"))}
                 label={t("dineOpplysningerSteg.dittEtternavn")}
                 {...register("etternavn")}
               />

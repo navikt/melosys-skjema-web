@@ -1,45 +1,19 @@
 import { z } from "zod";
 
-const baseUtenlandsoppdragSchema = z.object({
+const baseSchema = z.object({
   utsendelseLand: z
-    .string({
-      message:
-        "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
-    })
-    .optional(),
+    .string()
+    .min(1, "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil"),
   arbeidstakerUtsendelseFraDato: z
-    .string({
-      message: "utenlandsoppdragetSteg.fraDatoErPakrevd",
-    })
-    .optional(),
+    .string()
+    .min(1, "utenlandsoppdragetSteg.fraDatoErPakrevd"),
   arbeidstakerUtsendelseTilDato: z
-    .string({
-      message: "utenlandsoppdragetSteg.tilDatoErPakrevd",
-    })
-    .optional(),
-  arbeidsgiverHarOppdragILandet: z
-    .boolean({
-      message: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
-    })
-    .optional(),
-  arbeidstakerBleAnsattForUtenlandsoppdraget: z
-    .boolean({
-      message:
-        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget",
-    })
-    .optional(),
-  arbeidstakerForblirAnsattIHelePerioden: z
-    .boolean({
-      message:
-        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden",
-    })
-    .optional(),
-  arbeidstakerErstatterAnnenPerson: z
-    .boolean({
-      message:
-        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson",
-    })
-    .optional(),
+    .string()
+    .min(1, "utenlandsoppdragetSteg.tilDatoErPakrevd"),
+  arbeidsgiverHarOppdragILandet: z.boolean(),
+  arbeidstakerBleAnsattForUtenlandsoppdraget: z.boolean(),
+  arbeidstakerForblirAnsattIHelePerioden: z.boolean(),
+  arbeidstakerErstatterAnnenPerson: z.boolean(),
   arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z.boolean().optional(),
   utenlandsoppholdetsBegrunnelse: z.string().optional(),
   ansettelsesforholdBeskrivelse: z.string().optional(),
@@ -47,146 +21,96 @@ const baseUtenlandsoppdragSchema = z.object({
   forrigeArbeidstakerUtsendelseTilDato: z.string().optional(),
 });
 
-type BaseUtenlandsoppdragFormData = z.infer<typeof baseUtenlandsoppdragSchema>;
-
-function validerUtsendelseLandPakrevd(data: BaseUtenlandsoppdragFormData) {
-  return (
-    data.utsendelseLand !== undefined && data.utsendelseLand.trim().length > 0
-  );
-}
-
-function validerArbeidstakerUtsendelseFraDatoPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  return (
-    data.arbeidstakerUtsendelseFraDato !== undefined &&
-    data.arbeidstakerUtsendelseFraDato.trim().length > 0
-  );
-}
-
-function validerArbeidstakerUtsendelseTilDatoPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  return (
-    data.arbeidstakerUtsendelseTilDato !== undefined &&
-    data.arbeidstakerUtsendelseTilDato.trim().length > 0
-  );
-}
-
-function validerArbeidsgiverHarOppdragILandetPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  return data.arbeidsgiverHarOppdragILandet !== undefined;
-}
-
-function validerArbeidstakerBleAnsattForUtenlandsoppdragetPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  return data.arbeidstakerBleAnsattForUtenlandsoppdraget !== undefined;
-}
-
-function validerArbeidstakerForblirAnsattIHelePerioden(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  return data.arbeidstakerForblirAnsattIHelePerioden !== undefined;
-}
-
-function validerArbeidstakerErstatterAnnenPersonPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  return data.arbeidstakerErstatterAnnenPerson !== undefined;
-}
-
-function validerArbeidstakerUtsendelseDatoer(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  if (
-    data.arbeidstakerUtsendelseFraDato &&
-    data.arbeidstakerUtsendelseTilDato
-  ) {
-    return (
-      new Date(data.arbeidstakerUtsendelseFraDato) <=
+export const utenlandsoppdragSchema = baseSchema
+  .superRefine((data, ctx) => {
+    // Validate date ranges
+    if (
+      new Date(data.arbeidstakerUtsendelseFraDato) >
       new Date(data.arbeidstakerUtsendelseTilDato)
-    );
-  }
-  return true;
-}
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
+        path: ["arbeidstakerUtsendelseTilDato"],
+      });
+    }
 
-function validerForrigeArbeidstakerUtsendelseDatoer(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  if (
-    data.forrigeArbeidstakerUtsendelseFradato &&
-    data.forrigeArbeidstakerUtsendelseTilDato
-  ) {
-    return (
-      new Date(data.forrigeArbeidstakerUtsendelseFradato) <=
-      new Date(data.forrigeArbeidstakerUtsendelseTilDato)
-    );
-  }
-  return true;
-}
+    // Conditional validation: utenlandsoppholdetsBegrunnelse required when arbeidsgiverHarOppdragILandet is false
+    if (
+      !data.arbeidsgiverHarOppdragILandet &&
+      !data.utenlandsoppholdetsBegrunnelse?.trim()
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "utenlandsoppdragetSteg.begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet",
+        path: ["utenlandsoppholdetsBegrunnelse"],
+      });
+    }
 
-function validerUtenlandsoppholdetsBegrunnelsePakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  if (!data.arbeidsgiverHarOppdragILandet) {
-    return (
-      data.utenlandsoppholdetsBegrunnelse &&
-      data.utenlandsoppholdetsBegrunnelse.trim() !== ""
-    );
-  }
-  return true;
-}
+    // Conditional validation: ansettelsesforholdBeskrivelse required when arbeidstakerForblirAnsattIHelePerioden is false
+    if (
+      !data.arbeidstakerForblirAnsattIHelePerioden &&
+      !data.ansettelsesforholdBeskrivelse?.trim()
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "utenlandsoppdragetSteg.beskrivelseAvAnsettelsesforholdErPakrevd",
+        path: ["ansettelsesforholdBeskrivelse"],
+      });
+    }
 
-function validerAnsettelsesforholdBeskrivelsePakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  if (!data.arbeidstakerForblirAnsattIHelePerioden) {
-    return (
-      data.ansettelsesforholdBeskrivelse &&
-      data.ansettelsesforholdBeskrivelse.trim() !== ""
-    );
-  }
-  return true;
-}
+    // Conditional validation: arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget required when arbeidstakerBleAnsattForUtenlandsoppdraget is true
+    if (
+      data.arbeidstakerBleAnsattForUtenlandsoppdraget &&
+      data.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget === undefined
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget",
+        path: ["arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"],
+      });
+    }
 
-function validerJobbeINorgeEtterOppdragetPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  if (data.arbeidstakerBleAnsattForUtenlandsoppdraget) {
-    return (
-      data.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget !== undefined
-    );
-  }
-  return true;
-}
+    // Conditional validation: forrigeArbeidstakerUtsendelseFradato required when arbeidstakerErstatterAnnenPerson is true
+    if (
+      data.arbeidstakerErstatterAnnenPerson &&
+      !data.forrigeArbeidstakerUtsendelseFradato
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "utenlandsoppdragetSteg.fraDatoForForrigeArbeidstakerErPakrevd",
+        path: ["forrigeArbeidstakerUtsendelseFradato"],
+      });
+    }
 
-function validerForrigeArbeidstakerFraDatoPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  if (data.arbeidstakerErstatterAnnenPerson) {
-    return (
+    // Conditional validation: forrigeArbeidstakerUtsendelseTilDato required when arbeidstakerErstatterAnnenPerson is true
+    if (
+      data.arbeidstakerErstatterAnnenPerson &&
+      !data.forrigeArbeidstakerUtsendelseTilDato
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "utenlandsoppdragetSteg.tilDatoForForrigeArbeidstakerErPakrevd",
+        path: ["forrigeArbeidstakerUtsendelseTilDato"],
+      });
+    }
+
+    // Validate previous employee date range if both dates are provided
+    if (
       data.forrigeArbeidstakerUtsendelseFradato &&
-      data.forrigeArbeidstakerUtsendelseFradato !== ""
-    );
-  }
-  return true;
-}
-
-function validerForrigeArbeidstakerTilDatoPakrevd(
-  data: BaseUtenlandsoppdragFormData,
-) {
-  if (data.arbeidstakerErstatterAnnenPerson) {
-    return (
       data.forrigeArbeidstakerUtsendelseTilDato &&
-      data.forrigeArbeidstakerUtsendelseTilDato !== ""
-    );
-  }
-  return true;
-}
-
-export const utenlandsoppdragSchema = baseUtenlandsoppdragSchema
+      new Date(data.forrigeArbeidstakerUtsendelseFradato) >
+        new Date(data.forrigeArbeidstakerUtsendelseTilDato)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
+        path: ["forrigeArbeidstakerUtsendelseTilDato"],
+      });
+    }
+  })
   .transform((data) => ({
     ...data,
     // Clear conditional fields when their conditions are false
@@ -206,66 +130,4 @@ export const utenlandsoppdragSchema = baseUtenlandsoppdragSchema
     forrigeArbeidstakerUtsendelseTilDato: data.arbeidstakerErstatterAnnenPerson
       ? data.forrigeArbeidstakerUtsendelseTilDato
       : undefined,
-  }))
-  .refine(validerUtsendelseLandPakrevd, {
-    message:
-      "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
-    path: ["utsendelseLand"],
-  })
-  .refine(validerArbeidstakerUtsendelseFraDatoPakrevd, {
-    message: "utenlandsoppdragetSteg.fraDatoErPakrevd",
-    path: ["arbeidstakerUtsendelseFraDato"],
-  })
-  .refine(validerArbeidstakerUtsendelseTilDatoPakrevd, {
-    message: "utenlandsoppdragetSteg.tilDatoErPakrevd",
-    path: ["arbeidstakerUtsendelseTilDato"],
-  })
-  .refine(validerArbeidsgiverHarOppdragILandetPakrevd, {
-    message: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
-    path: ["arbeidsgiverHarOppdragILandet"],
-  })
-  .refine(validerArbeidstakerBleAnsattForUtenlandsoppdragetPakrevd, {
-    message:
-      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget",
-    path: ["arbeidstakerBleAnsattForUtenlandsoppdraget"],
-  })
-  .refine(validerArbeidstakerForblirAnsattIHelePerioden, {
-    message:
-      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden",
-    path: ["arbeidstakerForblirAnsattIHelePerioden"],
-  })
-  .refine(validerArbeidstakerErstatterAnnenPersonPakrevd, {
-    message:
-      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson",
-    path: ["arbeidstakerErstatterAnnenPerson"],
-  })
-  .refine(validerArbeidstakerUtsendelseDatoer, {
-    message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
-    path: ["arbeidstakerUtsendelseTilDato"],
-  })
-  .refine(validerForrigeArbeidstakerUtsendelseDatoer, {
-    message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
-    path: ["forrigeArbeidstakerUtsendelseTilDato"],
-  })
-  .refine(validerUtenlandsoppholdetsBegrunnelsePakrevd, {
-    message:
-      "utenlandsoppdragetSteg.begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet",
-    path: ["utenlandsoppholdetsBegrunnelse"],
-  })
-  .refine(validerAnsettelsesforholdBeskrivelsePakrevd, {
-    message: "utenlandsoppdragetSteg.beskrivelseAvAnsettelsesforholdErPakrevd",
-    path: ["ansettelsesforholdBeskrivelse"],
-  })
-  .refine(validerJobbeINorgeEtterOppdragetPakrevd, {
-    message:
-      "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget",
-    path: ["arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"],
-  })
-  .refine(validerForrigeArbeidstakerFraDatoPakrevd, {
-    message: "utenlandsoppdragetSteg.fraDatoForForrigeArbeidstakerErPakrevd",
-    path: ["forrigeArbeidstakerUtsendelseFradato"],
-  })
-  .refine(validerForrigeArbeidstakerTilDatoPakrevd, {
-    message: "utenlandsoppdragetSteg.tilDatoForForrigeArbeidstakerErPakrevd",
-    path: ["forrigeArbeidstakerUtsendelseTilDato"],
-  });
+  }));

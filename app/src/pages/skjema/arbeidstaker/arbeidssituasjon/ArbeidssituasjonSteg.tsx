@@ -42,6 +42,7 @@ function ArbeidssituasjonStegContent({
   const lagretSkjemadataForSteg = skjema.data?.arbeidssituasjon;
 
   const formMethods = useForm({
+    // @ts-expect-error - discriminated union literals vs DTO boolean types
     resolver: zodResolver(arbeidssituasjonSchema),
     ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });

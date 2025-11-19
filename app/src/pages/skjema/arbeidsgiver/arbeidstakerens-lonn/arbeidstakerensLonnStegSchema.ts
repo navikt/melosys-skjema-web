@@ -2,60 +2,35 @@ import { z } from "zod";
 
 import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
-const baseArbeidstakerensLonnSchema = z.object({
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z
-    .boolean()
-    .optional(),
+const arbeidsgiverBetalerAllLonnSchema = z.object({
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z.literal(true),
+});
+
+const arbeidsgiverBetalerIkkeAllLonnSchema = z.object({
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z.literal(false),
   virksomheterSomUtbetalerLonnOgNaturalytelser:
     norskeOgUtenlandskeVirksomheterSchema.optional(),
 });
 
-type BaseArbeidstakerensLonnFormData = z.infer<
-  typeof baseArbeidstakerensLonnSchema
->;
+export const arbeidstakerensLonnSchema = z
+  .discriminatedUnion(
+    "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+    [arbeidsgiverBetalerAllLonnSchema, arbeidsgiverBetalerIkkeAllLonnSchema],
+  )
+  .superRefine((data, ctx) => {
+    if (!data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
+      const v = data.virksomheterSomUtbetalerLonnOgNaturalytelser;
+      const hasAny =
+        (v?.norskeVirksomheter?.length ?? 0) > 0 ||
+        (v?.utenlandskeVirksomheter?.length ?? 0) > 0;
 
-function validerArbeidsgiverBetalerAllLonnPakrevd(
-  data: BaseArbeidstakerensLonnFormData,
-) {
-  return (
-    data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden !==
-    undefined
-  );
-}
-
-function validerVirksomheterPakrevd(data: BaseArbeidstakerensLonnFormData) {
-  if (!data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
-    const harNorskeVirksomheter =
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser?.norskeVirksomheter &&
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser.norskeVirksomheter
-        .length > 0;
-    const harUtenlandskeVirksomheter =
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser
-        ?.utenlandskeVirksomheter &&
-      data.virksomheterSomUtbetalerLonnOgNaturalytelser.utenlandskeVirksomheter
-        .length > 0;
-
-    return harNorskeVirksomheter || harUtenlandskeVirksomheter;
-  }
-  return true;
-}
-
-export const arbeidstakerensLonnSchema = baseArbeidstakerensLonnSchema
-  .transform((data) => ({
-    ...data,
-    // Clear conditional field when arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden is true
-    virksomheterSomUtbetalerLonnOgNaturalytelser:
-      data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
-        ? undefined
-        : data.virksomheterSomUtbetalerLonnOgNaturalytelser,
-  }))
-  .refine(validerArbeidsgiverBetalerAllLonnPakrevd, {
-    message:
-      "arbeidstakerenslonnSteg.duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden",
-    path: ["arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"],
-  })
-  .refine(validerVirksomheterPakrevd, {
-    message:
-      "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
-    path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
+      if (!hasAny) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
+          path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
+        });
+      }
+    }
   });
