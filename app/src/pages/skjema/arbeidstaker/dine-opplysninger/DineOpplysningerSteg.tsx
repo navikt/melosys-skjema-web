@@ -3,7 +3,7 @@ import { TextField } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -60,8 +60,8 @@ function DineOpplysningerStegContent({
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     setValue,
+    control,
   } = formMethods;
 
   const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId !== undefined;
@@ -73,7 +73,8 @@ function DineOpplysningerStegContent({
   }, [innloggetBrukerHarNorskFodselsnummer, userInfo?.userId, setValue]);
 
   const harNorskFodselsnummer =
-    watch("harNorskFodselsnummer") || innloggetBrukerHarNorskFodselsnummer;
+    useWatch({ control, name: "harNorskFodselsnummer" }) ||
+    innloggetBrukerHarNorskFodselsnummer;
 
   const postDineOpplysningerMutation = useMutation({
     mutationFn: (data: DineOpplysningerFormData) => {

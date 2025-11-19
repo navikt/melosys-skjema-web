@@ -1,6 +1,6 @@
 import { Detail, ErrorMessage, Label, VStack } from "@navikt/ds-react";
 import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 import { NorskeVirksomheterFormPart } from "~/components/virksomheter/NorskeVirksomheterFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/virksomheter/UtenlandskeVirksomheterFormPart.tsx";
@@ -19,14 +19,17 @@ export function NorskeOgUtenlandskeVirksomheterFormPart({
 }: NorskeOgUtenlandskeVirksomheterFormPartProps) {
   const {
     formState: { errors },
-    watch,
     clearErrors,
   } = useFormContext();
   const translateError = useTranslateError();
 
   const error = errors[fieldName];
-  const norskeVirksomheter = watch(`${fieldName}.norskeVirksomheter`);
-  const utenlandskeVirksomheter = watch(`${fieldName}.utenlandskeVirksomheter`);
+  const norskeVirksomheter = useWatch({
+    name: `${fieldName}.norskeVirksomheter`,
+  });
+  const utenlandskeVirksomheter = useWatch({
+    name: `${fieldName}.utenlandskeVirksomheter`,
+  });
 
   useEffect(() => {
     const harVirksomheter =

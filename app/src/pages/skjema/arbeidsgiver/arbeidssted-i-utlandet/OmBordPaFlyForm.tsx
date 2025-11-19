@@ -1,5 +1,5 @@
 import { TextField } from "@navikt/ds-react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -14,9 +14,11 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 export function OmBordPaFlyForm() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const { control, watch } = useFormContext<ArbeidsstedIUtlandetFormData>();
+  const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
-  const erVanligHjemmebase = watch("omBordPaFly.erVanligHjemmebase");
+  const erVanligHjemmebase = useWatch({
+    name: "omBordPaFly.erVanligHjemmebase",
+  });
 
   // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
   // This is a known design limitation (react-hook-form/react-hook-form#9287)

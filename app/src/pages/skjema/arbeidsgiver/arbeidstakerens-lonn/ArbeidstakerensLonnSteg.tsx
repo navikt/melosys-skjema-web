@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -40,10 +40,13 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     },
   });
 
-  const { handleSubmit, watch, setError, clearErrors } = formMethods;
+  const { handleSubmit, setError, clearErrors, control } = formMethods;
 
-  const arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden = watch(
-    "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+  const arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden = useWatch(
+    {
+      control,
+      name: "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+    },
   );
 
   const registerArbeidstakerLonnMutation = useMutation({

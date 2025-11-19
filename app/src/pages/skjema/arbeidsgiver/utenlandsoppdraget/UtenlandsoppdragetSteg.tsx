@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -52,7 +52,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    control,
   } = formMethods;
 
   const dateLimits = {
@@ -68,16 +68,22 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     ),
   };
 
-  const arbeidstakerErstatterAnnenPerson = watch(
-    "arbeidstakerErstatterAnnenPerson",
-  );
-  const arbeidsgiverHarOppdragILandet = watch("arbeidsgiverHarOppdragILandet");
-  const arbeidstakerForblirAnsattIHelePerioden = watch(
-    "arbeidstakerForblirAnsattIHelePerioden",
-  );
-  const arbeidstakerBleAnsattForUtenlandsoppdraget = watch(
-    "arbeidstakerBleAnsattForUtenlandsoppdraget",
-  );
+  const arbeidstakerErstatterAnnenPerson = useWatch({
+    control,
+    name: "arbeidstakerErstatterAnnenPerson",
+  });
+  const arbeidsgiverHarOppdragILandet = useWatch({
+    control,
+    name: "arbeidsgiverHarOppdragILandet",
+  });
+  const arbeidstakerForblirAnsattIHelePerioden = useWatch({
+    control,
+    name: "arbeidstakerForblirAnsattIHelePerioden",
+  });
+  const arbeidstakerBleAnsattForUtenlandsoppdraget = useWatch({
+    control,
+    name: "arbeidstakerBleAnsattForUtenlandsoppdraget",
+  });
 
   const registerUtenlandsoppdragMutation = useMutation({
     mutationFn: (data: UtenlandsoppdragFormData) => {
