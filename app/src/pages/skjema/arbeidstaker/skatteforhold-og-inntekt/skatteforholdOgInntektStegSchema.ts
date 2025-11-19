@@ -32,7 +32,10 @@ const mottarPengestotteSchema = z.object({
         const amount = Number.parseFloat(val);
         return amount > 0;
       },
-      { message: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0" },
+      {
+        message:
+          "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
+      },
     ),
 });
 

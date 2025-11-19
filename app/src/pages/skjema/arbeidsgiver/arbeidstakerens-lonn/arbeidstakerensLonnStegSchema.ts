@@ -7,7 +7,8 @@ const arbeidsgiverBetalerAllLonnSchema = z.object({
 });
 
 const arbeidsgiverBetalerIkkeAllLonnSchema = z.object({
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z.literal(false),
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden:
+    z.literal(false),
   virksomheterSomUtbetalerLonnOgNaturalytelser:
     norskeOgUtenlandskeVirksomheterSchema.optional(),
 });

@@ -3,7 +3,10 @@ import { z } from "zod";
 const baseSchema = z.object({
   utsendelseLand: z
     .string()
-    .min(1, "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil"),
+    .min(
+      1,
+      "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
+    ),
   arbeidstakerUtsendelseFraDato: z
     .string()
     .min(1, "utenlandsoppdragetSteg.fraDatoErPakrevd"),
@@ -55,7 +58,8 @@ export const utenlandsoppdragSchema = baseSchema
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "utenlandsoppdragetSteg.beskrivelseAvAnsettelsesforholdErPakrevd",
+        message:
+          "utenlandsoppdragetSteg.beskrivelseAvAnsettelsesforholdErPakrevd",
         path: ["ansettelsesforholdBeskrivelse"],
       });
     }
@@ -80,7 +84,8 @@ export const utenlandsoppdragSchema = baseSchema
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "utenlandsoppdragetSteg.fraDatoForForrigeArbeidstakerErPakrevd",
+        message:
+          "utenlandsoppdragetSteg.fraDatoForForrigeArbeidstakerErPakrevd",
         path: ["forrigeArbeidstakerUtsendelseFradato"],
       });
     }
@@ -92,7 +97,8 @@ export const utenlandsoppdragSchema = baseSchema
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "utenlandsoppdragetSteg.tilDatoForForrigeArbeidstakerErPakrevd",
+        message:
+          "utenlandsoppdragetSteg.tilDatoForForrigeArbeidstakerErPakrevd",
         path: ["forrigeArbeidstakerUtsendelseTilDato"],
       });
     }
