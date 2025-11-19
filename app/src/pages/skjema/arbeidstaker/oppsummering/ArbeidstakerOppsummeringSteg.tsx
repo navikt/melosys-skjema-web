@@ -12,10 +12,12 @@ import { stepKey as skatteforholdOgInntektStepKey } from "../skatteforhold-og-in
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { stepKey as tilleggsopplysningerStepKey } from "../tilleggsopplysninger/TilleggsopplysningerSteg.tsx";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
+import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
 import { ArbeidssituasjonStegOppsummering } from "./ArbeidssituasjonStegOppsummering.tsx";
 import { DineOpplysningerStegOppsummering } from "./DineOpplysningerStegOppsummering.tsx";
 import { FamiliemedlemmerStegOppsummering } from "./FamiliemedlemmerStegOppsummering.tsx";
 import { SkatteforholdOgInntektStegOppsummering } from "./SkatteforholdOgInntektStegOppsummering.tsx";
+import { UtenlandsoppdragetStegOppsummering } from "./UtenlandsoppdragetStegOppsummering.tsx";
 
 const oppsummeringStepKey = "oppsummering";
 
@@ -48,6 +50,11 @@ function ArbeidstakerOppsummeringStegContent({
       case arbeidssituasjonStepKey: {
         return (
           <ArbeidssituasjonStegOppsummering key={stepKey} skjema={skjema} />
+        );
+      }
+      case utenlandsoppdragetStepKey: {
+        return (
+          <UtenlandsoppdragetStegOppsummering key={stepKey} skjema={skjema} />
         );
       }
       case skatteforholdOgInntektStepKey: {

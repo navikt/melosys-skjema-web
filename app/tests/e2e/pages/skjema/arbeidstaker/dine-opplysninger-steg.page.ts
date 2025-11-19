@@ -86,7 +86,7 @@ export class DineOpplysningerStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/arbeidssituasjon`,
+      `/skjema/arbeidstaker/${this.skjema.id}/utenlandsoppdraget`,
     );
   }
 

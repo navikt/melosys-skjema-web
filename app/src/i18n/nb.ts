@@ -376,6 +376,20 @@ export const nb = {
         "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
       forrigeArbeidstakersUtsendelse: "Forrige arbeidstakers utsendelse",
     },
+    utenlandsoppdragetArbeidstakerSteg: {
+      tittel: "Utenlandsoppdraget",
+      iHvilketLandSkalDuUtforeArbeid: "I hvilket land skal du utføre arbeid?",
+      utsendingsperiode: "Utsendingsperiode",
+      fraDato: "Fra dato",
+      tilDato: "Til dato",
+      oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
+        "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
+      duMaVelgeHvilketLandDuSkalUtforeArbeid:
+        "Du må velge hvilket land du skal utføre arbeid",
+      fraDatoErPakrevd: "Fra-dato er påkrevd",
+      tilDatoErPakrevd: "Til-dato er påkrevd",
+      tilDatoKanIkkeVareForFraDato: "Til dato kan ikke være før fra dato",
+    },
     arbeidstakerenslonnSteg: {
       tittel: "Arbeidstakerens lønn",
       utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
