@@ -24,7 +24,7 @@
     "@navikt/nav-dekoratoren-moduler": "3.5.0",
     "@tailwindcss/vite": "4.1.17",
     "@tanstack/react-query": "5.90.10",
-    "@tanstack/react-router": "1.136.18",
+    "@tanstack/react-router": "1.139.0",
     "i18next": "25.6.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
