@@ -378,6 +378,50 @@ export const en = {
     oppsummeringSteg: {
       tittel: "Summary",
     },
+    landingsside: {
+      hei: "Hello",
+      hvemVilDuBrukeNavPaVegneAv: "Who do you want to use Nav on behalf of?",
+      degSelv: "YOURSELF",
+      dinArbeidsgiver: "YOUR EMPLOYER",
+      enArbeidsgiverSomRadgiver: "AN EMPLOYER AS AN ADVISOR",
+      annenPerson: "ANOTHER PERSON",
+      avbryt: "Cancel",
+    },
+    kontekstBanner: {
+      minSide: "My page",
+      minSideArbeidsgiver: "My page - employer",
+      minSideRadgiver: "My page - advisor",
+      minSideAnnenPerson: "My page - another person",
+      ingenArbeidsgiverValgt: "No employer selected",
+      ingenRadgiverValgt: "No advisor selected",
+      ingenPersonValgt: "No person selected",
+      byttKontekst: "Change",
+      byttKontekstAriaLabel: "Change representation and return to landing page",
+    },
+    oversiktDegSelv: {
+      tittel: "Overview: Yourself",
+      underUtvikling: "This page is under development (MELOSYS-7723).",
+    },
+    oversiktArbeidsgiver: {
+      tittel: "Overview: Employer",
+      underUtvikling: "This page is under development (MELOSYS-7723).",
+    },
+    oversiktRadgiver: {
+      tittel: "Overview: Advisor",
+      underUtvikling: "This page is under development (MELOSYS-7723).",
+    },
+    oversiktAnnenPerson: {
+      tittel: "Overview: Another person",
+      underUtvikling: "This page is under development (MELOSYS-7723).",
+    },
+    velgRadgiverfirma: {
+      tittel: "Select advisory firm",
+      underUtvikling: "This page is under development (MELOSYS-7722).",
+    },
+    velgAnnenPerson: {
+      tittel: "Select person to represent",
+      underUtvikling: "This page is under development (MELOSYS-7728).",
+    },
     generellValidering: {
       erPakrevd: "is required",
       organisasjonsnummerErPakrevd: "Organization number is required",

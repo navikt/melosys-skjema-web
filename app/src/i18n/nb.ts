@@ -403,6 +403,51 @@ export const nb = {
       duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
         "Du må legge til minst én virksomhet når du ikke betaler all lønn selv",
     },
+    landingsside: {
+      hei: "Hei",
+      hvemVilDuBrukeNavPaVegneAv: "Hvem vil du bruke Nav på vegne av?",
+      degSelv: "DEG SELV",
+      dinArbeidsgiver: "DIN ARBEIDSGIVER",
+      enArbeidsgiverSomRadgiver: "EN ARBEIDSGIVER SOM RÅDGIVER",
+      annenPerson: "ANNEN PERSON",
+      avbryt: "Avbryt",
+    },
+    kontekstBanner: {
+      minSide: "Min side",
+      minSideArbeidsgiver: "Min side - arbeidsgiver",
+      minSideRadgiver: "Min side - rådgiver",
+      minSideAnnenPerson: "Min side - annen person",
+      ingenArbeidsgiverValgt: "Ingen arbeidsgiver valgt",
+      ingenRadgiverValgt: "Ingen rådgiver valgt",
+      ingenPersonValgt: "Ingen person valgt",
+      byttKontekst: "Bytt",
+      byttKontekstAriaLabel:
+        "Bytt representasjon og gå tilbake til landingssiden",
+    },
+    oversiktDegSelv: {
+      tittel: "Oversikt: Deg selv",
+      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+    },
+    oversiktArbeidsgiver: {
+      tittel: "Oversikt: Arbeidsgiver",
+      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+    },
+    oversiktRadgiver: {
+      tittel: "Oversikt: Rådgiver",
+      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+    },
+    oversiktAnnenPerson: {
+      tittel: "Oversikt: Annen person",
+      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+    },
+    velgRadgiverfirma: {
+      tittel: "Velg rådgiverfirma",
+      underUtvikling: "Denne siden er under utvikling (MELOSYS-7722).",
+    },
+    velgAnnenPerson: {
+      tittel: "Velg person å representere",
+      underUtvikling: "Denne siden er under utvikling (MELOSYS-7728).",
+    },
     oppsummeringSteg: {
       tittel: "Oppsummering",
     },

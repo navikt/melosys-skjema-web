@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SkjemaRouteImport } from './routes/skjema'
 import { Route as RollevelgerRouteImport } from './routes/rollevelger'
+import { Route as OversiktRouteImport } from './routes/oversikt'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SkjemaIndexRouteImport } from './routes/skjema.index'
 import { Route as SkjemaArbeidstakerRouteImport } from './routes/skjema.arbeidstaker'
 import { Route as SkjemaArbeidsgiverRouteImport } from './routes/skjema.arbeidsgiver'
+import { Route as RepresentasjonRadgiverfirmaRouteImport } from './routes/representasjon.radgiverfirma'
+import { Route as RepresentasjonAnnenPersonRouteImport } from './routes/representasjon.annen-person'
 import { Route as SkjemaArbeidstakerIndexRouteImport } from './routes/skjema.arbeidstaker.index'
 import { Route as SkjemaArbeidsgiverIndexRouteImport } from './routes/skjema.arbeidsgiver.index'
 import { Route as SkjemaArbeidstakerIdVedleggRouteImport } from './routes/skjema.arbeidstaker.$id.vedlegg'
@@ -45,6 +48,11 @@ const RollevelgerRoute = RollevelgerRouteImport.update({
   path: '/rollevelger',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OversiktRoute = OversiktRouteImport.update({
+  id: '/oversikt',
+  path: '/oversikt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -65,6 +73,18 @@ const SkjemaArbeidsgiverRoute = SkjemaArbeidsgiverRouteImport.update({
   path: '/arbeidsgiver',
   getParentRoute: () => SkjemaRoute,
 } as any)
+const RepresentasjonRadgiverfirmaRoute =
+  RepresentasjonRadgiverfirmaRouteImport.update({
+    id: '/representasjon/radgiverfirma',
+    path: '/representasjon/radgiverfirma',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const RepresentasjonAnnenPersonRoute =
+  RepresentasjonAnnenPersonRouteImport.update({
+    id: '/representasjon/annen-person',
+    path: '/representasjon/annen-person',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SkjemaArbeidstakerIndexRoute = SkjemaArbeidstakerIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -180,8 +200,11 @@ const SkjemaArbeidsgiverIdArbeidsgiverenRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/oversikt': typeof OversiktRoute
   '/rollevelger': typeof RollevelgerRoute
   '/skjema': typeof SkjemaRouteWithChildren
+  '/representasjon/annen-person': typeof RepresentasjonAnnenPersonRoute
+  '/representasjon/radgiverfirma': typeof RepresentasjonRadgiverfirmaRoute
   '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverRouteWithChildren
   '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRouteWithChildren
   '/skjema/': typeof SkjemaIndexRoute
@@ -207,7 +230,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/oversikt': typeof OversiktRoute
   '/rollevelger': typeof RollevelgerRoute
+  '/representasjon/annen-person': typeof RepresentasjonAnnenPersonRoute
+  '/representasjon/radgiverfirma': typeof RepresentasjonRadgiverfirmaRoute
   '/skjema': typeof SkjemaIndexRoute
   '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverIndexRoute
   '/skjema/arbeidstaker': typeof SkjemaArbeidstakerIndexRoute
@@ -232,8 +258,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/oversikt': typeof OversiktRoute
   '/rollevelger': typeof RollevelgerRoute
   '/skjema': typeof SkjemaRouteWithChildren
+  '/representasjon/annen-person': typeof RepresentasjonAnnenPersonRoute
+  '/representasjon/radgiverfirma': typeof RepresentasjonRadgiverfirmaRoute
   '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverRouteWithChildren
   '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRouteWithChildren
   '/skjema/': typeof SkjemaIndexRoute
@@ -261,8 +290,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/oversikt'
     | '/rollevelger'
     | '/skjema'
+    | '/representasjon/annen-person'
+    | '/representasjon/radgiverfirma'
     | '/skjema/arbeidsgiver'
     | '/skjema/arbeidstaker'
     | '/skjema/'
@@ -288,7 +320,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/oversikt'
     | '/rollevelger'
+    | '/representasjon/annen-person'
+    | '/representasjon/radgiverfirma'
     | '/skjema'
     | '/skjema/arbeidsgiver'
     | '/skjema/arbeidstaker'
@@ -312,8 +347,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/oversikt'
     | '/rollevelger'
     | '/skjema'
+    | '/representasjon/annen-person'
+    | '/representasjon/radgiverfirma'
     | '/skjema/arbeidsgiver'
     | '/skjema/arbeidstaker'
     | '/skjema/'
@@ -340,8 +378,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OversiktRoute: typeof OversiktRoute
   RollevelgerRoute: typeof RollevelgerRoute
   SkjemaRoute: typeof SkjemaRouteWithChildren
+  RepresentasjonAnnenPersonRoute: typeof RepresentasjonAnnenPersonRoute
+  RepresentasjonRadgiverfirmaRoute: typeof RepresentasjonRadgiverfirmaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -358,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/rollevelger'
       fullPath: '/rollevelger'
       preLoaderRoute: typeof RollevelgerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oversikt': {
+      id: '/oversikt'
+      path: '/oversikt'
+      fullPath: '/oversikt'
+      preLoaderRoute: typeof OversiktRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -387,6 +435,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/skjema/arbeidsgiver'
       preLoaderRoute: typeof SkjemaArbeidsgiverRouteImport
       parentRoute: typeof SkjemaRoute
+    }
+    '/representasjon/radgiverfirma': {
+      id: '/representasjon/radgiverfirma'
+      path: '/representasjon/radgiverfirma'
+      fullPath: '/representasjon/radgiverfirma'
+      preLoaderRoute: typeof RepresentasjonRadgiverfirmaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/representasjon/annen-person': {
+      id: '/representasjon/annen-person'
+      path: '/representasjon/annen-person'
+      fullPath: '/representasjon/annen-person'
+      preLoaderRoute: typeof RepresentasjonAnnenPersonRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/skjema/arbeidstaker/': {
       id: '/skjema/arbeidstaker/'
@@ -610,8 +672,11 @@ const SkjemaRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OversiktRoute: OversiktRoute,
   RollevelgerRoute: RollevelgerRoute,
   SkjemaRoute: SkjemaRouteWithChildren,
+  RepresentasjonAnnenPersonRoute: RepresentasjonAnnenPersonRoute,
+  RepresentasjonRadgiverfirmaRoute: RepresentasjonRadgiverfirmaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
