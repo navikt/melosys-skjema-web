@@ -1,10 +1,9 @@
-version: '3.8'
 name: melosys-skjema-web
 services:
   express-server:
     build:
       context: .
-      dockerfile: "Dockerfile"
+      dockerfile: "Dockerfile.dev"
       secrets:
         - npmrc
     ports:
@@ -17,6 +16,7 @@ services:
       EXPRESS_HOST: "::"
       API_SCOPE: melosys-localhost
       API_URL: http://host.docker.internal:8089/api
+      DEKORATOREN_API_URL: https://www.ekstern.dev.nav.no/person/nav-dekoratoren-api
       ENV: dev
       TOKEN_X_ISSUER: isso
       TOKEN_X_TOKEN_ENDPOINT: http://host.docker.internal:8082/isso/token

@@ -7,6 +7,12 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import logger from "./logger.js";
 import { requireEnvironment } from "./utils.js";
 
+const useLocalToken = process.env.USE_LOCAL_TOKEN === "true";
+
+function getLocalToken(): string | null {
+  return process.env.LOCAL_TOKEN || null;
+}
+
 type ProxyOptions = {
   ingoingUrl: string;
   outgoingUrl: string;
@@ -19,18 +25,36 @@ type SimpleProxyOptions = {
 };
 
 export const setupApiProxy = (router: Router) => {
-  addProxyWithOboExchangeHandler(router, {
-    ingoingUrl: "/api",
-    outgoingUrl: requireEnvironment("API_URL"),
-    scope: requireEnvironment("API_SCOPE"),
-  });
+  if (useLocalToken) {
+    addProxyWithLocalToken(router, {
+      ingoingUrl: "/api",
+      outgoingUrl: requireEnvironment("API_URL"),
+    });
+  } else {
+    addProxyWithOboExchangeHandler(router, {
+      ingoingUrl: "/api",
+      outgoingUrl: requireEnvironment("API_URL"),
+      scope: requireEnvironment("API_SCOPE"),
+    });
+  }
 };
 
 export const setupDekoratorenApiProxy = (router: Router) => {
-  addSimpleProxyHandler(router, {
-    ingoingUrl: "/nav-dekoratoren-api",
-    outgoingUrl: requireEnvironment("DEKORATOREN_API_URL"),
-  });
+  if (useLocalToken) {
+    // Mock auth endpoint for local development
+    router.get("/nav-dekoratoren-api/auth", (_req, res) => {
+      res.json({
+        authenticated: true,
+        name: "Lokal Bruker",
+        ident: "12345678901",
+      });
+    });
+  } else {
+    addSimpleProxyHandler(router, {
+      ingoingUrl: "/nav-dekoratoren-api",
+      outgoingUrl: requireEnvironment("DEKORATOREN_API_URL"),
+    });
+  }
 };
 
 function addProxyWithOboExchangeHandler(
@@ -107,6 +131,32 @@ export function addSimpleProxyHandler(
       target: outgoingUrl,
       changeOrigin: true,
       logger: logger,
+    }),
+  );
+}
+
+function addProxyWithLocalToken(
+  router: Router,
+  { ingoingUrl, outgoingUrl }: SimpleProxyOptions,
+) {
+  router.use(
+    ingoingUrl,
+    createProxyMiddleware({
+      target: outgoingUrl,
+      changeOrigin: true,
+      logger: logger,
+      on: {
+        proxyReq: (proxyRequest) => {
+          const token = getLocalToken();
+          if (token) {
+            proxyRequest.removeHeader("cookie");
+            proxyRequest.setHeader("Authorization", `Bearer ${token}`);
+            logger.debug("Local token added to proxy request");
+          } else {
+            logger.warning("No local token available");
+          }
+        },
+      },
     }),
   );
 }
