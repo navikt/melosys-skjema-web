@@ -48,27 +48,37 @@ Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api
 1. Start express-server:
    Lag en `.env`-fil i `server/` med innhold fra: https://github.com/nais/wonderwalled/blob/master/wonderwalled-idporten/local.env
    ```bash
-   cd server
-   docker-compose up -d --build
+   make local
    ```
 
-2. Start react app (Dersom appen ikke kjører på port 5173 så vil det ikke fungere. Skulle det være tilfellet så har du mest sannsynlig en annen react app som kjører på samme port):
-   ```bash
-    cd app
-    npm run dev
-    ```
-3. Åpne url i nettleser:
+2. Åpne url i nettleser:
    http://localhost:4000/vite-on
+
+### Lokal utvikling mot lokal backend
+
+Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api) kjører lokalt på http://localhost:8089.
+
+Kjør `make` for å se tilgjengelige kommandoer:
+
+```bash
+make                      # Vis tilgjengelige kommandoer
+make local-q2-new-token   # Hent Q2-token og start (første gang)
+make local-q2             # Start med eksisterende token
+make local                # Start med mock OAuth (krever mock-oauth2-server, se "Lokal utvikling mot lokal server")
+make stop                 # Stopp alle tjenester
+```
+
+Åpne http://localhost:4000/vite-on
+
+**Merk:** Q2-token utløper etter ~1 time. Kjør `make get-token` for å hente nytt.
 
 ### Kommandoer
 
 **Frontend (app/):**
 ```bash
-npm run dev          # Start dev server
-npm run build        # Bygg for produksjon
-npm run preview      # Forhåndsvis produksjonsbygg
-npm run lint         # Kjør ESLint
-npm run lint:fix     # Fiks ESLint-feil
+npm run dev            # Start dev server
+npm run build          # Bygg for produksjon
+npm run lint           # Kjør ESLint
 npm run generate-types # Generer TypeScript-typer fra API
 ```
 

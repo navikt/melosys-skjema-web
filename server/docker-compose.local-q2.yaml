@@ -1,0 +1,26 @@
+name: melosys-skjema-web-local-q2
+services:
+  express-server:
+    build:
+      context: .
+      dockerfile: "Dockerfile.dev"
+      secrets:
+        - npmrc
+    ports:
+      - "4000:4000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      NODE_ENV: "development"
+      ENV: "dev"
+      EXPRESS_PORT: "4000"
+      EXPRESS_HOST: "::"
+      API_URL: http://host.docker.internal:8089/api
+      LOCAL_TOKEN_FILE: "/app/.local-token"
+      USE_LOCAL_TOKEN: "true"
+    volumes:
+      - ./.local-token:/app/.local-token:ro
+
+secrets:
+  npmrc:
+    file: ~/.npmrc
