@@ -144,6 +144,3 @@ vite.config.ts.timestamp-*
 .idea
 /app/playwright-report/
 /app/test-results/
-
-# Local token for Q2 development
-.local-token

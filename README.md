@@ -42,35 +42,29 @@ Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 2. Åpne url i nettleser:
    https://melosys-skjema-web.intern.dev.nav.no/vite-on
 
-### Lokal utvikling mot lokal server
-
-Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api) kjører lokalt på http://localhost:8089 og at mock-oauth2-server i [melosys-docker-compose](https://github.com/navikt/melosys-docker-compose) kjører.
-1. Start express-server:
-   Lag en `.env`-fil i `server/` med innhold fra: https://github.com/nais/wonderwalled/blob/master/wonderwalled-idporten/local.env
-   ```bash
-   make local
-   ```
-
-2. Åpne url i nettleser:
-   http://localhost:4000/vite-on
-
-### Lokal utvikling mot lokal backend
+### Lokal utvikling mot lokal backend med Q2-token
 
 Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api) kjører lokalt på http://localhost:8089.
 
-Kjør `make` for å se tilgjengelige kommandoer:
-
 ```bash
-make                      # Vis tilgjengelige kommandoer
-make local-q2-new-token   # Hent Q2-token og start (første gang)
-make local-q2             # Start med eksisterende token
-make local                # Start med mock OAuth (krever mock-oauth2-server, se "Lokal utvikling mot lokal server")
-make stop                 # Stopp alle tjenester
+make get-token                    # Åpner nettleser for innlogging
+export LOCAL_TOKEN="din-token"    # Kopier access_token fra JSON
+make local-q2                     # Start server og app
 ```
 
 Åpne http://localhost:4000/vite-on
 
 **Merk:** Q2-token utløper etter ~1 time. Kjør `make get-token` for å hente nytt.
+
+### Lokal utvikling med mock OAuth (Wonderwall)
+
+Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api) kjører lokalt på http://localhost:8089 og at mock-oauth2-server i [melosys-docker-compose](https://github.com/navikt/melosys-docker-compose) kjører.
+
+```bash
+make local    # Start server og app med mock OAuth
+```
+
+Åpne http://localhost:4000/vite-on
 
 ### Kommandoer
 

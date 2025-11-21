@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 .PHONY: help local local-q2 local-q2-new-token get-token stop
 
 MOCK_OAUTH_CONTAINER := melosys-docker-compose-mock-oauth2-server-1
@@ -5,41 +6,66 @@ MOCK_OAUTH_CONTAINER := melosys-docker-compose-mock-oauth2-server-1
 help:
 	@echo "Tilgjengelige kommandoer:"
 	@echo "  make local              - Start med mock OAuth (Wonderwall)"
-	@echo "  make local-q2           - Start med ekte Q2-token (bruker eksisterende token)"
+	@echo "  make local-q2           - Start med ekte Q2-token (krever LOCAL_TOKEN env var)"
 	@echo "  make local-q2-new-token - Hent nytt Q2-token og start"
 	@echo "  make get-token          - Hent nytt Q2-token (åpner nettleser)"
 	@echo "  make stop               - Stopp alle tjenester"
 
 # Start with mock OAuth (Wonderwall)
 local:
-	@echo "Starting mock-oauth2-server..."
-	@docker start $(MOCK_OAUTH_CONTAINER) 2>/dev/null || \
-		(echo ""; echo "ERROR: Container '$(MOCK_OAUTH_CONTAINER)' finnes ikke."; \
-		echo "Kjør først: cd ~/nav/melosys-docker-compose && docker compose up -d mock-oauth2-server"; exit 1)
-	@echo "Starting express + wonderwall..."
-	@cd server && docker compose up --build -d
-	@cd app && npm run dev &
 	@echo ""
-	@echo "Open http://localhost:4000/vite-on"
+	@printf "\033[36m⚡ Starting melosys-skjema-web (Wonderwall mode)\033[0m\n"
+	@echo ""
+	@printf "  \033[33m◐\033[0m Starting mock-oauth...  \r" && \
+		docker start $(MOCK_OAUTH_CONTAINER) 2>/dev/null && \
+		printf "  \033[32m✓\033[0m Mock-oauth running     \n" || \
+		(printf "  \033[31m✗\033[0m Mock-oauth failed      \n"; \
+		echo ""; echo "    Container '$(MOCK_OAUTH_CONTAINER)' finnes ikke."; \
+		echo "    Kjør først: cd ~/nav/melosys-docker-compose && docker compose up -d mock-oauth2-server"; exit 1)
+	@printf "  \033[33m◐\033[0m Building server...      \r" && \
+		cd server && docker compose build >/dev/null 2>&1 && \
+		printf "  \033[32m✓\033[0m Server built           \n"
+	@printf "  \033[33m◐\033[0m Starting server...      \r" && \
+		cd server && docker compose up -d >/dev/null 2>&1 && \
+		printf "  \033[32m✓\033[0m Server running         \n"
+	@echo ""
+	@printf "  \033[1m→\033[0m Open \033[4mhttp://localhost:4000/vite-on\033[0m\n"
+	@printf "  \033[2mPress CTRL+C to stop\033[0m\n"
+	@echo ""
+	@trap 'printf "\n\033[33m◐\033[0m Stopping...\r"; cd server && docker compose down -t 2 >/dev/null 2>&1; printf "\033[32m✓\033[0m Stopped        \n"; exit 0' INT; cd app && npm run dev --silent 2>&1 | grep -v "^$$"
 
-# Start with real Q2 token - requires melosys-skjema-api on localhost:8089
-local-q2: server/.local-token
-	@echo "Starting with Q2 token..."
-	@cd server && docker compose -f docker-compose.local-q2.yaml up --build -d
-	@cd app && npm run dev &
+# Start with real Q2 token - requires LOCAL_TOKEN env var and melosys-skjema-api on localhost:8089
+local-q2:
+ifndef LOCAL_TOKEN
+	@echo "ERROR: LOCAL_TOKEN er ikke satt."
 	@echo ""
-	@echo "Open http://localhost:4000/vite-on"
+	@echo "1. Kjør: make get-token"
+	@echo "2. Kopier access_token fra JSON-responsen"
+	@echo "3. Kjør: export LOCAL_TOKEN=\"din-token\""
+	@echo "4. Kjør: make local-q2"
+	@exit 1
+endif
+	@echo ""
+	@printf "\033[36m⚡ Starting melosys-skjema-web (Q2 mode)\033[0m\n"
+	@echo ""
+	@printf "  \033[33m◐\033[0m Building server...  \r" && \
+		cd server && docker compose -f docker-compose.local-q2.yaml build >/dev/null 2>&1 && \
+		printf "  \033[32m✓\033[0m Server built       \n"
+	@printf "  \033[33m◐\033[0m Starting server...  \r" && \
+		cd server && docker compose -f docker-compose.local-q2.yaml up -d >/dev/null 2>&1 && \
+		printf "  \033[32m✓\033[0m Server running     \n"
+	@echo ""
+	@printf "  \033[1m→\033[0m Open \033[4mhttp://localhost:4000/vite-on\033[0m\n"
+	@printf "  \033[2mPress CTRL+C to stop\033[0m\n"
+	@echo ""
+	@trap 'printf "\n\033[33m◐\033[0m Stopping...\r"; cd server && docker compose -f docker-compose.local-q2.yaml down -t 2 >/dev/null 2>&1; printf "\033[32m✓\033[0m Stopped        \n"; exit 0' INT; cd app && npm run dev --silent 2>&1 | grep -v "^$$"
 
 # Get new token and start
-local-q2-new-token: get-token local-q2
+local-q2-new-token:
+	@cd server && . ./scripts/get-q2-token.sh && cd .. && $(MAKE) local-q2
 
-# Get Q2 token (opens browser for login)
+# Open browser to get Q2 token
 get-token:
-	@cd server && ./scripts/get-q2-token.sh
-
-# Check if token exists, prompt to get one if not
-server/.local-token:
-	@echo "No token found. Running get-token first..."
 	@cd server && ./scripts/get-q2-token.sh
 
 # Stop all containers and processes

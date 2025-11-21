@@ -1,14 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-TOKEN_URL="https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teammelosys:melosys-skjema-api"
-TOKEN_FILE="$(dirname "$0")/../.local-token"
+# Colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
 
-echo "Opening browser for Q2 login..."
-xdg-open "$TOKEN_URL" 2>/dev/null || open "$TOKEN_URL" 2>/dev/null
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Run Node.js script - prompts go to stderr, token to stdout
+TOKEN=$(node "$SCRIPT_DIR/get-q2-token.cjs")
+
+if [[ -z "$TOKEN" ]]; then
+    echo -e "${RED}✗ No token received${NC}"
+    exit 1
+fi
+
+export LOCAL_TOKEN="$TOKEN"
 echo ""
-echo "After logging in, copy the 'access_token' value from the JSON and paste it here:"
-read -r TOKEN
-
-echo "$TOKEN" > "$TOKEN_FILE"
-echo "Token saved to .local-token"
+echo -e "${GREEN}${BOLD}✓ Token extracted and set!${NC}"
+echo -e "${CYAN}  Token expires in ~1 hour${NC}"

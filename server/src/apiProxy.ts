@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 import { ClientRequest } from "node:http";
 
 import { getToken, requestOboToken } from "@navikt/oasis";
@@ -11,14 +10,7 @@ import { requireEnvironment } from "./utils.js";
 const useLocalToken = process.env.USE_LOCAL_TOKEN === "true";
 
 function getLocalToken(): string | null {
-  const tokenFile = process.env.LOCAL_TOKEN_FILE;
-  if (!tokenFile) return null;
-  try {
-    return readFileSync(tokenFile, "utf-8").trim();
-  } catch (e) {
-    logger.error("Could not read local token file", e as Error);
-    return null;
-  }
+  return process.env.LOCAL_TOKEN || null;
 }
 
 type ProxyOptions = {
