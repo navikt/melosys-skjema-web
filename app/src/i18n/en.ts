@@ -399,20 +399,72 @@ export const en = {
       byttKontekstAriaLabel: "Change representation and return to landing page",
     },
     oversiktDegSelv: {
-      tittel: "Overview: Yourself",
-      underUtvikling: "This page is under development (MELOSYS-7723).",
+      tittel: "Your overview page",
+      infoBullet1: "You can view previous and ongoing applications",
+      infoBullet2: "Here you can start a new application for yourself",
     },
     oversiktArbeidsgiver: {
-      tittel: "Overview: Employer",
-      underUtvikling: "This page is under development (MELOSYS-7723).",
+      tittel: "This is the employer's overview page",
+      infoBullet1: "You can view previous and ongoing applications",
+      infoBullet2:
+        "Here you can see an overview of accesses and mandates that have been granted to you",
+      infoBullet3:
+        "You can submit applications on behalf of the employer and possibly the employee",
+      infoBullet4:
+        "If you have a mandate from an employee, you must submit the application for them at the same time",
     },
     oversiktRadgiver: {
-      tittel: "Overview: Advisor",
-      underUtvikling: "This page is under development (MELOSYS-7723).",
+      tittel: "This is the employer's overview page",
+      infoBullet1: "You can view previous and ongoing applications",
+      infoBullet2:
+        "Here you can see an overview of accesses and mandates that have been granted to you",
+      infoBullet3:
+        "You can submit applications on behalf of the employer and possibly the employee",
+      infoBullet4:
+        "If you have a mandate from an employee, you must submit the application for them at the same time",
     },
     oversiktAnnenPerson: {
       tittel: "Overview: Another person",
-      underUtvikling: "This page is under development (MELOSYS-7723).",
+      infoBullet1: "You can view previous and ongoing applications",
+      infoBullet2:
+        "Here you can start a new application on behalf of the person",
+    },
+    oversiktFelles: {
+      utkastTittel: "DRAFTS",
+      utkastBeskrivelse: "Applications you have started but not yet submitted",
+      soknadStarterTittel: "Who are you applying on behalf of?",
+      soknadStarterInfoDegSelv:
+        "When applying for yourself, we need information about the employer and you as an employee.",
+      soknadStarterInfo:
+        "We need information about both the employer and the employee.",
+      soknadStarterFullmaktInfo1:
+        "In the list below, you will find employees who have granted you a mandate on Nav.no.",
+      soknadStarterFullmaktInfo2:
+        "If you have a mandate from an employee, you must complete the entire application at once.",
+      soknadStarterFullmaktInfo3:
+        "If you do not have a mandate from an employee, you should only provide the employee's name and birth/d-number.",
+      arbeidsgiverTittel: "Employer",
+      arbeidsgiverVelgerLabel: "Select employer (Organization number or name)",
+      arbeidsgiverVelgerPlaceholder: "Select...",
+      arbeidsgiverVelgerInfo:
+        "The list contains all employers you have been granted access to in the Altinn form and employees who have granted you a mandate on Nav.no.",
+      arbeidstakerTittel: "Employee",
+      arbeidstakerMedFullmaktLabel:
+        "Select employee who has granted you a mandate",
+      arbeidstakerMedFullmaktPlaceholder: "Birth/d-number or name",
+      arbeidstakerMedFullmaktListePlaceholder: "+ Select...",
+      arbeidstakerUtenFullmaktTittel: "Posted employee",
+      arbeidstakerFnrLabel: "Birth or d-number",
+      arbeidstakerEtternavnLabel: "Last name",
+      arbeidstakerSokKnapp: "Search",
+      gaTilSkjemaKnapp: "Go to form for posted employee",
+      historikkTittel: "Previously submitted applications",
+      historikkSokPlaceholder: "Search...",
+      historikkKolonneVirksomhet: "Company",
+      historikkKolonneArbeidstaker: "Employee name",
+      historikkKolonneFnr: "Birth/D-number",
+      paginationForrige: "Previous",
+      paginationNeste: "Next",
     },
     velgRadgiverfirma: {
       tittel: "You are an advisor and use Nav on behalf of an advisory firm",
