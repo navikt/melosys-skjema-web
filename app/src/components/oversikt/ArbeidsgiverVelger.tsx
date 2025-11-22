@@ -1,7 +1,16 @@
-import { Box, Heading, TextField, UNSAFE_Combobox } from "@navikt/ds-react";
+import {
+  Alert,
+  Box,
+  Heading,
+  TextField,
+  UNSAFE_Combobox,
+} from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker";
+import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient";
 import type {
   Organisasjon,
   RepresentasjonskontekstDto,
@@ -9,6 +18,7 @@ import type {
 
 interface ArbeidsgiverVelgerProps {
   kontekst: RepresentasjonskontekstDto;
+  valgtArbeidsgiver?: Organisasjon;
   onArbeidsgiverValgt: (organisasjon: Organisasjon) => void;
 }
 
@@ -16,17 +26,35 @@ interface ArbeidsgiverVelgerProps {
  * Arbeidsgiver-velger komponent som håndterer tre modi:
  * 1. Read-only: Når arbeidsgiver allerede er valgt (ARBEIDSGIVER kontekst)
  * 2. OrganisasjonSoker: For DEG_SELV og ANNEN_PERSON
- * 3. Combobox: For RADGIVER (TODO: MELOSYS-7725 vil implementere lazy loading fra Altinn)
+ * 3. Combobox: For RADGIVER (eager loading fra Altinn)
+ *
  */
 export function ArbeidsgiverVelger({
   kontekst,
+  valgtArbeidsgiver,
   onArbeidsgiverValgt,
 }: ArbeidsgiverVelgerProps) {
   const { t } = useTranslation();
 
+  /**
+   * Eager loading: Henter arbeidsgivere umiddelbart når komponenten rendres
+   * Brukeren får beskjed med en gang hvis de ikke har tilganger
+   */
+  const {
+    data: arbeidsgivere,
+    isLoading,
+    isError,
+  } = useQuery({
+    ...listAltinnTilganger(),
+    enabled: kontekst.type === "RADGIVER",
+    retry: false,
+  });
+
   const arbeidsgiverErLast = () => {
     return kontekst.type === "ARBEIDSGIVER" && kontekst.arbeidsgiver;
   };
+
+  const visningArbeidsgiver = kontekst.arbeidsgiver || valgtArbeidsgiver;
 
   const skalSokeEtterArbeidsgiver = () => {
     return kontekst.type === "DEG_SELV" || kontekst.type === "ANNEN_PERSON";
@@ -36,17 +64,38 @@ export function ArbeidsgiverVelger({
     return kontekst.type === "RADGIVER";
   };
 
+  // Konverter OrganisasjonDto til Combobox options med søkbar tekst
+  const options = useMemo(() => {
+    if (!arbeidsgivere) return [];
+
+    return arbeidsgivere.map((org) => ({
+      label: `${org.navn} (${org.orgnr})`,
+      value: org.orgnr,
+    }));
+  }, [arbeidsgivere]);
+
+  const handleArbeidsgiverValgt = (value: string) => {
+    const valgtOrganisasjon = arbeidsgivere?.find((org) => org.orgnr === value);
+
+    if (valgtOrganisasjon) {
+      onArbeidsgiverValgt({
+        orgnr: valgtOrganisasjon.orgnr,
+        navn: valgtOrganisasjon.navn,
+      });
+    }
+  };
+
   return (
     <div>
       <Heading level="3" size="small" spacing>
         {t("oversiktFelles.arbeidsgiverTittel")}
       </Heading>
 
-      {arbeidsgiverErLast() ? (
+      {arbeidsgiverErLast() && visningArbeidsgiver ? (
         <TextField
           label={t("oversiktFelles.arbeidsgiverTittel")}
           readOnly
-          value={`${kontekst.arbeidsgiver!.navn}\nOrg.nr: ${kontekst.arbeidsgiver!.orgnr}`}
+          value={`${visningArbeidsgiver.navn}\nOrg.nr: ${visningArbeidsgiver.orgnr}`}
         />
       ) : (
         <Box borderColor="border-info" borderWidth="0 0 0 4" paddingInline="4">
@@ -57,15 +106,37 @@ export function ArbeidsgiverVelger({
             />
           ) : skalViseArbeidsgiverVelger() ? (
             <div className="max-w-lg w-full">
-              {/* TODO: MELOSYS-7725 vil implementere:
-                  - Lazy loading av arbeidsgivere fra Altinn
-                  - Søk på både navn og organisasjonsnummer
-                  - Validering av tilgang */}
-              <UNSAFE_Combobox
-                description={t("oversiktFelles.arbeidsgiverVelgerInfo")}
-                label={t("oversiktFelles.arbeidsgiverVelgerLabel")}
-                options={[]}
-              />
+              {!isLoading && !isError && options.length === 0 ? (
+                <Alert variant="warning">
+                  <Heading level="3" size="small" spacing>
+                    {t("oversiktFelles.ingenArbeidsgivereTittel")}
+                  </Heading>
+                  <p className="mb-4">
+                    {t("oversiktFelles.ingenArbeidsgivereInfo")}
+                  </p>
+                  {/* TODO: Legg til faktisk URL til Altinn-dokumentasjon */}
+                  <a className="navds-link" href="#">
+                    {t("oversiktFelles.ingenArbeidsgivereLenke")}
+                  </a>
+                </Alert>
+              ) : (
+                <>
+                  <UNSAFE_Combobox
+                    description={t("oversiktFelles.arbeidsgiverVelgerInfo")}
+                    isLoading={isLoading}
+                    label={t("oversiktFelles.arbeidsgiverVelgerLabel")}
+                    onToggleSelected={(value) => handleArbeidsgiverValgt(value)}
+                    options={options}
+                    shouldAutocomplete
+                    size="medium"
+                  />
+                  {isError && (
+                    <Alert className="mt-4" variant="error">
+                      {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}
+                    </Alert>
+                  )}
+                </>
+              )}
             </div>
           ) : null}
         </Box>

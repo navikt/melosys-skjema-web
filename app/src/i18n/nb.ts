@@ -473,6 +473,12 @@ export const nb = {
       arbeidsgiverVelgerPlaceholder: "Velg...",
       arbeidsgiverVelgerInfo:
         "Listen inneholder alle arbeidsgivere du har fått tilgang til i skjemaet i Altinn og arbeidstakere som har gitt deg fullmakt på Nav.no.",
+      ingenArbeidsgivereTittel: "Du har ingen arbeidsgivere tilgjengelig",
+      ingenArbeidsgivereInfo:
+        "For å kunne fylle ut søknad på vegne av en arbeidsgiver, må du ha fått delegert tilgang til virksomheten i Altinn.",
+      ingenArbeidsgivereLenke: "Les mer om hvordan du får tilgang i Altinn",
+      feilVedHentingAvArbeidsgivere:
+        "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
       arbeidstakerTittel: "Arbeidstaker",
       arbeidstakerMedFullmaktLabel:
         "Velg arbeidstaker du har fått fullmakt fra",
