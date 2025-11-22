@@ -48,11 +48,7 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
       type="button"
     >
       <LinkCard>
-        <Box
-          asChild
-          borderRadius="medium"
-          padding="2"
-        >
+        <Box asChild borderRadius="medium" padding="2">
           <LinkCard.Icon>
             <Icon aria-hidden fontSize="2rem" />
           </LinkCard.Icon>
