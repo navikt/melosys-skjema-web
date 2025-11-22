@@ -317,6 +317,7 @@ export const getOrganisasjonQuery = (orgnummer: string) =>
     queryFn: () => fetchOrganisasjon(orgnummer),
     staleTime: 60 * 60 * 1000,
     gcTime: 120 * 60 * 1000,
+    retry: false,
   });
 
 async function fetchOrganisasjon(
