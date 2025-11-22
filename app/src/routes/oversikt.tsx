@@ -8,11 +8,7 @@ import {
   SoknadStarter,
   UtkastListe,
 } from "~/components/oversikt";
-import type { Organisasjon } from "~/types/representasjon";
-import {
-  getRepresentasjonKontekst,
-  setRepresentasjonKontekst,
-} from "~/utils/sessionStorage";
+import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/oversikt")({
   component: OversiktRoute,
@@ -47,22 +43,12 @@ function OversiktRoute() {
   // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette.
   if (!kontekst) return null;
 
-  const handleArbeidsgiverValgt = (organisasjon: Organisasjon) => {
-    setRepresentasjonKontekst({
-      ...kontekst,
-      arbeidsgiver: organisasjon,
-    });
-  };
-
   return (
     <VStack gap="6">
       <KontekstBanner kontekst={kontekst} />
       <OversiktInfo kontekst={kontekst} />
       <UtkastListe kontekst={kontekst} />
-      <SoknadStarter
-        kontekst={kontekst}
-        onArbeidsgiverValgt={handleArbeidsgiverValgt}
-      />
+      <SoknadStarter kontekst={kontekst} />
       <InnsendteSoknaderTabell kontekst={kontekst} />
     </VStack>
   );

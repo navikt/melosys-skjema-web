@@ -448,6 +448,12 @@ export const en = {
       arbeidsgiverVelgerPlaceholder: "Select...",
       arbeidsgiverVelgerInfo:
         "The list contains all employers you have been granted access to in the Altinn form and employees who have granted you a mandate on Nav.no.",
+      ingenArbeidsgivereTittel: "You have no employers available",
+      ingenArbeidsgivereInfo:
+        "To fill out an application on behalf of an employer, you must have been delegated access to the company in Altinn.",
+      ingenArbeidsgivereLenke: "Read more about how to get access in Altinn",
+      feilVedHentingAvArbeidsgivere:
+        "An error occurred while fetching employers from Altinn. Please try again later.",
       arbeidstakerTittel: "Employee",
       arbeidstakerMedFullmaktLabel:
         "Select employee who has granted you a mandate",

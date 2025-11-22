@@ -6,6 +6,7 @@ import {
   Heading,
   VStack,
 } from "@navikt/ds-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type {
@@ -18,7 +19,6 @@ import { ArbeidstakerVelger } from "./ArbeidstakerVelger";
 
 interface SoknadStarterProps {
   kontekst: RepresentasjonskontekstDto;
-  onArbeidsgiverValgt: (organisasjon: Organisasjon) => void;
 }
 
 /**
@@ -27,14 +27,22 @@ interface SoknadStarterProps {
  *
  * TODO: MELOSYS-7727 vil implementere:
  * - Validering av at både arbeidsgiver og arbeidstaker er valgt
+ * - Form submission med valgt arbeidsgiver og arbeidstaker
  * - Navigering til søknadsskjema med kontekst
  * - Oppsummering av valgt kontekst
  */
-export function SoknadStarter({
-  kontekst,
-  onArbeidsgiverValgt,
-}: SoknadStarterProps) {
+export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
+  const [valgtArbeidsgiver, setValgtArbeidsgiver] = useState<
+    Organisasjon | undefined
+  >(kontekst.arbeidsgiver);
+
+  const handleSubmit = () => {
+    // TODO: MELOSYS-7727 - Implementer validering og navigering til skjema
+    // Med valgtArbeidsgiver og valgtArbeidstaker
+    // eslint-disable-next-line no-console -- Fjernes i MELOSYS-7727
+    console.log("Valgt arbeidsgiver:", valgtArbeidsgiver);
+  };
 
   return (
     <Box
@@ -72,12 +80,13 @@ export function SoknadStarter({
 
         <ArbeidsgiverVelger
           kontekst={kontekst}
-          onArbeidsgiverValgt={onArbeidsgiverValgt}
+          onArbeidsgiverValgt={setValgtArbeidsgiver}
+          valgtArbeidsgiver={valgtArbeidsgiver}
         />
 
         {kontekst.type !== "DEG_SELV" && <ArbeidstakerVelger />}
 
-        <Button className="w-fit" variant="primary">
+        <Button className="w-fit" onClick={handleSubmit} variant="primary">
           {t("oversiktFelles.gaTilSkjemaKnapp")}
         </Button>
       </VStack>

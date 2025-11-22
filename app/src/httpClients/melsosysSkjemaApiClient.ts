@@ -87,6 +87,9 @@ export function listAltinnTilganger() {
   return queryOptions({
     queryKey: ["ALTINNTILGANGER"],
     queryFn: fetchAltinnTilganger,
+    // Cache data siden Altinn-tilganger endres sjelden
+    staleTime: 5 * 60 * 1000, // 5 minutter
+    gcTime: 10 * 60 * 1000, // 10 minutter
   });
 }
 
@@ -94,7 +97,10 @@ async function fetchAltinnTilganger(): Promise<OrganisasjonDto[]> {
   const response = await fetch(`${API_PROXY_URL}/hentTilganger`);
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    // Kast feil med mer kontekst for bedre feilhåndtering
+    throw new Error(
+      `Kunne ikke hente Altinn-tilganger: ${response.status} ${response.statusText}`,
+    );
   }
 
   return response.json();
