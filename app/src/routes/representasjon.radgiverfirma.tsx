@@ -10,7 +10,7 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient";
@@ -52,29 +52,34 @@ function RadgiverfirmaRoute() {
     enabled: !!orgnummerToSok && orgnummerToSok.length === 9,
   });
 
-  const valgtFirma: Organisasjon | null = organisasjonQuery.data
-    ? {
-        orgnr: organisasjonQuery.data.juridiskEnhet.organisasjonsnummer,
-        navn:
-          organisasjonQuery.data.juridiskEnhet.navn?.sammensattnavn ||
-          organisasjonQuery.data.juridiskEnhet.navn?.navnelinje1 ||
-          "",
-      }
-    : null;
+  const valgtFirma = useMemo((): Organisasjon | null => {
+    if (!organisasjonQuery.data) return null;
 
-  const getErrorMessage = (): string | null => {
+    return {
+      orgnr: organisasjonQuery.data.juridiskEnhet.organisasjonsnummer,
+      navn:
+        organisasjonQuery.data.juridiskEnhet.navn?.sammensattnavn ||
+        organisasjonQuery.data.juridiskEnhet.navn?.navnelinje1 ||
+        "",
+    };
+  }, [organisasjonQuery.data]);
+
+  const errorMessage = useMemo((): string | null => {
     if (validationError) return validationError;
     if (!organisasjonQuery.isError) return null;
 
     const error = organisasjonQuery.error;
-    if (error.message.includes("429")) {
+    const statusMatch = error.message.match(/status:\s*(\d+)/);
+    const status = statusMatch ? statusMatch[1] : null;
+
+    if (status === "429") {
       return t("velgRadgiverfirma.rateLimitOverskredet");
     }
-    if (error.message.includes("404")) {
+    if (status === "404") {
       return t("velgRadgiverfirma.organisasjonIkkeFunnet");
     }
     return t("velgRadgiverfirma.feilVedSok");
-  };
+  }, [validationError, organisasjonQuery.isError, organisasjonQuery.error, t]);
 
   const handleSearch = (value: string): void => {
     const result = radgiverfirmaSchema.safeParse({
@@ -118,8 +123,6 @@ function RadgiverfirmaRoute() {
   };
 
   if (!kontekst) return null;
-
-  const errorMessage = getErrorMessage();
 
   return (
     <>
@@ -165,7 +168,7 @@ function RadgiverfirmaRoute() {
           <Button onClick={handleAvbryt} size="medium" variant="secondary">
             {t("felles.avbryt")}
           </Button>
-          <Button onClick={handleOk} size="medium">
+          <Button disabled={organisasjonQuery.isFetching} onClick={handleOk} size="medium">
             {t("velgRadgiverfirma.ok")}
           </Button>
         </HStack>
