@@ -168,7 +168,11 @@ function RadgiverfirmaRoute() {
           <Button onClick={handleAvbryt} size="medium" variant="secondary">
             {t("felles.avbryt")}
           </Button>
-          <Button disabled={organisasjonQuery.isFetching} onClick={handleOk} size="medium">
+          <Button
+            disabled={organisasjonQuery.isFetching}
+            onClick={handleOk}
+            size="medium"
+          >
             {t("velgRadgiverfirma.ok")}
           </Button>
         </HStack>
