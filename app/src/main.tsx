@@ -13,6 +13,7 @@ import { initReactI18next } from "react-i18next";
 
 import { resources } from "./i18n/i18n.ts";
 import { routeTree } from "./routeTree.gen";
+import type { RepresentasjonskontekstDto } from "./types/representasjon";
 
 // Initialize i18n with language from decorator cookie
 const getDecoratorLangFromCookie = () => {
@@ -40,6 +41,12 @@ setAvailableLanguages([
 ]);
 
 export const queryClient = new QueryClient();
+
+export interface RouterContext {
+  queryClient: QueryClient;
+  hideSiteTitle?: boolean;
+  kontekst?: RepresentasjonskontekstDto;
+}
 
 const router = createRouter({
   scrollRestoration: true,
