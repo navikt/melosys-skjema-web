@@ -425,20 +425,71 @@ export const nb = {
         "Bytt representasjon og gå tilbake til landingssiden",
     },
     oversiktDegSelv: {
-      tittel: "Oversikt: Deg selv",
-      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+      tittel: "Din oversiktsside",
+      infoBullet1: "Du kan se tidligere og pågående søknader",
+      infoBullet2: "Her kan du starte ny søknad for deg selv",
     },
     oversiktArbeidsgiver: {
-      tittel: "Oversikt: Arbeidsgiver",
-      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+      tittel: "Dette er arbeidsgivers oversiktsside",
+      infoBullet1: "Du kan se tidligere og pågående søknader",
+      infoBullet2:
+        "Her ser du oversikt over tilganger og fullmakter som er blitt gitt deg",
+      infoBullet3:
+        "Du kan sende inn søknader på vegne av arbeidsgiver og eventuelt arbeidstaker",
+      infoBullet4:
+        "Hvis du har fullmakt fra arbeidstaker skal du sende inn søknad for hen samtidig",
     },
     oversiktRadgiver: {
-      tittel: "Oversikt: Rådgiver",
-      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+      tittel: "Dette er rådgivers oversiktsside",
+      infoBullet1: "Du kan se tidligere og pågående søknader",
+      infoBullet2: "Her ser du oversikt over arbeidsgivere du kan representere",
+      infoBullet3:
+        "Du kan sende inn søknader på vegne av arbeidsgiver og eventuelt arbeidstaker",
+      infoBullet4:
+        "Hvis du har fullmakt fra arbeidstaker skal du sende inn søknad for hen samtidig",
     },
     oversiktAnnenPerson: {
       tittel: "Oversikt: Annen person",
-      underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
+      infoBullet1: "Du kan se tidligere og pågående søknader",
+      infoBullet2: "Her kan du starte ny søknad på vegne av personen",
+    },
+    oversiktFelles: {
+      utkastTittel: "UTKAST",
+      utkastBeskrivelse: "Påbegynte søknader du ikke har sendt inn ennå",
+      soknadStarterTittel: "Hvem skal du søke på vegne av?",
+      soknadStarterInfoDegSelv:
+        "Når du søker for deg selv, trenger vi informasjon om arbeidsgiver og deg selv som arbeidstaker.",
+      soknadStarterInfo:
+        "Vi trenger informasjon om både arbeidsgiver og arbeidstakeren.",
+      soknadStarterFullmaktInfo1:
+        "I listen under finner du arbeidstakere som har gitt deg fullmakt på Nav.no.",
+      soknadStarterFullmaktInfo2:
+        "Hvis du har fullmakt fra arbeidstaker, så skal du fylle ut hele søknaden under ett.",
+      soknadStarterFullmaktInfo3:
+        "Hvis du ikke har fullmakt fra arbeidstaker, skal du kun oppgi arbeidstakerens navn og fødsels-/d-nummer.",
+      arbeidsgiverTittel: "Arbeidsgiver",
+      arbeidsgiverVelgerLabel:
+        "Velg arbeidsgiver (Organisasjonsnummer eller -navn)",
+      arbeidsgiverVelgerPlaceholder: "Velg...",
+      arbeidsgiverVelgerInfo:
+        "Listen inneholder alle arbeidsgivere du har fått tilgang til i skjemaet i Altinn og arbeidstakere som har gitt deg fullmakt på Nav.no.",
+      arbeidstakerTittel: "Arbeidstaker",
+      arbeidstakerMedFullmaktLabel:
+        "Velg arbeidstaker du har fått fullmakt fra",
+      arbeidstakerMedFullmaktPlaceholder: "Fødsels-/d-nummer eller navn",
+      arbeidstakerMedFullmaktListePlaceholder: "+ Velg...",
+      arbeidstakerUtenFullmaktTittel: "Utsendt arbeidstaker",
+      arbeidstakerFnrLabel: "Fødsels- eller d-nummer",
+      arbeidstakerEtternavnLabel: "Etternavn",
+      arbeidstakerSokKnapp: "Søk",
+      gaTilSkjemaKnapp: "Gå til skjema for utsendt arbeidstaker",
+      historikkTittel: "Tidligere innsendte søknadsskjema",
+      historikkSokPlaceholder: "Søk...",
+      historikkKolonneVirksomhet: "Virksomhet",
+      historikkKolonneArbeidstaker: "Navn arbeidstaker",
+      historikkKolonneFnr: "Fnr/D-nummer",
+      paginationForrige: "Forrige",
+      paginationNeste: "Neste",
     },
     velgRadgiverfirma: {
       tittel: "Du er rådgiver og bruker Nav på vegne av et rådgivingsfirma",

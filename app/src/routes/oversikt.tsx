@@ -1,9 +1,18 @@
-import { Alert, Heading } from "@navikt/ds-react";
+import { VStack } from "@navikt/ds-react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
 
 import { KontekstBanner } from "~/components/KontekstBanner";
-import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
+import {
+  InnsendteSoknaderTabell,
+  OversiktInfo,
+  SoknadStarter,
+  UtkastListe,
+} from "~/components/oversikt";
+import type { Organisasjon } from "~/types/representasjon";
+import {
+  getRepresentasjonKontekst,
+  setRepresentasjonKontekst,
+} from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/oversikt")({
   component: OversiktRoute,
@@ -33,55 +42,28 @@ export const Route = createFileRoute("/oversikt")({
 });
 
 function OversiktRoute() {
-  const { t } = useTranslation();
   const { kontekst } = Route.useRouteContext();
 
   // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette.
   if (!kontekst) return null;
 
-  const getTittel = () => {
-    switch (kontekst.type) {
-      case "DEG_SELV": {
-        return t("oversiktDegSelv.tittel");
-      }
-      case "ARBEIDSGIVER": {
-        return t("oversiktArbeidsgiver.tittel");
-      }
-      case "RADGIVER": {
-        return t("oversiktRadgiver.tittel");
-      }
-      case "ANNEN_PERSON": {
-        return t("oversiktAnnenPerson.tittel");
-      }
-    }
-  };
-
-  const getUnderUtviklingMelding = () => {
-    switch (kontekst.type) {
-      case "DEG_SELV": {
-        return t("oversiktDegSelv.underUtvikling");
-      }
-      case "ARBEIDSGIVER": {
-        return t("oversiktArbeidsgiver.underUtvikling");
-      }
-      case "RADGIVER": {
-        return t("oversiktRadgiver.underUtvikling");
-      }
-      case "ANNEN_PERSON": {
-        return t("oversiktAnnenPerson.underUtvikling");
-      }
-    }
+  const handleArbeidsgiverValgt = (organisasjon: Organisasjon) => {
+    setRepresentasjonKontekst({
+      ...kontekst,
+      arbeidsgiver: organisasjon,
+    });
   };
 
   return (
-    <>
+    <VStack gap="6">
       <KontekstBanner kontekst={kontekst} />
-      <Heading className="mt-8" level="1" size="large">
-        {getTittel()}
-      </Heading>
-      <Alert className="mt-4" variant="info">
-        {getUnderUtviklingMelding()}
-      </Alert>
-    </>
+      <OversiktInfo kontekst={kontekst} />
+      <UtkastListe kontekst={kontekst} />
+      <SoknadStarter
+        kontekst={kontekst}
+        onArbeidsgiverValgt={handleArbeidsgiverValgt}
+      />
+      <InnsendteSoknaderTabell kontekst={kontekst} />
+    </VStack>
   );
 }
