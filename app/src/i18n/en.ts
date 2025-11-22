@@ -419,9 +419,6 @@ export const en = {
       informasjon:
         "In order to send letters to the correct address, we need information about which company you work as an advisor for.",
       sokPaVirksomhet: "Search for company (org.no.)",
-      organisasjonsnummer: "Organization number",
-      sok: "Search",
-      organisasjonsnummerMaVare9Siffer: "Organization number must be 9 digits",
       organisasjonIkkeFunnet: "No organization found with this number",
       feilVedSok: "Something went wrong with the search. Try again later.",
       rateLimitOverskredet:

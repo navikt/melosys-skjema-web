@@ -445,10 +445,6 @@ export const nb = {
       informasjon:
         "For å kunne sende brev til riktig adresse må vi ha informasjon om hvilken virksomhet du jobber som rådgiver for.",
       sokPaVirksomhet: "Søk på virksomhet (org.nr.)",
-      organisasjonsnummer: "Organisasjonsnummer",
-      sok: "Søk",
-      organisasjonsnummerMaVare9Siffer:
-        "Organisasjonsnummer må være 9 siffer",
       organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
       feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",
       rateLimitOverskredet:
