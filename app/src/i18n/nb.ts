@@ -442,8 +442,7 @@ export const nb = {
     oversiktRadgiver: {
       tittel: "Dette er rådgivers oversiktsside",
       infoBullet1: "Du kan se tidligere og pågående søknader",
-      infoBullet2:
-        "Her ser du oversikt over arbeidsgivere du kan representere",
+      infoBullet2: "Her ser du oversikt over arbeidsgivere du kan representere",
       infoBullet3:
         "Du kan sende inn søknader på vegne av arbeidsgiver og eventuelt arbeidstaker",
       infoBullet4:

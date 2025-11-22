@@ -14,7 +14,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootComponent() {
   const matches = useMatches();
-  const currentMatch = matches.length > 0 ? matches[matches.length - 1] : null;
+  const currentMatch = matches.length > 0 ? matches.at(-1) : null;
   const hideSiteTitle = currentMatch?.context?.hideSiteTitle ?? false;
 
   return (
