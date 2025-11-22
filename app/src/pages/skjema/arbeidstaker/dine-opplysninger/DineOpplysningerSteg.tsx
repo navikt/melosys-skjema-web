@@ -19,6 +19,7 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
+import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
@@ -50,10 +51,9 @@ function DineOpplysningerStegContent({
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakeren;
 
   const formMethods = useForm({
+    // @ts-expect-error - discriminated union literals vs DTO boolean types
     resolver: zodResolver(dineOpplysningerSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const {
@@ -134,7 +134,7 @@ function DineOpplysningerStegContent({
           {harNorskFodselsnummer && (
             <TextField
               className="mt-4"
-              error={translateError(errors.fodselsnummer?.message)}
+              error={translateError(getFieldError(errors, "fodselsnummer"))}
               label={t("dineOpplysningerSteg.dittFodselsnummerEllerDNummer")}
               size="medium"
               style={{ maxWidth: "160px" }}
@@ -147,14 +147,14 @@ function DineOpplysningerStegContent({
             <>
               <TextField
                 className="mt-4 max-w-md"
-                error={translateError(errors.fornavn?.message)}
+                error={translateError(getFieldError(errors, "fornavn"))}
                 label={t("dineOpplysningerSteg.dittFornavn")}
                 {...register("fornavn")}
               />
 
               <TextField
                 className="mt-4 max-w-md"
-                error={translateError(errors.etternavn?.message)}
+                error={translateError(getFieldError(errors, "etternavn"))}
                 label={t("dineOpplysningerSteg.dittEtternavn")}
                 {...register("etternavn")}
               />

@@ -35,9 +35,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const formMethods = useForm({
     resolver: zodResolver(arbeidstakerensLonnSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const { handleSubmit, setError, clearErrors, control } = formMethods;

@@ -36,10 +36,9 @@ export function VirksomhetINorgeStegContent({
   const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
 
   const formMethods = useForm({
+    // @ts-expect-error - discriminated union literals vs DTO boolean types
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const { handleSubmit, control } = formMethods;

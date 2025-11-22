@@ -2,44 +2,32 @@ import { z } from "zod";
 
 import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
+const harVertILonnetArbeidSchema = z.object({
+  harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.literal(true),
+  skalJobbeForFlereVirksomheter: z.boolean(),
+  virksomheterArbeidstakerJobberForIutsendelsesPeriode:
+    norskeOgUtenlandskeVirksomheterSchema.optional(),
+});
+
+const harIkkeVertILonnetArbeidSchema = z.object({
+  harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.literal(false),
+  aktivitetIMaanedenFoerUtsendingen: z
+    .string()
+    .min(
+      1,
+      "arbeidssituasjonSteg.duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid",
+    ),
+  skalJobbeForFlereVirksomheter: z.boolean(),
+  virksomheterArbeidstakerJobberForIutsendelsesPeriode:
+    norskeOgUtenlandskeVirksomheterSchema.optional(),
+});
+
 export const arbeidssituasjonSchema = z
-  .object({
-    harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean().optional(),
-    aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
-    skalJobbeForFlereVirksomheter: z.boolean().optional(),
-    virksomheterArbeidstakerJobberForIutsendelsesPeriode:
-      norskeOgUtenlandskeVirksomheterSchema.optional(),
-  })
+  .discriminatedUnion("harVaertEllerSkalVaereILonnetArbeidFoerUtsending", [
+    harVertILonnetArbeidSchema,
+    harIkkeVertILonnetArbeidSchema,
+  ])
   .superRefine((data, ctx) => {
-    if (data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending === undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "arbeidssituasjonSteg.duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending",
-        path: ["harVaertEllerSkalVaereILonnetArbeidFoerUtsending"],
-      });
-    }
-    if (data.skalJobbeForFlereVirksomheter === undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "arbeidssituasjonSteg.duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden",
-        path: ["skalJobbeForFlereVirksomheter"],
-      });
-    }
-
-    if (
-      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false &&
-      !data.aktivitetIMaanedenFoerUtsendingen?.trim()
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "arbeidssituasjonSteg.duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid",
-        path: ["aktivitetIMaanedenFoerUtsendingen"],
-      });
-    }
-
     if (data.skalJobbeForFlereVirksomheter === true) {
       const v = data.virksomheterArbeidstakerJobberForIutsendelsesPeriode;
       const hasAny =
@@ -58,12 +46,14 @@ export const arbeidssituasjonSchema = z
   })
   .transform((data) => ({
     harVaertEllerSkalVaereILonnetArbeidFoerUtsending:
-      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending!,
-    skalJobbeForFlereVirksomheter: data.skalJobbeForFlereVirksomheter!,
+      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending,
+    skalJobbeForFlereVirksomheter: data.skalJobbeForFlereVirksomheter,
+    // Clear activity description when user has been in paid work
     aktivitetIMaanedenFoerUtsendingen:
       data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
         ? undefined
         : data.aktivitetIMaanedenFoerUtsendingen,
+    // Clear companies list when user will not work for multiple companies
     virksomheterArbeidstakerJobberForIutsendelsesPeriode:
       data.skalJobbeForFlereVirksomheter
         ? data.virksomheterArbeidstakerJobberForIutsendelsesPeriode

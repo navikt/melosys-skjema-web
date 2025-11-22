@@ -12,6 +12,7 @@ import {
   ArbeidstakersSkjemaDto,
   TilleggsopplysningerDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { getFieldError } from "~/utils/formErrors.ts";
 
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
@@ -44,10 +45,9 @@ export function TilleggsopplysningerStegContent({
   const lagretSkjemadataForSteg = skjema.data?.tilleggsopplysninger;
 
   const formMethods = useForm({
+    // @ts-expect-error - discriminated union literals vs DTO boolean types
     resolver: zodResolver(tilleggsopplysningerSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const {
@@ -113,7 +113,7 @@ export function TilleggsopplysningerStegContent({
             <Textarea
               {...register("tilleggsopplysningerTilSoknad")}
               className="mt-4"
-              error={errors.tilleggsopplysningerTilSoknad?.message}
+              error={getFieldError(errors, "tilleggsopplysningerTilSoknad")}
               label={t(
                 "tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden",
               )}
