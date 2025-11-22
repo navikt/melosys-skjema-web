@@ -441,8 +441,22 @@ export const nb = {
       underUtvikling: "Denne siden er under utvikling (MELOSYS-7723).",
     },
     velgRadgiverfirma: {
-      tittel: "Velg rådgiverfirma",
-      underUtvikling: "Denne siden er under utvikling (MELOSYS-7722).",
+      tittel: "Du er rådgiver og bruker Nav på vegne av et rådgivingsfirma",
+      informasjon:
+        "For å kunne sende brev til riktig adresse må vi ha informasjon om hvilken virksomhet du jobber som rådgiver for.",
+      sokPaVirksomhet: "Søk på virksomhet (org.nr.)",
+      organisasjonsnummer: "Organisasjonsnummer",
+      sok: "Søk",
+      organisasjonsnummerMaVare9Siffer:
+        "Organisasjonsnummer må være 9 siffer",
+      organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
+      feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",
+      rateLimitOverskredet:
+        "Du har søkt for mange ganger. Vent et minutt før du prøver igjen.",
+      duMaSokeForstFeil:
+        "Du må søke etter og velge et rådgiverfirma før du kan fortsette",
+      valgtFirma: "Valgt rådgiverfirma",
+      ok: "Ok",
     },
     velgAnnenPerson: {
       tittel: "Velg person å representere",

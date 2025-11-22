@@ -415,8 +415,21 @@ export const en = {
       underUtvikling: "This page is under development (MELOSYS-7723).",
     },
     velgRadgiverfirma: {
-      tittel: "Select advisory firm",
-      underUtvikling: "This page is under development (MELOSYS-7722).",
+      tittel: "You are an advisor and use Nav on behalf of an advisory firm",
+      informasjon:
+        "In order to send letters to the correct address, we need information about which company you work as an advisor for.",
+      sokPaVirksomhet: "Search for company (org.no.)",
+      organisasjonsnummer: "Organization number",
+      sok: "Search",
+      organisasjonsnummerMaVare9Siffer: "Organization number must be 9 digits",
+      organisasjonIkkeFunnet: "No organization found with this number",
+      feilVedSok: "Something went wrong with the search. Try again later.",
+      rateLimitOverskredet:
+        "You have searched too many times. Wait a minute before trying again.",
+      duMaSokeForstFeil:
+        "You must search for and select an advisory firm before you can continue",
+      valgtFirma: "Selected advisory firm",
+      ok: "Ok",
     },
     velgAnnenPerson: {
       tittel: "Select person to represent",
