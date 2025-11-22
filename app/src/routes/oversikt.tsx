@@ -253,7 +253,7 @@ function OversiktRoute() {
                     onOrganisasjonValgt={handleArbeidsgiverValgt}
                   />
                 ) : skalViseArbeidsgiverVelger() ? (
-                  <div className="w-5/6">
+                  <div className="max-w-lg w-full">
                     <UNSAFE_Combobox
                       description={t("oversiktFelles.arbeidsgiverVelgerInfo")}
                       label={t("oversiktFelles.arbeidsgiverVelgerLabel")}
@@ -279,7 +279,7 @@ function OversiktRoute() {
               >
                 <VStack gap="6">
                   {/* Med fullmakt */}
-                  <div className="w-5/6">
+                  <div className="max-w-lg w-full">
                     <UNSAFE_Combobox
                       description={t(
                         "oversiktFelles.arbeidstakerMedFullmaktPlaceholder",

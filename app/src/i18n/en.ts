@@ -414,10 +414,10 @@ export const en = {
         "If you have a mandate from an employee, you must submit the application for them at the same time",
     },
     oversiktRadgiver: {
-      tittel: "This is the employer's overview page",
+      tittel: "This is the advisor's overview page",
       infoBullet1: "You can view previous and ongoing applications",
       infoBullet2:
-        "Here you can see an overview of accesses and mandates that have been granted to you",
+        "Here you can see an overview of employers you can represent",
       infoBullet3:
         "You can submit applications on behalf of the employer and possibly the employee",
       infoBullet4:
