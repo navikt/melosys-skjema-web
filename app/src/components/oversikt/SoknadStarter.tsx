@@ -11,11 +11,13 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad";
 import type {
   Organisasjon,
   Person,
   RepresentasjonskontekstDto,
 } from "~/types/representasjon";
+import { validerSoknadKontekst } from "~/utils/valideringUtils";
 
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger";
 import { ArbeidstakerVelger } from "./ArbeidstakerVelger";
@@ -41,22 +43,21 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const [valideringsfeil, setValideringsfeil] = useState<string[]>([]);
 
   const validerOgGaVidere = () => {
-    const feil: string[] = [];
+    const validering = validerSoknadKontekst(
+      kontekst,
+      valgtArbeidsgiver,
+      valgtArbeidstaker,
+    );
 
-    // Valider arbeidsgiver (kun for ARBEIDSGIVER og RADGIVER)
-    if (
-      (kontekst.type === "ARBEIDSGIVER" || kontekst.type === "RADGIVER") &&
-      !valgtArbeidsgiver
-    ) {
+    const feil: string[] = [];
+    if (validering.manglerArbeidsgiver) {
       feil.push(t("oversiktFelles.valideringManglerArbeidsgiver"));
     }
-
-    // Valider arbeidstaker (ikke for DEG_SELV)
-    if (kontekst.type !== "DEG_SELV" && !valgtArbeidstaker) {
+    if (validering.manglerArbeidstaker) {
       feil.push(t("oversiktFelles.valideringManglerArbeidstaker"));
     }
 
-    if (feil.length > 0) {
+    if (!validering.gyldig) {
       setValideringsfeil(feil);
       return;
     }
@@ -65,17 +66,19 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     setValideringsfeil([]);
 
     // Naviger til oppsummeringssiden med state
+    const navState: StartSoknadLocationState = {
+      arbeidsgiver: valgtArbeidsgiver,
+      arbeidstaker: valgtArbeidstaker,
+      kontekst: {
+        ...kontekst,
+        harFullmakt,
+      },
+    };
+
     void navigate({
       to: "/oversikt/start-soknad",
-
-      state: {
-        arbeidsgiver: valgtArbeidsgiver,
-        arbeidstaker: valgtArbeidstaker,
-        kontekst: {
-          ...kontekst,
-          harFullmakt,
-        },
-      } as never,
+      // TanStack Router krever eksplisitt type assertion for custom state
+      state: navState as never,
     });
   };
 

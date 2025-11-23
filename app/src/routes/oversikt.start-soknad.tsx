@@ -18,8 +18,9 @@ import type {
   Person,
   RepresentasjonskontekstDto,
 } from "~/types/representasjon";
+import { validerSoknadKontekst } from "~/utils/valideringUtils";
 
-interface StartSoknadLocationState {
+export interface StartSoknadLocationState {
   arbeidsgiver?: Organisasjon;
   arbeidstaker?: Person;
   kontekst: RepresentasjonskontekstDto;
@@ -42,15 +43,14 @@ export const Route = createFileRoute("/oversikt/start-soknad")({
     const arbeidsgiver = state.arbeidsgiver;
     const arbeidstaker = state.arbeidstaker;
 
-    // Redirect til oversikt hvis arbeidsgiver eller arbeidstaker mangler
-    if (
-      (kontekst.type === "ARBEIDSGIVER" || kontekst.type === "RADGIVER") &&
-      !arbeidsgiver
-    ) {
-      throw redirect({ to: "/oversikt" });
-    }
+    // Redirect til oversikt hvis validering feiler
+    const validering = validerSoknadKontekst(
+      kontekst,
+      arbeidsgiver,
+      arbeidstaker,
+    );
 
-    if (kontekst.type !== "DEG_SELV" && !arbeidstaker) {
+    if (!validering.gyldig) {
       throw redirect({ to: "/oversikt" });
     }
 
@@ -78,6 +78,11 @@ function StartSoknadRoute() {
       void navigate({
         to: `/skjema/${skjemaType}/${data.id}`,
       });
+    },
+    onError: (error) => {
+      // eslint-disable-next-line no-console -- Nyttig for debugging i utviklingsmiljø
+      console.error("Feil ved opprettelse av søknad:", error);
+      // Feilmeldingen vises automatisk via mutation.isError og Alert-komponenten
     },
   });
 
