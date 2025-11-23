@@ -29,6 +29,8 @@ export interface Person {
   fnr: string;
   /** Fullt navn på personen */
   navn: string;
+  /** Etternavn (kun nødvendig for PDL-verifisering uten fullmakt) */
+  etternavn?: string;
   /** Fødselsdato i ISO-format (valgfritt) */
   fodselsdato?: string;
 }

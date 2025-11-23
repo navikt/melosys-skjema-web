@@ -166,6 +166,7 @@ export function ArbeidstakerVelger({
           {
             fnr,
             navn: response.navn,
+            etternavn, // Etternavn fra brukerens input (for backend-validering)
             fodselsdato: response.fodselsdato,
           },
           false,
