@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SkjemaRouteImport } from './routes/skjema'
-import { Route as RollevelgerRouteImport } from './routes/rollevelger'
 import { Route as OversiktRouteImport } from './routes/oversikt'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SkjemaIndexRouteImport } from './routes/skjema.index'
@@ -45,11 +44,6 @@ import { Route as SkjemaArbeidsgiverIdArbeidsgiverenRouteImport } from './routes
 const SkjemaRoute = SkjemaRouteImport.update({
   id: '/skjema',
   path: '/skjema',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RollevelgerRoute = RollevelgerRouteImport.update({
-  id: '/rollevelger',
-  path: '/rollevelger',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OversiktRoute = OversiktRouteImport.update({
@@ -227,7 +221,6 @@ const SkjemaArbeidsgiverIdArbeidsgiverenRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/oversikt': typeof OversiktRouteWithChildren
-  '/rollevelger': typeof RollevelgerRoute
   '/skjema': typeof SkjemaRouteWithChildren
   '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/annen-person': typeof RepresentasjonAnnenPersonRoute
@@ -260,7 +253,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/rollevelger': typeof RollevelgerRoute
   '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/annen-person': typeof RepresentasjonAnnenPersonRoute
   '/representasjon/radgiverfirma': typeof RepresentasjonRadgiverfirmaRoute
@@ -292,7 +284,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/oversikt': typeof OversiktRouteWithChildren
-  '/rollevelger': typeof RollevelgerRoute
   '/skjema': typeof SkjemaRouteWithChildren
   '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/annen-person': typeof RepresentasjonAnnenPersonRoute
@@ -328,7 +319,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/oversikt'
-    | '/rollevelger'
     | '/skjema'
     | '/oversikt/start-soknad'
     | '/representasjon/annen-person'
@@ -361,7 +351,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/rollevelger'
     | '/oversikt/start-soknad'
     | '/representasjon/annen-person'
     | '/representasjon/radgiverfirma'
@@ -392,7 +381,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/oversikt'
-    | '/rollevelger'
     | '/skjema'
     | '/oversikt/start-soknad'
     | '/representasjon/annen-person'
@@ -427,7 +415,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OversiktRoute: typeof OversiktRouteWithChildren
-  RollevelgerRoute: typeof RollevelgerRoute
   SkjemaRoute: typeof SkjemaRouteWithChildren
   RepresentasjonAnnenPersonRoute: typeof RepresentasjonAnnenPersonRoute
   RepresentasjonRadgiverfirmaRoute: typeof RepresentasjonRadgiverfirmaRoute
@@ -440,13 +427,6 @@ declare module '@tanstack/react-router' {
       path: '/skjema'
       fullPath: '/skjema'
       preLoaderRoute: typeof SkjemaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rollevelger': {
-      id: '/rollevelger'
-      path: '/rollevelger'
-      fullPath: '/rollevelger'
-      preLoaderRoute: typeof RollevelgerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/oversikt': {
@@ -767,7 +747,6 @@ const SkjemaRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OversiktRoute: OversiktRouteWithChildren,
-  RollevelgerRoute: RollevelgerRoute,
   SkjemaRoute: SkjemaRouteWithChildren,
   RepresentasjonAnnenPersonRoute: RepresentasjonAnnenPersonRoute,
   RepresentasjonRadgiverfirmaRoute: RepresentasjonRadgiverfirmaRoute,

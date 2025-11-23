@@ -105,12 +105,6 @@ export const nb = {
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
       endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
     },
-    rollevelgerPage: {
-      hvemVilDuFylleUtSkjemaPaVegneAv:
-        "Hvem vil du fylle ut skjema på vegne av?",
-      degSelv: "Deg selv",
-      orgNr: "Org.nr.",
-    },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
       sokerDuForBarnUnder18SomSkalVaereMed:
@@ -539,7 +533,8 @@ export const nb = {
       radgiverfirmaTittel: "Rådgiverfirma",
       navn: "Navn",
       fodselsnummer: "Fødselsnummer / D-nummer",
-      duHarFullmakt: "Du har fullmakt til å fylle ut søknaden på vegne av arbeidstaker",
+      duHarFullmakt:
+        "Du har fullmakt til å fylle ut søknaden på vegne av arbeidstaker",
       startSoknadKnapp: "Start søknad",
       feilVedOpprettelse:
         "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",

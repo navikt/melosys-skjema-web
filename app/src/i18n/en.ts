@@ -107,12 +107,6 @@ export const en = {
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
     },
-    rollevelgerPage: {
-      hvemVilDuFylleUtSkjemaPaVegneAv:
-        "Who do you want to fill out the form for?",
-      degSelv: "Yourself",
-      orgNr: "Org. no.",
-    },
     familiemedlemmerSteg: {
       tittel: "Family Members",
       sokerDuForBarnUnder18SomSkalVaereMed:
@@ -512,7 +506,8 @@ export const en = {
       radgiverfirmaTittel: "Advisory firm",
       navn: "Name",
       fodselsnummer: "Birth number / D-number",
-      duHarFullmakt: "You have mandate to complete the application on behalf of the employee",
+      duHarFullmakt:
+        "You have mandate to complete the application on behalf of the employee",
       startSoknadKnapp: "Start application",
       feilVedOpprettelse:
         "An error occurred while creating the application. Please try again later.",
