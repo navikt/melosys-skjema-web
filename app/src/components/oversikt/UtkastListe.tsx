@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient";
@@ -34,6 +34,7 @@ const formatDato = (dato: string) => {
  */
 export function UtkastListe({ kontekst }: UtkastListeProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery(getUtkastQuery(kontekst));
 
@@ -119,74 +120,72 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
           <VStack as="ul" className="list-none p-0" gap="2">
             {utkast.map((item) => (
               <li key={item.id}>
-                <Link
-                  className="no-underline"
-                  params={{ id: item.id }}
-                  to="/skjema/$id"
+                <Box
+                  borderRadius="medium"
+                  className="hover:bg-surface-action-subtle-hover border border-border-subtle transition-colors cursor-pointer"
+                  onClick={() =>
+                    navigate({ to: "/skjema/$id", params: { id: item.id } })
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      navigate({ to: "/skjema/$id", params: { id: item.id } });
+                    }
+                  }}
+                  padding="4"
+                  role="button"
+                  tabIndex={0}
                 >
-                  <Box
-                    borderRadius="medium"
-                    className="hover:bg-surface-action-subtle-hover border border-border-subtle transition-colors cursor-pointer"
-                    padding="4"
-                  >
-                    <HStack align="center" gap="4" justify="space-between">
-                      <VStack className="flex-1" gap="2">
-                        {kontekst.type !== "DEG_SELV" && (
-                          <div>
-                            <BodyShort
-                              className="text-text-subtle"
-                              size="small"
-                            >
-                              {t("oversiktFelles.utkastArbeidsgiver")}
-                            </BodyShort>
-                            <BodyShort weight="semibold">
-                              {item.arbeidsgiverNavn ||
-                                item.arbeidsgiverOrgnr ||
-                                "-"}
-                            </BodyShort>
-                          </div>
-                        )}
+                  <HStack align="center" gap="4" justify="space-between">
+                    <VStack className="flex-1" gap="2">
+                      {kontekst.type !== "DEG_SELV" && (
                         <div>
                           <BodyShort className="text-text-subtle" size="small">
-                            {t("oversiktFelles.utkastArbeidstaker")}
+                            {t("oversiktFelles.utkastArbeidsgiver")}
                           </BodyShort>
                           <BodyShort weight="semibold">
-                            {item.arbeidstakerFnrMaskert || "-"}
+                            {item.arbeidsgiverNavn && item.arbeidsgiverOrgnr
+                              ? `${item.arbeidsgiverNavn} (${item.arbeidsgiverOrgnr})`
+                              : item.arbeidsgiverNavn ||
+                                item.arbeidsgiverOrgnr ||
+                                "-"}
                           </BodyShort>
                         </div>
-                        <HStack gap="4">
-                          <div>
-                            <BodyShort
-                              className="text-text-subtle"
-                              size="small"
-                            >
-                              {t("oversiktFelles.utkastOpprettet")}
-                            </BodyShort>
-                            <BodyShort size="small">
-                              {formatDato(item.opprettetDato)}
-                            </BodyShort>
-                          </div>
-                          <div>
-                            <BodyShort
-                              className="text-text-subtle"
-                              size="small"
-                            >
-                              {t("oversiktFelles.utkastSistEndret")}
-                            </BodyShort>
-                            <BodyShort size="small">
-                              {formatDato(item.sistEndretDato)}
-                            </BodyShort>
-                          </div>
-                        </HStack>
-                      </VStack>
-                      <ChevronRightIcon
-                        aria-hidden
-                        className="text-text-subtle"
-                        fontSize="1.5rem"
-                      />
-                    </HStack>
-                  </Box>
-                </Link>
+                      )}
+                      <div>
+                        <BodyShort className="text-text-subtle" size="small">
+                          {t("oversiktFelles.utkastArbeidstaker")}
+                        </BodyShort>
+                        <BodyShort weight="semibold">
+                          {item.arbeidstakerFnrMaskert || "-"}
+                        </BodyShort>
+                      </div>
+                      <HStack gap="4">
+                        <div>
+                          <BodyShort className="text-text-subtle" size="small">
+                            {t("oversiktFelles.utkastOpprettet")}
+                          </BodyShort>
+                          <BodyShort size="small">
+                            {formatDato(item.opprettetDato)}
+                          </BodyShort>
+                        </div>
+                        <div>
+                          <BodyShort className="text-text-subtle" size="small">
+                            {t("oversiktFelles.utkastSistEndret")}
+                          </BodyShort>
+                          <BodyShort size="small">
+                            {formatDato(item.sistEndretDato)}
+                          </BodyShort>
+                        </div>
+                      </HStack>
+                    </VStack>
+                    <ChevronRightIcon
+                      aria-hidden
+                      className="text-text-subtle"
+                      fontSize="1.5rem"
+                    />
+                  </HStack>
+                </Box>
               </li>
             ))}
           </VStack>
