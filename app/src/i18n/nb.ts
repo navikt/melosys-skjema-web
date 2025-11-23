@@ -517,10 +517,6 @@ export const nb = {
       valgtFirma: "Valgt organisasjon",
       ok: "Ok",
     },
-    velgAnnenPerson: {
-      tittel: "Velg person å representere",
-      underUtvikling: "Denne siden er under utvikling (MELOSYS-7728).",
-    },
     oppsummeringSteg: {
       tittel: "Oppsummering",
     },

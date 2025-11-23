@@ -31,6 +31,7 @@ interface ArbeidstakerVelgerProps {
     harFullmakt?: boolean,
   ) => void;
   harFeil?: boolean;
+  visKunMedFullmakt?: boolean;
 }
 
 interface VerifisertPerson {
@@ -56,10 +57,12 @@ const arbeidstakerSchema = z.object({
  * 1. Med fullmakt: Combobox for valg fra liste av personer med fullmakt
  * 2. Uten fullmakt: Manuell input av fnr/d-nr og etternavn med verifisering
  *
+ * @param visKunMedFullmakt - Hvis true, skjuler "uten fullmakt" seksjonen (brukes for ANNEN_PERSON)
  */
 export function ArbeidstakerVelger({
   onArbeidstakerValgt,
   harFeil = false,
+  visKunMedFullmakt = false,
 }: ArbeidstakerVelgerProps) {
   const { t } = useTranslation();
   const [fnr, setFnr] = useState("");
@@ -94,7 +97,8 @@ export function ArbeidstakerVelger({
 
   const harValgtMedFullmakt = selectedPersonFnr !== undefined;
   const harValgtUtenFullmakt = verifisertPerson !== undefined;
-  const skalDisableMedFullmakt = harValgtUtenFullmakt || utenFullmaktHarFokus;
+  const skalDisableMedFullmakt =
+    !visKunMedFullmakt && (harValgtUtenFullmakt || utenFullmaktHarFokus);
   const skalDisableUtenFullmakt = harValgtMedFullmakt || medFullmaktHarFokus;
 
   const handleComboboxChange = (value: string) => {
@@ -282,14 +286,15 @@ export function ArbeidstakerVelger({
             </div>
           </div>
 
-          {/* Uten fullmakt */}
-          <div
-            className="navds-form-field navds-form-field--medium"
-            style={{
-              opacity: skalDisableUtenFullmakt ? 0.5 : 1,
-              pointerEvents: skalDisableUtenFullmakt ? "none" : "auto",
-            }}
-          >
+          {/* Uten fullmakt - skjules hvis visKunMedFullmakt er true */}
+          {!visKunMedFullmakt && (
+            <div
+              className="navds-form-field navds-form-field--medium"
+              style={{
+                opacity: skalDisableUtenFullmakt ? 0.5 : 1,
+                pointerEvents: skalDisableUtenFullmakt ? "none" : "auto",
+              }}
+            >
             <Label className="navds-form-field__label">
               {t("oversiktFelles.arbeidstakerUtenFullmaktTittel")}
             </Label>
@@ -364,6 +369,7 @@ export function ArbeidstakerVelger({
               )}
             </div>
           </div>
+          )}
         </VStack>
       </Box>
     </div>

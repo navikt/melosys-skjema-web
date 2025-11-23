@@ -25,10 +25,8 @@ export const Route = createFileRoute("/oversikt/")({
       throw redirect({ to: "/representasjon/radgiverfirma" });
     }
 
-    // Redirect til velg person hvis ANNEN_PERSON men ingen person valgt
-    if (kontekst.type === "ANNEN_PERSON" && !kontekst.arbeidstaker) {
-      throw redirect({ to: "/representasjon/annen-person" });
-    }
+    // ANNEN_PERSON kan gå til oversikt uten forhåndsvalgt arbeidstaker
+    // (velges på oversiktssiden)
 
     return {
       hideSiteTitle: true,

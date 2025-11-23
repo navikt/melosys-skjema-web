@@ -71,12 +71,9 @@ function StartSoknadRoute() {
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
     onSuccess: (data) => {
-      // Naviger til skjema - inngangen vil redirecte til første steg
-      const skjemaType =
-        kontekst.type === "DEG_SELV" ? "arbeidstaker" : "arbeidsgiver";
-
+      // Naviger til felles skjema-inngang som bestemmer type basert på backend-data
       void navigate({
-        to: `/skjema/${skjemaType}/${data.id}`,
+        to: `/skjema/${data.id}`,
       });
     },
     onError: (error) => {

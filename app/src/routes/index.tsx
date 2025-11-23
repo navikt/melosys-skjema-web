@@ -19,12 +19,7 @@ export const Route = createFileRoute("/")({
         throw redirect({ to: "/representasjon/radgiverfirma" });
       }
 
-      if (
-        eksisterendeKontekst.type === "ANNEN_PERSON" &&
-        !eksisterendeKontekst.arbeidstaker
-      ) {
-        throw redirect({ to: "/representasjon/annen-person" });
-      }
+      // ANNEN_PERSON går direkte til oversikt (velger arbeidstaker der)
 
       throw redirect({ to: "/oversikt" });
     }

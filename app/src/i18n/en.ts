@@ -493,10 +493,6 @@ export const en = {
       valgtFirma: "Selected advisory firm",
       ok: "Ok",
     },
-    velgAnnenPerson: {
-      tittel: "Select person to represent",
-      underUtvikling: "This page is under development (MELOSYS-7728).",
-    },
     startSoknad: {
       tittel: "Start application",
       beskrivelse:
