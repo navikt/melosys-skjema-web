@@ -175,53 +175,63 @@ export function ArbeidstakerVelger({
       <Box borderColor="border-info" borderWidth="0 0 0 4" paddingInline="4">
         <VStack gap="6">
           {/* Med fullmakt */}
-          <div className="max-w-lg w-full">
-            {harValgtMedFullmakt ? (
-              <Box
-                background="surface-default"
-                borderColor="border-subtle"
-                borderRadius="small"
-                borderWidth="1"
-                padding="2"
-              >
-                <HStack align="center" justify="space-between">
-                  <BodyShort>
-                    {
-                      personerMedFullmakt.find(
-                        (p) => p.fnr === selectedPersonFnr,
-                      )?.navn
-                    }{" "}
-                    - {selectedPersonFnr}
-                  </BodyShort>
-                  <Button
-                    icon={<XMarkIcon aria-hidden />}
-                    onClick={handleClearMedFullmakt}
-                    size="small"
-                    variant="tertiary"
-                  />
-                </HStack>
-              </Box>
-            ) : (
-              <UNSAFE_Combobox
-                description={t(
-                  "oversiktFelles.arbeidstakerMedFullmaktBeskrivelse",
-                )}
-                disabled={skalDisableMedFullmakt}
-                error={
-                  error ? "Kunne ikke laste personer med fullmakt" : undefined
-                }
-                isLoading={isLoading}
-                label={t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
-                onBlur={() => setMedFullmaktHarFokus(false)}
-                onFocus={() => setMedFullmaktHarFokus(true)}
-                onToggleSelected={handleComboboxChange}
-                options={comboboxOptions}
-                placeholder={t(
-                  "oversiktFelles.arbeidstakerMedFullmaktPlaceholder",
-                )}
-                shouldAutocomplete
-              />
-            )}
+          <div className="navds-form-field navds-form-field--medium">
+            <Label className="navds-form-field__label">
+              {t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+            </Label>
+            <BodyShort className="navds-form-field__description">
+              {t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
+            </BodyShort>
+
+            <div className="max-w-lg w-full">
+              {harValgtMedFullmakt ? (
+                <Box
+                  background="surface-default"
+                  borderColor="border-subtle"
+                  borderRadius="small"
+                  borderWidth="1"
+                  className="mt-2"
+                  padding="2"
+                >
+                  <HStack align="center" justify="space-between">
+                    <BodyShort>
+                      {
+                        personerMedFullmakt.find(
+                          (p) => p.fnr === selectedPersonFnr,
+                        )?.navn
+                      }{" "}
+                      - {selectedPersonFnr}
+                    </BodyShort>
+                    <Button
+                      icon={<XMarkIcon aria-hidden />}
+                      onClick={handleClearMedFullmakt}
+                      size="small"
+                      variant="tertiary"
+                    />
+                  </HStack>
+                </Box>
+              ) : (
+                // Vi bruker tom label="" fordi vi viser egen Label og BodyShort over
+                // for å sikre at label og beskrivelse er synlig både når Combobox
+                // vises og når valgt person vises i boks. Combobox har ikke innebygd clear-knapp.
+                <UNSAFE_Combobox
+                  disabled={skalDisableMedFullmakt}
+                  error={
+                    error ? "Kunne ikke laste personer med fullmakt" : undefined
+                  }
+                  isLoading={isLoading}
+                  label=""
+                  onBlur={() => setMedFullmaktHarFokus(false)}
+                  onFocus={() => setMedFullmaktHarFokus(true)}
+                  onToggleSelected={handleComboboxChange}
+                  options={comboboxOptions}
+                  placeholder={t(
+                    "oversiktFelles.arbeidstakerMedFullmaktPlaceholder",
+                  )}
+                  shouldAutocomplete
+                />
+              )}
+            </div>
           </div>
 
           {/* Uten fullmakt */}
