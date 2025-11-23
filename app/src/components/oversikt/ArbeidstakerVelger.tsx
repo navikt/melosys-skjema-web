@@ -62,6 +62,8 @@ export function ArbeidstakerVelger({
   const [selectedPersonFnr, setSelectedPersonFnr] = useState<
     string | undefined
   >();
+  const [medFullmaktHarFokus, setMedFullmaktHarFokus] = useState(false);
+  const [utenFullmaktHarFokus, setUtenFullmaktHarFokus] = useState(false);
 
   // Lazy loading av personer med fullmakt
   const {
@@ -80,6 +82,8 @@ export function ArbeidstakerVelger({
 
   const harValgtMedFullmakt = selectedPersonFnr !== undefined;
   const harValgtUtenFullmakt = verifisertPerson !== undefined;
+  const skalDisableMedFullmakt = harValgtUtenFullmakt || utenFullmaktHarFokus;
+  const skalDisableUtenFullmakt = harValgtMedFullmakt || medFullmaktHarFokus;
 
   const handleComboboxChange = (value: string) => {
     const person = personerMedFullmakt.find((p) => p.fnr === value);
@@ -98,6 +102,7 @@ export function ArbeidstakerVelger({
 
   const handleClearMedFullmakt = () => {
     setSelectedPersonFnr(undefined);
+    setMedFullmaktHarFokus(false);
     onArbeidstakerValgt?.();
   };
 
@@ -155,6 +160,7 @@ export function ArbeidstakerVelger({
     setFnr("");
     setEtternavn("");
     setVerifiseringFeil(null);
+    setUtenFullmaktHarFokus(false);
     onArbeidstakerValgt?.();
   };
 
@@ -200,12 +206,14 @@ export function ArbeidstakerVelger({
                 description={t(
                   "oversiktFelles.arbeidstakerMedFullmaktBeskrivelse",
                 )}
-                disabled={harValgtUtenFullmakt}
+                disabled={skalDisableMedFullmakt}
                 error={
                   error ? "Kunne ikke laste personer med fullmakt" : undefined
                 }
                 isLoading={isLoading}
                 label={t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+                onBlur={() => setMedFullmaktHarFokus(false)}
+                onFocus={() => setMedFullmaktHarFokus(true)}
                 onToggleSelected={handleComboboxChange}
                 options={comboboxOptions}
                 placeholder={t(
@@ -220,7 +228,7 @@ export function ArbeidstakerVelger({
           <div
             className="navds-form-field navds-form-field--medium"
             style={{
-              opacity: harValgtMedFullmakt ? 0.5 : 1,
+              opacity: skalDisableUtenFullmakt ? 0.5 : 1,
             }}
           >
             <Label className="navds-form-field__label">
@@ -255,20 +263,24 @@ export function ArbeidstakerVelger({
               <>
                 <HStack align="end" gap="2" wrap={false}>
                   <TextField
-                    disabled={harValgtMedFullmakt}
+                    disabled={skalDisableUtenFullmakt}
                     label={t("oversiktFelles.arbeidstakerFnrLabel")}
                     maxLength={11}
+                    onBlur={() => setUtenFullmaktHarFokus(false)}
                     onChange={(e) => setFnr(e.target.value)}
+                    onFocus={() => setUtenFullmaktHarFokus(true)}
                     value={fnr}
                   />
                   <TextField
-                    disabled={harValgtMedFullmakt}
+                    disabled={skalDisableUtenFullmakt}
                     label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
+                    onBlur={() => setUtenFullmaktHarFokus(false)}
                     onChange={(e) => setEtternavn(e.target.value)}
+                    onFocus={() => setUtenFullmaktHarFokus(true)}
                     value={etternavn}
                   />
                   <Button
-                    disabled={!kanVerifisere || harValgtMedFullmakt}
+                    disabled={!kanVerifisere || skalDisableUtenFullmakt}
                     loading={verifiserer}
                     onClick={handleVerifiser}
                     variant="secondary"
