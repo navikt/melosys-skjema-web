@@ -514,7 +514,7 @@ export const nb = {
         "Du har søkt for mange ganger. Vent et minutt før du prøver igjen.",
       duMaSokeForstFeil:
         "Du må søke etter og velge et rådgiverfirma før du kan fortsette",
-      valgtFirma: "Valgt rådgiverfirma",
+      valgtFirma: "Valgt organisasjon",
       ok: "Ok",
     },
     velgAnnenPerson: {
