@@ -14,6 +14,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
 
 import {
   getPersonerMedFullmaktQuery,
@@ -42,6 +43,16 @@ interface VerifisertPerson {
   fodselsdato: string;
 }
 
+// Zod schema for validering av arbeidstaker uten fullmakt
+const arbeidstakerSchema = z.object({
+  fnr: z.string().refine((val) => val.length === 11 && /^\d+$/.test(val), {
+    message: "oversiktFelles.arbeidstakerFnrUgyldig",
+  }),
+  etternavn: z.string().refine((val) => val.trim().length > 0, {
+    message: "oversiktFelles.arbeidstakerEtternavnTom",
+  }),
+});
+
 /**
  * Arbeidstaker-velger komponent med to valg:
  * 1. Med fullmakt: Combobox for valg fra liste av personer med fullmakt
@@ -54,6 +65,8 @@ export function ArbeidstakerVelger({
   const { t } = useTranslation();
   const [fnr, setFnr] = useState("");
   const [etternavn, setEtternavn] = useState("");
+  const [fnrError, setFnrError] = useState<string | null>(null);
+  const [etternavnError, setEtternavnError] = useState<string | null>(null);
   const [verifisertPerson, setVerifisertPerson] = useState<
     VerifisertPerson | undefined
   >();
@@ -90,6 +103,9 @@ export function ArbeidstakerVelger({
 
     if (person) {
       setSelectedPersonFnr(person.fnr);
+      // Clear validation errors from "uten fullmakt" section
+      setFnrError(null);
+      setEtternavnError(null);
       if (onArbeidstakerValgt) {
         onArbeidstakerValgt({
           fnr: person.fnr,
@@ -102,11 +118,31 @@ export function ArbeidstakerVelger({
 
   const handleClearMedFullmakt = () => {
     setSelectedPersonFnr(undefined);
+    setMedFullmaktHarFokus(false);
     onArbeidstakerValgt?.();
   };
 
   const handleVerifiser = async () => {
+    // Clear previous errors
+    setFnrError(null);
+    setEtternavnError(null);
     setVerifiseringFeil(null);
+
+    // Validate input with Zod
+    const validationResult = arbeidstakerSchema.safeParse({ fnr, etternavn });
+
+    if (!validationResult.success) {
+      // Show field-specific validation errors
+      for (const error of validationResult.error.issues) {
+        if (error.path[0] === "fnr") {
+          setFnrError(t(error.message));
+        } else if (error.path[0] === "etternavn") {
+          setEtternavnError(t(error.message));
+        }
+      }
+      return;
+    }
+
     setVerifiserer(true);
 
     try {
@@ -158,11 +194,12 @@ export function ArbeidstakerVelger({
     setVerifisertPerson(undefined);
     setFnr("");
     setEtternavn("");
+    setFnrError(null);
+    setEtternavnError(null);
     setVerifiseringFeil(null);
+    setUtenFullmaktHarFokus(false);
     onArbeidstakerValgt?.();
   };
-
-  const kanVerifisere = fnr.length === 11 && etternavn.length >= 2;
 
   return (
     <div>
@@ -275,30 +312,39 @@ export function ArbeidstakerVelger({
               </Box>
             ) : (
               <>
-                <HStack align="end" gap="2" wrap={false}>
+                <HStack align="start" gap="2" wrap={false}>
                   <TextField
+                    error={fnrError ?? undefined}
                     label={t("oversiktFelles.arbeidstakerFnrLabel")}
                     maxLength={11}
                     onBlur={() => setUtenFullmaktHarFokus(false)}
-                    onChange={(e) => setFnr(e.target.value)}
+                    onChange={(e) => {
+                      setFnr(e.target.value);
+                      setFnrError(null);
+                    }}
                     onFocus={() => setUtenFullmaktHarFokus(true)}
                     value={fnr}
                   />
                   <TextField
+                    error={etternavnError ?? undefined}
                     label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
                     onBlur={() => setUtenFullmaktHarFokus(false)}
-                    onChange={(e) => setEtternavn(e.target.value)}
+                    onChange={(e) => {
+                      setEtternavn(e.target.value);
+                      setEtternavnError(null);
+                    }}
                     onFocus={() => setUtenFullmaktHarFokus(true)}
                     value={etternavn}
                   />
-                  <Button
-                    disabled={!kanVerifisere}
-                    loading={verifiserer}
-                    onClick={handleVerifiser}
-                    variant="secondary"
-                  >
-                    {t("oversiktFelles.arbeidstakerSokKnapp")}
-                  </Button>
+                  <Box className="mt-8">
+                    <Button
+                      loading={verifiserer}
+                      onClick={handleVerifiser}
+                      variant="secondary"
+                    >
+                      {t("oversiktFelles.arbeidstakerSokKnapp")}
+                    </Button>
+                  </Box>
                 </HStack>
 
                 {verifiseringFeil && (

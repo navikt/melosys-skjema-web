@@ -466,6 +466,9 @@ export const en = {
       arbeidstakerFnrLabel: "Birth or d-number",
       arbeidstakerEtternavnLabel: "Last name",
       arbeidstakerSokKnapp: "Search",
+      arbeidstakerFnrTom: "Enter birth number",
+      arbeidstakerFnrUgyldig: "Invalid birth number",
+      arbeidstakerEtternavnTom: "Enter last name",
       arbeidstakerVerifiseringFeilet:
         "Person not found with the specified birth number and last name",
       arbeidstakerVerifisertLabel: "Person verified",

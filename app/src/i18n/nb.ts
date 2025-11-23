@@ -490,6 +490,9 @@ export const nb = {
       arbeidstakerFnrLabel: "Fødsels- eller d-nummer",
       arbeidstakerEtternavnLabel: "Etternavn",
       arbeidstakerSokKnapp: "Søk",
+      arbeidstakerFnrTom: "Skriv fødselsnummer",
+      arbeidstakerFnrUgyldig: "Ugyldig fødselsnummer",
+      arbeidstakerEtternavnTom: "Skriv etternavn",
       arbeidstakerVerifiseringFeilet:
         "Finner ikke person med oppgitt fødselsnummer og etternavn",
       arbeidstakerVerifisertLabel: "Person verifisert",
