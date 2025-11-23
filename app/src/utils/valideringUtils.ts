@@ -24,12 +24,10 @@ export function validerSoknadKontekst(
   arbeidsgiver?: Organisasjon,
   arbeidstaker?: Person,
 ): SoknadValideringsresultat {
-  // Valider arbeidsgiver (kun for ARBEIDSGIVER og RADGIVER)
-  const manglerArbeidsgiver =
-    (kontekst.type === "ARBEIDSGIVER" || kontekst.type === "RADGIVER") &&
-    !arbeidsgiver;
+  // Arbeidsgiver er påkrevd for alle representasjonstyper
+  const manglerArbeidsgiver = !arbeidsgiver;
 
-  // Valider arbeidstaker (ikke for DEG_SELV)
+  // Arbeidstaker er påkrevd for alle unntatt DEG_SELV (settes automatisk)
   const manglerArbeidstaker = kontekst.type !== "DEG_SELV" && !arbeidstaker;
 
   return {
