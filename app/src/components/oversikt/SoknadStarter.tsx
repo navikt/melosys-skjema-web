@@ -7,10 +7,12 @@ import {
   Heading,
   VStack,
 } from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { getUserInfo } from "~/httpClients/dekoratorenClient";
 import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad";
 import type {
   Organisasjon,
@@ -41,6 +43,19 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   >(kontekst.arbeidstaker);
   const [harFullmakt, setHarFullmakt] = useState<boolean>(kontekst.harFullmakt);
   const [valideringsfeil, setValideringsfeil] = useState<string[]>([]);
+
+  // Hent innlogget bruker for DEG_SELV-scenario
+  const { data: userInfo } = useQuery(getUserInfo());
+
+  // Automatisk sett arbeidstaker til innlogget bruker for DEG_SELV
+  useEffect(() => {
+    if (kontekst.type === "DEG_SELV" && userInfo && !valgtArbeidstaker) {
+      setValgtArbeidstaker({
+        fnr: userInfo.userId,
+        navn: userInfo.name,
+      });
+    }
+  }, [kontekst.type, userInfo, valgtArbeidstaker]);
 
   const validerOgGaVidere = () => {
     const validering = validerSoknadKontekst(

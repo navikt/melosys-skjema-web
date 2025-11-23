@@ -22,6 +22,8 @@ import { Route as RepresentasjonAnnenPersonRouteImport } from './routes/represen
 import { Route as OversiktStartSoknadRouteImport } from './routes/oversikt.start-soknad'
 import { Route as SkjemaArbeidstakerIndexRouteImport } from './routes/skjema.arbeidstaker.index'
 import { Route as SkjemaArbeidsgiverIndexRouteImport } from './routes/skjema.arbeidsgiver.index'
+import { Route as SkjemaArbeidstakerIdIndexRouteImport } from './routes/skjema.arbeidstaker.$id.index'
+import { Route as SkjemaArbeidsgiverIdIndexRouteImport } from './routes/skjema.arbeidsgiver.$id.index'
 import { Route as SkjemaArbeidstakerIdVedleggRouteImport } from './routes/skjema.arbeidstaker.$id.vedlegg'
 import { Route as SkjemaArbeidstakerIdUtenlandsoppdragetRouteImport } from './routes/skjema.arbeidstaker.$id.utenlandsoppdraget'
 import { Route as SkjemaArbeidstakerIdTilleggsopplysningerRouteImport } from './routes/skjema.arbeidstaker.$id.tilleggsopplysninger'
@@ -107,6 +109,18 @@ const SkjemaArbeidsgiverIndexRoute = SkjemaArbeidsgiverIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SkjemaArbeidsgiverRoute,
 } as any)
+const SkjemaArbeidstakerIdIndexRoute =
+  SkjemaArbeidstakerIdIndexRouteImport.update({
+    id: '/$id/',
+    path: '/$id/',
+    getParentRoute: () => SkjemaArbeidstakerRoute,
+  } as any)
+const SkjemaArbeidsgiverIdIndexRoute =
+  SkjemaArbeidsgiverIdIndexRouteImport.update({
+    id: '/$id/',
+    path: '/$id/',
+    getParentRoute: () => SkjemaArbeidsgiverRoute,
+  } as any)
 const SkjemaArbeidstakerIdVedleggRoute =
   SkjemaArbeidstakerIdVedleggRouteImport.update({
     id: '/$id/vedlegg',
@@ -241,6 +255,8 @@ export interface FileRoutesByFullPath {
   '/skjema/arbeidstaker/$id/tilleggsopplysninger': typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
   '/skjema/arbeidstaker/$id/utenlandsoppdraget': typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   '/skjema/arbeidstaker/$id/vedlegg': typeof SkjemaArbeidstakerIdVedleggRoute
+  '/skjema/arbeidsgiver/$id': typeof SkjemaArbeidsgiverIdIndexRoute
+  '/skjema/arbeidstaker/$id': typeof SkjemaArbeidstakerIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -269,6 +285,8 @@ export interface FileRoutesByTo {
   '/skjema/arbeidstaker/$id/tilleggsopplysninger': typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
   '/skjema/arbeidstaker/$id/utenlandsoppdraget': typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   '/skjema/arbeidstaker/$id/vedlegg': typeof SkjemaArbeidstakerIdVedleggRoute
+  '/skjema/arbeidsgiver/$id': typeof SkjemaArbeidsgiverIdIndexRoute
+  '/skjema/arbeidstaker/$id': typeof SkjemaArbeidstakerIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -302,6 +320,8 @@ export interface FileRoutesById {
   '/skjema/arbeidstaker/$id/tilleggsopplysninger': typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
   '/skjema/arbeidstaker/$id/utenlandsoppdraget': typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   '/skjema/arbeidstaker/$id/vedlegg': typeof SkjemaArbeidstakerIdVedleggRoute
+  '/skjema/arbeidsgiver/$id/': typeof SkjemaArbeidsgiverIdIndexRoute
+  '/skjema/arbeidstaker/$id/': typeof SkjemaArbeidstakerIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -336,6 +356,8 @@ export interface FileRouteTypes {
     | '/skjema/arbeidstaker/$id/tilleggsopplysninger'
     | '/skjema/arbeidstaker/$id/utenlandsoppdraget'
     | '/skjema/arbeidstaker/$id/vedlegg'
+    | '/skjema/arbeidsgiver/$id'
+    | '/skjema/arbeidstaker/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -364,6 +386,8 @@ export interface FileRouteTypes {
     | '/skjema/arbeidstaker/$id/tilleggsopplysninger'
     | '/skjema/arbeidstaker/$id/utenlandsoppdraget'
     | '/skjema/arbeidstaker/$id/vedlegg'
+    | '/skjema/arbeidsgiver/$id'
+    | '/skjema/arbeidstaker/$id'
   id:
     | '__root__'
     | '/'
@@ -396,6 +420,8 @@ export interface FileRouteTypes {
     | '/skjema/arbeidstaker/$id/tilleggsopplysninger'
     | '/skjema/arbeidstaker/$id/utenlandsoppdraget'
     | '/skjema/arbeidstaker/$id/vedlegg'
+    | '/skjema/arbeidsgiver/$id/'
+    | '/skjema/arbeidstaker/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -498,6 +524,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/skjema/arbeidsgiver/'
       preLoaderRoute: typeof SkjemaArbeidsgiverIndexRouteImport
+      parentRoute: typeof SkjemaArbeidsgiverRoute
+    }
+    '/skjema/arbeidstaker/$id/': {
+      id: '/skjema/arbeidstaker/$id/'
+      path: '/$id'
+      fullPath: '/skjema/arbeidstaker/$id'
+      preLoaderRoute: typeof SkjemaArbeidstakerIdIndexRouteImport
+      parentRoute: typeof SkjemaArbeidstakerRoute
+    }
+    '/skjema/arbeidsgiver/$id/': {
+      id: '/skjema/arbeidsgiver/$id/'
+      path: '/$id'
+      fullPath: '/skjema/arbeidsgiver/$id'
+      preLoaderRoute: typeof SkjemaArbeidsgiverIdIndexRouteImport
       parentRoute: typeof SkjemaArbeidsgiverRoute
     }
     '/skjema/arbeidstaker/$id/vedlegg': {
@@ -647,6 +687,7 @@ interface SkjemaArbeidsgiverRouteChildren {
   SkjemaArbeidsgiverIdTilleggsopplysningerRoute: typeof SkjemaArbeidsgiverIdTilleggsopplysningerRoute
   SkjemaArbeidsgiverIdUtenlandsoppdragetRoute: typeof SkjemaArbeidsgiverIdUtenlandsoppdragetRoute
   SkjemaArbeidsgiverIdVedleggRoute: typeof SkjemaArbeidsgiverIdVedleggRoute
+  SkjemaArbeidsgiverIdIndexRoute: typeof SkjemaArbeidsgiverIdIndexRoute
 }
 
 const SkjemaArbeidsgiverRouteChildren: SkjemaArbeidsgiverRouteChildren = {
@@ -667,6 +708,7 @@ const SkjemaArbeidsgiverRouteChildren: SkjemaArbeidsgiverRouteChildren = {
   SkjemaArbeidsgiverIdUtenlandsoppdragetRoute:
     SkjemaArbeidsgiverIdUtenlandsoppdragetRoute,
   SkjemaArbeidsgiverIdVedleggRoute: SkjemaArbeidsgiverIdVedleggRoute,
+  SkjemaArbeidsgiverIdIndexRoute: SkjemaArbeidsgiverIdIndexRoute,
 }
 
 const SkjemaArbeidsgiverRouteWithChildren =
@@ -682,6 +724,7 @@ interface SkjemaArbeidstakerRouteChildren {
   SkjemaArbeidstakerIdTilleggsopplysningerRoute: typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
   SkjemaArbeidstakerIdUtenlandsoppdragetRoute: typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   SkjemaArbeidstakerIdVedleggRoute: typeof SkjemaArbeidstakerIdVedleggRoute
+  SkjemaArbeidstakerIdIndexRoute: typeof SkjemaArbeidstakerIdIndexRoute
 }
 
 const SkjemaArbeidstakerRouteChildren: SkjemaArbeidstakerRouteChildren = {
@@ -700,6 +743,7 @@ const SkjemaArbeidstakerRouteChildren: SkjemaArbeidstakerRouteChildren = {
   SkjemaArbeidstakerIdUtenlandsoppdragetRoute:
     SkjemaArbeidstakerIdUtenlandsoppdragetRoute,
   SkjemaArbeidstakerIdVedleggRoute: SkjemaArbeidstakerIdVedleggRoute,
+  SkjemaArbeidstakerIdIndexRoute: SkjemaArbeidstakerIdIndexRoute,
 }
 
 const SkjemaArbeidstakerRouteWithChildren =

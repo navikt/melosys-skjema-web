@@ -71,7 +71,7 @@ function StartSoknadRoute() {
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
     onSuccess: (data) => {
-      // Naviger til riktig skjema basert på representasjonstype
+      // Naviger til skjema - inngangen vil redirecte til første steg
       const skjemaType =
         kontekst.type === "DEG_SELV" ? "arbeidstaker" : "arbeidsgiver";
 
