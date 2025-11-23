@@ -91,10 +91,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
         />
 
         {kontekst.type !== "DEG_SELV" && (
-          <ArbeidstakerVelger
-            onArbeidstakerValgt={setValgtArbeidstaker}
-            valgtArbeidstaker={valgtArbeidstaker}
-          />
+          <ArbeidstakerVelger onArbeidstakerValgt={setValgtArbeidstaker} />
         )}
 
         <Button className="w-fit" onClick={handleSubmit} variant="primary">

@@ -23,31 +23,25 @@ import {
 } from "~/httpClients/melsosysSkjemaApiClient";
 import type { Person } from "~/types/representasjon";
 
-/**
- * Formaterer ISO dato (yyyy-mm-dd) til norsk format (dd.mm.yyyy)
- */
-function formaterDato(isoDato: string): string {
-  const [year, month, day] = isoDato.split("-");
-  return `${day}.${month}.${year}`;
-}
+const FNR_LENGTH = 11;
 
 interface ArbeidstakerVelgerProps {
   onArbeidstakerValgt?: (arbeidstaker?: Person | undefined) => void;
-  valgtArbeidstaker?: Person;
 }
 
 interface VerifisertPerson {
   fnr: string;
   etternavn: string;
   navn: string;
-  fodselsdato: string;
 }
 
 // Zod schema for validering av arbeidstaker uten fullmakt
 const arbeidstakerSchema = z.object({
-  fnr: z.string().refine((val) => val.length === 11 && /^\d+$/.test(val), {
-    message: "oversiktFelles.arbeidstakerFnrUgyldig",
-  }),
+  fnr: z
+    .string()
+    .refine((val) => val.length === FNR_LENGTH && /^\d+$/.test(val), {
+      message: "oversiktFelles.arbeidstakerFnrUgyldig",
+    }),
   etternavn: z.string().refine((val) => val.trim().length > 0, {
     message: "oversiktFelles.arbeidstakerEtternavnTom",
   }),
@@ -152,12 +146,10 @@ export function ArbeidstakerVelger({
       });
 
       // Success response means person is verified
-      const formatertDato = formaterDato(response.fodselsdato);
       setVerifisertPerson({
         fnr,
         etternavn,
         navn: response.navn,
-        fodselsdato: formatertDato,
       });
       setVerifiseringFeil(null);
 
@@ -165,7 +157,7 @@ export function ArbeidstakerVelger({
         onArbeidstakerValgt({
           fnr,
           navn: response.navn,
-          fodselsdato: response.fodselsdato, // Send original ISO format to parent
+          fodselsdato: response.fodselsdato,
         });
       }
     } catch (error: unknown) {
@@ -289,34 +281,34 @@ export function ArbeidstakerVelger({
               {t("oversiktFelles.arbeidstakerUtenFullmaktBeskrivelse")}
             </BodyShort>
 
-            {verifisertPerson ? (
-              <Box
-                background="surface-default"
-                borderColor="border-subtle"
-                borderRadius="small"
-                borderWidth="1"
-                className="max-w-lg"
-                padding="2"
-              >
-                <HStack align="center" justify="space-between">
-                  <BodyShort>
-                    {verifisertPerson.navn} - {verifisertPerson.fnr}
-                  </BodyShort>
-                  <Button
-                    icon={<XMarkIcon aria-hidden />}
-                    onClick={handleFjernVerifisertPerson}
-                    size="small"
-                    variant="tertiary"
-                  />
-                </HStack>
-              </Box>
-            ) : (
+            <div className="max-w-lg w-full">
+              {verifisertPerson ? (
+                <Box
+                  background="surface-default"
+                  borderColor="border-subtle"
+                  borderRadius="small"
+                  borderWidth="1"
+                  padding="2"
+                >
+                  <HStack align="center" justify="space-between">
+                    <BodyShort>
+                      {verifisertPerson.navn} - {verifisertPerson.fnr}
+                    </BodyShort>
+                    <Button
+                      icon={<XMarkIcon aria-hidden />}
+                      onClick={handleFjernVerifisertPerson}
+                      size="small"
+                      variant="tertiary"
+                    />
+                  </HStack>
+                </Box>
+              ) : (
               <>
                 <HStack align="start" gap="2" wrap={false}>
                   <TextField
                     error={fnrError ?? undefined}
                     label={t("oversiktFelles.arbeidstakerFnrLabel")}
-                    maxLength={11}
+                    maxLength={FNR_LENGTH}
                     onBlur={() => setUtenFullmaktHarFokus(false)}
                     onChange={(e) => {
                       setFnr(e.target.value);
@@ -353,7 +345,8 @@ export function ArbeidstakerVelger({
                   </Alert>
                 )}
               </>
-            )}
+              )}
+            </div>
           </div>
         </VStack>
       </Box>
