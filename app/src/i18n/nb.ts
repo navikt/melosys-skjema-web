@@ -443,29 +443,38 @@ export const nb = {
         "Hvis du har fullmakt fra arbeidstaker skal du sende inn søknad for hen samtidig",
     },
     oversiktAnnenPerson: {
-      tittel: "Oversikt: Annen person",
-      infoBullet1: "Du kan se tidligere og pågående søknader",
-      infoBullet2: "Her kan du starte ny søknad på vegne av personen",
+      tittel: "Send søknad på vegne av en annen person",
+      infoBullet1:
+        "Du kan sende søknad hvis personen har gitt deg fullmakt på nav.no/fullmakt",
+      infoBullet2:
+        "Du fyller ut hele søknaden på vegne av personen du representerer",
+      infoBullet3: "Du kan se tidligere søknader og utkast",
     },
     oversiktFelles: {
       utkastTittel: "UTKAST",
       utkastBeskrivelse: "Påbegynte søknader du ikke har sendt inn ennå",
+      utkastFeilmelding:
+        "Kunne ikke hente påbegynte søknader. Prøv å laste siden på nytt.",
+      utkastArbeidsgiver: "Arbeidsgiver",
+      utkastArbeidstaker: "Arbeidstaker",
+      utkastOpprettet: "Opprettet",
+      utkastSistEndret: "Sist endret",
       soknadStarterTittel: "Hvem skal du søke på vegne av?",
       soknadStarterInfoDegSelv:
         "Når du søker for deg selv, trenger vi informasjon om arbeidsgiver og deg selv som arbeidstaker.",
       soknadStarterInfo:
         "Vi trenger informasjon om både arbeidsgiver og arbeidstakeren.",
       soknadStarterFullmaktInfo1:
-        "I listen under finner du arbeidstakere som har gitt deg fullmakt på Nav.no.",
+        "I listen under finner du arbeidstakere som har gitt deg fullmakt på nav.no/fullmakt.",
       soknadStarterFullmaktInfo2:
         "Hvis du har fullmakt fra arbeidstaker, så skal du fylle ut hele søknaden under ett.",
       soknadStarterFullmaktInfo3:
-        "Hvis du ikke har fullmakt fra arbeidstaker, skal du kun oppgi arbeidstakerens navn og fødsels-/d-nummer.",
+        "Hvis du ikke har fullmakt fra arbeidstaker, må personen først gi deg fullmakt gjennom nav.no/fullmakt.",
       arbeidsgiverTittel: "Arbeidsgiver",
       arbeidsgiverVelgerLabel: "Velg arbeidsgiver",
       arbeidsgiverVelgerPlaceholder: "Organisasjonsnummer eller -navn",
       arbeidsgiverVelgerInfo:
-        "Listen inneholder alle arbeidsgivere du har fått tilgang til i skjemaet i Altinn og arbeidstakere som har gitt deg fullmakt på Nav.no.",
+        "Listen inneholder alle arbeidsgivere du har fått tilgang til i skjemaet i Altinn og arbeidstakere som har gitt deg fullmakt på nav.no/fullmakt.",
       ingenArbeidsgivereTittel: "Du har ingen arbeidsgivere tilgjengelig",
       ingenArbeidsgivereInfo:
         "For å kunne fylle ut søknad på vegne av en arbeidsgiver, må du ha fått delegert tilgang til virksomheten i Altinn.",

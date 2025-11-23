@@ -1,26 +1,106 @@
-import { NotePencilDashIcon } from "@navikt/aksel-icons";
-import { BodyShort, ExpansionCard, Heading, HStack } from "@navikt/ds-react";
+import { ChevronRightIcon, NotePencilDashIcon } from "@navikt/aksel-icons";
+import {
+  BodyShort,
+  Box,
+  ExpansionCard,
+  Heading,
+  HStack,
+  Skeleton,
+  VStack,
+} from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient";
 import type { RepresentasjonskontekstDto } from "~/types/representasjon";
 
 interface UtkastListeProps {
   kontekst: RepresentasjonskontekstDto;
 }
 
+const formatDato = (dato: string) => {
+  return new Date(dato).toLocaleDateString("nb-NO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
 /**
  * Utkast/påbegynte søknader komponent.
- * TODO: MELOSYS-7724 vil implementere:
- * - Henting av utkast fra backend
- * - Filtrering basert på kontekst
- * - Navigering til fortsett søknad
+ * Viser liste over påbegynte søknader basert på kontekst.
+ * Skjules hvis det ikke finnes noen utkast.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function UtkastListe(_props: UtkastListeProps) {
+export function UtkastListe({ kontekst }: UtkastListeProps) {
   const { t } = useTranslation();
 
+  const { data, isLoading, isError } = useQuery(getUtkastQuery(kontekst));
+
+  // Skjul komponenten hvis det er 0 utkast (etter at data er lastet)
+  if (!isLoading && (!data || data.antall === 0)) {
+    return null;
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <ExpansionCard aria-label={t("oversiktFelles.utkastTittel")} size="small">
+        <ExpansionCard.Header className="rounded-small">
+          <HStack align="center" gap="2">
+            <NotePencilDashIcon
+              aria-hidden
+              className="text-surface-action"
+              fontSize="2rem"
+            />
+            <Heading level="3" size="small">
+              {t("oversiktFelles.utkastTittel")}
+            </Heading>
+          </HStack>
+        </ExpansionCard.Header>
+        <ExpansionCard.Content>
+          <Skeleton height={100} variant="rectangle" width="100%" />
+        </ExpansionCard.Content>
+      </ExpansionCard>
+    );
+  }
+
+  // Error state - vis likevel komponenten men med feilmelding
+  if (isError) {
+    return (
+      <ExpansionCard aria-label={t("oversiktFelles.utkastTittel")} size="small">
+        <ExpansionCard.Header className="rounded-small">
+          <HStack align="center" gap="2">
+            <NotePencilDashIcon
+              aria-hidden
+              className="text-surface-action"
+              fontSize="2rem"
+            />
+            <Heading level="3" size="small">
+              {t("oversiktFelles.utkastTittel")}
+            </Heading>
+          </HStack>
+        </ExpansionCard.Header>
+        <ExpansionCard.Content>
+          <BodyShort>{t("oversiktFelles.utkastFeilmelding")}</BodyShort>
+        </ExpansionCard.Content>
+      </ExpansionCard>
+    );
+  }
+
+  // Sikre at data finnes før vi bruker den
+  if (!data) {
+    return null;
+  }
+
+  const utkast = data.utkast;
+
   return (
-    <ExpansionCard aria-label={t("oversiktFelles.utkastTittel")} size="small">
+    <ExpansionCard
+      aria-label={`${t("oversiktFelles.utkastTittel")} (${data.antall})`}
+      defaultOpen
+      size="small"
+    >
       <ExpansionCard.Header className="rounded-small">
         <HStack align="center" gap="2">
           <NotePencilDashIcon
@@ -29,12 +109,89 @@ export function UtkastListe(_props: UtkastListeProps) {
             fontSize="2rem"
           />
           <Heading level="3" size="small">
-            {t("oversiktFelles.utkastTittel")}
+            {t("oversiktFelles.utkastTittel")} ({data.antall})
           </Heading>
         </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <BodyShort>{t("oversiktFelles.utkastBeskrivelse")}</BodyShort>
+        <VStack gap="3">
+          <BodyShort>{t("oversiktFelles.utkastBeskrivelse")}</BodyShort>
+
+          <VStack as="ul" className="list-none p-0" gap="2">
+            {utkast.map((item) => (
+              <li key={item.id}>
+                <Link
+                  className="no-underline"
+                  params={{ id: item.id }}
+                  to="/skjema/$id"
+                >
+                  <Box
+                    borderRadius="medium"
+                    className="hover:bg-surface-action-subtle-hover border border-border-subtle transition-colors cursor-pointer"
+                    padding="4"
+                  >
+                    <HStack align="center" gap="4" justify="space-between">
+                      <VStack className="flex-1" gap="2">
+                        {kontekst.type !== "DEG_SELV" && (
+                          <div>
+                            <BodyShort
+                              className="text-text-subtle"
+                              size="small"
+                            >
+                              {t("oversiktFelles.utkastArbeidsgiver")}
+                            </BodyShort>
+                            <BodyShort weight="semibold">
+                              {item.arbeidsgiverNavn ||
+                                item.arbeidsgiverOrgnr ||
+                                "-"}
+                            </BodyShort>
+                          </div>
+                        )}
+                        <div>
+                          <BodyShort className="text-text-subtle" size="small">
+                            {t("oversiktFelles.utkastArbeidstaker")}
+                          </BodyShort>
+                          <BodyShort weight="semibold">
+                            {item.arbeidstakerFnrMaskert || "-"}
+                          </BodyShort>
+                        </div>
+                        <HStack gap="4">
+                          <div>
+                            <BodyShort
+                              className="text-text-subtle"
+                              size="small"
+                            >
+                              {t("oversiktFelles.utkastOpprettet")}
+                            </BodyShort>
+                            <BodyShort size="small">
+                              {formatDato(item.opprettetDato)}
+                            </BodyShort>
+                          </div>
+                          <div>
+                            <BodyShort
+                              className="text-text-subtle"
+                              size="small"
+                            >
+                              {t("oversiktFelles.utkastSistEndret")}
+                            </BodyShort>
+                            <BodyShort size="small">
+                              {formatDato(item.sistEndretDato)}
+                            </BodyShort>
+                          </div>
+                        </HStack>
+                      </VStack>
+                      <ChevronRightIcon
+                        aria-hidden
+                        className="text-text-subtle"
+                        fontSize="1.5rem"
+                      />
+                    </HStack>
+                  </Box>
+                </Link>
+              </li>
+            ))}
+          </VStack>
+        </VStack>
       </ExpansionCard.Content>
     </ExpansionCard>
   );

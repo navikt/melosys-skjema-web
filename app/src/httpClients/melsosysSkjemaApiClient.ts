@@ -21,6 +21,8 @@ import {
   UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import type { RepresentasjonskontekstDto } from "~/types/representasjon";
+import type { UtkastListeResponse } from "~/types/utkast";
 
 const API_PROXY_URL = "/api";
 
@@ -457,6 +459,54 @@ export async function opprettSoknadMedKontekst(
   if (!response.ok) {
     throw new Error(
       `Kunne ikke opprette søknad: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  return response.json();
+}
+
+// ============ Utkast ============
+
+/**
+ * Query for å hente utkast basert på representasjonskontekst.
+ * Returnerer kun søknader med status UTKAST.
+ *
+ * Backend filtrerer basert på:
+ * - DEG_SELV: Utkast for innlogget brukers eget fnr
+ * - ARBEIDSGIVER: Alle utkast for organisasjoner brukeren har tilgang til i Altinn
+ * - RADGIVER: Kun utkast for det spesifikke rådgiverfirmaet (krever radgiverfirmaOrgnr)
+ * - ANNEN_PERSON: Alle utkast for personer brukeren har fullmakt for
+ */
+export const getUtkastQuery = (kontekst: RepresentasjonskontekstDto) =>
+  queryOptions<UtkastListeResponse>({
+    queryKey: ["utkast", kontekst.type, kontekst.radgiverfirma?.orgnr],
+    queryFn: () => fetchUtkast(kontekst),
+    staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
+    gcTime: 5 * 60 * 1000, // 5 minutter
+    retry: false,
+  });
+
+async function fetchUtkast(
+  kontekst: RepresentasjonskontekstDto,
+): Promise<UtkastListeResponse> {
+  const params = new URLSearchParams();
+  params.append("representasjonstype", kontekst.type);
+
+  // For RADGIVER må vi sende med rådgiverfirmaets orgnr
+  if (kontekst.type === "RADGIVER" && kontekst.radgiverfirma?.orgnr) {
+    params.append("radgiverfirmaOrgnr", kontekst.radgiverfirma.orgnr);
+  }
+
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/utkast?${params.toString()}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Kunne ikke hente utkast: ${response.status} ${response.statusText}`,
     );
   }
 

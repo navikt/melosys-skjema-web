@@ -418,30 +418,38 @@ export const en = {
         "If you have a mandate from an employee, you must submit the application for them at the same time",
     },
     oversiktAnnenPerson: {
-      tittel: "Overview: Another person",
-      infoBullet1: "You can view previous and ongoing applications",
+      tittel: "Submit application on behalf of another person",
+      infoBullet1:
+        "You can submit an application if the person has granted you a mandate on nav.no/fullmakt",
       infoBullet2:
-        "Here you can start a new application on behalf of the person",
+        "You will complete the entire application on behalf of the person you represent",
+      infoBullet3: "You can view previous applications and drafts",
     },
     oversiktFelles: {
       utkastTittel: "DRAFTS",
       utkastBeskrivelse: "Applications you have started but not yet submitted",
+      utkastFeilmelding:
+        "Could not fetch started applications. Try reloading the page.",
+      utkastArbeidsgiver: "Employer",
+      utkastArbeidstaker: "Employee",
+      utkastOpprettet: "Created",
+      utkastSistEndret: "Last modified",
       soknadStarterTittel: "Who are you applying on behalf of?",
       soknadStarterInfoDegSelv:
         "When applying for yourself, we need information about the employer and you as an employee.",
       soknadStarterInfo:
         "We need information about both the employer and the employee.",
       soknadStarterFullmaktInfo1:
-        "In the list below, you will find employees who have granted you a mandate on Nav.no.",
+        "In the list below, you will find employees who have granted you a mandate on nav.no/fullmakt.",
       soknadStarterFullmaktInfo2:
         "If you have a mandate from an employee, you must complete the entire application at once.",
       soknadStarterFullmaktInfo3:
-        "If you do not have a mandate from an employee, you should only provide the employee's name and birth/d-number.",
+        "If you do not have a mandate from the employee, the person must first grant you a mandate through nav.no/fullmakt.",
       arbeidsgiverTittel: "Employer",
       arbeidsgiverVelgerLabel: "Select employer",
       arbeidsgiverVelgerPlaceholder: "Organization number or name",
       arbeidsgiverVelgerInfo:
-        "The list contains all employers you have been granted access to in the Altinn form and employees who have granted you a mandate on Nav.no.",
+        "The list contains all employers you have been granted access to in the Altinn form and employees who have granted you a mandate on nav.no/fullmakt.",
       ingenArbeidsgivereTittel: "You have no employers available",
       ingenArbeidsgivereInfo:
         "To fill out an application on behalf of an employer, you must have been delegated access to the company in Altinn.",
