@@ -34,16 +34,16 @@ export const Route = createFileRoute("/skjema/$id")({
         : "arbeidsgiver";
 
     // Redirect til riktig skjematype
-    if (skjemaType === "arbeidstaker") {
-      throw redirect({
-        to: "/skjema/arbeidstaker/$id",
-        params: { id },
-      });
-    } else {
-      throw redirect({
-        to: "/skjema/arbeidsgiver/$id",
-        params: { id },
-      });
-    }
+    const error =
+      skjemaType === "arbeidstaker"
+        ? redirect({
+            to: "/skjema/arbeidstaker/$id",
+            params: { id },
+          })
+        : redirect({
+            to: "/skjema/arbeidsgiver/$id",
+            params: { id },
+          });
+    throw error;
   },
 });
