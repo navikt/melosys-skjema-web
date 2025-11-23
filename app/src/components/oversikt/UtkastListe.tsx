@@ -98,7 +98,6 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
   return (
     <ExpansionCard
       aria-label={`${t("oversiktFelles.utkastTittel")} (${data.antall})`}
-      defaultOpen
       size="small"
     >
       <ExpansionCard.Header className="rounded-small">

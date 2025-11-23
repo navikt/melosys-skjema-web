@@ -483,7 +483,7 @@ export const getUtkastQuery = (kontekst: RepresentasjonskontekstDto) =>
     queryFn: () => fetchUtkast(kontekst),
     staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
     gcTime: 5 * 60 * 1000, // 5 minutter
-    retry: false,
+    retry: 1,
   });
 
 async function fetchUtkast(
@@ -505,9 +505,7 @@ async function fetchUtkast(
   );
 
   if (!response.ok) {
-    throw new Error(
-      `Kunne ikke hente utkast: ${response.status} ${response.statusText}`,
-    );
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
 
   return response.json();
