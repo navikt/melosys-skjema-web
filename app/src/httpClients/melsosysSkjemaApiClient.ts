@@ -407,3 +407,47 @@ export async function verifiserPerson(
 
   return response.json();
 }
+
+// ============ Opprett søknad med kontekst ============
+
+export interface OpprettSoknadMedKontekstRequest {
+  representasjonstype: string;
+  radgiverfirma?: {
+    orgnr: string;
+    navn: string;
+  };
+  arbeidsgiver?: {
+    orgnr: string;
+    navn: string;
+  };
+  arbeidstaker?: {
+    fnr: string;
+    navn: string;
+  };
+  harFullmakt: boolean;
+}
+
+export interface OpprettSoknadMedKontekstResponse {
+  id: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+}
+
+export async function opprettSoknadMedKontekst(
+  kontekst: OpprettSoknadMedKontekstRequest,
+): Promise<OpprettSoknadMedKontekstResponse> {
+  const response = await fetch(`${API_PROXY_URL}/skjema/opprett-med-kontekst`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(kontekst),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Kunne ikke opprette søknad: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  return response.json();
+}

@@ -1,4 +1,5 @@
 import {
+  Alert,
   BodyLong,
   BodyShort,
   Box,
@@ -6,6 +7,7 @@ import {
   Heading,
   VStack,
 } from "@navikt/ds-react";
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -25,30 +27,86 @@ interface SoknadStarterProps {
 /**
  * Søknadsstarter-komponent som lar brukeren velge arbeidsgiver og arbeidstaker
  * før søknad startes.
- *
- * TODO: MELOSYS-7727 vil implementere:
- * - Validering av at både arbeidsgiver og arbeidstaker er valgt
- * - Form submission med valgt arbeidsgiver og arbeidstaker
- * - Navigering til søknadsskjema med kontekst
- * - Oppsummering av valgt kontekst
  */
 export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [valgtArbeidsgiver, setValgtArbeidsgiver] = useState<
     Organisasjon | undefined
   >(kontekst.arbeidsgiver);
   const [valgtArbeidstaker, setValgtArbeidstaker] = useState<
     Person | undefined
   >(kontekst.arbeidstaker);
+  const [harFullmakt, setHarFullmakt] = useState<boolean>(kontekst.harFullmakt);
+  const [valideringsfeil, setValideringsfeil] = useState<string[]>([]);
 
-  const handleSubmit = () => {
-    // TODO: MELOSYS-7727 - Implementer validering og navigering til skjema
-    // Med valgtArbeidsgiver og valgtArbeidstaker
-    // eslint-disable-next-line no-console -- Fjernes i MELOSYS-7727
-    console.log("Valgt arbeidsgiver:", valgtArbeidsgiver);
-    // eslint-disable-next-line no-console -- Fjernes i MELOSYS-7727
-    console.log("Valgt arbeidstaker:", valgtArbeidstaker);
+  const validerOgGaVidere = () => {
+    const feil: string[] = [];
+
+    // Valider arbeidsgiver (kun for ARBEIDSGIVER og RADGIVER)
+    if (
+      (kontekst.type === "ARBEIDSGIVER" || kontekst.type === "RADGIVER") &&
+      !valgtArbeidsgiver
+    ) {
+      feil.push(t("oversiktFelles.valideringManglerArbeidsgiver"));
+    }
+
+    // Valider arbeidstaker (ikke for DEG_SELV)
+    if (kontekst.type !== "DEG_SELV" && !valgtArbeidstaker) {
+      feil.push(t("oversiktFelles.valideringManglerArbeidstaker"));
+    }
+
+    if (feil.length > 0) {
+      setValideringsfeil(feil);
+      return;
+    }
+
+    // Clear valideringsfeil hvis alt er ok
+    setValideringsfeil([]);
+
+    // Naviger til oppsummeringssiden med state
+    void navigate({
+      to: "/oversikt/start-soknad",
+
+      state: {
+        arbeidsgiver: valgtArbeidsgiver,
+        arbeidstaker: valgtArbeidstaker,
+        kontekst: {
+          ...kontekst,
+          harFullmakt,
+        },
+      } as never,
+    });
   };
+
+  // Clear valideringsfeil når arbeidsgiver/arbeidstaker endres
+  const handleArbeidsgiverValgt = (organisasjon: Organisasjon) => {
+    setValgtArbeidsgiver(organisasjon);
+    // Fjern arbeidsgiver-feil hvis den finnes
+    setValideringsfeil((prev) =>
+      prev.filter(
+        (feil) => feil !== t("oversiktFelles.valideringManglerArbeidsgiver"),
+      ),
+    );
+  };
+
+  const handleArbeidstakerValgt = (person?: Person, medFullmakt?: boolean) => {
+    setValgtArbeidstaker(person);
+    setHarFullmakt(medFullmakt ?? false);
+    // Fjern arbeidstaker-feil hvis den finnes
+    setValideringsfeil((prev) =>
+      prev.filter(
+        (feil) => feil !== t("oversiktFelles.valideringManglerArbeidstaker"),
+      ),
+    );
+  };
+
+  const harArbeidsgiverFeil = valideringsfeil.includes(
+    t("oversiktFelles.valideringManglerArbeidsgiver"),
+  );
+  const harArbeidstakerFeil = valideringsfeil.includes(
+    t("oversiktFelles.valideringManglerArbeidstaker"),
+  );
 
   return (
     <Box
@@ -84,17 +142,38 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
           )}
         </div>
 
-        <ArbeidsgiverVelger
-          kontekst={kontekst}
-          onArbeidsgiverValgt={setValgtArbeidsgiver}
-          valgtArbeidsgiver={valgtArbeidsgiver}
-        />
+        <div>
+          <ArbeidsgiverVelger
+            harFeil={harArbeidsgiverFeil}
+            kontekst={kontekst}
+            onArbeidsgiverValgt={handleArbeidsgiverValgt}
+            valgtArbeidsgiver={valgtArbeidsgiver}
+          />
+        </div>
 
         {kontekst.type !== "DEG_SELV" && (
-          <ArbeidstakerVelger onArbeidstakerValgt={setValgtArbeidstaker} />
+          <div>
+            <ArbeidstakerVelger
+              harFeil={harArbeidstakerFeil}
+              onArbeidstakerValgt={handleArbeidstakerValgt}
+            />
+          </div>
         )}
 
-        <Button className="w-fit" onClick={handleSubmit} variant="primary">
+        {valideringsfeil.length > 0 && (
+          <Alert variant="error">
+            <Heading level="3" size="small" spacing>
+              {t("oversiktFelles.valideringFeilTittel")}
+            </Heading>
+            <ul className="list-disc pl-5">
+              {valideringsfeil.map((feil, index) => (
+                <li key={index}>{feil}</li>
+              ))}
+            </ul>
+          </Alert>
+        )}
+
+        <Button className="w-fit" onClick={validerOgGaVidere} variant="primary">
           {t("oversiktFelles.gaTilSkjemaKnapp")}
         </Button>
       </VStack>
