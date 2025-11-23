@@ -102,7 +102,6 @@ export function ArbeidstakerVelger({
 
   const handleClearMedFullmakt = () => {
     setSelectedPersonFnr(undefined);
-    setMedFullmaktHarFokus(false);
     onArbeidstakerValgt?.();
   };
 
@@ -160,7 +159,6 @@ export function ArbeidstakerVelger({
     setFnr("");
     setEtternavn("");
     setVerifiseringFeil(null);
-    setUtenFullmaktHarFokus(false);
     onArbeidstakerValgt?.();
   };
 
@@ -175,7 +173,13 @@ export function ArbeidstakerVelger({
       <Box borderColor="border-info" borderWidth="0 0 0 4" paddingInline="4">
         <VStack gap="6">
           {/* Med fullmakt */}
-          <div className="navds-form-field navds-form-field--medium">
+          <div
+            className="navds-form-field navds-form-field--medium"
+            style={{
+              opacity: skalDisableMedFullmakt ? 0.5 : 1,
+              pointerEvents: skalDisableMedFullmakt ? "none" : "auto",
+            }}
+          >
             <Label className="navds-form-field__label">
               {t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
             </Label>
@@ -215,7 +219,6 @@ export function ArbeidstakerVelger({
                 // for å sikre at label og beskrivelse er synlig både når Combobox
                 // vises og når valgt person vises i boks. Combobox har ikke innebygd clear-knapp.
                 <UNSAFE_Combobox
-                  disabled={skalDisableMedFullmakt}
                   error={
                     error ? "Kunne ikke laste personer med fullmakt" : undefined
                   }
@@ -239,6 +242,7 @@ export function ArbeidstakerVelger({
             className="navds-form-field navds-form-field--medium"
             style={{
               opacity: skalDisableUtenFullmakt ? 0.5 : 1,
+              pointerEvents: skalDisableUtenFullmakt ? "none" : "auto",
             }}
           >
             <Label className="navds-form-field__label">
@@ -273,7 +277,6 @@ export function ArbeidstakerVelger({
               <>
                 <HStack align="end" gap="2" wrap={false}>
                   <TextField
-                    disabled={skalDisableUtenFullmakt}
                     label={t("oversiktFelles.arbeidstakerFnrLabel")}
                     maxLength={11}
                     onBlur={() => setUtenFullmaktHarFokus(false)}
@@ -282,7 +285,6 @@ export function ArbeidstakerVelger({
                     value={fnr}
                   />
                   <TextField
-                    disabled={skalDisableUtenFullmakt}
                     label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
                     onBlur={() => setUtenFullmaktHarFokus(false)}
                     onChange={(e) => setEtternavn(e.target.value)}
@@ -290,7 +292,7 @@ export function ArbeidstakerVelger({
                     value={etternavn}
                   />
                   <Button
-                    disabled={!kanVerifisere || skalDisableUtenFullmakt}
+                    disabled={!kanVerifisere}
                     loading={verifiserer}
                     onClick={handleVerifiser}
                     variant="secondary"
