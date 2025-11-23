@@ -510,3 +510,57 @@ async function fetchUtkast(
 
   return response.json();
 }
+
+// ============ Innsendte søknader ============
+
+/**
+ * Query for å hente innsendte søknader basert på representasjonskontekst med paginering, søk og sortering.
+ *
+ * Backend filtrerer basert på:
+ * - DEG_SELV: Søknader hvor innlogget bruker er arbeidstaker
+ * - ARBEIDSGIVER: Søknader for organisasjoner brukeren har tilgang til i Altinn
+ * - RADGIVER: Søknader for det spesifikke rådgiverfirmaet
+ * - ANNEN_PERSON: Søknader for personer brukeren har fullmakt for
+ *
+ * VIKTIG: Bruker POST i stedet for GET for å unngå at søkeord logges i access logs.
+ */
+export const getInnsendteSoknaderQuery = (
+  request: import("~/types/innsendteSoknader").HentInnsendteSoknaderRequest,
+) =>
+  queryOptions<import("~/types/innsendteSoknader").InnsendteSoknaderResponse>({
+    queryKey: [
+      "innsendte-soknader",
+      request.representasjonstype,
+      request.side,
+      request.antall,
+      request.sok,
+      request.sortering,
+      request.retning,
+      request.radgiverfirmaOrgnr,
+    ],
+    queryFn: () => fetchInnsendteSoknader(request),
+    staleTime: 5 * 60 * 1000, // 5 minutter - innsendte søknader endres sjelden
+    gcTime: 5 * 60 * 1000, // 5 minutter
+    retry: 1,
+  });
+
+async function fetchInnsendteSoknader(
+  request: import("~/types/innsendteSoknader").HentInnsendteSoknaderRequest,
+): Promise<import("~/types/innsendteSoknader").InnsendteSoknaderResponse> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/innsendte`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
