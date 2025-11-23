@@ -29,7 +29,17 @@ export interface Person {
   fnr: string;
   /** Fullt navn på personen */
   navn: string;
-  /** Etternavn (kun nødvendig for PDL-verifisering uten fullmakt) */
+  /**
+   * Etternavn (påkrevd for PDL-verifisering og backend-validering når harFullmakt=false)
+   *
+   * Dette feltet er påkrevd i følgende tilfeller:
+   * - Ved verifisering av arbeidstaker uten fullmakt (PDL-sjekk)
+   * - Ved opprettelse av søknad med harFullmakt=false (backend-validering)
+   *
+   * Feltet kan utelates når:
+   * - Arbeidstaker er valgt via fullmaktsregister (harFullmakt=true)
+   * - For DEG_SELV-scenario hvor innlogget bruker er arbeidstaker
+   */
   etternavn?: string;
   /** Fødselsdato i ISO-format (valgfritt) */
   fodselsdato?: string;
