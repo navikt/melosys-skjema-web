@@ -303,48 +303,48 @@ export function ArbeidstakerVelger({
                   </HStack>
                 </Box>
               ) : (
-              <>
-                <HStack align="start" gap="2" wrap={false}>
-                  <TextField
-                    error={fnrError ?? undefined}
-                    label={t("oversiktFelles.arbeidstakerFnrLabel")}
-                    maxLength={FNR_LENGTH}
-                    onBlur={() => setUtenFullmaktHarFokus(false)}
-                    onChange={(e) => {
-                      setFnr(e.target.value);
-                      setFnrError(null);
-                    }}
-                    onFocus={() => setUtenFullmaktHarFokus(true)}
-                    value={fnr}
-                  />
-                  <TextField
-                    error={etternavnError ?? undefined}
-                    label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
-                    onBlur={() => setUtenFullmaktHarFokus(false)}
-                    onChange={(e) => {
-                      setEtternavn(e.target.value);
-                      setEtternavnError(null);
-                    }}
-                    onFocus={() => setUtenFullmaktHarFokus(true)}
-                    value={etternavn}
-                  />
-                  <Box className="mt-8">
-                    <Button
-                      loading={verifiserer}
-                      onClick={handleVerifiser}
-                      variant="secondary"
-                    >
-                      {t("oversiktFelles.arbeidstakerSokKnapp")}
-                    </Button>
-                  </Box>
-                </HStack>
+                <>
+                  <HStack align="start" gap="2" wrap={false}>
+                    <TextField
+                      error={fnrError ?? undefined}
+                      label={t("oversiktFelles.arbeidstakerFnrLabel")}
+                      maxLength={FNR_LENGTH}
+                      onBlur={() => setUtenFullmaktHarFokus(false)}
+                      onChange={(e) => {
+                        setFnr(e.target.value);
+                        setFnrError(null);
+                      }}
+                      onFocus={() => setUtenFullmaktHarFokus(true)}
+                      value={fnr}
+                    />
+                    <TextField
+                      error={etternavnError ?? undefined}
+                      label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
+                      onBlur={() => setUtenFullmaktHarFokus(false)}
+                      onChange={(e) => {
+                        setEtternavn(e.target.value);
+                        setEtternavnError(null);
+                      }}
+                      onFocus={() => setUtenFullmaktHarFokus(true)}
+                      value={etternavn}
+                    />
+                    <Box className="mt-8">
+                      <Button
+                        loading={verifiserer}
+                        onClick={handleVerifiser}
+                        variant="secondary"
+                      >
+                        {t("oversiktFelles.arbeidstakerSokKnapp")}
+                      </Button>
+                    </Box>
+                  </HStack>
 
-                {verifiseringFeil && (
-                  <Alert size="small" variant="error">
-                    {verifiseringFeil}
-                  </Alert>
-                )}
-              </>
+                  {verifiseringFeil && (
+                    <Alert size="small" variant="error">
+                      {verifiseringFeil}
+                    </Alert>
+                  )}
+                </>
               )}
             </div>
           </div>
