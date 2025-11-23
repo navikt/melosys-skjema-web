@@ -60,17 +60,34 @@ function DineOpplysningerStegContent({
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    reset,
     control,
   } = formMethods;
 
   const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId !== undefined;
 
+  // TODO: Backend bør returnere arbeidstaker-data (fødselsnummer, navn, etc.) som del av skjema-konteksten.
+  // Dette steget bør være readonly/forhåndsutfylt basert på data fra backend, ikke client-side logikk.
+  // Når skjema opprettes via ny /oversikt-flyt, sendes fullstendig kontekst (arbeidsgiver, arbeidstaker)
+  // til backend som skal lagre og returnere denne dataen når skjemaet hentes.
+  // Denne useEffect er midlertidig for å håndtere legacy-scenario hvor data ikke kommer fra backend.
   useEffect(() => {
-    if (innloggetBrukerHarNorskFodselsnummer) {
-      setValue("fodselsnummer", userInfo.userId);
+    if (
+      innloggetBrukerHarNorskFodselsnummer &&
+      !lagretSkjemadataForSteg?.harNorskFodselsnummer
+    ) {
+      reset({
+        ...lagretSkjemadataForSteg,
+        harNorskFodselsnummer: true,
+        fodselsnummer: userInfo.userId,
+      });
     }
-  }, [innloggetBrukerHarNorskFodselsnummer, userInfo?.userId, setValue]);
+  }, [
+    innloggetBrukerHarNorskFodselsnummer,
+    userInfo?.userId,
+    lagretSkjemadataForSteg,
+    reset,
+  ]);
 
   const harNorskFodselsnummer =
     useWatch({ control, name: "harNorskFodselsnummer" }) ||
