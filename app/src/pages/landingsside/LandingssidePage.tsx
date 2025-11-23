@@ -95,16 +95,13 @@ export function LandingssidePage() {
 
     switch (type) {
       case "DEG_SELV":
-      case "ARBEIDSGIVER": {
+      case "ARBEIDSGIVER":
+      case "ANNEN_PERSON": {
         navigate({ to: "/oversikt" });
         break;
       }
       case "RADGIVER": {
         navigate({ to: "/representasjon/radgiverfirma" });
-        break;
-      }
-      case "ANNEN_PERSON": {
-        navigate({ to: "/representasjon/annen-person" });
         break;
       }
     }

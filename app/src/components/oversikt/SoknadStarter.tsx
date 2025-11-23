@@ -174,6 +174,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
             <ArbeidstakerVelger
               harFeil={harArbeidstakerFeil}
               onArbeidstakerValgt={handleArbeidstakerValgt}
+              visKunMedFullmakt={kontekst.type === "ANNEN_PERSON"}
             />
           </div>
         )}

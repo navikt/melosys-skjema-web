@@ -31,6 +31,7 @@ interface ArbeidstakerVelgerProps {
     harFullmakt?: boolean,
   ) => void;
   harFeil?: boolean;
+  visKunMedFullmakt?: boolean;
 }
 
 interface VerifisertPerson {
@@ -56,10 +57,12 @@ const arbeidstakerSchema = z.object({
  * 1. Med fullmakt: Combobox for valg fra liste av personer med fullmakt
  * 2. Uten fullmakt: Manuell input av fnr/d-nr og etternavn med verifisering
  *
+ * @param visKunMedFullmakt - Hvis true, skjuler "uten fullmakt" seksjonen (brukes for ANNEN_PERSON)
  */
 export function ArbeidstakerVelger({
   onArbeidstakerValgt,
   harFeil = false,
+  visKunMedFullmakt = false,
 }: ArbeidstakerVelgerProps) {
   const { t } = useTranslation();
   const [fnr, setFnr] = useState("");
@@ -94,7 +97,8 @@ export function ArbeidstakerVelger({
 
   const harValgtMedFullmakt = selectedPersonFnr !== undefined;
   const harValgtUtenFullmakt = verifisertPerson !== undefined;
-  const skalDisableMedFullmakt = harValgtUtenFullmakt || utenFullmaktHarFokus;
+  const skalDisableMedFullmakt =
+    !visKunMedFullmakt && (harValgtUtenFullmakt || utenFullmaktHarFokus);
   const skalDisableUtenFullmakt = harValgtMedFullmakt || medFullmaktHarFokus;
 
   const handleComboboxChange = (value: string) => {
@@ -282,88 +286,90 @@ export function ArbeidstakerVelger({
             </div>
           </div>
 
-          {/* Uten fullmakt */}
-          <div
-            className="navds-form-field navds-form-field--medium"
-            style={{
-              opacity: skalDisableUtenFullmakt ? 0.5 : 1,
-              pointerEvents: skalDisableUtenFullmakt ? "none" : "auto",
-            }}
-          >
-            <Label className="navds-form-field__label">
-              {t("oversiktFelles.arbeidstakerUtenFullmaktTittel")}
-            </Label>
-            <BodyShort className="navds-form-field__description">
-              {t("oversiktFelles.arbeidstakerUtenFullmaktBeskrivelse")}
-            </BodyShort>
+          {/* Uten fullmakt - skjules hvis visKunMedFullmakt er true */}
+          {!visKunMedFullmakt && (
+            <div
+              className="navds-form-field navds-form-field--medium"
+              style={{
+                opacity: skalDisableUtenFullmakt ? 0.5 : 1,
+                pointerEvents: skalDisableUtenFullmakt ? "none" : "auto",
+              }}
+            >
+              <Label className="navds-form-field__label">
+                {t("oversiktFelles.arbeidstakerUtenFullmaktTittel")}
+              </Label>
+              <BodyShort className="navds-form-field__description">
+                {t("oversiktFelles.arbeidstakerUtenFullmaktBeskrivelse")}
+              </BodyShort>
 
-            <div className="max-w-lg w-full">
-              {verifisertPerson ? (
-                <Box
-                  background="surface-default"
-                  borderColor="border-subtle"
-                  borderRadius="small"
-                  borderWidth="1"
-                  padding="2"
-                >
-                  <HStack align="center" justify="space-between">
-                    <BodyShort>
-                      {verifisertPerson.navn} - {verifisertPerson.fnr}
-                    </BodyShort>
-                    <Button
-                      icon={<XMarkIcon aria-hidden />}
-                      onClick={handleFjernVerifisertPerson}
-                      size="small"
-                      variant="tertiary"
-                    />
-                  </HStack>
-                </Box>
-              ) : (
-                <>
-                  <HStack align="start" gap="2" wrap={false}>
-                    <TextField
-                      error={fnrError ?? undefined}
-                      label={t("oversiktFelles.arbeidstakerFnrLabel")}
-                      maxLength={FNR_LENGTH}
-                      onBlur={() => setUtenFullmaktHarFokus(false)}
-                      onChange={(e) => {
-                        setFnr(e.target.value);
-                        setFnrError(null);
-                      }}
-                      onFocus={() => setUtenFullmaktHarFokus(true)}
-                      value={fnr}
-                    />
-                    <TextField
-                      error={etternavnError ?? undefined}
-                      label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
-                      onBlur={() => setUtenFullmaktHarFokus(false)}
-                      onChange={(e) => {
-                        setEtternavn(e.target.value);
-                        setEtternavnError(null);
-                      }}
-                      onFocus={() => setUtenFullmaktHarFokus(true)}
-                      value={etternavn}
-                    />
-                    <Box className="mt-8">
+              <div className="max-w-lg w-full">
+                {verifisertPerson ? (
+                  <Box
+                    background="surface-default"
+                    borderColor="border-subtle"
+                    borderRadius="small"
+                    borderWidth="1"
+                    padding="2"
+                  >
+                    <HStack align="center" justify="space-between">
+                      <BodyShort>
+                        {verifisertPerson.navn} - {verifisertPerson.fnr}
+                      </BodyShort>
                       <Button
-                        loading={verifiserer}
-                        onClick={handleVerifiser}
-                        variant="secondary"
-                      >
-                        {t("oversiktFelles.arbeidstakerSokKnapp")}
-                      </Button>
-                    </Box>
-                  </HStack>
+                        icon={<XMarkIcon aria-hidden />}
+                        onClick={handleFjernVerifisertPerson}
+                        size="small"
+                        variant="tertiary"
+                      />
+                    </HStack>
+                  </Box>
+                ) : (
+                  <>
+                    <HStack align="start" gap="2" wrap={false}>
+                      <TextField
+                        error={fnrError ?? undefined}
+                        label={t("oversiktFelles.arbeidstakerFnrLabel")}
+                        maxLength={FNR_LENGTH}
+                        onBlur={() => setUtenFullmaktHarFokus(false)}
+                        onChange={(e) => {
+                          setFnr(e.target.value);
+                          setFnrError(null);
+                        }}
+                        onFocus={() => setUtenFullmaktHarFokus(true)}
+                        value={fnr}
+                      />
+                      <TextField
+                        error={etternavnError ?? undefined}
+                        label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
+                        onBlur={() => setUtenFullmaktHarFokus(false)}
+                        onChange={(e) => {
+                          setEtternavn(e.target.value);
+                          setEtternavnError(null);
+                        }}
+                        onFocus={() => setUtenFullmaktHarFokus(true)}
+                        value={etternavn}
+                      />
+                      <Box className="mt-8">
+                        <Button
+                          loading={verifiserer}
+                          onClick={handleVerifiser}
+                          variant="secondary"
+                        >
+                          {t("oversiktFelles.arbeidstakerSokKnapp")}
+                        </Button>
+                      </Box>
+                    </HStack>
 
-                  {verifiseringFeil && (
-                    <Alert size="small" variant="error">
-                      {verifiseringFeil}
-                    </Alert>
-                  )}
-                </>
-              )}
+                    {verifiseringFeil && (
+                      <Alert size="small" variant="error">
+                        {verifiseringFeil}
+                      </Alert>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </VStack>
       </Box>
     </div>
