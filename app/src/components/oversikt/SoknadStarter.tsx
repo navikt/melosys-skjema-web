@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 
 import type {
   Organisasjon,
+  Person,
   RepresentasjonskontekstDto,
 } from "~/types/representasjon";
 
@@ -36,12 +37,17 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const [valgtArbeidsgiver, setValgtArbeidsgiver] = useState<
     Organisasjon | undefined
   >(kontekst.arbeidsgiver);
+  const [valgtArbeidstaker, setValgtArbeidstaker] = useState<
+    Person | undefined
+  >(kontekst.arbeidstaker);
 
   const handleSubmit = () => {
     // TODO: MELOSYS-7727 - Implementer validering og navigering til skjema
     // Med valgtArbeidsgiver og valgtArbeidstaker
     // eslint-disable-next-line no-console -- Fjernes i MELOSYS-7727
     console.log("Valgt arbeidsgiver:", valgtArbeidsgiver);
+    // eslint-disable-next-line no-console -- Fjernes i MELOSYS-7727
+    console.log("Valgt arbeidstaker:", valgtArbeidstaker);
   };
 
   return (
@@ -84,7 +90,12 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
           valgtArbeidsgiver={valgtArbeidsgiver}
         />
 
-        {kontekst.type !== "DEG_SELV" && <ArbeidstakerVelger />}
+        {kontekst.type !== "DEG_SELV" && (
+          <ArbeidstakerVelger
+            onArbeidstakerValgt={setValgtArbeidstaker}
+            valgtArbeidstaker={valgtArbeidstaker}
+          />
+        )}
 
         <Button className="w-fit" onClick={handleSubmit} variant="primary">
           {t("oversiktFelles.gaTilSkjemaKnapp")}

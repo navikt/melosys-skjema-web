@@ -127,6 +127,9 @@ export function ArbeidsgiverVelger({
                     label={t("oversiktFelles.arbeidsgiverVelgerLabel")}
                     onToggleSelected={(value) => handleArbeidsgiverValgt(value)}
                     options={options}
+                    placeholder={t(
+                      "oversiktFelles.arbeidsgiverVelgerPlaceholder",
+                    )}
                     shouldAutocomplete
                     size="medium"
                   />

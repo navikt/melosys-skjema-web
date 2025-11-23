@@ -1,29 +1,164 @@
+import { XMarkIcon } from "@navikt/aksel-icons";
 import {
+  Alert,
+  BodyShort,
   Box,
   Button,
   Heading,
   HStack,
+  Label,
   TextField,
   UNSAFE_Combobox,
   VStack,
 } from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import {
+  getPersonerMedFullmaktQuery,
+  type PersonMedFullmaktDto,
+  verifiserPerson,
+} from "~/httpClients/melsosysSkjemaApiClient";
+import type { Person } from "~/types/representasjon";
+
 /**
- * Arbeidstaker-velger komponent med to modi:
+ * Formaterer ISO dato (yyyy-mm-dd) til norsk format (dd.mm.yyyy)
+ */
+function formaterDato(isoDato: string): string {
+  const [year, month, day] = isoDato.split("-");
+  return `${day}.${month}.${year}`;
+}
+
+interface ArbeidstakerVelgerProps {
+  onArbeidstakerValgt?: (arbeidstaker?: Person | undefined) => void;
+  valgtArbeidstaker?: Person;
+}
+
+interface VerifisertPerson {
+  fnr: string;
+  etternavn: string;
+  navn: string;
+  fodselsdato: string;
+}
+
+/**
+ * Arbeidstaker-velger komponent med to valg:
  * 1. Med fullmakt: Combobox for valg fra liste av personer med fullmakt
  * 2. Uten fullmakt: Manuell input av fnr/d-nr og etternavn med verifisering
  *
- * TODO: MELOSYS-7726 vil implementere:
- * - State management for valgt arbeidstaker
- * - Lazy loading av personer med fullmakt
- * - Søk på navn og fødselsnummer
- * - PDL-verifisering for personer uten fullmakt
- * - Gjensidig ekskludering av de to valgene
- * - Visning av validert person
  */
-export function ArbeidstakerVelger() {
+export function ArbeidstakerVelger({
+  onArbeidstakerValgt,
+}: ArbeidstakerVelgerProps) {
   const { t } = useTranslation();
+  const [fnr, setFnr] = useState("");
+  const [etternavn, setEtternavn] = useState("");
+  const [verifisertPerson, setVerifisertPerson] = useState<
+    VerifisertPerson | undefined
+  >();
+  const [verifiseringFeil, setVerifiseringFeil] = useState<string | null>(null);
+  const [verifiserer, setVerifiserer] = useState(false);
+  const [selectedPersonFnr, setSelectedPersonFnr] = useState<
+    string | undefined
+  >();
+
+  // Lazy loading av personer med fullmakt
+  const {
+    data: personerMedFullmakt = [],
+    isLoading,
+    error,
+  } = useQuery(getPersonerMedFullmaktQuery());
+
+  // Konverter til combobox options med fødselsnummer
+  const comboboxOptions = personerMedFullmakt.map(
+    (person: PersonMedFullmaktDto) => ({
+      label: `${person.navn} - ${person.fnr}`,
+      value: person.fnr,
+    }),
+  );
+
+  const harValgtMedFullmakt = selectedPersonFnr !== undefined;
+  const harValgtUtenFullmakt = verifisertPerson !== undefined;
+
+  const handleComboboxChange = (value: string) => {
+    const person = personerMedFullmakt.find((p) => p.fnr === value);
+
+    if (person) {
+      setSelectedPersonFnr(person.fnr);
+      if (onArbeidstakerValgt) {
+        onArbeidstakerValgt({
+          fnr: person.fnr,
+          navn: person.navn,
+          fodselsdato: person.fodselsdato,
+        });
+      }
+    }
+  };
+
+  const handleClearMedFullmakt = () => {
+    setSelectedPersonFnr(undefined);
+    onArbeidstakerValgt?.();
+  };
+
+  const handleVerifiser = async () => {
+    setVerifiseringFeil(null);
+    setVerifiserer(true);
+
+    try {
+      const response = await verifiserPerson({
+        fodselsnummer: fnr,
+        etternavn,
+      });
+
+      // Success response means person is verified
+      const formatertDato = formaterDato(response.fodselsdato);
+      setVerifisertPerson({
+        fnr,
+        etternavn,
+        navn: response.navn,
+        fodselsdato: formatertDato,
+      });
+      setVerifiseringFeil(null);
+
+      if (onArbeidstakerValgt) {
+        onArbeidstakerValgt({
+          fnr,
+          navn: response.navn,
+          fodselsdato: response.fodselsdato, // Send original ISO format to parent
+        });
+      }
+    } catch (error: unknown) {
+      setVerifisertPerson(undefined);
+
+      // Sjekk status code for å vise riktig feilmelding
+      if (error instanceof Error && "status" in error) {
+        const statusError = error as { status?: number };
+        if (statusError.status === 429) {
+          setVerifiseringFeil(t("velgRadgiverfirma.rateLimitOverskredet"));
+        } else {
+          setVerifiseringFeil(
+            t("oversiktFelles.arbeidstakerVerifiseringFeilet"),
+          );
+        }
+      } else {
+        // Fallback hvis vi ikke kan lese status
+        setVerifiseringFeil(t("oversiktFelles.arbeidstakerVerifiseringFeilet"));
+      }
+    } finally {
+      setVerifiserer(false);
+    }
+  };
+
+  const handleFjernVerifisertPerson = () => {
+    setVerifisertPerson(undefined);
+    setFnr("");
+    setEtternavn("");
+    setVerifiseringFeil(null);
+    onArbeidstakerValgt?.();
+  };
+
+  const kanVerifisere = fnr.length === 11 && etternavn.length >= 2;
 
   return (
     <div>
@@ -35,30 +170,121 @@ export function ArbeidstakerVelger() {
         <VStack gap="6">
           {/* Med fullmakt */}
           <div className="max-w-lg w-full">
-            <UNSAFE_Combobox
-              description={t(
-                "oversiktFelles.arbeidstakerMedFullmaktPlaceholder",
-              )}
-              label={t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
-              options={[]}
-            />
+            {harValgtMedFullmakt ? (
+              <Box
+                background="surface-default"
+                borderColor="border-subtle"
+                borderRadius="small"
+                borderWidth="1"
+                padding="2"
+              >
+                <HStack align="center" justify="space-between">
+                  <BodyShort>
+                    {
+                      personerMedFullmakt.find(
+                        (p) => p.fnr === selectedPersonFnr,
+                      )?.navn
+                    }{" "}
+                    - {selectedPersonFnr}
+                  </BodyShort>
+                  <Button
+                    icon={<XMarkIcon aria-hidden />}
+                    onClick={handleClearMedFullmakt}
+                    size="small"
+                    variant="tertiary"
+                  />
+                </HStack>
+              </Box>
+            ) : (
+              <UNSAFE_Combobox
+                description={t(
+                  "oversiktFelles.arbeidstakerMedFullmaktBeskrivelse",
+                )}
+                disabled={harValgtUtenFullmakt}
+                error={
+                  error ? "Kunne ikke laste personer med fullmakt" : undefined
+                }
+                isLoading={isLoading}
+                label={t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+                onToggleSelected={handleComboboxChange}
+                options={comboboxOptions}
+                placeholder={t(
+                  "oversiktFelles.arbeidstakerMedFullmaktPlaceholder",
+                )}
+                shouldAutocomplete
+              />
+            )}
           </div>
 
           {/* Uten fullmakt */}
-          <VStack gap="2">
-            <Heading level="4" size="xsmall">
+          <div
+            className="navds-form-field navds-form-field--medium"
+            style={{
+              opacity: harValgtMedFullmakt ? 0.5 : 1,
+            }}
+          >
+            <Label className="navds-form-field__label">
               {t("oversiktFelles.arbeidstakerUtenFullmaktTittel")}
-            </Heading>
-            <HStack align="end" gap="2" wrap={false}>
-              <TextField label={t("oversiktFelles.arbeidstakerFnrLabel")} />
-              <TextField
-                label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
-              />
-              <Button variant="secondary">
-                {t("oversiktFelles.arbeidstakerSokKnapp")}
-              </Button>
-            </HStack>
-          </VStack>
+            </Label>
+            <BodyShort className="navds-form-field__description">
+              {t("oversiktFelles.arbeidstakerUtenFullmaktBeskrivelse")}
+            </BodyShort>
+
+            {verifisertPerson ? (
+              <Box
+                background="surface-default"
+                borderColor="border-subtle"
+                borderRadius="small"
+                borderWidth="1"
+                className="max-w-lg"
+                padding="2"
+              >
+                <HStack align="center" justify="space-between">
+                  <BodyShort>
+                    {verifisertPerson.navn} - {verifisertPerson.fnr}
+                  </BodyShort>
+                  <Button
+                    icon={<XMarkIcon aria-hidden />}
+                    onClick={handleFjernVerifisertPerson}
+                    size="small"
+                    variant="tertiary"
+                  />
+                </HStack>
+              </Box>
+            ) : (
+              <>
+                <HStack align="end" gap="2" wrap={false}>
+                  <TextField
+                    disabled={harValgtMedFullmakt}
+                    label={t("oversiktFelles.arbeidstakerFnrLabel")}
+                    maxLength={11}
+                    onChange={(e) => setFnr(e.target.value)}
+                    value={fnr}
+                  />
+                  <TextField
+                    disabled={harValgtMedFullmakt}
+                    label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
+                    onChange={(e) => setEtternavn(e.target.value)}
+                    value={etternavn}
+                  />
+                  <Button
+                    disabled={!kanVerifisere || harValgtMedFullmakt}
+                    loading={verifiserer}
+                    onClick={handleVerifiser}
+                    variant="secondary"
+                  >
+                    {t("oversiktFelles.arbeidstakerSokKnapp")}
+                  </Button>
+                </HStack>
+
+                {verifiseringFeil && (
+                  <Alert size="small" variant="error">
+                    {verifiseringFeil}
+                  </Alert>
+                )}
+              </>
+            )}
+          </div>
         </VStack>
       </Box>
     </div>

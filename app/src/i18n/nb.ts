@@ -468,9 +468,8 @@ export const nb = {
       soknadStarterFullmaktInfo3:
         "Hvis du ikke har fullmakt fra arbeidstaker, skal du kun oppgi arbeidstakerens navn og fødsels-/d-nummer.",
       arbeidsgiverTittel: "Arbeidsgiver",
-      arbeidsgiverVelgerLabel:
-        "Velg arbeidsgiver (Organisasjonsnummer eller -navn)",
-      arbeidsgiverVelgerPlaceholder: "Velg...",
+      arbeidsgiverVelgerLabel: "Velg arbeidsgiver",
+      arbeidsgiverVelgerPlaceholder: "Organisasjonsnummer eller -navn",
       arbeidsgiverVelgerInfo:
         "Listen inneholder alle arbeidsgivere du har fått tilgang til i skjemaet i Altinn og arbeidstakere som har gitt deg fullmakt på Nav.no.",
       ingenArbeidsgivereTittel: "Du har ingen arbeidsgivere tilgjengelig",
@@ -480,14 +479,21 @@ export const nb = {
       feilVedHentingAvArbeidsgivere:
         "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
       arbeidstakerTittel: "Arbeidstaker",
-      arbeidstakerMedFullmaktLabel:
-        "Velg arbeidstaker du har fått fullmakt fra",
+      arbeidstakerMedFullmaktLabel: "Arbeidstaker med fullmakt",
+      arbeidstakerMedFullmaktBeskrivelse:
+        "Velg en person du har fått fullmakt fra. Du vil fylle ut søknaden på vegne av arbeidstakeren.",
       arbeidstakerMedFullmaktPlaceholder: "Fødsels-/d-nummer eller navn",
       arbeidstakerMedFullmaktListePlaceholder: "+ Velg...",
-      arbeidstakerUtenFullmaktTittel: "Utsendt arbeidstaker",
+      arbeidstakerUtenFullmaktTittel: "Arbeidstaker uten fullmakt",
+      arbeidstakerUtenFullmaktBeskrivelse:
+        "Arbeidstakeren må selv fylle ut sin del av søknaden.",
       arbeidstakerFnrLabel: "Fødsels- eller d-nummer",
       arbeidstakerEtternavnLabel: "Etternavn",
       arbeidstakerSokKnapp: "Søk",
+      arbeidstakerVerifiseringFeilet:
+        "Finner ikke person med oppgitt fødselsnummer og etternavn",
+      arbeidstakerVerifisertLabel: "Person verifisert",
+      arbeidstakerFjernKnapp: "Fjern",
       gaTilSkjemaKnapp: "Gå til skjema for utsendt arbeidstaker",
       historikkTittel: "Tidligere innsendte søknadsskjema",
       historikkSokPlaceholder: "Søk...",

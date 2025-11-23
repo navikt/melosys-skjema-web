@@ -444,8 +444,8 @@ export const en = {
       soknadStarterFullmaktInfo3:
         "If you do not have a mandate from an employee, you should only provide the employee's name and birth/d-number.",
       arbeidsgiverTittel: "Employer",
-      arbeidsgiverVelgerLabel: "Select employer (Organization number or name)",
-      arbeidsgiverVelgerPlaceholder: "Select...",
+      arbeidsgiverVelgerLabel: "Select employer",
+      arbeidsgiverVelgerPlaceholder: "Organization number or name",
       arbeidsgiverVelgerInfo:
         "The list contains all employers you have been granted access to in the Altinn form and employees who have granted you a mandate on Nav.no.",
       ingenArbeidsgivereTittel: "You have no employers available",
@@ -455,14 +455,21 @@ export const en = {
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
       arbeidstakerTittel: "Employee",
-      arbeidstakerMedFullmaktLabel:
-        "Select employee who has granted you a mandate",
+      arbeidstakerMedFullmaktLabel: "Employee with mandate",
+      arbeidstakerMedFullmaktBeskrivelse:
+        "Select a person who has granted you a mandate. You will complete the application on behalf of the employee.",
       arbeidstakerMedFullmaktPlaceholder: "Birth/d-number or name",
       arbeidstakerMedFullmaktListePlaceholder: "+ Select...",
-      arbeidstakerUtenFullmaktTittel: "Posted employee",
+      arbeidstakerUtenFullmaktTittel: "Employee without mandate",
+      arbeidstakerUtenFullmaktBeskrivelse:
+        "The employee must complete their part of the application themselves.",
       arbeidstakerFnrLabel: "Birth or d-number",
       arbeidstakerEtternavnLabel: "Last name",
       arbeidstakerSokKnapp: "Search",
+      arbeidstakerVerifiseringFeilet:
+        "Person not found with the specified birth number and last name",
+      arbeidstakerVerifisertLabel: "Person verified",
+      arbeidstakerFjernKnapp: "Remove",
       gaTilSkjemaKnapp: "Go to form for posted employee",
       historikkTittel: "Previously submitted applications",
       historikkSokPlaceholder: "Search...",
