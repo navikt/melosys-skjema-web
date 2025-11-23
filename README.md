@@ -109,7 +109,7 @@ app/                           # Frontend-applikasjon
 │   ├── routes/                # TanStack Router ruter
 │   │   ├── __root.tsx         # Root layout med global scroll-til-topp
 │   │   ├── index.tsx          # Hjem-side
-│   │   ├── rollevelger.tsx    # Rollevelger-side
+│   │   ├── oversikt.tsx       # Oversiktsside (velg arbeidsgiver/arbeidstaker)
 │   │   ├── arbeidsgiver/      # Arbeidsgiver-ruter
 │   │   │   ├── index.tsx      # Arbeidsgiver landingsside
 │   │   │   └── skjema.tsx     # Arbeidsgiver skjemaside
@@ -129,8 +129,6 @@ app/                           # Frontend-applikasjon
 │   │   │   └── ArbeidsgiverPage.tsx
 │   │   ├── arbeidstaker/      # Arbeidstaker-komponenter
 │   │   │   └── ArbeidstakerPage.tsx
-│   │   ├── rollevelger/       # Rollevelger-komponenter
-│   │   │   └── RollevelgerPage.tsx
 │   │   └── skjema/            # Skjema-komponenter
 │   │       ├── Skjema.tsx     # Hovedskjema-komponent
 │   │       ├── VeiledningSteg.tsx          # Steg 1 komponent

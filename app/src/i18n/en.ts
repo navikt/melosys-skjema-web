@@ -107,12 +107,6 @@ export const en = {
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
     },
-    rollevelgerPage: {
-      hvemVilDuFylleUtSkjemaPaVegneAv:
-        "Who do you want to fill out the form for?",
-      degSelv: "Yourself",
-      orgNr: "Org. no.",
-    },
     familiemedlemmerSteg: {
       tittel: "Family Members",
       sokerDuForBarnUnder18SomSkalVaereMed:
@@ -474,6 +468,9 @@ export const en = {
       arbeidstakerVerifisertLabel: "Person verified",
       arbeidstakerFjernKnapp: "Remove",
       gaTilSkjemaKnapp: "Go to form for posted employee",
+      valideringFeilTittel: "You must fill in these fields:",
+      valideringManglerArbeidsgiver: "Employer must be selected",
+      valideringManglerArbeidstaker: "Employee must be selected",
       historikkTittel: "Previously submitted applications",
       historikkSokPlaceholder: "Search...",
       historikkKolonneVirksomhet: "Company",
@@ -499,6 +496,21 @@ export const en = {
     velgAnnenPerson: {
       tittel: "Select person to represent",
       underUtvikling: "This page is under development (MELOSYS-7728).",
+    },
+    startSoknad: {
+      tittel: "Start application",
+      beskrivelse:
+        "Check that the information below is correct before starting the application.",
+      organisasjonsnavn: "Organization name",
+      organisasjonsnummer: "Organization number",
+      radgiverfirmaTittel: "Advisory firm",
+      navn: "Name",
+      fodselsnummer: "Birth number / D-number",
+      duHarFullmakt:
+        "You have mandate to complete the application on behalf of the employee",
+      startSoknadKnapp: "Start application",
+      feilVedOpprettelse:
+        "An error occurred while creating the application. Please try again later.",
     },
     generellValidering: {
       erPakrevd: "is required",

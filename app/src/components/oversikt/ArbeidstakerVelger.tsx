@@ -26,7 +26,11 @@ import type { Person } from "~/types/representasjon";
 const FNR_LENGTH = 11;
 
 interface ArbeidstakerVelgerProps {
-  onArbeidstakerValgt?: (arbeidstaker?: Person | undefined) => void;
+  onArbeidstakerValgt?: (
+    arbeidstaker?: Person | undefined,
+    harFullmakt?: boolean,
+  ) => void;
+  harFeil?: boolean;
 }
 
 interface VerifisertPerson {
@@ -55,6 +59,7 @@ const arbeidstakerSchema = z.object({
  */
 export function ArbeidstakerVelger({
   onArbeidstakerValgt,
+  harFeil = false,
 }: ArbeidstakerVelgerProps) {
   const { t } = useTranslation();
   const [fnr, setFnr] = useState("");
@@ -101,11 +106,14 @@ export function ArbeidstakerVelger({
       setFnrError(null);
       setEtternavnError(null);
       if (onArbeidstakerValgt) {
-        onArbeidstakerValgt({
-          fnr: person.fnr,
-          navn: person.navn,
-          fodselsdato: person.fodselsdato,
-        });
+        onArbeidstakerValgt(
+          {
+            fnr: person.fnr,
+            navn: person.navn,
+            fodselsdato: person.fodselsdato,
+          },
+          true,
+        ); // Med fullmakt
       }
     }
   };
@@ -113,7 +121,7 @@ export function ArbeidstakerVelger({
   const handleClearMedFullmakt = () => {
     setSelectedPersonFnr(undefined);
     setMedFullmaktHarFokus(false);
-    onArbeidstakerValgt?.();
+    onArbeidstakerValgt?.(undefined, false);
   };
 
   const handleVerifiser = async () => {
@@ -154,11 +162,15 @@ export function ArbeidstakerVelger({
       setVerifiseringFeil(null);
 
       if (onArbeidstakerValgt) {
-        onArbeidstakerValgt({
-          fnr,
-          navn: response.navn,
-          fodselsdato: response.fodselsdato,
-        });
+        onArbeidstakerValgt(
+          {
+            fnr,
+            navn: response.navn,
+            etternavn, // Etternavn fra brukerens input (for backend-validering)
+            fodselsdato: response.fodselsdato,
+          },
+          false,
+        ); // Uten fullmakt
       }
     } catch (error: unknown) {
       setVerifisertPerson(undefined);
@@ -190,7 +202,7 @@ export function ArbeidstakerVelger({
     setEtternavnError(null);
     setVerifiseringFeil(null);
     setUtenFullmaktHarFokus(false);
-    onArbeidstakerValgt?.();
+    onArbeidstakerValgt?.(undefined, false);
   };
 
   return (
@@ -199,7 +211,11 @@ export function ArbeidstakerVelger({
         {t("oversiktFelles.arbeidstakerTittel")}
       </Heading>
 
-      <Box borderColor="border-info" borderWidth="0 0 0 4" paddingInline="4">
+      <Box
+        borderColor={harFeil ? "border-danger" : "border-info"}
+        borderWidth="0 0 0 4"
+        paddingInline="4"
+      >
         <VStack gap="6">
           {/* Med fullmakt */}
           <div

@@ -75,7 +75,7 @@ export async function mockFetchArbeidsgiverSkjema(
   skjemaDto: ArbeidsgiversSkjemaDto,
 ) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaDto.id}`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaDto.id}/arbeidsgiver-view`,
     async (route) => {
       if (route.request().method() === "GET") {
         await route.fulfill({
@@ -207,7 +207,7 @@ export async function mockFetchArbeidstakerSkjema(
   skjemaDto: ArbeidstakersSkjemaDto,
 ) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaDto.id}`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaDto.id}/arbeidstaker-view`,
     async (route) => {
       if (route.request().method() === "GET") {
         await route.fulfill({

@@ -105,12 +105,6 @@ export const nb = {
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
       endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
     },
-    rollevelgerPage: {
-      hvemVilDuFylleUtSkjemaPaVegneAv:
-        "Hvem vil du fylle ut skjema på vegne av?",
-      degSelv: "Deg selv",
-      orgNr: "Org.nr.",
-    },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
       sokerDuForBarnUnder18SomSkalVaereMed:
@@ -498,6 +492,9 @@ export const nb = {
       arbeidstakerVerifisertLabel: "Person verifisert",
       arbeidstakerFjernKnapp: "Fjern",
       gaTilSkjemaKnapp: "Gå til skjema for utsendt arbeidstaker",
+      valideringFeilTittel: "Du må fylle ut disse feltene:",
+      valideringManglerArbeidsgiver: "Arbeidsgiver må velges",
+      valideringManglerArbeidstaker: "Arbeidstaker må velges",
       historikkTittel: "Tidligere innsendte søknadsskjema",
       historikkSokPlaceholder: "Søk...",
       historikkKolonneVirksomhet: "Virksomhet",
@@ -526,6 +523,21 @@ export const nb = {
     },
     oppsummeringSteg: {
       tittel: "Oppsummering",
+    },
+    startSoknad: {
+      tittel: "Start søknad",
+      beskrivelse:
+        "Sjekk at informasjonen nedenfor stemmer før du starter søknaden.",
+      organisasjonsnavn: "Organisasjonsnavn",
+      organisasjonsnummer: "Organisasjonsnummer",
+      radgiverfirmaTittel: "Rådgiverfirma",
+      navn: "Navn",
+      fodselsnummer: "Fødselsnummer / D-nummer",
+      duHarFullmakt:
+        "Du har fullmakt til å fylle ut søknaden på vegne av arbeidstaker",
+      startSoknadKnapp: "Start søknad",
+      feilVedOpprettelse:
+        "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",
     },
     generellValidering: {
       erPakrevd: "er påkrevd",

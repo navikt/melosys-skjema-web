@@ -20,6 +20,7 @@ interface ArbeidsgiverVelgerProps {
   kontekst: RepresentasjonskontekstDto;
   valgtArbeidsgiver?: Organisasjon;
   onArbeidsgiverValgt: (organisasjon: Organisasjon) => void;
+  harFeil?: boolean;
 }
 
 /**
@@ -33,6 +34,7 @@ export function ArbeidsgiverVelger({
   kontekst,
   valgtArbeidsgiver,
   onArbeidsgiverValgt,
+  harFeil = false,
 }: ArbeidsgiverVelgerProps) {
   const { t } = useTranslation();
 
@@ -98,7 +100,11 @@ export function ArbeidsgiverVelger({
           value={`${visningArbeidsgiver.navn}\nOrg.nr: ${visningArbeidsgiver.orgnr}`}
         />
       ) : (
-        <Box borderColor="border-info" borderWidth="0 0 0 4" paddingInline="4">
+        <Box
+          borderColor={harFeil ? "border-danger" : "border-info"}
+          borderWidth="0 0 0 4"
+          paddingInline="4"
+        >
           {skalSokeEtterArbeidsgiver() ? (
             <OrganisasjonSoker
               label={t("velgRadgiverfirma.sokPaVirksomhet")}

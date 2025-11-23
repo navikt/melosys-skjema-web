@@ -118,7 +118,7 @@ async function fetchSkjemaAsArbeidsgiver(
   skjemaId: string,
 ): Promise<ArbeidsgiversSkjemaDto> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidsgiver-view`,
     {
       method: "GET",
     },
@@ -131,6 +131,10 @@ async function fetchSkjemaAsArbeidsgiver(
   return response.json();
 }
 
+/**
+ * @deprecated Bruk opprettSoknadMedKontekst() i stedet.
+ * Dette endepunktet oppretter skjema uten representasjonskontekst og er utgått.
+ */
 export async function createArbeidstakerSkjema(
   request: CreateArbeidstakerSkjemaRequest,
 ): Promise<ArbeidstakersSkjemaDto> {
@@ -152,6 +156,10 @@ export async function createArbeidstakerSkjema(
   return response.json();
 }
 
+/**
+ * @deprecated Bruk opprettSoknadMedKontekst() i stedet.
+ * Dette endepunktet oppretter skjema uten representasjonskontekst og er utgått.
+ */
 export async function createArbeidsgiverSkjema(
   request: CreateArbeidsgiverSkjemaRequest,
 ): Promise<ArbeidsgiversSkjemaDto> {
@@ -283,7 +291,7 @@ async function fetchSkjemaAsArbeidstaker(
   skjemaId: string,
 ): Promise<ArbeidstakersSkjemaDto> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidstaker-view`,
     {
       method: "GET",
     },
@@ -403,6 +411,53 @@ export async function verifiserPerson(
     ) as Error & { status: number };
     error.status = response.status;
     throw error;
+  }
+
+  return response.json();
+}
+
+// ============ Opprett søknad med kontekst ============
+
+export interface OpprettSoknadMedKontekstRequest {
+  representasjonstype: string;
+  radgiverfirma?: {
+    orgnr: string;
+    navn: string;
+  };
+  arbeidsgiver?: {
+    orgnr: string;
+    navn: string;
+  };
+  arbeidstaker?: {
+    fnr: string;
+    etternavn?: string; // Kun nødvendig for arbeidstaker uten fullmakt
+  };
+  harFullmakt: boolean;
+}
+
+export interface OpprettSoknadMedKontekstResponse {
+  id: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+}
+
+export async function opprettSoknadMedKontekst(
+  kontekst: OpprettSoknadMedKontekstRequest,
+): Promise<OpprettSoknadMedKontekstResponse> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/opprett-med-kontekst`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(kontekst),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Kunne ikke opprette søknad: ${response.status} ${response.statusText}`,
+    );
   }
 
   return response.json();
