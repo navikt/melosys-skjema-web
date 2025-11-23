@@ -342,3 +342,68 @@ async function fetchOrganisasjon(
 
   return response.json();
 }
+
+// ============ PDL / Representasjon API ============
+
+export interface PersonMedFullmaktDto {
+  fnr: string;
+  navn: string;
+  fodselsdato: string;
+}
+
+export interface VerifiserPersonRequest {
+  fodselsnummer: string;
+  etternavn: string;
+}
+
+export interface VerifiserPersonResponse {
+  navn: string;
+  fodselsdato: string;
+}
+
+export const getPersonerMedFullmaktQuery = () =>
+  queryOptions<PersonMedFullmaktDto[]>({
+    queryKey: ["representasjon", "personer"],
+    queryFn: fetchPersonerMedFullmakt,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+async function fetchPersonerMedFullmakt(): Promise<PersonMedFullmaktDto[]> {
+  const response = await fetch(`${API_PROXY_URL}/representasjon/personer`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Kunne ikke hente personer med fullmakt: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  return response.json();
+}
+
+export async function verifiserPerson(
+  request: VerifiserPersonRequest,
+): Promise<VerifiserPersonResponse> {
+  const response = await fetch(
+    `${API_PROXY_URL}/arbeidstaker/verifiser-person`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    },
+  );
+
+  if (!response.ok) {
+    const error = new Error(
+      `HTTP error! status: ${response.status}`,
+    ) as Error & { status: number };
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+}
