@@ -38,6 +38,10 @@ export function ArbeidsgiverVelger({
 }: ArbeidsgiverVelgerProps) {
   const { t } = useTranslation();
 
+  const skalHenteArbeidsgivere =
+    kontekst.representasjonstype === "RADGIVER" ||
+    kontekst.representasjonstype === "ARBEIDSGIVER";
+
   /**
    * Eager loading: Henter arbeidsgivere fra Altinn for både RADGIVER og ARBEIDSGIVER
    */
@@ -47,9 +51,7 @@ export function ArbeidsgiverVelger({
     isError,
   } = useQuery({
     ...listAltinnTilganger(),
-    enabled:
-      kontekst.representasjonstype === "RADGIVER" ||
-      kontekst.representasjonstype === "ARBEIDSGIVER",
+    enabled: skalHenteArbeidsgivere,
     retry: false,
   });
 
@@ -61,7 +63,8 @@ export function ArbeidsgiverVelger({
       kontekst.representasjonstype === "ARBEIDSGIVER" &&
       arbeidsgivere?.length === 1 &&
       !valgtArbeidsgiver &&
-      !isLoading
+      !isLoading &&
+      !isError
     ) {
       const forstOrg = arbeidsgivere[0];
       if (forstOrg) {
@@ -77,19 +80,13 @@ export function ArbeidsgiverVelger({
     valgtArbeidsgiver,
     onArbeidsgiverValgt,
     isLoading,
+    isError,
   ]);
 
   const skalSokeEtterArbeidsgiver = () => {
     return (
       kontekst.representasjonstype === "DEG_SELV" ||
       kontekst.representasjonstype === "ANNEN_PERSON"
-    );
-  };
-
-  const skalHenteArbeidsgivere = () => {
-    return (
-      kontekst.representasjonstype === "RADGIVER" ||
-      kontekst.representasjonstype === "ARBEIDSGIVER"
     );
   };
 
@@ -147,7 +144,7 @@ export function ArbeidsgiverVelger({
               label={t("velgRadgiverfirma.sokPaVirksomhet")}
               onOrganisasjonValgt={onArbeidsgiverValgt}
             />
-          ) : skalHenteArbeidsgivere() ? (
+          ) : skalHenteArbeidsgivere ? (
             // Henter fra Altinn for RADGIVER og ARBEIDSGIVER
             <div className="max-w-lg w-full">
               {isLoading ? (
