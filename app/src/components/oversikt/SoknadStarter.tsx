@@ -46,7 +46,6 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   // Hent innlogget bruker for DEG_SELV-scenario
   const { data: userInfo } = useQuery(getUserInfo());
-
   // Automatisk sett arbeidstaker til innlogget bruker for DEG_SELV
   useEffect(() => {
     if (
