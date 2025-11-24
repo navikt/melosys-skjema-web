@@ -1,12 +1,13 @@
 import {
   Alert,
+  BodyShort,
   Box,
   Heading,
-  TextField,
+  Loader,
   UNSAFE_Combobox,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker";
@@ -24,11 +25,10 @@ interface ArbeidsgiverVelgerProps {
 }
 
 /**
- * Arbeidsgiver-velger komponent som håndterer tre modi:
- * 1. Read-only: Når arbeidsgiver allerede er valgt (ARBEIDSGIVER kontekst)
- * 2. OrganisasjonSoker: For DEG_SELV og ANNEN_PERSON
- * 3. Combobox: For RADGIVER (eager loading fra Altinn)
- *
+ * Arbeidsgiver-velger komponent som håndterer flere modi:
+ * 1. OrganisasjonSoker: For DEG_SELV og ANNEN_PERSON (søk i Enhetsregisteret)
+ * 2. Read-only: Når ARBEIDSGIVER har tilgang til kun én organisasjon
+ * 3. Combobox: For RADGIVER eller ARBEIDSGIVER med flere organisasjoner (fra Altinn)
  */
 export function ArbeidsgiverVelger({
   kontekst,
@@ -38,9 +38,12 @@ export function ArbeidsgiverVelger({
 }: ArbeidsgiverVelgerProps) {
   const { t } = useTranslation();
 
+  const skalHenteArbeidsgivere =
+    kontekst.representasjonstype === "RADGIVER" ||
+    kontekst.representasjonstype === "ARBEIDSGIVER";
+
   /**
-   * Eager loading: Henter arbeidsgivere umiddelbart når komponenten rendres
-   * Brukeren får beskjed med en gang hvis de ikke har tilganger
+   * Eager loading: Henter arbeidsgivere fra Altinn for både RADGIVER og ARBEIDSGIVER
    */
   const {
     data: arbeidsgivere,
@@ -48,28 +51,45 @@ export function ArbeidsgiverVelger({
     isError,
   } = useQuery({
     ...listAltinnTilganger(),
-    enabled: kontekst.representasjonstype === "RADGIVER",
+    enabled: skalHenteArbeidsgivere,
     retry: false,
   });
 
-  const arbeidsgiverErLast = () => {
-    return (
-      kontekst.representasjonstype === "ARBEIDSGIVER" && kontekst.arbeidsgiver
-    );
-  };
+  /**
+   * Auto-select hvis ARBEIDSGIVER har tilgang til kun én organisasjon
+   */
+  useEffect(() => {
+    if (
+      kontekst.representasjonstype === "ARBEIDSGIVER" &&
+      arbeidsgivere?.length === 1 &&
+      !valgtArbeidsgiver &&
+      !isLoading &&
+      !isError
+    ) {
+      const forstOrg = arbeidsgivere[0];
+      if (forstOrg) {
+        onArbeidsgiverValgt({
+          orgnr: forstOrg.orgnr,
+          navn: forstOrg.navn,
+        });
+      }
+    }
+  }, [
+    kontekst.representasjonstype,
+    arbeidsgivere,
+    valgtArbeidsgiver,
+    isLoading,
+    isError,
+  ]);
 
-  const visningArbeidsgiver = kontekst.arbeidsgiver || valgtArbeidsgiver;
+  const skalSokeEtterArbeidsgiver =
+    kontekst.representasjonstype === "DEG_SELV" ||
+    kontekst.representasjonstype === "ANNEN_PERSON";
 
-  const skalSokeEtterArbeidsgiver = () => {
-    return (
-      kontekst.representasjonstype === "DEG_SELV" ||
-      kontekst.representasjonstype === "ANNEN_PERSON"
-    );
-  };
-
-  const skalViseArbeidsgiverVelger = () => {
-    return kontekst.representasjonstype === "RADGIVER";
-  };
+  const skalViseReadonly =
+    kontekst.representasjonstype === "ARBEIDSGIVER" &&
+    arbeidsgivere?.length === 1 &&
+    !!valgtArbeidsgiver;
 
   // Konverter OrganisasjonDto til Combobox options med søkbar tekst
   const options = useMemo(() => {
@@ -94,30 +114,44 @@ export function ArbeidsgiverVelger({
 
   return (
     <div>
-      <Heading level="3" size="small" spacing>
+      <Heading level="3" size="medium" spacing>
         {t("oversiktFelles.arbeidsgiverTittel")}
       </Heading>
 
-      {arbeidsgiverErLast() && visningArbeidsgiver ? (
-        <TextField
-          label={t("oversiktFelles.arbeidsgiverTittel")}
-          readOnly
-          value={`${visningArbeidsgiver.navn}\nOrg.nr: ${visningArbeidsgiver.orgnr}`}
-        />
+      {kontekst.representasjonstype === "ARBEIDSGIVER" &&
+      isLoading &&
+      !valgtArbeidsgiver ? (
+        <Loader size="medium" title={t("felles.laster")} />
+      ) : skalViseReadonly && valgtArbeidsgiver ? (
+        // Readonly display for ARBEIDSGIVER med kun én organisasjon
+        <div>
+          <BodyShort size={"medium"} weight="semibold">
+            {valgtArbeidsgiver.navn}
+          </BodyShort>
+          <BodyShort size="small">Org.nr: {valgtArbeidsgiver.orgnr}</BodyShort>
+        </div>
       ) : (
         <Box
           borderColor={harFeil ? "border-danger" : "border-info"}
           borderWidth="0 0 0 4"
           paddingInline="4"
         >
-          {skalSokeEtterArbeidsgiver() ? (
+          {skalSokeEtterArbeidsgiver ? (
+            // OrganisasjonSoker for DEG_SELV og ANNEN_PERSON
             <OrganisasjonSoker
               label={t("velgRadgiverfirma.sokPaVirksomhet")}
               onOrganisasjonValgt={onArbeidsgiverValgt}
             />
-          ) : skalViseArbeidsgiverVelger() ? (
+          ) : skalHenteArbeidsgivere ? (
+            // Henter fra Altinn for RADGIVER og ARBEIDSGIVER
             <div className="max-w-lg w-full">
-              {!isLoading && !isError && options.length === 0 ? (
+              {isLoading ? (
+                <Loader size="medium" title="Laster..." />
+              ) : isError ? (
+                <Alert variant="error">
+                  {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}
+                </Alert>
+              ) : !arbeidsgivere || arbeidsgivere.length === 0 ? (
                 <Alert variant="warning">
                   <Heading level="3" size="small" spacing>
                     {t("oversiktFelles.ingenArbeidsgivereTittel")}
@@ -131,25 +165,18 @@ export function ArbeidsgiverVelger({
                   </a>
                 </Alert>
               ) : (
-                <>
-                  <UNSAFE_Combobox
-                    description={t("oversiktFelles.arbeidsgiverVelgerInfo")}
-                    isLoading={isLoading}
-                    label={t("oversiktFelles.arbeidsgiverVelgerLabel")}
-                    onToggleSelected={(value) => handleArbeidsgiverValgt(value)}
-                    options={options}
-                    placeholder={t(
-                      "oversiktFelles.arbeidsgiverVelgerPlaceholder",
-                    )}
-                    shouldAutocomplete
-                    size="medium"
-                  />
-                  {isError && (
-                    <Alert className="mt-4" variant="error">
-                      {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}
-                    </Alert>
+                // Combobox for RADGIVER eller ARBEIDSGIVER med flere organisasjoner
+                <UNSAFE_Combobox
+                  description={t("oversiktFelles.arbeidsgiverVelgerInfo")}
+                  label={t("oversiktFelles.arbeidsgiverVelgerLabel")}
+                  onToggleSelected={(value) => handleArbeidsgiverValgt(value)}
+                  options={options}
+                  placeholder={t(
+                    "oversiktFelles.arbeidsgiverVelgerPlaceholder",
                   )}
-                </>
+                  shouldAutocomplete
+                  size="medium"
+                />
               )}
             </div>
           ) : null}
