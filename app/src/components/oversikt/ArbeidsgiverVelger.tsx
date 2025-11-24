@@ -78,25 +78,18 @@ export function ArbeidsgiverVelger({
     kontekst.representasjonstype,
     arbeidsgivere,
     valgtArbeidsgiver,
-    onArbeidsgiverValgt,
     isLoading,
     isError,
   ]);
 
-  const skalSokeEtterArbeidsgiver = () => {
-    return (
-      kontekst.representasjonstype === "DEG_SELV" ||
-      kontekst.representasjonstype === "ANNEN_PERSON"
-    );
-  };
+  const skalSokeEtterArbeidsgiver =
+    kontekst.representasjonstype === "DEG_SELV" ||
+    kontekst.representasjonstype === "ANNEN_PERSON";
 
-  const skalViseReadonly = () => {
-    return (
-      kontekst.representasjonstype === "ARBEIDSGIVER" &&
-      arbeidsgivere?.length === 1 &&
-      valgtArbeidsgiver
-    );
-  };
+  const skalViseReadonly =
+    kontekst.representasjonstype === "ARBEIDSGIVER" &&
+    arbeidsgivere?.length === 1 &&
+    !!valgtArbeidsgiver;
 
   // Konverter OrganisasjonDto til Combobox options med søkbar tekst
   const options = useMemo(() => {
@@ -125,7 +118,11 @@ export function ArbeidsgiverVelger({
         {t("oversiktFelles.arbeidsgiverTittel")}
       </Heading>
 
-      {skalViseReadonly() && valgtArbeidsgiver ? (
+      {kontekst.representasjonstype === "ARBEIDSGIVER" &&
+      isLoading &&
+      !valgtArbeidsgiver ? (
+        <Loader size="medium" title={t("felles.laster")} />
+      ) : skalViseReadonly && valgtArbeidsgiver ? (
         // Readonly TextField for ARBEIDSGIVER med kun én organisasjon
         <TextField
           label={t("oversiktFelles.arbeidsgiverTittel")}
@@ -138,7 +135,7 @@ export function ArbeidsgiverVelger({
           borderWidth="0 0 0 4"
           paddingInline="4"
         >
-          {skalSokeEtterArbeidsgiver() ? (
+          {skalSokeEtterArbeidsgiver ? (
             // OrganisasjonSoker for DEG_SELV og ANNEN_PERSON
             <OrganisasjonSoker
               label={t("velgRadgiverfirma.sokPaVirksomhet")}
