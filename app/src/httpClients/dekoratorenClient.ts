@@ -8,7 +8,7 @@ export type UserInfo = {
 type DekoratorenAuthResponse = {
   authenticated: boolean;
   name: string;
-  ident: string;
+  userId: string;
 };
 
 export function getUserInfo() {
@@ -33,6 +33,6 @@ async function fetchUserInfo(): Promise<UserInfo> {
 
   return {
     name: data.name,
-    userId: data.ident,
+    userId: data.userId,
   };
 }
