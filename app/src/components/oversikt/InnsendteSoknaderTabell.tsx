@@ -14,10 +14,7 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient";
-import type {
-  HentInnsendteSoknaderRequest,
-  SorteringsFelt,
-} from "~/types/innsendteSoknader";
+import { HentInnsendteSoknaderRequest } from "~/types/melosysSkjemaTypes.ts";
 import type { RepresentasjonskontekstDto } from "~/types/representasjon";
 
 interface InnsendteSoknaderTabellProps {
@@ -34,6 +31,12 @@ const formatDato = (dato: string) => {
     year: "numeric",
   });
 };
+
+type SorteringsFelt =
+  | "ARBEIDSGIVER"
+  | "ARBEIDSTAKER"
+  | "INNSENDT_DATO"
+  | "STATUS";
 
 /**
  * Tabell over innsendte søknader med søk, sortering og paginering.

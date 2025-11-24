@@ -9,10 +9,12 @@ import {
   ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
   ArbeidstakersSkjemaDto,
-  CreateArbeidsgiverSkjemaRequest,
-  CreateArbeidstakerSkjemaRequest,
   DineOpplysningerDto,
   FamiliemedlemmerDto,
+  HentInnsendteSoknaderRequest,
+  InnsendteSoknaderResponse,
+  OpprettSoknadMedKontekstRequest,
+  OpprettSoknadMedKontekstResponse,
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhet,
   SkatteforholdOgInntektDto,
@@ -123,56 +125,6 @@ async function fetchSkjemaAsArbeidsgiver(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidsgiver-view`,
     {
       method: "GET",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-}
-
-/**
- * @deprecated Bruk opprettSoknadMedKontekst() i stedet.
- * Dette endepunktet oppretter skjema uten representasjonskontekst og er utgått.
- */
-export async function createArbeidstakerSkjema(
-  request: CreateArbeidstakerSkjemaRequest,
-): Promise<ArbeidstakersSkjemaDto> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-}
-
-/**
- * @deprecated Bruk opprettSoknadMedKontekst() i stedet.
- * Dette endepunktet oppretter skjema uten representasjonskontekst og er utgått.
- */
-export async function createArbeidsgiverSkjema(
-  request: CreateArbeidsgiverSkjemaRequest,
-): Promise<ArbeidsgiversSkjemaDto> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
     },
   );
 
@@ -418,30 +370,6 @@ export async function verifiserPerson(
   return response.json();
 }
 
-// ============ Opprett søknad med kontekst ============
-
-export interface OpprettSoknadMedKontekstRequest {
-  representasjonstype: string;
-  radgiverfirma?: {
-    orgnr: string;
-    navn: string;
-  };
-  arbeidsgiver?: {
-    orgnr: string;
-    navn: string;
-  };
-  arbeidstaker?: {
-    fnr: string;
-    etternavn?: string; // Kun nødvendig for arbeidstaker uten fullmakt
-  };
-  harFullmakt: boolean;
-}
-
-export interface OpprettSoknadMedKontekstResponse {
-  id: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
-}
-
 export async function opprettSoknadMedKontekst(
   kontekst: OpprettSoknadMedKontekstRequest,
 ): Promise<OpprettSoknadMedKontekstResponse> {
@@ -525,9 +453,9 @@ async function fetchUtkast(
  * VIKTIG: Bruker POST i stedet for GET for å unngå at søkeord logges i access logs.
  */
 export const getInnsendteSoknaderQuery = (
-  request: import("~/types/innsendteSoknader").HentInnsendteSoknaderRequest,
+  request: HentInnsendteSoknaderRequest,
 ) =>
-  queryOptions<import("~/types/innsendteSoknader").InnsendteSoknaderResponse>({
+  queryOptions<InnsendteSoknaderResponse>({
     queryKey: [
       "innsendte-soknader",
       request.representasjonstype,
@@ -545,8 +473,8 @@ export const getInnsendteSoknaderQuery = (
   });
 
 async function fetchInnsendteSoknader(
-  request: import("~/types/innsendteSoknader").HentInnsendteSoknaderRequest,
-): Promise<import("~/types/innsendteSoknader").InnsendteSoknaderResponse> {
+  request: HentInnsendteSoknaderRequest,
+): Promise<InnsendteSoknaderResponse> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/innsendte`,
     {
