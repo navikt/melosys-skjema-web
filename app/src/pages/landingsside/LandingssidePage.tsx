@@ -92,13 +92,15 @@ export function LandingssidePage() {
   const navigate = useNavigate();
   const userInfoQuery = useQuery(getUserInfo());
 
-  const handleVelgRepresentasjon = (type: Representasjonstype) => {
+  const handleVelgRepresentasjon = (
+    representasjonstype: Representasjonstype,
+  ) => {
     setRepresentasjonKontekst({
-      type,
+      representasjonstype,
       harFullmakt: false,
     });
 
-    switch (type) {
+    switch (representasjonstype) {
       case "DEG_SELV":
       case "ARBEIDSGIVER":
       case "ANNEN_PERSON": {

@@ -21,7 +21,10 @@ export const Route = createFileRoute("/oversikt/")({
     }
 
     // Redirect til velg rådgiverfirma hvis RADGIVER men ingen firma valgt
-    if (kontekst.type === "RADGIVER" && !kontekst.radgiverfirma) {
+    if (
+      kontekst.representasjonstype === "RADGIVER" &&
+      !kontekst.radgiverfirma
+    ) {
       throw redirect({ to: "/representasjon/radgiverfirma" });
     }
 

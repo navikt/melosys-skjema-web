@@ -16,7 +16,7 @@ export const Route = createFileRoute("/representasjon/radgiverfirma")({
   beforeLoad: () => {
     const kontekst = getRepresentasjonKontekst();
 
-    if (!kontekst || kontekst.type !== "RADGIVER") {
+    if (!kontekst || kontekst.representasjonstype !== "RADGIVER") {
       throw redirect({ to: "/" });
     }
 
