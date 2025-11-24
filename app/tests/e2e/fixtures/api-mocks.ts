@@ -6,7 +6,6 @@ import type {
   ArbeidstakersSkjemaDto,
   OrganisasjonDto,
 } from "../../../src/types/melosysSkjemaTypes";
-import { testArbeidsgiverSkjema, testArbeidstakerSkjema } from "./test-data";
 
 export async function mockHentTilganger(
   page: Page,
@@ -32,42 +31,6 @@ export async function mockUserInfo(page: Page, userInfo: UserInfo) {
       }),
     });
   });
-}
-
-export async function mockCreateArbeidsgiverSkjema(page: Page) {
-  await page.route(
-    "/api/skjema/utsendt-arbeidstaker/arbeidsgiver",
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 201,
-          contentType: "application/json",
-          body: JSON.stringify({
-            id: testArbeidsgiverSkjema.id,
-            data: {},
-          }),
-        });
-      }
-    },
-  );
-}
-
-export async function mockCreateArbeidstakerSkjema(page: Page) {
-  await page.route(
-    "/api/skjema/utsendt-arbeidstaker/arbeidstaker",
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 201,
-          contentType: "application/json",
-          body: JSON.stringify({
-            id: testArbeidstakerSkjema.id,
-            data: {},
-          }),
-        });
-      }
-    },
-  );
 }
 
 export async function mockFetchArbeidsgiverSkjema(
@@ -363,7 +326,6 @@ export async function setupApiMocksForArbeidsgiver(
 ) {
   await mockHentTilganger(page, tilganger);
   await mockUserInfo(page, testUserInfo);
-  await mockCreateArbeidsgiverSkjema(page);
   await mockFetchArbeidsgiverSkjema(page, skjema);
   await mockPostArbeidsgiveren(page, skjema.id);
   await mockPostArbeidstakeren(page, skjema.id);
@@ -383,7 +345,6 @@ export async function setupApiMocksForArbeidstaker(
 ) {
   await mockUserInfo(page, userInfo);
   await mockHentTilganger(page, []);
-  await mockCreateArbeidstakerSkjema(page);
   await mockFetchArbeidstakerSkjema(page, skjema);
   await mockPostDineOpplysninger(page, skjema.id);
   await mockPostArbeidssituasjon(page, skjema.id);

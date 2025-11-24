@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
     if (eksisterendeKontekst) {
       // Naviger basert på konteksttype og om den er komplett
       if (
-        eksisterendeKontekst.type === "RADGIVER" &&
+        eksisterendeKontekst.representasjonstype === "RADGIVER" &&
         !eksisterendeKontekst.radgiverfirma
       ) {
         throw redirect({ to: "/representasjon/radgiverfirma" });

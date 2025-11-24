@@ -13,17 +13,17 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient";
-import type {
-  Organisasjon,
-  Person,
-  RepresentasjonskontekstDto,
-} from "~/types/representasjon";
+import {
+  OpprettSoknadMedKontekstRequest,
+  PersonDto,
+  SimpleOrganisasjonDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { validerSoknadKontekst } from "~/utils/valideringUtils";
 
 export interface StartSoknadLocationState {
-  arbeidsgiver?: Organisasjon;
-  arbeidstaker?: Person;
-  kontekst: RepresentasjonskontekstDto;
+  arbeidsgiver?: SimpleOrganisasjonDto;
+  arbeidstaker?: PersonDto;
+  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
 export const Route = createFileRoute("/oversikt/start-soknad")({
@@ -86,7 +86,7 @@ function StartSoknadRoute() {
   const handleStartSoknad = () => {
     // Konverter til OpprettSoknadMedKontekstRequest
     const request = {
-      representasjonstype: kontekst.type,
+      representasjonstype: kontekst.representasjonstype,
       radgiverfirma: kontekst.radgiverfirma,
       arbeidsgiver,
       arbeidstaker: arbeidstaker
@@ -106,10 +106,10 @@ function StartSoknadRoute() {
   };
 
   // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette
-  if (!arbeidsgiver && kontekst.type !== "DEG_SELV") {
+  if (!arbeidsgiver && kontekst.representasjonstype !== "DEG_SELV") {
     return null;
   }
-  if (!arbeidstaker && kontekst.type !== "DEG_SELV") {
+  if (!arbeidstaker && kontekst.representasjonstype !== "DEG_SELV") {
     return null;
   }
 
@@ -190,8 +190,9 @@ function StartSoknadRoute() {
             )}
 
             <div>
+              {/* TODO: Avklare/ nøste opp i person dtoene våre*/}
               <Label>{t("startSoknad.navn")}</Label>
-              <BodyShort>{arbeidstaker.navn}</BodyShort>
+              <BodyShort>{arbeidstaker.etternavn}</BodyShort>
             </div>
             <div>
               <Label>{t("startSoknad.fodselsnummer")}</Label>

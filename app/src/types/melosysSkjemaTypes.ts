@@ -15,8 +15,89 @@ export interface Organisasjon {
   navn?: Navn;
 }
 
-export interface CreateArbeidstakerSkjemaRequest {
+export interface OpprettSoknadMedKontekstRequest {
+  representasjonstype:
+    | "DEG_SELV"
+    | "ARBEIDSGIVER"
+    | "RADGIVER"
+    | "ANNEN_PERSON";
+  radgiverfirma?: SimpleOrganisasjonDto;
+  arbeidsgiver?: SimpleOrganisasjonDto;
+  arbeidstaker?: PersonDto;
+  harFullmakt: boolean;
+}
+
+export interface PersonDto {
+  /** @minLength 1 */
   fnr: string;
+  etternavn?: string;
+}
+
+export interface SimpleOrganisasjonDto {
+  /** @minLength 1 */
+  orgnr: string;
+  /** @minLength 1 */
+  navn: string;
+}
+
+export interface OpprettSoknadMedKontekstResponse {
+  /** @format uuid */
+  id: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+}
+
+export interface HentInnsendteSoknaderRequest {
+  /**
+   * @format int32
+   * @min 1
+   */
+  side: number;
+  /**
+   * @format int32
+   * @min 1
+   * @max 100
+   */
+  antall: number;
+  sok?: string;
+  sortering?: "ARBEIDSGIVER" | "ARBEIDSTAKER" | "INNSENDT_DATO" | "STATUS";
+  retning?: "ASC" | "DESC";
+  representasjonstype:
+    | "DEG_SELV"
+    | "ARBEIDSGIVER"
+    | "RADGIVER"
+    | "ANNEN_PERSON";
+  radgiverfirmaOrgnr?: string;
+}
+
+export interface InnsendtSoknadOversiktDto {
+  /** @format uuid */
+  id: string;
+  arbeidsgiverNavn?: string;
+  arbeidsgiverOrgnr?: string;
+  arbeidstakerNavn?: string;
+  arbeidstakerFnrMaskert?: string;
+  /** @format date-time */
+  innsendtDato: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+  harPdf: boolean;
+}
+
+export interface InnsendteSoknaderResponse {
+  soknader: InnsendtSoknadOversiktDto[];
+  /** @format int32 */
+  totaltAntall: number;
+  /** @format int32 */
+  side: number;
+  /** @format int32 */
+  antallPerSide: number;
+}
+
+export interface UtenlandsoppdragetArbeidstakersDelDto {
+  utsendelsesLand: string;
+  /** @format date */
+  utsendelseFraDato: string;
+  /** @format date */
+  utsendelseTilDato: string;
 }
 
 export interface ArbeidssituasjonDto {
@@ -58,6 +139,7 @@ export interface FamiliemedlemmerDto {
 }
 
 export interface NorskVirksomhet {
+  /** @minLength 1 */
   organisasjonsnummer: string;
 }
 
@@ -91,19 +173,27 @@ export interface UtenlandskVirksomhet {
   tilhorerSammeKonsern: boolean;
 }
 
-export interface UtenlandsoppdragetArbeidstakersDelDto {
-  utsendelsesLand: string;
+export interface UtenlandsoppdragetDto {
+  utsendelseLand: string;
   /** @format date */
-  utsendelseFraDato: string;
+  arbeidstakerUtsendelseFraDato: string;
   /** @format date */
-  utsendelseTilDato: string;
-}
-
-export interface CreateArbeidsgiverSkjemaRequest {
-  orgnr: string;
+  arbeidstakerUtsendelseTilDato: string;
+  arbeidsgiverHarOppdragILandet: boolean;
+  arbeidstakerBleAnsattForUtenlandsoppdraget: boolean;
+  arbeidstakerForblirAnsattIHelePerioden: boolean;
+  arbeidstakerErstatterAnnenPerson: boolean;
+  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget?: boolean;
+  utenlandsoppholdetsBegrunnelse?: string;
+  ansettelsesforholdBeskrivelse?: string;
+  /** @format date */
+  forrigeArbeidstakerUtsendelseFradato?: string;
+  /** @format date */
+  forrigeArbeidstakerUtsendelseTilDato?: string;
 }
 
 export interface ArbeidsgiverenDto {
+  /** @minLength 1 */
   organisasjonsnummer: string;
   organisasjonNavn: string;
 }
@@ -141,6 +231,7 @@ export interface ArbeidsstedIUtlandetDto {
 }
 
 export interface ArbeidstakerenDto {
+  /** @minLength 1 */
   fodselsnummer: string;
 }
 
@@ -187,29 +278,57 @@ export interface PaSkipDto {
   territorialfarvannLand?: string;
 }
 
-export interface UtenlandsoppdragetDto {
-  utsendelseLand: string;
-  /** @format date */
-  arbeidstakerUtsendelseFraDato: string;
-  /** @format date */
-  arbeidstakerUtsendelseTilDato: string;
-  arbeidsgiverHarOppdragILandet: boolean;
-  arbeidstakerBleAnsattForUtenlandsoppdraget: boolean;
-  arbeidstakerForblirAnsattIHelePerioden: boolean;
-  arbeidstakerErstatterAnnenPerson: boolean;
-  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget?: boolean;
-  utenlandsoppholdetsBegrunnelse?: string;
-  ansettelsesforholdBeskrivelse?: string;
-  /** @format date */
-  forrigeArbeidstakerUtsendelseFradato?: string;
-  /** @format date */
-  forrigeArbeidstakerUtsendelseTilDato?: string;
-}
-
 export interface SubmitSkjemaRequest {
   bekreftetRiktighet: boolean;
   /** @format date-time */
   submittedAt: string;
+}
+
+export interface VerifiserPersonRequest {
+  /** @minLength 1 */
+  fodselsnummer: string;
+  /** @minLength 1 */
+  etternavn: string;
+}
+
+export interface VerifiserPersonResponse {
+  navn: string;
+  /** @format date */
+  fodselsdato: string;
+}
+
+export interface UtkastListeResponse {
+  utkast: UtkastOversiktDto[];
+  /** @format int32 */
+  antall: number;
+}
+
+export interface UtkastOversiktDto {
+  /** @format uuid */
+  id: string;
+  arbeidsgiverNavn?: string;
+  arbeidsgiverOrgnr?: string;
+  arbeidstakerNavn?: string;
+  arbeidstakerFnrMaskert?: string;
+  /** @format date-time */
+  opprettetDato: string;
+  /** @format date-time */
+  sistEndretDato: string;
+  status: "UTKAST" | "SENDT" | "MOTTATT";
+}
+
+export interface Fullmakt {
+  fullmaktsgiver: string;
+  fullmektig: string;
+  leserettigheter: string[];
+  skriverettigheter: string[];
+}
+
+export interface PersonMedFullmaktDto {
+  fnr: string;
+  navn: string;
+  /** @format date */
+  fodselsdato: string;
 }
 
 export interface OrganisasjonDto {

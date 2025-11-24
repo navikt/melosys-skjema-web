@@ -17,7 +17,6 @@ import {
   testArbeidstakerSkjema,
   testUserInfo,
 } from "../fixtures/test-data";
-import { ArbeidssituasjonStegPage } from "../pages/skjema/arbeidstaker/arbeidssituasjon-steg.page";
 import { ArbeidstakerSkjemaVeiledningPage } from "../pages/skjema/arbeidstaker/arbeidstaker-skjema-veiledning.page";
 import { DineOpplysningerStegPage } from "../pages/skjema/arbeidstaker/dine-opplysninger-steg.page";
 import { FamiliemedlemmerStegPage } from "../pages/skjema/arbeidstaker/familiemedlemmer-steg.page";
@@ -135,37 +134,6 @@ test.describe("Arbeidstaker komplett flyt", () => {
 
     // Verifiser navigering til neste steg
     await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
-  });
-
-  test("skal fylle ut arbeidssituasjon steg og gjøre forventet POST request", async ({
-    page,
-  }) => {
-    const arbeidssituasjonStegPage = new ArbeidssituasjonStegPage(
-      page,
-      testArbeidstakerSkjema,
-    );
-
-    // Naviger direkte til steget
-    await arbeidssituasjonStegPage.goto();
-
-    await arbeidssituasjonStegPage.assertIsVisible();
-
-    // Svar på spørsmål
-    await arbeidssituasjonStegPage.harVaertEllerSkalVaereILonnetArbeidRadioGroup.JA.click();
-    await arbeidssituasjonStegPage.skalJobbeForFlereVirksomheterRadioGroup.NEI.click();
-
-    // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedArbeidssituasjonPayload: ArbeidssituasjonDto = {
-      harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
-      skalJobbeForFlereVirksomheter: false,
-    };
-
-    await arbeidssituasjonStegPage.lagreOgFortsettAndExpectPayload(
-      expectedArbeidssituasjonPayload,
-    );
-
-    // Verifiser navigering til neste steg
-    await arbeidssituasjonStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut skatteforhold og inntekt steg og gjøre forventet POST request", async ({

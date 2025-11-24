@@ -11,27 +11,30 @@ import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient";
-import type {
-  RepresentasjonskontekstDto,
-  RepresentasjonsType,
-} from "~/types/representasjon";
+import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 import { clearRepresentasjonKontekst } from "~/utils/sessionStorage";
 
+type Representasjonstype =
+  | "DEG_SELV"
+  | "ARBEIDSGIVER"
+  | "RADGIVER"
+  | "ANNEN_PERSON";
+
 interface KontekstBannerProps {
-  kontekst: RepresentasjonskontekstDto;
+  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
 interface KontekstConfig {
   icon: ComponentType<{ "aria-hidden"?: boolean; fontSize?: string }>;
   tittelKey: string;
   getDetaljer: (
-    kontekst: RepresentasjonskontekstDto,
+    kontekst: OpprettSoknadMedKontekstRequest,
     userName: string | undefined,
     t: (key: string) => string,
   ) => string;
 }
 
-const KONTEKST_CONFIG: Record<RepresentasjonsType, KontekstConfig> = {
+const KONTEKST_CONFIG: Record<Representasjonstype, KontekstConfig> = {
   DEG_SELV: {
     icon: PersonIcon,
     tittelKey: "kontekstBanner.minSide",
@@ -57,9 +60,8 @@ const KONTEKST_CONFIG: Record<RepresentasjonsType, KontekstConfig> = {
     icon: PersonGroupIcon,
     tittelKey: "kontekstBanner.minSideAnnenPerson",
     getDetaljer: (kontekst, _, t) =>
-      kontekst.arbeidstaker
-        ? kontekst.arbeidstaker.navn
-        : t("kontekstBanner.ingenPersonValgt"),
+      // TODO: Hva skal gjøres her? Her var det brukt en egendefinert type med feltet- navn, men typen apiet leverer har kun et nullable "etternavn"-felt.
+      kontekst.arbeidstaker?.etternavn ?? t("kontekstBanner.ingenPersonValgt"),
   },
 };
 
@@ -73,7 +75,7 @@ export function KontekstBanner({ kontekst }: KontekstBannerProps) {
     navigate({ to: "/" });
   };
 
-  const config = KONTEKST_CONFIG[kontekst.type];
+  const config = KONTEKST_CONFIG[kontekst.representasjonstype];
   const Icon = config.icon;
 
   return (

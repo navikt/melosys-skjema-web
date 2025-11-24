@@ -19,7 +19,6 @@ import {
   testOrganization,
   testUserInfo,
 } from "../fixtures/test-data";
-import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
 import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
 import { ArbeidsstedIUtlandetStegPage } from "../pages/skjema/arbeidsgiver/arbeidssted-i-utlandet-steg.page";
@@ -41,26 +40,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
   });
 
   // TODO: Update this test to use the new /oversikt flow instead of removed /rollevelger
-  // The new flow requires selecting employer and employee before starting application
-  test.skip("skal velge rolle som arbeidsgiver og starte søknad", async ({
-    page,
-  }) => {
-    const veiledningPage = new ArbeidsgiverSkjemaVeiledningPage(page);
-
-    // TODO: Implement navigation through /oversikt -> select employer/employee -> start application
-    // await oversiktPage.goto();
-    // await oversiktPage.selectEmployer(testOrganization);
-    // await oversiktPage.selectEmployee(...);
-    // await oversiktPage.clickStartApplication();
-
-    // Skal vise veiledningsside
-    await veiledningPage.assertStartSoknadButtonVisible();
-    await veiledningPage.startSoknad();
-
-    await veiledningPage.assertNavigatedToArbeidsgiveren(
-      testArbeidsgiverSkjema.id,
-    );
-  });
 
   test("skal fylle ut arbeidsgiveren steg og gjøre forventet POST request", async ({
     page,

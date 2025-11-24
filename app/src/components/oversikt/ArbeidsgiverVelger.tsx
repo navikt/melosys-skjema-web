@@ -11,15 +11,15 @@ import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker";
 import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient";
-import type {
-  Organisasjon,
-  RepresentasjonskontekstDto,
-} from "~/types/representasjon";
+import {
+  OpprettSoknadMedKontekstRequest,
+  SimpleOrganisasjonDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 interface ArbeidsgiverVelgerProps {
-  kontekst: RepresentasjonskontekstDto;
-  valgtArbeidsgiver?: Organisasjon;
-  onArbeidsgiverValgt: (organisasjon: Organisasjon) => void;
+  kontekst: OpprettSoknadMedKontekstRequest;
+  valgtArbeidsgiver?: SimpleOrganisasjonDto;
+  onArbeidsgiverValgt: (organisasjon: SimpleOrganisasjonDto) => void;
   harFeil?: boolean;
 }
 
@@ -48,22 +48,27 @@ export function ArbeidsgiverVelger({
     isError,
   } = useQuery({
     ...listAltinnTilganger(),
-    enabled: kontekst.type === "RADGIVER",
+    enabled: kontekst.representasjonstype === "RADGIVER",
     retry: false,
   });
 
   const arbeidsgiverErLast = () => {
-    return kontekst.type === "ARBEIDSGIVER" && kontekst.arbeidsgiver;
+    return (
+      kontekst.representasjonstype === "ARBEIDSGIVER" && kontekst.arbeidsgiver
+    );
   };
 
   const visningArbeidsgiver = kontekst.arbeidsgiver || valgtArbeidsgiver;
 
   const skalSokeEtterArbeidsgiver = () => {
-    return kontekst.type === "DEG_SELV" || kontekst.type === "ANNEN_PERSON";
+    return (
+      kontekst.representasjonstype === "DEG_SELV" ||
+      kontekst.representasjonstype === "ANNEN_PERSON"
+    );
   };
 
   const skalViseArbeidsgiverVelger = () => {
-    return kontekst.type === "RADGIVER";
+    return kontekst.representasjonstype === "RADGIVER";
   };
 
   // Konverter OrganisasjonDto til Combobox options med søkbar tekst

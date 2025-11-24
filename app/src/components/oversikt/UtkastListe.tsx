@@ -13,10 +13,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient";
-import type { RepresentasjonskontekstDto } from "~/types/representasjon";
+import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 
 interface UtkastListeProps {
-  kontekst: RepresentasjonskontekstDto;
+  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
 const formatDato = (dato: string) => {
@@ -138,7 +138,7 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
                 >
                   <HStack align="center" gap="4" justify="space-between">
                     <VStack className="flex-1" gap="2">
-                      {kontekst.type !== "DEG_SELV" && (
+                      {kontekst.representasjonstype !== "DEG_SELV" && (
                         <div>
                           <BodyShort className="text-text-subtle" size="small">
                             {t("oversiktFelles.utkastArbeidsgiver")}

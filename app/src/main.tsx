@@ -11,9 +11,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { initReactI18next } from "react-i18next";
 
+import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
+
 import { resources } from "./i18n/i18n.ts";
 import { routeTree } from "./routeTree.gen";
-import type { RepresentasjonskontekstDto } from "./types/representasjon";
 
 // Initialize i18n with language from decorator cookie
 const getDecoratorLangFromCookie = () => {
@@ -45,7 +46,7 @@ export const queryClient = new QueryClient();
 export interface RouterContext {
   queryClient: QueryClient;
   hideSiteTitle?: boolean;
-  kontekst?: RepresentasjonskontekstDto;
+  kontekst?: OpprettSoknadMedKontekstRequest;
 }
 
 const router = createRouter({

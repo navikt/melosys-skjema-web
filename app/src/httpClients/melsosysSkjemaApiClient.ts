@@ -9,20 +9,24 @@ import {
   ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
   ArbeidstakersSkjemaDto,
-  CreateArbeidsgiverSkjemaRequest,
-  CreateArbeidstakerSkjemaRequest,
   DineOpplysningerDto,
   FamiliemedlemmerDto,
+  HentInnsendteSoknaderRequest,
+  InnsendteSoknaderResponse,
+  OpprettSoknadMedKontekstRequest,
+  OpprettSoknadMedKontekstResponse,
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhet,
+  PersonMedFullmaktDto,
   SkatteforholdOgInntektDto,
   SubmitSkjemaRequest,
   TilleggsopplysningerDto,
   UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
+  UtkastListeResponse,
+  VerifiserPersonRequest,
+  VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonskontekstDto } from "~/types/representasjon";
-import type { UtkastListeResponse } from "~/types/utkast";
 
 const API_PROXY_URL = "/api";
 
@@ -123,56 +127,6 @@ async function fetchSkjemaAsArbeidsgiver(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidsgiver-view`,
     {
       method: "GET",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-}
-
-/**
- * @deprecated Bruk opprettSoknadMedKontekst() i stedet.
- * Dette endepunktet oppretter skjema uten representasjonskontekst og er utgått.
- */
-export async function createArbeidstakerSkjema(
-  request: CreateArbeidstakerSkjemaRequest,
-): Promise<ArbeidstakersSkjemaDto> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-}
-
-/**
- * @deprecated Bruk opprettSoknadMedKontekst() i stedet.
- * Dette endepunktet oppretter skjema uten representasjonskontekst og er utgått.
- */
-export async function createArbeidsgiverSkjema(
-  request: CreateArbeidsgiverSkjemaRequest,
-): Promise<ArbeidsgiversSkjemaDto> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
     },
   );
 
@@ -353,24 +307,6 @@ async function fetchOrganisasjon(
   return response.json();
 }
 
-// ============ PDL / Representasjon API ============
-
-export interface PersonMedFullmaktDto {
-  fnr: string;
-  navn: string;
-  fodselsdato: string;
-}
-
-export interface VerifiserPersonRequest {
-  fodselsnummer: string;
-  etternavn: string;
-}
-
-export interface VerifiserPersonResponse {
-  navn: string;
-  fodselsdato: string;
-}
-
 export const getPersonerMedFullmaktQuery = () =>
   queryOptions<PersonMedFullmaktDto[]>({
     queryKey: ["representasjon", "personer"],
@@ -418,30 +354,6 @@ export async function verifiserPerson(
   return response.json();
 }
 
-// ============ Opprett søknad med kontekst ============
-
-export interface OpprettSoknadMedKontekstRequest {
-  representasjonstype: string;
-  radgiverfirma?: {
-    orgnr: string;
-    navn: string;
-  };
-  arbeidsgiver?: {
-    orgnr: string;
-    navn: string;
-  };
-  arbeidstaker?: {
-    fnr: string;
-    etternavn?: string; // Kun nødvendig for arbeidstaker uten fullmakt
-  };
-  harFullmakt: boolean;
-}
-
-export interface OpprettSoknadMedKontekstResponse {
-  id: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
-}
-
 export async function opprettSoknadMedKontekst(
   kontekst: OpprettSoknadMedKontekstRequest,
 ): Promise<OpprettSoknadMedKontekstResponse> {
@@ -477,9 +389,13 @@ export async function opprettSoknadMedKontekst(
  * - RADGIVER: Kun utkast for det spesifikke rådgiverfirmaet (krever radgiverfirmaOrgnr)
  * - ANNEN_PERSON: Alle utkast for personer brukeren har fullmakt for
  */
-export const getUtkastQuery = (kontekst: RepresentasjonskontekstDto) =>
+export const getUtkastQuery = (kontekst: OpprettSoknadMedKontekstRequest) =>
   queryOptions<UtkastListeResponse>({
-    queryKey: ["utkast", kontekst.type, kontekst.radgiverfirma?.orgnr],
+    queryKey: [
+      "utkast",
+      kontekst.representasjonstype,
+      kontekst.radgiverfirma?.orgnr,
+    ],
     queryFn: () => fetchUtkast(kontekst),
     staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
     gcTime: 5 * 60 * 1000, // 5 minutter
@@ -487,13 +403,16 @@ export const getUtkastQuery = (kontekst: RepresentasjonskontekstDto) =>
   });
 
 async function fetchUtkast(
-  kontekst: RepresentasjonskontekstDto,
+  kontekst: OpprettSoknadMedKontekstRequest,
 ): Promise<UtkastListeResponse> {
   const params = new URLSearchParams();
-  params.append("representasjonstype", kontekst.type);
+  params.append("representasjonstype", kontekst.representasjonstype);
 
   // For RADGIVER må vi sende med rådgiverfirmaets orgnr
-  if (kontekst.type === "RADGIVER" && kontekst.radgiverfirma?.orgnr) {
+  if (
+    kontekst.representasjonstype === "RADGIVER" &&
+    kontekst.radgiverfirma?.orgnr
+  ) {
     params.append("radgiverfirmaOrgnr", kontekst.radgiverfirma.orgnr);
   }
 
@@ -525,9 +444,9 @@ async function fetchUtkast(
  * VIKTIG: Bruker POST i stedet for GET for å unngå at søkeord logges i access logs.
  */
 export const getInnsendteSoknaderQuery = (
-  request: import("~/types/innsendteSoknader").HentInnsendteSoknaderRequest,
+  request: HentInnsendteSoknaderRequest,
 ) =>
-  queryOptions<import("~/types/innsendteSoknader").InnsendteSoknaderResponse>({
+  queryOptions<InnsendteSoknaderResponse>({
     queryKey: [
       "innsendte-soknader",
       request.representasjonstype,
@@ -545,8 +464,8 @@ export const getInnsendteSoknaderQuery = (
   });
 
 async function fetchInnsendteSoknader(
-  request: import("~/types/innsendteSoknader").HentInnsendteSoknaderRequest,
-): Promise<import("~/types/innsendteSoknader").InnsendteSoknaderResponse> {
+  request: HentInnsendteSoknaderRequest,
+): Promise<InnsendteSoknaderResponse> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/innsendte`,
     {

@@ -14,14 +14,13 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient";
-import type {
+import {
   HentInnsendteSoknaderRequest,
-  SorteringsFelt,
-} from "~/types/innsendteSoknader";
-import type { RepresentasjonskontekstDto } from "~/types/representasjon";
+  OpprettSoknadMedKontekstRequest,
+} from "~/types/melosysSkjemaTypes.ts";
 
 interface InnsendteSoknaderTabellProps {
-  kontekst: RepresentasjonskontekstDto;
+  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
 const ANTALL_PER_SIDE = 5;
@@ -34,6 +33,12 @@ const formatDato = (dato: string) => {
     year: "numeric",
   });
 };
+
+type SorteringsFelt =
+  | "ARBEIDSGIVER"
+  | "ARBEIDSTAKER"
+  | "INNSENDT_DATO"
+  | "STATUS";
 
 /**
  * Tabell over innsendte søknader med søk, sortering og paginering.
@@ -80,7 +85,7 @@ export function InnsendteSoknaderTabell({
         : sort?.direction === "descending"
           ? "DESC"
           : undefined,
-    representasjonstype: kontekst.type,
+    representasjonstype: kontekst.representasjonstype,
     radgiverfirmaOrgnr: kontekst.radgiverfirma?.orgnr,
   };
 

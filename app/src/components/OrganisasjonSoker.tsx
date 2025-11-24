@@ -5,13 +5,13 @@ import { useTranslation } from "react-i18next";
 
 import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient";
 import { radgiverfirmaSchema } from "~/pages/representasjon/radgiverfirma/radgiverfirmaSchema";
-import type { Organisasjon } from "~/types/representasjon";
+import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 interface OrganisasjonSokerProps {
   /** Label for søkefeltet */
   label: string;
   /** Callback når organisasjon er funnet og validert */
-  onOrganisasjonValgt: (organisasjon: Organisasjon) => void;
+  onOrganisasjonValgt: (organisasjon: SimpleOrganisasjonDto) => void;
   /** Initial verdi for søkefeltet */
   initialValue?: string;
   /** Om søkefeltet skal ha autofokus */
@@ -28,7 +28,7 @@ export function OrganisasjonSoker({
   const [validationError, setValidationError] = useState<string | null>(null);
   const [searchValue, setSearchValue] = useState<string>(initialValue);
   const [valgtOrganisasjon, setValgtOrganisasjon] =
-    useState<Organisasjon | null>(null);
+    useState<SimpleOrganisasjonDto | null>(null);
 
   const organisasjonQuery = useQuery({
     ...getOrganisasjonQuery(searchValue || ""),
@@ -70,7 +70,7 @@ export function OrganisasjonSoker({
     const response = await organisasjonQuery.refetch();
 
     if (response.data) {
-      const org: Organisasjon = {
+      const org: SimpleOrganisasjonDto = {
         orgnr: response.data.juridiskEnhet.organisasjonsnummer,
         navn:
           response.data.juridiskEnhet.navn?.sammensattnavn ||
