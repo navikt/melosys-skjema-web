@@ -1,9 +1,9 @@
 import {
   Alert,
+  BodyShort,
   Box,
   Heading,
   Loader,
-  TextField,
   UNSAFE_Combobox,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
@@ -114,7 +114,7 @@ export function ArbeidsgiverVelger({
 
   return (
     <div>
-      <Heading level="3" size="small" spacing>
+      <Heading level="3" size="medium" spacing>
         {t("oversiktFelles.arbeidsgiverTittel")}
       </Heading>
 
@@ -123,12 +123,13 @@ export function ArbeidsgiverVelger({
       !valgtArbeidsgiver ? (
         <Loader size="medium" title={t("felles.laster")} />
       ) : skalViseReadonly && valgtArbeidsgiver ? (
-        // Readonly TextField for ARBEIDSGIVER med kun én organisasjon
-        <TextField
-          label={t("oversiktFelles.arbeidsgiverTittel")}
-          readOnly
-          value={`${valgtArbeidsgiver.navn}\nOrg.nr: ${valgtArbeidsgiver.orgnr}`}
-        />
+        // Readonly display for ARBEIDSGIVER med kun én organisasjon
+        <div>
+          <BodyShort size={"medium"} weight="semibold">
+            {valgtArbeidsgiver.navn}
+          </BodyShort>
+          <BodyShort size="small">Org.nr: {valgtArbeidsgiver.orgnr}</BodyShort>
+        </div>
       ) : (
         <Box
           borderColor={harFeil ? "border-danger" : "border-info"}

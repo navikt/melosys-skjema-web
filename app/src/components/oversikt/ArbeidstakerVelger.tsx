@@ -209,7 +209,7 @@ export function ArbeidstakerVelger({
 
   return (
     <div>
-      <Heading className="mt-4" level="3" size="small" spacing>
+      <Heading className="mt-4" level="3" size="medium" spacing>
         {t("oversiktFelles.arbeidstakerTittel")}
       </Heading>
 
