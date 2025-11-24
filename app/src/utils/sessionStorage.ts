@@ -1,5 +1,7 @@
-import type { OrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonskontekstDto } from "~/types/representasjon.ts";
+import type {
+  OpprettSoknadMedKontekstRequest,
+  OrganisasjonDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 export function getValgtRolle(): OrganisasjonDto | undefined {
   try {
@@ -29,7 +31,7 @@ export function setValgtRolle(organisasjon: OrganisasjonDto): void {
 const REPRESENTASJON_KEY = "representasjonKontekst";
 
 export function getRepresentasjonKontekst():
-  | RepresentasjonskontekstDto
+  | OpprettSoknadMedKontekstRequest
   | undefined {
   try {
     const kontekstData = sessionStorage.getItem(REPRESENTASJON_KEY);
@@ -38,7 +40,7 @@ export function getRepresentasjonKontekst():
       return undefined;
     }
 
-    return JSON.parse(kontekstData) as RepresentasjonskontekstDto;
+    return JSON.parse(kontekstData) as OpprettSoknadMedKontekstRequest;
   } catch {
     // Clear corrupted data
     sessionStorage.removeItem(REPRESENTASJON_KEY);
@@ -47,7 +49,7 @@ export function getRepresentasjonKontekst():
 }
 
 export function setRepresentasjonKontekst(
-  kontekst: RepresentasjonskontekstDto,
+  kontekst: OpprettSoknadMedKontekstRequest,
 ): void {
   try {
     sessionStorage.setItem(REPRESENTASJON_KEY, JSON.stringify(kontekst));

@@ -14,11 +14,13 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient";
-import { HentInnsendteSoknaderRequest } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonskontekstDto } from "~/types/representasjon";
+import {
+  HentInnsendteSoknaderRequest,
+  OpprettSoknadMedKontekstRequest,
+} from "~/types/melosysSkjemaTypes.ts";
 
 interface InnsendteSoknaderTabellProps {
-  kontekst: RepresentasjonskontekstDto;
+  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
 const ANTALL_PER_SIDE = 5;
@@ -83,7 +85,7 @@ export function InnsendteSoknaderTabell({
         : sort?.direction === "descending"
           ? "DESC"
           : undefined,
-    representasjonstype: kontekst.type,
+    representasjonstype: kontekst.representasjonstype,
     radgiverfirmaOrgnr: kontekst.radgiverfirma?.orgnr,
   };
 

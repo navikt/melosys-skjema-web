@@ -18,7 +18,6 @@ import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient";
-import type { RepresentasjonsType } from "~/types/representasjon";
 import { setRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 function getFirstName(fullName: string | undefined): string {
@@ -27,15 +26,21 @@ function getFirstName(fullName: string | undefined): string {
 }
 
 interface RepresentationOption {
-  type: RepresentasjonsType;
+  type: Representasjonstype;
   icon: ComponentType<{ "aria-hidden"?: boolean; fontSize?: string }>;
   labelKey: string;
 }
 
 interface RepresentationCardProps {
   option: RepresentationOption;
-  onSelect: (type: RepresentasjonsType) => void;
+  onSelect: (type: Representasjonstype) => void;
 }
+
+type Representasjonstype =
+  | "DEG_SELV"
+  | "ARBEIDSGIVER"
+  | "RADGIVER"
+  | "ANNEN_PERSON";
 
 function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
   const { t } = useTranslation();
@@ -87,7 +92,7 @@ export function LandingssidePage() {
   const navigate = useNavigate();
   const userInfoQuery = useQuery(getUserInfo());
 
-  const handleVelgRepresentasjon = (type: RepresentasjonsType) => {
+  const handleVelgRepresentasjon = (type: Representasjonstype) => {
     setRepresentasjonKontekst({
       type,
       harFullmakt: false,

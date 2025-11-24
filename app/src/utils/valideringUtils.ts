@@ -1,8 +1,8 @@
-import type {
-  Organisasjon,
-  Person,
-  RepresentasjonskontekstDto,
-} from "~/types/representasjon";
+import {
+  OpprettSoknadMedKontekstRequest,
+  PersonDto,
+  SimpleOrganisasjonDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 export interface SoknadValideringsresultat {
   gyldig: boolean;
@@ -20,15 +20,16 @@ export interface SoknadValideringsresultat {
  * @returns Valideringsresultat med info om hva som mangler
  */
 export function validerSoknadKontekst(
-  kontekst: RepresentasjonskontekstDto,
-  arbeidsgiver?: Organisasjon,
-  arbeidstaker?: Person,
+  kontekst: OpprettSoknadMedKontekstRequest,
+  arbeidsgiver?: SimpleOrganisasjonDto,
+  arbeidstaker?: PersonDto,
 ): SoknadValideringsresultat {
   // Arbeidsgiver er påkrevd for alle representasjonstyper
   const manglerArbeidsgiver = !arbeidsgiver;
 
   // Arbeidstaker er påkrevd for alle unntatt DEG_SELV (settes automatisk)
-  const manglerArbeidstaker = kontekst.type !== "DEG_SELV" && !arbeidstaker;
+  const manglerArbeidstaker =
+    kontekst.representasjonstype !== "DEG_SELV" && !arbeidstaker;
 
   return {
     gyldig: !manglerArbeidsgiver && !manglerArbeidstaker,

@@ -14,18 +14,18 @@ import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient";
 import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad";
-import type {
-  Organisasjon,
-  Person,
-  RepresentasjonskontekstDto,
-} from "~/types/representasjon";
+import {
+  OpprettSoknadMedKontekstRequest,
+  PersonDto,
+  SimpleOrganisasjonDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { validerSoknadKontekst } from "~/utils/valideringUtils";
 
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger";
 import { ArbeidstakerVelger } from "./ArbeidstakerVelger";
 
 interface SoknadStarterProps {
-  kontekst: RepresentasjonskontekstDto;
+  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
 /**
@@ -36,10 +36,10 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [valgtArbeidsgiver, setValgtArbeidsgiver] = useState<
-    Organisasjon | undefined
+    SimpleOrganisasjonDto | undefined
   >(kontekst.arbeidsgiver);
   const [valgtArbeidstaker, setValgtArbeidstaker] = useState<
-    Person | undefined
+    PersonDto | undefined
   >(kontekst.arbeidstaker);
   const [harFullmakt, setHarFullmakt] = useState<boolean>(kontekst.harFullmakt);
   const [valideringsfeil, setValideringsfeil] = useState<string[]>([]);
@@ -49,13 +49,18 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   // Automatisk sett arbeidstaker til innlogget bruker for DEG_SELV
   useEffect(() => {
-    if (kontekst.type === "DEG_SELV" && userInfo && !valgtArbeidstaker) {
+    if (
+      kontekst.representasjonstype === "DEG_SELV" &&
+      userInfo &&
+      !valgtArbeidstaker
+    ) {
+      // TODO: Her må typene avklares litt bedre mellom PersonDto og userInfo
       setValgtArbeidstaker({
         fnr: userInfo.userId,
-        navn: userInfo.name,
+        etternavn: userInfo.name,
       });
     }
-  }, [kontekst.type, userInfo, valgtArbeidstaker]);
+  }, [kontekst.representasjonstype, userInfo, valgtArbeidstaker]);
 
   const validerOgGaVidere = () => {
     const validering = validerSoknadKontekst(
@@ -98,7 +103,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   };
 
   // Clear valideringsfeil når arbeidsgiver/arbeidstaker endres
-  const handleArbeidsgiverValgt = (organisasjon: Organisasjon) => {
+  const handleArbeidsgiverValgt = (organisasjon: SimpleOrganisasjonDto) => {
     setValgtArbeidsgiver(organisasjon);
     // Fjern arbeidsgiver-feil hvis den finnes
     setValideringsfeil((prev) =>
@@ -108,7 +113,10 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     );
   };
 
-  const handleArbeidstakerValgt = (person?: Person, medFullmakt?: boolean) => {
+  const handleArbeidstakerValgt = (
+    person?: PersonDto,
+    medFullmakt?: boolean,
+  ) => {
     setValgtArbeidstaker(person);
     setHarFullmakt(medFullmakt ?? false);
     // Fjern arbeidstaker-feil hvis den finnes
@@ -141,11 +149,11 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
             {t("oversiktFelles.soknadStarterTittel")}
           </Heading>
           <BodyLong spacing>
-            {kontekst.type === "DEG_SELV"
+            {kontekst.representasjonstype === "DEG_SELV"
               ? t("oversiktFelles.soknadStarterInfoDegSelv")
               : t("oversiktFelles.soknadStarterInfo")}
           </BodyLong>
-          {kontekst.type !== "DEG_SELV" && (
+          {kontekst.representasjonstype !== "DEG_SELV" && (
             <VStack gap="4">
               <BodyShort>
                 {t("oversiktFelles.soknadStarterFullmaktInfo1")}
@@ -169,12 +177,14 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
           />
         </div>
 
-        {kontekst.type !== "DEG_SELV" && (
+        {kontekst.representasjonstype !== "DEG_SELV" && (
           <div>
             <ArbeidstakerVelger
               harFeil={harArbeidstakerFeil}
               onArbeidstakerValgt={handleArbeidstakerValgt}
-              visKunMedFullmakt={kontekst.type === "ANNEN_PERSON"}
+              visKunMedFullmakt={
+                kontekst.representasjonstype === "ANNEN_PERSON"
+              }
             />
           </div>
         )}

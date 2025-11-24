@@ -1,12 +1,16 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import type { RepresentasjonsType } from "~/types/representasjon";
-
 const API_PROXY_URL = "/api";
+
+type Representasjonstype =
+  | "DEG_SELV"
+  | "ARBEIDSGIVER"
+  | "RADGIVER"
+  | "ANNEN_PERSON";
 
 // Lightweight metadata-response for routing
 interface SkjemaMetadata {
-  representasjonstype: RepresentasjonsType;
+  representasjonstype: Representasjonstype;
 }
 
 async function fetchSkjemaMetadata(id: string): Promise<SkjemaMetadata> {
@@ -34,16 +38,15 @@ export const Route = createFileRoute("/skjema/$id")({
         : "arbeidsgiver";
 
     // Redirect til riktig skjematype
-    const error =
-      skjemaType === "arbeidstaker"
-        ? redirect({
-            to: "/skjema/arbeidstaker/$id",
-            params: { id },
-          })
-        : redirect({
-            to: "/skjema/arbeidsgiver/$id",
-            params: { id },
-          });
-    throw error;
+
+    throw skjemaType === "arbeidstaker"
+      ? redirect({
+          to: "/skjema/arbeidstaker/$id",
+          params: { id },
+        })
+      : redirect({
+          to: "/skjema/arbeidsgiver/$id",
+          params: { id },
+        });
   },
 });

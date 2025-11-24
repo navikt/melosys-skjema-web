@@ -17,14 +17,16 @@ import {
   OpprettSoknadMedKontekstResponse,
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhet,
+  PersonMedFullmaktDto,
   SkatteforholdOgInntektDto,
   SubmitSkjemaRequest,
   TilleggsopplysningerDto,
   UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
+  UtkastListeResponse,
+  VerifiserPersonRequest,
+  VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonskontekstDto } from "~/types/representasjon";
-import type { UtkastListeResponse } from "~/types/utkast";
 
 const API_PROXY_URL = "/api";
 
@@ -305,24 +307,6 @@ async function fetchOrganisasjon(
   return response.json();
 }
 
-// ============ PDL / Representasjon API ============
-
-export interface PersonMedFullmaktDto {
-  fnr: string;
-  navn: string;
-  fodselsdato: string;
-}
-
-export interface VerifiserPersonRequest {
-  fodselsnummer: string;
-  etternavn: string;
-}
-
-export interface VerifiserPersonResponse {
-  navn: string;
-  fodselsdato: string;
-}
-
 export const getPersonerMedFullmaktQuery = () =>
   queryOptions<PersonMedFullmaktDto[]>({
     queryKey: ["representasjon", "personer"],
@@ -405,9 +389,13 @@ export async function opprettSoknadMedKontekst(
  * - RADGIVER: Kun utkast for det spesifikke rådgiverfirmaet (krever radgiverfirmaOrgnr)
  * - ANNEN_PERSON: Alle utkast for personer brukeren har fullmakt for
  */
-export const getUtkastQuery = (kontekst: RepresentasjonskontekstDto) =>
+export const getUtkastQuery = (kontekst: OpprettSoknadMedKontekstRequest) =>
   queryOptions<UtkastListeResponse>({
-    queryKey: ["utkast", kontekst.type, kontekst.radgiverfirma?.orgnr],
+    queryKey: [
+      "utkast",
+      kontekst.representasjonstype,
+      kontekst.radgiverfirma?.orgnr,
+    ],
     queryFn: () => fetchUtkast(kontekst),
     staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
     gcTime: 5 * 60 * 1000, // 5 minutter
@@ -415,13 +403,16 @@ export const getUtkastQuery = (kontekst: RepresentasjonskontekstDto) =>
   });
 
 async function fetchUtkast(
-  kontekst: RepresentasjonskontekstDto,
+  kontekst: OpprettSoknadMedKontekstRequest,
 ): Promise<UtkastListeResponse> {
   const params = new URLSearchParams();
-  params.append("representasjonstype", kontekst.type);
+  params.append("representasjonstype", kontekst.representasjonstype);
 
   // For RADGIVER må vi sende med rådgiverfirmaets orgnr
-  if (kontekst.type === "RADGIVER" && kontekst.radgiverfirma?.orgnr) {
+  if (
+    kontekst.representasjonstype === "RADGIVER" &&
+    kontekst.radgiverfirma?.orgnr
+  ) {
     params.append("radgiverfirmaOrgnr", kontekst.radgiverfirma.orgnr);
   }
 

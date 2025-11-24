@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker";
-import type { Organisasjon } from "~/types/representasjon";
+import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 import {
   clearRepresentasjonKontekst,
   getRepresentasjonKontekst,
@@ -31,10 +31,14 @@ function RadgiverfirmaRoute() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { kontekst } = Route.useRouteContext();
-  const [valgtFirma, setValgtFirma] = useState<Organisasjon | null>(null);
+  const [valgtFirma, setValgtFirma] = useState<SimpleOrganisasjonDto | null>(
+    null,
+  );
   const [feilmelding, setFeilmelding] = useState<string | null>(null);
 
-  const handleOrganisasjonValgt = (organisasjon: Organisasjon): void => {
+  const handleOrganisasjonValgt = (
+    organisasjon: SimpleOrganisasjonDto,
+  ): void => {
     setValgtFirma(organisasjon);
     setFeilmelding(null);
   };

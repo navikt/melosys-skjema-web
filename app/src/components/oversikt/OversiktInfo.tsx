@@ -1,17 +1,17 @@
 import { BodyShort, GuidePanel, Heading } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import type { RepresentasjonskontekstDto } from "~/types/representasjon";
+import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 
 interface OversiktInfoProps {
-  kontekst: RepresentasjonskontekstDto;
+  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
 export function OversiktInfo({ kontekst }: OversiktInfoProps) {
   const { t } = useTranslation();
 
   const getTittel = () => {
-    switch (kontekst.type) {
+    switch (kontekst.representasjonstype) {
       case "DEG_SELV": {
         return t("oversiktDegSelv.tittel");
       }
@@ -28,7 +28,7 @@ export function OversiktInfo({ kontekst }: OversiktInfoProps) {
   };
 
   const getInfoBullets = (): string[] => {
-    switch (kontekst.type) {
+    switch (kontekst.representasjonstype) {
       case "DEG_SELV": {
         return [
           t("oversiktDegSelv.infoBullet1"),

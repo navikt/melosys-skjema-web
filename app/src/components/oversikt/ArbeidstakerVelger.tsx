@@ -18,16 +18,15 @@ import { z } from "zod";
 
 import {
   getPersonerMedFullmaktQuery,
-  type PersonMedFullmaktDto,
   verifiserPerson,
 } from "~/httpClients/melsosysSkjemaApiClient";
-import type { Person } from "~/types/representasjon";
+import { PersonDto, PersonMedFullmaktDto } from "~/types/melosysSkjemaTypes.ts";
 
 const FNR_LENGTH = 11;
 
 interface ArbeidstakerVelgerProps {
   onArbeidstakerValgt?: (
-    arbeidstaker?: Person | undefined,
+    arbeidstaker?: PersonDto,
     harFullmakt?: boolean,
   ) => void;
   harFeil?: boolean;
@@ -110,11 +109,11 @@ export function ArbeidstakerVelger({
       setFnrError(null);
       setEtternavnError(null);
       if (onArbeidstakerValgt) {
+        // TODO: Her må det rettes opp eller avklares litt hvordan typene skal se ut
         onArbeidstakerValgt(
           {
             fnr: person.fnr,
-            navn: person.navn,
-            fodselsdato: person.fodselsdato,
+            etternavn: person.navn,
           },
           true,
         ); // Med fullmakt
@@ -166,12 +165,11 @@ export function ArbeidstakerVelger({
       setVerifiseringFeil(null);
 
       if (onArbeidstakerValgt) {
+        // TODO: Her må det rettes opp eller avklares litt hvordan typene skal se ut
         onArbeidstakerValgt(
           {
             fnr,
-            navn: response.navn,
-            etternavn, // Etternavn fra brukerens input (for backend-validering)
-            fodselsdato: response.fodselsdato,
+            etternavn: response.navn, // Etternavn fra brukerens input (for backend-validering)
           },
           false,
         ); // Uten fullmakt
