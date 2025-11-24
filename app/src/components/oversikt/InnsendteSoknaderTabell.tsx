@@ -24,6 +24,8 @@ interface InnsendteSoknaderTabellProps {
   kontekst: RepresentasjonskontekstDto;
 }
 
+const ANTALL_PER_SIDE = 5;
+
 // Format dato
 const formatDato = (dato: string) => {
   return new Date(dato).toLocaleDateString("nb-NO", {
@@ -45,7 +47,6 @@ export function InnsendteSoknaderTabell({
   const [sokQuery, setSokQuery] = useState("");
   const [aktivtSok, setAktivtSok] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [antallPerSide] = useState(10);
   const [sort, setSort] = useState<
     | { orderBy: SorteringsFelt; direction: "ascending" | "descending" }
     | undefined
@@ -70,7 +71,7 @@ export function InnsendteSoknaderTabell({
   // Bygg request-objekt
   const request: HentInnsendteSoknaderRequest = {
     side: currentPage,
-    antall: antallPerSide,
+    antall: ANTALL_PER_SIDE,
     sok: aktivtSok || undefined,
     sortering: sort?.orderBy,
     retning:
@@ -208,7 +209,7 @@ export function InnsendteSoknaderTabell({
               <Table.ColumnHeader sortKey="arbeidstaker" sortable>
                 {t("oversiktFelles.historikkKolonneArbeidstaker")}
               </Table.ColumnHeader>
-              <Table.ColumnHeader sortKey="innsendt_dato" sortable>
+              <Table.ColumnHeader>
                 {t("oversiktFelles.historikkKolonneFnr")}
               </Table.ColumnHeader>
               <Table.ColumnHeader sortKey="innsendt_dato" sortable>
