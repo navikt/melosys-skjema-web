@@ -110,7 +110,7 @@ export function RepresentasjonPage() {
         break;
       }
       case "RADGIVER": {
-        navigate({ to: "/representasjon/radgiverfirma" });
+        navigate({ to: "/representasjon/velg-radgiverfirma" });
         break;
       }
       case "ANNEN_PERSON": {

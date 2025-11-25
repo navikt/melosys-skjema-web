@@ -19,7 +19,7 @@ export const Route = createFileRoute(
       kontekst.representasjonstype === "RADGIVER" &&
       !kontekst.radgiverfirma
     ) {
-      throw redirect({ to: "/representasjon/radgiverfirma" });
+      throw redirect({ to: "/representasjon/velg-radgiverfirma" });
     }
 
     return {

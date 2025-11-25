@@ -23,12 +23,14 @@ interface StartSoknadPageProps {
   kontekst: OpprettSoknadMedKontekstRequest;
   arbeidsgiver?: SimpleOrganisasjonDto;
   arbeidstaker?: PersonDto;
+  previousRoute: string;
 }
 
 export function StartSoknadPage({
   kontekst,
   arbeidsgiver,
   arbeidstaker,
+  previousRoute,
 }: StartSoknadPageProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -62,26 +64,6 @@ export function StartSoknadPage({
   };
 
   const handleAvbryt = () => {
-    const previousRoute = (() => {
-      switch (kontekst.representasjonstype) {
-        case "DEG_SELV": {
-          return "/representasjon/deg-selv";
-        }
-        case "ARBEIDSGIVER": {
-          return "/representasjon/din-arbeidsgiver";
-        }
-        case "RADGIVER": {
-          return "/representasjon/arbeidsgiver-som-radgiver";
-        }
-        case "ANNEN_PERSON": {
-          return "/representasjon/annen-person";
-        }
-        default: {
-          return "/representasjon";
-        }
-      }
-    })();
-
     void navigate({ to: previousRoute });
   };
 

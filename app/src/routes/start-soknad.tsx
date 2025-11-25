@@ -21,9 +21,9 @@ export const Route = createFileRoute("/start-soknad")({
       | StartSoknadLocationState
       | undefined;
 
-    // Redirect til oversikt hvis state mangler (f.eks. ved refresh)
+    // Redirect til rot hvis state mangler (f.eks. ved refresh)
     if (!state || !state.kontekst) {
-      throw redirect({ to: "/oversikt" });
+      throw redirect({ to: "/" });
     }
 
     // Valider at nødvendig data er tilstede
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/start-soknad")({
     );
 
     if (!validering.gyldig) {
-      throw redirect({ to: "/oversikt" });
+      throw redirect({ to: previousRoute(kontekst) });
     }
 
     return {
@@ -59,6 +59,27 @@ function StartSoknadRoute() {
       arbeidsgiver={arbeidsgiver}
       arbeidstaker={arbeidstaker}
       kontekst={kontekst}
+      previousRoute={previousRoute(kontekst)}
     />
   );
+}
+
+function previousRoute(kontekst: OpprettSoknadMedKontekstRequest): string {
+  switch (kontekst.representasjonstype) {
+    case "DEG_SELV": {
+      return "/representasjon/deg-selv";
+    }
+    case "ARBEIDSGIVER": {
+      return "/representasjon/din-arbeidsgiver";
+    }
+    case "RADGIVER": {
+      return "/representasjon/arbeidsgiver-som-radgiver";
+    }
+    case "ANNEN_PERSON": {
+      return "/representasjon/annen-person";
+    }
+    default: {
+      return "/representasjon";
+    }
+  }
 }
