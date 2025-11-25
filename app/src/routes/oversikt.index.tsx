@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { OversiktPage } from "~/pages/representasjon/OversiktPage";
+import { OversiktPage } from "~/pages/oversikt/OversiktPage.tsx";
 import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/oversikt/")({

@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { StartSoknadPage } from "~/pages/start-soknad/StartSoknadPage";
+import { StartSoknadPage } from "~/pages/oversikt/start-soknad/StartSoknadPage";
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
@@ -14,7 +14,7 @@ export interface StartSoknadLocationState {
   kontekst: OpprettSoknadMedKontekstRequest;
 }
 
-export const Route = createFileRoute("/start-soknad")({
+export const Route = createFileRoute("/oversikt/start-soknad")({
   component: StartSoknadRoute,
   beforeLoad: ({ location }) => {
     const state = location.state as unknown as
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/start-soknad")({
     );
 
     if (!validering.gyldig) {
-      throw redirect({ to: "/oversikt" });
+      throw redirect({ to: ".." });
     }
 
     return {

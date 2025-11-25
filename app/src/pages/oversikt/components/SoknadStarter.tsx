@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
-import type { StartSoknadLocationState } from "~/routes/start-soknad.tsx";
+import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad.tsx";
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
@@ -91,7 +91,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     };
 
     void navigate({
-      to: "/start-soknad",
+      to: "/oversikt/start-soknad",
       // TanStack Router krever eksplisitt type assertion for custom state
       state: navState as never,
     });

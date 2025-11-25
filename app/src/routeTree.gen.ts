@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as StartSoknadRouteImport } from './routes/start-soknad'
 import { Route as SkjemaRouteImport } from './routes/skjema'
 import { Route as RepresentasjonRouteImport } from './routes/representasjon'
 import { Route as OversiktRouteImport } from './routes/oversikt'
@@ -19,6 +18,7 @@ import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon
 import { Route as OversiktIndexRouteImport } from './routes/oversikt.index'
 import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
+import { Route as OversiktStartSoknadRouteImport } from './routes/oversikt.start-soknad'
 import { Route as SkjemaArbeidstakerIdIndexRouteImport } from './routes/skjema.arbeidstaker.$id.index'
 import { Route as SkjemaArbeidsgiverIdIndexRouteImport } from './routes/skjema.arbeidsgiver.$id.index'
 import { Route as SkjemaArbeidstakerIdVedleggRouteImport } from './routes/skjema.arbeidstaker.$id.vedlegg'
@@ -39,11 +39,6 @@ import { Route as SkjemaArbeidsgiverIdArbeidsstedIUtlandetRouteImport } from './
 import { Route as SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRouteImport } from './routes/skjema.arbeidsgiver.$id.arbeidsgiverens-virksomhet-i-norge'
 import { Route as SkjemaArbeidsgiverIdArbeidsgiverenRouteImport } from './routes/skjema.arbeidsgiver.$id.arbeidsgiveren'
 
-const StartSoknadRoute = StartSoknadRouteImport.update({
-  id: '/start-soknad',
-  path: '/start-soknad',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SkjemaRoute = SkjemaRouteImport.update({
   id: '/skjema',
   path: '/skjema',
@@ -90,6 +85,11 @@ const RepresentasjonVelgRadgiverfirmaRoute =
     path: '/velg-radgiverfirma',
     getParentRoute: () => RepresentasjonRoute,
   } as any)
+const OversiktStartSoknadRoute = OversiktStartSoknadRouteImport.update({
+  id: '/start-soknad',
+  path: '/start-soknad',
+  getParentRoute: () => OversiktRoute,
+} as any)
 const SkjemaArbeidstakerIdIndexRoute =
   SkjemaArbeidstakerIdIndexRouteImport.update({
     id: '/arbeidstaker/$id/',
@@ -210,7 +210,7 @@ export interface FileRoutesByFullPath {
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
-  '/start-soknad': typeof StartSoknadRoute
+  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRoute
   '/oversikt/': typeof OversiktIndexRoute
@@ -238,7 +238,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/start-soknad': typeof StartSoknadRoute
+  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRoute
   '/oversikt': typeof OversiktIndexRoute
@@ -270,7 +270,7 @@ export interface FileRoutesById {
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
-  '/start-soknad': typeof StartSoknadRoute
+  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRoute
   '/oversikt/': typeof OversiktIndexRoute
@@ -303,7 +303,7 @@ export interface FileRouteTypes {
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
-    | '/start-soknad'
+    | '/oversikt/start-soknad'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/oversikt/'
@@ -331,7 +331,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/start-soknad'
+    | '/oversikt/start-soknad'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/oversikt'
@@ -362,7 +362,7 @@ export interface FileRouteTypes {
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
-    | '/start-soknad'
+    | '/oversikt/start-soknad'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/oversikt/'
@@ -394,18 +394,10 @@ export interface RootRouteChildren {
   OversiktRoute: typeof OversiktRouteWithChildren
   RepresentasjonRoute: typeof RepresentasjonRouteWithChildren
   SkjemaRoute: typeof SkjemaRouteWithChildren
-  StartSoknadRoute: typeof StartSoknadRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/start-soknad': {
-      id: '/start-soknad'
-      path: '/start-soknad'
-      fullPath: '/start-soknad'
-      preLoaderRoute: typeof StartSoknadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/skjema': {
       id: '/skjema'
       path: '/skjema'
@@ -468,6 +460,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/representasjon/velg-radgiverfirma'
       preLoaderRoute: typeof RepresentasjonVelgRadgiverfirmaRouteImport
       parentRoute: typeof RepresentasjonRoute
+    }
+    '/oversikt/start-soknad': {
+      id: '/oversikt/start-soknad'
+      path: '/start-soknad'
+      fullPath: '/oversikt/start-soknad'
+      preLoaderRoute: typeof OversiktStartSoknadRouteImport
+      parentRoute: typeof OversiktRoute
     }
     '/skjema/arbeidstaker/$id/': {
       id: '/skjema/arbeidstaker/$id/'
@@ -606,10 +605,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface OversiktRouteChildren {
+  OversiktStartSoknadRoute: typeof OversiktStartSoknadRoute
   OversiktIndexRoute: typeof OversiktIndexRoute
 }
 
 const OversiktRouteChildren: OversiktRouteChildren = {
+  OversiktStartSoknadRoute: OversiktStartSoknadRoute,
   OversiktIndexRoute: OversiktIndexRoute,
 }
 
@@ -700,7 +701,6 @@ const rootRouteChildren: RootRouteChildren = {
   OversiktRoute: OversiktRouteWithChildren,
   RepresentasjonRoute: RepresentasjonRouteWithChildren,
   SkjemaRoute: SkjemaRouteWithChildren,
-  StartSoknadRoute: StartSoknadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

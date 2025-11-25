@@ -1,13 +1,13 @@
 import { BodyShort, GuidePanel, Heading, VStack } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { KontekstBanner } from "~/components/KontekstBanner";
+import { KontekstBanner } from "~/components/KontekstBanner.tsx";
 import {
   InnsendteSoknaderTabell,
   SoknadStarter,
   UtkastListe,
-} from "~/pages/representasjon/components";
-import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes";
+} from "~/pages/oversikt/components";
+import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 
 interface OversiktPageProps {
   kontekst: OpprettSoknadMedKontekstRequest;

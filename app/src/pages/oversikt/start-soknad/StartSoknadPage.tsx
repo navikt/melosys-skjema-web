@@ -12,12 +12,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient";
+import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
   SimpleOrganisasjonDto,
-} from "~/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes.ts";
 
 interface StartSoknadPageProps {
   kontekst: OpprettSoknadMedKontekstRequest;
@@ -62,7 +62,7 @@ export function StartSoknadPage({
   };
 
   const handleAvbryt = () => {
-    void navigate({ to: "/oversikt" });
+    void navigate({ to: ".." });
   };
 
   // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette
