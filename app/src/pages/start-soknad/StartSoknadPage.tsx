@@ -54,12 +54,7 @@ export function StartSoknadPage({
       representasjonstype: kontekst.representasjonstype,
       radgiverfirma: kontekst.radgiverfirma,
       arbeidsgiver,
-      arbeidstaker: arbeidstaker
-        ? {
-            fnr: arbeidstaker.fnr,
-            etternavn: arbeidstaker.etternavn, // Kun sendes hvis uten fullmakt
-          }
-        : undefined,
+      arbeidstaker,
       harFullmakt: kontekst.harFullmakt,
     };
 

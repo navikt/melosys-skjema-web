@@ -6,7 +6,7 @@ import {
   InnsendteSoknaderTabell,
   SoknadStarter,
   UtkastListe,
-} from "~/components/oversikt";
+} from "~/pages/representasjon/components";
 import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 
 interface ArbeidsgiverSomRadgiverPageProps {
