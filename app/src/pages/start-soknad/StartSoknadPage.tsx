@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient";
@@ -17,54 +17,19 @@ import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
   SimpleOrganisasjonDto,
-} from "~/types/melosysSkjemaTypes.ts";
-import { validerSoknadKontekst } from "~/utils/valideringUtils";
+} from "~/types/melosysSkjemaTypes";
 
-export interface StartSoknadLocationState {
+interface StartSoknadPageProps {
+  kontekst: OpprettSoknadMedKontekstRequest;
   arbeidsgiver?: SimpleOrganisasjonDto;
   arbeidstaker?: PersonDto;
-  kontekst: OpprettSoknadMedKontekstRequest;
 }
 
-export const Route = createFileRoute("/oversikt/start-soknad")({
-  component: StartSoknadRoute,
-  beforeLoad: ({ location }) => {
-    const state = location.state as unknown as
-      | StartSoknadLocationState
-      | undefined;
-
-    // Redirect til oversikt hvis state mangler (f.eks. ved refresh)
-    if (!state || !state.kontekst) {
-      throw redirect({ to: "/oversikt" });
-    }
-
-    // Valider at nødvendig data er tilstede
-    const kontekst = state.kontekst;
-    const arbeidsgiver = state.arbeidsgiver;
-    const arbeidstaker = state.arbeidstaker;
-
-    // Redirect til oversikt hvis validering feiler
-    const validering = validerSoknadKontekst(
-      kontekst,
-      arbeidsgiver,
-      arbeidstaker,
-    );
-
-    if (!validering.gyldig) {
-      throw redirect({ to: "/oversikt" });
-    }
-
-    return {
-      hideSiteTitle: true,
-      kontekst,
-      arbeidsgiver,
-      arbeidstaker,
-    };
-  },
-});
-
-function StartSoknadRoute() {
-  const { kontekst, arbeidsgiver, arbeidstaker } = Route.useRouteContext();
+export function StartSoknadPage({
+  kontekst,
+  arbeidsgiver,
+  arbeidstaker,
+}: StartSoknadPageProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -102,7 +67,27 @@ function StartSoknadRoute() {
   };
 
   const handleAvbryt = () => {
-    void navigate({ to: "/oversikt" });
+    const previousRoute = (() => {
+      switch (kontekst.representasjonstype) {
+        case "DEG_SELV": {
+          return "/representasjon/deg-selv";
+        }
+        case "ARBEIDSGIVER": {
+          return "/representasjon/din-arbeidsgiver";
+        }
+        case "RADGIVER": {
+          return "/representasjon/arbeidsgiver-som-radgiver";
+        }
+        case "ANNEN_PERSON": {
+          return "/representasjon/annen-person";
+        }
+        default: {
+          return "/representasjon";
+        }
+      }
+    })();
+
+    void navigate({ to: previousRoute });
   };
 
   // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette

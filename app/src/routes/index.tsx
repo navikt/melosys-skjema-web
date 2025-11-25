@@ -1,35 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { LandingssidePage } from "~/pages/landingsside/LandingssidePage";
-import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
-
 export const Route = createFileRoute("/")({
-  component: LandingssideRoute,
   beforeLoad: () => {
-    const eksisterendeKontekst = getRepresentasjonKontekst();
-
-    // Hvis kontekst finnes, redirecter til riktig side (LandingssidePage rendres aldri i dette tilfellet)
-    // Hvis ingen kontekst, vis landingssiden slik at bruker kan velge representasjonstype
-    if (eksisterendeKontekst) {
-      // Naviger basert på konteksttype og om den er komplett
-      if (
-        eksisterendeKontekst.representasjonstype === "RADGIVER" &&
-        !eksisterendeKontekst.radgiverfirma
-      ) {
-        throw redirect({ to: "/representasjon/radgiverfirma" });
-      }
-
-      // ANNEN_PERSON går direkte til oversikt (velger arbeidstaker der)
-
-      throw redirect({ to: "/oversikt" });
-    }
-
-    return {
-      hideSiteTitle: true,
-    };
+    throw redirect({ to: "/representasjon" });
   },
 });
-
-function LandingssideRoute() {
-  return <LandingssidePage />;
-}
