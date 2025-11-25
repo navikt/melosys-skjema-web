@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { DinArbeidsgiverPage } from "~/pages/representasjon/din-arbeidsgiver/DinArbeidsgiverPage";
+import { OversiktPage } from "~/pages/representasjon/OversiktPage";
 import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/representasjon/din-arbeidsgiver/")({
@@ -24,5 +24,5 @@ function DinArbeidsgiverRoute() {
 
   if (!kontekst) return null;
 
-  return <DinArbeidsgiverPage kontekst={kontekst} />;
+  return <OversiktPage kontekst={kontekst} />;
 }

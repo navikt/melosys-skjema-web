@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { AnnenPersonPage } from "~/pages/representasjon/annen-person/AnnenPersonPage";
+import { OversiktPage } from "~/pages/representasjon/OversiktPage";
 import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/representasjon/annen-person/")({
@@ -24,5 +24,5 @@ function AnnenPersonRoute() {
 
   if (!kontekst) return null;
 
-  return <AnnenPersonPage kontekst={kontekst} />;
+  return <OversiktPage kontekst={kontekst} />;
 }

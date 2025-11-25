@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StartSoknadRouteImport } from './routes/start-soknad'
 import { Route as SkjemaRouteImport } from './routes/skjema'
 import { Route as RepresentasjonRouteImport } from './routes/representasjon'
-import { Route as OversiktRouteImport } from './routes/oversikt'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SkjemaIndexRouteImport } from './routes/skjema.index'
 import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon.index'
@@ -59,11 +58,6 @@ const SkjemaRoute = SkjemaRouteImport.update({
 const RepresentasjonRoute = RepresentasjonRouteImport.update({
   id: '/representasjon',
   path: '/representasjon',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OversiktRoute = OversiktRouteImport.update({
-  id: '/oversikt',
-  path: '/oversikt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -256,7 +250,6 @@ const SkjemaArbeidsgiverIdArbeidsgiverenRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/oversikt': typeof OversiktRoute
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
   '/start-soknad': typeof StartSoknadRoute
@@ -294,7 +287,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/oversikt': typeof OversiktRoute
   '/start-soknad': typeof StartSoknadRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRoute
@@ -327,7 +319,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/oversikt': typeof OversiktRoute
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
   '/start-soknad': typeof StartSoknadRoute
@@ -367,7 +358,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/oversikt'
     | '/representasjon'
     | '/skjema'
     | '/start-soknad'
@@ -405,7 +395,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/oversikt'
     | '/start-soknad'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
@@ -437,7 +426,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/oversikt'
     | '/representasjon'
     | '/skjema'
     | '/start-soknad'
@@ -476,7 +464,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  OversiktRoute: typeof OversiktRoute
   RepresentasjonRoute: typeof RepresentasjonRouteWithChildren
   SkjemaRoute: typeof SkjemaRouteWithChildren
   StartSoknadRoute: typeof StartSoknadRoute
@@ -503,13 +490,6 @@ declare module '@tanstack/react-router' {
       path: '/representasjon'
       fullPath: '/representasjon'
       preLoaderRoute: typeof RepresentasjonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/oversikt': {
-      id: '/oversikt'
-      path: '/oversikt'
-      fullPath: '/oversikt'
-      preLoaderRoute: typeof OversiktRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -886,7 +866,6 @@ const SkjemaRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  OversiktRoute: OversiktRoute,
   RepresentasjonRoute: RepresentasjonRouteWithChildren,
   SkjemaRoute: SkjemaRouteWithChildren,
   StartSoknadRoute: StartSoknadRoute,

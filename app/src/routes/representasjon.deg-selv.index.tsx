@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { DegSelvPage } from "~/pages/representasjon/deg-selv/DegSelvPage";
+import { OversiktPage } from "~/pages/representasjon/OversiktPage";
 import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/representasjon/deg-selv/")({
@@ -24,5 +24,5 @@ function DegSelvRoute() {
 
   if (!kontekst) return null;
 
-  return <DegSelvPage kontekst={kontekst} />;
+  return <OversiktPage kontekst={kontekst} />;
 }
