@@ -39,7 +39,7 @@ export const Route = createFileRoute("/start-soknad")({
     );
 
     if (!validering.gyldig) {
-      throw redirect({ to: previousRoute(kontekst) });
+      throw redirect({ to: "/oversikt" });
     }
 
     return {
@@ -59,27 +59,6 @@ function StartSoknadRoute() {
       arbeidsgiver={arbeidsgiver}
       arbeidstaker={arbeidstaker}
       kontekst={kontekst}
-      previousRoute={previousRoute(kontekst)}
     />
   );
-}
-
-function previousRoute(kontekst: OpprettSoknadMedKontekstRequest): string {
-  switch (kontekst.representasjonstype) {
-    case "DEG_SELV": {
-      return "/representasjon/deg-selv";
-    }
-    case "ARBEIDSGIVER": {
-      return "/representasjon/din-arbeidsgiver";
-    }
-    case "RADGIVER": {
-      return "/representasjon/arbeidsgiver-som-radgiver";
-    }
-    case "ANNEN_PERSON": {
-      return "/representasjon/annen-person";
-    }
-    default: {
-      return "/representasjon";
-    }
-  }
 }

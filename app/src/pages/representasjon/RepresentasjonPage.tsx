@@ -100,23 +100,11 @@ export function RepresentasjonPage() {
       harFullmakt: false,
     });
 
-    switch (representasjonstype) {
-      case "DEG_SELV": {
-        navigate({ to: "/representasjon/deg-selv" });
-        break;
-      }
-      case "ARBEIDSGIVER": {
-        navigate({ to: "/representasjon/din-arbeidsgiver" });
-        break;
-      }
-      case "RADGIVER": {
-        navigate({ to: "/representasjon/velg-radgiverfirma" });
-        break;
-      }
-      case "ANNEN_PERSON": {
-        navigate({ to: "/representasjon/annen-person" });
-        break;
-      }
+    // RADGIVER må velge firma først, andre går direkte til oversikt
+    if (representasjonstype === "RADGIVER") {
+      void navigate({ to: "/representasjon/velg-radgiverfirma" });
+    } else {
+      void navigate({ to: "/oversikt" });
     }
   };
 

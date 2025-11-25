@@ -38,7 +38,7 @@ export function VelgRadgiverfirmaPage() {
       radgiverfirma: valgtFirma,
     });
 
-    void navigate({ to: "/representasjon/arbeidsgiver-som-radgiver" });
+    void navigate({ to: "/oversikt" });
   };
 
   const handleAvbryt = (): void => {

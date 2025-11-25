@@ -18,43 +18,51 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
 
   const getTittel = () => {
     switch (kontekst.representasjonstype) {
-      case "DEG_SELV":
+      case "DEG_SELV": {
         return t("oversiktDegSelv.tittel");
-      case "ARBEIDSGIVER":
+      }
+      case "ARBEIDSGIVER": {
         return t("oversiktArbeidsgiver.tittel");
-      case "RADGIVER":
+      }
+      case "RADGIVER": {
         return t("oversiktRadgiver.tittel");
-      case "ANNEN_PERSON":
+      }
+      case "ANNEN_PERSON": {
         return t("oversiktAnnenPerson.tittel");
+      }
     }
   };
 
   const getInfoBullets = (): string[] => {
     switch (kontekst.representasjonstype) {
-      case "DEG_SELV":
+      case "DEG_SELV": {
         return [
           t("oversiktDegSelv.infoBullet1"),
           t("oversiktDegSelv.infoBullet2"),
         ];
-      case "ARBEIDSGIVER":
+      }
+      case "ARBEIDSGIVER": {
         return [
           t("oversiktArbeidsgiver.infoBullet1"),
           t("oversiktArbeidsgiver.infoBullet2"),
           t("oversiktArbeidsgiver.infoBullet3"),
           t("oversiktArbeidsgiver.infoBullet4"),
         ];
-      case "RADGIVER":
+      }
+      case "RADGIVER": {
         return [
           t("oversiktRadgiver.infoBullet1"),
           t("oversiktRadgiver.infoBullet2"),
           t("oversiktRadgiver.infoBullet3"),
           t("oversiktRadgiver.infoBullet4"),
         ];
-      case "ANNEN_PERSON":
+      }
+      case "ANNEN_PERSON": {
         return [
           t("oversiktAnnenPerson.infoBullet1"),
           t("oversiktAnnenPerson.infoBullet2"),
         ];
+      }
     }
   };
 

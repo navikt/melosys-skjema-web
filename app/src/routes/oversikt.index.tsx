@@ -3,13 +3,22 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { OversiktPage } from "~/pages/representasjon/OversiktPage";
 import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
-export const Route = createFileRoute("/representasjon/annen-person/")({
-  component: AnnenPersonRoute,
+export const Route = createFileRoute("/oversikt/")({
+  component: OversiktRoute,
   beforeLoad: () => {
     const kontekst = getRepresentasjonKontekst();
 
+    // Redirect til landingsside hvis ingen kontekst er valgt
     if (!kontekst) {
       throw redirect({ to: "/" });
+    }
+
+    // Redirect til velg rådgiverfirma hvis RADGIVER men ingen firma valgt
+    if (
+      kontekst.representasjonstype === "RADGIVER" &&
+      !kontekst.radgiverfirma
+    ) {
+      throw redirect({ to: "/representasjon/velg-radgiverfirma" });
     }
 
     return {
@@ -19,10 +28,8 @@ export const Route = createFileRoute("/representasjon/annen-person/")({
   },
 });
 
-function AnnenPersonRoute() {
+function OversiktRoute() {
   const { kontekst } = Route.useRouteContext();
-
-  if (!kontekst) return null;
 
   return <OversiktPage kontekst={kontekst} />;
 }

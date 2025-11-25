@@ -23,14 +23,12 @@ interface StartSoknadPageProps {
   kontekst: OpprettSoknadMedKontekstRequest;
   arbeidsgiver?: SimpleOrganisasjonDto;
   arbeidstaker?: PersonDto;
-  previousRoute: string;
 }
 
 export function StartSoknadPage({
   kontekst,
   arbeidsgiver,
   arbeidstaker,
-  previousRoute,
 }: StartSoknadPageProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -64,7 +62,7 @@ export function StartSoknadPage({
   };
 
   const handleAvbryt = () => {
-    void navigate({ to: previousRoute });
+    void navigate({ to: "/oversikt" });
   };
 
   // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette
