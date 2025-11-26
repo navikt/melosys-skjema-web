@@ -460,6 +460,7 @@ export const nb = {
       utkastOpprettet: "Opprettet",
       utkastSistEndret: "Sist endret",
       soknadStarterTittel: "Hvem skal du søke på vegne av?",
+      soknadStarterTittelDegSelv: "Start søknad",
       soknadStarterInfoDegSelv:
         "Når du søker for deg selv, trenger vi informasjon om arbeidsgiver og deg selv som arbeidstaker.",
       soknadStarterInfo:

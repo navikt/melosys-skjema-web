@@ -141,7 +141,9 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
       <VStack gap="6">
         <div>
           <Heading level="2" size="medium" spacing>
-            {t("oversiktFelles.soknadStarterTittel")}
+            {kontekst.representasjonstype === "DEG_SELV"
+              ? t("oversiktFelles.soknadStarterTittelDegSelv")
+              : t("oversiktFelles.soknadStarterTittel")}
           </Heading>
           <BodyLong spacing>
             {kontekst.representasjonstype === "DEG_SELV"

@@ -435,6 +435,7 @@ export const en = {
       utkastOpprettet: "Created",
       utkastSistEndret: "Last modified",
       soknadStarterTittel: "Who are you applying on behalf of?",
+      soknadStarterTittelDegSelv: "Start application",
       soknadStarterInfoDegSelv:
         "When applying for yourself, we need information about the employer and you as an employee.",
       soknadStarterInfo:
