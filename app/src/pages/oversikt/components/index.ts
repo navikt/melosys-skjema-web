@@ -1,6 +1,3 @@
-/**
- * Oversikt-komponenter for MELOSYS-7723 og relaterte oppgaver
- */
 export { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
 export { ArbeidstakerVelger } from "./ArbeidstakerVelger.tsx";
 export { InnsendteSoknaderTabell } from "./InnsendteSoknaderTabell.tsx";
