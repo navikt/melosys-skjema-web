@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TextField } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -48,46 +48,45 @@ function DineOpplysningerStegContent({
   } = useQuery(getUserInfo());
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakeren;
-
-  const formMethods = useForm({
-    resolver: zodResolver(dineOpplysningerSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    control,
-  } = formMethods;
-
   const innloggetBrukerHarNorskFodselsnummer = userInfo?.userId !== undefined;
 
   // TODO: Backend bør returnere arbeidstaker-data (fødselsnummer, navn, etc.) som del av skjema-konteksten.
   // Dette steget bør være readonly/forhåndsutfylt basert på data fra backend, ikke client-side logikk.
   // Når skjema opprettes via ny /oversikt-flyt, sendes fullstendig kontekst (arbeidsgiver, arbeidstaker)
   // til backend som skal lagre og returnere denne dataen når skjemaet hentes.
-  // Denne useEffect er midlertidig for å håndtere legacy-scenario hvor data ikke kommer fra backend.
-  useEffect(() => {
+  // Denne logikken er midlertidig for å håndtere legacy-scenario hvor data ikke kommer fra backend.
+  const defaultValues = useMemo(() => {
+    // Hvis innlogget bruker har norsk fødselsnummer og det ikke allerede er lagret data,
+    // forhåndsutfyll med brukerens fødselsnummer
     if (
       innloggetBrukerHarNorskFodselsnummer &&
       !lagretSkjemadataForSteg?.harNorskFodselsnummer
     ) {
-      reset({
+      return {
         ...lagretSkjemadataForSteg,
         harNorskFodselsnummer: true,
         fodselsnummer: userInfo.userId,
-      });
+      };
     }
+
+    return lagretSkjemadataForSteg;
   }, [
     innloggetBrukerHarNorskFodselsnummer,
     userInfo?.userId,
     lagretSkjemadataForSteg,
-    reset,
   ]);
+
+  const formMethods = useForm({
+    resolver: zodResolver(dineOpplysningerSchema),
+    defaultValues,
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = formMethods;
 
   const harNorskFodselsnummer =
     useWatch({ control, name: "harNorskFodselsnummer" }) ||
