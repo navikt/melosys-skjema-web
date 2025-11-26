@@ -4,21 +4,17 @@ import { useTranslation } from "react-i18next";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegOppsummering.tsx";
 
-import { stepKey as arbeidsgiverStepKey } from "../arbeidsgiveren/ArbeidsgiverenSteg.tsx";
 import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
 import { stepKey as arbeidsstedIUtlandetStepKey } from "../arbeidssted-i-utlandet/ArbeidsstedIUtlandetSteg.tsx";
-import { stepKey as arbeidstakerenStepKey } from "../arbeidstakeren/ArbeidstakerenSteg.tsx";
 import { stepKey as arbeidstakerensLonnStepKey } from "../arbeidstakerens-lonn/ArbeidstakerensLonnSteg.tsx";
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { stepKey as tilleggsopplysningerStepKey } from "../tilleggsopplysninger/TilleggsopplysningerSteg.tsx";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
-import { ArbeidsgiverenStegOppsummering } from "./ArbeidsgiverenStegOppsummering.tsx";
 import { ArbeidsgiverensVirksomhetINorgeStegOppsummering } from "./ArbeidsgiverensVirksomhetINorgeStegOppsummering.tsx";
 import { ArbeidsstedIUtlandetStegOppsummering } from "./ArbeidsstedIUtlandetStegOppsummering.tsx";
 import { ArbeidstakerensLonnStegOppsummering } from "./ArbeidstakerensLonnStegOppsummering.tsx";
-import { ArbeidstakerenStegOppsummering } from "./ArbeidstakerenStegOppsummering.tsx";
 import { UtenlandsoppdragetStegOppsummering } from "./UtenlandsoppdragetStegOppsummering.tsx";
 
 const oppsummeringStepKey = "oppsummering";
@@ -44,9 +40,6 @@ function ArbeidsgiverOppsummeringStegContent({
 
   const renderStepSummary = (stepKey: string) => {
     switch (stepKey) {
-      case arbeidsgiverStepKey: {
-        return <ArbeidsgiverenStegOppsummering key={stepKey} skjema={skjema} />;
-      }
       case arbeidsgiverensVirksomhetINorgeStepKey: {
         return (
           <ArbeidsgiverensVirksomhetINorgeStegOppsummering
@@ -64,9 +57,6 @@ function ArbeidsgiverOppsummeringStegContent({
         return (
           <ArbeidsstedIUtlandetStegOppsummering key={stepKey} skjema={skjema} />
         );
-      }
-      case arbeidstakerenStepKey: {
-        return <ArbeidstakerenStegOppsummering key={stepKey} skjema={skjema} />;
       }
       case arbeidstakerensLonnStepKey: {
         return (

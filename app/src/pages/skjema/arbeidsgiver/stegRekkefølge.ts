@@ -2,16 +2,6 @@ import { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator
 
 export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
   {
-    key: "arbeidsgiveren",
-    title: "arbeidsgiverSteg.tittel",
-    route: "/skjema/arbeidsgiver/$id/arbeidsgiveren",
-  },
-  {
-    key: "arbeidstakeren",
-    title: "arbeidstakerenSteg.tittel",
-    route: "/skjema/arbeidsgiver/$id/arbeidstakeren",
-  },
-  {
     key: "arbeidsgiverens-virksomhet-i-norge",
     title: "arbeidsgiverensVirksomhetINorgeSteg.tittel",
     route: "/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge",
