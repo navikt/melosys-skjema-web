@@ -7,7 +7,7 @@ import {
   UNSAFE_Combobox,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
@@ -37,6 +37,7 @@ export function ArbeidsgiverVelger({
   harFeil = false,
 }: ArbeidsgiverVelgerProps) {
   const { t } = useTranslation();
+  const hasAutoSelectedRef = useRef(false);
 
   const skalHenteArbeidsgivere =
     kontekst.representasjonstype === "RADGIVER" ||
@@ -56,31 +57,30 @@ export function ArbeidsgiverVelger({
   });
 
   /**
-   * Auto-select hvis ARBEIDSGIVER har tilgang til kun én organisasjon
+   * Auto-select hvis ARBEIDSGIVER har tilgang til kun én organisasjon.
+   * Dette skjer som en direkte konsekvens av data-loading, så vi gjør det
+   * som en event handler (callback) heller enn som en transformasjon.
    */
-  useEffect(() => {
-    if (
-      kontekst.representasjonstype === "ARBEIDSGIVER" &&
-      arbeidsgivere?.length === 1 &&
-      !valgtArbeidsgiver &&
-      !isLoading &&
-      !isError
-    ) {
-      const forstOrg = arbeidsgivere[0];
-      if (forstOrg) {
+  if (
+    kontekst.representasjonstype === "ARBEIDSGIVER" &&
+    arbeidsgivere?.length === 1 &&
+    !valgtArbeidsgiver &&
+    !isLoading &&
+    !isError &&
+    !hasAutoSelectedRef.current
+  ) {
+    const forstOrg = arbeidsgivere[0];
+    if (forstOrg) {
+      hasAutoSelectedRef.current = true;
+      // Kjør i neste tick for å unngå state-oppdatering under render
+      queueMicrotask(() => {
         onArbeidsgiverValgt({
           orgnr: forstOrg.orgnr,
           navn: forstOrg.navn,
         });
-      }
+      });
     }
-  }, [
-    kontekst.representasjonstype,
-    arbeidsgivere,
-    valgtArbeidsgiver,
-    isLoading,
-    isError,
-  ]);
+  }
 
   const skalSokeEtterArbeidsgiver =
     kontekst.representasjonstype === "DEG_SELV" ||
