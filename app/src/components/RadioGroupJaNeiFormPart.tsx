@@ -28,7 +28,7 @@ export function RadioGroupJaNeiFormPart({
       render={({ field, fieldState }) => {
         // Når lockedValue er satt, bruk den i stedet for field.value
         const effectiveValue =
-          lockedValue !== undefined ? lockedValue : field.value;
+          lockedValue === undefined ? field.value : lockedValue;
 
         return (
           <RadioGroup
