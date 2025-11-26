@@ -165,14 +165,13 @@ export function ArbeidstakerVelger({
       setVerifiseringFeil(null);
 
       if (onArbeidstakerValgt) {
-        // TODO: Her må det rettes opp eller avklares litt hvordan typene skal se ut
         onArbeidstakerValgt(
           {
             fnr,
-            etternavn: response.navn, // Etternavn fra brukerens input (for backend-validering)
+            etternavn,
           },
           false,
-        ); // Uten fullmakt
+        );
       }
     } catch (error: unknown) {
       setVerifisertPerson(undefined);
