@@ -169,7 +169,7 @@ export function ArbeidstakerVelger({
         onArbeidstakerValgt(
           {
             fnr,
-            etternavn: response.navn, // Etternavn fra brukerens input (for backend-validering)
+            etternavn: etternavn, // Etternavn fra brukerens input (for backend-validering)
           },
           false,
         ); // Uten fullmakt
