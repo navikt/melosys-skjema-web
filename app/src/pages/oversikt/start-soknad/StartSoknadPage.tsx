@@ -30,6 +30,14 @@ export function StartSoknadPage({
   arbeidsgiver,
   arbeidstaker,
 }: StartSoknadPageProps) {
+  // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette
+  if (
+    (!arbeidsgiver || !arbeidstaker) &&
+    kontekst.representasjonstype !== "DEG_SELV"
+  ) {
+    return null;
+  }
+
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -64,14 +72,6 @@ export function StartSoknadPage({
   const handleAvbryt = () => {
     void navigate({ to: ".." });
   };
-
-  // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette
-  if (!arbeidsgiver && kontekst.representasjonstype !== "DEG_SELV") {
-    return null;
-  }
-  if (!arbeidstaker && kontekst.representasjonstype !== "DEG_SELV") {
-    return null;
-  }
 
   return (
     <VStack gap="6">
