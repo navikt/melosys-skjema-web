@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient";
+import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   HentInnsendteSoknaderRequest,
   OpprettSoknadMedKontekstRequest,

@@ -1,13 +1,19 @@
-import { BodyShort, GuidePanel, Heading } from "@navikt/ds-react";
+import { BodyShort, GuidePanel, Heading, VStack } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { KontekstBanner } from "~/components/KontekstBanner.tsx";
+import {
+  InnsendteSoknaderTabell,
+  SoknadStarter,
+  UtkastListe,
+} from "~/pages/oversikt/components";
 import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 
-interface OversiktInfoProps {
+interface OversiktPageProps {
   kontekst: OpprettSoknadMedKontekstRequest;
 }
 
-export function OversiktInfo({ kontekst }: OversiktInfoProps) {
+export function OversiktPage({ kontekst }: OversiktPageProps) {
   const { t } = useTranslation();
 
   const getTittel = () => {
@@ -61,17 +67,25 @@ export function OversiktInfo({ kontekst }: OversiktInfoProps) {
   };
 
   return (
-    <GuidePanel poster>
-      <Heading level="2" size="small" spacing>
-        {getTittel()}
-      </Heading>
-      <ul className="list-disc pl-6 space-y-1">
-        {getInfoBullets().map((bullet, index) => (
-          <li key={index}>
-            <BodyShort size="small">{bullet}</BodyShort>
-          </li>
-        ))}
-      </ul>
-    </GuidePanel>
+    <VStack gap="6">
+      <KontekstBanner kontekst={kontekst} />
+
+      <GuidePanel poster>
+        <Heading level="2" size="small" spacing>
+          {getTittel()}
+        </Heading>
+        <ul className="list-disc pl-6 space-y-1">
+          {getInfoBullets().map((bullet, index) => (
+            <li key={index}>
+              <BodyShort size="small">{bullet}</BodyShort>
+            </li>
+          ))}
+        </ul>
+      </GuidePanel>
+
+      <UtkastListe kontekst={kontekst} />
+      <SoknadStarter kontekst={kontekst} />
+      <InnsendteSoknaderTabell kontekst={kontekst} />
+    </VStack>
   );
 }

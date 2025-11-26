@@ -9,20 +9,20 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getUserInfo } from "~/httpClients/dekoratorenClient";
-import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad";
+import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
+import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad.tsx";
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { validerSoknadKontekst } from "~/utils/valideringUtils";
+import { validerSoknadKontekst } from "~/utils/valideringUtils.ts";
 
-import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger";
-import { ArbeidstakerVelger } from "./ArbeidstakerVelger";
+import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
+import { ArbeidstakerVelger } from "./ArbeidstakerVelger.tsx";
 
 interface SoknadStarterProps {
   kontekst: OpprettSoknadMedKontekstRequest;
@@ -46,26 +46,22 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   // Hent innlogget bruker for DEG_SELV-scenario
   const { data: userInfo } = useQuery(getUserInfo());
-  // Automatisk sett arbeidstaker til innlogget bruker for DEG_SELV
-  useEffect(() => {
-    if (
-      kontekst.representasjonstype === "DEG_SELV" &&
-      userInfo &&
-      !valgtArbeidstaker
-    ) {
-      // TODO: Her må typene avklares litt bedre mellom PersonDto og userInfo
-      setValgtArbeidstaker({
-        fnr: userInfo.userId,
-        etternavn: userInfo.name,
-      });
-    }
-  }, [kontekst.representasjonstype, userInfo, valgtArbeidstaker]);
+
+  // For DEG_SELV er arbeidstaker alltid innlogget bruker, beregnes direkte
+  // For andre typer brukes valgtArbeidstaker fra state
+  const effektivArbeidstaker =
+    kontekst.representasjonstype === "DEG_SELV" && userInfo
+      ? {
+          fnr: userInfo.userId,
+          etternavn: userInfo.name,
+        }
+      : valgtArbeidstaker;
 
   const validerOgGaVidere = () => {
     const validering = validerSoknadKontekst(
       kontekst,
       valgtArbeidsgiver,
-      valgtArbeidstaker,
+      effektivArbeidstaker,
     );
 
     const feil: string[] = [];
@@ -87,7 +83,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     // Naviger til oppsummeringssiden med state
     const navState: StartSoknadLocationState = {
       arbeidsgiver: valgtArbeidsgiver,
-      arbeidstaker: valgtArbeidstaker,
+      arbeidstaker: effektivArbeidstaker,
       kontekst: {
         ...kontekst,
         harFullmakt,

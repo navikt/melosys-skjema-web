@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient";
+import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 
 interface UtkastListeProps {

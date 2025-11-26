@@ -10,8 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { OrganisasjonSoker } from "~/components/OrganisasjonSoker";
-import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient";
+import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
+import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   OpprettSoknadMedKontekstRequest,
   SimpleOrganisasjonDto,

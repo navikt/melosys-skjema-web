@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient";
-import { radgiverfirmaSchema } from "~/pages/representasjon/radgiverfirma/radgiverfirmaSchema";
+import { radgiverfirmaSchema } from "~/pages/representasjon/velg-radgiverfirma/radgiverfirmaSchema";
 import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 interface OrganisasjonSokerProps {

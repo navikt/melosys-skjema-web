@@ -17,8 +17,8 @@ import { useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getUserInfo } from "~/httpClients/dekoratorenClient";
-import { setRepresentasjonKontekst } from "~/utils/sessionStorage";
+import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
+import { setRepresentasjonKontekst } from "~/utils/sessionStorage.ts";
 
 function getFirstName(fullName: string | undefined): string {
   if (!fullName) return "";
@@ -87,7 +87,7 @@ const REPRESENTATION_OPTIONS: RepresentationOption[] = [
   },
 ];
 
-export function LandingssidePage() {
+export function RepresentasjonPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const userInfoQuery = useQuery(getUserInfo());
@@ -100,17 +100,11 @@ export function LandingssidePage() {
       harFullmakt: false,
     });
 
-    switch (representasjonstype) {
-      case "DEG_SELV":
-      case "ARBEIDSGIVER":
-      case "ANNEN_PERSON": {
-        navigate({ to: "/oversikt" });
-        break;
-      }
-      case "RADGIVER": {
-        navigate({ to: "/representasjon/radgiverfirma" });
-        break;
-      }
+    // RADGIVER må velge firma først, andre går direkte til oversikt
+    if (representasjonstype === "RADGIVER") {
+      void navigate({ to: "/representasjon/velg-radgiverfirma" });
+    } else {
+      void navigate({ to: "/oversikt" });
     }
   };
 

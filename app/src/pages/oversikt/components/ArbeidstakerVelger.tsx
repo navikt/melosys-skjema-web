@@ -19,7 +19,7 @@ import { z } from "zod";
 import {
   getPersonerMedFullmaktQuery,
   verifiserPerson,
-} from "~/httpClients/melsosysSkjemaApiClient";
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { PersonDto, PersonMedFullmaktDto } from "~/types/melosysSkjemaTypes.ts";
 
 const FNR_LENGTH = 11;

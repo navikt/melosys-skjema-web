@@ -1,33 +1,17 @@
 import { BodyShort, Button, Heading, HStack, VStack } from "@navikt/ds-react";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { OrganisasjonSoker } from "~/components/OrganisasjonSoker";
+import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
+import { Route } from "~/routes/representasjon.velg-radgiverfirma.tsx";
 import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 import {
   clearRepresentasjonKontekst,
-  getRepresentasjonKontekst,
   setRepresentasjonKontekst,
-} from "~/utils/sessionStorage";
+} from "~/utils/sessionStorage.ts";
 
-export const Route = createFileRoute("/representasjon/radgiverfirma")({
-  component: RadgiverfirmaRoute,
-  beforeLoad: () => {
-    const kontekst = getRepresentasjonKontekst();
-
-    if (!kontekst || kontekst.representasjonstype !== "RADGIVER") {
-      throw redirect({ to: "/" });
-    }
-
-    return {
-      hideSiteTitle: true,
-      kontekst,
-    };
-  },
-});
-
-function RadgiverfirmaRoute() {
+export function VelgRadgiverfirmaPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { kontekst } = Route.useRouteContext();

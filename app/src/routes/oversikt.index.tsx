@@ -1,13 +1,6 @@
-import { VStack } from "@navikt/ds-react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { KontekstBanner } from "~/components/KontekstBanner";
-import {
-  InnsendteSoknaderTabell,
-  OversiktInfo,
-  SoknadStarter,
-  UtkastListe,
-} from "~/components/oversikt";
+import { OversiktPage } from "~/pages/oversikt/OversiktPage.tsx";
 import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/oversikt/")({
@@ -25,11 +18,8 @@ export const Route = createFileRoute("/oversikt/")({
       kontekst.representasjonstype === "RADGIVER" &&
       !kontekst.radgiverfirma
     ) {
-      throw redirect({ to: "/representasjon/radgiverfirma" });
+      throw redirect({ to: "/representasjon/velg-radgiverfirma" });
     }
-
-    // ANNEN_PERSON kan gå til oversikt uten forhåndsvalgt arbeidstaker
-    // (velges på oversiktssiden)
 
     return {
       hideSiteTitle: true,
@@ -41,16 +31,5 @@ export const Route = createFileRoute("/oversikt/")({
 function OversiktRoute() {
   const { kontekst } = Route.useRouteContext();
 
-  // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette.
-  if (!kontekst) return null;
-
-  return (
-    <VStack gap="6">
-      <KontekstBanner kontekst={kontekst} />
-      <OversiktInfo kontekst={kontekst} />
-      <UtkastListe kontekst={kontekst} />
-      <SoknadStarter kontekst={kontekst} />
-      <InnsendteSoknaderTabell kontekst={kontekst} />
-    </VStack>
-  );
+  return <OversiktPage kontekst={kontekst} />;
 }
