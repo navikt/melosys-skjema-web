@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TextField } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -55,26 +54,18 @@ function DineOpplysningerStegContent({
   // Når skjema opprettes via ny /oversikt-flyt, sendes fullstendig kontekst (arbeidsgiver, arbeidstaker)
   // til backend som skal lagre og returnere denne dataen når skjemaet hentes.
   // Denne logikken er midlertidig for å håndtere legacy-scenario hvor data ikke kommer fra backend.
-  const defaultValues = useMemo(() => {
-    // Hvis innlogget bruker har norsk fødselsnummer og det ikke allerede er lagret data,
-    // forhåndsutfyll med brukerens fødselsnummer
-    if (
-      innloggetBrukerHarNorskFodselsnummer &&
-      !lagretSkjemadataForSteg?.harNorskFodselsnummer
-    ) {
-      return {
-        ...lagretSkjemadataForSteg,
-        harNorskFodselsnummer: true,
-        fodselsnummer: userInfo.userId,
-      };
-    }
-
-    return lagretSkjemadataForSteg;
-  }, [
-    innloggetBrukerHarNorskFodselsnummer,
-    userInfo?.userId,
-    lagretSkjemadataForSteg,
-  ]);
+  //
+  // Hvis innlogget bruker har norsk fødselsnummer og det ikke allerede er lagret data,
+  // forhåndsutfyll med brukerens fødselsnummer
+  const defaultValues =
+    innloggetBrukerHarNorskFodselsnummer &&
+    !lagretSkjemadataForSteg?.harNorskFodselsnummer
+      ? {
+          ...lagretSkjemadataForSteg,
+          harNorskFodselsnummer: true,
+          fodselsnummer: userInfo.userId,
+        }
+      : lagretSkjemadataForSteg;
 
   const formMethods = useForm({
     resolver: zodResolver(dineOpplysningerSchema),

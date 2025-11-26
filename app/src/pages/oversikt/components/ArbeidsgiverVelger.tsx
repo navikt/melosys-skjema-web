@@ -7,7 +7,7 @@ import {
   UNSAFE_Combobox,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
@@ -92,14 +92,12 @@ export function ArbeidsgiverVelger({
     !!valgtArbeidsgiver;
 
   // Konverter OrganisasjonDto til Combobox options med søkbar tekst
-  const options = useMemo(() => {
-    if (!arbeidsgivere) return [];
-
-    return arbeidsgivere.map((org) => ({
-      label: `${org.navn} (${org.orgnr})`,
-      value: org.orgnr,
-    }));
-  }, [arbeidsgivere]);
+  const options = arbeidsgivere
+    ? arbeidsgivere.map((org) => ({
+        label: `${org.navn} (${org.orgnr})`,
+        value: org.orgnr,
+      }))
+    : [];
 
   const handleArbeidsgiverValgt = (value: string) => {
     const valgtOrganisasjon = arbeidsgivere?.find((org) => org.orgnr === value);
