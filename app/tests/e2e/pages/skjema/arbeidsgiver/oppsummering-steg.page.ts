@@ -3,11 +3,9 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { landKodeTilNavn } from "../../../../../src/components/LandVelgerFormPart";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
   ArbeidsstedIUtlandetDto,
-  ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerensLonnDto,
   NorskeOgUtenlandskeVirksomheter,
   TilleggsopplysningerDto,
@@ -33,20 +31,6 @@ export class OppsummeringStegPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
-  }
-
-  async assertArbeidsgiverenData(data: ArbeidsgiverenDto) {
-    await expect(
-      this.page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverSteg.arbeidsgiverensOrganisasjonsnummer}") + dd`,
-      ),
-    ).toHaveText(data.organisasjonsnummer);
-
-    await expect(
-      this.page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverSteg.organisasjonensNavn}") + dd`,
-      ),
-    ).toHaveText(data.organisasjonNavn);
   }
 
   async assertArbeidsgiverensVirksomhetINorgeData(
@@ -218,14 +202,6 @@ export class OppsummeringStegPage {
         );
       }
     }
-  }
-
-  async assertArbeidstakerenData(data: ArbeidstakerenArbeidsgiversDelDto) {
-    await expect(
-      this.page.locator(
-        `dt:has-text("${nb.translation.arbeidstakerenSteg.harArbeidstakerenNorskFodselsnummerEllerDNummer}") + dd`,
-      ),
-    ).toHaveText(data.fodselsnummer);
   }
 
   async assertArbeidstakerensLonnData(data: ArbeidstakerensLonnDto) {
