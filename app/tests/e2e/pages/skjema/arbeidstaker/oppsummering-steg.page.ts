@@ -5,7 +5,6 @@ import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidssituasjonDto,
   ArbeidstakersSkjemaDto,
-  DineOpplysningerDto,
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
@@ -31,50 +30,6 @@ export class OppsummeringStegPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
-  }
-
-  async assertDineOpplysningerData(data: DineOpplysningerDto) {
-    await expect(
-      this.page.locator(
-        `dt:has-text("${nb.translation.dineOpplysningerSteg.harDuNorskFodselsnummerEllerDNummer}") + dd`,
-      ),
-    ).toHaveText(
-      data.harNorskFodselsnummer
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
-    );
-
-    if (data.fodselsnummer !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dittFodselsnummerEllerDNummer}") + dd`,
-        ),
-      ).toHaveText(data.fodselsnummer);
-    }
-
-    if (data.fornavn !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dittFornavn}") + dd`,
-        ),
-      ).toHaveText(data.fornavn);
-    }
-
-    if (data.etternavn !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dittEtternavn}") + dd`,
-        ),
-      ).toHaveText(data.etternavn);
-    }
-
-    if (data.fodselsdato !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dinFodselsdato}") + dd`,
-        ),
-      ).toHaveText(data.fodselsdato);
-    }
   }
 
   async assertUtenlandsoppdragetData(

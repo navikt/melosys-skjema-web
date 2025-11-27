@@ -140,49 +140,6 @@ export const en = {
       lastOppVedleggBeskrivelse:
         "You can upload PDF, Word documents or images. Maximum file size 10 MB per file.",
     },
-    arbeidstakerenSteg: {
-      tittel: "The Employee",
-      harArbeidstakerenNorskFodselsnummerEllerDNummer:
-        "Does the employee have a Norwegian social security number or D-number?",
-      arbeidstakerensFodselsnummerEllerDNummer:
-        "Employee's social security number or D-number",
-      arbeidstakerensFornavn: "Employee's first name",
-      arbeidstakerensEtternavn: "Employee's last name",
-      arbeidstakerensFodselsdato: "Employee's date of birth",
-      harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
-        "Have you been or will you be in paid employment in Norway for at least one month before the assignment?",
-      aktivitet: "Activity (TODO: find a good label here)",
-      velgAktivitet: "Select activity",
-      skalDuJobbeForFlereVirksomheterIPerioden:
-        "Will you work for multiple companies during the period you are applying for?",
-      duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer:
-        "You must answer whether the employee has a Norwegian social security number",
-      fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer:
-        "Social security number or D-number is required when the employee has a Norwegian social security number",
-      fodselsnummerEllerDNummerMaVare11Siffer:
-        "Social security number or D-number must be 11 digits",
-      fornavnErPakrevdOgMaVareMinst2Tegn:
-        "First name is required and must be at least 2 characters",
-      etternavnErPakrevdOgMaVareMinst2Tegn:
-        "Last name is required and must be at least 2 characters",
-      fodselsdatoErPakrevd: "Date of birth is required",
-      duMaVelgeEnAktivitetNarDuIkkeHarVertILonnetArbeid:
-        "You must select an activity when you have not been in paid employment",
-      duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
-        "You must answer whether you have been or will be in paid employment in Norway before assignment",
-      duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden:
-        "You must answer whether you will work for multiple companies during the period",
-      duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter:
-        "You must add at least one company when you will work for multiple companies",
-      hvemSkalDuJobbeForIUtsendelsesPerioden:
-        "Who will you work for during the assignment period?",
-      hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse:
-        "Add Norwegian and/or foreign companies you will work for during the assignment period.",
-      studier: "Studies",
-      ferie: "Vacation",
-      selvstendingVirksomhet: "Self-employed business",
-      kontantytelseFraNav: "Received cash benefits from Nav",
-    },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",
       erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
@@ -206,12 +163,6 @@ export const en = {
         "You must select which country pays the financial support",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
-    },
-    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
-    arbeidsgiverSteg: {
-      tittel: "The Employer",
-      arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
-      organisasjonensNavn: "Organization name",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Place of work abroad",
