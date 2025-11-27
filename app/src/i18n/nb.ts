@@ -137,47 +137,6 @@ export const nb = {
       lastOppVedleggBeskrivelse:
         "Du kan laste opp PDF, Word-dokumenter eller bilder. Maks filstørrelse 10 MB per fil.",
     },
-    dineOpplysningerSteg: {
-      tittel: "Dine opplysninger",
-      harDuNorskFodselsnummerEllerDNummer:
-        "Har du norsk fødselsnummer eller d-nummer?",
-      dittFodselsnummerEllerDNummer: "Ditt fødselsnummer eller d-nummer",
-      dittFornavn: "Ditt fornavn",
-      dittEtternavn: "Ditt etternavn",
-      dinFodselsdato: "Din fødselsdato",
-      duMaSvarePaOmDuHarNorskFodselsnummer:
-        "Du må svare på om du har norsk fødselsnummer",
-      fodselsnummerEllerDNummerErPakrevdNarDuHarNorskFodselsnummer:
-        "Fødselsnummer eller d-nummer er påkrevd når du har norsk fødselsnummer",
-      fodselsnummerEllerDNummerMaVare11Siffer:
-        "Fødselsnummer eller d-nummer må være 11 siffer",
-      fornavnErPakrevdOgMaVareMinst2Tegn:
-        "Fornavn er påkrevd og må være minst 2 tegn",
-      etternavnErPakrevdOgMaVareMinst2Tegn:
-        "Etternavn er påkrevd og må være minst 2 tegn",
-      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
-    },
-    arbeidstakerenSteg: {
-      tittel: "Arbeidstakeren",
-      harArbeidstakerenNorskFodselsnummerEllerDNummer:
-        "Har arbeidstakeren norsk fødselsnummer eller d-nummer?",
-      arbeidstakerensFodselsnummerEllerDNummer:
-        "Arbeidstakerens fødselsnummer eller d-nummer",
-      arbeidstakerensFornavn: "Arbeidstakerens fornavn",
-      arbeidstakerensEtternavn: "Arbeidstakerens etternavn",
-      arbeidstakerensFodselsdato: "Arbeidstakerens fødselsdato",
-      duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer:
-        "Du må svare på om arbeidstakeren har norsk fødselsnummer",
-      fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer:
-        "Fødselsnummer eller d-nummer er påkrevd når arbeidstakeren har norsk fødselsnummer",
-      fodselsnummerEllerDNummerMaVare11Siffer:
-        "Fødselsnummer eller d-nummer må være 11 siffer",
-      fornavnErPakrevdOgMaVareMinst2Tegn:
-        "Fornavn er påkrevd og må være minst 2 tegn",
-      etternavnErPakrevdOgMaVareMinst2Tegn:
-        "Etternavn er påkrevd og må være minst 2 tegn",
-      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
-    },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
       harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
@@ -223,12 +182,6 @@ export const nb = {
         "Du må velge hvilket land som utbetaler pengestøtten",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
-    },
-    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
-    arbeidsgiverSteg: {
-      tittel: "Arbeidsgiveren",
-      arbeidsgiverensOrganisasjonsnummer: "Arbeidsgiverens organisasjonsnummer",
-      organisasjonensNavn: "Organisasjonens navn",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Arbeidssted i utlandet",

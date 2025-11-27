@@ -21,9 +21,9 @@ export class ArbeidstakerSkjemaVeiledningPage {
     await this.startSoknadButton.click();
   }
 
-  async assertNavigatedToDineOpplysninger(skjemaId: string) {
+  async assertNavigatedToUtenlandsoppdraget(skjemaId: string) {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${skjemaId}/dine-opplysninger`,
+      `/skjema/arbeidstaker/${skjemaId}/utenlandsoppdraget`,
     );
   }
 }

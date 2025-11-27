@@ -9,7 +9,6 @@ import {
   ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
   ArbeidstakersSkjemaDto,
-  DineOpplysningerDto,
   FamiliemedlemmerDto,
   HentInnsendteSoknaderRequest,
   InnsendteSoknaderResponse,
@@ -40,7 +39,6 @@ type ArbeidsgiverStegData =
   | TilleggsopplysningerDto;
 
 type ArbeidstakerStegData =
-  | DineOpplysningerDto
   | ArbeidssituasjonDto
   | UtenlandsoppdragetArbeidstakersDelDto
   | SkatteforholdOgInntektDto
@@ -135,13 +133,6 @@ async function fetchSkjemaAsArbeidsgiver(
   }
 
   return response.json();
-}
-
-export async function postDineOpplysninger(
-  skjemaId: string,
-  request: DineOpplysningerDto,
-): Promise<void> {
-  return postArbeidstakerStegData(skjemaId, "dine-opplysninger", request);
 }
 
 export async function postArbeidssituasjon(

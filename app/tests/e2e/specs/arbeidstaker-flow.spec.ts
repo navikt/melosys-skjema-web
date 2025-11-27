@@ -2,7 +2,6 @@ import { test } from "@playwright/test";
 
 import {
   ArbeidssituasjonDto,
-  DineOpplysningerDto,
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
@@ -18,7 +17,6 @@ import {
   testUserInfo,
 } from "../fixtures/test-data";
 import { ArbeidstakerSkjemaVeiledningPage } from "../pages/skjema/arbeidstaker/arbeidstaker-skjema-veiledning.page";
-import { DineOpplysningerStegPage } from "../pages/skjema/arbeidstaker/dine-opplysninger-steg.page";
 import { FamiliemedlemmerStegPage } from "../pages/skjema/arbeidstaker/familiemedlemmer-steg.page";
 import { OppsummeringStegPage } from "../pages/skjema/arbeidstaker/oppsummering-steg.page";
 import { SkatteforholdOgInntektStegPage } from "../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";
@@ -51,48 +49,9 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await veiledningPage.assertStartSoknadButtonVisible();
     await veiledningPage.startSoknad();
 
-    await veiledningPage.assertNavigatedToDineOpplysninger(
+    await veiledningPage.assertNavigatedToUtenlandsoppdraget(
       testArbeidstakerSkjema.id,
     );
-  });
-
-  // TODO: Denne testen navigerer direkte til skjema uten å gå gjennom ny /oversikt-flyt.
-  // I ny flyt skal backend returnere arbeidstaker-data som del av skjema-konteksten,
-  // slik at "dine opplysninger" steget vises som readonly/forhåndsutfylt.
-  // Skriv ny test som:
-  // 1. Går gjennom /oversikt → velg arbeidsgiver/arbeidstaker → opprett søknad
-  // 2. Verifiserer at backend-data vises korrekt i skjemaet
-  test.skip("skal fylle ut dine opplysninger steg og gjøre forventet POST request", async ({
-    page,
-  }) => {
-    const dineOpplysningerStegPage = new DineOpplysningerStegPage(
-      page,
-      testArbeidstakerSkjema,
-    );
-
-    // Naviger direkte til steget
-    await dineOpplysningerStegPage.goto();
-
-    await dineOpplysningerStegPage.assertIsVisible();
-
-    // Verifiser at fødselsnummer-felter er forhåndsutfylt
-    await dineOpplysningerStegPage.assertHarNorskFodselsnummerIsJa();
-    await dineOpplysningerStegPage.assertFodselsnummerValue(
-      testUserInfo.userId,
-    );
-
-    // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedDineOpplysningerPayload: DineOpplysningerDto = {
-      harNorskFodselsnummer: true,
-      fodselsnummer: testUserInfo.userId,
-    };
-
-    await dineOpplysningerStegPage.lagreOgFortsettAndExpectPayload(
-      expectedDineOpplysningerPayload,
-    );
-
-    // Verifiser navigering til neste steg
-    await dineOpplysningerStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut utenlandsoppdraget steg og gjøre forventet POST request", async ({
@@ -245,14 +204,6 @@ test.describe("Arbeidstaker komplett flyt", () => {
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
     page,
   }) => {
-    const dineOpplysningerData: DineOpplysningerDto = {
-      harNorskFodselsnummer: true,
-      fodselsnummer: testUserInfo.userId,
-      fornavn: formFieldValues.fornavn,
-      etternavn: formFieldValues.etternavn,
-      fodselsdato: formFieldValues.periodeFraIso,
-    };
-
     const utenlandsoppdragetData: UtenlandsoppdragetArbeidstakersDelDto = {
       utsendelsesLand: formFieldValues.utsendelseLand.value,
       utsendelseFraDato: formFieldValues.periodeFraIso,
@@ -282,7 +233,6 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await mockFetchArbeidstakerSkjema(page, {
       ...testArbeidstakerSkjema,
       data: {
-        arbeidstakeren: dineOpplysningerData,
         arbeidssituasjon: arbeidssituasjonData,
         utenlandsoppdraget: utenlandsoppdragetData,
         familiemedlemmer: familiemedlemmerData,
@@ -301,9 +251,6 @@ test.describe("Arbeidstaker komplett flyt", () => {
 
     // Verifiser at oppsummeringssiden vises
     await oppsummeringPage.assertIsVisible();
-
-    // Verifiser data fra dine opplysninger-steget
-    await oppsummeringPage.assertDineOpplysningerData(dineOpplysningerData);
 
     // Verifiser data fra arbeidssituasjon-steget
     await oppsummeringPage.assertArbeidssituasjonData(arbeidssituasjonData);

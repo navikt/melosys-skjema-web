@@ -153,21 +153,6 @@ export async function mockFetchArbeidstakerSkjema(
   );
 }
 
-export async function mockPostDineOpplysninger(page: Page, skjemaId: string) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/dine-opplysninger`,
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      }
-    },
-  );
-}
-
 export async function mockPostArbeidssituasjon(page: Page, skjemaId: string) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidssituasjon`,
@@ -314,7 +299,6 @@ export async function setupApiMocksForArbeidstaker(
   await mockUserInfo(page, userInfo);
   await mockHentTilganger(page, []);
   await mockFetchArbeidstakerSkjema(page, skjema);
-  await mockPostDineOpplysninger(page, skjema.id);
   await mockPostArbeidssituasjon(page, skjema.id);
   await mockPostUtenlandsoppdragetArbeidstaker(page, skjema.id);
   await mockGetEregOrganisasjon(page);
