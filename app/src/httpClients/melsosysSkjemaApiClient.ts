@@ -1,12 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import {
-  ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
   ArbeidssituasjonDto,
   ArbeidsstedIUtlandetDto,
-  ArbeidstakerenDto,
   ArbeidstakerensLonnDto,
   ArbeidstakersSkjemaDto,
   FamiliemedlemmerDto,
@@ -30,8 +28,6 @@ import {
 const API_PROXY_URL = "/api";
 
 type ArbeidsgiverStegData =
-  | ArbeidsgiverenDto
-  | ArbeidstakerenDto
   | ArbeidsgiverensVirksomhetINorgeDto
   | UtenlandsoppdragetDto
   | ArbeidsstedIUtlandetDto
@@ -151,20 +147,6 @@ export async function postSkatteforholdOgInntekt(
     "skatteforhold-og-inntekt",
     request,
   );
-}
-
-export async function postArbeidsgiveren(
-  skjemaId: string,
-  request: ArbeidsgiverenDto,
-): Promise<void> {
-  return postArbeidsgiverStegData(skjemaId, "arbeidsgiveren", request);
-}
-
-export async function postArbeidstakeren(
-  skjemaId: string,
-  request: ArbeidstakerenDto,
-): Promise<void> {
-  return postArbeidsgiverStegData(skjemaId, "arbeidstakeren", request);
 }
 
 export async function postArbeidsgiverensVirksomhetINorge(
