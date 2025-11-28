@@ -10,8 +10,8 @@
 type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 export interface Organisasjon {
-  type: string;
   organisasjonsnummer: string;
+  type: string;
   navn?: Navn;
 }
 
@@ -108,7 +108,6 @@ export interface ArbeidssituasjonDto {
 }
 
 export interface ArbeidstakersSkjemaDataDto {
-  arbeidstakeren?: DineOpplysningerDto;
   utenlandsoppdraget?: UtenlandsoppdragetArbeidstakersDelDto;
   arbeidssituasjon?: ArbeidssituasjonDto;
   skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
@@ -122,15 +121,6 @@ export interface ArbeidstakersSkjemaDto {
   fnr: string;
   status: "UTKAST" | "SENDT" | "MOTTATT";
   data: ArbeidstakersSkjemaDataDto;
-}
-
-export interface DineOpplysningerDto {
-  harNorskFodselsnummer: boolean;
-  fodselsnummer?: string;
-  fornavn?: string;
-  etternavn?: string;
-  /** @format date */
-  fodselsdato?: string;
 }
 
 export interface FamiliemedlemmerDto {
@@ -192,12 +182,6 @@ export interface UtenlandsoppdragetDto {
   forrigeArbeidstakerUtsendelseTilDato?: string;
 }
 
-export interface ArbeidsgiverenDto {
-  /** @minLength 1 */
-  organisasjonsnummer: string;
-  organisasjonNavn: string;
-}
-
 export interface ArbeidsgiverensVirksomhetINorgeDto {
   erArbeidsgiverenOffentligVirksomhet: boolean;
   erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
@@ -205,8 +189,6 @@ export interface ArbeidsgiverensVirksomhetINorgeDto {
 }
 
 export interface ArbeidsgiversSkjemaDataDto {
-  arbeidsgiveren?: ArbeidsgiverenDto;
-  arbeidstakeren?: ArbeidstakerenDto;
   arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
   utenlandsoppdraget?: UtenlandsoppdragetDto;
   arbeidstakerensLonn?: ArbeidstakerensLonnDto;
@@ -228,11 +210,6 @@ export interface ArbeidsstedIUtlandetDto {
   offshore?: OffshoreDto;
   paSkip?: PaSkipDto;
   omBordPaFly?: OmBordPaFlyDto;
-}
-
-export interface ArbeidstakerenDto {
-  /** @minLength 1 */
-  fodselsnummer: string;
 }
 
 export interface ArbeidstakerensLonnDto {
@@ -431,13 +408,12 @@ export interface OrganisasjonMedJuridiskEnhet {
 
 export type Organisasjonsledd = UtilRequiredKeys<
   Organisasjon,
-  "type" | "organisasjonsnummer"
+  "organisasjonsnummer" | "type"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   organisasjonsleddDetaljer?: OrganisasjonsleddDetaljer;
   driverVirksomheter?: DriverVirksomhet[];
   inngaarIJuridiskEnheter?: InngaarIJuridiskEnhet[];
-  organisasjonsleddUnder?: BestaarAvOrganisasjonsledd[];
   organisasjonsleddOver?: BestaarAvOrganisasjonsledd[];
 };
 
@@ -448,7 +424,7 @@ export interface OrganisasjonsleddDetaljer {
 
 export type Virksomhet = UtilRequiredKeys<
   Organisasjon,
-  "type" | "organisasjonsnummer"
+  "organisasjonsnummer" | "type"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   virksomhetDetaljer?: VirksomhetDetaljer;
