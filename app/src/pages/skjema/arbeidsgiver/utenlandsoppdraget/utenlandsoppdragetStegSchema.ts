@@ -1,30 +1,45 @@
 import { z } from "zod";
 
-const baseSchema = z.object({
-  utsendelseLand: z
-    .string()
-    .min(
-      1,
-      "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
-    ),
-  arbeidstakerUtsendelseFraDato: z
-    .string()
-    .min(1, "utenlandsoppdragetSteg.fraDatoErPakrevd"),
-  arbeidstakerUtsendelseTilDato: z
-    .string()
-    .min(1, "utenlandsoppdragetSteg.tilDatoErPakrevd"),
-  arbeidsgiverHarOppdragILandet: z.boolean(),
-  arbeidstakerBleAnsattForUtenlandsoppdraget: z.boolean(),
-  arbeidstakerForblirAnsattIHelePerioden: z.boolean(),
-  arbeidstakerErstatterAnnenPerson: z.boolean(),
-  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z.boolean().optional(),
-  utenlandsoppholdetsBegrunnelse: z.string().optional(),
-  ansettelsesforholdBeskrivelse: z.string().optional(),
-  forrigeArbeidstakerUtsendelseFradato: z.string().optional(),
-  forrigeArbeidstakerUtsendelseTilDato: z.string().optional(),
-});
-
-export const utenlandsoppdragSchema = baseSchema
+export const utenlandsoppdragSchema = z
+  .object({
+    utsendelseLand: z
+      .string({
+        error:
+          "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
+      })
+      .min(
+        1,
+        "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
+      ),
+    arbeidstakerUtsendelseFraDato: z
+      .string({ error: "utenlandsoppdragetSteg.fraDatoErPakrevd" })
+      .min(1, "utenlandsoppdragetSteg.fraDatoErPakrevd"),
+    arbeidstakerUtsendelseTilDato: z
+      .string({ error: "utenlandsoppdragetSteg.tilDatoErPakrevd" })
+      .min(1, "utenlandsoppdragetSteg.tilDatoErPakrevd"),
+    arbeidsgiverHarOppdragILandet: z.boolean({
+      error: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
+    }),
+    arbeidstakerBleAnsattForUtenlandsoppdraget: z.boolean({
+      error:
+        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget",
+    }),
+    arbeidstakerForblirAnsattIHelePerioden: z.boolean({
+      error:
+        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden",
+    }),
+    arbeidstakerErstatterAnnenPerson: z.boolean({
+      error:
+        "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson",
+    }),
+    arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: z
+      .boolean()
+      .optional(),
+    utenlandsoppholdetsBegrunnelse: z.string().optional(),
+    ansettelsesforholdBeskrivelse: z.string().optional(),
+    forrigeArbeidstakerUtsendelseFradato: z.string().optional(),
+    forrigeArbeidstakerUtsendelseTilDato: z.string().optional(),
+  })
   .superRefine((data, ctx) => {
     // Validate date ranges
     if (
@@ -32,7 +47,7 @@ export const utenlandsoppdragSchema = baseSchema
       new Date(data.arbeidstakerUtsendelseTilDato)
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
         path: ["arbeidstakerUtsendelseTilDato"],
       });
@@ -44,7 +59,7 @@ export const utenlandsoppdragSchema = baseSchema
       !data.utenlandsoppholdetsBegrunnelse?.trim()
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message:
           "utenlandsoppdragetSteg.begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet",
         path: ["utenlandsoppholdetsBegrunnelse"],
@@ -57,7 +72,7 @@ export const utenlandsoppdragSchema = baseSchema
       !data.ansettelsesforholdBeskrivelse?.trim()
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message:
           "utenlandsoppdragetSteg.beskrivelseAvAnsettelsesforholdErPakrevd",
         path: ["ansettelsesforholdBeskrivelse"],
@@ -70,7 +85,7 @@ export const utenlandsoppdragSchema = baseSchema
       data.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget === undefined
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message:
           "utenlandsoppdragetSteg.duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget",
         path: ["arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"],
@@ -83,7 +98,7 @@ export const utenlandsoppdragSchema = baseSchema
       !data.forrigeArbeidstakerUtsendelseFradato
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message:
           "utenlandsoppdragetSteg.fraDatoForForrigeArbeidstakerErPakrevd",
         path: ["forrigeArbeidstakerUtsendelseFradato"],
@@ -96,7 +111,7 @@ export const utenlandsoppdragSchema = baseSchema
       !data.forrigeArbeidstakerUtsendelseTilDato
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message:
           "utenlandsoppdragetSteg.tilDatoForForrigeArbeidstakerErPakrevd",
         path: ["forrigeArbeidstakerUtsendelseTilDato"],
@@ -111,7 +126,7 @@ export const utenlandsoppdragSchema = baseSchema
         new Date(data.forrigeArbeidstakerUtsendelseTilDato)
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
         path: ["forrigeArbeidstakerUtsendelseTilDato"],
       });
