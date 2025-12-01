@@ -44,7 +44,7 @@ jobs:
 
       - name: Install app dependencies
         working-directory: app
-        run: npm install
+        run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
