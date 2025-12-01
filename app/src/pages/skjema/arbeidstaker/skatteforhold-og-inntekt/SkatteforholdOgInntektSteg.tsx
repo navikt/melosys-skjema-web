@@ -48,7 +48,6 @@ function SkatteforholdOgInntektStegContent({
   const lagretSkjemadataForSteg = skjema.data?.skatteforholdOgInntekt;
 
   const formMethods = useForm({
-    // @ts-expect-error - discriminated union literals vs DTO boolean types
     resolver: zodResolver(skatteforholdOgInntektSchema),
     ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
