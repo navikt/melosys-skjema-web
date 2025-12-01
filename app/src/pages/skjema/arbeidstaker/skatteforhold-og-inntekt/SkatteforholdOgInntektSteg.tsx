@@ -19,6 +19,7 @@ import {
   ArbeidstakersSkjemaDto,
   SkatteforholdOgInntektDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
@@ -48,9 +49,7 @@ function SkatteforholdOgInntektStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(skatteforholdOgInntektSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const {
@@ -137,7 +136,10 @@ function SkatteforholdOgInntektStegContent({
                   "skatteforholdOgInntektSteg.oppgiBelopetINorskeKroner",
                 )}
                 error={translateError(
-                  errors.pengestotteSomMottasFraAndreLandBelop?.message,
+                  getFieldError(
+                    errors,
+                    "pengestotteSomMottasFraAndreLandBelop",
+                  ),
                 )}
                 inputMode="decimal"
                 label={t(
@@ -149,7 +151,10 @@ function SkatteforholdOgInntektStegContent({
               <Textarea
                 className="mt-4"
                 error={translateError(
-                  errors.pengestotteSomMottasFraAndreLandBeskrivelse?.message,
+                  getFieldError(
+                    errors,
+                    "pengestotteSomMottasFraAndreLandBeskrivelse",
+                  ),
                 )}
                 label={t(
                   "skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu",

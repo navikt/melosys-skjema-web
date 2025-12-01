@@ -43,9 +43,7 @@ function FamiliemedlemmerStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(familiemedlemmerSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const { handleSubmit, control } = formMethods;

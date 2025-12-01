@@ -1,76 +1,81 @@
 import { z } from "zod";
 
-const baseSkatteforholdOgInntektSchema = z.object({
-  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean().optional(),
-  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean().optional(),
-  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
-  landSomUtbetalerPengestotte: z.string().optional(),
-  pengestotteSomMottasFraAndreLandBelop: z
-    .string()
-    .optional()
-    .transform((val) => val?.trim().replace(",", ".")),
-});
+function isValidBelop(belop?: string): boolean {
+  if (!belop) return false;
 
-type BaseSkatteforholdOgInntektFormData = z.infer<
-  typeof baseSkatteforholdOgInntektSchema
->;
+  const normalized = belop.trim().replace(",", ".");
+  const regex = /^\d+([.]\d+)?$/;
 
-function validerErSkattepliktigPakrevd(
-  data: BaseSkatteforholdOgInntektFormData,
-) {
-  return data.erSkattepliktigTilNorgeIHeleutsendingsperioden !== undefined;
+  if (!regex.test(normalized)) return false;
+
+  const amount = Number.parseFloat(normalized);
+  return amount > 0;
 }
 
-function validerMottarPengestottePakrevd(
-  data: BaseSkatteforholdOgInntektFormData,
-) {
-  return data.mottarPengestotteFraAnnetEosLandEllerSveits !== undefined;
-}
-
-function validerPengestotteBeskrivelse(
-  data: BaseSkatteforholdOgInntektFormData,
-) {
-  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-    return (
-      data.pengestotteSomMottasFraAndreLandBeskrivelse &&
-      data.pengestotteSomMottasFraAndreLandBeskrivelse.trim().length > 0
-    );
-  }
-  return true;
-}
-
-function validerPengestotteLand(data: BaseSkatteforholdOgInntektFormData) {
-  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-    return (
-      data.landSomUtbetalerPengestotte &&
-      data.landSomUtbetalerPengestotte.trim().length > 0
-    );
-  }
-  return true;
-}
-
-function validerPengestotteBelop(data: BaseSkatteforholdOgInntektFormData) {
-  if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-    if (!data.pengestotteSomMottasFraAndreLandBelop) {
-      return false;
-    }
-    // Allow formats: 123, 123.4, 123,4 (comma already normalized to dot in transform)
-    // Reject multiple dots/commas or non-numeric characters
-    const regex = /^\d+([.]\d+)?$/;
-    if (!regex.test(data.pengestotteSomMottasFraAndreLandBelop)) {
-      return false;
-    }
-    const amount = Number.parseFloat(
-      data.pengestotteSomMottasFraAndreLandBelop,
-    );
-    return amount > 0;
-  }
-  return true;
-}
-
-export const skatteforholdOgInntektSchema = baseSkatteforholdOgInntektSchema
+export const skatteforholdOgInntektSchema = z
+  .object({
+    erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean({
+      error:
+        "skatteforholdOgInntektSteg.duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden",
+    }),
+    mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean({
+      error:
+        "skatteforholdOgInntektSteg.duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits",
+    }),
+    pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
+    landSomUtbetalerPengestotte: z.string().optional(),
+    pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
+        return (
+          data.pengestotteSomMottasFraAndreLandBeskrivelse &&
+          data.pengestotteSomMottasFraAndreLandBeskrivelse.trim().length > 0
+        );
+      }
+      return true;
+    },
+    {
+      message:
+        "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
+      path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
+        return (
+          data.landSomUtbetalerPengestotte &&
+          data.landSomUtbetalerPengestotte.trim().length > 0
+        );
+      }
+      return true;
+    },
+    {
+      message:
+        "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
+      path: ["landSomUtbetalerPengestotte"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
+        return isValidBelop(data.pengestotteSomMottasFraAndreLandBelop);
+      }
+      return true;
+    },
+    {
+      message:
+        "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
+      path: ["pengestotteSomMottasFraAndreLandBelop"],
+    },
+  )
   .transform((data) => ({
-    ...data,
+    erSkattepliktigTilNorgeIHeleutsendingsperioden:
+      data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
+    mottarPengestotteFraAnnetEosLandEllerSveits:
+      data.mottarPengestotteFraAnnetEosLandEllerSveits,
     // Clear conditional fields when mottarPengestotteFraAnnetEosLandEllerSveits is false
     pengestotteSomMottasFraAndreLandBeskrivelse:
       data.mottarPengestotteFraAnnetEosLandEllerSveits
@@ -80,32 +85,10 @@ export const skatteforholdOgInntektSchema = baseSkatteforholdOgInntektSchema
       data.mottarPengestotteFraAnnetEosLandEllerSveits
         ? data.landSomUtbetalerPengestotte
         : undefined,
+    // Transform and normalize beløp
     pengestotteSomMottasFraAndreLandBelop:
-      data.mottarPengestotteFraAnnetEosLandEllerSveits
-        ? data.pengestotteSomMottasFraAndreLandBelop
+      data.mottarPengestotteFraAnnetEosLandEllerSveits &&
+      data.pengestotteSomMottasFraAndreLandBelop
+        ? data.pengestotteSomMottasFraAndreLandBelop.trim().replace(",", ".")
         : undefined,
-  }))
-  .refine(validerErSkattepliktigPakrevd, {
-    message:
-      "skatteforholdOgInntektSteg.duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden",
-    path: ["erSkattepliktigTilNorgeIHeleutsendingsperioden"],
-  })
-  .refine(validerMottarPengestottePakrevd, {
-    message:
-      "skatteforholdOgInntektSteg.duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits",
-    path: ["mottarPengestotteFraAnnetEosLandEllerSveits"],
-  })
-  .refine(validerPengestotteBeskrivelse, {
-    message:
-      "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
-    path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
-  })
-  .refine(validerPengestotteLand, {
-    message:
-      "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
-    path: ["landSomUtbetalerPengestotte"],
-  })
-  .refine(validerPengestotteBelop, {
-    message: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
-    path: ["pengestotteSomMottasFraAndreLandBelop"],
-  });
+  }));

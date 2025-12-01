@@ -37,9 +37,7 @@ export function VirksomhetINorgeStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const { handleSubmit, control } = formMethods;

@@ -43,9 +43,7 @@ function ArbeidssituasjonStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(arbeidssituasjonSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const {

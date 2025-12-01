@@ -17,6 +17,7 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
+import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
@@ -43,9 +44,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const formMethods = useForm({
     resolver: zodResolver(utenlandsoppdragSchema),
-    defaultValues: {
-      ...lagretSkjemadataForSteg,
-    },
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
   const {
@@ -180,7 +179,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <Textarea
               className="mt-6"
               error={translateError(
-                errors.utenlandsoppholdetsBegrunnelse?.message,
+                getFieldError(errors, "utenlandsoppholdetsBegrunnelse"),
               )}
               label={t(
                 "utenlandsoppdragetSteg.hvorforSkalArbeidstakerenArbeideIUtlandet",
@@ -219,7 +218,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <Textarea
               className="mt-6"
               error={translateError(
-                errors.ansettelsesforholdBeskrivelse?.message,
+                getFieldError(errors, "ansettelsesforholdBeskrivelse"),
               )}
               label={t(
                 "utenlandsoppdragetSteg.beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden",

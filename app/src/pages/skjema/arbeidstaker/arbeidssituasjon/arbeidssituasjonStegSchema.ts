@@ -4,43 +4,32 @@ import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter
 
 export const arbeidssituasjonSchema = z
   .object({
-    harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean().optional(),
+    harVaertEllerSkalVaereILonnetArbeidFoerUtsending: z.boolean({
+      error:
+        "arbeidssituasjonSteg.duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending",
+    }),
     aktivitetIMaanedenFoerUtsendingen: z.string().optional(),
-    skalJobbeForFlereVirksomheter: z.boolean().optional(),
+    skalJobbeForFlereVirksomheter: z.boolean({
+      error:
+        "arbeidssituasjonSteg.duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden",
+    }),
     virksomheterArbeidstakerJobberForIutsendelsesPeriode:
       norskeOgUtenlandskeVirksomheterSchema.optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending === undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "arbeidssituasjonSteg.duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending",
-        path: ["harVaertEllerSkalVaereILonnetArbeidFoerUtsending"],
-      });
-    }
-    if (data.skalJobbeForFlereVirksomheter === undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "arbeidssituasjonSteg.duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden",
-        path: ["skalJobbeForFlereVirksomheter"],
-      });
-    }
-
     if (
-      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false &&
+      !data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending &&
       !data.aktivitetIMaanedenFoerUtsendingen?.trim()
     ) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message:
           "arbeidssituasjonSteg.duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid",
         path: ["aktivitetIMaanedenFoerUtsendingen"],
       });
     }
 
-    if (data.skalJobbeForFlereVirksomheter === true) {
+    if (data.skalJobbeForFlereVirksomheter) {
       const v = data.virksomheterArbeidstakerJobberForIutsendelsesPeriode;
       const hasAny =
         (v?.norskeVirksomheter?.length ?? 0) > 0 ||
@@ -48,7 +37,7 @@ export const arbeidssituasjonSchema = z
 
       if (!hasAny) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message:
             "arbeidssituasjonSteg.duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter",
           path: ["virksomheterArbeidstakerJobberForIutsendelsesPeriode"],
@@ -58,8 +47,8 @@ export const arbeidssituasjonSchema = z
   })
   .transform((data) => ({
     harVaertEllerSkalVaereILonnetArbeidFoerUtsending:
-      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending!,
-    skalJobbeForFlereVirksomheter: data.skalJobbeForFlereVirksomheter!,
+      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending,
+    skalJobbeForFlereVirksomheter: data.skalJobbeForFlereVirksomheter,
     aktivitetIMaanedenFoerUtsendingen:
       data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
         ? undefined
