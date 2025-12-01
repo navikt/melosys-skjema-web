@@ -13,7 +13,7 @@ const IGNORED_UNICORN_RULES = {
 
 export default tseslint.config(
   {
-    ignores: ["dist/*"],
+    ignores: ["dist/*", "scripts/*"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,

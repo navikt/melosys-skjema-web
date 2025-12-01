@@ -42,33 +42,37 @@ Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 2. Åpne url i nettleser:
    https://melosys-skjema-web.intern.dev.nav.no/vite-on
 
-### Lokal utvikling mot lokal server
+### Lokal utvikling mot lokal backend med Q2-token
+
+Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api) kjører lokalt på http://localhost:8089.
+
+```bash
+make get-token                    # Åpner nettleser for innlogging
+export LOCAL_TOKEN="din-token"    # Kopier access_token fra JSON
+make local-q2                     # Start server og app
+```
+
+Åpne http://localhost:4000/vite-on
+
+**Merk:** Q2-token utløper etter ~1 time. Kjør `make get-token` for å hente nytt.
+
+### Lokal utvikling med mock OAuth (Wonderwall)
 
 Forutsetter at [melosys-skjema-api](https://github.com/navikt/melosys-skjema-api) kjører lokalt på http://localhost:8089 og at mock-oauth2-server i [melosys-docker-compose](https://github.com/navikt/melosys-docker-compose) kjører.
-1. Start express-server:
-   Lag en `.env`-fil i `server/` med innhold fra: https://github.com/nais/wonderwalled/blob/master/wonderwalled-idporten/local.env
-   ```bash
-   cd server
-   docker-compose up -d --build
-   ```
 
-2. Start react app (Dersom appen ikke kjører på port 5173 så vil det ikke fungere. Skulle det være tilfellet så har du mest sannsynlig en annen react app som kjører på samme port):
-   ```bash
-    cd app
-    npm run dev
-    ```
-3. Åpne url i nettleser:
-   http://localhost:4000/vite-on
+```bash
+make local    # Start server og app med mock OAuth
+```
+
+Åpne http://localhost:4000/vite-on
 
 ### Kommandoer
 
 **Frontend (app/):**
 ```bash
-npm run dev          # Start dev server
-npm run build        # Bygg for produksjon
-npm run preview      # Forhåndsvis produksjonsbygg
-npm run lint         # Kjør ESLint
-npm run lint:fix     # Fiks ESLint-feil
+npm run dev            # Start dev server
+npm run build          # Bygg for produksjon
+npm run lint           # Kjør ESLint
 npm run generate-types # Generer TypeScript-typer fra API
 ```
 
@@ -105,7 +109,7 @@ app/                           # Frontend-applikasjon
 │   ├── routes/                # TanStack Router ruter
 │   │   ├── __root.tsx         # Root layout med global scroll-til-topp
 │   │   ├── index.tsx          # Hjem-side
-│   │   ├── rollevelger.tsx    # Rollevelger-side
+│   │   ├── oversikt.tsx       # Oversiktsside (velg arbeidsgiver/arbeidstaker)
 │   │   ├── arbeidsgiver/      # Arbeidsgiver-ruter
 │   │   │   ├── index.tsx      # Arbeidsgiver landingsside
 │   │   │   └── skjema.tsx     # Arbeidsgiver skjemaside
@@ -125,8 +129,6 @@ app/                           # Frontend-applikasjon
 │   │   │   └── ArbeidsgiverPage.tsx
 │   │   ├── arbeidstaker/      # Arbeidstaker-komponenter
 │   │   │   └── ArbeidstakerPage.tsx
-│   │   ├── rollevelger/       # Rollevelger-komponenter
-│   │   │   └── RollevelgerPage.tsx
 │   │   └── skjema/            # Skjema-komponenter
 │   │       ├── Skjema.tsx     # Hovedskjema-komponent
 │   │       ├── VeiledningSteg.tsx          # Steg 1 komponent

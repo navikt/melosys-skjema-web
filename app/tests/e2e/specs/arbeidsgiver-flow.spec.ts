@@ -1,10 +1,8 @@
 import { test } from "@playwright/test";
 
 import {
-  ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsstedIUtlandetDto,
-  ArbeidstakerenArbeidsgiversDelDto,
   ArbeidstakerensLonnDto,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
@@ -19,12 +17,8 @@ import {
   testOrganization,
   testUserInfo,
 } from "../fixtures/test-data";
-import { RollevelgerPage } from "../pages/rollevelger/rollevelger.page";
-import { ArbeidsgiverSkjemaVeiledningPage } from "../pages/skjema/arbeidsgiver/arbeidsgiver-skjema-veiledning.page";
-import { ArbeidsgiverenStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiveren-steg.page";
 import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
 import { ArbeidsstedIUtlandetStegPage } from "../pages/skjema/arbeidsgiver/arbeidssted-i-utlandet-steg.page";
-import { ArbeidstakerenStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakeren-steg.page";
 import { ArbeidstakerensLonnStegPage } from "../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
 import { OppsummeringStegPage } from "../pages/skjema/arbeidsgiver/oppsummering-steg.page";
 import { TilleggsopplysningerStegPage } from "../pages/skjema/arbeidsgiver/tilleggsopplysninger-steg.page";
@@ -41,90 +35,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     );
   });
 
-  test("skal velge rolle som arbeidsgiver og starte søknad", async ({
-    page,
-  }) => {
-    const rollevelgerPage = new RollevelgerPage(page);
-    const veiledningPage = new ArbeidsgiverSkjemaVeiledningPage(page);
-
-    // Start fra rollevelger og velg organisasjons
-    await rollevelgerPage.goto();
-
-    // Velg test organisasjonen (navigerer direkte)
-    await rollevelgerPage.selectOrganization(testOrganization.navn);
-
-    // Skal vise veiledningsside
-    await veiledningPage.assertStartSoknadButtonVisible();
-    await veiledningPage.startSoknad();
-
-    await veiledningPage.assertNavigatedToArbeidsgiveren(
-      testArbeidsgiverSkjema.id,
-    );
-  });
-
-  test("skal fylle ut arbeidsgiveren steg og gjøre forventet POST request", async ({
-    page,
-  }) => {
-    const arbeidsgiverStegPage = new ArbeidsgiverenStegPage(
-      page,
-      testArbeidsgiverSkjema,
-    );
-
-    // Sett valgt rolle i session storage
-    await arbeidsgiverStegPage.setValgtRolle(testOrganization);
-
-    // Naviger direkte til steget
-    await arbeidsgiverStegPage.goto();
-
-    await arbeidsgiverStegPage.assertIsVisible();
-
-    // Verifiser at organisasjonsnummer er forhåndsutfylt
-    await arbeidsgiverStegPage.assertOrganisasjonsnummerValue(
-      testOrganization.orgnr,
-    );
-
-    // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedArbeidsgiverPayload: ArbeidsgiverenDto = {
-      organisasjonsnummer: testOrganization.orgnr,
-      organisasjonNavn: testOrganization.navn,
-    };
-
-    await arbeidsgiverStegPage.lagreOgFortsettAndExpectPayload(
-      expectedArbeidsgiverPayload,
-    );
-
-    // Verifiser navigerering til neste steg
-    await arbeidsgiverStegPage.assertNavigatedToNextStep();
-  });
-
-  test("skal fylle ut arbeidstakeren steg og gjøre forventet POST request", async ({
-    page,
-  }) => {
-    const arbeidstakerenStegPage = new ArbeidstakerenStegPage(
-      page,
-      testArbeidsgiverSkjema,
-    );
-
-    // Naviger direkte til steget
-    await arbeidstakerenStegPage.goto();
-
-    await arbeidstakerenStegPage.assertIsVisible();
-
-    // Fyll ut fødselsnummer
-    await arbeidstakerenStegPage.fillFodselsnummer("12345678901");
-
-    // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedArbeidstakerPayload: ArbeidstakerenArbeidsgiversDelDto = {
-      fodselsnummer: "12345678901",
-    };
-
-    await arbeidstakerenStegPage.lagreOgFortsettAndExpectPayload(
-      expectedArbeidstakerPayload,
-    );
-
-    // Verifiser navigerering til neste steg
-    await arbeidstakerenStegPage.assertNavigatedToNextStep();
-  });
+  // TODO: Update this test to use the new /oversikt flow instead of removed /rollevelger
 
   test("skal fylle ut arbeidsgiverens virksomhet i Norge steg og gjøre forventet POST request", async ({
     page,
@@ -347,11 +258,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       testArbeidsgiverSkjema,
     );
 
-    const arbeidsgiverenData: ArbeidsgiverenDto = {
-      organisasjonsnummer: testOrganization.orgnr,
-      organisasjonNavn: testOrganization.navn,
-    };
-
     const arbeidsgiverensVirksomhetINorgeData: ArbeidsgiverensVirksomhetINorgeDto =
       {
         erArbeidsgiverenOffentligVirksomhet: false,
@@ -383,10 +289,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       },
     };
 
-    const arbeidstakerenData: ArbeidstakerenArbeidsgiversDelDto = {
-      fodselsnummer: "12345678901",
-    };
-
     const arbeidstakerensLonnData: ArbeidstakerensLonnDto = {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
@@ -399,11 +301,9 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await mockFetchArbeidsgiverSkjema(page, {
       ...testArbeidsgiverSkjema,
       data: {
-        arbeidsgiveren: arbeidsgiverenData,
         arbeidsgiverensVirksomhetINorge: arbeidsgiverensVirksomhetINorgeData,
         utenlandsoppdraget: utenlandsoppdragetData,
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
-        arbeidstakeren: arbeidstakerenData,
         arbeidstakerensLonn: arbeidstakerensLonnData,
         tilleggsopplysninger: tilleggsopplysningerData,
       },
@@ -415,7 +315,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await oppsummeringStegPage.assertIsVisible();
 
     // Verifiser at oppsummeringen viser utfylte data
-    await oppsummeringStegPage.assertArbeidsgiverenData(arbeidsgiverenData);
     await oppsummeringStegPage.assertArbeidsgiverensVirksomhetINorgeData(
       arbeidsgiverensVirksomhetINorgeData,
     );
@@ -425,7 +324,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await oppsummeringStegPage.assertArbeidsstedIUtlandetData(
       arbeidsstedIUtlandetData,
     );
-    await oppsummeringStegPage.assertArbeidstakerenData(arbeidstakerenData);
     await oppsummeringStegPage.assertArbeidstakerensLonnData(
       arbeidstakerensLonnData,
     );

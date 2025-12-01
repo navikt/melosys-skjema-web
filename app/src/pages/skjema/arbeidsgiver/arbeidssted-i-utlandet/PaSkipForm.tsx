@@ -1,5 +1,5 @@
 import { Radio, RadioGroup, TextField } from "@navikt/ds-react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -13,9 +13,9 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 export function PaSkipForm() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const { control, watch } = useFormContext<ArbeidsstedIUtlandetFormData>();
+  const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
-  const seilerI = watch("paSkip.seilerI");
+  const seilerI = useWatch({ name: "paSkip.seilerI" });
 
   // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
   // This is a known design limitation (react-hook-form/react-hook-form#9287)

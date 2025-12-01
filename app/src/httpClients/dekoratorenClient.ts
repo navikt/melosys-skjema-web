@@ -5,6 +5,12 @@ export type UserInfo = {
   userId: string;
 };
 
+type DekoratorenAuthResponse = {
+  authenticated: boolean;
+  name: string;
+  userId: string;
+};
+
 export function getUserInfo() {
   return queryOptions({
     queryKey: ["USER_INFO"],
@@ -19,11 +25,14 @@ async function fetchUserInfo(): Promise<UserInfo> {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  const data = await response.json();
+  const data: DekoratorenAuthResponse = await response.json();
 
   if (!data.authenticated) {
     throw new Error("User is not authenticated");
   }
 
-  return data;
+  return {
+    name: data.name,
+    userId: data.userId,
+  };
 }

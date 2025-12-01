@@ -5,10 +5,10 @@ import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidssituasjonDto,
   ArbeidstakersSkjemaDto,
-  DineOpplysningerDto,
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
+  UtenlandsoppdragetArbeidstakersDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 
 export class OppsummeringStegPage {
@@ -32,48 +32,26 @@ export class OppsummeringStegPage {
     await expect(this.heading).toBeVisible();
   }
 
-  async assertDineOpplysningerData(data: DineOpplysningerDto) {
+  async assertUtenlandsoppdragetData(
+    data: UtenlandsoppdragetArbeidstakersDelDto,
+  ) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.dineOpplysningerSteg.harDuNorskFodselsnummerEllerDNummer}") + dd`,
+        `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.iHvilketLandSkalDuUtforeArbeid}") + dd`,
       ),
-    ).toHaveText(
-      data.harNorskFodselsnummer
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
-    );
+    ).toHaveText(landKodeTilNavn(data.utsendelsesLand));
 
-    if (data.fodselsnummer !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dittFodselsnummerEllerDNummer}") + dd`,
-        ),
-      ).toHaveText(data.fodselsnummer);
-    }
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.fraDato}") + dd`,
+      ),
+    ).toHaveText(data.utsendelseFraDato);
 
-    if (data.fornavn !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dittFornavn}") + dd`,
-        ),
-      ).toHaveText(data.fornavn);
-    }
-
-    if (data.etternavn !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dittEtternavn}") + dd`,
-        ),
-      ).toHaveText(data.etternavn);
-    }
-
-    if (data.fodselsdato !== undefined) {
-      await expect(
-        this.page.locator(
-          `dt:has-text("${nb.translation.dineOpplysningerSteg.dinFodselsdato}") + dd`,
-        ),
-      ).toHaveText(data.fodselsdato);
-    }
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.tilDato}") + dd`,
+      ),
+    ).toHaveText(data.utsendelseTilDato);
   }
 
   async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {

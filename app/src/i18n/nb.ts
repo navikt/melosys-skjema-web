@@ -105,12 +105,6 @@ export const nb = {
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
       endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
     },
-    rollevelgerPage: {
-      hvemVilDuFylleUtSkjemaPaVegneAv:
-        "Hvem vil du fylle ut skjema på vegne av?",
-      degSelv: "Deg selv",
-      orgNr: "Org.nr.",
-    },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
       sokerDuForBarnUnder18SomSkalVaereMed:
@@ -142,47 +136,6 @@ export const nb = {
       lastOppVedlegg: "Last opp vedlegg (valgfritt)",
       lastOppVedleggBeskrivelse:
         "Du kan laste opp PDF, Word-dokumenter eller bilder. Maks filstørrelse 10 MB per fil.",
-    },
-    dineOpplysningerSteg: {
-      tittel: "Dine opplysninger",
-      harDuNorskFodselsnummerEllerDNummer:
-        "Har du norsk fødselsnummer eller d-nummer?",
-      dittFodselsnummerEllerDNummer: "Ditt fødselsnummer eller d-nummer",
-      dittFornavn: "Ditt fornavn",
-      dittEtternavn: "Ditt etternavn",
-      dinFodselsdato: "Din fødselsdato",
-      duMaSvarePaOmDuHarNorskFodselsnummer:
-        "Du må svare på om du har norsk fødselsnummer",
-      fodselsnummerEllerDNummerErPakrevdNarDuHarNorskFodselsnummer:
-        "Fødselsnummer eller d-nummer er påkrevd når du har norsk fødselsnummer",
-      fodselsnummerEllerDNummerMaVare11Siffer:
-        "Fødselsnummer eller d-nummer må være 11 siffer",
-      fornavnErPakrevdOgMaVareMinst2Tegn:
-        "Fornavn er påkrevd og må være minst 2 tegn",
-      etternavnErPakrevdOgMaVareMinst2Tegn:
-        "Etternavn er påkrevd og må være minst 2 tegn",
-      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
-    },
-    arbeidstakerenSteg: {
-      tittel: "Arbeidstakeren",
-      harArbeidstakerenNorskFodselsnummerEllerDNummer:
-        "Har arbeidstakeren norsk fødselsnummer eller d-nummer?",
-      arbeidstakerensFodselsnummerEllerDNummer:
-        "Arbeidstakerens fødselsnummer eller d-nummer",
-      arbeidstakerensFornavn: "Arbeidstakerens fornavn",
-      arbeidstakerensEtternavn: "Arbeidstakerens etternavn",
-      arbeidstakerensFodselsdato: "Arbeidstakerens fødselsdato",
-      duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer:
-        "Du må svare på om arbeidstakeren har norsk fødselsnummer",
-      fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer:
-        "Fødselsnummer eller d-nummer er påkrevd når arbeidstakeren har norsk fødselsnummer",
-      fodselsnummerEllerDNummerMaVare11Siffer:
-        "Fødselsnummer eller d-nummer må være 11 siffer",
-      fornavnErPakrevdOgMaVareMinst2Tegn:
-        "Fornavn er påkrevd og må være minst 2 tegn",
-      etternavnErPakrevdOgMaVareMinst2Tegn:
-        "Etternavn er påkrevd og må være minst 2 tegn",
-      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
@@ -229,12 +182,6 @@ export const nb = {
         "Du må velge hvilket land som utbetaler pengestøtten",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
-    },
-    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
-    arbeidsgiverSteg: {
-      tittel: "Arbeidsgiveren",
-      arbeidsgiverensOrganisasjonsnummer: "Arbeidsgiverens organisasjonsnummer",
-      organisasjonensNavn: "Organisasjonens navn",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Arbeidssted i utlandet",
@@ -376,6 +323,20 @@ export const nb = {
         "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
       forrigeArbeidstakersUtsendelse: "Forrige arbeidstakers utsendelse",
     },
+    utenlandsoppdragetArbeidstakerSteg: {
+      tittel: "Utenlandsoppdraget",
+      iHvilketLandSkalDuUtforeArbeid: "I hvilket land skal du utføre arbeid?",
+      utsendingsperiode: "Utsendingsperiode",
+      fraDato: "Fra dato",
+      tilDato: "Til dato",
+      oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
+        "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
+      duMaVelgeHvilketLandDuSkalUtforeArbeid:
+        "Du må velge hvilket land du skal utføre arbeid",
+      fraDatoErPakrevd: "Fra-dato er påkrevd",
+      tilDatoErPakrevd: "Til-dato er påkrevd",
+      tilDatoKanIkkeVareForFraDato: "Til dato kan ikke være før fra dato",
+    },
     arbeidstakerenslonnSteg: {
       tittel: "Arbeidstakerens lønn",
       utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
@@ -389,8 +350,161 @@ export const nb = {
       duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
         "Du må legge til minst én virksomhet når du ikke betaler all lønn selv",
     },
+    landingsside: {
+      hei: "Hei",
+      hvemVilDuBrukeNavPaVegneAv: "Hvem vil du bruke Nav på vegne av?",
+      degSelv: "DEG SELV",
+      dinArbeidsgiver: "DIN ARBEIDSGIVER",
+      enArbeidsgiverSomRadgiver: "EN ARBEIDSGIVER SOM RÅDGIVER",
+      annenPerson: "ANNEN PERSON",
+      avbryt: "Avbryt",
+    },
+    kontekstBanner: {
+      minSide: "Min side",
+      minSideArbeidsgiver: "Min side - arbeidsgiver",
+      minSideRadgiver: "Min side - rådgiver",
+      minSideAnnenPerson: "Min side - annen person",
+      ingenArbeidsgiverValgt: "Ingen arbeidsgiver valgt",
+      ingenRadgiverValgt: "Ingen rådgiver valgt",
+      ingenPersonValgt: "Ingen person valgt",
+      byttKontekst: "Bytt",
+      byttKontekstAriaLabel:
+        "Bytt representasjon og gå tilbake til landingssiden",
+    },
+    oversiktDegSelv: {
+      tittel: "Din oversiktsside",
+      infoBullet1: "Du kan se tidligere og pågående søknader",
+      infoBullet2: "Her kan du starte ny søknad for deg selv",
+    },
+    oversiktArbeidsgiver: {
+      tittel: "Dette er arbeidsgivers oversiktsside",
+      infoBullet1: "Du kan se tidligere og pågående søknader",
+      infoBullet2:
+        "Her ser du oversikt over tilganger og fullmakter som er blitt gitt deg",
+      infoBullet3:
+        "Du kan sende inn søknader på vegne av arbeidsgiver og eventuelt arbeidstaker",
+      infoBullet4:
+        "Hvis du har fullmakt fra arbeidstaker skal du sende inn søknad for hen samtidig",
+    },
+    oversiktRadgiver: {
+      tittel: "Dette er rådgivers oversiktsside",
+      infoBullet1: "Du kan se tidligere og pågående søknader",
+      infoBullet2: "Her ser du oversikt over arbeidsgivere du kan representere",
+      infoBullet3:
+        "Du kan sende inn søknader på vegne av arbeidsgiver og eventuelt arbeidstaker",
+      infoBullet4:
+        "Hvis du har fullmakt fra arbeidstaker skal du sende inn søknad for hen samtidig",
+    },
+    oversiktAnnenPerson: {
+      tittel: "Send søknad på vegne av en annen person",
+      infoBullet1:
+        "Du kan sende søknad hvis personen har gitt deg fullmakt på nav.no/fullmakt",
+      infoBullet2:
+        "Du fyller ut hele søknaden på vegne av personen du representerer",
+      infoBullet3: "Du kan se tidligere søknader og utkast",
+    },
+    oversiktFelles: {
+      utkastTittel: "UTKAST",
+      utkastBeskrivelse: "Påbegynte søknader du ikke har sendt inn ennå",
+      utkastFeilmelding:
+        "Kunne ikke hente påbegynte søknader. Prøv å laste siden på nytt.",
+      utkastArbeidsgiver: "Arbeidsgiver",
+      utkastArbeidstaker: "Arbeidstaker",
+      utkastOpprettet: "Opprettet",
+      utkastSistEndret: "Sist endret",
+      soknadStarterTittel: "Hvem skal du søke på vegne av?",
+      soknadStarterTittelDegSelv: "Start søknad",
+      soknadStarterInfoDegSelv:
+        "Når du søker for deg selv, trenger vi informasjon om arbeidsgiver og deg selv som arbeidstaker.",
+      soknadStarterInfo:
+        "Vi trenger informasjon om både arbeidsgiver og arbeidstakeren.",
+      soknadStarterFullmaktInfo1:
+        "I listen under finner du arbeidstakere som har gitt deg fullmakt på nav.no/fullmakt.",
+      soknadStarterFullmaktInfo2:
+        "Hvis du har fullmakt fra arbeidstaker, så skal du fylle ut hele søknaden under ett.",
+      soknadStarterFullmaktInfo3:
+        "Hvis du ikke har fullmakt fra arbeidstaker, må personen først gi deg fullmakt gjennom nav.no/fullmakt.",
+      arbeidsgiverTittel: "Arbeidsgiver",
+      arbeidsgiverVelgerLabel: "Velg arbeidsgiver",
+      arbeidsgiverVelgerPlaceholder: "Organisasjonsnummer eller -navn",
+      arbeidsgiverVelgerInfo:
+        "Listen inneholder alle arbeidsgivere du har fått tilgang til i skjemaet i Altinn og arbeidstakere som har gitt deg fullmakt på nav.no/fullmakt.",
+      ingenArbeidsgivereTittel: "Du har ingen arbeidsgivere tilgjengelig",
+      ingenArbeidsgivereInfo:
+        "For å kunne fylle ut søknad på vegne av en arbeidsgiver, må du ha fått delegert tilgang til virksomheten i Altinn.",
+      ingenArbeidsgivereLenke: "Les mer om hvordan du får tilgang i Altinn",
+      feilVedHentingAvArbeidsgivere:
+        "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
+      arbeidstakerTittel: "Arbeidstaker",
+      arbeidstakerMedFullmaktLabel: "Arbeidstaker med fullmakt",
+      arbeidstakerMedFullmaktBeskrivelse:
+        "Velg en person du har fått fullmakt fra. Du vil fylle ut søknaden på vegne av arbeidstakeren.",
+      arbeidstakerMedFullmaktPlaceholder: "Fødsels-/d-nummer eller navn",
+      arbeidstakerMedFullmaktListePlaceholder: "+ Velg...",
+      arbeidstakerUtenFullmaktTittel: "Arbeidstaker uten fullmakt",
+      arbeidstakerUtenFullmaktBeskrivelse:
+        "Arbeidstakeren må selv fylle ut sin del av søknaden.",
+      arbeidstakerFnrLabel: "Fødsels- eller d-nummer",
+      arbeidstakerEtternavnLabel: "Etternavn",
+      arbeidstakerSokKnapp: "Søk",
+      arbeidstakerFnrTom: "Skriv fødselsnummer",
+      arbeidstakerFnrUgyldig: "Ugyldig fødselsnummer",
+      arbeidstakerEtternavnTom: "Skriv etternavn",
+      arbeidstakerVerifiseringFeilet:
+        "Finner ikke person med oppgitt fødselsnummer og etternavn",
+      arbeidstakerVerifisertLabel: "Person verifisert",
+      arbeidstakerFjernKnapp: "Fjern",
+      gaTilSkjemaKnapp: "Gå til skjema for utsendt arbeidstaker",
+      valideringFeilTittel: "Du må fylle ut disse feltene:",
+      valideringManglerArbeidsgiver: "Arbeidsgiver må velges",
+      valideringManglerArbeidstaker: "Arbeidstaker må velges",
+      historikkTittel: "Tidligere innsendte søknadsskjema",
+      historikkSokPlaceholder: "Søk...",
+      historikkKolonneVirksomhet: "Virksomhet",
+      historikkKolonneArbeidstaker: "Navn arbeidstaker",
+      historikkKolonneFnr: "Fnr/D-nummer",
+      historikkKolonneInnsendtDato: "Innsendt dato",
+      historikkKolonneStatus: "Status",
+      historikkAntallTreff: "{{antall}} treff",
+      historikkFeilmelding:
+        "Kunne ikke hente innsendte søknader. Prøv igjen senere.",
+      historikkIngenResultater: "Ingen søknader funnet",
+      historikkStatusSendt: "Sendt",
+      historikkStatusMottatt: "Mottatt",
+      paginationForrige: "Forrige",
+      paginationNeste: "Neste",
+    },
+    velgRadgiverfirma: {
+      tittel: "Du er rådgiver og bruker Nav på vegne av et rådgivingsfirma",
+      informasjon:
+        "For å kunne sende brev til riktig adresse må vi ha informasjon om hvilken virksomhet du jobber som rådgiver for.",
+      sokPaVirksomhet: "Søk på virksomhet (org.nr.)",
+      organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
+      feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",
+      rateLimitOverskredet:
+        "Du har søkt for mange ganger. Vent et minutt før du prøver igjen.",
+      duMaSokeForstFeil:
+        "Du må søke etter og velge et rådgiverfirma før du kan fortsette",
+      valgtFirma: "Valgt organisasjon",
+      ok: "Ok",
+    },
     oppsummeringSteg: {
       tittel: "Oppsummering",
+    },
+    startSoknad: {
+      tittel: "Start søknad",
+      beskrivelse:
+        "Sjekk at informasjonen nedenfor stemmer før du starter søknaden.",
+      organisasjonsnavn: "Organisasjonsnavn",
+      organisasjonsnummer: "Organisasjonsnummer",
+      radgiverfirmaTittel: "Rådgiverfirma",
+      navn: "Navn",
+      fodselsnummer: "Fødselsnummer / D-nummer",
+      duHarFullmakt:
+        "Du har fullmakt til å fylle ut søknaden på vegne av arbeidstaker",
+      startSoknadKnapp: "Start søknad",
+      feilVedOpprettelse:
+        "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",
     },
     generellValidering: {
       erPakrevd: "er påkrevd",

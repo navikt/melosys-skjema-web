@@ -107,12 +107,6 @@ export const en = {
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
     },
-    rollevelgerPage: {
-      hvemVilDuFylleUtSkjemaPaVegneAv:
-        "Who do you want to fill out the form for?",
-      degSelv: "Yourself",
-      orgNr: "Org. no.",
-    },
     familiemedlemmerSteg: {
       tittel: "Family Members",
       sokerDuForBarnUnder18SomSkalVaereMed:
@@ -146,49 +140,6 @@ export const en = {
       lastOppVedleggBeskrivelse:
         "You can upload PDF, Word documents or images. Maximum file size 10 MB per file.",
     },
-    arbeidstakerenSteg: {
-      tittel: "The Employee",
-      harArbeidstakerenNorskFodselsnummerEllerDNummer:
-        "Does the employee have a Norwegian social security number or D-number?",
-      arbeidstakerensFodselsnummerEllerDNummer:
-        "Employee's social security number or D-number",
-      arbeidstakerensFornavn: "Employee's first name",
-      arbeidstakerensEtternavn: "Employee's last name",
-      arbeidstakerensFodselsdato: "Employee's date of birth",
-      harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
-        "Have you been or will you be in paid employment in Norway for at least one month before the assignment?",
-      aktivitet: "Activity (TODO: find a good label here)",
-      velgAktivitet: "Select activity",
-      skalDuJobbeForFlereVirksomheterIPerioden:
-        "Will you work for multiple companies during the period you are applying for?",
-      duMaSvarePaOmArbeidstakerenHarNorskFodselsnummer:
-        "You must answer whether the employee has a Norwegian social security number",
-      fodselsnummerEllerDNummerErPakrevdNarArbeidstakerenHarNorskFodselsnummer:
-        "Social security number or D-number is required when the employee has a Norwegian social security number",
-      fodselsnummerEllerDNummerMaVare11Siffer:
-        "Social security number or D-number must be 11 digits",
-      fornavnErPakrevdOgMaVareMinst2Tegn:
-        "First name is required and must be at least 2 characters",
-      etternavnErPakrevdOgMaVareMinst2Tegn:
-        "Last name is required and must be at least 2 characters",
-      fodselsdatoErPakrevd: "Date of birth is required",
-      duMaVelgeEnAktivitetNarDuIkkeHarVertILonnetArbeid:
-        "You must select an activity when you have not been in paid employment",
-      duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
-        "You must answer whether you have been or will be in paid employment in Norway before assignment",
-      duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden:
-        "You must answer whether you will work for multiple companies during the period",
-      duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter:
-        "You must add at least one company when you will work for multiple companies",
-      hvemSkalDuJobbeForIUtsendelsesPerioden:
-        "Who will you work for during the assignment period?",
-      hvemSkalDuJobbeForIUtsendelsesPeriodenBeskrivelse:
-        "Add Norwegian and/or foreign companies you will work for during the assignment period.",
-      studier: "Studies",
-      ferie: "Vacation",
-      selvstendingVirksomhet: "Self-employed business",
-      kontantytelseFraNav: "Received cash benefits from Nav",
-    },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",
       erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
@@ -212,12 +163,6 @@ export const en = {
         "You must select which country pays the financial support",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
-    },
-    // TODO: rename arbeidsgiverSteg -> arbeidsgiverenSteg
-    arbeidsgiverSteg: {
-      tittel: "The Employer",
-      arbeidsgiverensOrganisasjonsnummer: "Employer's organization number",
-      organisasjonensNavn: "Organization name",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Place of work abroad",
@@ -377,6 +322,159 @@ export const en = {
     },
     oppsummeringSteg: {
       tittel: "Summary",
+    },
+    landingsside: {
+      hei: "Hello",
+      hvemVilDuBrukeNavPaVegneAv: "Who do you want to use Nav on behalf of?",
+      degSelv: "YOURSELF",
+      dinArbeidsgiver: "YOUR EMPLOYER",
+      enArbeidsgiverSomRadgiver: "AN EMPLOYER AS AN ADVISOR",
+      annenPerson: "ANOTHER PERSON",
+      avbryt: "Cancel",
+    },
+    kontekstBanner: {
+      minSide: "My page",
+      minSideArbeidsgiver: "My page - employer",
+      minSideRadgiver: "My page - advisor",
+      minSideAnnenPerson: "My page - another person",
+      ingenArbeidsgiverValgt: "No employer selected",
+      ingenRadgiverValgt: "No advisor selected",
+      ingenPersonValgt: "No person selected",
+      byttKontekst: "Change",
+      byttKontekstAriaLabel: "Change representation and return to landing page",
+    },
+    oversiktDegSelv: {
+      tittel: "Your overview page",
+      infoBullet1: "You can view previous and ongoing applications",
+      infoBullet2: "Here you can start a new application for yourself",
+    },
+    oversiktArbeidsgiver: {
+      tittel: "This is the employer's overview page",
+      infoBullet1: "You can view previous and ongoing applications",
+      infoBullet2:
+        "Here you can see an overview of accesses and mandates that have been granted to you",
+      infoBullet3:
+        "You can submit applications on behalf of the employer and possibly the employee",
+      infoBullet4:
+        "If you have a mandate from an employee, you must submit the application for them at the same time",
+    },
+    oversiktRadgiver: {
+      tittel: "This is the advisor's overview page",
+      infoBullet1: "You can view previous and ongoing applications",
+      infoBullet2:
+        "Here you can see an overview of employers you can represent",
+      infoBullet3:
+        "You can submit applications on behalf of the employer and possibly the employee",
+      infoBullet4:
+        "If you have a mandate from an employee, you must submit the application for them at the same time",
+    },
+    oversiktAnnenPerson: {
+      tittel: "Submit application on behalf of another person",
+      infoBullet1:
+        "You can submit an application if the person has granted you a mandate on nav.no/fullmakt",
+      infoBullet2:
+        "You will complete the entire application on behalf of the person you represent",
+      infoBullet3: "You can view previous applications and drafts",
+    },
+    oversiktFelles: {
+      utkastTittel: "DRAFTS",
+      utkastBeskrivelse: "Applications you have started but not yet submitted",
+      utkastFeilmelding:
+        "Could not fetch started applications. Try reloading the page.",
+      utkastArbeidsgiver: "Employer",
+      utkastArbeidstaker: "Employee",
+      utkastOpprettet: "Created",
+      utkastSistEndret: "Last modified",
+      soknadStarterTittel: "Who are you applying on behalf of?",
+      soknadStarterTittelDegSelv: "Start application",
+      soknadStarterInfoDegSelv:
+        "When applying for yourself, we need information about the employer and you as an employee.",
+      soknadStarterInfo:
+        "We need information about both the employer and the employee.",
+      soknadStarterFullmaktInfo1:
+        "In the list below, you will find employees who have granted you a mandate on nav.no/fullmakt.",
+      soknadStarterFullmaktInfo2:
+        "If you have a mandate from an employee, you must complete the entire application at once.",
+      soknadStarterFullmaktInfo3:
+        "If you do not have a mandate from the employee, the person must first grant you a mandate through nav.no/fullmakt.",
+      arbeidsgiverTittel: "Employer",
+      arbeidsgiverVelgerLabel: "Select employer",
+      arbeidsgiverVelgerPlaceholder: "Organization number or name",
+      arbeidsgiverVelgerInfo:
+        "The list contains all employers you have been granted access to in the Altinn form and employees who have granted you a mandate on nav.no/fullmakt.",
+      ingenArbeidsgivereTittel: "You have no employers available",
+      ingenArbeidsgivereInfo:
+        "To fill out an application on behalf of an employer, you must have been delegated access to the company in Altinn.",
+      ingenArbeidsgivereLenke: "Read more about how to get access in Altinn",
+      feilVedHentingAvArbeidsgivere:
+        "An error occurred while fetching employers from Altinn. Please try again later.",
+      arbeidstakerTittel: "Employee",
+      arbeidstakerMedFullmaktLabel: "Employee with mandate",
+      arbeidstakerMedFullmaktBeskrivelse:
+        "Select a person who has granted you a mandate. You will complete the application on behalf of the employee.",
+      arbeidstakerMedFullmaktPlaceholder: "Birth/d-number or name",
+      arbeidstakerMedFullmaktListePlaceholder: "+ Select...",
+      arbeidstakerUtenFullmaktTittel: "Employee without mandate",
+      arbeidstakerUtenFullmaktBeskrivelse:
+        "The employee must complete their part of the application themselves.",
+      arbeidstakerFnrLabel: "Birth or d-number",
+      arbeidstakerEtternavnLabel: "Last name",
+      arbeidstakerSokKnapp: "Search",
+      arbeidstakerFnrTom: "Enter birth number",
+      arbeidstakerFnrUgyldig: "Invalid birth number",
+      arbeidstakerEtternavnTom: "Enter last name",
+      arbeidstakerVerifiseringFeilet:
+        "Person not found with the specified birth number and last name",
+      arbeidstakerVerifisertLabel: "Person verified",
+      arbeidstakerFjernKnapp: "Remove",
+      gaTilSkjemaKnapp: "Go to form for posted employee",
+      valideringFeilTittel: "You must fill in these fields:",
+      valideringManglerArbeidsgiver: "Employer must be selected",
+      valideringManglerArbeidstaker: "Employee must be selected",
+      historikkTittel: "Previously submitted applications",
+      historikkSokPlaceholder: "Search...",
+      historikkKolonneVirksomhet: "Company",
+      historikkKolonneArbeidstaker: "Employee name",
+      historikkKolonneFnr: "Birth/D-number",
+      historikkKolonneInnsendtDato: "Submitted date",
+      historikkKolonneStatus: "Status",
+      historikkAntallTreff: "{{antall}} results",
+      historikkFeilmelding:
+        "Could not retrieve submitted applications. Please try again later.",
+      historikkIngenResultater: "No applications found",
+      historikkStatusSendt: "Submitted",
+      historikkStatusMottatt: "Received",
+      paginationForrige: "Previous",
+      paginationNeste: "Next",
+    },
+    velgRadgiverfirma: {
+      tittel: "You are an advisor and use Nav on behalf of an advisory firm",
+      informasjon:
+        "In order to send letters to the correct address, we need information about which company you work as an advisor for.",
+      sokPaVirksomhet: "Search for company (org.no.)",
+      organisasjonIkkeFunnet: "No organization found with this number",
+      feilVedSok: "Something went wrong with the search. Try again later.",
+      rateLimitOverskredet:
+        "You have searched too many times. Wait a minute before trying again.",
+      duMaSokeForstFeil:
+        "You must search for and select an advisory firm before you can continue",
+      valgtFirma: "Selected advisory firm",
+      ok: "Ok",
+    },
+    startSoknad: {
+      tittel: "Start application",
+      beskrivelse:
+        "Check that the information below is correct before starting the application.",
+      organisasjonsnavn: "Organization name",
+      organisasjonsnummer: "Organization number",
+      radgiverfirmaTittel: "Advisory firm",
+      navn: "Name",
+      fodselsnummer: "Birth number / D-number",
+      duHarFullmakt:
+        "You have mandate to complete the application on behalf of the employee",
+      startSoknadKnapp: "Start application",
+      feilVedOpprettelse:
+        "An error occurred while creating the application. Please try again later.",
     },
     generellValidering: {
       erPakrevd: "is required",

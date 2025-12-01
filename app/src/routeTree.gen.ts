@@ -10,38 +10,45 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SkjemaRouteImport } from './routes/skjema'
-import { Route as RollevelgerRouteImport } from './routes/rollevelger'
+import { Route as RepresentasjonRouteImport } from './routes/representasjon'
+import { Route as OversiktRouteImport } from './routes/oversikt'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SkjemaIndexRouteImport } from './routes/skjema.index'
-import { Route as SkjemaArbeidstakerRouteImport } from './routes/skjema.arbeidstaker'
-import { Route as SkjemaArbeidsgiverRouteImport } from './routes/skjema.arbeidsgiver'
-import { Route as SkjemaArbeidstakerIndexRouteImport } from './routes/skjema.arbeidstaker.index'
-import { Route as SkjemaArbeidsgiverIndexRouteImport } from './routes/skjema.arbeidsgiver.index'
+import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon.index'
+import { Route as OversiktIndexRouteImport } from './routes/oversikt.index'
+import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
+import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
+import { Route as OversiktStartSoknadRouteImport } from './routes/oversikt.start-soknad'
+import { Route as SkjemaArbeidstakerIdIndexRouteImport } from './routes/skjema.arbeidstaker.$id.index'
+import { Route as SkjemaArbeidsgiverIdIndexRouteImport } from './routes/skjema.arbeidsgiver.$id.index'
 import { Route as SkjemaArbeidstakerIdVedleggRouteImport } from './routes/skjema.arbeidstaker.$id.vedlegg'
+import { Route as SkjemaArbeidstakerIdUtenlandsoppdragetRouteImport } from './routes/skjema.arbeidstaker.$id.utenlandsoppdraget'
 import { Route as SkjemaArbeidstakerIdTilleggsopplysningerRouteImport } from './routes/skjema.arbeidstaker.$id.tilleggsopplysninger'
 import { Route as SkjemaArbeidstakerIdSkatteforholdOgInntektRouteImport } from './routes/skjema.arbeidstaker.$id.skatteforhold-og-inntekt'
 import { Route as SkjemaArbeidstakerIdOppsummeringRouteImport } from './routes/skjema.arbeidstaker.$id.oppsummering'
 import { Route as SkjemaArbeidstakerIdFamiliemedlemmerRouteImport } from './routes/skjema.arbeidstaker.$id.familiemedlemmer'
-import { Route as SkjemaArbeidstakerIdDineOpplysningerRouteImport } from './routes/skjema.arbeidstaker.$id.dine-opplysninger'
 import { Route as SkjemaArbeidstakerIdArbeidssituasjonRouteImport } from './routes/skjema.arbeidstaker.$id.arbeidssituasjon'
 import { Route as SkjemaArbeidsgiverIdVedleggRouteImport } from './routes/skjema.arbeidsgiver.$id.vedlegg'
 import { Route as SkjemaArbeidsgiverIdUtenlandsoppdragetRouteImport } from './routes/skjema.arbeidsgiver.$id.utenlandsoppdraget'
 import { Route as SkjemaArbeidsgiverIdTilleggsopplysningerRouteImport } from './routes/skjema.arbeidsgiver.$id.tilleggsopplysninger'
 import { Route as SkjemaArbeidsgiverIdOppsummeringRouteImport } from './routes/skjema.arbeidsgiver.$id.oppsummering'
 import { Route as SkjemaArbeidsgiverIdArbeidstakerensLonnRouteImport } from './routes/skjema.arbeidsgiver.$id.arbeidstakerens-lonn'
-import { Route as SkjemaArbeidsgiverIdArbeidstakerenRouteImport } from './routes/skjema.arbeidsgiver.$id.arbeidstakeren'
 import { Route as SkjemaArbeidsgiverIdArbeidsstedIUtlandetRouteImport } from './routes/skjema.arbeidsgiver.$id.arbeidssted-i-utlandet'
 import { Route as SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRouteImport } from './routes/skjema.arbeidsgiver.$id.arbeidsgiverens-virksomhet-i-norge'
-import { Route as SkjemaArbeidsgiverIdArbeidsgiverenRouteImport } from './routes/skjema.arbeidsgiver.$id.arbeidsgiveren'
 
 const SkjemaRoute = SkjemaRouteImport.update({
   id: '/skjema',
   path: '/skjema',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RollevelgerRoute = RollevelgerRouteImport.update({
-  id: '/rollevelger',
-  path: '/rollevelger',
+const RepresentasjonRoute = RepresentasjonRouteImport.update({
+  id: '/representasjon',
+  path: '/representasjon',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OversiktRoute = OversiktRouteImport.update({
+  id: '/oversikt',
+  path: '/oversikt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -54,280 +61,299 @@ const SkjemaIndexRoute = SkjemaIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SkjemaRoute,
 } as any)
-const SkjemaArbeidstakerRoute = SkjemaArbeidstakerRouteImport.update({
-  id: '/arbeidstaker',
-  path: '/arbeidstaker',
-  getParentRoute: () => SkjemaRoute,
-} as any)
-const SkjemaArbeidsgiverRoute = SkjemaArbeidsgiverRouteImport.update({
-  id: '/arbeidsgiver',
-  path: '/arbeidsgiver',
-  getParentRoute: () => SkjemaRoute,
-} as any)
-const SkjemaArbeidstakerIndexRoute = SkjemaArbeidstakerIndexRouteImport.update({
+const RepresentasjonIndexRoute = RepresentasjonIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SkjemaArbeidstakerRoute,
+  getParentRoute: () => RepresentasjonRoute,
 } as any)
-const SkjemaArbeidsgiverIndexRoute = SkjemaArbeidsgiverIndexRouteImport.update({
+const OversiktIndexRoute = OversiktIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SkjemaArbeidsgiverRoute,
+  getParentRoute: () => OversiktRoute,
 } as any)
+const SkjemaIdRoute = SkjemaIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => SkjemaRoute,
+} as any)
+const RepresentasjonVelgRadgiverfirmaRoute =
+  RepresentasjonVelgRadgiverfirmaRouteImport.update({
+    id: '/velg-radgiverfirma',
+    path: '/velg-radgiverfirma',
+    getParentRoute: () => RepresentasjonRoute,
+  } as any)
+const OversiktStartSoknadRoute = OversiktStartSoknadRouteImport.update({
+  id: '/start-soknad',
+  path: '/start-soknad',
+  getParentRoute: () => OversiktRoute,
+} as any)
+const SkjemaArbeidstakerIdIndexRoute =
+  SkjemaArbeidstakerIdIndexRouteImport.update({
+    id: '/arbeidstaker/$id/',
+    path: '/arbeidstaker/$id/',
+    getParentRoute: () => SkjemaRoute,
+  } as any)
+const SkjemaArbeidsgiverIdIndexRoute =
+  SkjemaArbeidsgiverIdIndexRouteImport.update({
+    id: '/arbeidsgiver/$id/',
+    path: '/arbeidsgiver/$id/',
+    getParentRoute: () => SkjemaRoute,
+  } as any)
 const SkjemaArbeidstakerIdVedleggRoute =
   SkjemaArbeidstakerIdVedleggRouteImport.update({
-    id: '/$id/vedlegg',
-    path: '/$id/vedlegg',
-    getParentRoute: () => SkjemaArbeidstakerRoute,
+    id: '/arbeidstaker/$id/vedlegg',
+    path: '/arbeidstaker/$id/vedlegg',
+    getParentRoute: () => SkjemaRoute,
+  } as any)
+const SkjemaArbeidstakerIdUtenlandsoppdragetRoute =
+  SkjemaArbeidstakerIdUtenlandsoppdragetRouteImport.update({
+    id: '/arbeidstaker/$id/utenlandsoppdraget',
+    path: '/arbeidstaker/$id/utenlandsoppdraget',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidstakerIdTilleggsopplysningerRoute =
   SkjemaArbeidstakerIdTilleggsopplysningerRouteImport.update({
-    id: '/$id/tilleggsopplysninger',
-    path: '/$id/tilleggsopplysninger',
-    getParentRoute: () => SkjemaArbeidstakerRoute,
+    id: '/arbeidstaker/$id/tilleggsopplysninger',
+    path: '/arbeidstaker/$id/tilleggsopplysninger',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidstakerIdSkatteforholdOgInntektRoute =
   SkjemaArbeidstakerIdSkatteforholdOgInntektRouteImport.update({
-    id: '/$id/skatteforhold-og-inntekt',
-    path: '/$id/skatteforhold-og-inntekt',
-    getParentRoute: () => SkjemaArbeidstakerRoute,
+    id: '/arbeidstaker/$id/skatteforhold-og-inntekt',
+    path: '/arbeidstaker/$id/skatteforhold-og-inntekt',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidstakerIdOppsummeringRoute =
   SkjemaArbeidstakerIdOppsummeringRouteImport.update({
-    id: '/$id/oppsummering',
-    path: '/$id/oppsummering',
-    getParentRoute: () => SkjemaArbeidstakerRoute,
+    id: '/arbeidstaker/$id/oppsummering',
+    path: '/arbeidstaker/$id/oppsummering',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidstakerIdFamiliemedlemmerRoute =
   SkjemaArbeidstakerIdFamiliemedlemmerRouteImport.update({
-    id: '/$id/familiemedlemmer',
-    path: '/$id/familiemedlemmer',
-    getParentRoute: () => SkjemaArbeidstakerRoute,
-  } as any)
-const SkjemaArbeidstakerIdDineOpplysningerRoute =
-  SkjemaArbeidstakerIdDineOpplysningerRouteImport.update({
-    id: '/$id/dine-opplysninger',
-    path: '/$id/dine-opplysninger',
-    getParentRoute: () => SkjemaArbeidstakerRoute,
+    id: '/arbeidstaker/$id/familiemedlemmer',
+    path: '/arbeidstaker/$id/familiemedlemmer',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidstakerIdArbeidssituasjonRoute =
   SkjemaArbeidstakerIdArbeidssituasjonRouteImport.update({
-    id: '/$id/arbeidssituasjon',
-    path: '/$id/arbeidssituasjon',
-    getParentRoute: () => SkjemaArbeidstakerRoute,
+    id: '/arbeidstaker/$id/arbeidssituasjon',
+    path: '/arbeidstaker/$id/arbeidssituasjon',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidsgiverIdVedleggRoute =
   SkjemaArbeidsgiverIdVedleggRouteImport.update({
-    id: '/$id/vedlegg',
-    path: '/$id/vedlegg',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+    id: '/arbeidsgiver/$id/vedlegg',
+    path: '/arbeidsgiver/$id/vedlegg',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidsgiverIdUtenlandsoppdragetRoute =
   SkjemaArbeidsgiverIdUtenlandsoppdragetRouteImport.update({
-    id: '/$id/utenlandsoppdraget',
-    path: '/$id/utenlandsoppdraget',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+    id: '/arbeidsgiver/$id/utenlandsoppdraget',
+    path: '/arbeidsgiver/$id/utenlandsoppdraget',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidsgiverIdTilleggsopplysningerRoute =
   SkjemaArbeidsgiverIdTilleggsopplysningerRouteImport.update({
-    id: '/$id/tilleggsopplysninger',
-    path: '/$id/tilleggsopplysninger',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+    id: '/arbeidsgiver/$id/tilleggsopplysninger',
+    path: '/arbeidsgiver/$id/tilleggsopplysninger',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidsgiverIdOppsummeringRoute =
   SkjemaArbeidsgiverIdOppsummeringRouteImport.update({
-    id: '/$id/oppsummering',
-    path: '/$id/oppsummering',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+    id: '/arbeidsgiver/$id/oppsummering',
+    path: '/arbeidsgiver/$id/oppsummering',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidsgiverIdArbeidstakerensLonnRoute =
   SkjemaArbeidsgiverIdArbeidstakerensLonnRouteImport.update({
-    id: '/$id/arbeidstakerens-lonn',
-    path: '/$id/arbeidstakerens-lonn',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
-  } as any)
-const SkjemaArbeidsgiverIdArbeidstakerenRoute =
-  SkjemaArbeidsgiverIdArbeidstakerenRouteImport.update({
-    id: '/$id/arbeidstakeren',
-    path: '/$id/arbeidstakeren',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+    id: '/arbeidsgiver/$id/arbeidstakerens-lonn',
+    path: '/arbeidsgiver/$id/arbeidstakerens-lonn',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute =
   SkjemaArbeidsgiverIdArbeidsstedIUtlandetRouteImport.update({
-    id: '/$id/arbeidssted-i-utlandet',
-    path: '/$id/arbeidssted-i-utlandet',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+    id: '/arbeidsgiver/$id/arbeidssted-i-utlandet',
+    path: '/arbeidsgiver/$id/arbeidssted-i-utlandet',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 const SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute =
   SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRouteImport.update({
-    id: '/$id/arbeidsgiverens-virksomhet-i-norge',
-    path: '/$id/arbeidsgiverens-virksomhet-i-norge',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
-  } as any)
-const SkjemaArbeidsgiverIdArbeidsgiverenRoute =
-  SkjemaArbeidsgiverIdArbeidsgiverenRouteImport.update({
-    id: '/$id/arbeidsgiveren',
-    path: '/$id/arbeidsgiveren',
-    getParentRoute: () => SkjemaArbeidsgiverRoute,
+    id: '/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge',
+    path: '/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge',
+    getParentRoute: () => SkjemaRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/rollevelger': typeof RollevelgerRoute
+  '/oversikt': typeof OversiktRouteWithChildren
+  '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
-  '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverRouteWithChildren
-  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRouteWithChildren
+  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
+  '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
+  '/skjema/$id': typeof SkjemaIdRoute
+  '/oversikt/': typeof OversiktIndexRoute
+  '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
-  '/skjema/arbeidsgiver/': typeof SkjemaArbeidsgiverIndexRoute
-  '/skjema/arbeidstaker/': typeof SkjemaArbeidstakerIndexRoute
-  '/skjema/arbeidsgiver/$id/arbeidsgiveren': typeof SkjemaArbeidsgiverIdArbeidsgiverenRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
-  '/skjema/arbeidsgiver/$id/arbeidstakeren': typeof SkjemaArbeidsgiverIdArbeidstakerenRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
   '/skjema/arbeidsgiver/$id/oppsummering': typeof SkjemaArbeidsgiverIdOppsummeringRoute
   '/skjema/arbeidsgiver/$id/tilleggsopplysninger': typeof SkjemaArbeidsgiverIdTilleggsopplysningerRoute
   '/skjema/arbeidsgiver/$id/utenlandsoppdraget': typeof SkjemaArbeidsgiverIdUtenlandsoppdragetRoute
   '/skjema/arbeidsgiver/$id/vedlegg': typeof SkjemaArbeidsgiverIdVedleggRoute
   '/skjema/arbeidstaker/$id/arbeidssituasjon': typeof SkjemaArbeidstakerIdArbeidssituasjonRoute
-  '/skjema/arbeidstaker/$id/dine-opplysninger': typeof SkjemaArbeidstakerIdDineOpplysningerRoute
   '/skjema/arbeidstaker/$id/familiemedlemmer': typeof SkjemaArbeidstakerIdFamiliemedlemmerRoute
   '/skjema/arbeidstaker/$id/oppsummering': typeof SkjemaArbeidstakerIdOppsummeringRoute
   '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt': typeof SkjemaArbeidstakerIdSkatteforholdOgInntektRoute
   '/skjema/arbeidstaker/$id/tilleggsopplysninger': typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
+  '/skjema/arbeidstaker/$id/utenlandsoppdraget': typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   '/skjema/arbeidstaker/$id/vedlegg': typeof SkjemaArbeidstakerIdVedleggRoute
+  '/skjema/arbeidsgiver/$id': typeof SkjemaArbeidsgiverIdIndexRoute
+  '/skjema/arbeidstaker/$id': typeof SkjemaArbeidstakerIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/rollevelger': typeof RollevelgerRoute
+  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
+  '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
+  '/skjema/$id': typeof SkjemaIdRoute
+  '/oversikt': typeof OversiktIndexRoute
+  '/representasjon': typeof RepresentasjonIndexRoute
   '/skjema': typeof SkjemaIndexRoute
-  '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverIndexRoute
-  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerIndexRoute
-  '/skjema/arbeidsgiver/$id/arbeidsgiveren': typeof SkjemaArbeidsgiverIdArbeidsgiverenRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
-  '/skjema/arbeidsgiver/$id/arbeidstakeren': typeof SkjemaArbeidsgiverIdArbeidstakerenRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
   '/skjema/arbeidsgiver/$id/oppsummering': typeof SkjemaArbeidsgiverIdOppsummeringRoute
   '/skjema/arbeidsgiver/$id/tilleggsopplysninger': typeof SkjemaArbeidsgiverIdTilleggsopplysningerRoute
   '/skjema/arbeidsgiver/$id/utenlandsoppdraget': typeof SkjemaArbeidsgiverIdUtenlandsoppdragetRoute
   '/skjema/arbeidsgiver/$id/vedlegg': typeof SkjemaArbeidsgiverIdVedleggRoute
   '/skjema/arbeidstaker/$id/arbeidssituasjon': typeof SkjemaArbeidstakerIdArbeidssituasjonRoute
-  '/skjema/arbeidstaker/$id/dine-opplysninger': typeof SkjemaArbeidstakerIdDineOpplysningerRoute
   '/skjema/arbeidstaker/$id/familiemedlemmer': typeof SkjemaArbeidstakerIdFamiliemedlemmerRoute
   '/skjema/arbeidstaker/$id/oppsummering': typeof SkjemaArbeidstakerIdOppsummeringRoute
   '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt': typeof SkjemaArbeidstakerIdSkatteforholdOgInntektRoute
   '/skjema/arbeidstaker/$id/tilleggsopplysninger': typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
+  '/skjema/arbeidstaker/$id/utenlandsoppdraget': typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   '/skjema/arbeidstaker/$id/vedlegg': typeof SkjemaArbeidstakerIdVedleggRoute
+  '/skjema/arbeidsgiver/$id': typeof SkjemaArbeidsgiverIdIndexRoute
+  '/skjema/arbeidstaker/$id': typeof SkjemaArbeidstakerIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/rollevelger': typeof RollevelgerRoute
+  '/oversikt': typeof OversiktRouteWithChildren
+  '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
-  '/skjema/arbeidsgiver': typeof SkjemaArbeidsgiverRouteWithChildren
-  '/skjema/arbeidstaker': typeof SkjemaArbeidstakerRouteWithChildren
+  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
+  '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
+  '/skjema/$id': typeof SkjemaIdRoute
+  '/oversikt/': typeof OversiktIndexRoute
+  '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
-  '/skjema/arbeidsgiver/': typeof SkjemaArbeidsgiverIndexRoute
-  '/skjema/arbeidstaker/': typeof SkjemaArbeidstakerIndexRoute
-  '/skjema/arbeidsgiver/$id/arbeidsgiveren': typeof SkjemaArbeidsgiverIdArbeidsgiverenRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
-  '/skjema/arbeidsgiver/$id/arbeidstakeren': typeof SkjemaArbeidsgiverIdArbeidstakerenRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
   '/skjema/arbeidsgiver/$id/oppsummering': typeof SkjemaArbeidsgiverIdOppsummeringRoute
   '/skjema/arbeidsgiver/$id/tilleggsopplysninger': typeof SkjemaArbeidsgiverIdTilleggsopplysningerRoute
   '/skjema/arbeidsgiver/$id/utenlandsoppdraget': typeof SkjemaArbeidsgiverIdUtenlandsoppdragetRoute
   '/skjema/arbeidsgiver/$id/vedlegg': typeof SkjemaArbeidsgiverIdVedleggRoute
   '/skjema/arbeidstaker/$id/arbeidssituasjon': typeof SkjemaArbeidstakerIdArbeidssituasjonRoute
-  '/skjema/arbeidstaker/$id/dine-opplysninger': typeof SkjemaArbeidstakerIdDineOpplysningerRoute
   '/skjema/arbeidstaker/$id/familiemedlemmer': typeof SkjemaArbeidstakerIdFamiliemedlemmerRoute
   '/skjema/arbeidstaker/$id/oppsummering': typeof SkjemaArbeidstakerIdOppsummeringRoute
   '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt': typeof SkjemaArbeidstakerIdSkatteforholdOgInntektRoute
   '/skjema/arbeidstaker/$id/tilleggsopplysninger': typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
+  '/skjema/arbeidstaker/$id/utenlandsoppdraget': typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   '/skjema/arbeidstaker/$id/vedlegg': typeof SkjemaArbeidstakerIdVedleggRoute
+  '/skjema/arbeidsgiver/$id/': typeof SkjemaArbeidsgiverIdIndexRoute
+  '/skjema/arbeidstaker/$id/': typeof SkjemaArbeidstakerIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/rollevelger'
+    | '/oversikt'
+    | '/representasjon'
     | '/skjema'
-    | '/skjema/arbeidsgiver'
-    | '/skjema/arbeidstaker'
+    | '/oversikt/start-soknad'
+    | '/representasjon/velg-radgiverfirma'
+    | '/skjema/$id'
+    | '/oversikt/'
+    | '/representasjon/'
     | '/skjema/'
-    | '/skjema/arbeidsgiver/'
-    | '/skjema/arbeidstaker/'
-    | '/skjema/arbeidsgiver/$id/arbeidsgiveren'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
-    | '/skjema/arbeidsgiver/$id/arbeidstakeren'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
     | '/skjema/arbeidsgiver/$id/oppsummering'
     | '/skjema/arbeidsgiver/$id/tilleggsopplysninger'
     | '/skjema/arbeidsgiver/$id/utenlandsoppdraget'
     | '/skjema/arbeidsgiver/$id/vedlegg'
     | '/skjema/arbeidstaker/$id/arbeidssituasjon'
-    | '/skjema/arbeidstaker/$id/dine-opplysninger'
     | '/skjema/arbeidstaker/$id/familiemedlemmer'
     | '/skjema/arbeidstaker/$id/oppsummering'
     | '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt'
     | '/skjema/arbeidstaker/$id/tilleggsopplysninger'
+    | '/skjema/arbeidstaker/$id/utenlandsoppdraget'
     | '/skjema/arbeidstaker/$id/vedlegg'
+    | '/skjema/arbeidsgiver/$id'
+    | '/skjema/arbeidstaker/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/rollevelger'
+    | '/oversikt/start-soknad'
+    | '/representasjon/velg-radgiverfirma'
+    | '/skjema/$id'
+    | '/oversikt'
+    | '/representasjon'
     | '/skjema'
-    | '/skjema/arbeidsgiver'
-    | '/skjema/arbeidstaker'
-    | '/skjema/arbeidsgiver/$id/arbeidsgiveren'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
-    | '/skjema/arbeidsgiver/$id/arbeidstakeren'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
     | '/skjema/arbeidsgiver/$id/oppsummering'
     | '/skjema/arbeidsgiver/$id/tilleggsopplysninger'
     | '/skjema/arbeidsgiver/$id/utenlandsoppdraget'
     | '/skjema/arbeidsgiver/$id/vedlegg'
     | '/skjema/arbeidstaker/$id/arbeidssituasjon'
-    | '/skjema/arbeidstaker/$id/dine-opplysninger'
     | '/skjema/arbeidstaker/$id/familiemedlemmer'
     | '/skjema/arbeidstaker/$id/oppsummering'
     | '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt'
     | '/skjema/arbeidstaker/$id/tilleggsopplysninger'
+    | '/skjema/arbeidstaker/$id/utenlandsoppdraget'
     | '/skjema/arbeidstaker/$id/vedlegg'
+    | '/skjema/arbeidsgiver/$id'
+    | '/skjema/arbeidstaker/$id'
   id:
     | '__root__'
     | '/'
-    | '/rollevelger'
+    | '/oversikt'
+    | '/representasjon'
     | '/skjema'
-    | '/skjema/arbeidsgiver'
-    | '/skjema/arbeidstaker'
+    | '/oversikt/start-soknad'
+    | '/representasjon/velg-radgiverfirma'
+    | '/skjema/$id'
+    | '/oversikt/'
+    | '/representasjon/'
     | '/skjema/'
-    | '/skjema/arbeidsgiver/'
-    | '/skjema/arbeidstaker/'
-    | '/skjema/arbeidsgiver/$id/arbeidsgiveren'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
-    | '/skjema/arbeidsgiver/$id/arbeidstakeren'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
     | '/skjema/arbeidsgiver/$id/oppsummering'
     | '/skjema/arbeidsgiver/$id/tilleggsopplysninger'
     | '/skjema/arbeidsgiver/$id/utenlandsoppdraget'
     | '/skjema/arbeidsgiver/$id/vedlegg'
     | '/skjema/arbeidstaker/$id/arbeidssituasjon'
-    | '/skjema/arbeidstaker/$id/dine-opplysninger'
     | '/skjema/arbeidstaker/$id/familiemedlemmer'
     | '/skjema/arbeidstaker/$id/oppsummering'
     | '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt'
     | '/skjema/arbeidstaker/$id/tilleggsopplysninger'
+    | '/skjema/arbeidstaker/$id/utenlandsoppdraget'
     | '/skjema/arbeidstaker/$id/vedlegg'
+    | '/skjema/arbeidsgiver/$id/'
+    | '/skjema/arbeidstaker/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  RollevelgerRoute: typeof RollevelgerRoute
+  OversiktRoute: typeof OversiktRouteWithChildren
+  RepresentasjonRoute: typeof RepresentasjonRouteWithChildren
   SkjemaRoute: typeof SkjemaRouteWithChildren
 }
 
@@ -340,11 +366,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkjemaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rollevelger': {
-      id: '/rollevelger'
-      path: '/rollevelger'
-      fullPath: '/rollevelger'
-      preLoaderRoute: typeof RollevelgerRouteImport
+    '/representasjon': {
+      id: '/representasjon'
+      path: '/representasjon'
+      fullPath: '/representasjon'
+      preLoaderRoute: typeof RepresentasjonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oversikt': {
+      id: '/oversikt'
+      path: '/oversikt'
+      fullPath: '/oversikt'
+      preLoaderRoute: typeof OversiktRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -361,172 +394,212 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkjemaIndexRouteImport
       parentRoute: typeof SkjemaRoute
     }
-    '/skjema/arbeidstaker': {
-      id: '/skjema/arbeidstaker'
-      path: '/arbeidstaker'
-      fullPath: '/skjema/arbeidstaker'
-      preLoaderRoute: typeof SkjemaArbeidstakerRouteImport
+    '/representasjon/': {
+      id: '/representasjon/'
+      path: '/'
+      fullPath: '/representasjon/'
+      preLoaderRoute: typeof RepresentasjonIndexRouteImport
+      parentRoute: typeof RepresentasjonRoute
+    }
+    '/oversikt/': {
+      id: '/oversikt/'
+      path: '/'
+      fullPath: '/oversikt/'
+      preLoaderRoute: typeof OversiktIndexRouteImport
+      parentRoute: typeof OversiktRoute
+    }
+    '/skjema/$id': {
+      id: '/skjema/$id'
+      path: '/$id'
+      fullPath: '/skjema/$id'
+      preLoaderRoute: typeof SkjemaIdRouteImport
       parentRoute: typeof SkjemaRoute
     }
-    '/skjema/arbeidsgiver': {
-      id: '/skjema/arbeidsgiver'
-      path: '/arbeidsgiver'
-      fullPath: '/skjema/arbeidsgiver'
-      preLoaderRoute: typeof SkjemaArbeidsgiverRouteImport
+    '/representasjon/velg-radgiverfirma': {
+      id: '/representasjon/velg-radgiverfirma'
+      path: '/velg-radgiverfirma'
+      fullPath: '/representasjon/velg-radgiverfirma'
+      preLoaderRoute: typeof RepresentasjonVelgRadgiverfirmaRouteImport
+      parentRoute: typeof RepresentasjonRoute
+    }
+    '/oversikt/start-soknad': {
+      id: '/oversikt/start-soknad'
+      path: '/start-soknad'
+      fullPath: '/oversikt/start-soknad'
+      preLoaderRoute: typeof OversiktStartSoknadRouteImport
+      parentRoute: typeof OversiktRoute
+    }
+    '/skjema/arbeidstaker/$id/': {
+      id: '/skjema/arbeidstaker/$id/'
+      path: '/arbeidstaker/$id'
+      fullPath: '/skjema/arbeidstaker/$id'
+      preLoaderRoute: typeof SkjemaArbeidstakerIdIndexRouteImport
       parentRoute: typeof SkjemaRoute
     }
-    '/skjema/arbeidstaker/': {
-      id: '/skjema/arbeidstaker/'
-      path: '/'
-      fullPath: '/skjema/arbeidstaker/'
-      preLoaderRoute: typeof SkjemaArbeidstakerIndexRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
-    }
-    '/skjema/arbeidsgiver/': {
-      id: '/skjema/arbeidsgiver/'
-      path: '/'
-      fullPath: '/skjema/arbeidsgiver/'
-      preLoaderRoute: typeof SkjemaArbeidsgiverIndexRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+    '/skjema/arbeidsgiver/$id/': {
+      id: '/skjema/arbeidsgiver/$id/'
+      path: '/arbeidsgiver/$id'
+      fullPath: '/skjema/arbeidsgiver/$id'
+      preLoaderRoute: typeof SkjemaArbeidsgiverIdIndexRouteImport
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidstaker/$id/vedlegg': {
       id: '/skjema/arbeidstaker/$id/vedlegg'
-      path: '/$id/vedlegg'
+      path: '/arbeidstaker/$id/vedlegg'
       fullPath: '/skjema/arbeidstaker/$id/vedlegg'
       preLoaderRoute: typeof SkjemaArbeidstakerIdVedleggRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
+      parentRoute: typeof SkjemaRoute
+    }
+    '/skjema/arbeidstaker/$id/utenlandsoppdraget': {
+      id: '/skjema/arbeidstaker/$id/utenlandsoppdraget'
+      path: '/arbeidstaker/$id/utenlandsoppdraget'
+      fullPath: '/skjema/arbeidstaker/$id/utenlandsoppdraget'
+      preLoaderRoute: typeof SkjemaArbeidstakerIdUtenlandsoppdragetRouteImport
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidstaker/$id/tilleggsopplysninger': {
       id: '/skjema/arbeidstaker/$id/tilleggsopplysninger'
-      path: '/$id/tilleggsopplysninger'
+      path: '/arbeidstaker/$id/tilleggsopplysninger'
       fullPath: '/skjema/arbeidstaker/$id/tilleggsopplysninger'
       preLoaderRoute: typeof SkjemaArbeidstakerIdTilleggsopplysningerRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt': {
       id: '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt'
-      path: '/$id/skatteforhold-og-inntekt'
+      path: '/arbeidstaker/$id/skatteforhold-og-inntekt'
       fullPath: '/skjema/arbeidstaker/$id/skatteforhold-og-inntekt'
       preLoaderRoute: typeof SkjemaArbeidstakerIdSkatteforholdOgInntektRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidstaker/$id/oppsummering': {
       id: '/skjema/arbeidstaker/$id/oppsummering'
-      path: '/$id/oppsummering'
+      path: '/arbeidstaker/$id/oppsummering'
       fullPath: '/skjema/arbeidstaker/$id/oppsummering'
       preLoaderRoute: typeof SkjemaArbeidstakerIdOppsummeringRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidstaker/$id/familiemedlemmer': {
       id: '/skjema/arbeidstaker/$id/familiemedlemmer'
-      path: '/$id/familiemedlemmer'
+      path: '/arbeidstaker/$id/familiemedlemmer'
       fullPath: '/skjema/arbeidstaker/$id/familiemedlemmer'
       preLoaderRoute: typeof SkjemaArbeidstakerIdFamiliemedlemmerRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
-    }
-    '/skjema/arbeidstaker/$id/dine-opplysninger': {
-      id: '/skjema/arbeidstaker/$id/dine-opplysninger'
-      path: '/$id/dine-opplysninger'
-      fullPath: '/skjema/arbeidstaker/$id/dine-opplysninger'
-      preLoaderRoute: typeof SkjemaArbeidstakerIdDineOpplysningerRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidstaker/$id/arbeidssituasjon': {
       id: '/skjema/arbeidstaker/$id/arbeidssituasjon'
-      path: '/$id/arbeidssituasjon'
+      path: '/arbeidstaker/$id/arbeidssituasjon'
       fullPath: '/skjema/arbeidstaker/$id/arbeidssituasjon'
       preLoaderRoute: typeof SkjemaArbeidstakerIdArbeidssituasjonRouteImport
-      parentRoute: typeof SkjemaArbeidstakerRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/vedlegg': {
       id: '/skjema/arbeidsgiver/$id/vedlegg'
-      path: '/$id/vedlegg'
+      path: '/arbeidsgiver/$id/vedlegg'
       fullPath: '/skjema/arbeidsgiver/$id/vedlegg'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdVedleggRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/utenlandsoppdraget': {
       id: '/skjema/arbeidsgiver/$id/utenlandsoppdraget'
-      path: '/$id/utenlandsoppdraget'
+      path: '/arbeidsgiver/$id/utenlandsoppdraget'
       fullPath: '/skjema/arbeidsgiver/$id/utenlandsoppdraget'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdUtenlandsoppdragetRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/tilleggsopplysninger': {
       id: '/skjema/arbeidsgiver/$id/tilleggsopplysninger'
-      path: '/$id/tilleggsopplysninger'
+      path: '/arbeidsgiver/$id/tilleggsopplysninger'
       fullPath: '/skjema/arbeidsgiver/$id/tilleggsopplysninger'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdTilleggsopplysningerRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/oppsummering': {
       id: '/skjema/arbeidsgiver/$id/oppsummering'
-      path: '/$id/oppsummering'
+      path: '/arbeidsgiver/$id/oppsummering'
       fullPath: '/skjema/arbeidsgiver/$id/oppsummering'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdOppsummeringRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': {
       id: '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
-      path: '/$id/arbeidstakerens-lonn'
+      path: '/arbeidsgiver/$id/arbeidstakerens-lonn'
       fullPath: '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
-    }
-    '/skjema/arbeidsgiver/$id/arbeidstakeren': {
-      id: '/skjema/arbeidsgiver/$id/arbeidstakeren'
-      path: '/$id/arbeidstakeren'
-      fullPath: '/skjema/arbeidsgiver/$id/arbeidstakeren'
-      preLoaderRoute: typeof SkjemaArbeidsgiverIdArbeidstakerenRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': {
       id: '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
-      path: '/$id/arbeidssted-i-utlandet'
+      path: '/arbeidsgiver/$id/arbeidssted-i-utlandet'
       fullPath: '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': {
       id: '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
-      path: '/$id/arbeidsgiverens-virksomhet-i-norge'
+      path: '/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
       fullPath: '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
-    }
-    '/skjema/arbeidsgiver/$id/arbeidsgiveren': {
-      id: '/skjema/arbeidsgiver/$id/arbeidsgiveren'
-      path: '/$id/arbeidsgiveren'
-      fullPath: '/skjema/arbeidsgiver/$id/arbeidsgiveren'
-      preLoaderRoute: typeof SkjemaArbeidsgiverIdArbeidsgiverenRouteImport
-      parentRoute: typeof SkjemaArbeidsgiverRoute
+      parentRoute: typeof SkjemaRoute
     }
   }
 }
 
-interface SkjemaArbeidsgiverRouteChildren {
-  SkjemaArbeidsgiverIndexRoute: typeof SkjemaArbeidsgiverIndexRoute
-  SkjemaArbeidsgiverIdArbeidsgiverenRoute: typeof SkjemaArbeidsgiverIdArbeidsgiverenRoute
+interface OversiktRouteChildren {
+  OversiktStartSoknadRoute: typeof OversiktStartSoknadRoute
+  OversiktIndexRoute: typeof OversiktIndexRoute
+}
+
+const OversiktRouteChildren: OversiktRouteChildren = {
+  OversiktStartSoknadRoute: OversiktStartSoknadRoute,
+  OversiktIndexRoute: OversiktIndexRoute,
+}
+
+const OversiktRouteWithChildren = OversiktRoute._addFileChildren(
+  OversiktRouteChildren,
+)
+
+interface RepresentasjonRouteChildren {
+  RepresentasjonVelgRadgiverfirmaRoute: typeof RepresentasjonVelgRadgiverfirmaRoute
+  RepresentasjonIndexRoute: typeof RepresentasjonIndexRoute
+}
+
+const RepresentasjonRouteChildren: RepresentasjonRouteChildren = {
+  RepresentasjonVelgRadgiverfirmaRoute: RepresentasjonVelgRadgiverfirmaRoute,
+  RepresentasjonIndexRoute: RepresentasjonIndexRoute,
+}
+
+const RepresentasjonRouteWithChildren = RepresentasjonRoute._addFileChildren(
+  RepresentasjonRouteChildren,
+)
+
+interface SkjemaRouteChildren {
+  SkjemaIdRoute: typeof SkjemaIdRoute
+  SkjemaIndexRoute: typeof SkjemaIndexRoute
   SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute: typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute: typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
-  SkjemaArbeidsgiverIdArbeidstakerenRoute: typeof SkjemaArbeidsgiverIdArbeidstakerenRoute
   SkjemaArbeidsgiverIdArbeidstakerensLonnRoute: typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
   SkjemaArbeidsgiverIdOppsummeringRoute: typeof SkjemaArbeidsgiverIdOppsummeringRoute
   SkjemaArbeidsgiverIdTilleggsopplysningerRoute: typeof SkjemaArbeidsgiverIdTilleggsopplysningerRoute
   SkjemaArbeidsgiverIdUtenlandsoppdragetRoute: typeof SkjemaArbeidsgiverIdUtenlandsoppdragetRoute
   SkjemaArbeidsgiverIdVedleggRoute: typeof SkjemaArbeidsgiverIdVedleggRoute
+  SkjemaArbeidstakerIdArbeidssituasjonRoute: typeof SkjemaArbeidstakerIdArbeidssituasjonRoute
+  SkjemaArbeidstakerIdFamiliemedlemmerRoute: typeof SkjemaArbeidstakerIdFamiliemedlemmerRoute
+  SkjemaArbeidstakerIdOppsummeringRoute: typeof SkjemaArbeidstakerIdOppsummeringRoute
+  SkjemaArbeidstakerIdSkatteforholdOgInntektRoute: typeof SkjemaArbeidstakerIdSkatteforholdOgInntektRoute
+  SkjemaArbeidstakerIdTilleggsopplysningerRoute: typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
+  SkjemaArbeidstakerIdUtenlandsoppdragetRoute: typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
+  SkjemaArbeidstakerIdVedleggRoute: typeof SkjemaArbeidstakerIdVedleggRoute
+  SkjemaArbeidsgiverIdIndexRoute: typeof SkjemaArbeidsgiverIdIndexRoute
+  SkjemaArbeidstakerIdIndexRoute: typeof SkjemaArbeidstakerIdIndexRoute
 }
 
-const SkjemaArbeidsgiverRouteChildren: SkjemaArbeidsgiverRouteChildren = {
-  SkjemaArbeidsgiverIndexRoute: SkjemaArbeidsgiverIndexRoute,
-  SkjemaArbeidsgiverIdArbeidsgiverenRoute:
-    SkjemaArbeidsgiverIdArbeidsgiverenRoute,
+const SkjemaRouteChildren: SkjemaRouteChildren = {
+  SkjemaIdRoute: SkjemaIdRoute,
+  SkjemaIndexRoute: SkjemaIndexRoute,
   SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute:
     SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute,
   SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute:
     SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute,
-  SkjemaArbeidsgiverIdArbeidstakerenRoute:
-    SkjemaArbeidsgiverIdArbeidstakerenRoute,
   SkjemaArbeidsgiverIdArbeidstakerensLonnRoute:
     SkjemaArbeidsgiverIdArbeidstakerensLonnRoute,
   SkjemaArbeidsgiverIdOppsummeringRoute: SkjemaArbeidsgiverIdOppsummeringRoute,
@@ -535,28 +608,8 @@ const SkjemaArbeidsgiverRouteChildren: SkjemaArbeidsgiverRouteChildren = {
   SkjemaArbeidsgiverIdUtenlandsoppdragetRoute:
     SkjemaArbeidsgiverIdUtenlandsoppdragetRoute,
   SkjemaArbeidsgiverIdVedleggRoute: SkjemaArbeidsgiverIdVedleggRoute,
-}
-
-const SkjemaArbeidsgiverRouteWithChildren =
-  SkjemaArbeidsgiverRoute._addFileChildren(SkjemaArbeidsgiverRouteChildren)
-
-interface SkjemaArbeidstakerRouteChildren {
-  SkjemaArbeidstakerIndexRoute: typeof SkjemaArbeidstakerIndexRoute
-  SkjemaArbeidstakerIdArbeidssituasjonRoute: typeof SkjemaArbeidstakerIdArbeidssituasjonRoute
-  SkjemaArbeidstakerIdDineOpplysningerRoute: typeof SkjemaArbeidstakerIdDineOpplysningerRoute
-  SkjemaArbeidstakerIdFamiliemedlemmerRoute: typeof SkjemaArbeidstakerIdFamiliemedlemmerRoute
-  SkjemaArbeidstakerIdOppsummeringRoute: typeof SkjemaArbeidstakerIdOppsummeringRoute
-  SkjemaArbeidstakerIdSkatteforholdOgInntektRoute: typeof SkjemaArbeidstakerIdSkatteforholdOgInntektRoute
-  SkjemaArbeidstakerIdTilleggsopplysningerRoute: typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
-  SkjemaArbeidstakerIdVedleggRoute: typeof SkjemaArbeidstakerIdVedleggRoute
-}
-
-const SkjemaArbeidstakerRouteChildren: SkjemaArbeidstakerRouteChildren = {
-  SkjemaArbeidstakerIndexRoute: SkjemaArbeidstakerIndexRoute,
   SkjemaArbeidstakerIdArbeidssituasjonRoute:
     SkjemaArbeidstakerIdArbeidssituasjonRoute,
-  SkjemaArbeidstakerIdDineOpplysningerRoute:
-    SkjemaArbeidstakerIdDineOpplysningerRoute,
   SkjemaArbeidstakerIdFamiliemedlemmerRoute:
     SkjemaArbeidstakerIdFamiliemedlemmerRoute,
   SkjemaArbeidstakerIdOppsummeringRoute: SkjemaArbeidstakerIdOppsummeringRoute,
@@ -564,22 +617,11 @@ const SkjemaArbeidstakerRouteChildren: SkjemaArbeidstakerRouteChildren = {
     SkjemaArbeidstakerIdSkatteforholdOgInntektRoute,
   SkjemaArbeidstakerIdTilleggsopplysningerRoute:
     SkjemaArbeidstakerIdTilleggsopplysningerRoute,
+  SkjemaArbeidstakerIdUtenlandsoppdragetRoute:
+    SkjemaArbeidstakerIdUtenlandsoppdragetRoute,
   SkjemaArbeidstakerIdVedleggRoute: SkjemaArbeidstakerIdVedleggRoute,
-}
-
-const SkjemaArbeidstakerRouteWithChildren =
-  SkjemaArbeidstakerRoute._addFileChildren(SkjemaArbeidstakerRouteChildren)
-
-interface SkjemaRouteChildren {
-  SkjemaArbeidsgiverRoute: typeof SkjemaArbeidsgiverRouteWithChildren
-  SkjemaArbeidstakerRoute: typeof SkjemaArbeidstakerRouteWithChildren
-  SkjemaIndexRoute: typeof SkjemaIndexRoute
-}
-
-const SkjemaRouteChildren: SkjemaRouteChildren = {
-  SkjemaArbeidsgiverRoute: SkjemaArbeidsgiverRouteWithChildren,
-  SkjemaArbeidstakerRoute: SkjemaArbeidstakerRouteWithChildren,
-  SkjemaIndexRoute: SkjemaIndexRoute,
+  SkjemaArbeidsgiverIdIndexRoute: SkjemaArbeidsgiverIdIndexRoute,
+  SkjemaArbeidstakerIdIndexRoute: SkjemaArbeidstakerIdIndexRoute,
 }
 
 const SkjemaRouteWithChildren =
@@ -587,7 +629,8 @@ const SkjemaRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  RollevelgerRoute: RollevelgerRoute,
+  OversiktRoute: OversiktRouteWithChildren,
+  RepresentasjonRoute: RepresentasjonRouteWithChildren,
   SkjemaRoute: SkjemaRouteWithChildren,
 }
 export const routeTree = rootRouteImport

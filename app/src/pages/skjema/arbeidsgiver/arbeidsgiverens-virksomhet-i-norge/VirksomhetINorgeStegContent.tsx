@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -41,11 +41,12 @@ export function VirksomhetINorgeStegContent({
     ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
   });
 
-  const { handleSubmit, watch } = formMethods;
+  const { handleSubmit, control } = formMethods;
 
-  const erArbeidsgiverenOffentligVirksomhet = watch(
-    "erArbeidsgiverenOffentligVirksomhet",
-  );
+  const erArbeidsgiverenOffentligVirksomhet = useWatch({
+    control,
+    name: "erArbeidsgiverenOffentligVirksomhet",
+  });
 
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {

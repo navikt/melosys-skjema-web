@@ -1,13 +1,67 @@
-import type { OrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  OpprettSoknadMedKontekstRequest,
+  OrganisasjonDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 export function getValgtRolle(): OrganisasjonDto | undefined {
-  const organisasjonData = sessionStorage.getItem("valgtRolle");
+  try {
+    const organisasjonData = sessionStorage.getItem("valgtRolle");
 
-  return organisasjonData
-    ? (JSON.parse(organisasjonData) as OrganisasjonDto)
-    : undefined;
+    if (!organisasjonData) {
+      return undefined;
+    }
+
+    return JSON.parse(organisasjonData) as OrganisasjonDto;
+  } catch {
+    // Clear corrupted data
+    sessionStorage.removeItem("valgtRolle");
+    return undefined;
+  }
 }
 
 export function setValgtRolle(organisasjon: OrganisasjonDto): void {
-  sessionStorage.setItem("valgtRolle", JSON.stringify(organisasjon));
+  try {
+    sessionStorage.setItem("valgtRolle", JSON.stringify(organisasjon));
+  } catch {
+    // Silently fail - sessionStorage might be full or disabled
+  }
+}
+
+// Representasjonskontekst-håndtering
+const REPRESENTASJON_KEY = "representasjonKontekst";
+
+export function getRepresentasjonKontekst():
+  | OpprettSoknadMedKontekstRequest
+  | undefined {
+  try {
+    const kontekstData = sessionStorage.getItem(REPRESENTASJON_KEY);
+
+    if (!kontekstData) {
+      return undefined;
+    }
+
+    return JSON.parse(kontekstData) as OpprettSoknadMedKontekstRequest;
+  } catch {
+    // Clear corrupted data
+    sessionStorage.removeItem(REPRESENTASJON_KEY);
+    return undefined;
+  }
+}
+
+export function setRepresentasjonKontekst(
+  kontekst: OpprettSoknadMedKontekstRequest,
+): void {
+  try {
+    sessionStorage.setItem(REPRESENTASJON_KEY, JSON.stringify(kontekst));
+  } catch {
+    // Silently fail - sessionStorage might be full or disabled
+  }
+}
+
+export function clearRepresentasjonKontekst(): void {
+  try {
+    sessionStorage.removeItem(REPRESENTASJON_KEY);
+  } catch {
+    // Silently fail - sessionStorage might be disabled
+  }
 }

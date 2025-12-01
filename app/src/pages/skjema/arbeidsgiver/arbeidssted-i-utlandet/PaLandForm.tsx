@@ -1,5 +1,5 @@
 import { Radio, RadioGroup, Textarea, TextField } from "@navikt/ds-react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -13,11 +13,11 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 export function PaLandForm() {
   const { t } = useTranslation();
   const translateError = useTranslateError();
-  const { control, watch } = useFormContext<ArbeidsstedIUtlandetFormData>();
+  const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
-  const fastEllerVekslendeArbeidssted = watch(
-    "paLand.fastEllerVekslendeArbeidssted",
-  );
+  const fastEllerVekslendeArbeidssted = useWatch({
+    name: "paLand.fastEllerVekslendeArbeidssted",
+  });
 
   // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
   // This is a known design limitation (react-hook-form/react-hook-form#9287)
