@@ -264,8 +264,6 @@ export const en = {
       hvilketLandSendesArbeidstakerenTil:
         "To which country is the employee being sent?",
       utsendingsperiode: "Assignment period",
-      fraDato: "From date",
-      tilDato: "To date",
       harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil:
         "Do you as an employer have assignments in the country where the employee will be sent?",
       hvorforSkalArbeidstakerenArbeideIUtlandet:
@@ -282,8 +280,6 @@ export const en = {
         "Is the employee replacing another person who was sent out to do the same work?",
       duMaVelgeHvilketLandArbeidstakerenSendesTil:
         "You must select which country the employee is being sent to",
-      fraDatoErPakrevd: "From date is required",
-      tilDatoErPakrevd: "To date is required",
       duMaSvarePaOmDereHarOppdragILandet:
         "You must answer whether you have assignments in the country",
       duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget:
@@ -292,17 +288,12 @@ export const en = {
         "You must answer whether the employee will still be employed during the entire assignment period",
       duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson:
         "You must answer whether the employee is replacing another person",
-      tilDatoKanIkkeVareForFraDato: "To date cannot be before from date",
       begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet:
         "Justification is required when employer does not have assignments in the country",
       beskrivelseAvAnsettelsesforholdErPakrevd:
         "Description of employment relationship is required",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "You must answer whether the employee will work for the company in Norway after the assignment",
-      fraDatoForForrigeArbeidstakerErPakrevd:
-        "From date for previous employee is required",
-      tilDatoForForrigeArbeidstakerErPakrevd:
-        "To date for previous employee is required",
       oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
         "Enter approximate date if you don't know the exact date.",
       forrigeArbeidstakersUtsendelse: "Previous employee's assignment",
@@ -475,6 +466,12 @@ export const en = {
       startSoknadKnapp: "Start application",
       feilVedOpprettelse:
         "An error occurred while creating the application. Please try again later.",
+    },
+    periode: {
+      fraDato: "From date",
+      tilDato: "To date",
+      datoErPakrevd: "You must enter a valid date",
+      tilDatoMaVareEtterFraDato: "To date cannot be before from date",
     },
     generellValidering: {
       erPakrevd: "is required",
