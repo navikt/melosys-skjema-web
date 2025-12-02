@@ -24,6 +24,12 @@ export const nb = {
       startSoknad: "Start søknad",
       valgtVirksomhet: "Valgt virksomhet",
     },
+    periode: {
+      fraDato: "Fra dato",
+      tilDato: "Til dato",
+      datoErPakrevd: "Du må fylle inn en gyldig dato",
+      tilDatoMaVareEtterFraDato: "Til-dato kan ikke være før fra-dato",
+    },
     skjemaVeiledning: {
       hei: "Hei",
       guidePanelTekst1:

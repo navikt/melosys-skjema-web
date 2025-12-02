@@ -1,4 +1,5 @@
-import { UseDatepickerOptions } from "@navikt/ds-react";
+import { ErrorMessage, UseDatepickerOptions } from "@navikt/ds-react";
+import { get, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { DatePickerFormPart } from "./DatePickerFormPart.tsx";
@@ -26,6 +27,19 @@ export function PeriodeFormPart({
   ...datePickerOptions
 }: PeriodeFormPartProps) {
   const { t } = useTranslation();
+  const {
+    formState: { errors },
+    control,
+  } = useFormContext();
+
+  const fraDato = useWatch({ control, name: `${formFieldName}.fraDato` });
+  const tilDato = useWatch({ control, name: `${formFieldName}.tilDato` });
+
+  const periodeError = get(errors, formFieldName);
+  const periodeErPakrevdErrorMessage =
+    (periodeError?.message?.includes("undefined") ||
+      periodeError?.message === "periode.datoErPakrevd") &&
+    "periode.datoErPakrevd";
 
   return (
     <div className={className}>
@@ -34,8 +48,9 @@ export function PeriodeFormPart({
       <DatePickerFormPart
         className="mt-4"
         defaultSelected={defaultFraDato}
+        error={!fraDato && periodeErPakrevdErrorMessage}
         formFieldName={`${formFieldName}.fraDato`}
-        label={fraDatoLabel ?? t("felles.fraDato")}
+        label={fraDatoLabel ?? t("periode.fraDato")}
         {...datePickerOptions}
       />
 
@@ -43,10 +58,14 @@ export function PeriodeFormPart({
         className="mt-4"
         defaultSelected={defaultTilDato}
         description={tilDatoDescription}
+        error={!tilDato && periodeErPakrevdErrorMessage}
         formFieldName={`${formFieldName}.tilDato`}
-        label={tilDatoLabel ?? t("felles.tilDato")}
+        label={tilDatoLabel ?? t("periode.tilDato")}
         {...datePickerOptions}
       />
+      {!periodeErPakrevdErrorMessage && periodeError ? (
+        <ErrorMessage className="mt-1">{t(periodeError.message)}</ErrorMessage>
+      ) : undefined}
     </div>
   );
 }

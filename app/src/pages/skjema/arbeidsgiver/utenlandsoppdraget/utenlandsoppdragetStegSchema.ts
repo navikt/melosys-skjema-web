@@ -37,7 +37,6 @@ export const utenlandsoppdragSchema = z
     forrigeArbeidstakerUtsendelsePeriode: periodeSchema.optional(),
   })
   .superRefine((data, ctx) => {
-
     // Conditional validation: utenlandsoppholdetsBegrunnelse required when arbeidsgiverHarOppdragILandet is false
     if (
       !data.arbeidsgiverHarOppdragILandet &&
@@ -77,29 +76,15 @@ export const utenlandsoppdragSchema = z
       });
     }
 
-    // Conditional validation: forrigeArbeidstakerUtsendelsePeriode.fraDato required when arbeidstakerErstatterAnnenPerson is true
+    // Valider at forrigeArbeidstakerUtsendelsePeriode er satt når arbeidstakerErstatterAnnenPerson er true
     if (
       data.arbeidstakerErstatterAnnenPerson &&
-      !data.forrigeArbeidstakerUtsendelsePeriode?.fraDato
+      !data.forrigeArbeidstakerUtsendelsePeriode
     ) {
       ctx.addIssue({
         code: "custom",
-        message:
-          "utenlandsoppdragetSteg.fraDatoForForrigeArbeidstakerErPakrevd",
-        path: ["forrigeArbeidstakerUtsendelsePeriode", "fraDato"],
-      });
-    }
-
-    // Conditional validation: forrigeArbeidstakerUtsendelsePeriode.tilDato required when arbeidstakerErstatterAnnenPerson is true
-    if (
-      data.arbeidstakerErstatterAnnenPerson &&
-      !data.forrigeArbeidstakerUtsendelsePeriode?.tilDato
-    ) {
-      ctx.addIssue({
-        code: "custom",
-        message:
-          "utenlandsoppdragetSteg.tilDatoForForrigeArbeidstakerErPakrevd",
-        path: ["forrigeArbeidstakerUtsendelsePeriode", "tilDato"],
+        message: "periode.datoErPakrevd",
+        path: ["forrigeArbeidstakerUtsendelsePeriode"],
       });
     }
   })
