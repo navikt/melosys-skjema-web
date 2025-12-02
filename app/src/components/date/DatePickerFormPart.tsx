@@ -4,7 +4,7 @@ import {
   UseDatepickerOptions,
 } from "@navikt/ds-react";
 import { formatISO } from "date-fns";
-import { useFormContext } from "react-hook-form";
+import { get, useFormContext } from "react-hook-form";
 
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -13,6 +13,7 @@ type DatePickerFormPartProps = {
   label: string;
   description?: string;
   className?: string;
+  error?: string;
 } & Omit<UseDatepickerOptions, "onDateChange">;
 
 export function DatePickerFormPart({
@@ -20,6 +21,7 @@ export function DatePickerFormPart({
   label,
   description,
   className,
+  error: externalError,
   ...datePickerOptions
 }: DatePickerFormPartProps) {
   const {
@@ -28,7 +30,8 @@ export function DatePickerFormPart({
   } = useFormContext();
   const translateError = useTranslateError();
 
-  const error = translateError(errors[formFieldName]?.message as string);
+  const fieldError = get(errors, formFieldName)?.message as string | undefined;
+  const error = translateError(externalError ?? fieldError);
 
   const datePicker = useDatepicker({
     onDateChange: (date) =>

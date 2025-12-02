@@ -83,8 +83,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
     const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetArbeidstakersDelDto =
       {
         utsendelsesLand: formFieldValues.utsendelseLand.value,
-        utsendelseFraDato: formFieldValues.periodeFraIso,
-        utsendelseTilDato: formFieldValues.periodeTilIso,
+        utsendelsePeriode: formFieldValues.periode,
       };
 
     await utenlandsoppdragetStegPage.lagreOgFortsettAndExpectPayload(
@@ -206,8 +205,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
   }) => {
     const utenlandsoppdragetData: UtenlandsoppdragetArbeidstakersDelDto = {
       utsendelsesLand: formFieldValues.utsendelseLand.value,
-      utsendelseFraDato: formFieldValues.periodeFraIso,
-      utsendelseTilDato: formFieldValues.periodeTilIso,
+      utsendelsePeriode: formFieldValues.periode,
     };
 
     const arbeidssituasjonData: ArbeidssituasjonDto = {

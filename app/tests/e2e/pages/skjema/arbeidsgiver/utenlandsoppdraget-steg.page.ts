@@ -30,12 +30,8 @@ export class UtenlandsoppdragetStegPage {
       name: nb.translation.utenlandsoppdragetSteg
         .hvilketLandSendesArbeidstakerenTil,
     });
-    this.fraDatoInput = page.getByLabel(
-      nb.translation.utenlandsoppdragetSteg.fraDato,
-    );
-    this.tilDatoInput = page.getByLabel(
-      nb.translation.utenlandsoppdragetSteg.tilDato,
-    );
+    this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
+    this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);
 
     const arbeidsgiverHarOppdragILandetGroup = page.getByRole("group", {
       name: nb.translation.utenlandsoppdragetSteg

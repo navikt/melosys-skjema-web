@@ -39,20 +39,16 @@ export function UtenlandsoppdragetStegOppsummering({
         </FormSummary.Answer>
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandsoppdragetSteg.fraDato")}
-          </FormSummary.Label>
+          <FormSummary.Label>{t("periode.fraDato")}</FormSummary.Label>
           <FormSummary.Value>
-            {utenlandsoppdragData.arbeidstakerUtsendelseFraDato}
+            {utenlandsoppdragData.arbeidstakerUtsendelsePeriode.fraDato}
           </FormSummary.Value>
         </FormSummary.Answer>
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandsoppdragetSteg.tilDato")}
-          </FormSummary.Label>
+          <FormSummary.Label>{t("periode.tilDato")}</FormSummary.Label>
           <FormSummary.Value>
-            {utenlandsoppdragData.arbeidstakerUtsendelseTilDato}
+            {utenlandsoppdragData.arbeidstakerUtsendelsePeriode.tilDato}
           </FormSummary.Value>
         </FormSummary.Answer>
 
@@ -148,30 +144,35 @@ export function UtenlandsoppdragetStegOppsummering({
           </FormSummary.Value>
         </FormSummary.Answer>
 
-        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseFradato !==
+        {utenlandsoppdragData.forrigeArbeidstakerUtsendelsePeriode !==
           undefined && (
-          <FormSummary.Answer>
-            <FormSummary.Label>
-              {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
-              {t("utenlandsoppdragetSteg.fraDato")}
-            </FormSummary.Label>
-            <FormSummary.Value>
-              {utenlandsoppdragData.forrigeArbeidstakerUtsendelseFradato}
-            </FormSummary.Value>
-          </FormSummary.Answer>
-        )}
+          <>
+            <FormSummary.Answer>
+              <FormSummary.Label>
+                {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
+                {t("periode.fraDato")}
+              </FormSummary.Label>
+              <FormSummary.Value>
+                {
+                  utenlandsoppdragData.forrigeArbeidstakerUtsendelsePeriode
+                    .fraDato
+                }
+              </FormSummary.Value>
+            </FormSummary.Answer>
 
-        {utenlandsoppdragData.forrigeArbeidstakerUtsendelseTilDato !==
-          undefined && (
-          <FormSummary.Answer>
-            <FormSummary.Label>
-              {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
-              {t("utenlandsoppdragetSteg.tilDato")}
-            </FormSummary.Label>
-            <FormSummary.Value>
-              {utenlandsoppdragData.forrigeArbeidstakerUtsendelseTilDato}
-            </FormSummary.Value>
-          </FormSummary.Answer>
+            <FormSummary.Answer>
+              <FormSummary.Label>
+                {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
+                {t("periode.tilDato")}
+              </FormSummary.Label>
+              <FormSummary.Value>
+                {
+                  utenlandsoppdragData.forrigeArbeidstakerUtsendelsePeriode
+                    .tilDato
+                }
+              </FormSummary.Value>
+            </FormSummary.Answer>
+          </>
         )}
       </FormSummary.Answers>
 

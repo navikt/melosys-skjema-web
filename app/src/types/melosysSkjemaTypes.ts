@@ -92,12 +92,16 @@ export interface InnsendteSoknaderResponse {
   antallPerSide: number;
 }
 
+export interface PeriodeDto {
+  /** @format date */
+  fraDato: string;
+  /** @format date */
+  tilDato: string;
+}
+
 export interface UtenlandsoppdragetArbeidstakersDelDto {
   utsendelsesLand: string;
-  /** @format date */
-  utsendelseFraDato: string;
-  /** @format date */
-  utsendelseTilDato: string;
+  utsendelsePeriode: PeriodeDto;
 }
 
 export interface ArbeidssituasjonDto {
@@ -165,10 +169,7 @@ export interface UtenlandskVirksomhet {
 
 export interface UtenlandsoppdragetDto {
   utsendelseLand: string;
-  /** @format date */
-  arbeidstakerUtsendelseFraDato: string;
-  /** @format date */
-  arbeidstakerUtsendelseTilDato: string;
+  arbeidstakerUtsendelsePeriode: PeriodeDto;
   arbeidsgiverHarOppdragILandet: boolean;
   arbeidstakerBleAnsattForUtenlandsoppdraget: boolean;
   arbeidstakerForblirAnsattIHelePerioden: boolean;
@@ -176,10 +177,7 @@ export interface UtenlandsoppdragetDto {
   arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget?: boolean;
   utenlandsoppholdetsBegrunnelse?: string;
   ansettelsesforholdBeskrivelse?: string;
-  /** @format date */
-  forrigeArbeidstakerUtsendelseFradato?: string;
-  /** @format date */
-  forrigeArbeidstakerUtsendelseTilDato?: string;
+  forrigeArbeidstakerUtsendelsePeriode?: PeriodeDto;
 }
 
 export interface ArbeidsgiverensVirksomhetINorgeDto {
