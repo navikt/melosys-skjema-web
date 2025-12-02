@@ -115,11 +115,11 @@ function UtenlandsoppdragetStegContent({
             <DatePickerFormPart
               className="mt-4"
               defaultSelected={
-                lagretSkjemadataForSteg?.utsendelseFraDato
-                  ? new Date(lagretSkjemadataForSteg.utsendelseFraDato)
+                lagretSkjemadataForSteg?.utsendelsePeriode?.fraDato
+                  ? new Date(lagretSkjemadataForSteg.utsendelsePeriode.fraDato)
                   : undefined
               }
-              formFieldName="utsendelseFraDato"
+              formFieldName="utsendelsePeriode.fraDato"
               label={t("utenlandsoppdragetArbeidstakerSteg.fraDato")}
               {...dateLimits}
             />
@@ -127,14 +127,14 @@ function UtenlandsoppdragetStegContent({
             <DatePickerFormPart
               className="mt-4"
               defaultSelected={
-                lagretSkjemadataForSteg?.utsendelseTilDato
-                  ? new Date(lagretSkjemadataForSteg.utsendelseTilDato)
+                lagretSkjemadataForSteg?.utsendelsePeriode?.tilDato
+                  ? new Date(lagretSkjemadataForSteg.utsendelsePeriode.tilDato)
                   : undefined
               }
               description={t(
                 "utenlandsoppdragetArbeidstakerSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
               )}
-              formFieldName="utsendelseTilDato"
+              formFieldName="utsendelsePeriode.tilDato"
               label={t("utenlandsoppdragetArbeidstakerSteg.tilDato")}
               {...dateLimits}
             />

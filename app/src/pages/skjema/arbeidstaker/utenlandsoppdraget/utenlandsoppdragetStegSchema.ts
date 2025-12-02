@@ -12,23 +12,26 @@ export const utenlandsoppdragSchema = z
         "utenlandsoppdragetArbeidstakerSteg.duMaVelgeHvilketLandDuSkalUtforeArbeid",
       ),
 
-    utsendelseFraDato: z
-      .string({
-        error: "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd",
-      })
-      .min(1, "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd"),
+    utsendelsePeriode: z.object({
+      fraDato: z
+        .string({
+          error: "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd",
+        })
+        .min(1, "utenlandsoppdragetArbeidstakerSteg.fraDatoErPakrevd"),
 
-    utsendelseTilDato: z
-      .string({
-        error: "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd",
-      })
-      .min(1, "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd"),
+      tilDato: z
+        .string({
+          error: "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd",
+        })
+        .min(1, "utenlandsoppdragetArbeidstakerSteg.tilDatoErPakrevd"),
+    }),
   })
   .refine(
     (data) =>
-      new Date(data.utsendelseFraDato) <= new Date(data.utsendelseTilDato),
+      new Date(data.utsendelsePeriode.fraDato) <=
+      new Date(data.utsendelsePeriode.tilDato),
     {
       error: "utenlandsoppdragetArbeidstakerSteg.tilDatoKanIkkeVareForFraDato",
-      path: ["utsendelseTilDato"],
+      path: ["utsendelsePeriode", "tilDato"],
     },
   );

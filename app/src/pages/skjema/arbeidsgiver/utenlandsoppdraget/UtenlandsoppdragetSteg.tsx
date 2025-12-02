@@ -86,8 +86,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const registerUtenlandsoppdragMutation = useMutation({
     mutationFn: (data: UtenlandsoppdragFormData) => {
-      const apiPayload = data as UtenlandsoppdragetDto;
-      return postUtenlandsoppdraget(skjema.id, apiPayload);
+      return postUtenlandsoppdraget(skjema.id, data);
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjema.id);
@@ -138,13 +137,14 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <DatePickerFormPart
               className="mt-4"
               defaultSelected={
-                lagretSkjemadataForSteg?.arbeidstakerUtsendelseFraDato
+                lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.fraDato
                   ? new Date(
-                      lagretSkjemadataForSteg.arbeidstakerUtsendelseFraDato,
+                      lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
+                        .fraDato,
                     )
                   : undefined
               }
-              formFieldName="arbeidstakerUtsendelseFraDato"
+              formFieldName="arbeidstakerUtsendelsePeriode.fraDato"
               label={t("utenlandsoppdragetSteg.fraDato")}
               {...dateLimits}
             />
@@ -152,16 +152,17 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <DatePickerFormPart
               className="mt-4"
               defaultSelected={
-                lagretSkjemadataForSteg?.arbeidstakerUtsendelseTilDato
+                lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.tilDato
                   ? new Date(
-                      lagretSkjemadataForSteg.arbeidstakerUtsendelseTilDato,
+                      lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
+                        .tilDato,
                     )
                   : undefined
               }
               description={t(
                 "utenlandsoppdragetSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
               )}
-              formFieldName="arbeidstakerUtsendelseTilDato"
+              formFieldName="arbeidstakerUtsendelsePeriode.tilDato"
               label={t("utenlandsoppdragetSteg.tilDato")}
               {...dateLimits}
             />
@@ -244,13 +245,15 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
               <DatePickerFormPart
                 className="mt-4"
                 defaultSelected={
-                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelseFradato
+                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
+                    ?.fraDato
                     ? new Date(
-                        lagretSkjemadataForSteg.forrigeArbeidstakerUtsendelseFradato,
+                        lagretSkjemadataForSteg
+                          .forrigeArbeidstakerUtsendelsePeriode.fraDato,
                       )
                     : undefined
                 }
-                formFieldName="forrigeArbeidstakerUtsendelseFradato"
+                formFieldName="forrigeArbeidstakerUtsendelsePeriode.fraDato"
                 label={t("utenlandsoppdragetSteg.fraDato")}
                 {...dateLimits}
               />
@@ -258,13 +261,15 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
               <DatePickerFormPart
                 className="mt-4"
                 defaultSelected={
-                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelseTilDato
+                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
+                    ?.tilDato
                     ? new Date(
-                        lagretSkjemadataForSteg.forrigeArbeidstakerUtsendelseTilDato,
+                        lagretSkjemadataForSteg
+                          .forrigeArbeidstakerUtsendelsePeriode.tilDato,
                       )
                     : undefined
                 }
-                formFieldName="forrigeArbeidstakerUtsendelseTilDato"
+                formFieldName="forrigeArbeidstakerUtsendelsePeriode.tilDato"
                 label={t("utenlandsoppdragetSteg.tilDato")}
                 {...dateLimits}
               />
