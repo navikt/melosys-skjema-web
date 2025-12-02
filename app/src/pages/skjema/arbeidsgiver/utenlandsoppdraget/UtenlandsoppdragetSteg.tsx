@@ -147,12 +147,10 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
                 : undefined
             }
             formFieldName="arbeidstakerUtsendelsePeriode"
-            fraDatoLabel={t("utenlandsoppdragetSteg.fraDato")}
             label={t("utenlandsoppdragetSteg.utsendingsperiode")}
             tilDatoDescription={t(
               "utenlandsoppdragetSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
             )}
-            tilDatoLabel={t("utenlandsoppdragetSteg.tilDato")}
             {...dateLimits}
           />
 
@@ -246,9 +244,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
                   : undefined
               }
               formFieldName="forrigeArbeidstakerUtsendelsePeriode"
-              fraDatoLabel={t("utenlandsoppdragetSteg.fraDato")}
               label={t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")}
-              tilDatoLabel={t("utenlandsoppdragetSteg.tilDato")}
               {...dateLimits}
             />
           )}

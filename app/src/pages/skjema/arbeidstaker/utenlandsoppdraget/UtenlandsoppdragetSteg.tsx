@@ -120,12 +120,10 @@ function UtenlandsoppdragetStegContent({
                 : undefined
             }
             formFieldName="utsendelsePeriode"
-            fraDatoLabel={t("utenlandsoppdragetArbeidstakerSteg.fraDato")}
             label={t("utenlandsoppdragetArbeidstakerSteg.utsendingsperiode")}
             tilDatoDescription={t(
               "utenlandsoppdragetArbeidstakerSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
             )}
-            tilDatoLabel={t("utenlandsoppdragetArbeidstakerSteg.tilDato")}
             {...dateLimits}
           />
         </SkjemaSteg>

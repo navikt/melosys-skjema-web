@@ -80,13 +80,13 @@ export class OppsummeringStegPage {
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.fraDato}") + dd`,
+        `dt:has-text("${nb.translation.periode.fraDato}") + dd`,
       ),
     ).toHaveText(data.arbeidstakerUtsendelsePeriode.fraDato);
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.tilDato}") + dd`,
+        `dt:has-text("${nb.translation.periode.tilDato}") + dd`,
       ),
     ).toHaveText(data.arbeidstakerUtsendelsePeriode.tilDato);
 

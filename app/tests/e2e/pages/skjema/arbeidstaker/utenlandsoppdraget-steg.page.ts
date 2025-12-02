@@ -25,12 +25,8 @@ export class UtenlandsoppdragetStegPage {
       name: nb.translation.utenlandsoppdragetArbeidstakerSteg
         .iHvilketLandSkalDuUtforeArbeid,
     });
-    this.fraDatoInput = page.getByLabel(
-      nb.translation.utenlandsoppdragetArbeidstakerSteg.fraDato,
-    );
-    this.tilDatoInput = page.getByLabel(
-      nb.translation.utenlandsoppdragetArbeidstakerSteg.tilDato,
-    );
+    this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
+    this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
     });

@@ -286,8 +286,6 @@ export const nb = {
       hvilketLandSendesArbeidstakerenTil:
         "Hvilket land sendes arbeidstakeren til?",
       utsendingsperiode: "Utsendingsperiode",
-      fraDato: "Fra dato",
-      tilDato: "Til dato",
       harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil:
         "Har du som arbeidsgiver oppdrag i landet arbeidstaker skal sendes ut til?",
       hvorforSkalArbeidstakerenArbeideIUtlandet:
@@ -304,8 +302,6 @@ export const nb = {
         "Erstatter arbeidstaker en annen person som var sendt ut for å gjøre det samme arbeidet?",
       duMaVelgeHvilketLandArbeidstakerenSendesTil:
         "Du må velge hvilket land arbeidstakeren sendes til",
-      fraDatoErPakrevd: "Fra-dato er påkrevd",
-      tilDatoErPakrevd: "Til-dato er påkrevd",
       duMaSvarePaOmDereHarOppdragILandet:
         "Du må svare på om dere har oppdrag i landet",
       duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget:
@@ -333,8 +329,6 @@ export const nb = {
       tittel: "Utenlandsoppdraget",
       iHvilketLandSkalDuUtforeArbeid: "I hvilket land skal du utføre arbeid?",
       utsendingsperiode: "Utsendingsperiode",
-      fraDato: "Fra dato",
-      tilDato: "Til dato",
       oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
         "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
       duMaVelgeHvilketLandDuSkalUtforeArbeid:

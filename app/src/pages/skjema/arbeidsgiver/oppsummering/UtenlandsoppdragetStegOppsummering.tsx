@@ -39,18 +39,14 @@ export function UtenlandsoppdragetStegOppsummering({
         </FormSummary.Answer>
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandsoppdragetSteg.fraDato")}
-          </FormSummary.Label>
+          <FormSummary.Label>{t("periode.fraDato")}</FormSummary.Label>
           <FormSummary.Value>
             {utenlandsoppdragData.arbeidstakerUtsendelsePeriode.fraDato}
           </FormSummary.Value>
         </FormSummary.Answer>
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandsoppdragetSteg.tilDato")}
-          </FormSummary.Label>
+          <FormSummary.Label>{t("periode.tilDato")}</FormSummary.Label>
           <FormSummary.Value>
             {utenlandsoppdragData.arbeidstakerUtsendelsePeriode.tilDato}
           </FormSummary.Value>
@@ -154,7 +150,7 @@ export function UtenlandsoppdragetStegOppsummering({
             <FormSummary.Answer>
               <FormSummary.Label>
                 {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
-                {t("utenlandsoppdragetSteg.fraDato")}
+                {t("periode.fraDato")}
               </FormSummary.Label>
               <FormSummary.Value>
                 {
@@ -167,7 +163,7 @@ export function UtenlandsoppdragetStegOppsummering({
             <FormSummary.Answer>
               <FormSummary.Label>
                 {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
-                {t("utenlandsoppdragetSteg.tilDato")}
+                {t("periode.tilDato")}
               </FormSummary.Label>
               <FormSummary.Value>
                 {
