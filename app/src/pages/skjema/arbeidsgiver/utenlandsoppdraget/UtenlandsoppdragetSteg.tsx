@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
+import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
@@ -16,7 +16,6 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -129,44 +128,33 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             )}
           />
 
-          <div className="mt-6">
-            <h3 className="mb-4 text-lg font-semibold">
-              {t("utenlandsoppdragetSteg.utsendingsperiode")}
-            </h3>
-
-            <DatePickerFormPart
-              className="mt-4"
-              defaultSelected={
-                lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.fraDato
-                  ? new Date(
-                      lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
-                        .fraDato,
-                    )
-                  : undefined
-              }
-              formFieldName="arbeidstakerUtsendelsePeriode.fraDato"
-              label={t("utenlandsoppdragetSteg.fraDato")}
-              {...dateLimits}
-            />
-
-            <DatePickerFormPart
-              className="mt-4"
-              defaultSelected={
-                lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.tilDato
-                  ? new Date(
-                      lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
-                        .tilDato,
-                    )
-                  : undefined
-              }
-              description={t(
-                "utenlandsoppdragetSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
-              )}
-              formFieldName="arbeidstakerUtsendelsePeriode.tilDato"
-              label={t("utenlandsoppdragetSteg.tilDato")}
-              {...dateLimits}
-            />
-          </div>
+          <PeriodeFormPart
+            className="mt-6"
+            defaultFraDato={
+              lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.fraDato
+                ? new Date(
+                    lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
+                      .fraDato,
+                  )
+                : undefined
+            }
+            defaultTilDato={
+              lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.tilDato
+                ? new Date(
+                    lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
+                      .tilDato,
+                  )
+                : undefined
+            }
+            formFieldName="arbeidstakerUtsendelsePeriode"
+            fraDatoLabel={t("utenlandsoppdragetSteg.fraDato")}
+            label={t("utenlandsoppdragetSteg.utsendingsperiode")}
+            tilDatoDescription={t(
+              "utenlandsoppdragetSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
+            )}
+            tilDatoLabel={t("utenlandsoppdragetSteg.tilDato")}
+            {...dateLimits}
+          />
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
@@ -237,43 +225,32 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           />
 
           {arbeidstakerErstatterAnnenPerson && (
-            <div className="mt-6">
-              <h3 className="mb-4 text-lg font-semibold">
-                {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")}
-              </h3>
-
-              <DatePickerFormPart
-                className="mt-4"
-                defaultSelected={
-                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
-                    ?.fraDato
-                    ? new Date(
-                        lagretSkjemadataForSteg
-                          .forrigeArbeidstakerUtsendelsePeriode.fraDato,
-                      )
-                    : undefined
-                }
-                formFieldName="forrigeArbeidstakerUtsendelsePeriode.fraDato"
-                label={t("utenlandsoppdragetSteg.fraDato")}
-                {...dateLimits}
-              />
-
-              <DatePickerFormPart
-                className="mt-4"
-                defaultSelected={
-                  lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
-                    ?.tilDato
-                    ? new Date(
-                        lagretSkjemadataForSteg
-                          .forrigeArbeidstakerUtsendelsePeriode.tilDato,
-                      )
-                    : undefined
-                }
-                formFieldName="forrigeArbeidstakerUtsendelsePeriode.tilDato"
-                label={t("utenlandsoppdragetSteg.tilDato")}
-                {...dateLimits}
-              />
-            </div>
+            <PeriodeFormPart
+              className="mt-6"
+              defaultFraDato={
+                lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
+                  ?.fraDato
+                  ? new Date(
+                      lagretSkjemadataForSteg
+                        .forrigeArbeidstakerUtsendelsePeriode.fraDato,
+                    )
+                  : undefined
+              }
+              defaultTilDato={
+                lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
+                  ?.tilDato
+                  ? new Date(
+                      lagretSkjemadataForSteg
+                        .forrigeArbeidstakerUtsendelsePeriode.tilDato,
+                    )
+                  : undefined
+              }
+              formFieldName="forrigeArbeidstakerUtsendelsePeriode"
+              fraDatoLabel={t("utenlandsoppdragetSteg.fraDato")}
+              label={t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")}
+              tilDatoLabel={t("utenlandsoppdragetSteg.tilDato")}
+              {...dateLimits}
+            />
           )}
         </SkjemaSteg>
       </form>

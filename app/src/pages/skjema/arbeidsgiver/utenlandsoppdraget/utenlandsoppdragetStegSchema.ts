@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { periodeSchema } from "~/components/date/periodeSchema.ts";
+
 export const utenlandsoppdragSchema = z
   .object({
     utsendelseLand: z
@@ -11,14 +13,7 @@ export const utenlandsoppdragSchema = z
         1,
         "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
       ),
-    arbeidstakerUtsendelsePeriode: z.object({
-      fraDato: z
-        .string({ error: "utenlandsoppdragetSteg.fraDatoErPakrevd" })
-        .min(1, "utenlandsoppdragetSteg.fraDatoErPakrevd"),
-      tilDato: z
-        .string({ error: "utenlandsoppdragetSteg.tilDatoErPakrevd" })
-        .min(1, "utenlandsoppdragetSteg.tilDatoErPakrevd"),
-    }),
+    arbeidstakerUtsendelsePeriode: periodeSchema,
     arbeidsgiverHarOppdragILandet: z.boolean({
       error: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
     }),
@@ -39,25 +34,9 @@ export const utenlandsoppdragSchema = z
       .optional(),
     utenlandsoppholdetsBegrunnelse: z.string().optional(),
     ansettelsesforholdBeskrivelse: z.string().optional(),
-    forrigeArbeidstakerUtsendelsePeriode: z
-      .object({
-        fraDato: z.string().optional(),
-        tilDato: z.string().optional(),
-      })
-      .optional(),
+    forrigeArbeidstakerUtsendelsePeriode: periodeSchema.optional(),
   })
   .superRefine((data, ctx) => {
-    // Validate date ranges
-    if (
-      new Date(data.arbeidstakerUtsendelsePeriode.fraDato) >
-      new Date(data.arbeidstakerUtsendelsePeriode.tilDato)
-    ) {
-      ctx.addIssue({
-        code: "custom",
-        message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
-        path: ["arbeidstakerUtsendelsePeriode", "tilDato"],
-      });
-    }
 
     // Conditional validation: utenlandsoppholdetsBegrunnelse required when arbeidsgiverHarOppdragILandet is false
     if (
@@ -120,20 +99,6 @@ export const utenlandsoppdragSchema = z
         code: "custom",
         message:
           "utenlandsoppdragetSteg.tilDatoForForrigeArbeidstakerErPakrevd",
-        path: ["forrigeArbeidstakerUtsendelsePeriode", "tilDato"],
-      });
-    }
-
-    // Validate previous employee date range if both dates are provided
-    if (
-      data.forrigeArbeidstakerUtsendelsePeriode?.fraDato &&
-      data.forrigeArbeidstakerUtsendelsePeriode?.tilDato &&
-      new Date(data.forrigeArbeidstakerUtsendelsePeriode.fraDato) >
-        new Date(data.forrigeArbeidstakerUtsendelsePeriode.tilDato)
-    ) {
-      ctx.addIssue({
-        code: "custom",
-        message: "utenlandsoppdragetSteg.tilDatoKanIkkeVareForFraDato",
         path: ["forrigeArbeidstakerUtsendelsePeriode", "tilDato"],
       });
     }

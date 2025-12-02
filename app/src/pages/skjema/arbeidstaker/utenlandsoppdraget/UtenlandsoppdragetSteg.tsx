@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
-import { DatePickerFormPart } from "~/components/DatePickerFormPart.tsx";
+import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postUtenlandsoppdragetArbeidstaker } from "~/httpClients/melsosysSkjemaApiClient.ts";
@@ -107,38 +107,27 @@ function UtenlandsoppdragetStegContent({
             )}
           />
 
-          <div className="mt-6">
-            <h3 className="mb-4 text-lg font-semibold">
-              {t("utenlandsoppdragetArbeidstakerSteg.utsendingsperiode")}
-            </h3>
-
-            <DatePickerFormPart
-              className="mt-4"
-              defaultSelected={
-                lagretSkjemadataForSteg?.utsendelsePeriode?.fraDato
-                  ? new Date(lagretSkjemadataForSteg.utsendelsePeriode.fraDato)
-                  : undefined
-              }
-              formFieldName="utsendelsePeriode.fraDato"
-              label={t("utenlandsoppdragetArbeidstakerSteg.fraDato")}
-              {...dateLimits}
-            />
-
-            <DatePickerFormPart
-              className="mt-4"
-              defaultSelected={
-                lagretSkjemadataForSteg?.utsendelsePeriode?.tilDato
-                  ? new Date(lagretSkjemadataForSteg.utsendelsePeriode.tilDato)
-                  : undefined
-              }
-              description={t(
-                "utenlandsoppdragetArbeidstakerSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
-              )}
-              formFieldName="utsendelsePeriode.tilDato"
-              label={t("utenlandsoppdragetArbeidstakerSteg.tilDato")}
-              {...dateLimits}
-            />
-          </div>
+          <PeriodeFormPart
+            className="mt-6"
+            defaultFraDato={
+              lagretSkjemadataForSteg?.utsendelsePeriode?.fraDato
+                ? new Date(lagretSkjemadataForSteg.utsendelsePeriode.fraDato)
+                : undefined
+            }
+            defaultTilDato={
+              lagretSkjemadataForSteg?.utsendelsePeriode?.tilDato
+                ? new Date(lagretSkjemadataForSteg.utsendelsePeriode.tilDato)
+                : undefined
+            }
+            formFieldName="utsendelsePeriode"
+            fraDatoLabel={t("utenlandsoppdragetArbeidstakerSteg.fraDato")}
+            label={t("utenlandsoppdragetArbeidstakerSteg.utsendingsperiode")}
+            tilDatoDescription={t(
+              "utenlandsoppdragetArbeidstakerSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
+            )}
+            tilDatoLabel={t("utenlandsoppdragetArbeidstakerSteg.tilDato")}
+            {...dateLimits}
+          />
         </SkjemaSteg>
       </form>
     </FormProvider>
