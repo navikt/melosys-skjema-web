@@ -45,13 +45,13 @@ export class OppsummeringStegPage {
       this.page.locator(
         `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.fraDato}") + dd`,
       ),
-    ).toHaveText(data.utsendelseFraDato);
+    ).toHaveText(data.utsendelsePeriode.fraDato);
 
     await expect(
       this.page.locator(
         `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.tilDato}") + dd`,
       ),
-    ).toHaveText(data.utsendelseTilDato);
+    ).toHaveText(data.utsendelsePeriode.tilDato);
   }
 
   async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {

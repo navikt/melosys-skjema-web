@@ -108,8 +108,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetDto = {
       utsendelseLand: formFieldValues.utsendelseLand.value,
-      arbeidstakerUtsendelseFraDato: formFieldValues.periodeFraIso,
-      arbeidstakerUtsendelseTilDato: formFieldValues.periodeTilIso,
+      arbeidstakerUtsendelsePeriode: formFieldValues.periode,
       arbeidsgiverHarOppdragILandet: true,
       arbeidstakerBleAnsattForUtenlandsoppdraget: false,
       arbeidstakerForblirAnsattIHelePerioden: true,
@@ -267,8 +266,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
 
     const utenlandsoppdragetData: UtenlandsoppdragetDto = {
       utsendelseLand: formFieldValues.utsendelseLand.value,
-      arbeidstakerUtsendelseFraDato: formFieldValues.periodeFraIso,
-      arbeidstakerUtsendelseTilDato: formFieldValues.periodeTilIso,
+      arbeidstakerUtsendelsePeriode: formFieldValues.periode,
       arbeidsgiverHarOppdragILandet: true,
       arbeidstakerBleAnsattForUtenlandsoppdraget: false,
       arbeidstakerForblirAnsattIHelePerioden: true,

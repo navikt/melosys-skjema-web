@@ -45,7 +45,7 @@ export function UtenlandsoppdragetStegOppsummering({
               {t("utenlandsoppdragetArbeidstakerSteg.fraDato")}
             </FormSummary.Label>
             <FormSummary.Value>
-              {utenlandsoppdragetData.utsendelseFraDato}
+              {utenlandsoppdragetData.utsendelsePeriode.fraDato}
             </FormSummary.Value>
           </FormSummary.Answer>
 
@@ -54,7 +54,7 @@ export function UtenlandsoppdragetStegOppsummering({
               {t("utenlandsoppdragetArbeidstakerSteg.tilDato")}
             </FormSummary.Label>
             <FormSummary.Value>
-              {utenlandsoppdragetData.utsendelseTilDato}
+              {utenlandsoppdragetData.utsendelsePeriode.tilDato}
             </FormSummary.Value>
           </FormSummary.Answer>
         </FormSummary.Answers>
