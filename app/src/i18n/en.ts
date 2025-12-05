@@ -23,6 +23,7 @@ export const en = {
       nesteSteg: "Next step",
       startSoknad: "Start application",
       valgtVirksomhet: "Selected company",
+      navn: "Name",
     },
     skjemaVeiledning: {
       hei: "Hello",

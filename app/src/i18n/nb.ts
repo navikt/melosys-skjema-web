@@ -23,6 +23,7 @@ export const nb = {
       nesteSteg: "Neste steg",
       startSoknad: "Start søknad",
       valgtVirksomhet: "Valgt virksomhet",
+      navn: "Navn",
     },
     periode: {
       fraDato: "Fra dato",
