@@ -23,6 +23,7 @@ export const en = {
       nesteSteg: "Next step",
       startSoknad: "Start application",
       valgtVirksomhet: "Selected company",
+      navn: "Name",
     },
     skjemaVeiledning: {
       hei: "Hello",
@@ -88,6 +89,8 @@ export const en = {
       organisasjonsnummer: "Organization number",
       leggTilNorskVirksomhet: "Add Norwegian company",
       endreNorskVirksomhet: "Edit Norwegian company",
+      kunneIkkeFInneOrganisasjon:
+        "Could not find organization with organization number",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",

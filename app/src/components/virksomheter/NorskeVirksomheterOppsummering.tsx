@@ -2,6 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { OrganisasjonNameLookup } from "~/components/virksomheter/OrganisasjonNameLookup.tsx";
 import { norskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
 type NorskVirksomhetFormData = z.infer<typeof norskVirksomhetSchema>;
@@ -22,6 +23,10 @@ export function NorskVirksomhetOppsummering({
           {t("norskeVirksomheterFormPart.organisasjonsnummer")}
         </FormSummary.Label>
         <FormSummary.Value>{virksomhet.organisasjonsnummer}</FormSummary.Value>
+        <FormSummary.Label>{t("felles.navn")}</FormSummary.Label>
+        <FormSummary.Value>
+          <OrganisasjonNameLookup orgnummer={virksomhet.organisasjonsnummer} />
+        </FormSummary.Value>
       </FormSummary.Answer>
     </FormSummary.Answers>
   );
