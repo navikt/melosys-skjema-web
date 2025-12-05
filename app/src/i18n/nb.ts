@@ -93,6 +93,8 @@ export const nb = {
       organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk virksomhet",
       endreNorskVirksomhet: "Endre norsk virksomhet",
+      kunneIkkeFInneOrganisasjon:
+        "Kunne ikke finne organisasjon med organisasjonsnummer",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",

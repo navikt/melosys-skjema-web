@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient";
+import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient";
 import { radgiverfirmaSchema } from "~/pages/representasjon/velg-radgiverfirma/radgiverfirmaSchema";
 import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
@@ -31,7 +31,7 @@ export function OrganisasjonSoker({
     useState<SimpleOrganisasjonDto | null>(null);
 
   const organisasjonQuery = useQuery({
-    ...getOrganisasjonQuery(searchValue || ""),
+    ...getOrganisasjonMedJuridiskEnhetQuery(searchValue || ""),
     enabled: false, // Disable auto-fetch, vi kaller refetch manuelt
   });
 

@@ -12,6 +12,7 @@ import {
   InnsendteSoknaderResponse,
   OpprettSoknadMedKontekstRequest,
   OpprettSoknadMedKontekstResponse,
+  Organisasjon,
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhet,
   PersonMedFullmaktDto,
@@ -254,8 +255,34 @@ export async function postTilleggsopplysninger(
   return postArbeidstakerStegData(skjemaId, "tilleggsopplysninger", request);
 }
 
-export const getOrganisasjonQuery = (orgnummer: string) =>
+export const getOrganisasjonMedJuridiskEnhetQuery = (orgnummer: string) =>
   queryOptions<OrganisasjonMedJuridiskEnhet>({
+    queryKey: ["ereg", "organisasjon-med-juridisk-enhet", orgnummer],
+    queryFn: () => fetchOrganisasjonMedJuridiskEnhet(orgnummer),
+    staleTime: 60 * 60 * 1000,
+    gcTime: 120 * 60 * 1000,
+    retry: false,
+  });
+
+async function fetchOrganisasjonMedJuridiskEnhet(
+  orgnummer: string,
+): Promise<OrganisasjonMedJuridiskEnhet> {
+  const response = await fetch(
+    `${API_PROXY_URL}/ereg/organisasjon-med-juridisk-enhet/${orgnummer}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export const getOrganisasjonQueryOptions = (orgnummer: string) =>
+  queryOptions<Organisasjon>({
     queryKey: ["ereg", "organisasjon", orgnummer],
     queryFn: () => fetchOrganisasjon(orgnummer),
     staleTime: 60 * 60 * 1000,
@@ -263,9 +290,7 @@ export const getOrganisasjonQuery = (orgnummer: string) =>
     retry: false,
   });
 
-async function fetchOrganisasjon(
-  orgnummer: string,
-): Promise<OrganisasjonMedJuridiskEnhet> {
+async function fetchOrganisasjon(orgnummer: string): Promise<Organisasjon> {
   const response = await fetch(
     `${API_PROXY_URL}/ereg/organisasjon/${orgnummer}`,
     {

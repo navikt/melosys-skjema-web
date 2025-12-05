@@ -88,6 +88,8 @@ export const en = {
       organisasjonsnummer: "Organization number",
       leggTilNorskVirksomhet: "Add Norwegian company",
       endreNorskVirksomhet: "Edit Norwegian company",
+      kunneIkkeFInneOrganisasjon:
+        "Could not find organization with organization number",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",
