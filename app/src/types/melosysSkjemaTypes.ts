@@ -358,13 +358,13 @@ export interface InngaarIJuridiskEnhet {
   gyldighetsperiode?: Gyldighetsperiode;
 }
 
-export interface JuridiskEnhet {
-  organisasjonsnummer: string;
-  navn?: Navn;
-  type: string;
+export type JuridiskEnhet = UtilRequiredKeys<
+  Organisasjon,
+  "organisasjonsnummer" | "type"
+> & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   juridiskEnhetDetaljer?: JuridiskEnhetDetaljer;
-}
+};
 
 export interface JuridiskEnhetDetaljer {
   enhetstype?: string;
@@ -397,11 +397,6 @@ export interface OrganisasjonDetaljer {
   naeringer?: Naering[];
   forretningsadresser?: Adresse[];
   postadresser?: Adresse[];
-}
-
-export interface OrganisasjonMedJuridiskEnhet {
-  organisasjon: JuridiskEnhet | Organisasjonsledd | Virksomhet;
-  juridiskEnhet: JuridiskEnhet;
 }
 
 export type Organisasjonsledd = UtilRequiredKeys<
@@ -437,4 +432,9 @@ export interface VirksomhetDetaljer {
   oppstartsdato?: string;
   /** @format date */
   nedleggelsesdato?: string;
+}
+
+export interface OrganisasjonMedJuridiskEnhet {
+  organisasjon: JuridiskEnhet | Organisasjonsledd | Virksomhet;
+  juridiskEnhet: JuridiskEnhet;
 }

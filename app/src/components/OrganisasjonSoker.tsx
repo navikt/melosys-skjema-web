@@ -1,9 +1,10 @@
-import { Alert, BodyShort, Heading, Loader, Search } from "@navikt/ds-react";
+import { Loader, Search } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getOrganisasjonQuery } from "~/httpClients/melsosysSkjemaApiClient";
+import { ValgtOrganisasjon } from "~/components/virksomheter/ValgtOrganisasjon.tsx";
+import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient";
 import { radgiverfirmaSchema } from "~/pages/representasjon/velg-radgiverfirma/radgiverfirmaSchema";
 import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
@@ -31,7 +32,7 @@ export function OrganisasjonSoker({
     useState<SimpleOrganisasjonDto | null>(null);
 
   const organisasjonQuery = useQuery({
-    ...getOrganisasjonQuery(searchValue || ""),
+    ...getOrganisasjonMedJuridiskEnhetQuery(searchValue || ""),
     enabled: false, // Disable auto-fetch, vi kaller refetch manuelt
   });
 
@@ -110,14 +111,7 @@ export function OrganisasjonSoker({
       )}
 
       {valgtOrganisasjon && !organisasjonQuery.isFetching && (
-        <Alert className="mt-4" variant="success">
-          <Heading level="3" size="small">
-            {t("velgRadgiverfirma.valgtFirma")}
-          </Heading>
-          <BodyShort>
-            {valgtOrganisasjon.navn} (org.nr. {valgtOrganisasjon.orgnr})
-          </BodyShort>
-        </Alert>
+        <ValgtOrganisasjon valgtOrganisasjon={valgtOrganisasjon} />
       )}
     </div>
   );

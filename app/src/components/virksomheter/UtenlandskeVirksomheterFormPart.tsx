@@ -186,7 +186,13 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
 
   return (
     <FormProvider {...modalForm}>
-      <Modal.Body>
+      <Modal.Body
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
+      >
         <VStack gap="space-6">
           <TextField
             error={translateError(modalForm.formState.errors.navn?.message)}

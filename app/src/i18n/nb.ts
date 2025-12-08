@@ -23,6 +23,8 @@ export const nb = {
       nesteSteg: "Neste steg",
       startSoknad: "Start søknad",
       valgtVirksomhet: "Valgt virksomhet",
+      valgtOrganisasjon: "Valgt organisasjon",
+      navn: "Navn",
     },
     periode: {
       fraDato: "Fra dato",
@@ -93,6 +95,8 @@ export const nb = {
       organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk virksomhet",
       endreNorskVirksomhet: "Endre norsk virksomhet",
+      kunneIkkeFInneOrganisasjon:
+        "Kunne ikke finne organisasjon med organisasjonsnummer",
     },
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",

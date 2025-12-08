@@ -1,11 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Label, Modal, Table, TextField } from "@navikt/ds-react";
+import {
+  Button,
+  ErrorMessage,
+  Label,
+  Modal,
+  Table,
+  TextField,
+} from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   FormProvider,
   useFieldArray,
   useForm,
   useFormContext,
+  useWatch,
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -14,8 +23,10 @@ import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { NorskVirksomhetOppsummering } from "~/components/virksomheter/NorskeVirksomheterOppsummering.tsx";
+import { OrganisasjonNameLookup } from "~/components/virksomheter/OrganisasjonNameLookup.tsx";
+import { ValgtOrganisasjon } from "~/components/virksomheter/ValgtOrganisasjon.tsx";
 import { norskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
-import { useTranslateError } from "~/utils/translation.ts";
+import { getOrganisasjonQueryOptions } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
 type NorskVirksomhetFormData = z.infer<typeof norskVirksomhetSchema>;
 type NorskVirksomhetField = NorskVirksomhetFormData & { id: string };
@@ -153,11 +164,15 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
   virksomhet,
 }: LeggTilEllerEndreNorskVirksomhetModalContentProps) {
   const { t } = useTranslation();
-  const translateError = useTranslateError();
 
   const modalForm = useForm<NorskVirksomhetFormData>({
     resolver: zodResolver(norskVirksomhetSchema),
     defaultValues: { ...virksomhet },
+  });
+
+  const valgtOrganisasjonsnummer = useWatch({
+    name: "organisasjonsnummer",
+    control: modalForm.control,
   });
 
   const handleSubmit = modalForm.handleSubmit((data) => {
@@ -165,17 +180,65 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
     onCancel();
   });
 
+  const [searchValue, setSearchValue] = useState(valgtOrganisasjonsnummer);
+
+  const getOrganisasjonQuery = useQuery({
+    ...getOrganisasjonQueryOptions(searchValue),
+    enabled: false,
+  });
+
+  const handleSearch = async () => {
+    const result = await getOrganisasjonQuery.refetch();
+    if (result.data) {
+      modalForm.setValue(
+        "organisasjonsnummer",
+        result.data.organisasjonsnummer,
+      );
+    }
+  };
+
+  const displayChosenOrg =
+    valgtOrganisasjonsnummer && valgtOrganisasjonsnummer === searchValue;
+
   return (
     <FormProvider {...modalForm}>
       <Modal.Body>
-        <TextField
-          error={translateError(
-            modalForm.formState.errors.organisasjonsnummer?.message,
-          )}
-          label={t("norskeVirksomheterFormPart.organisasjonsnummer")}
-          maxLength={9}
-          {...modalForm.register("organisasjonsnummer")}
-        />
+        <div className="flex gap-2 items-end">
+          <TextField
+            className="flex-1"
+            label={t("norskeVirksomheterFormPart.organisasjonsnummer")}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
+            value={searchValue}
+          />
+          <Button
+            loading={getOrganisasjonQuery.isLoading}
+            onClick={() => handleSearch()}
+            type="button"
+            variant="secondary"
+          >
+            {t("oversiktFelles.arbeidstakerSokKnapp")}
+          </Button>
+        </div>
+        {displayChosenOrg && (
+          <ValgtOrganisasjon
+            valgtOrganisasjon={{
+              orgnr: valgtOrganisasjonsnummer,
+              navn: getOrganisasjonQuery.data?.navn?.sammensattnavn,
+            }}
+          />
+        )}
+        {getOrganisasjonQuery.error && (
+          <ErrorMessage>
+            {t("norskeVirksomheterFormPart.kunneIkkeFInneOrganisasjon")}{" "}
+            {searchValue}
+          </ErrorMessage>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleSubmit} type="button">
@@ -208,7 +271,9 @@ function NorskVirksomhetRow({
         </div>
       }
     >
-      <Table.HeaderCell>Placeholder Verdi AS</Table.HeaderCell>
+      <Table.HeaderCell>
+        <OrganisasjonNameLookup orgnummer={virksomhet.organisasjonsnummer} />
+      </Table.HeaderCell>
       <Table.DataCell>
         <EndreKnapp onClick={onEdit} size="small" />
         <FjernKnapp onClick={onRemove} size="small" />
