@@ -208,6 +208,12 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
             className="flex-1"
             label={t("norskeVirksomheterFormPart.organisasjonsnummer")}
             onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
             value={searchValue}
           />
           <Button
