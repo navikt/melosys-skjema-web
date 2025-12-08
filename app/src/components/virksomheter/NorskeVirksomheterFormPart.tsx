@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  BodyShort,
   Button,
   ErrorMessage,
   Label,
@@ -25,6 +24,7 @@ import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { NorskVirksomhetOppsummering } from "~/components/virksomheter/NorskeVirksomheterOppsummering.tsx";
 import { OrganisasjonNameLookup } from "~/components/virksomheter/OrganisasjonNameLookup.tsx";
+import { ValgtOrganisasjon } from "~/components/virksomheter/ValgtOrganisasjon.tsx";
 import { norskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 import { getOrganisasjonQueryOptions } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
@@ -226,9 +226,12 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
           </Button>
         </div>
         {displayChosenOrg && (
-          <BodyShort>
-            {getOrganisasjonQuery.data?.navn?.sammensattnavn}
-          </BodyShort>
+          <ValgtOrganisasjon
+            valgtOrganisasjon={{
+              orgnr: valgtOrganisasjonsnummer,
+              navn: getOrganisasjonQuery.data?.navn?.sammensattnavn,
+            }}
+          />
         )}
         {getOrganisasjonQuery.error && (
           <ErrorMessage>
