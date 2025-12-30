@@ -17,7 +17,6 @@ import {
   OrganisasjonMedJuridiskEnhet,
   PersonMedFullmaktDto,
   SkatteforholdOgInntektDto,
-  SubmitSkjemaRequest,
   TilleggsopplysningerDto,
   UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
@@ -189,18 +188,14 @@ export async function postTilleggsopplysningerArbeidsgiver(
   return postArbeidsgiverStegData(skjemaId, "tilleggsopplysninger", request);
 }
 
-export async function submitSkjema(
-  skjemaId: string,
-  request: SubmitSkjemaRequest,
-): Promise<void> {
+export async function sendInnSkjema(skjemaId: string): Promise<void> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/submit`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(request),
     },
   );
 
