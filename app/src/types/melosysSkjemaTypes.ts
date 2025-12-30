@@ -1,3 +1,4 @@
+/* tslint:disable */
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -43,7 +44,7 @@ export interface SimpleOrganisasjonDto {
 export interface OpprettSoknadMedKontekstResponse {
   /** @format uuid */
   id: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
+  status: "UTKAST" | "SENDT";
 }
 
 export interface HentInnsendteSoknaderRequest {
@@ -72,13 +73,14 @@ export interface HentInnsendteSoknaderRequest {
 export interface InnsendtSoknadOversiktDto {
   /** @format uuid */
   id: string;
+  referanseId?: string;
   arbeidsgiverNavn?: string;
   arbeidsgiverOrgnr?: string;
   arbeidstakerNavn?: string;
   arbeidstakerFnrMaskert?: string;
   /** @format date-time */
   innsendtDato: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
+  status: "UTKAST" | "SENDT";
   harPdf: boolean;
 }
 
@@ -123,7 +125,7 @@ export interface ArbeidstakersSkjemaDto {
   /** @format uuid */
   id: string;
   fnr: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
+  status: "UTKAST" | "SENDT";
   data: ArbeidstakersSkjemaDataDto;
 }
 
@@ -198,7 +200,7 @@ export interface ArbeidsgiversSkjemaDto {
   /** @format uuid */
   id: string;
   orgnr: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
+  status: "UTKAST" | "SENDT";
   data: ArbeidsgiversSkjemaDataDto;
 }
 
@@ -253,12 +255,6 @@ export interface PaSkipDto {
   territorialfarvannLand?: string;
 }
 
-export interface SubmitSkjemaRequest {
-  bekreftetRiktighet: boolean;
-  /** @format date-time */
-  submittedAt: string;
-}
-
 export interface VerifiserPersonRequest {
   /** @minLength 1 */
   fodselsnummer: string;
@@ -270,6 +266,23 @@ export interface VerifiserPersonResponse {
   navn: string;
   /** @format date */
   fodselsdato: string;
+}
+
+export interface RadgiverfirmaInfo {
+  orgnr: string;
+  navn: string;
+}
+
+export interface UtsendtArbeidstakerMetadata {
+  representasjonstype:
+    | "DEG_SELV"
+    | "ARBEIDSGIVER"
+    | "RADGIVER"
+    | "ANNEN_PERSON";
+  harFullmakt: boolean;
+  radgiverfirma?: RadgiverfirmaInfo;
+  arbeidsgiverNavn?: string;
+  fullmektigFnr?: string;
 }
 
 export interface UtkastListeResponse {
@@ -289,7 +302,7 @@ export interface UtkastOversiktDto {
   opprettetDato: string;
   /** @format date-time */
   sistEndretDato: string;
-  status: "UTKAST" | "SENDT" | "MOTTATT";
+  status: "UTKAST" | "SENDT";
 }
 
 export interface Fullmakt {
@@ -310,6 +323,104 @@ export interface OrganisasjonDto {
   orgnr: string;
   navn: string;
   organisasjonsform: string;
+}
+
+export interface ArbeidsgiverensVirksomhetINorgeTranslation {
+  offentligVirksomhetSkalIkkeOppgiBemanningsbyraa: string;
+  offentligVirksomhetSkalIkkeOppgiVanligDrift: string;
+  maaOppgiOmBemanningsbyraa: string;
+  maaOppgiOmVanligDrift: string;
+}
+
+export interface ArbeidssituasjonTranslation {
+  maaOppgiAktivitetFoerUtsending: string;
+  maaOppgiMinstEnVirksomhet: string;
+}
+
+export interface ArbeidsstedIUtlandetTranslation {
+  maaOppgiArbeidsstedPaLand: string;
+  maaOppgiOffshoreArbeidssted: string;
+  maaOppgiArbeidsstedPaSkip: string;
+  maaOppgiArbeidsstedOmBordPaFly: string;
+}
+
+export interface ArbeidstakerensLonnTranslation {
+  virksomheterSkalIkkeOppgis: string;
+  maaOppgiVirksomheter: string;
+}
+
+export interface ErrorMessageTranslation {
+  arbeidsgiverensVirksomhetINorgeTranslation: ArbeidsgiverensVirksomhetINorgeTranslation;
+  arbeidssituasjonTranslation: ArbeidssituasjonTranslation;
+  arbeidsstedIUtlandetTranslation: ArbeidsstedIUtlandetTranslation;
+  omBordPaFlyTranslation: OmBordPaFlyTranslation;
+  paLandTranslation: PaLandTranslation;
+  paSkipTranslation: PaSkipTranslation;
+  arbeidstakerensLonnTranslation: ArbeidstakerensLonnTranslation;
+  periodeTranslation: PeriodeTranslation;
+  skatteforholdOgInntektTranslation: SkatteforholdOgInntektTranslation;
+  tilleggsopplysningerTranslation: TilleggsopplysningerTranslation;
+  utenlandsoppdragetTranslation: UtenlandsoppdragetTranslation;
+  utenlandsoppdragetArbeidstakerTranslation: UtenlandsoppdragetArbeidstakerTranslation;
+  fellesTranslation: FellesTranslation;
+}
+
+export interface ErrorMessageTranslations {
+  no: ErrorMessageTranslation;
+  en: ErrorMessageTranslation;
+}
+
+export interface FellesTranslation {
+  organisasjonsnummerHarUgyldigFormat: string;
+  organisasjonsnummerFinnesIkke: string;
+  ugyldigFodselsellerDNummer: string;
+}
+
+export interface OmBordPaFlyTranslation {
+  vanligHjemmebaseLandSkalIkkeOppgis: string;
+  vanligHjemmebaseNavnSkalIkkeOppgis: string;
+  maaOppgiVanligHjemmebaseLand: string;
+  maaOppgiVanligHjemmebaseNavn: string;
+}
+
+export interface PaLandTranslation {
+  maaOppgiFastArbeidssted: string;
+  beskrivelseVekslendeSkalIkkeOppgis: string;
+  fastArbeidsstedSkalIkkeOppgis: string;
+  maaOppgiBeskrivelseVekslende: string;
+}
+
+export interface PaSkipTranslation {
+  duMaOppgiFlaggland: string;
+  territorialfarvannLandSkalIkkeOppgis: string;
+  duMaOppgiTerritorialfarvannLand: string;
+  flagglandSkalIkkeOppgis: string;
+}
+
+export interface PeriodeTranslation {
+  fraDatoMaaVaereFoerTilDato: string;
+}
+
+export interface SkatteforholdOgInntektTranslation {
+  maaOppgiLandSomUtbetalerPengestotte: string;
+  maaOppgiBelopPengestotte: string;
+  maaOppgiBeskrivelsePengestotte: string;
+}
+
+export interface TilleggsopplysningerTranslation {
+  maaOppgiTilleggsopplysninger: string;
+  tilleggsopplysningerSkalIkkeOppgis: string;
+}
+
+export interface UtenlandsoppdragetArbeidstakerTranslation {
+  duMaOppgiUtsendelsesland: string;
+}
+
+export interface UtenlandsoppdragetTranslation {
+  duMaOppgiBegrunnelse: string;
+  duMaOppgiOmArbeidstakerVilJobbeEtterOppdraget: string;
+  duMaOppgiBeskrivelseAvAnsettelsesforhold: string;
+  duMaOppgiForrigeArbeidstakerUtsendelsePeriode: string;
 }
 
 export interface Adresse {

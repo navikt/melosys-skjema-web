@@ -9,6 +9,7 @@ export const nb = {
       lagre: "Lagre",
       lagreOgFortsett: "Lagre og fortsett",
       sendSoknad: "Send søknad",
+      skjemaSendtInn: "Skjema sendt inn",
       avbryt: "Avbryt",
       ja: "Ja",
       nei: "Nei",
