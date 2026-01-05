@@ -1,19 +1,12 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
+import { UtsendtArbeidstakerMetadata } from "~/types/melosysSkjemaTypes.ts";
+
 const API_PROXY_URL = "/api";
 
-type Representasjonstype =
-  | "DEG_SELV"
-  | "ARBEIDSGIVER"
-  | "RADGIVER"
-  | "ANNEN_PERSON";
-
-// Lightweight metadata-response for routing
-interface SkjemaMetadata {
-  representasjonstype: Representasjonstype;
-}
-
-async function fetchSkjemaMetadata(id: string): Promise<SkjemaMetadata> {
+async function fetchSkjemaMetadata(
+  id: string,
+): Promise<UtsendtArbeidstakerMetadata> {
   const response = await fetch(`${API_PROXY_URL}/skjema/${id}/metadata`);
   if (!response.ok) {
     throw new Error("Kunne ikke hente skjema-metadata");

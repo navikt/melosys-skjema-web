@@ -9,6 +9,7 @@ export const en = {
       lagre: "Save",
       lagreOgFortsett: "Save and continue",
       sendSoknad: "Submit application",
+      skjemaSendtInn: "Application submitted",
       avbryt: "Cancel",
       ja: "Yes",
       nei: "No",
