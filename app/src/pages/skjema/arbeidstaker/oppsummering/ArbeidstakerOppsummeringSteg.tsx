@@ -92,7 +92,8 @@ function ArbeidstakerOppsummeringStegContent({
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     sendInnSkjemaMutation.mutate();
   };
 

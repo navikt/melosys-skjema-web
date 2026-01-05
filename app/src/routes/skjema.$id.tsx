@@ -7,7 +7,7 @@ const API_PROXY_URL = "/api";
 async function fetchSkjemaMetadata(
   id: string,
 ): Promise<UtsendtArbeidstakerMetadata> {
-  const response = await fetch(`${API_PROXY_URL}/skjema/${id}/metafata`);
+  const response = await fetch(`${API_PROXY_URL}/skjema/${id}/metadata`);
   if (!response.ok) {
     throw new Error("Kunne ikke hente skjema-metadata");
   }
