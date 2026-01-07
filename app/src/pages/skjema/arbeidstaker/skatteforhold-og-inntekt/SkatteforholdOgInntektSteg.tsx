@@ -15,6 +15,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   ArbeidstakersSkjemaDto,
   SkatteforholdOgInntektDto,
@@ -97,12 +98,10 @@ function SkatteforholdOgInntektStegContent({
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: postSkatteforholdMutation.isPending,
-            },
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={postSkatteforholdMutation.isPending} />
+          }
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"

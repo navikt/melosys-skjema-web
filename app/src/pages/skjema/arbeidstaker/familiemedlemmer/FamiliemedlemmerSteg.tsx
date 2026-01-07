@@ -15,6 +15,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   ArbeidstakersSkjemaDto,
   FamiliemedlemmerDto,
@@ -87,13 +88,11 @@ function FamiliemedlemmerStegContent({
         <SkjemaSteg
           config={{
             stepKey,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: postFamiliemedlemmerMutation.isPending,
-            },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={postFamiliemedlemmerMutation.isPending} />
+          }
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"

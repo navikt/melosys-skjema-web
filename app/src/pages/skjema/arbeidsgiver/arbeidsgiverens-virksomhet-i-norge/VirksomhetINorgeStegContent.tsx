@@ -13,6 +13,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
@@ -80,12 +81,10 @@ export function VirksomhetINorgeStegContent({
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: registerVirksomhetMutation.isPending,
-            },
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />
+          }
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"

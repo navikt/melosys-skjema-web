@@ -16,6 +16,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -91,13 +92,11 @@ function ArbeidssituasjonStegContent({
         <SkjemaSteg
           config={{
             stepKey,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: postArbeidssituasjonMutation.isPending,
-            },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={postArbeidssituasjonMutation.isPending} />
+          }
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"

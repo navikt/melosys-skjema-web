@@ -13,6 +13,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import { ArbeidsstedIUtlandetDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -90,12 +91,10 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: registerArbeidsstedMutation.isPending,
-            },
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={registerArbeidsstedMutation.isPending} />
+          }
         >
           <Select
             className="mt-4"

@@ -13,6 +13,7 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   ArbeidstakersSkjemaDto,
   UtenlandsoppdragetArbeidstakersDelDto,
@@ -92,12 +93,10 @@ function UtenlandsoppdragetStegContent({
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: registerUtenlandsoppdragMutation.isPending,
-            },
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={registerUtenlandsoppdragMutation.isPending} />
+          }
         >
           <LandVelgerFormPart
             className="mt-4"
