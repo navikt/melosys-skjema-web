@@ -491,11 +491,7 @@ export const en = {
     },
     kvittering: {
       tittel: "Thank you!",
-      melding: {
-        del1: "We have received your application for",
-        soknadstype: "Posted worker",
-        del2: "with reference",
-      },
+      melding: "We have received your application with reference",
       infoOversikt:
         "You can see the application under 'Previously submitted applications' on the application overview page.",
       tilOversikt: "Go to application overview",

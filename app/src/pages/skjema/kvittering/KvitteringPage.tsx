@@ -58,11 +58,9 @@ function KvitteringPageContent({ response }: KvitteringPageContentProps) {
         {t("kvittering.tittel")}
       </Heading>
 
-      {/* Melding med søknadstype og referanse */}
+      {/* Melding med referanse */}
       <BodyLong>
-        {t("kvittering.melding.del1")}{" "}
-        <strong>{t("kvittering.melding.soknadstype")}</strong>{" "}
-        {t("kvittering.melding.del2")} <strong>{response.referanseId}</strong>.
+        {t("kvittering.melding")} <strong>{response.referanseId}</strong>.
       </BodyLong>
 
       {/* Info om oversiktssiden */}

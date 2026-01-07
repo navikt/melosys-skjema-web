@@ -523,11 +523,7 @@ export const nb = {
     },
     kvittering: {
       tittel: "Takk!",
-      melding: {
-        del1: "Vi har mottatt din søknad om",
-        soknadstype: "Utsendt arbeidstaker",
-        del2: "med referanse",
-      },
+      melding: "Vi har mottatt din søknad med referanse",
       infoOversikt:
         "Du kan se søknaden under 'Tidligere innsendte søknader' på oversiktssiden for søknader.",
       tilOversikt: "Gå til oversiktsside for søknader",
