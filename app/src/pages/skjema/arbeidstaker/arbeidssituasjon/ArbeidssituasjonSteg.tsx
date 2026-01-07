@@ -12,11 +12,11 @@ import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomhet
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postArbeidssituasjon } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 

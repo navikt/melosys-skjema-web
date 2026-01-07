@@ -8,8 +8,8 @@ import {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
-import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
+import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
 
 export const stepKey = "vedlegg";
 

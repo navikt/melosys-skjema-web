@@ -15,8 +15,8 @@ import {
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
-import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
+import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
 import {
   TilleggsopplysningerFormData,
   tilleggsopplysningerSchema,
@@ -97,7 +97,9 @@ export function TilleggsopplysningerStegContent({
             stegRekkefolge,
           }}
           nesteKnapp={
-            <NesteStegKnapp loading={postTilleggsopplysningerMutation.isPending} />
+            <NesteStegKnapp
+              loading={postTilleggsopplysningerMutation.isPending}
+            />
           }
         >
           <RadioGroupJaNeiFormPart

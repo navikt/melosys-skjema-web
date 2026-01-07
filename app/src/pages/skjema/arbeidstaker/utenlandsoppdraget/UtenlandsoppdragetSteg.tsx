@@ -9,11 +9,11 @@ import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postUtenlandsoppdragetArbeidstaker } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   ArbeidstakersSkjemaDto,
   UtenlandsoppdragetArbeidstakersDelDto,
@@ -95,7 +95,9 @@ function UtenlandsoppdragetStegContent({
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
           nesteKnapp={
-            <NesteStegKnapp loading={registerUtenlandsoppdragMutation.isPending} />
+            <NesteStegKnapp
+              loading={registerUtenlandsoppdragMutation.isPending}
+            />
           }
         >
           <LandVelgerFormPart

@@ -10,11 +10,11 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
@@ -103,7 +103,9 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
           }}
           nesteKnapp={
-            <NesteStegKnapp loading={registerArbeidstakerLonnMutation.isPending} />
+            <NesteStegKnapp
+              loading={registerArbeidstakerLonnMutation.isPending}
+            />
           }
         >
           <RadioGroupJaNeiFormPart

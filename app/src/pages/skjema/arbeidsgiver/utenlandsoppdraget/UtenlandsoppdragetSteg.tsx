@@ -12,11 +12,11 @@ import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -116,7 +116,9 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
           }}
           nesteKnapp={
-            <NesteStegKnapp loading={registerUtenlandsoppdragMutation.isPending} />
+            <NesteStegKnapp
+              loading={registerUtenlandsoppdragMutation.isPending}
+            />
           }
         >
           <LandVelgerFormPart
