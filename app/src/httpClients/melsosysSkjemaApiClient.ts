@@ -17,6 +17,7 @@ import {
   OrganisasjonMedJuridiskEnhet,
   PersonMedFullmaktDto,
   SkatteforholdOgInntektDto,
+  SkjemaInnsendtKvittering,
   TilleggsopplysningerDto,
   UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
@@ -188,7 +189,9 @@ export async function postTilleggsopplysningerArbeidsgiver(
   return postArbeidsgiverStegData(skjemaId, "tilleggsopplysninger", request);
 }
 
-export async function sendInnSkjema(skjemaId: string): Promise<void> {
+export async function sendInnSkjema(
+  skjemaId: string,
+): Promise<SkjemaInnsendtKvittering> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`,
     {
@@ -202,7 +205,34 @@ export async function sendInnSkjema(skjemaId: string): Promise<void> {
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
+
+  return response.json();
 }
+
+export async function fetchInnsendtKvittering(
+  skjemaId: string,
+): Promise<SkjemaInnsendtKvittering> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/innsendt-kvittering`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export const getInnsendtKvitteringQuery = (skjemaId: string) =>
+  queryOptions<SkjemaInnsendtKvittering>({
+    queryKey: ["innsendt-kvittering", skjemaId],
+    queryFn: () => fetchInnsendtKvittering(skjemaId),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
 
 export const getSkjemaAsArbeidstakerQuery = (skjemaId: string) =>
   queryOptions<ArbeidstakersSkjemaDto>({

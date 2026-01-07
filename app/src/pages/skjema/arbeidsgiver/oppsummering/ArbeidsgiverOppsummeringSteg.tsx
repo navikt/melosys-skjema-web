@@ -1,9 +1,14 @@
 import { PaperplaneIcon } from "@navikt/aksel-icons";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
-import { sendInnSkjema } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getInnsendtKvitteringQuery,
+  sendInnSkjema,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegOppsummering.tsx";
 
@@ -40,12 +45,23 @@ function ArbeidsgiverOppsummeringStegContent({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { handleSubmit } = useForm();
 
   const sendInnSkjemaMutation = useMutation({
     mutationFn: () => sendInnSkjema(skjema.id),
-    onSuccess: () => {
-      // TODO: Lage og navigere kvittering-side
-      toast.success(t("felles.skjemaSendtInn"));
+    onSuccess: (response) => {
+      // Populer cache for kvittering-query
+      queryClient.setQueryData(
+        getInnsendtKvitteringQuery(response.skjemaId).queryKey,
+        response,
+      );
+
+      navigate({
+        to: "/skjema/kvittering/$id",
+        params: { id: response.skjemaId },
+      });
     },
     onError: () => {
       toast.error(t("felles.feil"));
@@ -92,13 +108,12 @@ function ArbeidsgiverOppsummeringStegContent({
     }
   };
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = () => {
     sendInnSkjemaMutation.mutate();
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <SkjemaSteg
         config={{
           stepKey: oppsummeringStepKey,

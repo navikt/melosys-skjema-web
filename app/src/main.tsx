@@ -9,6 +9,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import i18n from "i18next";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Toaster } from "react-hot-toast";
 import { initReactI18next } from "react-i18next";
 
 import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
@@ -71,6 +72,7 @@ onLanguageSelect((language) => {
 createRoot(document.querySelector("#root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <RouterProvider router={router} />
     </QueryClientProvider>
   </StrictMode>,

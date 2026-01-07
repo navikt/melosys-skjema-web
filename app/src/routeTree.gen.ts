@@ -19,6 +19,7 @@ import { Route as OversiktIndexRouteImport } from './routes/oversikt.index'
 import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
 import { Route as OversiktStartSoknadRouteImport } from './routes/oversikt.start-soknad'
+import { Route as SkjemaKvitteringIdRouteImport } from './routes/skjema.kvittering.$id'
 import { Route as SkjemaArbeidstakerIdIndexRouteImport } from './routes/skjema.arbeidstaker.$id.index'
 import { Route as SkjemaArbeidsgiverIdIndexRouteImport } from './routes/skjema.arbeidsgiver.$id.index'
 import { Route as SkjemaArbeidstakerIdVedleggRouteImport } from './routes/skjema.arbeidstaker.$id.vedlegg'
@@ -86,6 +87,11 @@ const OversiktStartSoknadRoute = OversiktStartSoknadRouteImport.update({
   id: '/start-soknad',
   path: '/start-soknad',
   getParentRoute: () => OversiktRoute,
+} as any)
+const SkjemaKvitteringIdRoute = SkjemaKvitteringIdRouteImport.update({
+  id: '/kvittering/$id',
+  path: '/kvittering/$id',
+  getParentRoute: () => SkjemaRoute,
 } as any)
 const SkjemaArbeidstakerIdIndexRoute =
   SkjemaArbeidstakerIdIndexRouteImport.update({
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
+  '/skjema/kvittering/$id': typeof SkjemaKvitteringIdRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
@@ -220,6 +227,7 @@ export interface FileRoutesByTo {
   '/oversikt': typeof OversiktIndexRoute
   '/representasjon': typeof RepresentasjonIndexRoute
   '/skjema': typeof SkjemaIndexRoute
+  '/skjema/kvittering/$id': typeof SkjemaKvitteringIdRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
@@ -249,6 +257,7 @@ export interface FileRoutesById {
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
+  '/skjema/kvittering/$id': typeof SkjemaKvitteringIdRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
@@ -279,6 +288,7 @@ export interface FileRouteTypes {
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
+    | '/skjema/kvittering/$id'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
+    | '/skjema/kvittering/$id'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
+    | '/skjema/kvittering/$id'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
@@ -428,6 +440,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/oversikt/start-soknad'
       preLoaderRoute: typeof OversiktStartSoknadRouteImport
       parentRoute: typeof OversiktRoute
+    }
+    '/skjema/kvittering/$id': {
+      id: '/skjema/kvittering/$id'
+      path: '/kvittering/$id'
+      fullPath: '/skjema/kvittering/$id'
+      preLoaderRoute: typeof SkjemaKvitteringIdRouteImport
+      parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidstaker/$id/': {
       id: '/skjema/arbeidstaker/$id/'
@@ -575,6 +594,7 @@ const RepresentasjonRouteWithChildren = RepresentasjonRoute._addFileChildren(
 interface SkjemaRouteChildren {
   SkjemaIdRoute: typeof SkjemaIdRoute
   SkjemaIndexRoute: typeof SkjemaIndexRoute
+  SkjemaKvitteringIdRoute: typeof SkjemaKvitteringIdRoute
   SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute: typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute: typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
   SkjemaArbeidsgiverIdArbeidstakerensLonnRoute: typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
@@ -596,6 +616,7 @@ interface SkjemaRouteChildren {
 const SkjemaRouteChildren: SkjemaRouteChildren = {
   SkjemaIdRoute: SkjemaIdRoute,
   SkjemaIndexRoute: SkjemaIndexRoute,
+  SkjemaKvitteringIdRoute: SkjemaKvitteringIdRoute,
   SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute:
     SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute,
   SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute:
