@@ -10,17 +10,19 @@ export interface StegRekkefolgeItem {
 type FremgangsindikatorProps = {
   aktivtSteg: number;
   stegRekkefolge: StegRekkefolgeItem[];
+  className?: string;
 };
 
 export const Fremgangsindikator = ({
   aktivtSteg,
   stegRekkefolge,
+  className,
 }: FremgangsindikatorProps) => {
   const { t } = useTranslation();
   return (
     <FormProgress
       activeStep={aktivtSteg}
-      className="col-span-2"
+      className={className ? `col-span-2 ${className}` : "col-span-2"}
       interactiveSteps={false}
       totalSteps={stegRekkefolge.length}
     >

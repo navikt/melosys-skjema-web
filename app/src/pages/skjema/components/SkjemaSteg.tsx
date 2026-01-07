@@ -8,6 +8,7 @@ import {
   Fremgangsindikator,
   StegRekkefolgeItem,
 } from "~/pages/skjema/components/Fremgangsindikator";
+import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
 
 interface StegConfig {
   stepKey: string;
@@ -39,8 +40,10 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
 
   return (
     <section>
+      <SkjemaHeader />
       <Fremgangsindikator
         aktivtSteg={stepNumber}
+        className="mt-4"
         stegRekkefolge={config.stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">

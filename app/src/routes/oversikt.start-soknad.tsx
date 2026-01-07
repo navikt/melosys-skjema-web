@@ -43,7 +43,6 @@ export const Route = createFileRoute("/oversikt/start-soknad")({
     }
 
     return {
-      hideSiteTitle: true,
       kontekst,
       arbeidsgiver,
       arbeidstaker,

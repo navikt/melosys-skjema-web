@@ -22,7 +22,6 @@ export const Route = createFileRoute("/oversikt/")({
     }
 
     return {
-      hideSiteTitle: true,
       kontekst,
     };
   },

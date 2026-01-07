@@ -9,7 +9,4 @@ function KvitteringRoute() {
 
 export const Route = createFileRoute("/skjema/$id/kvittering")({
   component: KvitteringRoute,
-  beforeLoad: () => ({
-    hideSiteTitle: true,
-  }),
 });

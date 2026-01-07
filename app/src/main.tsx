@@ -46,7 +46,6 @@ export const queryClient = new QueryClient();
 
 export interface RouterContext {
   queryClient: QueryClient;
-  hideSiteTitle?: boolean;
   kontekst?: OpprettSoknadMedKontekstRequest;
 }
 
