@@ -29,7 +29,7 @@ export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
       );
 
       navigate({
-        to: "/skjema/kvittering/$id",
+        to: "/skjema/$id/kvittering",
         params: { id: response.skjemaId },
       });
     },

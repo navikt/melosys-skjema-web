@@ -15,8 +15,13 @@ async function fetchSkjemaMetadata(
 }
 
 export const Route = createFileRoute("/skjema/$id")({
-  beforeLoad: async ({ params }) => {
+  beforeLoad: async ({ params, location }) => {
     const { id } = params;
+
+    // Hvis vi er på vei til kvittering, ikke redirect
+    if (location.pathname.endsWith("/kvittering")) {
+      return;
+    }
 
     // Hent metadata fra backend for å bestemme skjematype
     const metadata = await fetchSkjemaMetadata(id);
