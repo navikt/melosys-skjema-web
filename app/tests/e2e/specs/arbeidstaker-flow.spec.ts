@@ -72,12 +72,8 @@ test.describe("Arbeidstaker komplett flyt", () => {
       formFieldValues.utsendelseLand,
     );
 
-    await utenlandsoppdragetStegPage.fraDatoInput.fill(
-      formFieldValues.periodeFra,
-    );
-    await utenlandsoppdragetStegPage.tilDatoInput.fill(
-      formFieldValues.periodeTil,
-    );
+    await utenlandsoppdragetStegPage.fillFraDato(formFieldValues.periodeFra);
+    await utenlandsoppdragetStegPage.fillTilDato(formFieldValues.periodeTil);
 
     // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetArbeidstakersDelDto =

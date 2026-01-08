@@ -5,6 +5,7 @@ import type {
   ArbeidstakersSkjemaDto,
   UtenlandsoppdragetArbeidstakersDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
+import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
@@ -66,5 +67,13 @@ export class UtenlandsoppdragetStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/arbeidstaker/${this.skjema.id}/arbeidssituasjon`,
     );
+  }
+
+  async fillFraDato(date: string) {
+    await selectDateFromCalendar(this.page, this.fraDatoInput, date);
+  }
+
+  async fillTilDato(date: string) {
+    await selectDateFromCalendar(this.page, this.tilDatoInput, date);
   }
 }

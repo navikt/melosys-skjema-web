@@ -93,12 +93,8 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await utenlandsoppdragetStegPage.utsendelseLandCombobox.selectOption(
       formFieldValues.utsendelseLand,
     );
-    await utenlandsoppdragetStegPage.fraDatoInput.fill(
-      formFieldValues.periodeFra,
-    );
-    await utenlandsoppdragetStegPage.tilDatoInput.fill(
-      formFieldValues.periodeTil,
-    );
+    await utenlandsoppdragetStegPage.fillFraDato(formFieldValues.periodeFra);
+    await utenlandsoppdragetStegPage.fillTilDato(formFieldValues.periodeTil);
 
     await utenlandsoppdragetStegPage.arbeidsgiverHarOppdragILandetRadioGroup.JA.click();
     await utenlandsoppdragetStegPage.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup.NEI.click();
