@@ -489,5 +489,12 @@ export const en = {
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "You must answer whether the company belongs to the same consortium",
     },
+    kvittering: {
+      tittel: "Thank you!",
+      melding: "We have received your application with reference",
+      infoOversikt:
+        "You can see the application under 'Previously submitted applications' on the application overview page.",
+      tilOversikt: "Go to application overview",
+    },
   },
 };

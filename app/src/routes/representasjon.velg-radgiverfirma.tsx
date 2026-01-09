@@ -13,7 +13,6 @@ export const Route = createFileRoute("/representasjon/velg-radgiverfirma")({
     }
 
     return {
-      hideSiteTitle: true,
       kontekst,
     };
   },

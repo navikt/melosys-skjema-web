@@ -521,5 +521,12 @@ export const nb = {
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "Du må svare på om virksomheten tilhører samme konsern",
     },
+    kvittering: {
+      tittel: "Takk!",
+      melding: "Vi har mottatt din søknad med referanse",
+      infoOversikt:
+        "Du kan se søknaden under 'Tidligere innsendte søknader' på oversiktssiden for søknader.",
+      tilOversikt: "Gå til oversiktsside for søknader",
+    },
   },
 };

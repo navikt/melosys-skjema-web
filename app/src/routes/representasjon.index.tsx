@@ -4,11 +4,6 @@ import { RepresentasjonPage } from "~/pages/representasjon/RepresentasjonPage";
 
 export const Route = createFileRoute("/representasjon/")({
   component: RepresentasjonRoute,
-  beforeLoad: () => {
-    return {
-      hideSiteTitle: true,
-    };
-  },
 });
 
 function RepresentasjonRoute() {

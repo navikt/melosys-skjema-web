@@ -16,6 +16,13 @@ export interface Organisasjon {
   navn?: Navn;
 }
 
+export interface SkjemaInnsendtKvittering {
+  /** @format uuid */
+  skjemaId: string;
+  referanseId: string;
+  status: "UTKAST" | "SENDT";
+}
+
 export interface OpprettSoknadMedKontekstRequest {
   representasjonstype:
     | "DEG_SELV"

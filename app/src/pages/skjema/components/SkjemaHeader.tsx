@@ -1,9 +1,9 @@
 import { Bleed, Heading, Show, Stack, VStack } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { ApplicationPictogram } from "~/assets/ApplicationPictogram";
+import { ApplicationPictogram } from "~/assets/ApplicationPictogram.tsx";
 
-export function SoknadHeader() {
+export function SkjemaHeader() {
   const { t } = useTranslation();
   return (
     <Bleed data-aksel-template="form-intropage-v2" marginInline={{ lg: "24" }}>

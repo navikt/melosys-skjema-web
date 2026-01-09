@@ -11,6 +11,7 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postFamiliemedlemmer } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
@@ -87,13 +88,11 @@ function FamiliemedlemmerStegContent({
         <SkjemaSteg
           config={{
             stepKey,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: postFamiliemedlemmerMutation.isPending,
-            },
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={postFamiliemedlemmerMutation.isPending} />
+          }
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"

@@ -16,12 +16,16 @@ export class OppsummeringStegPage {
   readonly page: Page;
   readonly skjema: ArbeidsgiversSkjemaDto;
   readonly heading: Locator;
+  readonly sendSoknadButton: Locator;
 
   constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
       name: nb.translation.oppsummeringSteg.tittel,
+    });
+    this.sendSoknadButton = page.getByRole("button", {
+      name: nb.translation.felles.sendSoknad,
     });
   }
 
@@ -259,5 +263,23 @@ export class OppsummeringStegPage {
         ),
       ).toHaveText(data.tilleggsopplysningerTilSoknad);
     }
+  }
+
+  async sendInnAndExpectPost() {
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response
+          .url()
+          .includes(
+            `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/send-inn`,
+          ) && response.request().method() === "POST",
+    );
+
+    await this.sendSoknadButton.click();
+    await responsePromise;
+  }
+
+  async assertNavigatedToKvittering() {
+    await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/kvittering`);
   }
 }

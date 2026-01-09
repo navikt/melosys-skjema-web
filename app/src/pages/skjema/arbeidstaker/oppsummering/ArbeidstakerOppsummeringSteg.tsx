@@ -1,9 +1,4 @@
-import { PaperplaneIcon } from "@navikt/aksel-icons";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import { useTranslation } from "react-i18next";
-
-import { sendInnSkjema } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { SendInnSkjemaKnapp } from "~/pages/skjema/components/SendInnSkjemaKnapp.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegOppsummering.tsx";
 
@@ -39,19 +34,6 @@ export function ArbeidstakerOppsummeringSteg({
 function ArbeidstakerOppsummeringStegContent({
   skjema,
 }: ArbeidstakerSkjemaProps) {
-  const { t } = useTranslation();
-
-  const sendInnSkjemaMutation = useMutation({
-    mutationFn: () => sendInnSkjema(skjema.id),
-    onSuccess: () => {
-      // TODO: Lage og navigere kvittering-side
-      toast.success(t("felles.skjemaSendtInn"));
-    },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
-  });
-
   const renderStepSummary = (stepKey: string) => {
     switch (stepKey) {
       case arbeidssituasjonStepKey: {
@@ -92,29 +74,17 @@ function ArbeidstakerOppsummeringStegContent({
     }
   };
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendInnSkjemaMutation.mutate();
-  };
-
   return (
-    <form onSubmit={onSubmit}>
-      <SkjemaSteg
-        config={{
-          stepKey: oppsummeringStepKey,
-          stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
-          customNesteKnapp: {
-            tekst: t("felles.sendSoknad"),
-            ikon: <PaperplaneIcon />,
-            type: "submit",
-            loading: sendInnSkjemaMutation.isPending,
-          },
-        }}
-      >
-        {ARBEIDSTAKER_STEG_REKKEFOLGE.filter(
-          (steg) => steg.key !== oppsummeringStepKey,
-        ).map((steg) => renderStepSummary(steg.key))}
-      </SkjemaSteg>
-    </form>
+    <SkjemaSteg
+      config={{
+        stepKey: oppsummeringStepKey,
+        stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
+      }}
+      nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjema.id} />}
+    >
+      {ARBEIDSTAKER_STEG_REKKEFOLGE.filter(
+        (steg) => steg.key !== oppsummeringStepKey,
+      ).map((steg) => renderStepSummary(steg.key))}
+    </SkjemaSteg>
   );
 }

@@ -6,6 +6,7 @@ import type {
   UtenlandsoppdragetDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
@@ -130,5 +131,13 @@ export class UtenlandsoppdragetStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
     );
+  }
+
+  async fillFraDato(date: string) {
+    await selectDateFromCalendar(this.page, this.fraDatoInput, date);
+  }
+
+  async fillTilDato(date: string) {
+    await selectDateFromCalendar(this.page, this.tilDatoInput, date);
   }
 }

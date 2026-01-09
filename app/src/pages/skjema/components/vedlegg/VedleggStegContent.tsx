@@ -8,6 +8,7 @@ import {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
+import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
 
 export const stepKey = "vedlegg";
@@ -40,12 +41,9 @@ export function VedleggStegContent({
       <SkjemaSteg
         config={{
           stepKey,
-          customNesteKnapp: {
-            tekst: t("felles.lagreOgFortsett"),
-            type: "submit",
-          },
           stegRekkefolge,
         }}
+        nesteKnapp={<NesteStegKnapp />}
       >
         <FileUpload.Dropzone
           accept=".pdf,.docx,.doc,.jpg,.jpeg,.png"

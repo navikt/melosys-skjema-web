@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidsstedIUtlandet } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
@@ -90,12 +91,10 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: registerArbeidsstedMutation.isPending,
-            },
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={registerArbeidsstedMutation.isPending} />
+          }
         >
           <Select
             className="mt-4"

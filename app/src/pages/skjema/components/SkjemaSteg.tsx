@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
@@ -8,34 +8,25 @@ import {
   Fremgangsindikator,
   StegRekkefolgeItem,
 } from "~/pages/skjema/components/Fremgangsindikator";
+import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
 
 interface StegConfig {
   stepKey: string;
   stegRekkefolge: StegRekkefolgeItem[];
-  customNesteKnapp?: {
-    tekst: string;
-    ikon?: ReactNode;
-    type?: "button" | "submit";
-    loading?: boolean;
-  };
 }
 
 interface SkjemaStegProps {
   config: StegConfig;
+  nesteKnapp: ReactNode;
   children?: ReactNode;
 }
 
-export function SkjemaSteg({ config, children }: SkjemaStegProps) {
+export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
   const { t } = useTranslation();
   const stepNumber = getStepNumber(config.stepKey, config.stegRekkefolge);
   const prevRoute = getRelativeRoute(
     config.stepKey,
     "prev",
-    config.stegRekkefolge,
-  );
-  const nextRoute = getRelativeRoute(
-    config.stepKey,
-    "next",
     config.stegRekkefolge,
   );
 
@@ -49,8 +40,10 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
 
   return (
     <section>
+      <SkjemaHeader />
       <Fremgangsindikator
         aktivtSteg={stepNumber}
+        className="mt-4"
         stegRekkefolge={config.stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">
@@ -68,28 +61,7 @@ export function SkjemaSteg({ config, children }: SkjemaStegProps) {
             {t("felles.forrigeSteg")}
           </Button>
         )}
-        {nextRoute && !config.customNesteKnapp && (
-          <Button
-            as={Link}
-            icon={<ArrowRightIcon />}
-            iconPosition="right"
-            to={nextRoute}
-            variant="primary"
-          >
-            {t("felles.nesteSteg")}
-          </Button>
-        )}
-        {config.customNesteKnapp && (
-          <Button
-            icon={config.customNesteKnapp.ikon || <ArrowRightIcon />}
-            iconPosition="right"
-            loading={config.customNesteKnapp.loading}
-            type={config.customNesteKnapp.type}
-            variant="primary"
-          >
-            {config.customNesteKnapp.tekst}
-          </Button>
-        )}
+        {nesteKnapp}
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postSkatteforholdOgInntekt } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
@@ -97,12 +98,10 @@ function SkatteforholdOgInntektStegContent({
           config={{
             stepKey,
             stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
-            customNesteKnapp: {
-              tekst: t("felles.lagreOgFortsett"),
-              type: "submit",
-              loading: postSkatteforholdMutation.isPending,
-            },
           }}
+          nesteKnapp={
+            <NesteStegKnapp loading={postSkatteforholdMutation.isPending} />
+          }
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"

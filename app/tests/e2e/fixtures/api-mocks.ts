@@ -6,6 +6,7 @@ import type {
   ArbeidstakersSkjemaDto,
   OrganisasjonDto,
 } from "../../../src/types/melosysSkjemaTypes";
+import { skjemaInnsendtKvittering } from "./test-data";
 
 export async function mockHentTilganger(
   page: Page,
@@ -237,14 +238,17 @@ export async function mockPostTilleggsopplysninger(
   );
 }
 
-export async function mockSubmitSkjema(page: Page) {
+export async function mockSendInnSkjema(page: Page, skjemaId: string) {
   await page.route(
-    "/api/skjema/utsendt-arbeidstaker/*/submit",
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`,
     async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: "{}",
+        body: JSON.stringify({
+          ...skjemaInnsendtKvittering,
+          skjemaId: skjemaId,
+        }),
       });
     },
   );
@@ -288,7 +292,7 @@ export async function setupApiMocksForArbeidsgiver(
   await mockPostArbeidsstedIUtlandet(page, skjema.id);
   await mockPostArbeidstakerensLonn(page, skjema.id);
   await mockPostTilleggsopplysningerArbeidsgiver(page, skjema.id);
-  await mockSubmitSkjema(page);
+  await mockSendInnSkjema(page, skjema.id);
 }
 
 export async function setupApiMocksForArbeidstaker(
@@ -305,5 +309,5 @@ export async function setupApiMocksForArbeidstaker(
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
   await mockPostTilleggsopplysninger(page, skjema.id);
-  await mockSubmitSkjema(page);
+  await mockSendInnSkjema(page, skjema.id);
 }
