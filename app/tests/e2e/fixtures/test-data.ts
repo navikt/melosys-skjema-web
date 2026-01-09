@@ -5,6 +5,7 @@ import type {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
   OrganisasjonDto,
+  SkjemaInnsendtKvittering,
 } from "../../../src/types/melosysSkjemaTypes";
 
 export const testOrganization: OrganisasjonDto = {
@@ -58,4 +59,10 @@ export const formFieldValues = {
   periodeTil: "31.12.2026",
   periodeTilIso: "2026-12-31",
   utsendelseLand: { label: "Sverige", value: "SV" },
+};
+
+export const skjemaInnsendtKvittering: SkjemaInnsendtKvittering = {
+  skjemaId: "test-skjema-id",
+  status: "SENDT",
+  referanseId: "ABC123XYZ",
 };

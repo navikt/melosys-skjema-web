@@ -264,5 +264,9 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await oppsummeringPage.assertTilleggsopplysningerData(
       tilleggsopplysningerData,
     );
+
+    await oppsummeringPage.sendInnAndExpectPost();
+
+    await oppsummeringPage.assertNavigatedToKvittering();
   });
 });

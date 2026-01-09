@@ -324,5 +324,9 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await oppsummeringStegPage.assertTilleggsopplysningerData(
       tilleggsopplysningerData,
     );
+
+    await oppsummeringStegPage.sendInnAndExpectPost();
+
+    await oppsummeringStegPage.assertNavigatedToKvittering();
   });
 });
