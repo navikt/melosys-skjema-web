@@ -23,15 +23,15 @@
     "@navikt/ds-tailwind": "7.36.0",
     "@navikt/nav-dekoratoren-moduler": "3.6.1",
     "@tailwindcss/vite": "4.1.18",
-    "@tanstack/react-query": "5.90.15",
+    "@tanstack/react-query": "5.90.16",
     "@tanstack/react-router": "1.144.0",
     "i18next": "25.7.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "7.69.0",
     "react-hot-toast": "2.6.0",
-    "react-i18next": "16.5.0",
-    "zod": "4.2.1"
+    "react-i18next": "16.5.1",
+    "zod": "4.3.4"
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
