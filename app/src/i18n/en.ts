@@ -118,14 +118,23 @@ export const en = {
         "Do you have a spouse, partner, cohabitant or children who will accompany you?",
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "You must answer whether you have a spouse, partner, cohabitant or children who will accompany you",
-      harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
-        "Do you have a spouse, partner, cohabitant or children over 18 who are submitting their own application?",
-      duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
-        "You must answer whether you have a spouse, partner, cohabitant or children over 18 who are submitting their own application",
-      duMaLageEgenSoknadForBarna:
-        "You must create separate applications for your children",
-      duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18:
-        "You must create a separate application for spouse, partner, cohabitant or children over 18",
+      informasjonOmEgenSoknad:
+        "Spouse, partner, cohabitant and children over 18 must submit their own application. For children under 18, a guardian must submit a separate application",
+      familiemedlemmer: "Family members",
+      leggTilFamiliemedlem: "Add family member",
+      endreFamiliemedlem: "Edit family member",
+      fornavn: "First name",
+      etternavn: "Last name",
+      harNorskFodselsnummerEllerDnummer:
+        "Does the person have a Norwegian national identity number or D-number?",
+      duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer:
+        "You must answer whether the person has a Norwegian national identity number or D-number",
+      fodselsnummer: "National identity number / D-number",
+      fodselsdato: "Date of birth",
+      fornavnErPakrevd: "First name is required",
+      etternavnErPakrevd: "Last name is required",
+      fodselsnummerErPakrevd: "National identity number / D-number is required",
+      fodselsdatoErPakrevd: "Date of birth is required",
     },
     tilleggsopplysningerSteg: {
       tittel: "Additional Information",

@@ -122,13 +122,23 @@ export const nb = {
         "Har du ektefelle, partner, samboer eller barn som skal være med deg?",
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
-      harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
-        "Har du ektefelle partner, samboer eller barn over 18 år som sender egen søknad?",
-      duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
-        "Du må svare på om du har ektefelle partner, samboer eller barn over 18 år som sender egen søknad",
-      duMaLageEgenSoknadForBarna: "Du må lage egen søknad for barna dine",
-      duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18:
-        "Du må lage en egen søknad for ektefelle, partner, samboer eller barn over 18 år",
+      informasjonOmEgenSoknad:
+        "Ektefelle, partner, samboer og barn over 18 år må selv sende egen søknad. For barn under 18 år må foresatt sende egen søknad",
+      familiemedlemmer: "Familiemedlemmer",
+      leggTilFamiliemedlem: "Legg til familiemedlem",
+      endreFamiliemedlem: "Endre familiemedlem",
+      fornavn: "Fornavn",
+      etternavn: "Etternavn",
+      harNorskFodselsnummerEllerDnummer:
+        "Har personen norsk fødselsnummer eller D-nummer?",
+      duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer:
+        "Du må svare på om personen har norsk fødselsnummer eller D-nummer",
+      fodselsnummer: "Fødselsnummer / D-nummer",
+      fodselsdato: "Fødselsdato",
+      fornavnErPakrevd: "Fornavn er påkrevd",
+      etternavnErPakrevd: "Etternavn er påkrevd",
+      fodselsnummerErPakrevd: "Fødselsnummer / D-nummer er påkrevd",
+      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
     },
     tilleggsopplysningerSteg: {
       tittel: "Tilleggsopplysninger",
