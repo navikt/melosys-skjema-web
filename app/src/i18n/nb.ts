@@ -118,10 +118,10 @@ export const nb = {
     },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
-      sokerDuForBarnUnder18SomSkalVaereMed:
-        "Søker du for barn under 18 år som skal være med deg?",
-      duMaSvarePaOmDuSokerForBarnUnder18SomSkalVaereMed:
-        "Du må svare på om du søker for barn under 18 år som skal være med deg",
+      harDuFamiliemedlemmerSomSkalVaereMed:
+        "Har du ektefelle, partner, samboer eller barn som skal være med deg?",
+      duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
+        "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
       harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
         "Har du ektefelle partner, samboer eller barn over 18 år som sender egen søknad?",
       duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:

@@ -48,16 +48,10 @@ function FamiliemedlemmerStegContent({
   });
 
   const { handleSubmit, control } = formMethods;
-  const sokerForBarnUnder18SomSkalVaereMed = useWatch({
+  const skalHaMedFamiliemedlemmer = useWatch({
     control,
-    name: "sokerForBarnUnder18SomSkalVaereMed",
+    name: "skalHaMedFamiliemedlemmer",
   });
-  const harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad = useWatch(
-    {
-      control,
-      name: "harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad",
-    },
-  );
 
   const postFamiliemedlemmerMutation = useMutation({
     mutationFn: (data: FamiliemedlemmerFormData) => {
@@ -96,31 +90,15 @@ function FamiliemedlemmerStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            formFieldName="sokerForBarnUnder18SomSkalVaereMed"
+            formFieldName="skalHaMedFamiliemedlemmer"
             legend={t(
-              "familiemedlemmerSteg.sokerDuForBarnUnder18SomSkalVaereMed",
+              "familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMed",
             )}
           />
 
-          {sokerForBarnUnder18SomSkalVaereMed && (
+          {skalHaMedFamiliemedlemmer && (
             <GuidePanel className="mt-4">
               {t("familiemedlemmerSteg.duMaLageEgenSoknadForBarna")}
-            </GuidePanel>
-          )}
-
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            formFieldName="harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad"
-            legend={t(
-              "familiemedlemmerSteg.harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad",
-            )}
-          />
-
-          {harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad && (
-            <GuidePanel className="mt-4">
-              {t(
-                "familiemedlemmerSteg.duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18",
-              )}
             </GuidePanel>
           )}
         </SkjemaSteg>

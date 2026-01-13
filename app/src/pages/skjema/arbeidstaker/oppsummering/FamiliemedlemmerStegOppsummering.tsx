@@ -31,25 +31,10 @@ export function FamiliemedlemmerStegOppsummering({
         <FormSummary.Answers>
           <FormSummary.Answer>
             <FormSummary.Label>
-              {t("familiemedlemmerSteg.sokerDuForBarnUnder18SomSkalVaereMed")}
+              {t("familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMed")}
             </FormSummary.Label>
             <FormSummary.Value>
-              {booleanToJaNei(
-                familiemedlemmerData.sokerForBarnUnder18SomSkalVaereMed,
-              )}
-            </FormSummary.Value>
-          </FormSummary.Answer>
-
-          <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "familiemedlemmerSteg.harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad",
-              )}
-            </FormSummary.Label>
-            <FormSummary.Value>
-              {booleanToJaNei(
-                familiemedlemmerData.harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad,
-              )}
+              {booleanToJaNei(familiemedlemmerData.skalHaMedFamiliemedlemmer)}
             </FormSummary.Value>
           </FormSummary.Answer>
         </FormSummary.Answers>

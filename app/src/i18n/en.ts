@@ -114,10 +114,10 @@ export const en = {
     },
     familiemedlemmerSteg: {
       tittel: "Family Members",
-      sokerDuForBarnUnder18SomSkalVaereMed:
-        "Are you applying for children under 18 who will accompany you?",
-      duMaSvarePaOmDuSokerForBarnUnder18SomSkalVaereMed:
-        "You must answer whether you are applying for children under 18 who will accompany you",
+      harDuFamiliemedlemmerSomSkalVaereMed:
+        "Do you have a spouse, partner, cohabitant or children who will accompany you?",
+      duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
+        "You must answer whether you have a spouse, partner, cohabitant or children who will accompany you",
       harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
         "Do you have a spouse, partner, cohabitant or children over 18 who are submitting their own application?",
       duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:

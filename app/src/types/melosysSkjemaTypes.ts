@@ -1,4 +1,3 @@
-/* tslint:disable */
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -11,8 +10,8 @@
 type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 export interface Organisasjon {
-  organisasjonsnummer: string;
   type: string;
+  organisasjonsnummer: string;
   navn?: Navn;
 }
 
@@ -136,9 +135,18 @@ export interface ArbeidstakersSkjemaDto {
   data: ArbeidstakersSkjemaDataDto;
 }
 
+export interface Familiemedlem {
+  fornavn: string;
+  etternavn: string;
+  harNorskFodselsnummerEllerDnummer: boolean;
+  fodselsnummer?: string;
+  /** @format date */
+  fodselsdato?: string;
+}
+
 export interface FamiliemedlemmerDto {
-  sokerForBarnUnder18SomSkalVaereMed: boolean;
-  harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: boolean;
+  skalHaMedFamiliemedlemmer: boolean;
+  familiemedlemmer: Familiemedlem[];
 }
 
 export interface NorskVirksomhet {
@@ -369,12 +377,21 @@ export interface ErrorMessageTranslation {
   tilleggsopplysningerTranslation: TilleggsopplysningerTranslation;
   utenlandsoppdragetTranslation: UtenlandsoppdragetTranslation;
   utenlandsoppdragetArbeidstakerTranslation: UtenlandsoppdragetArbeidstakerTranslation;
+  familiemedlemmerTranslation: FamiliemedlemmerTranslation;
   fellesTranslation: FellesTranslation;
 }
 
 export interface ErrorMessageTranslations {
   no: ErrorMessageTranslation;
   en: ErrorMessageTranslation;
+}
+
+export interface FamiliemedlemmerTranslation {
+  familiemedlemmerMaaVaereTomNarSkalHaMedFamiliemedlemmerErFalse: string;
+  fornavnMaaOppgis: string;
+  etternavnMaaOppgis: string;
+  fodselsnummerMaaOppgis: string;
+  fodselsdatoMaaOppgis: string;
 }
 
 export interface FellesTranslation {
@@ -478,7 +495,7 @@ export interface InngaarIJuridiskEnhet {
 
 export type JuridiskEnhet = UtilRequiredKeys<
   Organisasjon,
-  "organisasjonsnummer" | "type"
+  "type" | "organisasjonsnummer"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   juridiskEnhetDetaljer?: JuridiskEnhetDetaljer;
@@ -519,7 +536,7 @@ export interface OrganisasjonDetaljer {
 
 export type Organisasjonsledd = UtilRequiredKeys<
   Organisasjon,
-  "organisasjonsnummer" | "type"
+  "type" | "organisasjonsnummer"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   organisasjonsleddDetaljer?: OrganisasjonsleddDetaljer;
@@ -535,7 +552,7 @@ export interface OrganisasjonsleddDetaljer {
 
 export type Virksomhet = UtilRequiredKeys<
   Organisasjon,
-  "organisasjonsnummer" | "type"
+  "type" | "organisasjonsnummer"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   virksomhetDetaljer?: VirksomhetDetaljer;

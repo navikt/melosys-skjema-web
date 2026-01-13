@@ -135,20 +135,10 @@ export class OppsummeringStegPage {
   async assertFamiliemedlemmerData(data: FamiliemedlemmerDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.familiemedlemmerSteg.sokerDuForBarnUnder18SomSkalVaereMed}") + dd`,
+        `dt:has-text("${nb.translation.familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMed}") + dd`,
       ),
     ).toHaveText(
-      data.sokerForBarnUnder18SomSkalVaereMed
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
-    );
-
-    await expect(
-      this.page.locator(
-        `dt:has-text("${nb.translation.familiemedlemmerSteg.harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad}") + dd`,
-      ),
-    ).toHaveText(
-      data.harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad
+      data.skalHaMedFamiliemedlemmer
         ? nb.translation.felles.ja
         : nb.translation.felles.nei,
     );
