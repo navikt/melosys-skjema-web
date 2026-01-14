@@ -26,6 +26,7 @@ export const en = {
       valgtVirksomhet: "Selected company",
       valgtOrganisasjon: "Selected organization",
       navn: "Name",
+      ugyldigFodselsnummerEllerDnummer: "Invalid national identity number or D-number",
     },
     skjemaVeiledning: {
       hei: "Hello",
@@ -119,7 +120,7 @@ export const en = {
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "You must answer whether you have a spouse, partner, cohabitant or children who will accompany you",
       informasjonOmEgenSoknad:
-        "Spouse, partner, cohabitant and children over 18 must submit their own application. For children under 18, a guardian must submit a separate application",
+        "Family members must submit their own application. You can submit an application for children under 18 by starting a new application on behalf of the child.",
       familiemedlemmer: "Family members",
       leggTilFamiliemedlem: "Add family member",
       endreFamiliemedlem: "Edit family member",

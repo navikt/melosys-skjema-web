@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
+  FormSummary,
   InlineMessage,
   Label,
   Modal,
@@ -215,7 +216,7 @@ function ValgteFamiliemedlemmer({
   return (
     <>
       <Label>{t("familiemedlemmerSteg.familiemedlemmer")}</Label>
-      <Table size="small">
+      <Table className="max-w-md" size="small">
         <Table.Body>
           {familiemedlemmer.map((familiemedlem, index) => (
             <FamiliemedlemRow
@@ -333,21 +334,65 @@ interface FamiliemedlemRowProps {
   onEdit: () => void;
 }
 
+function FamiliemedlemOppsummering({
+  familiemedlem,
+}: {
+  familiemedlem: FamiliemedlemField;
+}) {
+  const { t } = useTranslation();
+
+  const fields = [
+    {
+      label: t("familiemedlemmerSteg.fornavn"),
+      value: familiemedlem.fornavn,
+    },
+    {
+      label: t("familiemedlemmerSteg.etternavn"),
+      value: familiemedlem.etternavn,
+    },
+    {
+      label: familiemedlem.harNorskFodselsnummerEllerDnummer
+        ? t("familiemedlemmerSteg.fodselsnummer")
+        : t("familiemedlemmerSteg.fodselsdato"),
+      value: familiemedlem.harNorskFodselsnummerEllerDnummer
+        ? familiemedlem.fodselsnummer
+        : familiemedlem.fodselsdato,
+    },
+  ];
+
+  return (
+    <FormSummary.Answers>
+      {fields.map((field, index) => (
+        <FormSummary.Answer key={index}>
+          <FormSummary.Label>{field.label}</FormSummary.Label>
+          <FormSummary.Value>{field.value}</FormSummary.Value>
+        </FormSummary.Answer>
+      ))}
+    </FormSummary.Answers>
+  );
+}
+
 function FamiliemedlemRow({
   familiemedlem,
   onRemove,
   onEdit,
 }: FamiliemedlemRowProps) {
   return (
-    <Table.Row>
-      <Table.DataCell>
+    <Table.ExpandableRow
+      content={
+        <div className="-my-4">
+          <FamiliemedlemOppsummering familiemedlem={familiemedlem} />
+        </div>
+      }
+    >
+      <Table.HeaderCell>
         {familiemedlem.fornavn} {familiemedlem.etternavn}
-      </Table.DataCell>
-      <Table.DataCell>
+      </Table.HeaderCell>
+      <Table.DataCell style={{ width: "1px", whiteSpace: "nowrap" }}>
         <EndreKnapp onClick={onEdit} size="small" />
         <FjernKnapp onClick={onRemove} size="small" />
       </Table.DataCell>
-    </Table.Row>
+    </Table.ExpandableRow>
   );
 }
 

@@ -26,6 +26,7 @@ export const nb = {
       valgtVirksomhet: "Valgt virksomhet",
       valgtOrganisasjon: "Valgt organisasjon",
       navn: "Navn",
+      ugyldigFodselsnummerEllerDnummer: "Ugyldig fødselsnummer eller D-nummer",
     },
     periode: {
       fraDato: "Fra dato",
@@ -123,7 +124,7 @@ export const nb = {
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
       informasjonOmEgenSoknad:
-        "Ektefelle, partner, samboer og barn over 18 år må selv sende egen søknad. For barn under 18 år må foresatt sende egen søknad",
+        "Familiemedlemmer må sende egen søknad. Du kan sende søknad for barn under 18 år ved å starte en ny søknad på vegne av barnet.",
       familiemedlemmer: "Familiemedlemmer",
       leggTilFamiliemedlem: "Legg til familiemedlem",
       endreFamiliemedlem: "Endre familiemedlem",

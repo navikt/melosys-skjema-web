@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@navikt/fnrvalidator": "^2.2.1",
+    "install": "^0.13.0",
+    "npm": "^11.7.0"
+  }
+}
