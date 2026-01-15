@@ -26,7 +26,8 @@ export const en = {
       valgtVirksomhet: "Selected company",
       valgtOrganisasjon: "Selected organization",
       navn: "Name",
-      ugyldigFodselsnummerEllerDnummer: "Invalid national identity number or D-number",
+      ugyldigFodselsnummerEllerDnummer:
+        "Invalid national identity number or D-number",
     },
     skjemaVeiledning: {
       hei: "Hello",
