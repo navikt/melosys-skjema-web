@@ -116,6 +116,9 @@ function FamiliemedlemmerStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
+            description={t(
+              "familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMedBeskrivelse",
+            )}
             formFieldName="skalHaMedFamiliemedlemmer"
             legend={t(
               "familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMed",

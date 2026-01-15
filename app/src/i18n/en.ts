@@ -118,6 +118,8 @@ export const en = {
       tittel: "Family Members",
       harDuFamiliemedlemmerSomSkalVaereMed:
         "Do you have a spouse, partner, cohabitant or children who will accompany you?",
+      harDuFamiliemedlemmerSomSkalVaereMedBeskrivelse:
+        "We ask this because we want to process applications from multiple family members simultaneously",
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "You must answer whether you have a spouse, partner, cohabitant or children who will accompany you",
       informasjonOmEgenSoknad:

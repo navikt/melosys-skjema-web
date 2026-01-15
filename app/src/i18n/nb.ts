@@ -121,6 +121,8 @@ export const nb = {
       tittel: "Familiemedlemmer",
       harDuFamiliemedlemmerSomSkalVaereMed:
         "Har du ektefelle, partner, samboer eller barn som skal være med deg?",
+      harDuFamiliemedlemmerSomSkalVaereMedBeskrivelse:
+        "Vi spør om dette fordi vi ønsker å behandle søknader fra flere i samme familie samtidig",
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
       informasjonOmEgenSoknad:
