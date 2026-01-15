@@ -26,6 +26,7 @@ export const nb = {
       valgtVirksomhet: "Valgt virksomhet",
       valgtOrganisasjon: "Valgt organisasjon",
       navn: "Navn",
+      ugyldigFodselsnummerEllerDnummer: "Ugyldig fødselsnummer eller D-nummer",
     },
     periode: {
       fraDato: "Fra dato",
@@ -118,17 +119,29 @@ export const nb = {
     },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
-      sokerDuForBarnUnder18SomSkalVaereMed:
-        "Søker du for barn under 18 år som skal være med deg?",
-      duMaSvarePaOmDuSokerForBarnUnder18SomSkalVaereMed:
-        "Du må svare på om du søker for barn under 18 år som skal være med deg",
-      harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
-        "Har du ektefelle partner, samboer eller barn over 18 år som sender egen søknad?",
-      duMaSvarePaOmDuHarEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad:
-        "Du må svare på om du har ektefelle partner, samboer eller barn over 18 år som sender egen søknad",
-      duMaLageEgenSoknadForBarna: "Du må lage egen søknad for barna dine",
-      duMaLageEgenSoknadForEktefellePartnerSamboerEllerBarnOver18:
-        "Du må lage en egen søknad for ektefelle, partner, samboer eller barn over 18 år",
+      harDuFamiliemedlemmerSomSkalVaereMed:
+        "Har du ektefelle, partner, samboer eller barn som skal være med deg?",
+      harDuFamiliemedlemmerSomSkalVaereMedBeskrivelse:
+        "Vi spør om dette fordi vi ønsker å behandle søknader fra flere i samme familie samtidig",
+      duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
+        "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
+      informasjonOmEgenSoknad:
+        "Familiemedlemmer må sende egen søknad. Du kan sende søknad for barn under 18 år ved å starte en ny søknad på vegne av barnet.",
+      familiemedlemmer: "Familiemedlemmer",
+      leggTilFamiliemedlem: "Legg til familiemedlem",
+      endreFamiliemedlem: "Endre familiemedlem",
+      fornavn: "Fornavn",
+      etternavn: "Etternavn",
+      harNorskFodselsnummerEllerDnummer:
+        "Har personen norsk fødselsnummer eller D-nummer?",
+      duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer:
+        "Du må svare på om personen har norsk fødselsnummer eller D-nummer",
+      fodselsnummer: "Fødselsnummer / D-nummer",
+      fodselsdato: "Fødselsdato",
+      fornavnErPakrevd: "Fornavn er påkrevd",
+      etternavnErPakrevd: "Etternavn er påkrevd",
+      fodselsnummerErPakrevd: "Fødselsnummer / D-nummer er påkrevd",
+      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
     },
     tilleggsopplysningerSteg: {
       tittel: "Tilleggsopplysninger",

@@ -135,13 +135,12 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await familiemedlemmerStegPage.assertIsVisible();
 
     // Svar på spørsmål
-    await familiemedlemmerStegPage.sokerForBarnUnder18RadioGroup.NEI.click();
-    await familiemedlemmerStegPage.harEktefelleEllerBarnOver18RadioGroup.NEI.click();
+    await familiemedlemmerStegPage.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup.NEI.click();
 
     // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedFamiliemedlemmerPayload: FamiliemedlemmerDto = {
-      sokerForBarnUnder18SomSkalVaereMed: false,
-      harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: false,
+      skalHaMedFamiliemedlemmer: false,
+      familiemedlemmer: [],
     };
 
     await familiemedlemmerStegPage.lagreOgFortsettAndExpectPayload(
@@ -210,8 +209,8 @@ test.describe("Arbeidstaker komplett flyt", () => {
     };
 
     const familiemedlemmerData: FamiliemedlemmerDto = {
-      sokerForBarnUnder18SomSkalVaereMed: false,
-      harEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad: false,
+      skalHaMedFamiliemedlemmer: false,
+      familiemedlemmer: [],
     };
 
     const skatteforholdOgInntektData: SkatteforholdOgInntektDto = {

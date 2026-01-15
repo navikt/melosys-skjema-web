@@ -11,8 +11,7 @@ export class FamiliemedlemmerStegPage {
   readonly page: Page;
   readonly skjema: ArbeidstakersSkjemaDto;
   readonly heading: Locator;
-  readonly sokerForBarnUnder18RadioGroup: RadioButtonGroupJaNeiLocator;
-  readonly harEktefelleEllerBarnOver18RadioGroup: RadioButtonGroupJaNeiLocator;
+  readonly harDuFamiliemedlemmerSomSkalVaereMedRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly lagreOgFortsettButton: Locator;
 
   constructor(page: Page, skjema: ArbeidstakersSkjemaDto) {
@@ -22,28 +21,15 @@ export class FamiliemedlemmerStegPage {
       name: nb.translation.familiemedlemmerSteg.tittel,
     });
 
-    const sokerForBarnUnder18Group = page.getByRole("group", {
+    const harDuFamiliemedlemmerSomSkalVaereMedGroup = page.getByRole("group", {
       name: nb.translation.familiemedlemmerSteg
-        .sokerDuForBarnUnder18SomSkalVaereMed,
+        .harDuFamiliemedlemmerSomSkalVaereMed,
     });
-    this.sokerForBarnUnder18RadioGroup = {
-      JA: sokerForBarnUnder18Group.getByRole("radio", {
+    this.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup = {
+      JA: harDuFamiliemedlemmerSomSkalVaereMedGroup.getByRole("radio", {
         name: nb.translation.felles.ja,
       }),
-      NEI: sokerForBarnUnder18Group.getByRole("radio", {
-        name: nb.translation.felles.nei,
-      }),
-    };
-
-    const harEktefelleEllerBarnOver18Group = page.getByRole("group", {
-      name: nb.translation.familiemedlemmerSteg
-        .harDuEktefellePartnerSamboerEllerBarnOver18SomSenderEgenSoknad,
-    });
-    this.harEktefelleEllerBarnOver18RadioGroup = {
-      JA: harEktefelleEllerBarnOver18Group.getByRole("radio", {
-        name: nb.translation.felles.ja,
-      }),
-      NEI: harEktefelleEllerBarnOver18Group.getByRole("radio", {
+      NEI: harDuFamiliemedlemmerSomSkalVaereMedGroup.getByRole("radio", {
         name: nb.translation.felles.nei,
       }),
     };
