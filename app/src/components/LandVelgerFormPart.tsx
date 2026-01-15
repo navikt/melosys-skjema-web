@@ -44,6 +44,7 @@ const landOptions = [
   { value: "DE", label: "Tyskland" },
   { value: "HU", label: "Ungarn" },
   { value: "AT", label: "Østerrike" },
+  { value: "AX", label: "Åland" },
 ];
 
 export function LandVelgerFormPart({
