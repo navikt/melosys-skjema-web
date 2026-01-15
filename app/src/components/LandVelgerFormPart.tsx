@@ -38,6 +38,7 @@ const landOptions = [
   { value: "SI", label: "Slovenia" },
   { value: "ES", label: "Spania" },
   { value: "GB", label: "Storbritannia" },
+  { value: "SJ", label: "Svalbard og Jan Mayen" },
   { value: "CH", label: "Sveits" },
   { value: "SE", label: "Sverige" },
   { value: "CZ", label: "Tsjekkia" },
