@@ -437,7 +437,7 @@ export const nb = {
       soknadStarterInfoAnnenPerson:
         "Vi trenger informasjon om både person du søker på vegne av og dennes arbeidsgiver.",
       soknadStarterInfo:
-        "Vi trenger informasjon om både arbeidsgiver og arbeidstaker. Hvis du har fullmakt fra arbeidstakeren, skal du fylle ut for begge samtidig. Hvis ikke, huker du av for at arbeidstakeren skal fylle ut sin del selv. Du må da oppgi hans/hennes navn og fødsels-/d-nummer før du fyller ut informasjon om arbeidsgiver.",
+        "Vi trenger informasjon om både arbeidsgiver og arbeidstaker. Hvis du har fullmakt fra arbeidstakeren, skal du fylle ut for begge samtidig. Hvis ikke, huker du av for at arbeidstakeren skal fylle ut sin del selv. Du må da oppgi hans/hennes navn og fødsels-/d-nummer før du starter søknaden.",
       soknadStarterFullmaktInfo1: "",
       soknadStarterFullmaktInfo2: "",
       soknadStarterFullmaktInfo3: "",
