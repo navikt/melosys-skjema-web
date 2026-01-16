@@ -1,7 +1,6 @@
 import { BodyShort, GuidePanel, Heading, VStack } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { KontekstBanner } from "~/components/KontekstBanner.tsx";
 import {
   InnsendteSoknaderTabell,
   SoknadStarter,
@@ -66,8 +65,6 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
 
   return (
     <VStack gap="6">
-      <KontekstBanner kontekst={kontekst} />
-
       <GuidePanel poster>
         <Heading level="2" size="small" spacing>
           {getTittel()}

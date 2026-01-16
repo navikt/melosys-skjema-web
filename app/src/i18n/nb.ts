@@ -377,17 +377,13 @@ export const nb = {
       annenPerson: "ANNEN PERSON",
       avbryt: "Avbryt",
     },
-    kontekstBanner: {
-      minSide: "Min side",
-      minSideArbeidsgiver: "Min side - arbeidsgiver",
-      minSideRadgiver: "Min side - rådgiver",
-      minSideAnnenPerson: "Min side - annen person",
-      ingenArbeidsgiverValgt: "Ingen arbeidsgiver valgt",
-      ingenRadgiverValgt: "Ingen rådgiver valgt",
-      ingenPersonValgt: "Ingen person valgt",
-      byttKontekst: "Bytt",
-      byttKontekstAriaLabel:
-        "Bytt representasjon og gå tilbake til landingssiden",
+    appHeader: {
+      tittel: "Medlemskap og lovvalg",
+    },
+    kontekstVelger: {
+      arbeidsgiver: "Arbeidsgiver",
+      radgiver: "Rådgiver",
+      annenPerson: "Annen person",
     },
     oversiktDegSelv: {
       tittel: "Oversiktsside for søknader",
