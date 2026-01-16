@@ -341,49 +341,47 @@ export const en = {
       annenPerson: "ANOTHER PERSON",
       avbryt: "Cancel",
     },
-    kontekstBanner: {
-      minSide: "My page",
-      minSideArbeidsgiver: "My page - employer",
-      minSideRadgiver: "My page - advisor",
-      minSideAnnenPerson: "My page - another person",
-      ingenArbeidsgiverValgt: "No employer selected",
-      ingenRadgiverValgt: "No advisor selected",
-      ingenPersonValgt: "No person selected",
-      byttKontekst: "Change",
-      byttKontekstAriaLabel: "Change representation and return to landing page",
+    appHeader: {
+      tittel: "Membership and applicable legislation",
+    },
+    kontekstVelger: {
+      arbeidsgiver: "Employer",
+      radgiver: "Advisor",
+      annenPerson: "Another person",
+      byttKontekstAriaLabel: "Open menu to change representation or language",
     },
     oversiktDegSelv: {
-      tittel: "Your overview page",
-      infoBullet1: "You can view previous and ongoing applications",
-      infoBullet2: "Here you can start a new application for yourself",
+      tittel: "Overview page for applications",
+      herKanDu: "Here you can:",
+      infoBullet1: "fill out an application.",
+      infoBullet2: "view started and previously submitted applications.",
     },
     oversiktArbeidsgiver: {
-      tittel: "This is the employer's overview page",
-      infoBullet1: "You can view previous and ongoing applications",
-      infoBullet2:
-        "Here you can see an overview of accesses and mandates that have been granted to you",
-      infoBullet3:
-        "You can submit applications on behalf of the employer and possibly the employee",
-      infoBullet4:
-        "If you have a mandate from an employee, you must submit the application for them at the same time",
+      tittel: "Overview page for applications",
+      herKanDu: "Here you can:",
+      infoBullet1:
+        "fill out an application for your employer and their employees.",
+      infoBullet2: "view accesses and mandates you have been granted.",
+      infoBullet3: "view started and previously submitted applications.",
     },
     oversiktRadgiver: {
-      tittel: "This is the advisor's overview page",
-      infoBullet1: "You can view previous and ongoing applications",
-      infoBullet2:
-        "Here you can see an overview of employers you can represent",
-      infoBullet3:
-        "You can submit applications on behalf of the employer and possibly the employee",
-      infoBullet4:
-        "If you have a mandate from an employee, you must submit the application for them at the same time",
+      tittel: "Overview page for applications",
+      herKanDu: "Here you can:",
+      infoBullet1:
+        "fill out an application for an employer and their employees.",
+      infoBullet2: "view accesses and mandates you have been granted.",
+      infoBullet3: "view started and previously submitted applications.",
     },
     oversiktAnnenPerson: {
-      tittel: "Submit application on behalf of another person",
+      tittel: "Overview page for applications",
+      herKanDu: "Here you can:",
       infoBullet1:
-        "You can submit an application if the person has granted you a mandate on nav.no/fullmakt",
-      infoBullet2:
-        "You will complete the entire application on behalf of the person you represent",
-      infoBullet3: "You can view previous applications and drafts",
+        "fill out an application for people who have granted you a mandate.",
+      infoBullet2: "view started and previously submitted applications.",
+      personVelgerLabel:
+        "Select the person you want to fill out an application for",
+      personVelgerBeskrivelse:
+        "The list contains all people who have granted you a mandate on nav.no.",
     },
     oversiktFelles: {
       utkastTittel: "DRAFTS",
@@ -394,23 +392,21 @@ export const en = {
       utkastArbeidstaker: "Employee",
       utkastOpprettet: "Created",
       utkastSistEndret: "Last modified",
-      soknadStarterTittel: "Who are you applying on behalf of?",
-      soknadStarterTittelDegSelv: "Start application",
-      soknadStarterInfoDegSelv:
-        "When applying for yourself, we need information about the employer and you as an employee.",
+      soknadStarterTittel:
+        "Who are you filling out the application on behalf of?",
+      soknadStarterTittelDegSelv: "Specify the employer sending you abroad",
+      soknadStarterTittelAnnenPerson:
+        "Who are you filling out the application on behalf of?",
+      soknadStarterInfoAnnenPerson:
+        "We need information about both the person you are applying on behalf of and their employer.",
       soknadStarterInfo:
-        "We need information about both the employer and the employee.",
-      soknadStarterFullmaktInfo1:
-        "In the list below, you will find employees who have granted you a mandate on nav.no/fullmakt.",
-      soknadStarterFullmaktInfo2:
-        "If you have a mandate from an employee, you must complete the entire application at once.",
-      soknadStarterFullmaktInfo3:
-        "If you do not have a mandate from the employee, the person must first grant you a mandate through nav.no/fullmakt.",
+        "We need information about both employer and employee. If you have a mandate from the employee, you should fill out for both at the same time. If not, check the box for the employee to fill out their part themselves. You must then provide their name and birth/d-number before starting the application.",
       arbeidsgiverTittel: "Employer",
-      arbeidsgiverVelgerLabel: "Select employer",
+      arbeidsgiverOrgnrLabel: "Employer's organization number",
+      arbeidsgiverVelgerLabel: "Select employer (Organization number or name)",
       arbeidsgiverVelgerPlaceholder: "Organization number or name",
       arbeidsgiverVelgerInfo:
-        "The list contains all employers you have been granted access to in the Altinn form and employees who have granted you a mandate on nav.no/fullmakt.",
+        "The list contains all employers you have been granted access to in Altinn.",
       ingenArbeidsgivereTittel: "You have no employers available",
       ingenArbeidsgivereInfo:
         "To fill out an application on behalf of an employer, you must have been delegated access to the company in Altinn.",
@@ -418,25 +414,28 @@ export const en = {
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
       arbeidstakerTittel: "Employee",
-      arbeidstakerMedFullmaktLabel: "Employee with mandate",
+      arbeidstakerMedFullmaktLabel:
+        "Select the employee you want to fill out an application for",
       arbeidstakerMedFullmaktBeskrivelse:
-        "Select a person who has granted you a mandate. You will complete the application on behalf of the employee.",
+        "The list contains all employees who have granted you a mandate",
+      arbeidstakerSelvUtfyllingCheckbox:
+        "The employee will fill out their part of the application themselves",
       arbeidstakerMedFullmaktPlaceholder: "Birth/d-number or name",
       arbeidstakerMedFullmaktListePlaceholder: "+ Select...",
       arbeidstakerUtenFullmaktTittel: "Employee without mandate",
       arbeidstakerUtenFullmaktBeskrivelse:
         "The employee must complete their part of the application themselves.",
-      arbeidstakerFnrLabel: "Birth or d-number",
-      arbeidstakerEtternavnLabel: "Last name",
+      arbeidstakerFnrLabel: "Birth/d-number",
+      arbeidstakerFulltNavnLabel: "Full name",
       arbeidstakerSokKnapp: "Search",
       arbeidstakerFnrTom: "Enter birth number",
       arbeidstakerFnrUgyldig: "Invalid birth number",
-      arbeidstakerEtternavnTom: "Enter last name",
+      arbeidstakerFulltNavnTom: "Enter full name",
       arbeidstakerVerifiseringFeilet:
         "Person not found with the specified birth number and last name",
       arbeidstakerVerifisertLabel: "Person verified",
       arbeidstakerFjernKnapp: "Remove",
-      gaTilSkjemaKnapp: "Go to form for posted employee",
+      gaTilSkjemaKnapp: "Start application",
       valideringFeilTittel: "You must fill in these fields:",
       valideringManglerArbeidsgiver: "Employer must be selected",
       valideringManglerArbeidstaker: "Employee must be selected",
@@ -444,8 +443,9 @@ export const en = {
       historikkSokPlaceholder: "Search...",
       historikkKolonneVirksomhet: "Company",
       historikkKolonneArbeidstaker: "Employee name",
-      historikkKolonneFnr: "Birth/D-number",
-      historikkKolonneInnsendtDato: "Submitted date",
+      historikkKolonneFnr: "Birth/D-no",
+      historikkKolonneInnsendt: "Submitted",
+      historikkKolonneRefnr: "Ref.no.",
       historikkKolonneStatus: "Status",
       historikkAntallTreff: "{{antall}} results",
       historikkFeilmelding:

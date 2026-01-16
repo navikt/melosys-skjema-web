@@ -384,6 +384,7 @@ export const nb = {
       arbeidsgiver: "Arbeidsgiver",
       radgiver: "Rådgiver",
       annenPerson: "Annen person",
+      byttKontekstAriaLabel: "Åpne meny for å bytte representasjon eller språk",
     },
     oversiktDegSelv: {
       tittel: "Oversiktsside for søknader",
@@ -429,14 +430,10 @@ export const nb = {
       soknadStarterTittelDegSelv: "Oppgi arbeidsgiver som sender deg ut",
       soknadStarterTittelAnnenPerson:
         "Hvem skal du fylle ut søknaden på vegne av?",
-      soknadStarterInfoDegSelv: "",
       soknadStarterInfoAnnenPerson:
         "Vi trenger informasjon om både person du søker på vegne av og dennes arbeidsgiver.",
       soknadStarterInfo:
         "Vi trenger informasjon om både arbeidsgiver og arbeidstaker. Hvis du har fullmakt fra arbeidstakeren, skal du fylle ut for begge samtidig. Hvis ikke, huker du av for at arbeidstakeren skal fylle ut sin del selv. Du må da oppgi hans/hennes navn og fødsels-/d-nummer før du starter søknaden.",
-      soknadStarterFullmaktInfo1: "",
-      soknadStarterFullmaktInfo2: "",
-      soknadStarterFullmaktInfo3: "",
       arbeidsgiverTittel: "Arbeidsgiver",
       arbeidsgiverOrgnrLabel: "Arbeidsgivers organisasjonsnummer",
       arbeidsgiverVelgerLabel:
@@ -467,7 +464,7 @@ export const nb = {
       arbeidstakerSokKnapp: "Søk",
       arbeidstakerFnrTom: "Skriv fødselsnummer",
       arbeidstakerFnrUgyldig: "Ugyldig fødselsnummer",
-      arbeidstakerEtternavnTom: "Skriv fullt navn",
+      arbeidstakerFulltNavnTom: "Skriv fullt navn",
       arbeidstakerVerifiseringFeilet:
         "Finner ikke person med oppgitt fødselsnummer og etternavn",
       arbeidstakerVerifisertLabel: "Person verifisert",

@@ -10,16 +10,11 @@ import { useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import {
   clearRepresentasjonKontekst,
   setRepresentasjonKontekst,
 } from "~/utils/sessionStorage.ts";
-
-export type Representasjonstype =
-  | "DEG_SELV"
-  | "ARBEIDSGIVER"
-  | "RADGIVER"
-  | "ANNEN_PERSON";
 
 interface RepresentationOption {
   type: Representasjonstype;

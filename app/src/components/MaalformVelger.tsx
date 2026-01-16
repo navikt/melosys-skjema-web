@@ -1,20 +1,18 @@
 import { ChevronDownIcon, GlobeIcon } from "@navikt/aksel-icons";
 import { Button, Dropdown, HStack } from "@navikt/ds-react";
-import { DecoratorLocale, setParams } from "@navikt/nav-dekoratoren-moduler";
+import { setParams } from "@navikt/nav-dekoratoren-moduler";
 import { useTranslation } from "react-i18next";
 
-const LANGUAGES: { code: DecoratorLocale; label: string }[] = [
-  { code: "nb", label: "Norsk" },
-  { code: "en", label: "English" },
-];
+import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
 
 export function MaalformVelger() {
   const { i18n } = useTranslation();
 
   const currentLanguage =
-    LANGUAGES.find((lang) => lang.code === i18n.language) ?? LANGUAGES[0]!;
+    SUPPORTED_LANGUAGES.find((lang) => lang.code === i18n.language) ??
+    SUPPORTED_LANGUAGES[0]!;
 
-  const handleChangeLanguage = async (code: DecoratorLocale) => {
+  const handleChangeLanguage = async (code: Language["code"]) => {
     await setParams({ language: code });
     await i18n.changeLanguage(code);
   };
@@ -30,7 +28,7 @@ export function MaalformVelger() {
       </Button>
       <Dropdown.Menu>
         <Dropdown.Menu.List>
-          {LANGUAGES.map((lang) => (
+          {SUPPORTED_LANGUAGES.map((lang) => (
             <Dropdown.Menu.List.Item
               key={lang.code}
               onClick={() => handleChangeLanguage(lang.code)}

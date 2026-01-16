@@ -7,35 +7,25 @@ import {
   PersonGroupIcon,
 } from "@navikt/aksel-icons";
 import { Button, HStack, Popover } from "@navikt/ds-react";
-import { DecoratorLocale, setParams } from "@navikt/nav-dekoratoren-moduler";
-import { useLocation } from "@tanstack/react-router";
+import { setParams } from "@navikt/nav-dekoratoren-moduler";
 import type { ComponentType } from "react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RepresentasjonVelger } from "~/components/RepresentasjonVelger.tsx";
-import { getRepresentasjonKontekst } from "~/utils/sessionStorage.ts";
-
-type Representasjonstype =
-  | "DEG_SELV"
-  | "ARBEIDSGIVER"
-  | "RADGIVER"
-  | "ANNEN_PERSON";
+import { useKontekst } from "~/hooks/useKontekst.ts";
+import type { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
 
 interface KontekstConfig {
   icon: ComponentType<{ "aria-hidden"?: boolean; fontSize?: string }>;
   tekstKey: string;
 }
 
-const LANGUAGES: { code: DecoratorLocale; label: string }[] = [
-  { code: "nb", label: "Norsk" },
-  { code: "en", label: "English" },
-];
-
 function MaalformValg() {
   const { i18n } = useTranslation();
 
-  const handleChangeLanguage = async (code: DecoratorLocale) => {
+  const handleChangeLanguage = async (code: Language["code"]) => {
     await setParams({ language: code });
     await i18n.changeLanguage(code);
   };
@@ -43,7 +33,7 @@ function MaalformValg() {
   return (
     <HStack align="center" gap="2">
       <GlobeIcon aria-hidden fontSize="1.5rem" />
-      {LANGUAGES.map((lang) => (
+      {SUPPORTED_LANGUAGES.map((lang) => (
         <Button
           key={lang.code}
           onClick={() => handleChangeLanguage(lang.code)}
@@ -77,15 +67,9 @@ const KONTEKST_CONFIG: Record<
 
 export function KontekstVelger() {
   const { t } = useTranslation();
-  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  // Re-read kontekst on every render (triggered by location changes)
-  const kontekst = getRepresentasjonKontekst();
-
-  // Force re-render when location changes by using it
-  void location.pathname;
+  const kontekst = useKontekst();
 
   if (!kontekst) {
     return null;
@@ -123,11 +107,12 @@ export function KontekstVelger() {
     <>
       <HStack align="center" gap="2">
         {displayText && (
-          <span className="text-xl font-semibold" style={{ color: "#0067C5" }}>
+          <span className="text-xl font-semibold text-text-action">
             {displayText}
           </span>
         )}
         <Button
+          aria-label={t("kontekstVelger.byttKontekstAriaLabel")}
           onClick={() => setIsOpen(!isOpen)}
           ref={buttonRef}
           variant="secondary"

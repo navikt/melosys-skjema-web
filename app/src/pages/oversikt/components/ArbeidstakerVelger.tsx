@@ -49,7 +49,7 @@ const arbeidstakerSchema = z.object({
       message: "oversiktFelles.arbeidstakerFnrUgyldig",
     }),
   etternavn: z.string().refine((val) => val.trim().length > 0, {
-    message: "oversiktFelles.arbeidstakerEtternavnTom",
+    message: "oversiktFelles.arbeidstakerFulltNavnTom",
   }),
 });
 

@@ -32,6 +32,23 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
     }
   };
 
+  const getHerKanDu = () => {
+    switch (kontekst.representasjonstype) {
+      case "DEG_SELV": {
+        return t("oversiktDegSelv.herKanDu");
+      }
+      case "ARBEIDSGIVER": {
+        return t("oversiktArbeidsgiver.herKanDu");
+      }
+      case "RADGIVER": {
+        return t("oversiktRadgiver.herKanDu");
+      }
+      case "ANNEN_PERSON": {
+        return t("oversiktAnnenPerson.herKanDu");
+      }
+    }
+  };
+
   const getInfoBullets = (): string[] => {
     switch (kontekst.representasjonstype) {
       case "DEG_SELV": {
@@ -70,13 +87,7 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           {getTittel()}
         </Heading>
         <BodyShort size="small" spacing>
-          {kontekst.representasjonstype === "DEG_SELV"
-            ? t("oversiktDegSelv.herKanDu")
-            : kontekst.representasjonstype === "ARBEIDSGIVER"
-              ? t("oversiktArbeidsgiver.herKanDu")
-              : kontekst.representasjonstype === "RADGIVER"
-                ? t("oversiktRadgiver.herKanDu")
-                : t("oversiktAnnenPerson.herKanDu")}
+          {getHerKanDu()}
         </BodyShort>
         <ul className="list-disc pl-6 space-y-1">
           {getInfoBullets().map((bullet, index) => (

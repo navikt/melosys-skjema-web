@@ -1,20 +1,13 @@
 import { Heading, HStack } from "@navikt/ds-react";
-import { useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { KontekstVelger } from "~/components/KontekstVelger.tsx";
 import { MaalformVelger } from "~/components/MaalformVelger.tsx";
-import { getRepresentasjonKontekst } from "~/utils/sessionStorage.ts";
+import { useKontekst } from "~/hooks/useKontekst.ts";
 
 export function AppHeader() {
   const { t } = useTranslation();
-  const location = useLocation();
-
-  // Re-read kontekst on every render (triggered by location changes)
-  const kontekst = getRepresentasjonKontekst();
-
-  // Force re-render when location changes
-  void location.pathname;
+  const kontekst = useKontekst();
 
   return (
     <HStack align="center" justify="space-between">
