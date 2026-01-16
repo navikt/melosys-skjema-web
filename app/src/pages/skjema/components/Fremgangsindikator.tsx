@@ -1,8 +1,20 @@
 import { FormProgress } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+export type StegKey =
+  | "arbeidsgiverens-virksomhet-i-norge"
+  | "utenlandsoppdraget"
+  | "arbeidssted-i-utlandet"
+  | "arbeidstakerens-lonn"
+  | "tilleggsopplysninger"
+  | "vedlegg"
+  | "oppsummering"
+  | "arbeidssituasjon"
+  | "skatteforhold-og-inntekt"
+  | "familiemedlemmer";
+
 export interface StegRekkefolgeItem {
-  key: string;
+  key: StegKey;
   title: string;
   route: string;
 }
@@ -23,11 +35,13 @@ export const Fremgangsindikator = ({
     <FormProgress
       activeStep={aktivtSteg}
       className={className ? `col-span-2 ${className}` : "col-span-2"}
-      interactiveSteps={false}
+      interactiveSteps={true}
       totalSteps={stegRekkefolge.length}
     >
       {stegRekkefolge.map((step) => (
-        <FormProgress.Step key={step.key}>{t(step.title)}</FormProgress.Step>
+        <FormProgress.Step href={step.key} key={step.key}>
+          {t(step.title)}
+        </FormProgress.Step>
       ))}
     </FormProgress>
   );
