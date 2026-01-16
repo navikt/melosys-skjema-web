@@ -1,7 +1,9 @@
 import { z } from "zod";
 
+import { ArbeidsstedType } from "~/types/melosysSkjemaTypes.ts";
+
 export const omBordPaFlySchema = z.object({
-  arbeidsstedType: z.literal("OM_BORD_PA_FLY"),
+  arbeidsstedType: z.literal(ArbeidsstedType.OM_BORD_PA_FLY),
   omBordPaFly: z
     .object({
       hjemmebaseLand: z

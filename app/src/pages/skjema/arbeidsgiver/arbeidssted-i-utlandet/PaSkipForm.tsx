@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
+import { Farvann } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
@@ -63,17 +64,17 @@ export function PaSkipForm() {
             onChange={field.onChange}
             value={field.value ?? ""}
           >
-            <Radio value="INTERNASJONALT_FARVANN">
+            <Radio value={Farvann.INTERNASJONALT_FARVANN}>
               {t("arbeidsstedIUtlandetSteg.internasjonaltFarvann")}
             </Radio>
-            <Radio value="TERRITORIALFARVANN">
+            <Radio value={Farvann.TERRITORIALFARVANN}>
               {t("arbeidsstedIUtlandetSteg.territorialfarvann")}
             </Radio>
           </RadioGroup>
         )}
       />
 
-      {seilerI === "INTERNASJONALT_FARVANN" && (
+      {seilerI === Farvann.INTERNASJONALT_FARVANN && (
         <LandVelgerFormPart
           className="mt-4"
           formFieldName="paSkip.flaggland"
@@ -81,7 +82,7 @@ export function PaSkipForm() {
         />
       )}
 
-      {seilerI === "TERRITORIALFARVANN" && (
+      {seilerI === Farvann.TERRITORIALFARVANN && (
         <LandVelgerFormPart
           className="mt-4"
           formFieldName="paSkip.territorialfarvannLand"

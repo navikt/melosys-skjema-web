@@ -1,7 +1,9 @@
 import { z } from "zod";
 
+import { ArbeidsstedType, Farvann } from "~/types/melosysSkjemaTypes.ts";
+
 export const paSkipSchema = z.object({
-  arbeidsstedType: z.literal("PA_SKIP"),
+  arbeidsstedType: z.literal(ArbeidsstedType.PA_SKIP),
   paSkip: z
     .object({
       navnPaSkip: z
@@ -12,7 +14,7 @@ export const paSkipSchema = z.object({
           error: "arbeidsstedIUtlandetSteg.yrketTilArbeidstakerErPakrevd",
         })
         .min(1, "arbeidsstedIUtlandetSteg.yrketTilArbeidstakerErPakrevd"),
-      seilerI: z.enum(["INTERNASJONALT_FARVANN", "TERRITORIALFARVANN"], {
+      seilerI: z.enum(Farvann, {
         error: "arbeidsstedIUtlandetSteg.duMaVelgeHvorSkipetSeiler",
       }),
       // INTERNASJONALT_FARVANN field
@@ -22,7 +24,8 @@ export const paSkipSchema = z.object({
     })
     .refine(
       (data) =>
-        data.seilerI !== "INTERNASJONALT_FARVANN" || !!data.flaggland?.trim(),
+        data.seilerI !== Farvann.INTERNASJONALT_FARVANN ||
+        !!data.flaggland?.trim(),
       {
         message: "arbeidsstedIUtlandetSteg.flagglandErPakrevd",
         path: ["flaggland"],
@@ -30,7 +33,7 @@ export const paSkipSchema = z.object({
     )
     .refine(
       (data) =>
-        data.seilerI !== "TERRITORIALFARVANN" ||
+        data.seilerI !== Farvann.TERRITORIALFARVANN ||
         !!data.territorialfarvannLand?.trim(),
       {
         message: "arbeidsstedIUtlandetSteg.territorialfarvannLandErPakrevd",
@@ -43,10 +46,12 @@ export const paSkipSchema = z.object({
       seilerI: data.seilerI,
       // Clear INTERNASJONALT_FARVANN field when TERRITORIALFARVANN
       flaggland:
-        data.seilerI === "INTERNASJONALT_FARVANN" ? data.flaggland : undefined,
+        data.seilerI === Farvann.INTERNASJONALT_FARVANN
+          ? data.flaggland
+          : undefined,
       // Clear TERRITORIALFARVANN field when INTERNASJONALT_FARVANN
       territorialfarvannLand:
-        data.seilerI === "TERRITORIALFARVANN"
+        data.seilerI === Farvann.TERRITORIALFARVANN
           ? data.territorialfarvannLand
           : undefined,
     }))

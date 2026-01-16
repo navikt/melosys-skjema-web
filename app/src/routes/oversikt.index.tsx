@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { OversiktPage } from "~/pages/oversikt/OversiktPage.tsx";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
 
 export const Route = createFileRoute("/oversikt/")({
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/oversikt/")({
 
     // Redirect til velg rådgiverfirma hvis RADGIVER men ingen firma valgt
     if (
-      kontekst.representasjonstype === "RADGIVER" &&
+      kontekst.representasjonstype === Representasjonstype.RADGIVER &&
       !kontekst.radgiverfirma
     ) {
       throw redirect({ to: "/representasjon/velg-radgiverfirma" });

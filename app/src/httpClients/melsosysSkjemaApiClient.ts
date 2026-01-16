@@ -16,6 +16,7 @@ import {
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhet,
   PersonMedFullmaktDto,
+  Representasjonstype,
   SkatteforholdOgInntektDto,
   SkjemaInnsendtKvittering,
   TilleggsopplysningerDto,
@@ -433,7 +434,7 @@ async function fetchUtkast(
 
   // For RADGIVER må vi sende med rådgiverfirmaets orgnr
   if (
-    kontekst.representasjonstype === "RADGIVER" &&
+    kontekst.representasjonstype === Representasjonstype.RADGIVER &&
     kontekst.radgiverfirma?.orgnr
   ) {
     params.append("radgiverfirmaOrgnr", kontekst.radgiverfirma.orgnr);

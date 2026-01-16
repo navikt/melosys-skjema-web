@@ -58,7 +58,10 @@ const arbeidstakerSchema = z.object({
  * 1. Med fullmakt: Combobox for valg fra liste av personer med fullmakt
  * 2. Uten fullmakt: Manuell input av fnr/d-nr og etternavn med verifisering
  *
+ * @param onArbeidstakerValgt
+ * @param harFeil
  * @param visKunMedFullmakt - Hvis true, skjuler "uten fullmakt" seksjonen (brukes for ANNEN_PERSON)
+ * @param erAnnenPerson
  */
 export function ArbeidstakerVelger({
   onArbeidstakerValgt,

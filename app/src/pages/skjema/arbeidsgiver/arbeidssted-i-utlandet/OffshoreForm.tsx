@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
+import { TypeInnretning } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
@@ -44,10 +45,12 @@ export function OffshoreForm() {
             onChange={field.onChange}
             value={field.value ?? ""}
           >
-            <Radio value="PLATTFORM_ELLER_ANNEN_FAST_INNRETNING">
+            <Radio value={TypeInnretning.PLATTFORM_ELLER_ANNEN_FAST_INNRETNING}>
               {t("arbeidsstedIUtlandetSteg.plattformEllerFast")}
             </Radio>
-            <Radio value="BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING">
+            <Radio
+              value={TypeInnretning.BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING}
+            >
               {t("arbeidsstedIUtlandetSteg.boreskipEllerFlyttbar")}
             </Radio>
           </RadioGroup>

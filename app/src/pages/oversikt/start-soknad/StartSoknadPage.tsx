@@ -16,6 +16,7 @@ import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
+  Representasjonstype,
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
@@ -33,7 +34,7 @@ export function StartSoknadPage({
   // Burde ikke skje pga beforeLoad guard, men TypeScript vet ikke dette
   if (
     (!arbeidsgiver || !arbeidstaker) &&
-    kontekst.representasjonstype !== "DEG_SELV"
+    kontekst.representasjonstype !== Representasjonstype.DEG_SELV
   ) {
     return null;
   }

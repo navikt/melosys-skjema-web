@@ -1,6 +1,10 @@
 import { test } from "@playwright/test";
 
-import { SkjemaInnsendtKvittering } from "../../../../../src/types/melosysSkjemaTypes";
+import {
+  Representasjonstype,
+  SkjemaInnsendtKvittering,
+  SkjemaStatus,
+} from "../../../../../src/types/melosysSkjemaTypes";
 import { mockUserInfo } from "../../../fixtures/api-mocks";
 import { testUserInfo } from "../../../fixtures/test-data";
 import { KvitteringPage } from "../../../pages/skjema/kvittering/kvittering-page";
@@ -9,14 +13,14 @@ test.describe("Kvittering page", () => {
   test.beforeEach(async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
     // Set representation type in sessionStorage before navigation
-    await page.addInitScript(() => {
+    await page.addInitScript((repType) => {
       sessionStorage.setItem(
         "representasjonKontekst",
         JSON.stringify({
-          representasjonstype: "DEG_SELV",
+          representasjonstype: repType,
         }),
       );
-    });
+    }, Representasjonstype.DEG_SELV);
   });
 
   test("should display receipt after successful submission", async ({
@@ -25,7 +29,7 @@ test.describe("Kvittering page", () => {
     const skjemaId = "test-skjema-id";
     const kvittering: SkjemaInnsendtKvittering = {
       skjemaId: skjemaId,
-      status: "SENDT",
+      status: SkjemaStatus.SENDT,
       referanseId: "ABX1244",
     };
 

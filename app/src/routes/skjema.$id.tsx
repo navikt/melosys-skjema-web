@@ -1,6 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { UtsendtArbeidstakerMetadata } from "~/types/melosysSkjemaTypes.ts";
+import {
+  Representasjonstype,
+  UtsendtArbeidstakerMetadata,
+} from "~/types/melosysSkjemaTypes.ts";
 
 const API_PROXY_URL = "/api";
 
@@ -30,8 +33,8 @@ export const Route = createFileRoute("/skjema/$id")({
     // DEG_SELV og ANNEN_PERSON → arbeidstaker
     // ARBEIDSGIVER og RADGIVER → arbeidsgiver
     const skjemaType =
-      metadata.representasjonstype === "DEG_SELV" ||
-      metadata.representasjonstype === "ANNEN_PERSON"
+      metadata.representasjonstype === Representasjonstype.DEG_SELV ||
+      metadata.representasjonstype === Representasjonstype.ANNEN_PERSON
         ? "arbeidstaker"
         : "arbeidsgiver";
 

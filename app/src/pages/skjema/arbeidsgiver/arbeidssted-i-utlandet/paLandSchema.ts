@@ -1,10 +1,15 @@
 import { z } from "zod";
 
+import {
+  ArbeidsstedType,
+  FastEllerVekslendeArbeidssted,
+} from "~/types/melosysSkjemaTypes.ts";
+
 export const paLandSchema = z.object({
-  arbeidsstedType: z.literal("PA_LAND"),
+  arbeidsstedType: z.literal(ArbeidsstedType.PA_LAND),
   paLand: z
     .object({
-      fastEllerVekslendeArbeidssted: z.enum(["FAST", "VEKSLENDE"], {
+      fastEllerVekslendeArbeidssted: z.enum(FastEllerVekslendeArbeidssted, {
         error: "arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende",
       }),
       // FAST fields
@@ -24,7 +29,8 @@ export const paLandSchema = z.object({
     })
     .refine(
       (data) =>
-        data.fastEllerVekslendeArbeidssted !== "FAST" ||
+        data.fastEllerVekslendeArbeidssted !==
+          FastEllerVekslendeArbeidssted.FAST ||
         !!data.fastArbeidssted?.vegadresse?.trim(),
       {
         message: "arbeidsstedIUtlandetSteg.vegadresseErPakrevd",
@@ -33,7 +39,8 @@ export const paLandSchema = z.object({
     )
     .refine(
       (data) =>
-        data.fastEllerVekslendeArbeidssted !== "FAST" ||
+        data.fastEllerVekslendeArbeidssted !==
+          FastEllerVekslendeArbeidssted.FAST ||
         !!data.fastArbeidssted?.nummer?.trim(),
       {
         message: "arbeidsstedIUtlandetSteg.nummerErPakrevd",
@@ -42,7 +49,8 @@ export const paLandSchema = z.object({
     )
     .refine(
       (data) =>
-        data.fastEllerVekslendeArbeidssted !== "FAST" ||
+        data.fastEllerVekslendeArbeidssted !==
+          FastEllerVekslendeArbeidssted.FAST ||
         !!data.fastArbeidssted?.postkode?.trim(),
       {
         message: "arbeidsstedIUtlandetSteg.postkodeErPakrevd",
@@ -51,7 +59,8 @@ export const paLandSchema = z.object({
     )
     .refine(
       (data) =>
-        data.fastEllerVekslendeArbeidssted !== "FAST" ||
+        data.fastEllerVekslendeArbeidssted !==
+          FastEllerVekslendeArbeidssted.FAST ||
         !!data.fastArbeidssted?.bySted?.trim(),
       {
         message: "arbeidsstedIUtlandetSteg.byStedErPakrevd",
@@ -60,7 +69,8 @@ export const paLandSchema = z.object({
     )
     .refine(
       (data) =>
-        data.fastEllerVekslendeArbeidssted !== "FAST" ||
+        data.fastEllerVekslendeArbeidssted !==
+          FastEllerVekslendeArbeidssted.FAST ||
         data.erHjemmekontor !== undefined,
       {
         message: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
@@ -69,7 +79,8 @@ export const paLandSchema = z.object({
     )
     .refine(
       (data) =>
-        data.fastEllerVekslendeArbeidssted !== "VEKSLENDE" ||
+        data.fastEllerVekslendeArbeidssted !==
+          FastEllerVekslendeArbeidssted.VEKSLENDE ||
         !!data.beskrivelseVekslende?.trim(),
       {
         message: "arbeidsstedIUtlandetSteg.beskrivelseErPakrevd",
@@ -78,7 +89,8 @@ export const paLandSchema = z.object({
     )
     .refine(
       (data) =>
-        data.fastEllerVekslendeArbeidssted !== "VEKSLENDE" ||
+        data.fastEllerVekslendeArbeidssted !==
+          FastEllerVekslendeArbeidssted.VEKSLENDE ||
         data.erHjemmekontor !== undefined,
       {
         message: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
@@ -89,13 +101,15 @@ export const paLandSchema = z.object({
       fastEllerVekslendeArbeidssted: data.fastEllerVekslendeArbeidssted,
       // Clear FAST fields when VEKSLENDE
       fastArbeidssted:
-        data.fastEllerVekslendeArbeidssted === "FAST"
+        data.fastEllerVekslendeArbeidssted ===
+        FastEllerVekslendeArbeidssted.FAST
           ? data.fastArbeidssted
           : undefined,
       erHjemmekontor: data.erHjemmekontor,
       // Clear VEKSLENDE fields when FAST
       beskrivelseVekslende:
-        data.fastEllerVekslendeArbeidssted === "VEKSLENDE"
+        data.fastEllerVekslendeArbeidssted ===
+        FastEllerVekslendeArbeidssted.VEKSLENDE
           ? data.beskrivelseVekslende
           : undefined,
     }))

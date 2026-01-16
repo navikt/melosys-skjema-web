@@ -14,7 +14,10 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { ArbeidsstedIUtlandetDto } from "~/types/melosysSkjemaTypes.ts";
+import {
+  ArbeidsstedIUtlandetDto,
+  ArbeidsstedType,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
@@ -29,10 +32,22 @@ import { PaSkipForm } from "./PaSkipForm.tsx";
 export const stepKey = "arbeidssted-i-utlandet";
 
 export const arbeidsstedTypeOptions = [
-  { value: "PA_LAND", labelKey: "arbeidsstedIUtlandetSteg.paLand" },
-  { value: "OFFSHORE", labelKey: "arbeidsstedIUtlandetSteg.offshore" },
-  { value: "PA_SKIP", labelKey: "arbeidsstedIUtlandetSteg.paSkip" },
-  { value: "OM_BORD_PA_FLY", labelKey: "arbeidsstedIUtlandetSteg.omBordPaFly" },
+  {
+    value: ArbeidsstedType.PA_LAND,
+    labelKey: "arbeidsstedIUtlandetSteg.paLand",
+  },
+  {
+    value: ArbeidsstedType.OFFSHORE,
+    labelKey: "arbeidsstedIUtlandetSteg.offshore",
+  },
+  {
+    value: ArbeidsstedType.PA_SKIP,
+    labelKey: "arbeidsstedIUtlandetSteg.paSkip",
+  },
+  {
+    value: ArbeidsstedType.OM_BORD_PA_FLY,
+    labelKey: "arbeidsstedIUtlandetSteg.omBordPaFly",
+  },
 ];
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
@@ -113,13 +128,15 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             ))}
           </Select>
 
-          {arbeidsstedType === "PA_LAND" && <PaLandForm />}
+          {arbeidsstedType === ArbeidsstedType.PA_LAND && <PaLandForm />}
 
-          {arbeidsstedType === "OFFSHORE" && <OffshoreForm />}
+          {arbeidsstedType === ArbeidsstedType.OFFSHORE && <OffshoreForm />}
 
-          {arbeidsstedType === "PA_SKIP" && <PaSkipForm />}
+          {arbeidsstedType === ArbeidsstedType.PA_SKIP && <PaSkipForm />}
 
-          {arbeidsstedType === "OM_BORD_PA_FLY" && <OmBordPaFlyForm />}
+          {arbeidsstedType === ArbeidsstedType.OM_BORD_PA_FLY && (
+            <OmBordPaFlyForm />
+          )}
         </SkjemaSteg>
       </form>
     </FormProvider>

@@ -17,6 +17,9 @@ import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient
 import {
   HentInnsendteSoknaderRequest,
   OpprettSoknadMedKontekstRequest,
+  Representasjonstype,
+  SorteringsFelt,
+  Sorteringsretning,
 } from "~/types/melosysSkjemaTypes.ts";
 
 interface InnsendteSoknaderTabellProps {
@@ -34,12 +37,6 @@ const formatDato = (dato: string) => {
   });
 };
 
-type SorteringsFelt =
-  | "ARBEIDSGIVER"
-  | "ARBEIDSTAKER"
-  | "INNSENDT_DATO"
-  | "STATUS";
-
 /**
  * Tabell over innsendte søknader med søk, sortering og paginering.
  */
@@ -53,8 +50,7 @@ export function InnsendteSoknaderTabell({
   const [aktivtSok, setAktivtSok] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState<
-    | { orderBy: SorteringsFelt; direction: "ascending" | "descending" }
-    | undefined
+    { orderBy: SorteringsFelt; direction: Sorteringsretning } | undefined
   >();
 
   // Håndter søk når knapp trykkes eller Enter trykkes
@@ -79,12 +75,7 @@ export function InnsendteSoknaderTabell({
     antall: ANTALL_PER_SIDE,
     sok: aktivtSok || undefined,
     sortering: sort?.orderBy,
-    retning:
-      sort?.direction === "ascending"
-        ? "ASC"
-        : sort?.direction === "descending"
-          ? "DESC"
-          : undefined,
+    retning: sort?.direction ?? undefined,
     representasjonstype: kontekst.representasjonstype,
     radgiverfirmaOrgnr: kontekst.radgiverfirma?.orgnr,
   };
@@ -104,9 +95,9 @@ export function InnsendteSoknaderTabell({
       orderBy: sorteringsFelt,
       direction:
         prevSort?.orderBy === sorteringsFelt &&
-        prevSort.direction === "ascending"
-          ? "descending"
-          : "ascending",
+        prevSort.direction === Sorteringsretning.ASC
+          ? Sorteringsretning.DESC
+          : Sorteringsretning.ASC,
     }));
     setCurrentPage(1); // Reset til side 1 når sortering endres
   }, []);
@@ -201,14 +192,18 @@ export function InnsendteSoknaderTabell({
             sort
               ? {
                   orderBy: sort.orderBy.toLowerCase(),
-                  direction: sort.direction,
+                  direction:
+                    sort.direction === Sorteringsretning.ASC
+                      ? "ascending"
+                      : "descending",
                 }
               : undefined
           }
         >
           <Table.Header>
             <Table.Row>
-              {kontekst.representasjonstype === "ANNEN_PERSON" ? (
+              {kontekst.representasjonstype ===
+              Representasjonstype.ANNEN_PERSON ? (
                 <>
                   <Table.ColumnHeader sortKey="innsendt_dato" sortable>
                     {t("oversiktFelles.historikkKolonneInnsendt")}
@@ -250,7 +245,8 @@ export function InnsendteSoknaderTabell({
                   </BodyShort>
                 </Table.DataCell>
               </Table.Row>
-            ) : kontekst.representasjonstype === "ANNEN_PERSON" ? (
+            ) : kontekst.representasjonstype ===
+              Representasjonstype.ANNEN_PERSON ? (
               data.soknader.map((soknad) => (
                 <Table.Row key={soknad.id}>
                   <Table.DataCell>

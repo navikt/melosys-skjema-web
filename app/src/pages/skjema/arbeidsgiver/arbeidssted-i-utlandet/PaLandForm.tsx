@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
@@ -36,17 +37,17 @@ export function PaLandForm() {
             onChange={field.onChange}
             value={field.value ?? ""}
           >
-            <Radio size="small" value="FAST">
+            <Radio size="small" value={FastEllerVekslendeArbeidssted.FAST}>
               {t("arbeidsstedIUtlandetSteg.fastArbeidssted")}
             </Radio>
-            <Radio size="small" value="VEKSLENDE">
+            <Radio size="small" value={FastEllerVekslendeArbeidssted.VEKSLENDE}>
               {t("arbeidsstedIUtlandetSteg.vekslerOfte")}
             </Radio>
           </RadioGroup>
         )}
       />
 
-      {fastEllerVekslendeArbeidssted === "FAST" && (
+      {fastEllerVekslendeArbeidssted === FastEllerVekslendeArbeidssted.FAST && (
         <div className="mt-4">
           <Controller
             control={control}
@@ -103,7 +104,8 @@ export function PaLandForm() {
         </div>
       )}
 
-      {fastEllerVekslendeArbeidssted === "VEKSLENDE" && (
+      {fastEllerVekslendeArbeidssted ===
+        FastEllerVekslendeArbeidssted.VEKSLENDE && (
         <Controller
           control={control}
           name="paLand.beskrivelseVekslende"

@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 import { RepresentasjonVelger } from "~/components/RepresentasjonVelger.tsx";
 import { useKontekst } from "~/hooks/useKontekst.ts";
-import type { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
 
 interface KontekstConfig {
@@ -48,18 +48,18 @@ function MaalformValg() {
 }
 
 const KONTEKST_CONFIG: Record<
-  Exclude<Representasjonstype, "DEG_SELV">,
+  Exclude<Representasjonstype, Representasjonstype.DEG_SELV>,
   KontekstConfig
 > = {
-  ARBEIDSGIVER: {
+  [Representasjonstype.ARBEIDSGIVER]: {
     icon: BriefcaseIcon,
     tekstKey: "kontekstVelger.arbeidsgiver",
   },
-  RADGIVER: {
+  [Representasjonstype.RADGIVER]: {
     icon: HandshakeIcon,
     tekstKey: "kontekstVelger.radgiver",
   },
-  ANNEN_PERSON: {
+  [Representasjonstype.ANNEN_PERSON]: {
     icon: PersonGroupIcon,
     tekstKey: "kontekstVelger.annenPerson",
   },
@@ -75,7 +75,8 @@ export function KontekstVelger() {
     return null;
   }
 
-  const isDegSelv = kontekst.representasjonstype === "DEG_SELV";
+  const isDegSelv =
+    kontekst.representasjonstype === Representasjonstype.DEG_SELV;
 
   const getDisplayText = () => {
     if (isDegSelv) {
@@ -83,9 +84,15 @@ export function KontekstVelger() {
     }
     const config =
       KONTEKST_CONFIG[
-        kontekst.representasjonstype as Exclude<Representasjonstype, "DEG_SELV">
+        kontekst.representasjonstype as Exclude<
+          Representasjonstype,
+          Representasjonstype.DEG_SELV
+        >
       ];
-    if (kontekst.representasjonstype === "RADGIVER" && kontekst.radgiverfirma) {
+    if (
+      kontekst.representasjonstype === Representasjonstype.RADGIVER &&
+      kontekst.radgiverfirma
+    ) {
       return kontekst.radgiverfirma.navn;
     }
     return t(config.tekstKey);
@@ -96,7 +103,10 @@ export function KontekstVelger() {
       return PersonCircleIcon;
     }
     return KONTEKST_CONFIG[
-      kontekst.representasjonstype as Exclude<Representasjonstype, "DEG_SELV">
+      kontekst.representasjonstype as Exclude<
+        Representasjonstype,
+        Representasjonstype.DEG_SELV
+      >
     ].icon;
   };
 
