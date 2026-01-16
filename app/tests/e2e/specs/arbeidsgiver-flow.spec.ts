@@ -3,7 +3,9 @@ import { test } from "@playwright/test";
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsstedIUtlandetDto,
+  ArbeidsstedType,
   ArbeidstakerensLonnDto,
+  FastEllerVekslendeArbeidssted,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
 } from "../../../src/types/melosysSkjemaTypes";
@@ -134,7 +136,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
 
     // Velg "På land" som arbeidssted type
     await arbeidsstedIUtlandetStegPage.arbeidsstedTypeSelect.selectOption(
-      "PA_LAND",
+      ArbeidsstedType.PA_LAND,
     );
 
     // Velg fast arbeidssted
@@ -151,9 +153,9 @@ test.describe("Arbeidsgiver komplett flyt", () => {
 
     // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedArbeidsstedIUtlandetPayload: ArbeidsstedIUtlandetDto = {
-      arbeidsstedType: "PA_LAND",
+      arbeidsstedType: ArbeidsstedType.PA_LAND,
       paLand: {
-        fastEllerVekslendeArbeidssted: "FAST",
+        fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
         fastArbeidssted: {
           vegadresse: "Storgata",
           nummer: "1",
@@ -270,9 +272,9 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     };
 
     const arbeidsstedIUtlandetData: ArbeidsstedIUtlandetDto = {
-      arbeidsstedType: "PA_LAND",
+      arbeidsstedType: ArbeidsstedType.PA_LAND,
       paLand: {
-        fastEllerVekslendeArbeidssted: "FAST",
+        fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
         fastArbeidssted: {
           vegadresse: "Storgata",
           nummer: "1",

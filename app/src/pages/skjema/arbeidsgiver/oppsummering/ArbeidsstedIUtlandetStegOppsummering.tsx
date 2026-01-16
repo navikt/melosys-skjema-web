@@ -3,10 +3,13 @@ import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
 import {
+  Farvann,
+  FastEllerVekslendeArbeidssted,
   OffshoreDto,
   OmBordPaFlyDto,
   PaLandDto,
   PaSkipDto,
+  TypeInnretning,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
@@ -88,7 +91,8 @@ function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
             {t("arbeidsstedIUtlandetSteg.harFastArbeidsstedEllerVeksler")}
           </FormSummary.Label>
           <FormSummary.Value>
-            {paLand.fastEllerVekslendeArbeidssted === "FAST"
+            {paLand.fastEllerVekslendeArbeidssted ===
+            FastEllerVekslendeArbeidssted.FAST
               ? t("arbeidsstedIUtlandetSteg.fastArbeidssted")
               : t("arbeidsstedIUtlandetSteg.vekslerOfte")}
           </FormSummary.Value>
@@ -178,7 +182,8 @@ function OffshoreOppsummering({ offshore }: { offshore: OffshoreDto }) {
             {t("arbeidsstedIUtlandetSteg.hvilkenTypeInnretning")}
           </FormSummary.Label>
           <FormSummary.Value>
-            {offshore.typeInnretning === "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING"
+            {offshore.typeInnretning ===
+            TypeInnretning.PLATTFORM_ELLER_ANNEN_FAST_INNRETNING
               ? t("arbeidsstedIUtlandetSteg.plattformEllerFast")
               : t("arbeidsstedIUtlandetSteg.boreskipEllerFlyttbar")}
           </FormSummary.Value>
@@ -228,7 +233,7 @@ function PaSkipOppsummering({ paSkip }: { paSkip: PaSkipDto }) {
             {t("arbeidsstedIUtlandetSteg.hvorSkalSkipetSeile")}
           </FormSummary.Label>
           <FormSummary.Value>
-            {paSkip.seilerI === "INTERNASJONALT_FARVANN"
+            {paSkip.seilerI === Farvann.INTERNASJONALT_FARVANN
               ? t("arbeidsstedIUtlandetSteg.internasjonaltFarvann")
               : t("arbeidsstedIUtlandetSteg.territorialfarvann")}
           </FormSummary.Value>

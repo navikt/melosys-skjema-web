@@ -9,24 +9,102 @@
 
 type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
+export enum TypeInnretning {
+  PLATTFORM_ELLER_ANNEN_FAST_INNRETNING = "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING",
+  BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING = "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING",
+}
+
+export enum FastEllerVekslendeArbeidssted {
+  FAST = "FAST",
+  VEKSLENDE = "VEKSLENDE",
+}
+
+export enum Farvann {
+  INTERNASJONALT_FARVANN = "INTERNASJONALT_FARVANN",
+  TERRITORIALFARVANN = "TERRITORIALFARVANN",
+}
+
+export enum ArbeidsstedType {
+  PA_LAND = "PA_LAND",
+  OFFSHORE = "OFFSHORE",
+  PA_SKIP = "PA_SKIP",
+  OM_BORD_PA_FLY = "OM_BORD_PA_FLY",
+}
+
+export enum LandKode {
+  AT = "AT",
+  AX = "AX",
+  BE = "BE",
+  BG = "BG",
+  CH = "CH",
+  CY = "CY",
+  CZ = "CZ",
+  DE = "DE",
+  DK = "DK",
+  EE = "EE",
+  ES = "ES",
+  FI = "FI",
+  FO = "FO",
+  FR = "FR",
+  GB = "GB",
+  GL = "GL",
+  GR = "GR",
+  HR = "HR",
+  HU = "HU",
+  IE = "IE",
+  IS = "IS",
+  IT = "IT",
+  LI = "LI",
+  LT = "LT",
+  LU = "LU",
+  LV = "LV",
+  MT = "MT",
+  NL = "NL",
+  PL = "PL",
+  PT = "PT",
+  RO = "RO",
+  SE = "SE",
+  SI = "SI",
+  SJ = "SJ",
+  SK = "SK",
+}
+
+export enum Sorteringsretning {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+export enum SorteringsFelt {
+  ARBEIDSGIVER = "ARBEIDSGIVER",
+  ARBEIDSTAKER = "ARBEIDSTAKER",
+  INNSENDT_DATO = "INNSENDT_DATO",
+  STATUS = "STATUS",
+}
+
+export enum Representasjonstype {
+  DEG_SELV = "DEG_SELV",
+  ARBEIDSGIVER = "ARBEIDSGIVER",
+  RADGIVER = "RADGIVER",
+  ANNEN_PERSON = "ANNEN_PERSON",
+}
+
+export enum SkjemaStatus {
+  UTKAST = "UTKAST",
+  SENDT = "SENDT",
+}
+
 export interface Organisasjon {
   type: string;
-  organisasjonsnummer: string;
   navn?: Navn;
+  organisasjonsnummer: string;
 }
 
 export interface SkjemaInnsendtKvittering {
   /** @format uuid */
   skjemaId: string;
   referanseId: string;
-  status: "UTKAST" | "SENDT";
+  status: SkjemaStatus;
 }
-
-export type Representasjonstype =
-  | "DEG_SELV"
-  | "ARBEIDSGIVER"
-  | "RADGIVER"
-  | "ANNEN_PERSON";
 
 export interface OpprettSoknadMedKontekstRequest {
   representasjonstype: Representasjonstype;
@@ -52,7 +130,7 @@ export interface SimpleOrganisasjonDto {
 export interface OpprettSoknadMedKontekstResponse {
   /** @format uuid */
   id: string;
-  status: "UTKAST" | "SENDT";
+  status: SkjemaStatus;
 }
 
 export interface HentInnsendteSoknaderRequest {
@@ -68,8 +146,8 @@ export interface HentInnsendteSoknaderRequest {
    */
   antall: number;
   sok?: string;
-  sortering?: "ARBEIDSGIVER" | "ARBEIDSTAKER" | "INNSENDT_DATO" | "STATUS";
-  retning?: "ASC" | "DESC";
+  sortering?: SorteringsFelt;
+  retning?: Sorteringsretning;
   representasjonstype: Representasjonstype;
   radgiverfirmaOrgnr?: string;
 }
@@ -84,7 +162,7 @@ export interface InnsendtSoknadOversiktDto {
   arbeidstakerFnrMaskert?: string;
   /** @format date-time */
   innsendtDato: string;
-  status: "UTKAST" | "SENDT";
+  status: SkjemaStatus;
   harPdf: boolean;
 }
 
@@ -106,7 +184,7 @@ export interface PeriodeDto {
 }
 
 export interface UtenlandsoppdragetArbeidstakersDelDto {
-  utsendelsesLand: string;
+  utsendelsesLand: LandKode;
   utsendelsePeriode: PeriodeDto;
 }
 
@@ -129,7 +207,7 @@ export interface ArbeidstakersSkjemaDto {
   /** @format uuid */
   id: string;
   fnr: string;
-  status: "UTKAST" | "SENDT";
+  status: SkjemaStatus;
   data: ArbeidstakersSkjemaDataDto;
 }
 
@@ -183,7 +261,7 @@ export interface UtenlandskVirksomhet {
 }
 
 export interface UtenlandsoppdragetDto {
-  utsendelseLand: string;
+  utsendelseLand: LandKode;
   arbeidstakerUtsendelsePeriode: PeriodeDto;
   arbeidsgiverHarOppdragILandet: boolean;
   arbeidstakerBleAnsattForUtenlandsoppdraget: boolean;
@@ -213,12 +291,12 @@ export interface ArbeidsgiversSkjemaDto {
   /** @format uuid */
   id: string;
   orgnr: string;
-  status: "UTKAST" | "SENDT";
+  status: SkjemaStatus;
   data: ArbeidsgiversSkjemaDataDto;
 }
 
 export interface ArbeidsstedIUtlandetDto {
-  arbeidsstedType: "PA_LAND" | "OFFSHORE" | "PA_SKIP" | "OM_BORD_PA_FLY";
+  arbeidsstedType: ArbeidsstedType;
   paLand?: PaLandDto;
   offshore?: OffshoreDto;
   paSkip?: PaSkipDto;
@@ -232,22 +310,20 @@ export interface ArbeidstakerensLonnDto {
 
 export interface OffshoreDto {
   navnPaInnretning: string;
-  typeInnretning:
-    | "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING"
-    | "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING";
-  sokkelLand: string;
+  typeInnretning: TypeInnretning;
+  sokkelLand: LandKode;
 }
 
 export interface OmBordPaFlyDto {
-  hjemmebaseLand: string;
+  hjemmebaseLand: LandKode;
   hjemmebaseNavn: string;
   erVanligHjemmebase: boolean;
-  vanligHjemmebaseLand?: string;
+  vanligHjemmebaseLand?: LandKode;
   vanligHjemmebaseNavn?: string;
 }
 
 export interface PaLandDto {
-  fastEllerVekslendeArbeidssted: "FAST" | "VEKSLENDE";
+  fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted;
   fastArbeidssted?: PaLandFastArbeidsstedDto;
   beskrivelseVekslende?: string;
   erHjemmekontor: boolean;
@@ -263,9 +339,9 @@ export interface PaLandFastArbeidsstedDto {
 export interface PaSkipDto {
   navnPaSkip: string;
   yrketTilArbeidstaker: string;
-  seilerI: "INTERNASJONALT_FARVANN" | "TERRITORIALFARVANN";
-  flaggland?: string;
-  territorialfarvannLand?: string;
+  seilerI: Farvann;
+  flaggland?: LandKode;
+  territorialfarvannLand?: LandKode;
 }
 
 export interface VerifiserPersonRequest {
@@ -311,7 +387,7 @@ export interface UtkastOversiktDto {
   opprettetDato: string;
   /** @format date-time */
   sistEndretDato: string;
-  status: "UTKAST" | "SENDT";
+  status: SkjemaStatus;
 }
 
 export interface Fullmakt {

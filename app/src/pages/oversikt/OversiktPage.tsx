@@ -6,7 +6,10 @@ import {
   SoknadStarter,
   UtkastListe,
 } from "~/pages/oversikt/components";
-import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
+import {
+  OpprettSoknadMedKontekstRequest,
+  Representasjonstype,
+} from "~/types/melosysSkjemaTypes.ts";
 
 interface OversiktPageProps {
   kontekst: OpprettSoknadMedKontekstRequest;
@@ -17,16 +20,16 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
 
   const getTittel = () => {
     switch (kontekst.representasjonstype) {
-      case "DEG_SELV": {
+      case Representasjonstype.DEG_SELV: {
         return t("oversiktDegSelv.tittel");
       }
-      case "ARBEIDSGIVER": {
+      case Representasjonstype.ARBEIDSGIVER: {
         return t("oversiktArbeidsgiver.tittel");
       }
-      case "RADGIVER": {
+      case Representasjonstype.RADGIVER: {
         return t("oversiktRadgiver.tittel");
       }
-      case "ANNEN_PERSON": {
+      case Representasjonstype.ANNEN_PERSON: {
         return t("oversiktAnnenPerson.tittel");
       }
     }
@@ -34,16 +37,16 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
 
   const getHerKanDu = () => {
     switch (kontekst.representasjonstype) {
-      case "DEG_SELV": {
+      case Representasjonstype.DEG_SELV: {
         return t("oversiktDegSelv.herKanDu");
       }
-      case "ARBEIDSGIVER": {
+      case Representasjonstype.ARBEIDSGIVER: {
         return t("oversiktArbeidsgiver.herKanDu");
       }
-      case "RADGIVER": {
+      case Representasjonstype.RADGIVER: {
         return t("oversiktRadgiver.herKanDu");
       }
-      case "ANNEN_PERSON": {
+      case Representasjonstype.ANNEN_PERSON: {
         return t("oversiktAnnenPerson.herKanDu");
       }
     }
@@ -51,27 +54,27 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
 
   const getInfoBullets = (): string[] => {
     switch (kontekst.representasjonstype) {
-      case "DEG_SELV": {
+      case Representasjonstype.DEG_SELV: {
         return [
           t("oversiktDegSelv.infoBullet1"),
           t("oversiktDegSelv.infoBullet2"),
         ];
       }
-      case "ARBEIDSGIVER": {
+      case Representasjonstype.ARBEIDSGIVER: {
         return [
           t("oversiktArbeidsgiver.infoBullet1"),
           t("oversiktArbeidsgiver.infoBullet2"),
           t("oversiktArbeidsgiver.infoBullet3"),
         ];
       }
-      case "RADGIVER": {
+      case Representasjonstype.RADGIVER: {
         return [
           t("oversiktRadgiver.infoBullet1"),
           t("oversiktRadgiver.infoBullet2"),
           t("oversiktRadgiver.infoBullet3"),
         ];
       }
-      case "ANNEN_PERSON": {
+      case Representasjonstype.ANNEN_PERSON: {
         return [
           t("oversiktAnnenPerson.infoBullet1"),
           t("oversiktAnnenPerson.infoBullet2"),

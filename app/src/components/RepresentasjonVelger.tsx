@@ -10,7 +10,7 @@ import { useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import {
   clearRepresentasjonKontekst,
   setRepresentasjonKontekst,
@@ -58,22 +58,22 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
 
 const REPRESENTATION_OPTIONS: RepresentationOption[] = [
   {
-    type: "DEG_SELV",
+    type: Representasjonstype.DEG_SELV,
     icon: PersonCircleIcon,
     labelKey: "landingsside.degSelv",
   },
   {
-    type: "ARBEIDSGIVER",
+    type: Representasjonstype.ARBEIDSGIVER,
     icon: BriefcaseIcon,
     labelKey: "landingsside.dinArbeidsgiver",
   },
   {
-    type: "RADGIVER",
+    type: Representasjonstype.RADGIVER,
     icon: HandshakeIcon,
     labelKey: "landingsside.enArbeidsgiverSomRadgiver",
   },
   {
-    type: "ANNEN_PERSON",
+    type: Representasjonstype.ANNEN_PERSON,
     icon: PersonGroupIcon,
     labelKey: "landingsside.annenPerson",
   },
@@ -102,7 +102,7 @@ export function RepresentasjonVelger({
 
     onVelg?.();
 
-    if (representasjonstype === "RADGIVER") {
+    if (representasjonstype === Representasjonstype.RADGIVER) {
       void navigate({ to: "/representasjon/velg-radgiverfirma" });
     } else {
       void navigate({ to: "/oversikt" });

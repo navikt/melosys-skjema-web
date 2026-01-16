@@ -3,6 +3,7 @@ import { idnr } from "@navikt/fnrvalidator";
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
+  Representasjonstype,
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
@@ -31,7 +32,8 @@ export function validerSoknadKontekst(
 
   // Arbeidstaker er påkrevd for alle unntatt DEG_SELV (settes automatisk)
   const manglerArbeidstaker =
-    kontekst.representasjonstype !== "DEG_SELV" && !arbeidstaker;
+    kontekst.representasjonstype !== Representasjonstype.DEG_SELV &&
+    !arbeidstaker;
 
   return {
     gyldig: !manglerArbeidsgiver && !manglerArbeidstaker,

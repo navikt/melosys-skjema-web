@@ -14,6 +14,7 @@ import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   OpprettSoknadMedKontekstRequest,
+  Representasjonstype,
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
@@ -40,8 +41,8 @@ export function ArbeidsgiverVelger({
   const hasAutoSelectedRef = useRef(false);
 
   const skalHenteArbeidsgivere =
-    kontekst.representasjonstype === "RADGIVER" ||
-    kontekst.representasjonstype === "ARBEIDSGIVER";
+    kontekst.representasjonstype === Representasjonstype.RADGIVER ||
+    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER;
 
   /**
    * Eager loading: Henter arbeidsgivere fra Altinn for både RADGIVER og ARBEIDSGIVER
@@ -62,7 +63,7 @@ export function ArbeidsgiverVelger({
    * som en event handler (callback) heller enn som en transformasjon.
    */
   if (
-    kontekst.representasjonstype === "ARBEIDSGIVER" &&
+    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
     arbeidsgivere?.length === 1 &&
     !valgtArbeidsgiver &&
     !isLoading &&
@@ -83,11 +84,11 @@ export function ArbeidsgiverVelger({
   }
 
   const skalSokeEtterArbeidsgiver =
-    kontekst.representasjonstype === "DEG_SELV" ||
-    kontekst.representasjonstype === "ANNEN_PERSON";
+    kontekst.representasjonstype === Representasjonstype.DEG_SELV ||
+    kontekst.representasjonstype === Representasjonstype.ANNEN_PERSON;
 
   const skalViseReadonly =
-    kontekst.representasjonstype === "ARBEIDSGIVER" &&
+    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
     arbeidsgivere?.length === 1 &&
     !!valgtArbeidsgiver;
 
@@ -112,13 +113,13 @@ export function ArbeidsgiverVelger({
 
   return (
     <div>
-      {kontekst.representasjonstype !== "DEG_SELV" && (
+      {kontekst.representasjonstype !== Representasjonstype.DEG_SELV && (
         <Heading level="3" size="medium" spacing>
           {t("oversiktFelles.arbeidsgiverTittel")}
         </Heading>
       )}
 
-      {kontekst.representasjonstype === "ARBEIDSGIVER" &&
+      {kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
       isLoading &&
       !valgtArbeidsgiver ? (
         <Loader size="medium" title={t("felles.laster")} />

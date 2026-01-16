@@ -16,6 +16,7 @@ import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad.ts
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
+  Representasjonstype,
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { validerSoknadKontekst } from "~/utils/valideringUtils.ts";
@@ -49,7 +50,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   // For DEG_SELV er arbeidstaker alltid innlogget bruker, beregnes direkte
   // For andre typer brukes valgtArbeidstaker fra state
   const effektivArbeidstaker =
-    kontekst.representasjonstype === "DEG_SELV" && userInfo
+    kontekst.representasjonstype === Representasjonstype.DEG_SELV && userInfo
       ? {
           fnr: userInfo.userId,
           etternavn: userInfo.name,
@@ -140,25 +141,28 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
       <VStack gap="6">
         <div>
           <Heading level="2" size="medium" spacing>
-            {kontekst.representasjonstype === "DEG_SELV"
+            {kontekst.representasjonstype === Representasjonstype.DEG_SELV
               ? t("oversiktFelles.soknadStarterTittelDegSelv")
-              : kontekst.representasjonstype === "ANNEN_PERSON"
+              : kontekst.representasjonstype ===
+                  Representasjonstype.ANNEN_PERSON
                 ? t("oversiktFelles.soknadStarterTittelAnnenPerson")
                 : t("oversiktFelles.soknadStarterTittel")}
           </Heading>
-          {kontekst.representasjonstype === "ANNEN_PERSON" && (
+          {kontekst.representasjonstype ===
+            Representasjonstype.ANNEN_PERSON && (
             <BodyLong spacing>
               {t("oversiktFelles.soknadStarterInfoAnnenPerson")}
             </BodyLong>
           )}
-          {(kontekst.representasjonstype === "RADGIVER" ||
-            kontekst.representasjonstype === "ARBEIDSGIVER") && (
+          {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
+            kontekst.representasjonstype ===
+              Representasjonstype.ARBEIDSGIVER) && (
             <BodyLong spacing>{t("oversiktFelles.soknadStarterInfo")}</BodyLong>
           )}
         </div>
 
         {/* For ANNEN_PERSON: Person først, så arbeidsgiver */}
-        {kontekst.representasjonstype === "ANNEN_PERSON" && (
+        {kontekst.representasjonstype === Representasjonstype.ANNEN_PERSON && (
           <div>
             <ArbeidstakerVelger
               erAnnenPerson
@@ -179,8 +183,9 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
         </div>
 
         {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}
-        {(kontekst.representasjonstype === "RADGIVER" ||
-          kontekst.representasjonstype === "ARBEIDSGIVER") && (
+        {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
+          kontekst.representasjonstype ===
+            Representasjonstype.ARBEIDSGIVER) && (
           <div>
             <ArbeidstakerVelger
               harFeil={harArbeidstakerFeil}

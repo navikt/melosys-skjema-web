@@ -1,11 +1,13 @@
 // Test data constants that can be reused across tests
 
 import type { UserInfo } from "../../../src/httpClients/dekoratorenClient";
-import type {
-  ArbeidsgiversSkjemaDto,
-  ArbeidstakersSkjemaDto,
-  OrganisasjonDto,
-  SkjemaInnsendtKvittering,
+import {
+  type ArbeidsgiversSkjemaDto,
+  type ArbeidstakersSkjemaDto,
+  LandKode,
+  type OrganisasjonDto,
+  type SkjemaInnsendtKvittering,
+  SkjemaStatus,
 } from "../../../src/types/melosysSkjemaTypes";
 
 export const testOrganization: OrganisasjonDto = {
@@ -25,14 +27,14 @@ export const testArbeidstakerSkjemaId = "test-arbeidstaker-skjema-id";
 export const testArbeidsgiverSkjema: ArbeidsgiversSkjemaDto = {
   id: testArbeidsgiverSkjemaId,
   orgnr: "123456789",
-  status: "UTKAST",
+  status: SkjemaStatus.UTKAST,
   data: {},
 };
 
 export const testArbeidstakerSkjema: ArbeidstakersSkjemaDto = {
   id: testArbeidstakerSkjemaId,
   fnr: testUserInfo.userId,
-  status: "UTKAST",
+  status: SkjemaStatus.UTKAST,
   data: {},
 };
 
@@ -58,11 +60,11 @@ export const formFieldValues = {
   },
   periodeTil: "31.12.2026",
   periodeTilIso: "2026-12-31",
-  utsendelseLand: { label: "Sverige", value: "SE" },
+  utsendelseLand: { label: "Sverige", value: LandKode.SE },
 };
 
 export const skjemaInnsendtKvittering: SkjemaInnsendtKvittering = {
   skjemaId: "test-skjema-id",
-  status: "SENDT",
+  status: SkjemaStatus.SENDT,
   referanseId: "ABC123XYZ",
 };
