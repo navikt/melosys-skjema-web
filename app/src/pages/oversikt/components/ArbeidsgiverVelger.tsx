@@ -112,9 +112,11 @@ export function ArbeidsgiverVelger({
 
   return (
     <div>
-      <Heading level="3" size="medium" spacing>
-        {t("oversiktFelles.arbeidsgiverTittel")}
-      </Heading>
+      {kontekst.representasjonstype !== "DEG_SELV" && (
+        <Heading level="3" size="medium" spacing>
+          {t("oversiktFelles.arbeidsgiverTittel")}
+        </Heading>
+      )}
 
       {kontekst.representasjonstype === "ARBEIDSGIVER" &&
       isLoading &&
