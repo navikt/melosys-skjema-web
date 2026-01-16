@@ -4,14 +4,7 @@ import {
   PersonGroupIcon,
   PersonIcon,
 } from "@navikt/aksel-icons";
-import {
-  Box,
-  Button,
-  ErrorMessage,
-  Heading,
-  LinkCard,
-  Loader,
-} from "@navikt/ds-react";
+import { Box, ErrorMessage, Heading, LinkCard, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
@@ -19,11 +12,6 @@ import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { setRepresentasjonKontekst } from "~/utils/sessionStorage.ts";
-
-function getFirstName(fullName: string | undefined): string {
-  if (!fullName) return "";
-  return fullName.split(" ")[0] ?? fullName;
-}
 
 interface RepresentationOption {
   type: Representasjonstype;
@@ -124,16 +112,9 @@ export function RepresentasjonPage() {
     return <Loader size="xlarge" title={t("felles.laster")} />;
   }
 
-  const userInfo = userInfoQuery.data;
-  const fornavn = getFirstName(userInfo.name);
-
   return (
     <>
       <Heading className="mt-4" level="1" size="large">
-        {t("landingsside.hei")}, {fornavn}
-      </Heading>
-
-      <Heading level="2" size="large">
         {t("landingsside.hvemVilDuBrukeNavPaVegneAv")}
       </Heading>
 
@@ -145,18 +126,6 @@ export function RepresentasjonPage() {
             option={option}
           />
         ))}
-      </div>
-
-      <div className="mt-8">
-        <Button
-          onClick={() => {
-            globalThis.location.href =
-              import.meta.env.VITE_NAV_URL || "https://www.nav.no";
-          }}
-          variant="secondary"
-        >
-          {t("landingsside.avbryt")}
-        </Button>
       </div>
     </>
   );

@@ -46,7 +46,6 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           t("oversiktArbeidsgiver.infoBullet1"),
           t("oversiktArbeidsgiver.infoBullet2"),
           t("oversiktArbeidsgiver.infoBullet3"),
-          t("oversiktArbeidsgiver.infoBullet4"),
         ];
       }
       case "RADGIVER": {
@@ -54,7 +53,6 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           t("oversiktRadgiver.infoBullet1"),
           t("oversiktRadgiver.infoBullet2"),
           t("oversiktRadgiver.infoBullet3"),
-          t("oversiktRadgiver.infoBullet4"),
         ];
       }
       case "ANNEN_PERSON": {
@@ -74,6 +72,15 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
         <Heading level="2" size="small" spacing>
           {getTittel()}
         </Heading>
+        <BodyShort size="small" spacing>
+          {kontekst.representasjonstype === "DEG_SELV"
+            ? t("oversiktDegSelv.herKanDu")
+            : kontekst.representasjonstype === "ARBEIDSGIVER"
+              ? t("oversiktArbeidsgiver.herKanDu")
+              : kontekst.representasjonstype === "RADGIVER"
+                ? t("oversiktRadgiver.herKanDu")
+                : t("oversiktAnnenPerson.herKanDu")}
+        </BodyShort>
         <ul className="list-disc pl-6 space-y-1">
           {getInfoBullets().map((bullet, index) => (
             <li key={index}>

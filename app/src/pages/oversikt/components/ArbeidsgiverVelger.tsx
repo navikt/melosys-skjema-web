@@ -137,7 +137,7 @@ export function ArbeidsgiverVelger({
           {skalSokeEtterArbeidsgiver ? (
             // OrganisasjonSoker for DEG_SELV og ANNEN_PERSON
             <OrganisasjonSoker
-              label={t("velgRadgiverfirma.sokPaVirksomhet")}
+              label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
               onOrganisasjonValgt={onArbeidsgiverValgt}
             />
           ) : skalHenteArbeidsgivere ? (
