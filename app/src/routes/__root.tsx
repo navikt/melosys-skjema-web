@@ -1,6 +1,7 @@
 import { Page, VStack } from "@navikt/ds-react";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 
+import { AppHeader } from "~/components/AppHeader.tsx";
 import type { RouterContext } from "~/main";
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -12,6 +13,7 @@ function RootComponent() {
     <Page footerPosition="belowFold">
       <Page.Block gutters width="md">
         <VStack as="main" gap="8" paddingBlock="8 0">
+          <AppHeader />
           <Outlet />
         </VStack>
       </Page.Block>

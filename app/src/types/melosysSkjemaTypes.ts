@@ -22,12 +22,14 @@ export interface SkjemaInnsendtKvittering {
   status: "UTKAST" | "SENDT";
 }
 
+export type Representasjonstype =
+  | "DEG_SELV"
+  | "ARBEIDSGIVER"
+  | "RADGIVER"
+  | "ANNEN_PERSON";
+
 export interface OpprettSoknadMedKontekstRequest {
-  representasjonstype:
-    | "DEG_SELV"
-    | "ARBEIDSGIVER"
-    | "RADGIVER"
-    | "ANNEN_PERSON";
+  representasjonstype: Representasjonstype;
   radgiverfirma?: SimpleOrganisasjonDto;
   arbeidsgiver?: SimpleOrganisasjonDto;
   arbeidstaker?: PersonDto;
@@ -68,11 +70,7 @@ export interface HentInnsendteSoknaderRequest {
   sok?: string;
   sortering?: "ARBEIDSGIVER" | "ARBEIDSTAKER" | "INNSENDT_DATO" | "STATUS";
   retning?: "ASC" | "DESC";
-  representasjonstype:
-    | "DEG_SELV"
-    | "ARBEIDSGIVER"
-    | "RADGIVER"
-    | "ANNEN_PERSON";
+  representasjonstype: Representasjonstype;
   radgiverfirmaOrgnr?: string;
 }
 
@@ -289,11 +287,7 @@ export interface RadgiverfirmaInfo {
 }
 
 export interface UtsendtArbeidstakerMetadata {
-  representasjonstype:
-    | "DEG_SELV"
-    | "ARBEIDSGIVER"
-    | "RADGIVER"
-    | "ANNEN_PERSON";
+  representasjonstype: Representasjonstype;
   harFullmakt: boolean;
   radgiverfirma?: RadgiverfirmaInfo;
   arbeidsgiverNavn?: string;

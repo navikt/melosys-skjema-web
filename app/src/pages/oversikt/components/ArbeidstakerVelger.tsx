@@ -4,6 +4,7 @@ import {
   BodyShort,
   Box,
   Button,
+  Checkbox,
   Heading,
   HStack,
   Label,
@@ -31,6 +32,7 @@ interface ArbeidstakerVelgerProps {
   ) => void;
   harFeil?: boolean;
   visKunMedFullmakt?: boolean;
+  erAnnenPerson?: boolean;
 }
 
 interface VerifisertPerson {
@@ -47,7 +49,7 @@ const arbeidstakerSchema = z.object({
       message: "oversiktFelles.arbeidstakerFnrUgyldig",
     }),
   etternavn: z.string().refine((val) => val.trim().length > 0, {
-    message: "oversiktFelles.arbeidstakerEtternavnTom",
+    message: "oversiktFelles.arbeidstakerFulltNavnTom",
   }),
 });
 
@@ -62,6 +64,7 @@ export function ArbeidstakerVelger({
   onArbeidstakerValgt,
   harFeil = false,
   visKunMedFullmakt = false,
+  erAnnenPerson = false,
 }: ArbeidstakerVelgerProps) {
   const { t } = useTranslation();
   const [fnr, setFnr] = useState("");
@@ -78,6 +81,8 @@ export function ArbeidstakerVelger({
   >();
   const [medFullmaktHarFokus, setMedFullmaktHarFokus] = useState(false);
   const [utenFullmaktHarFokus, setUtenFullmaktHarFokus] = useState(false);
+  const [arbeidstakerSelvUtfylling, setArbeidstakerSelvUtfylling] =
+    useState(false);
 
   // Lazy loading av personer med fullmakt
   const {
@@ -97,7 +102,8 @@ export function ArbeidstakerVelger({
   const harValgtMedFullmakt = selectedPersonFnr !== undefined;
   const harValgtUtenFullmakt = verifisertPerson !== undefined;
   const skalDisableMedFullmakt =
-    !visKunMedFullmakt && (harValgtUtenFullmakt || utenFullmaktHarFokus);
+    !visKunMedFullmakt &&
+    (harValgtUtenFullmakt || utenFullmaktHarFokus || arbeidstakerSelvUtfylling);
   const skalDisableUtenFullmakt = harValgtMedFullmakt || medFullmaktHarFokus;
 
   const handleComboboxChange = (value: string) => {
@@ -209,9 +215,11 @@ export function ArbeidstakerVelger({
 
   return (
     <div>
-      <Heading className="mt-4" level="3" size="medium" spacing>
-        {t("oversiktFelles.arbeidstakerTittel")}
-      </Heading>
+      {!erAnnenPerson && (
+        <Heading className="mt-4" level="3" size="medium" spacing>
+          {t("oversiktFelles.arbeidstakerTittel")}
+        </Heading>
+      )}
 
       <Box
         borderColor={harFeil ? "border-danger" : "border-info"}
@@ -228,10 +236,14 @@ export function ArbeidstakerVelger({
             }}
           >
             <Label className="navds-form-field__label">
-              {t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+              {erAnnenPerson
+                ? t("oversiktAnnenPerson.personVelgerLabel")
+                : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
             </Label>
             <BodyShort className="navds-form-field__description">
-              {t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
+              {erAnnenPerson
+                ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
+                : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
             </BodyShort>
 
             <div className="max-w-lg w-full">
@@ -284,88 +296,96 @@ export function ArbeidstakerVelger({
             </div>
           </div>
 
-          {/* Uten fullmakt - skjules hvis visKunMedFullmakt er true */}
+          {/* Checkbox for selvutfylling - vises for RADGIVER/ARBEIDSGIVER */}
           {!visKunMedFullmakt && (
             <div
-              className="navds-form-field navds-form-field--medium"
               style={{
                 opacity: skalDisableUtenFullmakt ? 0.5 : 1,
                 pointerEvents: skalDisableUtenFullmakt ? "none" : "auto",
               }}
             >
-              <Label className="navds-form-field__label">
-                {t("oversiktFelles.arbeidstakerUtenFullmaktTittel")}
-              </Label>
-              <BodyShort className="navds-form-field__description">
-                {t("oversiktFelles.arbeidstakerUtenFullmaktBeskrivelse")}
-              </BodyShort>
+              <Checkbox
+                checked={arbeidstakerSelvUtfylling}
+                onChange={(e) => {
+                  setArbeidstakerSelvUtfylling(e.target.checked);
+                  if (!e.target.checked) {
+                    // Clear data når checkbox uncheckes
+                    handleFjernVerifisertPerson();
+                  }
+                }}
+              >
+                {t("oversiktFelles.arbeidstakerSelvUtfyllingCheckbox")}
+              </Checkbox>
 
-              <div className="max-w-lg w-full">
-                {verifisertPerson ? (
-                  <Box
-                    background="surface-default"
-                    borderColor="border-subtle"
-                    borderRadius="small"
-                    borderWidth="1"
-                    padding="2"
-                  >
-                    <HStack align="center" justify="space-between">
-                      <BodyShort>
-                        {verifisertPerson.navn} - {verifisertPerson.fnr}
-                      </BodyShort>
-                      <Button
-                        icon={<XMarkIcon aria-hidden />}
-                        onClick={handleFjernVerifisertPerson}
-                        size="small"
-                        variant="tertiary"
-                      />
-                    </HStack>
-                  </Box>
-                ) : (
-                  <>
-                    <HStack align="start" gap="2" wrap={false}>
-                      <TextField
-                        error={fnrError ?? undefined}
-                        label={t("oversiktFelles.arbeidstakerFnrLabel")}
-                        maxLength={FNR_LENGTH}
-                        onBlur={() => setUtenFullmaktHarFokus(false)}
-                        onChange={(e) => {
-                          setFnr(e.target.value);
-                          setFnrError(null);
-                        }}
-                        onFocus={() => setUtenFullmaktHarFokus(true)}
-                        value={fnr}
-                      />
-                      <TextField
-                        error={etternavnError ?? undefined}
-                        label={t("oversiktFelles.arbeidstakerEtternavnLabel")}
-                        onBlur={() => setUtenFullmaktHarFokus(false)}
-                        onChange={(e) => {
-                          setEtternavn(e.target.value);
-                          setEtternavnError(null);
-                        }}
-                        onFocus={() => setUtenFullmaktHarFokus(true)}
-                        value={etternavn}
-                      />
-                      <Box className="mt-8">
+              {/* Felt for F.nr og Fullt navn - vises kun når checkbox er huket av */}
+              {arbeidstakerSelvUtfylling && (
+                <div className="max-w-lg w-full mt-4">
+                  {verifisertPerson ? (
+                    <Box
+                      background="surface-default"
+                      borderColor="border-subtle"
+                      borderRadius="small"
+                      borderWidth="1"
+                      padding="2"
+                    >
+                      <HStack align="center" justify="space-between">
+                        <BodyShort>
+                          {verifisertPerson.navn} - {verifisertPerson.fnr}
+                        </BodyShort>
                         <Button
-                          loading={verifiserer}
-                          onClick={handleVerifiser}
-                          variant="secondary"
-                        >
-                          {t("oversiktFelles.arbeidstakerSokKnapp")}
-                        </Button>
-                      </Box>
-                    </HStack>
+                          icon={<XMarkIcon aria-hidden />}
+                          onClick={handleFjernVerifisertPerson}
+                          size="small"
+                          variant="tertiary"
+                        />
+                      </HStack>
+                    </Box>
+                  ) : (
+                    <>
+                      <HStack align="start" gap="2" wrap={false}>
+                        <TextField
+                          error={fnrError ?? undefined}
+                          label={t("oversiktFelles.arbeidstakerFnrLabel")}
+                          maxLength={FNR_LENGTH}
+                          onBlur={() => setUtenFullmaktHarFokus(false)}
+                          onChange={(e) => {
+                            setFnr(e.target.value);
+                            setFnrError(null);
+                          }}
+                          onFocus={() => setUtenFullmaktHarFokus(true)}
+                          value={fnr}
+                        />
+                        <TextField
+                          error={etternavnError ?? undefined}
+                          label={t("oversiktFelles.arbeidstakerFulltNavnLabel")}
+                          onBlur={() => setUtenFullmaktHarFokus(false)}
+                          onChange={(e) => {
+                            setEtternavn(e.target.value);
+                            setEtternavnError(null);
+                          }}
+                          onFocus={() => setUtenFullmaktHarFokus(true)}
+                          value={etternavn}
+                        />
+                        <Box className="mt-8">
+                          <Button
+                            loading={verifiserer}
+                            onClick={handleVerifiser}
+                            variant="secondary"
+                          >
+                            {t("oversiktFelles.arbeidstakerSokKnapp")}
+                          </Button>
+                        </Box>
+                      </HStack>
 
-                    {verifiseringFeil && (
-                      <Alert size="small" variant="error">
-                        {verifiseringFeil}
-                      </Alert>
-                    )}
-                  </>
-                )}
-              </div>
+                      {verifiseringFeil && (
+                        <Alert size="small" variant="error">
+                          {verifiseringFeil}
+                        </Alert>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </VStack>

@@ -1,5 +1,5 @@
-import { Alert, BodyShort, Heading } from "@navikt/ds-react";
-import { useTranslation } from "react-i18next";
+import { CheckmarkCircleFillIcon } from "@navikt/aksel-icons";
+import { BodyShort, HStack } from "@navikt/ds-react";
 
 interface ValgtOrganisasjonProps {
   valgtOrganisasjon: {
@@ -11,16 +11,14 @@ interface ValgtOrganisasjonProps {
 export function ValgtOrganisasjon({
   valgtOrganisasjon,
 }: ValgtOrganisasjonProps) {
-  const { t } = useTranslation();
-
   return (
-    <Alert className="mt-4" variant="success">
-      <Heading level="3" size="small">
-        {t("felles.valgtOrganisasjon")}
-      </Heading>
-      <BodyShort>
-        {valgtOrganisasjon.navn} (org.nr. {valgtOrganisasjon.orgnr})
-      </BodyShort>
-    </Alert>
+    <HStack align="center" className="mt-4" gap="2">
+      <CheckmarkCircleFillIcon
+        aria-hidden
+        className="text-icon-success"
+        fontSize="1.5rem"
+      />
+      <BodyShort>{valgtOrganisasjon.navn}</BodyShort>
+    </HStack>
   );
 }

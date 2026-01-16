@@ -1,7 +1,6 @@
 import {
   Alert,
   BodyLong,
-  BodyShort,
   Box,
   Button,
   Heading,
@@ -143,27 +142,32 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
           <Heading level="2" size="medium" spacing>
             {kontekst.representasjonstype === "DEG_SELV"
               ? t("oversiktFelles.soknadStarterTittelDegSelv")
-              : t("oversiktFelles.soknadStarterTittel")}
+              : kontekst.representasjonstype === "ANNEN_PERSON"
+                ? t("oversiktFelles.soknadStarterTittelAnnenPerson")
+                : t("oversiktFelles.soknadStarterTittel")}
           </Heading>
-          <BodyLong spacing>
-            {kontekst.representasjonstype === "DEG_SELV"
-              ? t("oversiktFelles.soknadStarterInfoDegSelv")
-              : t("oversiktFelles.soknadStarterInfo")}
-          </BodyLong>
-          {kontekst.representasjonstype !== "DEG_SELV" && (
-            <VStack gap="4">
-              <BodyShort>
-                {t("oversiktFelles.soknadStarterFullmaktInfo1")}
-              </BodyShort>
-              <BodyShort>
-                {t("oversiktFelles.soknadStarterFullmaktInfo2")}
-              </BodyShort>
-              <BodyShort>
-                {t("oversiktFelles.soknadStarterFullmaktInfo3")}
-              </BodyShort>
-            </VStack>
+          {kontekst.representasjonstype === "ANNEN_PERSON" && (
+            <BodyLong spacing>
+              {t("oversiktFelles.soknadStarterInfoAnnenPerson")}
+            </BodyLong>
+          )}
+          {(kontekst.representasjonstype === "RADGIVER" ||
+            kontekst.representasjonstype === "ARBEIDSGIVER") && (
+            <BodyLong spacing>{t("oversiktFelles.soknadStarterInfo")}</BodyLong>
           )}
         </div>
+
+        {/* For ANNEN_PERSON: Person først, så arbeidsgiver */}
+        {kontekst.representasjonstype === "ANNEN_PERSON" && (
+          <div>
+            <ArbeidstakerVelger
+              erAnnenPerson
+              harFeil={harArbeidstakerFeil}
+              onArbeidstakerValgt={handleArbeidstakerValgt}
+              visKunMedFullmakt
+            />
+          </div>
+        )}
 
         <div>
           <ArbeidsgiverVelger
@@ -174,14 +178,13 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
           />
         </div>
 
-        {kontekst.representasjonstype !== "DEG_SELV" && (
+        {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}
+        {(kontekst.representasjonstype === "RADGIVER" ||
+          kontekst.representasjonstype === "ARBEIDSGIVER") && (
           <div>
             <ArbeidstakerVelger
               harFeil={harArbeidstakerFeil}
               onArbeidstakerValgt={handleArbeidstakerValgt}
-              visKunMedFullmakt={
-                kontekst.representasjonstype === "ANNEN_PERSON"
-              }
             />
           </div>
         )}

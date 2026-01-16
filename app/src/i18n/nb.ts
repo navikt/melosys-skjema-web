@@ -377,49 +377,45 @@ export const nb = {
       annenPerson: "ANNEN PERSON",
       avbryt: "Avbryt",
     },
-    kontekstBanner: {
-      minSide: "Min side",
-      minSideArbeidsgiver: "Min side - arbeidsgiver",
-      minSideRadgiver: "Min side - rådgiver",
-      minSideAnnenPerson: "Min side - annen person",
-      ingenArbeidsgiverValgt: "Ingen arbeidsgiver valgt",
-      ingenRadgiverValgt: "Ingen rådgiver valgt",
-      ingenPersonValgt: "Ingen person valgt",
-      byttKontekst: "Bytt",
-      byttKontekstAriaLabel:
-        "Bytt representasjon og gå tilbake til landingssiden",
+    appHeader: {
+      tittel: "Medlemskap og lovvalg",
+    },
+    kontekstVelger: {
+      arbeidsgiver: "Arbeidsgiver",
+      radgiver: "Rådgiver",
+      annenPerson: "Annen person",
+      byttKontekstAriaLabel: "Åpne meny for å bytte representasjon eller språk",
     },
     oversiktDegSelv: {
-      tittel: "Din oversiktsside",
-      infoBullet1: "Du kan se tidligere og pågående søknader",
-      infoBullet2: "Her kan du starte ny søknad for deg selv",
+      tittel: "Oversiktsside for søknader",
+      herKanDu: "Her kan du:",
+      infoBullet1: "fylle ut søknad.",
+      infoBullet2: "se påbegynte og tidligere innsendte søknader.",
     },
     oversiktArbeidsgiver: {
-      tittel: "Dette er arbeidsgivers oversiktsside",
-      infoBullet1: "Du kan se tidligere og pågående søknader",
-      infoBullet2:
-        "Her ser du oversikt over tilganger og fullmakter som er blitt gitt deg",
-      infoBullet3:
-        "Du kan sende inn søknader på vegne av arbeidsgiver og eventuelt arbeidstaker",
-      infoBullet4:
-        "Hvis du har fullmakt fra arbeidstaker skal du sende inn søknad for hen samtidig",
+      tittel: "Oversiktsside for søknader",
+      herKanDu: "Her kan du:",
+      infoBullet1:
+        "fylle ut søknad for din arbeidsgiver og dennes arbeidstakere.",
+      infoBullet2: "se tilganger og fullmakter som du har fått.",
+      infoBullet3: "se påbegynte og tidligere innsendte søknader.",
     },
     oversiktRadgiver: {
-      tittel: "Dette er rådgivers oversiktsside",
-      infoBullet1: "Du kan se tidligere og pågående søknader",
-      infoBullet2: "Her ser du oversikt over arbeidsgivere du kan representere",
-      infoBullet3:
-        "Du kan sende inn søknader på vegne av arbeidsgiver og eventuelt arbeidstaker",
-      infoBullet4:
-        "Hvis du har fullmakt fra arbeidstaker skal du sende inn søknad for hen samtidig",
+      tittel: "Oversiktsside for søknader",
+      herKanDu: "Her kan du:",
+      infoBullet1:
+        "fylle ut søknad for en arbeidsgiver og dennes arbeidstakere.",
+      infoBullet2: "se tilganger og fullmakter som du har fått.",
+      infoBullet3: "se påbegynte og tidligere innsendte søknader.",
     },
     oversiktAnnenPerson: {
-      tittel: "Send søknad på vegne av en annen person",
-      infoBullet1:
-        "Du kan sende søknad hvis personen har gitt deg fullmakt på nav.no/fullmakt",
-      infoBullet2:
-        "Du fyller ut hele søknaden på vegne av personen du representerer",
-      infoBullet3: "Du kan se tidligere søknader og utkast",
+      tittel: "Oversiktsside for søknader",
+      herKanDu: "Her kan du:",
+      infoBullet1: "fylle ut søknad for personer som har gitt deg fullmakt.",
+      infoBullet2: "se påbegynte og tidligere innsendte søknader.",
+      personVelgerLabel: "Velg person du skal fylle ut søknad for",
+      personVelgerBeskrivelse:
+        "Listen inneholder alle personer du har fått fullmakt fra på nav.no.",
     },
     oversiktFelles: {
       utkastTittel: "UTKAST",
@@ -430,23 +426,21 @@ export const nb = {
       utkastArbeidstaker: "Arbeidstaker",
       utkastOpprettet: "Opprettet",
       utkastSistEndret: "Sist endret",
-      soknadStarterTittel: "Hvem skal du søke på vegne av?",
-      soknadStarterTittelDegSelv: "Start søknad",
-      soknadStarterInfoDegSelv:
-        "Når du søker for deg selv, trenger vi informasjon om arbeidsgiver og deg selv som arbeidstaker.",
+      soknadStarterTittel: "Hvem skal du fylle ut søknaden på vegne av?",
+      soknadStarterTittelDegSelv: "Oppgi arbeidsgiver som sender deg ut",
+      soknadStarterTittelAnnenPerson:
+        "Hvem skal du fylle ut søknaden på vegne av?",
+      soknadStarterInfoAnnenPerson:
+        "Vi trenger informasjon om både person du søker på vegne av og dennes arbeidsgiver.",
       soknadStarterInfo:
-        "Vi trenger informasjon om både arbeidsgiver og arbeidstakeren.",
-      soknadStarterFullmaktInfo1:
-        "I listen under finner du arbeidstakere som har gitt deg fullmakt på nav.no/fullmakt.",
-      soknadStarterFullmaktInfo2:
-        "Hvis du har fullmakt fra arbeidstaker, så skal du fylle ut hele søknaden under ett.",
-      soknadStarterFullmaktInfo3:
-        "Hvis du ikke har fullmakt fra arbeidstaker, må personen først gi deg fullmakt gjennom nav.no/fullmakt.",
+        "Vi trenger informasjon om både arbeidsgiver og arbeidstaker. Hvis du har fullmakt fra arbeidstakeren, skal du fylle ut for begge samtidig. Hvis ikke, huker du av for at arbeidstakeren skal fylle ut sin del selv. Du må da oppgi hans/hennes navn og fødsels-/d-nummer før du starter søknaden.",
       arbeidsgiverTittel: "Arbeidsgiver",
-      arbeidsgiverVelgerLabel: "Velg arbeidsgiver",
+      arbeidsgiverOrgnrLabel: "Arbeidsgivers organisasjonsnummer",
+      arbeidsgiverVelgerLabel:
+        "Velg arbeidsgiver (Organisasjonsnummer eller -navn)",
       arbeidsgiverVelgerPlaceholder: "Organisasjonsnummer eller -navn",
       arbeidsgiverVelgerInfo:
-        "Listen inneholder alle arbeidsgivere du har fått tilgang til i skjemaet i Altinn og arbeidstakere som har gitt deg fullmakt på nav.no/fullmakt.",
+        "Listen inneholder alle arbeidsgivere du har fått tilgang til i Altinn.",
       ingenArbeidsgivereTittel: "Du har ingen arbeidsgivere tilgjengelig",
       ingenArbeidsgivereInfo:
         "For å kunne fylle ut søknad på vegne av en arbeidsgiver, må du ha fått delegert tilgang til virksomheten i Altinn.",
@@ -454,34 +448,38 @@ export const nb = {
       feilVedHentingAvArbeidsgivere:
         "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
       arbeidstakerTittel: "Arbeidstaker",
-      arbeidstakerMedFullmaktLabel: "Arbeidstaker med fullmakt",
+      arbeidstakerMedFullmaktLabel:
+        "Velg arbeidstaker du skal fylle ut søknad for",
       arbeidstakerMedFullmaktBeskrivelse:
-        "Velg en person du har fått fullmakt fra. Du vil fylle ut søknaden på vegne av arbeidstakeren.",
+        "Listen inneholder alle arbeidstakere du har fått fullmakt fra",
+      arbeidstakerSelvUtfyllingCheckbox:
+        "Arbeidstakeren skal selv fylle ut sin del av søknaden",
       arbeidstakerMedFullmaktPlaceholder: "Fødsels-/d-nummer eller navn",
       arbeidstakerMedFullmaktListePlaceholder: "+ Velg...",
       arbeidstakerUtenFullmaktTittel: "Arbeidstaker uten fullmakt",
       arbeidstakerUtenFullmaktBeskrivelse:
         "Arbeidstakeren må selv fylle ut sin del av søknaden.",
-      arbeidstakerFnrLabel: "Fødsels- eller d-nummer",
-      arbeidstakerEtternavnLabel: "Etternavn",
+      arbeidstakerFnrLabel: "Fødsels-/d-nummer",
+      arbeidstakerFulltNavnLabel: "Fullt navn",
       arbeidstakerSokKnapp: "Søk",
       arbeidstakerFnrTom: "Skriv fødselsnummer",
       arbeidstakerFnrUgyldig: "Ugyldig fødselsnummer",
-      arbeidstakerEtternavnTom: "Skriv etternavn",
+      arbeidstakerFulltNavnTom: "Skriv fullt navn",
       arbeidstakerVerifiseringFeilet:
         "Finner ikke person med oppgitt fødselsnummer og etternavn",
       arbeidstakerVerifisertLabel: "Person verifisert",
       arbeidstakerFjernKnapp: "Fjern",
-      gaTilSkjemaKnapp: "Gå til skjema for utsendt arbeidstaker",
+      gaTilSkjemaKnapp: "Start søknad",
       valideringFeilTittel: "Du må fylle ut disse feltene:",
       valideringManglerArbeidsgiver: "Arbeidsgiver må velges",
       valideringManglerArbeidstaker: "Arbeidstaker må velges",
-      historikkTittel: "Tidligere innsendte søknadsskjema",
+      historikkTittel: "Tidligere innsendte søknader",
       historikkSokPlaceholder: "Søk...",
       historikkKolonneVirksomhet: "Virksomhet",
       historikkKolonneArbeidstaker: "Navn arbeidstaker",
-      historikkKolonneFnr: "Fnr/D-nummer",
-      historikkKolonneInnsendtDato: "Innsendt dato",
+      historikkKolonneFnr: "F.nr/D-nr",
+      historikkKolonneInnsendt: "Innsendt",
+      historikkKolonneRefnr: "Refnr.",
       historikkKolonneStatus: "Status",
       historikkAntallTreff: "{{antall}} treff",
       historikkFeilmelding:

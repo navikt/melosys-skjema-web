@@ -1,7 +1,6 @@
 import { BodyShort, GuidePanel, Heading, VStack } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { KontekstBanner } from "~/components/KontekstBanner.tsx";
 import {
   InnsendteSoknaderTabell,
   SoknadStarter,
@@ -33,6 +32,23 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
     }
   };
 
+  const getHerKanDu = () => {
+    switch (kontekst.representasjonstype) {
+      case "DEG_SELV": {
+        return t("oversiktDegSelv.herKanDu");
+      }
+      case "ARBEIDSGIVER": {
+        return t("oversiktArbeidsgiver.herKanDu");
+      }
+      case "RADGIVER": {
+        return t("oversiktRadgiver.herKanDu");
+      }
+      case "ANNEN_PERSON": {
+        return t("oversiktAnnenPerson.herKanDu");
+      }
+    }
+  };
+
   const getInfoBullets = (): string[] => {
     switch (kontekst.representasjonstype) {
       case "DEG_SELV": {
@@ -46,7 +62,6 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           t("oversiktArbeidsgiver.infoBullet1"),
           t("oversiktArbeidsgiver.infoBullet2"),
           t("oversiktArbeidsgiver.infoBullet3"),
-          t("oversiktArbeidsgiver.infoBullet4"),
         ];
       }
       case "RADGIVER": {
@@ -54,7 +69,6 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           t("oversiktRadgiver.infoBullet1"),
           t("oversiktRadgiver.infoBullet2"),
           t("oversiktRadgiver.infoBullet3"),
-          t("oversiktRadgiver.infoBullet4"),
         ];
       }
       case "ANNEN_PERSON": {
@@ -68,12 +82,13 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
 
   return (
     <VStack gap="6">
-      <KontekstBanner kontekst={kontekst} />
-
       <GuidePanel poster>
         <Heading level="2" size="small" spacing>
           {getTittel()}
         </Heading>
+        <BodyShort size="small" spacing>
+          {getHerKanDu()}
+        </BodyShort>
         <ul className="list-disc pl-6 space-y-1">
           {getInfoBullets().map((bullet, index) => (
             <li key={index}>

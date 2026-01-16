@@ -208,18 +208,37 @@ export function InnsendteSoknaderTabell({
         >
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader sortKey="arbeidsgiver" sortable>
-                {t("oversiktFelles.historikkKolonneVirksomhet")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader sortKey="arbeidstaker" sortable>
-                {t("oversiktFelles.historikkKolonneArbeidstaker")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("oversiktFelles.historikkKolonneFnr")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader sortKey="innsendt_dato" sortable>
-                {t("oversiktFelles.historikkKolonneInnsendtDato")}
-              </Table.ColumnHeader>
+              {kontekst.representasjonstype === "ANNEN_PERSON" ? (
+                <>
+                  <Table.ColumnHeader sortKey="innsendt_dato" sortable>
+                    {t("oversiktFelles.historikkKolonneInnsendt")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("oversiktFelles.historikkKolonneRefnr")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="arbeidstaker" sortable>
+                    {t("felles.navn")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("oversiktFelles.historikkKolonneFnr")}
+                  </Table.ColumnHeader>
+                </>
+              ) : (
+                <>
+                  <Table.ColumnHeader sortKey="arbeidsgiver" sortable>
+                    {t("oversiktFelles.historikkKolonneVirksomhet")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="arbeidstaker" sortable>
+                    {t("oversiktFelles.historikkKolonneArbeidstaker")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("oversiktFelles.historikkKolonneFnr")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortKey="innsendt_dato" sortable>
+                    {t("oversiktFelles.historikkKolonneInnsendt")}
+                  </Table.ColumnHeader>
+                </>
+              )}
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -231,6 +250,21 @@ export function InnsendteSoknaderTabell({
                   </BodyShort>
                 </Table.DataCell>
               </Table.Row>
+            ) : kontekst.representasjonstype === "ANNEN_PERSON" ? (
+              data.soknader.map((soknad) => (
+                <Table.Row key={soknad.id}>
+                  <Table.DataCell>
+                    {formatDato(soknad.innsendtDato)}
+                  </Table.DataCell>
+                  <Table.DataCell>{soknad.referanseId || "-"}</Table.DataCell>
+                  <Table.DataCell>
+                    {soknad.arbeidstakerNavn || "-"}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {soknad.arbeidstakerFnrMaskert || "-"}
+                  </Table.DataCell>
+                </Table.Row>
+              ))
             ) : (
               data.soknader.map((soknad) => (
                 <Table.Row key={soknad.id}>

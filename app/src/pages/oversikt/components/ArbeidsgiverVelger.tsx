@@ -112,9 +112,11 @@ export function ArbeidsgiverVelger({
 
   return (
     <div>
-      <Heading level="3" size="medium" spacing>
-        {t("oversiktFelles.arbeidsgiverTittel")}
-      </Heading>
+      {kontekst.representasjonstype !== "DEG_SELV" && (
+        <Heading level="3" size="medium" spacing>
+          {t("oversiktFelles.arbeidsgiverTittel")}
+        </Heading>
+      )}
 
       {kontekst.representasjonstype === "ARBEIDSGIVER" &&
       isLoading &&
@@ -137,7 +139,7 @@ export function ArbeidsgiverVelger({
           {skalSokeEtterArbeidsgiver ? (
             // OrganisasjonSoker for DEG_SELV og ANNEN_PERSON
             <OrganisasjonSoker
-              label={t("velgRadgiverfirma.sokPaVirksomhet")}
+              label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
               onOrganisasjonValgt={onArbeidsgiverValgt}
             />
           ) : skalHenteArbeidsgivere ? (
