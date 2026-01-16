@@ -6,6 +6,9 @@ export const offshoreSchema = z.object({
   arbeidsstedType: z.literal(ArbeidsstedType.OFFSHORE),
   offshore: z
     .object({
+      navnPaVirksomhet: z
+        .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
+        .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
       navnPaInnretning: z
         .string({ error: "arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd" })
         .min(1, "arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd"),

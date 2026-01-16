@@ -8,6 +8,7 @@ import { Farvann } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
+import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
@@ -23,12 +24,15 @@ export function PaSkipForm() {
   // We use Controller's fieldState.error for type-safe error handling
   return (
     <div className="mt-6">
+      <NavnPaVirksomhetFormPart formFieldName="paSkip.navnPaVirksomhet" />
+
       <Controller
         control={control}
         name="paSkip.navnPaSkip"
         render={({ field, fieldState }) => (
           <TextField
             {...field}
+            className="mt-4"
             error={translateError(fieldState.error?.message)}
             label={t("arbeidsstedIUtlandetSteg.navnPaSkip")}
             value={field.value ?? ""}

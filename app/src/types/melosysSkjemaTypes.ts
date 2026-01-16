@@ -94,8 +94,8 @@ export enum SkjemaStatus {
 }
 
 export interface Organisasjon {
-  type: string;
   navn?: Navn;
+  type: string;
   organisasjonsnummer: string;
 }
 
@@ -309,12 +309,14 @@ export interface ArbeidstakerensLonnDto {
 }
 
 export interface OffshoreDto {
+  navnPaVirksomhet: string;
   navnPaInnretning: string;
   typeInnretning: TypeInnretning;
   sokkelLand: LandKode;
 }
 
 export interface OmBordPaFlyDto {
+  navnPaVirksomhet: string;
   hjemmebaseLand: LandKode;
   hjemmebaseNavn: string;
   erVanligHjemmebase: boolean;
@@ -323,6 +325,7 @@ export interface OmBordPaFlyDto {
 }
 
 export interface PaLandDto {
+  navnPaVirksomhet: string;
   fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted;
   fastArbeidssted?: PaLandFastArbeidsstedDto;
   beskrivelseVekslende?: string;
@@ -337,6 +340,7 @@ export interface PaLandFastArbeidsstedDto {
 }
 
 export interface PaSkipDto {
+  navnPaVirksomhet: string;
   navnPaSkip: string;
   yrketTilArbeidstaker: string;
   seilerI: Farvann;

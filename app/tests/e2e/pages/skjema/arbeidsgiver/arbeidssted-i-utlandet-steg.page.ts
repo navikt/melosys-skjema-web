@@ -15,6 +15,9 @@ export class ArbeidsstedIUtlandetStegPage {
   readonly arbeidsstedTypeSelect: Locator;
   readonly lagreOgFortsettButton: Locator;
 
+  // Felles felt
+  readonly navnPaVirksomhetInput: Locator;
+
   // På land felter
   readonly fastEllerVekslendeRadioGroup: {
     FAST: Locator;
@@ -61,6 +64,11 @@ export class ArbeidsstedIUtlandetStegPage {
     this.arbeidsstedTypeSelect = page.getByRole("combobox", {
       name: nb.translation.arbeidsstedIUtlandetSteg.hvorSkalArbeidetUtfores,
     });
+
+    // Felles
+    this.navnPaVirksomhetInput = page.getByLabel(
+      nb.translation.arbeidsstedIUtlandetSteg.navnPaVirksomhet,
+    );
 
     // På land
     const fastEllerVekslendeGroup = page.getByRole("group", {

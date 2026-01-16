@@ -257,6 +257,8 @@ export const en = {
         "You must select which country the usual home base is located in",
       vanligHjemmebaseNavnErPakrevd:
         "The name of the usual home base is required",
+      navnPaVirksomhet: "Name of the business",
+      navnPaVirksomhetErPakrevd: "Name of the business is required",
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Employer's business in Norway",

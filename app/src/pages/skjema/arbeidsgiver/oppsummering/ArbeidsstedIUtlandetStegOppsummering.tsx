@@ -31,6 +31,12 @@ export function ArbeidsstedIUtlandetStegOppsummering({
   );
   const editHref = arbeidsstedSteg?.route.replace("$id", skjema.id) || "";
 
+  const navnPaVirksomhet =
+    arbeidsstedData?.paLand?.navnPaVirksomhet ??
+    arbeidsstedData?.offshore?.navnPaVirksomhet ??
+    arbeidsstedData?.paSkip?.navnPaVirksomhet ??
+    arbeidsstedData?.omBordPaFly?.navnPaVirksomhet;
+
   return arbeidsstedData ? (
     <FormSummary className="mt-8">
       <FormSummary.Header>
@@ -52,6 +58,15 @@ export function ArbeidsstedIUtlandetStegOppsummering({
             )}
           </FormSummary.Value>
         </FormSummary.Answer>
+
+        {navnPaVirksomhet && (
+          <FormSummary.Answer>
+            <FormSummary.Label>
+              {t("arbeidsstedIUtlandetSteg.navnPaVirksomhet")}
+            </FormSummary.Label>
+            <FormSummary.Value>{navnPaVirksomhet}</FormSummary.Value>
+          </FormSummary.Answer>
+        )}
 
         {arbeidsstedData.paLand && (
           <PaLandOppsummering paLand={arbeidsstedData.paLand} />

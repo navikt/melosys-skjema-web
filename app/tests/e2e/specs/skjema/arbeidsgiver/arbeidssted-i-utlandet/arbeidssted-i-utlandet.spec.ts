@@ -19,6 +19,7 @@ import { ArbeidsstedIUtlandetStegPage } from "../../../../pages/skjema/arbeidsgi
 const arbeidsstedIUtlandetMedVerdiIAlleFelter: ArbeidsstedIUtlandetDto = {
   arbeidsstedType: ArbeidsstedType.PA_LAND,
   paLand: {
+    navnPaVirksomhet: "Test Virksomhet AS",
     fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
     fastArbeidssted: {
       vegadresse: "Test Street",
@@ -30,19 +31,22 @@ const arbeidsstedIUtlandetMedVerdiIAlleFelter: ArbeidsstedIUtlandetDto = {
     erHjemmekontor: false,
   },
   offshore: {
+    navnPaVirksomhet: "Test Virksomhet AS",
     navnPaInnretning: "Test Platform",
     typeInnretning: TypeInnretning.PLATTFORM_ELLER_ANNEN_FAST_INNRETNING,
-    sokkelLand: LandKode.NO,
+    sokkelLand: LandKode.SE,
   },
   paSkip: {
+    navnPaVirksomhet: "Test Virksomhet AS",
     navnPaSkip: "Test Ship",
     yrketTilArbeidstaker: "Test Occupation",
     seilerI: Farvann.INTERNASJONALT_FARVANN,
-    flaggland: LandKode.NO,
+    flaggland: LandKode.SE,
     territorialfarvannLand: LandKode.SE,
   },
   omBordPaFly: {
-    hjemmebaseLand: LandKode.NO,
+    navnPaVirksomhet: "Test Virksomhet AS",
+    hjemmebaseLand: LandKode.SE,
     hjemmebaseNavn: "Oslo Airport",
     erVanligHjemmebase: false,
     vanligHjemmebaseLand: LandKode.SE,
@@ -79,6 +83,8 @@ test.describe("ArbeidsstedIUtlandet", () => {
         ArbeidsstedType.PA_LAND,
       );
 
+      await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+
       await arbeidsstedPage.fastEllerVekslendeRadioGroup.FAST.click();
 
       await arbeidsstedPage.vegadresseInput.fill("Test Street");
@@ -91,6 +97,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: ArbeidsstedType.PA_LAND,
         paLand: {
+          navnPaVirksomhet: "Test Virksomhet AS",
           fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
           fastArbeidssted: {
             vegadresse: "Test Street",
@@ -125,6 +132,8 @@ test.describe("ArbeidsstedIUtlandet", () => {
         ArbeidsstedType.PA_LAND,
       );
 
+      await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+
       await arbeidsstedPage.fastEllerVekslendeRadioGroup.VEKSLENDE.click();
 
       await arbeidsstedPage.beskrivelseVekslendeTextarea.fill(
@@ -136,6 +145,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: ArbeidsstedType.PA_LAND,
         paLand: {
+          navnPaVirksomhet: "Test Virksomhet AS",
           fastEllerVekslendeArbeidssted:
             FastEllerVekslendeArbeidssted.VEKSLENDE,
           beskrivelseVekslende: "Arbeidstaker veksler mellom flere lokasjoner",
@@ -166,6 +176,8 @@ test.describe("ArbeidsstedIUtlandet", () => {
         ArbeidsstedType.PA_SKIP,
       );
 
+      await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+
       await arbeidsstedPage.navnPaSkipInput.fill("MS Test Ship");
       await arbeidsstedPage.yrketTilArbeidstakerInput.fill("Kaptein");
 
@@ -176,6 +188,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: ArbeidsstedType.PA_SKIP,
         paSkip: {
+          navnPaVirksomhet: "Test Virksomhet AS",
           navnPaSkip: "MS Test Ship",
           yrketTilArbeidstaker: "Kaptein",
           seilerI: Farvann.INTERNASJONALT_FARVANN,
@@ -206,6 +219,8 @@ test.describe("ArbeidsstedIUtlandet", () => {
         ArbeidsstedType.PA_SKIP,
       );
 
+      await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+
       await arbeidsstedPage.navnPaSkipInput.fill("MS Test Ship");
       await arbeidsstedPage.yrketTilArbeidstakerInput.fill("Kaptein");
 
@@ -216,6 +231,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: ArbeidsstedType.PA_SKIP,
         paSkip: {
+          navnPaVirksomhet: "Test Virksomhet AS",
           navnPaSkip: "MS Test Ship",
           yrketTilArbeidstaker: "Kaptein",
           seilerI: Farvann.TERRITORIALFARVANN,
@@ -246,6 +262,8 @@ test.describe("ArbeidsstedIUtlandet", () => {
         ArbeidsstedType.OM_BORD_PA_FLY,
       );
 
+      await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+
       await arbeidsstedPage.hjemmebaseLandSelect.selectOption("DK");
 
       await arbeidsstedPage.hjemmebaseNavnInput.fill("Aarhus Airport");
@@ -255,6 +273,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: ArbeidsstedType.OM_BORD_PA_FLY,
         omBordPaFly: {
+          navnPaVirksomhet: "Test Virksomhet AS",
           hjemmebaseLand: LandKode.DK,
           hjemmebaseNavn: "Aarhus Airport",
           erVanligHjemmebase: true,
@@ -284,6 +303,8 @@ test.describe("ArbeidsstedIUtlandet", () => {
         ArbeidsstedType.OM_BORD_PA_FLY,
       );
 
+      await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+
       await arbeidsstedPage.hjemmebaseLandSelect.selectOption("DK");
 
       await arbeidsstedPage.hjemmebaseNavnInput.fill("Skagen Airport");
@@ -297,6 +318,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: ArbeidsstedType.OM_BORD_PA_FLY,
         omBordPaFly: {
+          navnPaVirksomhet: "Test Virksomhet AS",
           hjemmebaseLand: LandKode.DK,
           hjemmebaseNavn: "Skagen Airport",
           erVanligHjemmebase: false,
