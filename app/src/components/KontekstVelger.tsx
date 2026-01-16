@@ -3,8 +3,8 @@ import {
   ChevronDownIcon,
   GlobeIcon,
   HandshakeIcon,
+  PersonCircleIcon,
   PersonGroupIcon,
-  PersonIcon,
 } from "@navikt/aksel-icons";
 import { Button, HStack, Popover } from "@navikt/ds-react";
 import { DecoratorLocale, setParams } from "@navikt/nav-dekoratoren-moduler";
@@ -109,7 +109,7 @@ export function KontekstVelger() {
 
   const getIcon = () => {
     if (isDegSelv) {
-      return PersonIcon;
+      return PersonCircleIcon;
     }
     return KONTEKST_CONFIG[
       kontekst.representasjonstype as Exclude<Representasjonstype, "DEG_SELV">

@@ -1,10 +1,11 @@
 import {
   BriefcaseIcon,
+  ChevronRightIcon,
   HandshakeIcon,
+  PersonCircleIcon,
   PersonGroupIcon,
-  PersonIcon,
 } from "@navikt/aksel-icons";
-import { Box, Heading, LinkCard } from "@navikt/ds-react";
+import { BodyShort, Heading, HStack } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,7 +23,11 @@ export type Representasjonstype =
 
 interface RepresentationOption {
   type: Representasjonstype;
-  icon: ComponentType<{ "aria-hidden"?: boolean; fontSize?: string }>;
+  icon: ComponentType<{
+    "aria-hidden"?: boolean;
+    fontSize?: string;
+    className?: string;
+  }>;
   labelKey: string;
 }
 
@@ -37,18 +42,21 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
 
   return (
     <button
-      className="text-left"
+      className="w-full text-left border border-border-subtle rounded px-4 py-4 hover:bg-surface-action-subtle transition-colors"
       onClick={() => onSelect(option.type)}
       type="button"
     >
-      <LinkCard>
-        <Box asChild borderRadius="medium" padding="2">
-          <LinkCard.Icon>
-            <Icon aria-hidden fontSize="2rem" />
-          </LinkCard.Icon>
-        </Box>
-        <LinkCard.Title>{t(option.labelKey)}</LinkCard.Title>
-      </LinkCard>
+      <HStack align="center" gap="4" justify="space-between">
+        <HStack align="center" gap="4">
+          <Icon aria-hidden className="text-icon-action" fontSize="1.75rem" />
+          <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
+        </HStack>
+        <ChevronRightIcon
+          aria-hidden
+          className="text-icon-action"
+          fontSize="1.5rem"
+        />
+      </HStack>
     </button>
   );
 }
@@ -56,7 +64,7 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
 const REPRESENTATION_OPTIONS: RepresentationOption[] = [
   {
     type: "DEG_SELV",
-    icon: PersonIcon,
+    icon: PersonCircleIcon,
     labelKey: "landingsside.degSelv",
   },
   {
@@ -114,7 +122,7 @@ export function RepresentasjonVelger({
         </Heading>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         {REPRESENTATION_OPTIONS.map((option) => (
           <RepresentationCard
             key={option.type}
