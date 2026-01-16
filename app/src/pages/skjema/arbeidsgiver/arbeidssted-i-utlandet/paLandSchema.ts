@@ -9,6 +9,9 @@ export const paLandSchema = z.object({
   arbeidsstedType: z.literal(ArbeidsstedType.PA_LAND),
   paLand: z
     .object({
+      navnPaVirksomhet: z
+        .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
+        .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
       fastEllerVekslendeArbeidssted: z.enum(FastEllerVekslendeArbeidssted, {
         error: "arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende",
       }),
@@ -98,14 +101,13 @@ export const paLandSchema = z.object({
       },
     )
     .transform((data) => ({
-      fastEllerVekslendeArbeidssted: data.fastEllerVekslendeArbeidssted,
+      ...data,
       // Clear FAST fields when VEKSLENDE
       fastArbeidssted:
         data.fastEllerVekslendeArbeidssted ===
         FastEllerVekslendeArbeidssted.FAST
           ? data.fastArbeidssted
           : undefined,
-      erHjemmekontor: data.erHjemmekontor,
       // Clear VEKSLENDE fields when FAST
       beskrivelseVekslende:
         data.fastEllerVekslendeArbeidssted ===

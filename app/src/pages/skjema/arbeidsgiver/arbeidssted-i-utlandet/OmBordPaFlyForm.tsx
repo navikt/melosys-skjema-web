@@ -8,6 +8,7 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
+import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
@@ -25,7 +26,10 @@ export function OmBordPaFlyForm() {
   // We use Controller's fieldState.error for type-safe error handling
   return (
     <div className="mt-6">
+      <NavnPaVirksomhetFormPart formFieldName="omBordPaFly.navnPaVirksomhet" />
+
       <LandVelgerFormPart
+        className="mt-4"
         description={t("arbeidsstedIUtlandetSteg.hjemmebaseLandBeskrivelse")}
         formFieldName="omBordPaFly.hjemmebaseLand"
         label={t("arbeidsstedIUtlandetSteg.hjemmebaseLand")}

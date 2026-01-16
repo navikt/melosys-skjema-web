@@ -6,6 +6,9 @@ export const paSkipSchema = z.object({
   arbeidsstedType: z.literal(ArbeidsstedType.PA_SKIP),
   paSkip: z
     .object({
+      navnPaVirksomhet: z
+        .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
+        .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
       navnPaSkip: z
         .string({ error: "arbeidsstedIUtlandetSteg.navnPaSkipErPakrevd" })
         .min(1, "arbeidsstedIUtlandetSteg.navnPaSkipErPakrevd"),
@@ -41,9 +44,7 @@ export const paSkipSchema = z.object({
       },
     )
     .transform((data) => ({
-      navnPaSkip: data.navnPaSkip,
-      yrketTilArbeidstaker: data.yrketTilArbeidstaker,
-      seilerI: data.seilerI,
+      ...data,
       // Clear INTERNASJONALT_FARVANN field when TERRITORIALFARVANN
       flaggland:
         data.seilerI === Farvann.INTERNASJONALT_FARVANN

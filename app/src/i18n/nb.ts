@@ -279,6 +279,8 @@ export const nb = {
         "Du må velge hvilket land den vanlige hjemmebasen ligger i",
       vanligHjemmebaseNavnErPakrevd:
         "Navnet på den vanlige hjemmebasen er påkrevd",
+      navnPaVirksomhet: "Navn på virksomheten",
+      navnPaVirksomhetErPakrevd: "Navn på virksomheten er påkrevd",
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Arbeidsgiverens virksomhet i Norge",

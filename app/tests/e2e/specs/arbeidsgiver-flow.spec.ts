@@ -139,6 +139,11 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       ArbeidsstedType.PA_LAND,
     );
 
+    // Fyll ut navn på virksomhet
+    await arbeidsstedIUtlandetStegPage.navnPaVirksomhetInput.fill(
+      "Test Virksomhet AS",
+    );
+
     // Velg fast arbeidssted
     await arbeidsstedIUtlandetStegPage.fastEllerVekslendeRadioGroup.FAST.click();
 
@@ -155,6 +160,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     const expectedArbeidsstedIUtlandetPayload: ArbeidsstedIUtlandetDto = {
       arbeidsstedType: ArbeidsstedType.PA_LAND,
       paLand: {
+        navnPaVirksomhet: "Test Virksomhet AS",
         fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
         fastArbeidssted: {
           vegadresse: "Storgata",
@@ -274,6 +280,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     const arbeidsstedIUtlandetData: ArbeidsstedIUtlandetDto = {
       arbeidsstedType: ArbeidsstedType.PA_LAND,
       paLand: {
+        navnPaVirksomhet: "Test Virksomhet AS",
         fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
         fastArbeidssted: {
           vegadresse: "Storgata",

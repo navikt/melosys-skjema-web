@@ -6,6 +6,9 @@ export const omBordPaFlySchema = z.object({
   arbeidsstedType: z.literal(ArbeidsstedType.OM_BORD_PA_FLY),
   omBordPaFly: z
     .object({
+      navnPaVirksomhet: z
+        .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
+        .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
       hjemmebaseLand: z
         .string({ error: "arbeidsstedIUtlandetSteg.hjemmebaseLandErPakrevd" })
         .min(1, "arbeidsstedIUtlandetSteg.hjemmebaseLandErPakrevd"),
@@ -33,9 +36,7 @@ export const omBordPaFlySchema = z.object({
       },
     )
     .transform((data) => ({
-      hjemmebaseLand: data.hjemmebaseLand,
-      hjemmebaseNavn: data.hjemmebaseNavn,
-      erVanligHjemmebase: data.erVanligHjemmebase,
+      ...data,
       // Clear fields when erVanligHjemmebase is true
       vanligHjemmebaseLand: data.erVanligHjemmebase
         ? undefined

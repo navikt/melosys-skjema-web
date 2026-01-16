@@ -8,6 +8,7 @@ import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
+import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
@@ -25,11 +26,14 @@ export function PaLandForm() {
   // We use Controller's fieldState.error for individual field errors when available
   return (
     <div className="mt-6">
+      <NavnPaVirksomhetFormPart formFieldName="paLand.navnPaVirksomhet" />
+
       <Controller
         control={control}
         name="paLand.fastEllerVekslendeArbeidssted"
         render={({ field, fieldState }) => (
           <RadioGroup
+            className="mt-4"
             error={translateError(fieldState.error?.message)}
             legend={t(
               "arbeidsstedIUtlandetSteg.harFastArbeidsstedEllerVeksler",
