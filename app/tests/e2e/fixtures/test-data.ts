@@ -58,7 +58,7 @@ export const formFieldValues = {
   },
   periodeTil: "31.12.2026",
   periodeTilIso: "2026-12-31",
-  utsendelseLand: { label: "Sverige", value: "SV" },
+  utsendelseLand: { label: "Sverige", value: "SE" },
 };
 
 export const skjemaInnsendtKvittering: SkjemaInnsendtKvittering = {

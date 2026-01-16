@@ -157,7 +157,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
 
       await arbeidsstedPage.seilerIRadioGroup.INTERNASJONALT.click();
 
-      await arbeidsstedPage.flagglandSelect.selectOption("SV");
+      await arbeidsstedPage.flagglandSelect.selectOption("SE");
 
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: "PA_SKIP",
@@ -165,7 +165,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
           navnPaSkip: "MS Test Ship",
           yrketTilArbeidstaker: "Kaptein",
           seilerI: "INTERNASJONALT_FARVANN",
-          flaggland: "SV",
+          flaggland: "SE",
         },
       };
 
@@ -195,7 +195,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
 
       await arbeidsstedPage.seilerIRadioGroup.TERRITORIALFARVANN.click();
 
-      await arbeidsstedPage.territorialfarvannLandSelect.selectOption("SV");
+      await arbeidsstedPage.territorialfarvannLandSelect.selectOption("SE");
 
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
         arbeidsstedType: "PA_SKIP",
@@ -203,7 +203,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
           navnPaSkip: "MS Test Ship",
           yrketTilArbeidstaker: "Kaptein",
           seilerI: "TERRITORIALFARVANN",
-          territorialfarvannLand: "SV",
+          territorialfarvannLand: "SE",
         },
       };
 
@@ -274,7 +274,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
 
       await arbeidsstedPage.erVanligHjemmebaseRadioGroup.NEI.click();
 
-      await arbeidsstedPage.vanligHjemmebaseLandSelect.selectOption("SV");
+      await arbeidsstedPage.vanligHjemmebaseLandSelect.selectOption("SE");
 
       await arbeidsstedPage.vanligHjemmebaseNavnInput.fill("Stockholm Airport");
 
@@ -284,7 +284,7 @@ test.describe("ArbeidsstedIUtlandet", () => {
           hjemmebaseLand: "DK",
           hjemmebaseNavn: "Skagen Airport",
           erVanligHjemmebase: false,
-          vanligHjemmebaseLand: "SV",
+          vanligHjemmebaseLand: "SE",
           vanligHjemmebaseNavn: "Stockholm Airport",
         },
       };

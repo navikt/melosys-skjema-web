@@ -8,27 +8,50 @@ type LandVelgerFormPartProps = {
   formFieldName: string;
   label: string;
   className?: string;
-  landOptions?: Array<{ value: string; label: string }>;
 } & Omit<SelectProps, "children" | "onChange" | "value">;
 
-const defaultLandOptions = [
-  { value: "SV", label: "Sverige" },
-  { value: "DK", label: "Danmark" },
-  { value: "FI", label: "Finland" },
-  { value: "DE", label: "Tyskland" },
-  { value: "FR", label: "Frankrike" },
-  { value: "ES", label: "Spania" },
-  { value: "IT", label: "Italia" },
-  { value: "NL", label: "Nederland" },
+const landOptions = [
   { value: "BE", label: "Belgia" },
+  { value: "BG", label: "Bulgaria" },
+  { value: "DK", label: "Danmark" },
+  { value: "EE", label: "Estland" },
+  { value: "FI", label: "Finland" },
+  { value: "FR", label: "Frankrike" },
+  { value: "FO", label: "Færøyene" },
+  { value: "GL", label: "Grønland" },
+  { value: "GR", label: "Hellas" },
+  { value: "IE", label: "Irland" },
+  { value: "IS", label: "Island" },
+  { value: "IT", label: "Italia" },
+  { value: "HR", label: "Kroatia" },
+  { value: "CY", label: "Kypros" },
+  { value: "LV", label: "Latvia" },
+  { value: "LI", label: "Liechtenstein" },
+  { value: "LT", label: "Litauen" },
+  { value: "LU", label: "Luxembourg" },
+  { value: "MT", label: "Malta" },
+  { value: "NL", label: "Nederland" },
+  { value: "PL", label: "Polen" },
+  { value: "PT", label: "Portugal" },
+  { value: "RO", label: "Romania" },
+  { value: "SK", label: "Slovakia" },
+  { value: "SI", label: "Slovenia" },
+  { value: "ES", label: "Spania" },
+  { value: "GB", label: "Storbritannia" },
+  { value: "SJ", label: "Svalbard og Jan Mayen" },
+  { value: "CH", label: "Sveits" },
+  { value: "SE", label: "Sverige" },
+  { value: "CZ", label: "Tsjekkia" },
+  { value: "DE", label: "Tyskland" },
+  { value: "HU", label: "Ungarn" },
   { value: "AT", label: "Østerrike" },
+  { value: "AX", label: "Åland" },
 ];
 
 export function LandVelgerFormPart({
   formFieldName,
   label,
   className,
-  landOptions = defaultLandOptions,
   ...selectProps
 }: LandVelgerFormPartProps) {
   const { register, getFieldState, formState } = useFormContext();
@@ -57,7 +80,7 @@ export function LandVelgerFormPart({
 }
 
 export function landKodeTilNavn(landkode: string): string {
-  const land = defaultLandOptions.find((land) => land.value === landkode);
+  const land = landOptions.find((land) => land.value === landkode);
 
   return land ? land.label : landkode;
 }
