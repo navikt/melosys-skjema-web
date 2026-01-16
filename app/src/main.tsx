@@ -36,11 +36,8 @@ i18n.use(initReactI18next).init({
   },
 });
 
-// Set up language support
-setAvailableLanguages([
-  { locale: "nb", handleInApp: true },
-  { locale: "en", handleInApp: true },
-]);
+// Hide language selector in decorator - we use our own MaalformVelger instead
+setAvailableLanguages([]);
 
 export const queryClient = new QueryClient();
 

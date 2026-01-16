@@ -1,11 +1,13 @@
 import {
   BriefcaseIcon,
   ChevronDownIcon,
+  GlobeIcon,
   HandshakeIcon,
   PersonGroupIcon,
   PersonIcon,
 } from "@navikt/aksel-icons";
 import { Button, HStack, Popover } from "@navikt/ds-react";
+import { DecoratorLocale, setParams } from "@navikt/nav-dekoratoren-moduler";
 import { useLocation } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useRef, useState } from "react";
@@ -23,6 +25,36 @@ type Representasjonstype =
 interface KontekstConfig {
   icon: ComponentType<{ "aria-hidden"?: boolean; fontSize?: string }>;
   tekstKey: string;
+}
+
+const LANGUAGES: { code: DecoratorLocale; label: string }[] = [
+  { code: "nb", label: "Norsk" },
+  { code: "en", label: "English" },
+];
+
+function MaalformValg() {
+  const { i18n } = useTranslation();
+
+  const handleChangeLanguage = async (code: DecoratorLocale) => {
+    await setParams({ language: code });
+    await i18n.changeLanguage(code);
+  };
+
+  return (
+    <HStack align="center" gap="2">
+      <GlobeIcon aria-hidden fontSize="1.5rem" />
+      {LANGUAGES.map((lang) => (
+        <Button
+          key={lang.code}
+          onClick={() => handleChangeLanguage(lang.code)}
+          size="small"
+          variant={i18n.language === lang.code ? "primary" : "tertiary"}
+        >
+          {lang.label}
+        </Button>
+      ))}
+    </HStack>
+  );
 }
 
 const KONTEKST_CONFIG: Record<
@@ -117,6 +149,8 @@ export function KontekstVelger() {
             onVelg={() => setIsOpen(false)}
             visOverskrift={false}
           />
+          <hr className="my-4 border-border-subtle" />
+          <MaalformValg />
         </Popover.Content>
       </Popover>
     </>
