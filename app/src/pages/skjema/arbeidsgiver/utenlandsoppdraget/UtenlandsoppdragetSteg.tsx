@@ -28,7 +28,6 @@ import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 export const stepKey = "utenlandsoppdraget";
 
 // Date range constants for assignment period selection
-const YEARS_BACK_FROM_CURRENT = 1;
 const YEARS_FORWARD_FROM_CURRENT = 5;
 
 type UtenlandsoppdragFormData = z.infer<typeof utenlandsoppdragSchema>;
@@ -55,11 +54,8 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   } = formMethods;
 
   const dateLimits = {
-    fromDate: new Date(
-      new Date().getFullYear() - YEARS_BACK_FROM_CURRENT,
-      0,
-      1,
-    ),
+    // Dato norge ble EØS medlem
+    fromDate: new Date(1995, 0, 1),
     toDate: new Date(
       new Date().getFullYear() + YEARS_FORWARD_FROM_CURRENT,
       11,
