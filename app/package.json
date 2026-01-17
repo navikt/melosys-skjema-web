@@ -13,7 +13,8 @@
     "generate-types": "swagger-typescript-api generate --path https://melosys-skjema-api.intern.dev.nav.no/v3/api-docs --output ./src/types --union-enums --no-client -n melosysSkjemaTypes",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:debug": "playwright test --debug"
+    "test:e2e:debug": "playwright test --debug",
+    "sync-skjema-definisjon": "node scripts/sync-skjema-definisjon.js"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
