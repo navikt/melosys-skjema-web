@@ -176,6 +176,57 @@ server/                        # Express server
 └── eslint.config.mjs
 ```
 
+## Skjemadefinisjon-arkitektur
+
+Skjemadefinisjoner (labels, valideringsregler, alternativer) kommer fra backend som én kilde til sannhet. Dette sikrer konsistens mellom frontend og backend, og muliggjør versjonering for etterlevelse.
+
+```mermaid
+flowchart TB
+    subgraph Backend["melosys-skjema-api"]
+        JSON["skjemaDefinisjonA1.json<br/>(master data)"]
+    end
+
+    subgraph Sync["Sync-prosess"]
+        Script["npm run sync-skjema-definisjon"]
+    end
+
+    subgraph Frontend["melosys-skjema-web/app"]
+        TS["src/constants/skjemaDefinisjonA1.ts<br/>(TypeScript med 'as const')"]
+        Components["React-komponenter<br/>(skjema, oppsummering)"]
+        E2E["E2E-tester<br/>(Playwright page objects)"]
+    end
+
+    JSON -->|HTTP fetch| Script
+    Script -->|Genererer| TS
+    TS -->|Import| Components
+    TS -->|Import| E2E
+```
+
+### Synkronisering
+
+```bash
+cd app
+npm run sync-skjema-definisjon
+```
+
+Dette henter skjemadefinisjonen fra backend og genererer `skjemaDefinisjonA1.ts` med full TypeScript-typing.
+
+### Bruk i kode
+
+```typescript
+import { SKJEMA_DEFINISJON_A1, getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
+
+// Hent seksjon
+const seksjon = getSeksjon("utenlandsoppdragetArbeidsgiver");
+
+// Hent felt med label
+const felt = getFelt("arbeidsstedPaLand", "vegadresse");
+console.log(felt.label); // "Vegadresse"
+
+// Direkte tilgang for felter med alternativer
+const alternativer = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet.felter.arbeidsstedType.alternativer;
+```
+
 ## Kodestandarder
 
 - ESLint med strenge regler (Unicorn, React, import-sorting)
