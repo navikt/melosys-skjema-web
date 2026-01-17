@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiverenDto,
@@ -8,6 +9,11 @@ import type {
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
+
+// Hent felter fra statiske definisjoner
+const virksomhetINorge =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsgiverensVirksomhetINorge;
+const felter = virksomhetINorge.felter;
 
 export class ArbeidsgiverensVirksomhetINorgeStegPage {
   readonly page: Page;
@@ -22,12 +28,11 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg.tittel,
+      name: virksomhetINorge.tittel,
     });
 
     const offentligVirksomhetGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg
-        .erArbeidsgiverenEnOffentligVirksomhet,
+      name: felter.erArbeidsgiverenOffentligVirksomhet.label,
     });
     this.offentligVirksomhetRadioGroup = {
       JA: offentligVirksomhetGroup.getByRole("radio", {
@@ -39,8 +44,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     };
 
     const bemanningsEllerVikarbyraGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg
-        .erArbeidsgiverenEtBemanningsEllerVikarbyra,
+      name: felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label,
     });
     this.bemanningsEllerVikarbyraRadioGroup = {
       JA: bemanningsEllerVikarbyraGroup.getByRole("radio", {
@@ -52,8 +56,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     };
 
     const vanligDriftGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsgiverensVirksomhetINorgeSteg
-        .opprettholderArbeidsgiverenVanligDriftINorge,
+      name: felter.opprettholderArbeidsgiverenVanligDrift.label,
     });
     this.vanligDriftRadioGroup = {
       JA: vanligDriftGroup.getByRole("radio", {

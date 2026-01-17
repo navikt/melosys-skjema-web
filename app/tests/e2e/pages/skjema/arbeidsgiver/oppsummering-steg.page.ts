@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { landKodeTilNavn } from "../../../../../src/components/LandVelgerFormPart";
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiverensVirksomhetINorgeDto,
@@ -11,6 +12,19 @@ import type {
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
+
+// Hent felter fra statiske definisjoner
+const virksomhetINorge =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsgiverensVirksomhetINorge;
+const utenlandsoppdraget =
+  SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidsgiver;
+const arbeidsstedIUtlandet =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet;
+const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
+const arbeidstakerensLonn =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
+const tilleggsopplysninger =
+  SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidsgiver;
 
 export class OppsummeringStegPage {
   readonly page: Page;
@@ -42,7 +56,7 @@ export class OppsummeringStegPage {
   ) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet}") + dd`,
+        `dt:has-text("${virksomhetINorge.felter.erArbeidsgiverenOffentligVirksomhet.label}") + dd`,
       ),
     ).toHaveText(
       data.erArbeidsgiverenOffentligVirksomhet
@@ -53,7 +67,7 @@ export class OppsummeringStegPage {
     if (data.erArbeidsgiverenBemanningsEllerVikarbyraa !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra}") + dd`,
+          `dt:has-text("${virksomhetINorge.felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label}") + dd`,
         ),
       ).toHaveText(
         data.erArbeidsgiverenBemanningsEllerVikarbyraa
@@ -65,7 +79,7 @@ export class OppsummeringStegPage {
     if (data.opprettholderArbeidsgiverenVanligDrift !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge}") + dd`,
+          `dt:has-text("${virksomhetINorge.felter.opprettholderArbeidsgiverenVanligDrift.label}") + dd`,
         ),
       ).toHaveText(
         data.opprettholderArbeidsgiverenVanligDrift
@@ -78,25 +92,25 @@ export class OppsummeringStegPage {
   async assertUtenlandsoppdragetData(data: UtenlandsoppdragetDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.utsendelseLand.label}") + dd`,
       ),
     ).toHaveText(landKodeTilNavn(data.utsendelseLand));
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.periode.fraDato}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerUtsendelsePeriode.fraDatoLabel}") + dd`,
       ),
     ).toHaveText(data.arbeidstakerUtsendelsePeriode.fraDato);
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.periode.tilDato}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerUtsendelsePeriode.tilDatoLabel}") + dd`,
       ),
     ).toHaveText(data.arbeidstakerUtsendelsePeriode.tilDato);
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.arbeidsgiverHarOppdragILandet.label}") + dd`,
       ),
     ).toHaveText(
       data.arbeidsgiverHarOppdragILandet
@@ -106,7 +120,7 @@ export class OppsummeringStegPage {
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerBleAnsattForUtenlandsoppdraget.label}") + dd`,
       ),
     ).toHaveText(
       data.arbeidstakerBleAnsattForUtenlandsoppdraget
@@ -116,7 +130,7 @@ export class OppsummeringStegPage {
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerForblirAnsattIHelePerioden.label}") + dd`,
       ),
     ).toHaveText(
       data.arbeidstakerForblirAnsattIHelePerioden
@@ -126,7 +140,7 @@ export class OppsummeringStegPage {
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetSteg.erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerErstatterAnnenPerson.label}") + dd`,
       ),
     ).toHaveText(
       data.arbeidstakerErstatterAnnenPerson
@@ -139,7 +153,7 @@ export class OppsummeringStegPage {
     ) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.utenlandsoppdragetSteg.vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget}") + dd`,
+          `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget.label}") + dd`,
         ),
       ).toHaveText(
         data.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget
@@ -151,7 +165,7 @@ export class OppsummeringStegPage {
     if (data.utenlandsoppholdetsBegrunnelse !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.utenlandsoppdragetSteg.hvorforSkalArbeidstakerenArbeideIUtlandet}") + dd`,
+          `dt:has-text("${utenlandsoppdraget.felter.utenlandsoppholdetsBegrunnelse.label}") + dd`,
         ),
       ).toHaveText(data.utenlandsoppholdetsBegrunnelse);
     }
@@ -159,7 +173,7 @@ export class OppsummeringStegPage {
     if (data.ansettelsesforholdBeskrivelse !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.utenlandsoppdragetSteg.beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden}") + dd`,
+          `dt:has-text("${utenlandsoppdraget.felter.ansettelsesforholdBeskrivelse.label}") + dd`,
         ),
       ).toHaveText(data.ansettelsesforholdBeskrivelse);
     }
@@ -169,7 +183,7 @@ export class OppsummeringStegPage {
     // Verifiser arbeidssted type
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.hvorSkalArbeidetUtfores}") + dd`,
+        `dt:has-text("${arbeidsstedIUtlandet.felter.arbeidsstedType.label}") + dd`,
       ),
     ).toBeVisible();
 
@@ -178,7 +192,7 @@ export class OppsummeringStegPage {
       if (data.paLand.fastEllerVekslendeArbeidssted) {
         await expect(
           this.page.locator(
-            `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.harFastArbeidsstedEllerVeksler}") + dd`,
+            `dt:has-text("${paLandFelter.fastEllerVekslendeArbeidssted.label}") + dd`,
           ),
         ).toBeVisible();
       }
@@ -189,7 +203,7 @@ export class OppsummeringStegPage {
       ) {
         await expect(
           this.page.locator(
-            `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.vegadresse}") + dd`,
+            `dt:has-text("${paLandFelter.vegadresse.label}") + dd`,
           ),
         ).toHaveText(data.paLand.fastArbeidssted.vegadresse);
       }
@@ -197,7 +211,7 @@ export class OppsummeringStegPage {
       if (data.paLand.erHjemmekontor !== undefined) {
         await expect(
           this.page.locator(
-            `dt:has-text("${nb.translation.arbeidsstedIUtlandetSteg.erHjemmekontor}") + dd`,
+            `dt:has-text("${paLandFelter.erHjemmekontor.label}") + dd`,
           ),
         ).toHaveText(
           data.paLand.erHjemmekontor
@@ -211,7 +225,7 @@ export class OppsummeringStegPage {
   async assertArbeidstakerensLonnData(data: ArbeidstakerensLonnDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.arbeidstakerenslonnSteg.utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden}") + dd`,
+        `dt:has-text("${arbeidstakerensLonn.felter.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden.label}") + dd`,
       ),
     ).toHaveText(
       data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
@@ -248,7 +262,7 @@ export class OppsummeringStegPage {
   async assertTilleggsopplysningerData(data: TilleggsopplysningerDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.tilleggsopplysningerSteg.harDuNoenFlereOpplysningerTilSoknaden}") + dd`,
+        `dt:has-text("${tilleggsopplysninger.felter.harFlereOpplysningerTilSoknaden.label}") + dd`,
       ),
     ).toHaveText(
       data.harFlereOpplysningerTilSoknaden
@@ -259,7 +273,7 @@ export class OppsummeringStegPage {
     if (data.tilleggsopplysningerTilSoknad !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden}") + dd`,
+          `dt:has-text("${tilleggsopplysninger.felter.tilleggsopplysningerTilSoknad.label}") + dd`,
         ),
       ).toHaveText(data.tilleggsopplysningerTilSoknad);
     }

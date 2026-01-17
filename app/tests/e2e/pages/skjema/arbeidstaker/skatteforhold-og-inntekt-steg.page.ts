@@ -1,11 +1,17 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidstakersSkjemaDto,
   SkatteforholdOgInntektDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+
+// Hent felter fra statiske definisjoner
+const skatteforholdOgInntekt =
+  SKJEMA_DEFINISJON_A1.seksjoner.skatteforholdOgInntekt;
+const felter = skatteforholdOgInntekt.felter;
 
 export class SkatteforholdOgInntektStegPage {
   readonly page: Page;
@@ -22,12 +28,11 @@ export class SkatteforholdOgInntektStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.skatteforholdOgInntektSteg.tittel,
+      name: skatteforholdOgInntekt.tittel,
     });
 
     const erSkattepliktigTilNorgeGroup = page.getByRole("group", {
-      name: nb.translation.skatteforholdOgInntektSteg
-        .erDuSkattepliktigTilNorgeIHeleUtsendingsperioden,
+      name: felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label,
     });
     this.erSkattepliktigTilNorgeRadioGroup = {
       JA: erSkattepliktigTilNorgeGroup.getByRole("radio", {
@@ -39,8 +44,7 @@ export class SkatteforholdOgInntektStegPage {
     };
 
     const mottarPengestotteFraAnnetEosLandGroup = page.getByRole("group", {
-      name: nb.translation.skatteforholdOgInntektSteg
-        .mottarDuPengestotteFraEtAnnetEosLandEllerSveits,
+      name: felter.mottarPengestotteFraAnnetEosLandEllerSveits.label,
     });
     this.mottarPengestotteFraAnnetEosLandRadioGroup = {
       JA: mottarPengestotteFraAnnetEosLandGroup.getByRole("radio", {
@@ -52,15 +56,13 @@ export class SkatteforholdOgInntektStegPage {
     };
 
     this.landSomUtbetalerPengestotteCombobox = page.getByRole("combobox", {
-      name: nb.translation.skatteforholdOgInntektSteg
-        .fraHvilketLandMottarDuPengestotte,
+      name: felter.landSomUtbetalerPengestotte.label,
     });
     this.pengestotteBelopInput = page.getByLabel(
-      nb.translation.skatteforholdOgInntektSteg
-        .hvorMyePengerMottarDuBruttoPerManed,
+      felter.pengestotteSomMottasFraAndreLandBelop.label,
     );
     this.pengestotteBeskrivelseInput = page.getByLabel(
-      nb.translation.skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu,
+      felter.pengestotteSomMottasFraAndreLandBeskrivelse.label,
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {

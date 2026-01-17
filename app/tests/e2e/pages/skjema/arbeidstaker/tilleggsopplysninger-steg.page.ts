@@ -1,11 +1,17 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidstakersSkjemaDto,
   TilleggsopplysningerDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+
+// Hent felter fra statiske definisjoner
+const tilleggsopplysninger =
+  SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidstaker;
+const felter = tilleggsopplysninger.felter;
 
 export class TilleggsopplysningerStegPage {
   readonly page: Page;
@@ -19,12 +25,11 @@ export class TilleggsopplysningerStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.tilleggsopplysningerSteg.tittel,
+      name: tilleggsopplysninger.tittel,
     });
 
     const harFlereOpplysningerGroup = page.getByRole("group", {
-      name: nb.translation.tilleggsopplysningerSteg
-        .harDuNoenFlereOpplysningerTilSoknaden,
+      name: felter.harFlereOpplysningerTilSoknaden.label,
     });
     this.harFlereOpplysningerRadioGroup = {
       JA: harFlereOpplysningerGroup.getByRole("radio", {
@@ -36,8 +41,7 @@ export class TilleggsopplysningerStegPage {
     };
 
     this.tilleggsopplysningerTextarea = page.getByLabel(
-      nb.translation.tilleggsopplysningerSteg
-        .beskriveFlereOpplysningerTilSoknaden,
+      felter.tilleggsopplysningerTilSoknad.label,
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {

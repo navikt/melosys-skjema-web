@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { landKodeTilNavn } from "../../../../../src/components/LandVelgerFormPart";
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidssituasjonDto,
@@ -10,6 +11,16 @@ import type {
   TilleggsopplysningerDto,
   UtenlandsoppdragetArbeidstakersDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
+
+// Hent felter fra statiske definisjoner
+const utenlandsoppdraget =
+  SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidstaker;
+const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
+const skatteforholdOgInntekt =
+  SKJEMA_DEFINISJON_A1.seksjoner.skatteforholdOgInntekt;
+const familiemedlemmer = SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer;
+const tilleggsopplysninger =
+  SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidstaker;
 
 export class OppsummeringStegPage {
   readonly page: Page;
@@ -41,19 +52,19 @@ export class OppsummeringStegPage {
   ) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.utenlandsoppdragetArbeidstakerSteg.iHvilketLandSkalDuUtforeArbeid}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.utsendelsesLand.label}") + dd`,
       ),
     ).toHaveText(landKodeTilNavn(data.utsendelsesLand));
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.periode.fraDato}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.utsendelsePeriode.fraDatoLabel}") + dd`,
       ),
     ).toHaveText(data.utsendelsePeriode.fraDato);
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.periode.tilDato}") + dd`,
+        `dt:has-text("${utenlandsoppdraget.felter.utsendelsePeriode.tilDatoLabel}") + dd`,
       ),
     ).toHaveText(data.utsendelsePeriode.tilDato);
   }
@@ -61,7 +72,7 @@ export class OppsummeringStegPage {
   async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.arbeidssituasjonSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen}") + dd`,
+        `dt:has-text("${arbeidssituasjon.felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label}") + dd`,
       ),
     ).toHaveText(
       data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
@@ -77,7 +88,7 @@ export class OppsummeringStegPage {
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.arbeidssituasjonSteg.skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver}") + dd`,
+        `dt:has-text("${arbeidssituasjon.felter.skalJobbeForFlereVirksomheter.label}") + dd`,
       ),
     ).toHaveText(
       data.skalJobbeForFlereVirksomheter
@@ -89,7 +100,7 @@ export class OppsummeringStegPage {
   async assertSkatteforholdOgInntektData(data: SkatteforholdOgInntektDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.skatteforholdOgInntektSteg.erDuSkattepliktigTilNorgeIHeleUtsendingsperioden}") + dd`,
+        `dt:has-text("${skatteforholdOgInntekt.felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label}") + dd`,
       ),
     ).toHaveText(
       data.erSkattepliktigTilNorgeIHeleutsendingsperioden
@@ -99,7 +110,7 @@ export class OppsummeringStegPage {
 
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.skatteforholdOgInntektSteg.mottarDuPengestotteFraEtAnnetEosLandEllerSveits}") + dd`,
+        `dt:has-text("${skatteforholdOgInntekt.felter.mottarPengestotteFraAnnetEosLandEllerSveits.label}") + dd`,
       ),
     ).toHaveText(
       data.mottarPengestotteFraAnnetEosLandEllerSveits
@@ -110,7 +121,7 @@ export class OppsummeringStegPage {
     if (data.landSomUtbetalerPengestotte !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.skatteforholdOgInntektSteg.fraHvilketLandMottarDuPengestotte}") + dd`,
+          `dt:has-text("${skatteforholdOgInntekt.felter.landSomUtbetalerPengestotte.label}") + dd`,
         ),
       ).toHaveText(landKodeTilNavn(data.landSomUtbetalerPengestotte));
     }
@@ -118,7 +129,7 @@ export class OppsummeringStegPage {
     if (data.pengestotteSomMottasFraAndreLandBelop !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.skatteforholdOgInntektSteg.hvorMyePengerMottarDuBruttoPerManed}") + dd`,
+          `dt:has-text("${skatteforholdOgInntekt.felter.pengestotteSomMottasFraAndreLandBelop.label}") + dd`,
         ),
       ).toHaveText(data.pengestotteSomMottasFraAndreLandBelop);
     }
@@ -126,7 +137,7 @@ export class OppsummeringStegPage {
     if (data.pengestotteSomMottasFraAndreLandBeskrivelse !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu}") + dd`,
+          `dt:has-text("${skatteforholdOgInntekt.felter.pengestotteSomMottasFraAndreLandBeskrivelse.label}") + dd`,
         ),
       ).toHaveText(data.pengestotteSomMottasFraAndreLandBeskrivelse);
     }
@@ -135,7 +146,7 @@ export class OppsummeringStegPage {
   async assertFamiliemedlemmerData(data: FamiliemedlemmerDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMed}") + dd`,
+        `dt:has-text("${familiemedlemmer.felter.skalHaMedFamiliemedlemmer.label}") + dd`,
       ),
     ).toHaveText(
       data.skalHaMedFamiliemedlemmer
@@ -147,7 +158,7 @@ export class OppsummeringStegPage {
   async assertTilleggsopplysningerData(data: TilleggsopplysningerDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.tilleggsopplysningerSteg.harDuNoenFlereOpplysningerTilSoknaden}") + dd`,
+        `dt:has-text("${tilleggsopplysninger.felter.harFlereOpplysningerTilSoknaden.label}") + dd`,
       ),
     ).toHaveText(
       data.harFlereOpplysningerTilSoknaden
@@ -158,7 +169,7 @@ export class OppsummeringStegPage {
     if (data.tilleggsopplysningerTilSoknad !== undefined) {
       await expect(
         this.page.locator(
-          `dt:has-text("${nb.translation.tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden}") + dd`,
+          `dt:has-text("${tilleggsopplysninger.felter.tilleggsopplysningerTilSoknad.label}") + dd`,
         ),
       ).toHaveText(data.tilleggsopplysningerTilSoknad);
     }
