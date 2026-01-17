@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
+import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postArbeidssituasjon } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
@@ -22,6 +23,24 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
+
+// Hent felt-definisjoner fra backend (statisk kopi)
+const harVaertFelt = getFelt(
+  "arbeidssituasjon",
+  "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
+);
+const aktivitetFelt = getFelt(
+  "arbeidssituasjon",
+  "aktivitetIMaanedenFoerUtsendingen",
+);
+const skalJobbeFelt = getFelt(
+  "arbeidssituasjon",
+  "skalJobbeForFlereVirksomheter",
+);
+const virksomheterFelt = getFelt(
+  "arbeidssituasjon",
+  "virksomheterArbeidstakerJobberForIutsendelsesPeriode",
+);
 
 export const stepKey = "arbeidssituasjon";
 
@@ -101,21 +120,17 @@ function ArbeidssituasjonStegContent({
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
-            legend={t(
-              "arbeidssituasjonSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen",
-            )}
+            legend={harVaertFelt.label}
           />
 
           {harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
             <Textarea
               className="mt-4"
-              description={t(
-                "arbeidssituasjonSteg.beskriveAktivitetFoerUtsendingBeskrivelse",
-              )}
+              description={aktivitetFelt.hjelpetekst}
               error={translateError(
                 errors.aktivitetIMaanedenFoerUtsendingen?.message,
               )}
-              label={t("arbeidssituasjonSteg.beskriveAktivitetFoerUtsending")}
+              label={aktivitetFelt.label}
               {...register("aktivitetIMaanedenFoerUtsendingen")}
             />
           )}
@@ -123,21 +138,15 @@ function ArbeidssituasjonStegContent({
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="skalJobbeForFlereVirksomheter"
-            legend={t(
-              "arbeidssituasjonSteg.skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver",
-            )}
+            legend={skalJobbeFelt.label}
           />
 
           {skalJobbeForFlereVirksomheter && (
             <NorskeOgUtenlandskeVirksomheterFormPart
-              description={t(
-                "arbeidssituasjonSteg.leggTilVirksomheterDuSkalJobbeForBeskrivelse",
-              )}
+              description={virksomheterFelt.hjelpetekst}
               fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode"
               includeAnsettelsesform
-              label={t(
-                "arbeidssituasjonSteg.hvemSkalDuJobbeForIUtsendelsesPerioden",
-              )}
+              label={virksomheterFelt.label}
             />
           )}
         </SkjemaSteg>

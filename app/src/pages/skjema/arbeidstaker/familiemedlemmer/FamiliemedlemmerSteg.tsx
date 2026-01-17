@@ -27,6 +27,7 @@ import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { getFelt, SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postFamiliemedlemmer } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
@@ -47,6 +48,14 @@ import {
   familiemedlemmerSchema,
   familiemedlemSchema,
 } from "./familiemedlemmerStegSchema.ts";
+
+// Hent felt-definisjoner fra backend (statisk kopi)
+const skalHaMedFelt = getFelt("familiemedlemmer", "skalHaMedFamiliemedlemmer");
+// Hent familiemedlemmer-feltet direkte for tilgang til leggTilLabel
+const familiemedlemmerListeFelt =
+  SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer.felter.familiemedlemmer;
+// Hent elementDefinisjon for familiemedlem-feltene
+const elementDef = familiemedlemmerListeFelt.elementDefinisjon;
 
 export const stepKey = "familiemedlemmer";
 
@@ -116,13 +125,9 @@ function FamiliemedlemmerStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            description={t(
-              "familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMedBeskrivelse",
-            )}
+            description={skalHaMedFelt.hjelpetekst}
             formFieldName="skalHaMedFamiliemedlemmer"
-            legend={t(
-              "familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMed",
-            )}
+            legend={skalHaMedFelt.label}
           />
 
           {skalHaMedFamiliemedlemmer && (
@@ -141,7 +146,6 @@ function FamiliemedlemmerStegContent({
 
 function FamiliemedlemmerListe() {
   const { control } = useFormContext();
-  const { t } = useTranslation();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const { fields, append, remove, update } = useFieldArray({
@@ -165,12 +169,12 @@ function FamiliemedlemmerListe() {
         update={update}
       />
       <LeggTilKnapp className="mt-2" onClick={apneAddModal}>
-        {t("familiemedlemmerSteg.leggTilFamiliemedlem")}
+        {familiemedlemmerListeFelt.leggTilLabel}
       </LeggTilKnapp>
 
       <Modal
         header={{
-          heading: t("familiemedlemmerSteg.leggTilFamiliemedlem"),
+          heading: familiemedlemmerListeFelt.leggTilLabel,
         }}
         onClose={lukkAddModal}
         open={isAddModalOpen}
@@ -218,7 +222,7 @@ function ValgteFamiliemedlemmer({
 
   return (
     <>
-      <Label>{t("familiemedlemmerSteg.familiemedlemmer")}</Label>
+      <Label>{familiemedlemmerListeFelt.label}</Label>
       <Table className="max-w-md" size="small">
         <Table.Body>
           {familiemedlemmer.map((familiemedlem, index) => (
@@ -289,23 +293,23 @@ function LeggTilEllerEndreFamiliemedlemModalContent({
           <TextField
             {...modalForm.register("fornavn")}
             error={translateError(modalForm.formState.errors.fornavn?.message)}
-            label={t("familiemedlemmerSteg.fornavn")}
+            label={elementDef.fornavn.label}
           />
           <TextField
             {...modalForm.register("etternavn")}
             error={translateError(
               modalForm.formState.errors.etternavn?.message,
             )}
-            label={t("familiemedlemmerSteg.etternavn")}
+            label={elementDef.etternavn.label}
           />
           <RadioGroupJaNeiFormPart
             formFieldName="harNorskFodselsnummerEllerDnummer"
-            legend={t("familiemedlemmerSteg.harNorskFodselsnummerEllerDnummer")}
+            legend={elementDef.harNorskFodselsnummerEllerDnummer.label}
           />
           {harNorskFodselsnummerEllerDnummer === false && (
             <DatePickerFormPart
               formFieldName="fodselsdato"
-              label={t("familiemedlemmerSteg.fodselsdato")}
+              label={elementDef.fodselsdato.label}
             />
           )}
           {harNorskFodselsnummerEllerDnummer && (
@@ -314,7 +318,7 @@ function LeggTilEllerEndreFamiliemedlemModalContent({
               error={translateError(
                 modalForm.formState.errors.fodselsnummer?.message,
               )}
-              label={t("familiemedlemmerSteg.fodselsnummer")}
+              label={elementDef.fodselsnummer.label}
             />
           )}
         </div>
@@ -342,21 +346,19 @@ function FamiliemedlemOppsummering({
 }: {
   familiemedlem: FamiliemedlemField;
 }) {
-  const { t } = useTranslation();
-
   const fields = [
     {
-      label: t("familiemedlemmerSteg.fornavn"),
+      label: elementDef.fornavn.label,
       value: familiemedlem.fornavn,
     },
     {
-      label: t("familiemedlemmerSteg.etternavn"),
+      label: elementDef.etternavn.label,
       value: familiemedlem.etternavn,
     },
     {
       label: familiemedlem.harNorskFodselsnummerEllerDnummer
-        ? t("familiemedlemmerSteg.fodselsnummer")
-        : t("familiemedlemmerSteg.fodselsdato"),
+        ? elementDef.fodselsnummer.label
+        : elementDef.fodselsdato.label,
       value: familiemedlem.harNorskFodselsnummerEllerDnummer
         ? familiemedlem.fodselsnummer
         : familiemedlem.fodselsdato,

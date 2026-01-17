@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
 import { postSkatteforholdOgInntekt } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -26,6 +27,28 @@ import { useTranslateError } from "~/utils/translation.ts";
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
+
+// Hent felt-definisjoner fra backend (statisk kopi)
+const erSkattepliktigFelt = getFelt(
+  "skatteforholdOgInntekt",
+  "erSkattepliktigTilNorgeIHeleutsendingsperioden",
+);
+const mottarPengestotteFelt = getFelt(
+  "skatteforholdOgInntekt",
+  "mottarPengestotteFraAnnetEosLandEllerSveits",
+);
+const landSomUtbetalerFelt = getFelt(
+  "skatteforholdOgInntekt",
+  "landSomUtbetalerPengestotte",
+);
+const belopFelt = getFelt(
+  "skatteforholdOgInntekt",
+  "pengestotteSomMottasFraAndreLandBelop",
+);
+const beskrivelseFelt = getFelt(
+  "skatteforholdOgInntekt",
+  "pengestotteSomMottasFraAndreLandBeskrivelse",
+);
 
 export const stepKey = "skatteforhold-og-inntekt";
 
@@ -106,9 +129,7 @@ function SkatteforholdOgInntektStegContent({
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="erSkattepliktigTilNorgeIHeleutsendingsperioden"
-            legend={t(
-              "skatteforholdOgInntektSteg.erDuSkattepliktigTilNorgeIHeleUtsendingsperioden",
-            )}
+            legend={erSkattepliktigFelt.label}
           />
 
           <RadioGroupJaNeiFormPart
@@ -117,9 +138,7 @@ function SkatteforholdOgInntektStegContent({
               "skatteforholdOgInntektSteg.mottarDuPengestotteBeskrivelse",
             )}
             formFieldName="mottarPengestotteFraAnnetEosLandEllerSveits"
-            legend={t(
-              "skatteforholdOgInntektSteg.mottarDuPengestotteFraEtAnnetEosLandEllerSveits",
-            )}
+            legend={mottarPengestotteFelt.label}
           />
 
           {mottarPengestotteFraAnnetEosLandEllerSveits && (
@@ -127,16 +146,12 @@ function SkatteforholdOgInntektStegContent({
               <LandVelgerFormPart
                 className="mt-4"
                 formFieldName="landSomUtbetalerPengestotte"
-                label={t(
-                  "skatteforholdOgInntektSteg.fraHvilketLandMottarDuPengestotte",
-                )}
+                label={landSomUtbetalerFelt.label}
               />
 
               <TextField
                 className="mt-4"
-                description={t(
-                  "skatteforholdOgInntektSteg.oppgiBelopetINorskeKroner",
-                )}
+                description={belopFelt.hjelpetekst}
                 error={translateError(
                   getFieldError(
                     errors,
@@ -144,9 +159,7 @@ function SkatteforholdOgInntektStegContent({
                   ),
                 )}
                 inputMode="decimal"
-                label={t(
-                  "skatteforholdOgInntektSteg.hvorMyePengerMottarDuBruttoPerManed",
-                )}
+                label={belopFelt.label}
                 {...register("pengestotteSomMottasFraAndreLandBelop")}
               />
 
@@ -158,9 +171,7 @@ function SkatteforholdOgInntektStegContent({
                     "pengestotteSomMottasFraAndreLandBeskrivelse",
                   ),
                 )}
-                label={t(
-                  "skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu",
-                )}
+                label={beskrivelseFelt.label}
                 {...register("pengestotteSomMottasFraAndreLandBeskrivelse")}
               />
             </>
