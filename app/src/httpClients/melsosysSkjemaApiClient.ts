@@ -507,3 +507,39 @@ async function fetchInnsendteSoknader(
 
   return response.json();
 }
+
+// ============ Skjemadefinisjon ============
+
+/**
+ * Henter skjemadefinisjon fra backend.
+ * Brukes primært for runtime-validering mot statisk kopi.
+ * Returnerer unknown fordi vi sammenligner med statisk definisjon.
+ */
+export async function fetchSkjemaDefinisjon(
+  type: string,
+  sprak: string = "nb",
+): Promise<unknown> {
+  const params = new URLSearchParams({ sprak });
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/definisjon/${type}?${params.toString()}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Kunne ikke hente skjemadefinisjon: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  return response.json();
+}
+
+export const getSkjemaDefinisjonQuery = (type: string, sprak: string = "nb") =>
+  queryOptions<unknown>({
+    queryKey: ["skjema-definisjon", type, sprak],
+    queryFn: () => fetchSkjemaDefinisjon(type, sprak),
+    staleTime: 60 * 60 * 1000, // 1 time - definisjoner endres sjelden
+    gcTime: 120 * 60 * 1000, // 2 timer
+  });
