@@ -1,6 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { getSeksjon } from "~/constants/skjemaDefinisjonA1";
 import {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
@@ -10,6 +11,12 @@ import { useBooleanToJaNei } from "~/utils/translation.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 
 export const stepKey = "tilleggsopplysninger";
+
+// Hent felt-definisjoner fra statisk kopi
+// Vi bruker arbeidstaker-seksjonen da den har samme struktur som arbeidsgiver
+const seksjon = getSeksjon("tilleggsopplysningerArbeidstaker");
+const harFlereFelt = seksjon.felter.harFlereOpplysningerTilSoknaden;
+const tilleggsopplysningerFelt = seksjon.felter.tilleggsopplysningerTilSoknad;
 
 interface TilleggsopplysningerStegOppsummeringProps {
   skjema: ArbeidsgiversSkjemaDto | ArbeidstakersSkjemaDto;
@@ -34,18 +41,12 @@ export function TilleggsopplysningerStegOppsummering({
     tilleggsopplysningerData && (
       <FormSummary className="mt-8">
         <FormSummary.Header>
-          <FormSummary.Heading level="2">
-            {t("tilleggsopplysningerSteg.tittel")}
-          </FormSummary.Heading>
+          <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
         </FormSummary.Header>
 
         <FormSummary.Answers>
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "tilleggsopplysningerSteg.harDuNoenFlereOpplysningerTilSoknaden",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{harFlereFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 tilleggsopplysningerData.harFlereOpplysningerTilSoknaden,
@@ -56,9 +57,7 @@ export function TilleggsopplysningerStegOppsummering({
           {tilleggsopplysningerData.tilleggsopplysningerTilSoknad && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t(
-                  "tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden",
-                )}
+                {tilleggsopplysningerFelt.label}
               </FormSummary.Label>
               <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
                 {tilleggsopplysningerData.tilleggsopplysningerTilSoknad}

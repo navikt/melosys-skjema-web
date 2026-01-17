@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
@@ -21,6 +22,17 @@ import {
   TilleggsopplysningerFormData,
   tilleggsopplysningerSchema,
 } from "./tilleggsopplysningerStegSchema.ts";
+
+// Hent felt-definisjoner fra backend (statisk kopi)
+// Begge seksjonene (arbeidstaker/arbeidsgiver) har identiske labels
+const harFlereOpplysningerFelt = getFelt(
+  "tilleggsopplysningerArbeidstaker",
+  "harFlereOpplysningerTilSoknaden",
+);
+const tilleggsopplysningerFelt = getFelt(
+  "tilleggsopplysningerArbeidstaker",
+  "tilleggsopplysningerTilSoknad",
+);
 
 export const stepKey = "tilleggsopplysninger";
 
@@ -105,9 +117,7 @@ export function TilleggsopplysningerStegContent({
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harFlereOpplysningerTilSoknaden"
-            legend={t(
-              "tilleggsopplysningerSteg.harDuNoenFlereOpplysningerTilSoknaden",
-            )}
+            legend={harFlereOpplysningerFelt.label}
           />
 
           {harFlereOpplysningerTilSoknaden && (
@@ -117,9 +127,7 @@ export function TilleggsopplysningerStegContent({
               error={translateError(
                 errors.tilleggsopplysningerTilSoknad?.message,
               )}
-              label={t(
-                "tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden",
-              )}
+              label={tilleggsopplysningerFelt.label}
             />
           )}
         </SkjemaSteg>
