@@ -19,6 +19,7 @@ export default tseslint.config(
       "dist/*",
       "playwright-report/**",
       ".tanstack/**",
+      "scripts/**",
     ],
   },
   eslint.configs.recommended,

@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { initReactI18next } from "react-i18next";
 
 import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
+import { logSkjemaDefinisjonValidation } from "~/utils/validateSkjemaDefinisjon";
 
 import { resources } from "./i18n/i18n.ts";
 import { routeTree } from "./routeTree.gen";
@@ -62,3 +63,8 @@ createRoot(document.querySelector("#root")!).render(
     </QueryClientProvider>
   </StrictMode>,
 );
+
+// Valider at statisk skjemadefinisjon matcher backend (kun i utvikling)
+if (import.meta.env.DEV) {
+  logSkjemaDefinisjonValidation();
+}
