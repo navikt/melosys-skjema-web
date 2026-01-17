@@ -10,6 +10,7 @@ import { z } from "zod";
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -24,6 +25,48 @@ import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
+
+// Hent felt-definisjoner fra backend (statisk kopi)
+const utsendelseLandFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "utsendelseLand",
+);
+const utsendelsePeriodeFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerUtsendelsePeriode",
+);
+const harOppdragILandetFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidsgiverHarOppdragILandet",
+);
+const bleAnsattForOppdragFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerBleAnsattForUtenlandsoppdraget",
+);
+const forblirAnsattFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerForblirAnsattIHelePerioden",
+);
+const erstatterAnnenFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerErstatterAnnenPerson",
+);
+const vilJobbeEtterOppdragFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget",
+);
+const begrunnelseFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "utenlandsoppholdetsBegrunnelse",
+);
+const ansettelsesforholdFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "ansettelsesforholdBeskrivelse",
+);
+const forrigePeriodeFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "forrigeArbeidstakerUtsendelsePeriode",
+);
 
 export const stepKey = "utenlandsoppdraget";
 
@@ -120,9 +163,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           <LandVelgerFormPart
             className="mt-4"
             formFieldName="utsendelseLand"
-            label={t(
-              "utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil",
-            )}
+            label={utsendelseLandFelt.label}
           />
 
           <PeriodeFormPart
@@ -144,19 +185,15 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
                 : undefined
             }
             formFieldName="arbeidstakerUtsendelsePeriode"
-            label={t("utenlandsoppdragetSteg.utsendingsperiode")}
-            tilDatoDescription={t(
-              "utenlandsoppdragetSteg.oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato",
-            )}
+            label={utsendelsePeriodeFelt.label}
+            tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
             {...dateLimits}
           />
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
             formFieldName="arbeidsgiverHarOppdragILandet"
-            legend={t(
-              "utenlandsoppdragetSteg.harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil",
-            )}
+            legend={harOppdragILandetFelt.label}
           />
 
           {arbeidsgiverHarOppdragILandet === false && (
@@ -165,9 +202,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
               error={translateError(
                 getFieldError(errors, "utenlandsoppholdetsBegrunnelse"),
               )}
-              label={t(
-                "utenlandsoppdragetSteg.hvorforSkalArbeidstakerenArbeideIUtlandet",
-              )}
+              label={begrunnelseFelt.label}
               {...register("utenlandsoppholdetsBegrunnelse")}
             />
           )}
@@ -175,27 +210,21 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           <RadioGroupJaNeiFormPart
             className="mt-6"
             formFieldName="arbeidstakerBleAnsattForUtenlandsoppdraget"
-            legend={t(
-              "utenlandsoppdragetSteg.bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget",
-            )}
+            legend={bleAnsattForOppdragFelt.label}
           />
 
           {arbeidstakerBleAnsattForUtenlandsoppdraget && (
             <RadioGroupJaNeiFormPart
               className="mt-6"
               formFieldName="arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget"
-              legend={t(
-                "utenlandsoppdragetSteg.vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget",
-              )}
+              legend={vilJobbeEtterOppdragFelt.label}
             />
           )}
 
           <RadioGroupJaNeiFormPart
             className="mt-6"
             formFieldName="arbeidstakerForblirAnsattIHelePerioden"
-            legend={t(
-              "utenlandsoppdragetSteg.vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden",
-            )}
+            legend={forblirAnsattFelt.label}
           />
 
           {arbeidstakerForblirAnsattIHelePerioden === false && (
@@ -204,9 +233,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
               error={translateError(
                 getFieldError(errors, "ansettelsesforholdBeskrivelse"),
               )}
-              label={t(
-                "utenlandsoppdragetSteg.beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden",
-              )}
+              label={ansettelsesforholdFelt.label}
               {...register("ansettelsesforholdBeskrivelse")}
             />
           )}
@@ -214,9 +241,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           <RadioGroupJaNeiFormPart
             className="mt-6"
             formFieldName="arbeidstakerErstatterAnnenPerson"
-            legend={t(
-              "utenlandsoppdragetSteg.erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet",
-            )}
+            legend={erstatterAnnenFelt.label}
           />
 
           {arbeidstakerErstatterAnnenPerson && (
@@ -241,7 +266,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
                   : undefined
               }
               formFieldName="forrigeArbeidstakerUtsendelsePeriode"
-              label={t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")}
+              label={forrigePeriodeFelt.label}
               {...dateLimits}
             />
           )}

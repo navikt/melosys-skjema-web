@@ -2,11 +2,23 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
+import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidstakerensLonnStepKey } from "../arbeidstakerens-lonn/ArbeidstakerensLonnSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
+
+// Hent felt-definisjoner fra statisk kopi
+const seksjon = getSeksjon("arbeidstakerensLonn");
+const betalerAllLonnFelt = getFelt(
+  "arbeidstakerensLonn",
+  "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+);
+const virksomheterFelt = getFelt(
+  "arbeidstakerensLonn",
+  "virksomheterSomUtbetalerLonnOgNaturalytelser",
+);
 
 export function ArbeidstakerensLonnStegOppsummering({
   skjema,
@@ -23,18 +35,12 @@ export function ArbeidstakerensLonnStegOppsummering({
   return lonnData ? (
     <FormSummary className="mt-8">
       <FormSummary.Header>
-        <FormSummary.Heading level="2">
-          {t("arbeidstakerenslonnSteg.tittel")}
-        </FormSummary.Heading>
+        <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
       </FormSummary.Header>
 
       <FormSummary.Answers>
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t(
-              "arbeidstakerenslonnSteg.utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden",
-            )}
-          </FormSummary.Label>
+          <FormSummary.Label>{betalerAllLonnFelt.label}</FormSummary.Label>
           <FormSummary.Value>
             {booleanToJaNei(
               lonnData.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden,
@@ -42,9 +48,7 @@ export function ArbeidstakerensLonnStegOppsummering({
           </FormSummary.Value>
         </FormSummary.Answer>
         <NorskeOgUtenlandskeVirksomheterOppsummering
-          label={t(
-            "arbeidstakerenslonnSteg.hvemUtbetalerLonnenOgEventuelleNaturalytelser",
-          )}
+          label={virksomheterFelt.label}
           norskeOgUtenlandskeVirksomheter={
             lonnData.virksomheterSomUtbetalerLonnOgNaturalytelser
           }

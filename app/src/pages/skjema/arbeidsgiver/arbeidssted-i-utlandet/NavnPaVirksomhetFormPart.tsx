@@ -1,7 +1,7 @@
 import { TextField } from "@navikt/ds-react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 
+import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useTranslateError } from "~/utils/translation.ts";
 
 type NavnPaVirksomhetFormPartProps = {
@@ -9,11 +9,13 @@ type NavnPaVirksomhetFormPartProps = {
   className?: string;
 };
 
+// Alle arbeidssted-seksjoner har navnPaVirksomhet med samme label, så vi velger en vilkårlig
+const navnPaVirksomhetFelt = getFelt("arbeidsstedPaLand", "navnPaVirksomhet");
+
 export function NavnPaVirksomhetFormPart({
   formFieldName,
   className,
 }: NavnPaVirksomhetFormPartProps) {
-  const { t } = useTranslation();
   const translateError = useTranslateError();
   const { control } = useFormContext();
 
@@ -26,7 +28,7 @@ export function NavnPaVirksomhetFormPart({
           {...field}
           className={className}
           error={translateError(fieldState.error?.message)}
-          label={t("arbeidsstedIUtlandetSteg.navnPaVirksomhet")}
+          label={navnPaVirksomhetFelt.label}
           value={field.value ?? ""}
         />
       )}

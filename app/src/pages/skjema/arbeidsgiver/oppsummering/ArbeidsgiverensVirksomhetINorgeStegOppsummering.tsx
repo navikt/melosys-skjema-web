@@ -1,11 +1,27 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
+
+// Hent felt-definisjoner fra statisk kopi
+const seksjon = getSeksjon("arbeidsgiverensVirksomhetINorge");
+const erOffentligFelt = getFelt(
+  "arbeidsgiverensVirksomhetINorge",
+  "erArbeidsgiverenOffentligVirksomhet",
+);
+const erBemanningsbyraFelt = getFelt(
+  "arbeidsgiverensVirksomhetINorge",
+  "erArbeidsgiverenBemanningsEllerVikarbyraa",
+);
+const opprettholderDriftFelt = getFelt(
+  "arbeidsgiverensVirksomhetINorge",
+  "opprettholderArbeidsgiverenVanligDrift",
+);
 
 export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
   skjema,
@@ -22,19 +38,13 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
   return virksomhetData ? (
     <FormSummary className="mt-8">
       <FormSummary.Header>
-        <FormSummary.Heading level="2">
-          {t("arbeidsgiverensVirksomhetINorgeSteg.tittel")}
-        </FormSummary.Heading>
+        <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
       </FormSummary.Header>
 
       <FormSummary.Answers>
         {virksomhetData.erArbeidsgiverenOffentligVirksomhet !== undefined && (
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{erOffentligFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 virksomhetData.erArbeidsgiverenOffentligVirksomhet,
@@ -46,11 +56,7 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
         {virksomhetData.erArbeidsgiverenBemanningsEllerVikarbyraa !==
           undefined && (
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{erBemanningsbyraFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 virksomhetData.erArbeidsgiverenBemanningsEllerVikarbyraa,
@@ -63,9 +69,7 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
           undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
-              {t(
-                "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge",
-              )}
+              {opprettholderDriftFelt.label}
             </FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(

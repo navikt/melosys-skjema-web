@@ -2,11 +2,49 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
+import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
+
+// Hent felt-definisjoner fra statisk kopi
+const seksjon = getSeksjon("utenlandsoppdragetArbeidsgiver");
+const utsendelseLandFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "utsendelseLand",
+);
+const periodeFelt = seksjon.felter.arbeidstakerUtsendelsePeriode;
+const harOppdragFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidsgiverHarOppdragILandet",
+);
+const begrunnelseFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "utenlandsoppholdetsBegrunnelse",
+);
+const bleAnsattFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerBleAnsattForUtenlandsoppdraget",
+);
+const vilJobbeEtterFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget",
+);
+const forblirAnsattFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerForblirAnsattIHelePerioden",
+);
+const ansettelsesforholdFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "ansettelsesforholdBeskrivelse",
+);
+const erstatterFelt = getFelt(
+  "utenlandsoppdragetArbeidsgiver",
+  "arbeidstakerErstatterAnnenPerson",
+);
+const forrigePeriodeFelt = seksjon.felter.forrigeArbeidstakerUtsendelsePeriode;
 
 export function UtenlandsoppdragetStegOppsummering({
   skjema,
@@ -23,41 +61,33 @@ export function UtenlandsoppdragetStegOppsummering({
   return utenlandsoppdragData ? (
     <FormSummary className="mt-8">
       <FormSummary.Header>
-        <FormSummary.Heading level="2">
-          {t("utenlandsoppdragetSteg.tittel")}
-        </FormSummary.Heading>
+        <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
       </FormSummary.Header>
 
       <FormSummary.Answers>
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandsoppdragetSteg.hvilketLandSendesArbeidstakerenTil")}
-          </FormSummary.Label>
+          <FormSummary.Label>{utsendelseLandFelt.label}</FormSummary.Label>
           <FormSummary.Value>
             {landKodeTilNavn(utenlandsoppdragData.utsendelseLand)}
           </FormSummary.Value>
         </FormSummary.Answer>
 
         <FormSummary.Answer>
-          <FormSummary.Label>{t("periode.fraDato")}</FormSummary.Label>
+          <FormSummary.Label>{periodeFelt.fraDatoLabel}</FormSummary.Label>
           <FormSummary.Value>
             {utenlandsoppdragData.arbeidstakerUtsendelsePeriode.fraDato}
           </FormSummary.Value>
         </FormSummary.Answer>
 
         <FormSummary.Answer>
-          <FormSummary.Label>{t("periode.tilDato")}</FormSummary.Label>
+          <FormSummary.Label>{periodeFelt.tilDatoLabel}</FormSummary.Label>
           <FormSummary.Value>
             {utenlandsoppdragData.arbeidstakerUtsendelsePeriode.tilDato}
           </FormSummary.Value>
         </FormSummary.Answer>
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t(
-              "utenlandsoppdragetSteg.harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil",
-            )}
-          </FormSummary.Label>
+          <FormSummary.Label>{harOppdragFelt.label}</FormSummary.Label>
           <FormSummary.Value>
             {booleanToJaNei(utenlandsoppdragData.arbeidsgiverHarOppdragILandet)}
           </FormSummary.Value>
@@ -65,11 +95,7 @@ export function UtenlandsoppdragetStegOppsummering({
 
         {utenlandsoppdragData.utenlandsoppholdetsBegrunnelse !== undefined && (
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "utenlandsoppdragetSteg.hvorforSkalArbeidstakerenArbeideIUtlandet",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{begrunnelseFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {utenlandsoppdragData.utenlandsoppholdetsBegrunnelse}
             </FormSummary.Value>
@@ -77,11 +103,7 @@ export function UtenlandsoppdragetStegOppsummering({
         )}
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t(
-              "utenlandsoppdragetSteg.bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget",
-            )}
-          </FormSummary.Label>
+          <FormSummary.Label>{bleAnsattFelt.label}</FormSummary.Label>
           <FormSummary.Value>
             {booleanToJaNei(
               utenlandsoppdragData.arbeidstakerBleAnsattForUtenlandsoppdraget,
@@ -92,11 +114,7 @@ export function UtenlandsoppdragetStegOppsummering({
         {utenlandsoppdragData.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget !==
           undefined && (
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "utenlandsoppdragetSteg.vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{vilJobbeEtterFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 utenlandsoppdragData.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget,
@@ -106,11 +124,7 @@ export function UtenlandsoppdragetStegOppsummering({
         )}
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t(
-              "utenlandsoppdragetSteg.vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden",
-            )}
-          </FormSummary.Label>
+          <FormSummary.Label>{forblirAnsattFelt.label}</FormSummary.Label>
           <FormSummary.Value>
             {booleanToJaNei(
               utenlandsoppdragData.arbeidstakerForblirAnsattIHelePerioden,
@@ -121,9 +135,7 @@ export function UtenlandsoppdragetStegOppsummering({
         {utenlandsoppdragData.ansettelsesforholdBeskrivelse !== undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
-              {t(
-                "utenlandsoppdragetSteg.beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden",
-              )}
+              {ansettelsesforholdFelt.label}
             </FormSummary.Label>
             <FormSummary.Value>
               {utenlandsoppdragData.ansettelsesforholdBeskrivelse}
@@ -132,11 +144,7 @@ export function UtenlandsoppdragetStegOppsummering({
         )}
 
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t(
-              "utenlandsoppdragetSteg.erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet",
-            )}
-          </FormSummary.Label>
+          <FormSummary.Label>{erstatterFelt.label}</FormSummary.Label>
           <FormSummary.Value>
             {booleanToJaNei(
               utenlandsoppdragData.arbeidstakerErstatterAnnenPerson,
@@ -149,8 +157,7 @@ export function UtenlandsoppdragetStegOppsummering({
           <>
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
-                {t("periode.fraDato")}
+                {forrigePeriodeFelt.label} - {forrigePeriodeFelt.fraDatoLabel}
               </FormSummary.Label>
               <FormSummary.Value>
                 {
@@ -162,8 +169,7 @@ export function UtenlandsoppdragetStegOppsummering({
 
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t("utenlandsoppdragetSteg.forrigeArbeidstakersUtsendelse")} -{" "}
-                {t("periode.tilDato")}
+                {forrigePeriodeFelt.label} - {forrigePeriodeFelt.tilDatoLabel}
               </FormSummary.Label>
               <FormSummary.Value>
                 {
