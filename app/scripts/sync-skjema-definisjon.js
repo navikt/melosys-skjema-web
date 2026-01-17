@@ -19,22 +19,28 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Konfigurasjon - prøv flere mulige stier
-const POSSIBLE_BACKEND_PATHS = [
-  // Når melosys-skjema-web er klonet ved siden av melosys-skjema-api
-  resolve(
-    __dirname,
-    "../../../../melosys-skjema-api/src/main/resources/skjema-definisjoner/A1/v1/nb.json",
-  ),
-  // Når kjørt fra melosys-skjema-mottak-oppgave (symlink)
-  resolve(
-    __dirname,
-    "../../../melosys-skjema-api/src/main/resources/skjema-definisjoner/A1/v1/nb.json",
-  ),
-  // Absolutt sti til nav-mappen
-  resolve(
-    "/home/isa/nav/melosys-skjema-api/src/main/resources/skjema-definisjoner/A1/v1/nb.json",
-  ),
-];
+const BACKEND_RELATIVE_PATH =
+  "src/main/resources/skjema-definisjoner/A1/v1/nb.json";
+
+function buildPossiblePaths() {
+  const paths = [
+    // Når melosys-skjema-web er klonet ved siden av melosys-skjema-api
+    resolve(__dirname, "../../../../melosys-skjema-api", BACKEND_RELATIVE_PATH),
+    // Når kjørt fra melosys-skjema-mottak-oppgave (symlink)
+    resolve(__dirname, "../../../melosys-skjema-api", BACKEND_RELATIVE_PATH),
+  ];
+
+  // Støtte for miljøvariabel MELOSYS_SKJEMA_API_PATH
+  if (process.env.MELOSYS_SKJEMA_API_PATH) {
+    paths.unshift(
+      resolve(process.env.MELOSYS_SKJEMA_API_PATH, BACKEND_RELATIVE_PATH),
+    );
+  }
+
+  return paths;
+}
+
+const POSSIBLE_BACKEND_PATHS = buildPossiblePaths();
 const OUTPUT_PATH = resolve(
   __dirname,
   "../src/constants/skjemaDefinisjonA1.ts",
@@ -174,7 +180,14 @@ async function main() {
     for (const path of POSSIBLE_BACKEND_PATHS) {
       console.error(`   - ${path}`);
     }
-    console.error("\nSjekk at melosys-skjema-api er klonet/tilgjengelig.");
+    console.error("\nLøsning:");
+    console.error(
+      "  1. Sjekk at melosys-skjema-api er klonet ved siden av melosys-skjema-web",
+    );
+    console.error("  2. Eller sett miljøvariabel MELOSYS_SKJEMA_API_PATH:");
+    console.error(
+      "     MELOSYS_SKJEMA_API_PATH=/path/to/melosys-skjema-api npm run sync-skjema-definisjon",
+    );
     process.exit(1);
   }
 
