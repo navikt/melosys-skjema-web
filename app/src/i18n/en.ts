@@ -113,6 +113,33 @@ export const en = {
         "Does the company belong to the same consortium as the Norwegian employer?",
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
+      ansettelsesform: "What do you work as in this company?",
+      arbeidstakerEllerFrilanser: "Employee or freelancer",
+      selvstendigNaeringsdrivende: "Self-employed",
+      statsansatt: "Government employee",
+    },
+    arbeidssituasjonSteg: {
+      tittel: "Work situation",
+      harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
+        "Have you been or will you be in paid employment in Norway for at least one month right before the posting?",
+      beskriveAktivitetFoerUtsending:
+        "Describe your activity in the month before the posting",
+      beskriveAktivitetFoerUtsendingBeskrivelse:
+        "For example studies, vacation or self-employment",
+      skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver:
+        "Will you also work for another employer or run a self-employed business during the posting period?",
+      leggTilVirksomheterDuSkalJobbeForBeskrivelse:
+        "Add Norwegian and/or foreign companies you will work for during the posting period.",
+      hvemSkalDuJobbeForIUtsendelsesPerioden:
+        "Who will you work for during the posting period?",
+      duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
+        "You must answer whether you have been or will be in paid employment in Norway before posting",
+      duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid:
+        "You must describe your activity when you have not been in paid employment",
+      duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden:
+        "You must answer whether you will work for multiple companies during the period",
+      duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter:
+        "You must add at least one company when you will work for multiple companies",
     },
     familiemedlemmerSteg: {
       tittel: "Family Members",
@@ -503,6 +530,7 @@ export const en = {
       landErPakrevd: "Country is required",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "You must answer whether the company belongs to the same consortium",
+      ansettelsesformErPakrevd: "You must select an employment form",
     },
     kvittering: {
       tittel: "Thank you!",

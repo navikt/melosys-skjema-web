@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter/virksomheterSchema.ts";
+import { norskeOgUtenlandskeVirksomheterMedAnsettelsesformSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
 export const arbeidssituasjonSchema = z
   .object({
@@ -14,7 +14,7 @@ export const arbeidssituasjonSchema = z
         "arbeidssituasjonSteg.duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden",
     }),
     virksomheterArbeidstakerJobberForIutsendelsesPeriode:
-      norskeOgUtenlandskeVirksomheterSchema.optional(),
+      norskeOgUtenlandskeVirksomheterMedAnsettelsesformSchema.optional(),
   })
   .superRefine((data, ctx) => {
     if (

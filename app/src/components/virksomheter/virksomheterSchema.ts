@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { Ansettelsesform } from "~/types/melosysSkjemaTypes";
+
 export const norskVirksomhetSchema = z.object({
   organisasjonsnummer: z
     .string({
@@ -45,7 +47,23 @@ export const utenlandskVirksomhetSchema = z.object({
   }),
 });
 
+export const utenlandskVirksomhetMedAnsettelsesformSchema =
+  utenlandskVirksomhetSchema.extend({
+    ansettelsesform: z.nativeEnum(Ansettelsesform, {
+      message: "generellValidering.ansettelsesformErPakrevd",
+    }),
+  });
+
 export const norskeOgUtenlandskeVirksomheterSchema = z.object({
   norskeVirksomheter: z.array(norskVirksomhetSchema).optional(),
   utenlandskeVirksomheter: z.array(utenlandskVirksomhetSchema).optional(),
 });
+
+export const norskeOgUtenlandskeVirksomheterMedAnsettelsesformSchema = z.object(
+  {
+    norskeVirksomheter: z.array(norskVirksomhetSchema).optional(),
+    utenlandskeVirksomheter: z
+      .array(utenlandskVirksomhetMedAnsettelsesformSchema)
+      .optional(),
+  },
+);

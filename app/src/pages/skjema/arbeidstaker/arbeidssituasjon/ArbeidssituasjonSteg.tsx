@@ -134,6 +134,7 @@ function ArbeidssituasjonStegContent({
                 "arbeidssituasjonSteg.leggTilVirksomheterDuSkalJobbeForBeskrivelse",
               )}
               fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode"
+              includeAnsettelsesform
               label={t(
                 "arbeidssituasjonSteg.hvemSkalDuJobbeForIUtsendelsesPerioden",
               )}

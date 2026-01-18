@@ -31,6 +31,12 @@ export enum ArbeidsstedType {
   OM_BORD_PA_FLY = "OM_BORD_PA_FLY",
 }
 
+export enum Ansettelsesform {
+  ARBEIDSTAKER_ELLER_FRILANSER = "ARBEIDSTAKER_ELLER_FRILANSER",
+  SELVSTENDIG_NAERINGSDRIVENDE = "SELVSTENDIG_NAERINGSDRIVENDE",
+  STATSANSATT = "STATSANSATT",
+}
+
 export enum LandKode {
   AT = "AT",
   AX = "AX",
@@ -95,8 +101,8 @@ export enum SkjemaStatus {
 
 export interface Organisasjon {
   navn?: Navn;
-  type: string;
   organisasjonsnummer: string;
+  type: string;
 }
 
 export interface SkjemaInnsendtKvittering {
@@ -192,7 +198,7 @@ export interface ArbeidssituasjonDto {
   harVaertEllerSkalVaereILonnetArbeidFoerUtsending: boolean;
   aktivitetIMaanedenFoerUtsendingen?: string;
   skalJobbeForFlereVirksomheter: boolean;
-  virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheter;
+  virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheterMedAnsettelsesform;
 }
 
 export interface ArbeidstakersSkjemaDataDto {
@@ -230,9 +236,9 @@ export interface NorskVirksomhet {
   organisasjonsnummer: string;
 }
 
-export interface NorskeOgUtenlandskeVirksomheter {
+export interface NorskeOgUtenlandskeVirksomheterMedAnsettelsesform {
   norskeVirksomheter?: NorskVirksomhet[];
-  utenlandskeVirksomheter?: UtenlandskVirksomhet[];
+  utenlandskeVirksomheter?: UtenlandskVirksomhetMedAnsettelsesform[];
 }
 
 export interface SkatteforholdOgInntektDto {
@@ -248,7 +254,7 @@ export interface TilleggsopplysningerDto {
   tilleggsopplysningerTilSoknad?: string;
 }
 
-export interface UtenlandskVirksomhet {
+export interface UtenlandskVirksomhetMedAnsettelsesform {
   navn: string;
   organisasjonsnummer?: string;
   vegnavnOgHusnummer: string;
@@ -258,6 +264,7 @@ export interface UtenlandskVirksomhet {
   region?: string;
   land: string;
   tilhorerSammeKonsern: boolean;
+  ansettelsesform: Ansettelsesform;
 }
 
 export interface UtenlandsoppdragetDto {
@@ -308,6 +315,11 @@ export interface ArbeidstakerensLonnDto {
   virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
 }
 
+export interface NorskeOgUtenlandskeVirksomheter {
+  norskeVirksomheter?: NorskVirksomhet[];
+  utenlandskeVirksomheter?: UtenlandskVirksomhet[];
+}
+
 export interface OffshoreDto {
   navnPaVirksomhet: string;
   navnPaInnretning: string;
@@ -346,6 +358,18 @@ export interface PaSkipDto {
   seilerI: Farvann;
   flaggland?: LandKode;
   territorialfarvannLand?: LandKode;
+}
+
+export interface UtenlandskVirksomhet {
+  navn: string;
+  organisasjonsnummer?: string;
+  vegnavnOgHusnummer: string;
+  bygning?: string;
+  postkode?: string;
+  byStedsnavn?: string;
+  region?: string;
+  land: string;
+  tilhorerSammeKonsern: boolean;
 }
 
 export interface VerifiserPersonRequest {
@@ -569,7 +593,7 @@ export interface InngaarIJuridiskEnhet {
 
 export type JuridiskEnhet = UtilRequiredKeys<
   Organisasjon,
-  "type" | "organisasjonsnummer"
+  "organisasjonsnummer" | "type"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   juridiskEnhetDetaljer?: JuridiskEnhetDetaljer;
@@ -610,7 +634,7 @@ export interface OrganisasjonDetaljer {
 
 export type Organisasjonsledd = UtilRequiredKeys<
   Organisasjon,
-  "type" | "organisasjonsnummer"
+  "organisasjonsnummer" | "type"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   organisasjonsleddDetaljer?: OrganisasjonsleddDetaljer;
@@ -626,7 +650,7 @@ export interface OrganisasjonsleddDetaljer {
 
 export type Virksomhet = UtilRequiredKeys<
   Organisasjon,
-  "type" | "organisasjonsnummer"
+  "organisasjonsnummer" | "type"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   virksomhetDetaljer?: VirksomhetDetaljer;

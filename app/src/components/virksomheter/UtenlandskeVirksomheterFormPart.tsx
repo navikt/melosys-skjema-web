@@ -3,19 +3,21 @@ import {
   Button,
   Label,
   Modal,
+  Radio,
+  RadioGroup,
   Table,
   TextField,
   VStack,
 } from "@navikt/ds-react";
 import { useState } from "react";
 import {
+  Controller,
   FormProvider,
   useFieldArray,
   useForm,
   useFormContext,
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
 import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
@@ -23,20 +25,31 @@ import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskVirksomhetOppsummering } from "~/components/virksomheter/UtenlandskeVirksomheterOppsummering.tsx";
-import { utenlandskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
+import {
+  utenlandskVirksomhetMedAnsettelsesformSchema,
+  utenlandskVirksomhetSchema,
+} from "~/components/virksomheter/virksomheterSchema.ts";
+import {
+  Ansettelsesform,
+  UtenlandskVirksomhet,
+  UtenlandskVirksomhetMedAnsettelsesform,
+} from "~/types/melosysSkjemaTypes";
 import { useTranslateError } from "~/utils/translation.ts";
 
-type UtenlandskVirksomhetFormData = z.infer<typeof utenlandskVirksomhetSchema>;
-type UtenlandskVirksomhetField = UtenlandskVirksomhetFormData & { id: string };
+type UtenlandskVirksomhetField = (
+  | UtenlandskVirksomhet
+  | UtenlandskVirksomhetMedAnsettelsesform
+) & { id: string };
 
-interface UtenlandskeVirksomheterSectionProps {
+interface UtenlandskeVirksomheterFormPartProps {
   fieldName: string;
-  className?: string;
+  includeAnsettelsesform?: boolean;
 }
 
 export function UtenlandskeVirksomheterFormPart({
   fieldName,
-}: UtenlandskeVirksomheterSectionProps) {
+  includeAnsettelsesform = false,
+}: UtenlandskeVirksomheterFormPartProps) {
   const { control } = useFormContext();
   const { t } = useTranslation();
 
@@ -66,7 +79,6 @@ export function UtenlandskeVirksomheterFormPart({
         {t("utenlandskeVirksomheterFormPart.leggTilUtenlandskVirksomhet")}
       </LeggTilKnapp>
 
-      {/* Add Modal */}
       <Modal
         header={{
           heading: t(
@@ -79,6 +91,7 @@ export function UtenlandskeVirksomheterFormPart({
       >
         {isAddModalOpen && (
           <LeggTilEllerEndreUtenlandskVirksomhetModalContent
+            includeAnsettelsesform={includeAnsettelsesform}
             onCancel={lukkAddModal}
             onSubmit={append}
           />
@@ -90,7 +103,10 @@ export function UtenlandskeVirksomheterFormPart({
 
 type ValgteUtenlandskeVirksomheterProps = {
   virksomheter: Array<UtenlandskVirksomhetField>;
-  update: (index: number, data: UtenlandskVirksomhetFormData) => void;
+  update: (
+    index: number,
+    data: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform,
+  ) => void;
   remove: (index: number) => void;
 };
 
@@ -114,6 +130,12 @@ function ValgteUtenlandskeVirksomheter({
   if (virksomheter.length === 0) {
     return null;
   }
+
+  const virksomhetSomRedigeres =
+    editingIndex === null ? undefined : virksomheter[editingIndex];
+  const includeAnsettelsesform =
+    virksomhetSomRedigeres !== undefined &&
+    "ansettelsesform" in virksomhetSomRedigeres;
 
   return (
     <>
@@ -145,6 +167,7 @@ function ValgteUtenlandskeVirksomheter({
       >
         {editingIndex !== null && (
           <LeggTilEllerEndreUtenlandskVirksomhetModalContent
+            includeAnsettelsesform={includeAnsettelsesform}
             onCancel={lukkEditModal}
             onSubmit={(data) => {
               update(editingIndex, data);
@@ -159,21 +182,31 @@ function ValgteUtenlandskeVirksomheter({
 }
 
 interface LeggTilEllerEndreUtenlandskVirksomhetModalContentProps {
-  onSubmit: (data: UtenlandskVirksomhetFormData) => void;
+  onSubmit: (
+    data: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform,
+  ) => void;
   onCancel: () => void;
-  virksomhet?: UtenlandskVirksomhetFormData;
+  virksomhet?: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform;
+  includeAnsettelsesform: boolean;
 }
 
 function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
   onSubmit,
   onCancel,
   virksomhet,
+  includeAnsettelsesform,
 }: LeggTilEllerEndreUtenlandskVirksomhetModalContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
-  const modalForm = useForm<UtenlandskVirksomhetFormData>({
-    resolver: zodResolver(utenlandskVirksomhetSchema),
+  const schema = includeAnsettelsesform
+    ? utenlandskVirksomhetMedAnsettelsesformSchema
+    : utenlandskVirksomhetSchema;
+
+  type FormData = UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform;
+
+  const modalForm = useForm<FormData>({
+    resolver: zodResolver(schema),
     defaultValues: {
       ...virksomhet,
     },
@@ -258,6 +291,35 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
               "utenlandskeVirksomheterFormPart.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
             )}
           />
+
+          {includeAnsettelsesform && (
+            <Controller
+              control={modalForm.control}
+              name="ansettelsesform"
+              render={({ field, fieldState }) => (
+                <RadioGroup
+                  error={translateError(fieldState.error?.message)}
+                  legend={t("utenlandskeVirksomheterFormPart.ansettelsesform")}
+                  onChange={field.onChange}
+                  value={field.value ?? ""}
+                >
+                  <Radio value={Ansettelsesform.ARBEIDSTAKER_ELLER_FRILANSER}>
+                    {t(
+                      "utenlandskeVirksomheterFormPart.arbeidstakerEllerFrilanser",
+                    )}
+                  </Radio>
+                  <Radio value={Ansettelsesform.SELVSTENDIG_NAERINGSDRIVENDE}>
+                    {t(
+                      "utenlandskeVirksomheterFormPart.selvstendigNaeringsdrivende",
+                    )}
+                  </Radio>
+                  <Radio value={Ansettelsesform.STATSANSATT}>
+                    {t("utenlandskeVirksomheterFormPart.statsansatt")}
+                  </Radio>
+                </RadioGroup>
+              )}
+            />
+          )}
         </VStack>
       </Modal.Body>
       <Modal.Footer>

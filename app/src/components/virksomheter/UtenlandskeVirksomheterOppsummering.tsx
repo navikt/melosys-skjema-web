@@ -1,15 +1,24 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
-import { utenlandskVirksomhetSchema } from "~/components/virksomheter/virksomheterSchema.ts";
+import {
+  Ansettelsesform,
+  UtenlandskVirksomhet,
+  UtenlandskVirksomhetMedAnsettelsesform,
+} from "~/types/melosysSkjemaTypes";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-type UtenlandskVirksomhetFormData = z.infer<typeof utenlandskVirksomhetSchema>;
+const ansettelsesformTilOversettelsesnokkel: Record<Ansettelsesform, string> = {
+  [Ansettelsesform.ARBEIDSTAKER_ELLER_FRILANSER]:
+    "utenlandskeVirksomheterFormPart.arbeidstakerEllerFrilanser",
+  [Ansettelsesform.SELVSTENDIG_NAERINGSDRIVENDE]:
+    "utenlandskeVirksomheterFormPart.selvstendigNaeringsdrivende",
+  [Ansettelsesform.STATSANSATT]: "utenlandskeVirksomheterFormPart.statsansatt",
+};
 
 interface UtenlandskVirksomhetOppsummeringProps {
-  virksomhet: UtenlandskVirksomhetFormData;
+  virksomhet: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform;
 }
 
 export function UtenlandskVirksomhetOppsummering({
@@ -94,12 +103,26 @@ export function UtenlandskVirksomhetOppsummering({
           {booleanToJaNei(virksomhet.tilhorerSammeKonsern)}
         </FormSummary.Value>
       </FormSummary.Answer>
+      {"ansettelsesform" in virksomhet && virksomhet.ansettelsesform && (
+        <FormSummary.Answer>
+          <FormSummary.Label>
+            {t("utenlandskeVirksomheterFormPart.ansettelsesform")}
+          </FormSummary.Label>
+          <FormSummary.Value>
+            {t(
+              ansettelsesformTilOversettelsesnokkel[virksomhet.ansettelsesform],
+            )}
+          </FormSummary.Value>
+        </FormSummary.Answer>
+      )}
     </FormSummary.Answers>
   );
 }
 
 interface UtenlandskeVirksomheterOppsummeringProps {
-  virksomheter?: Array<UtenlandskVirksomhetFormData>;
+  virksomheter?: Array<
+    UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform
+  >;
 }
 
 export function UtenlandskeVirksomheterOppsummering({
