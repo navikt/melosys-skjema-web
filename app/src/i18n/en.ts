@@ -192,7 +192,7 @@ export const en = {
       mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
         "Do you receive financial support from another EEA country or Switzerland?",
       mottarDuPengestotteBeskrivelse:
-        'By "financial support" we mean money you receive as compensation for lost income from work. Sickness benefits, parental benefits, unemployment benefits and work assessment allowance are examples of such financial support in Norway.',
+        "By «financial support» we mean money you receive as compensation for lost income from work. Sickness benefits, parental benefits, unemployment benefits and work assessment allowance are examples of such financial support in Norway.",
       fraHvilketLandMottarDuPengestotte:
         "From which country do you receive financial support?",
       hvorMyePengerMottarDuBruttoPerManed:
