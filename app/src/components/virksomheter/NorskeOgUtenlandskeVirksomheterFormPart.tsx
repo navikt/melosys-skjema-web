@@ -9,12 +9,14 @@ interface NorskeOgUtenlandskeVirksomheterFormPartProps {
   fieldName: string;
   label?: string;
   description?: string;
+  includeAnsettelsesform?: boolean;
 }
 
 export function NorskeOgUtenlandskeVirksomheterFormPart({
   fieldName,
   label,
   description,
+  includeAnsettelsesform = false,
 }: NorskeOgUtenlandskeVirksomheterFormPartProps) {
   const {
     formState: { errors },
@@ -48,6 +50,7 @@ export function NorskeOgUtenlandskeVirksomheterFormPart({
 
       <UtenlandskeVirksomheterFormPart
         fieldName={`${fieldName}.utenlandskeVirksomheter`}
+        includeAnsettelsesform={includeAnsettelsesform}
       />
 
       {shouldShowError && (

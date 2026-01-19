@@ -116,6 +116,10 @@ export const nb = {
         "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
       endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
+      ansettelsesform: "Hva jobber du som i denne virksomheten?",
+      arbeidstakerEllerFrilanser: "Arbeidstaker eller frilanser",
+      selvstendigNaeringsdrivende: "Selvstendig næringsdrivende",
+      statsansatt: "Statsansatt",
     },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
@@ -170,7 +174,7 @@ export const nb = {
       beskriveAktivitetFoerUtsendingBeskrivelse:
         "For eksempel studier, ferie eller selvstendig virksomhet",
       skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver:
-        "Skal du også drive selvstendig virksomhet eller arbeide for en annen arbeidsgiver i utsendingsperioden?",
+        "Skal du også arbeide for en annen arbeidsgiver eller drive selvstendig virksomhet i utsendingsperioden?",
       leggTilVirksomheterDuSkalJobbeForBeskrivelse:
         "Legg til norske og/eller utenlandske virksomheter du skal jobbe for i utsendingsperioden.",
       hvemSkalDuJobbeForIUtsendelsesPerioden:
@@ -533,6 +537,7 @@ export const nb = {
       landErPakrevd: "Land er påkrevd",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "Du må svare på om virksomheten tilhører samme konsern",
+      ansettelsesformErPakrevd: "Du må velge en ansettelsesform",
     },
     kvittering: {
       tittel: "Takk!",
