@@ -2,55 +2,56 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
-import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
 
-// Hent felt-definisjoner fra statisk kopi
-const seksjon = getSeksjon("utenlandsoppdragetArbeidsgiver");
-const utsendelseLandFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "utsendelseLand",
-);
-const periodeFelt = seksjon.felter.arbeidstakerUtsendelsePeriode;
-const harOppdragFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidsgiverHarOppdragILandet",
-);
-const begrunnelseFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "utenlandsoppholdetsBegrunnelse",
-);
-const bleAnsattFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerBleAnsattForUtenlandsoppdraget",
-);
-const vilJobbeEtterFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget",
-);
-const forblirAnsattFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerForblirAnsattIHelePerioden",
-);
-const ansettelsesforholdFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "ansettelsesforholdBeskrivelse",
-);
-const erstatterFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerErstatterAnnenPerson",
-);
-const forrigePeriodeFelt = seksjon.felter.forrigeArbeidstakerUtsendelsePeriode;
-
 export function UtenlandsoppdragetStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("utenlandsoppdragetArbeidsgiver");
+  const utsendelseLandFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "utsendelseLand",
+  );
+  const periodeFelt = seksjon.felter.arbeidstakerUtsendelsePeriode;
+  const harOppdragFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidsgiverHarOppdragILandet",
+  );
+  const begrunnelseFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "utenlandsoppholdetsBegrunnelse",
+  );
+  const bleAnsattFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerBleAnsattForUtenlandsoppdraget",
+  );
+  const vilJobbeEtterFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget",
+  );
+  const forblirAnsattFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerForblirAnsattIHelePerioden",
+  );
+  const ansettelsesforholdFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "ansettelsesforholdBeskrivelse",
+  );
+  const erstatterFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerErstatterAnnenPerson",
+  );
+  const forrigePeriodeFelt =
+    seksjon.felter.forrigeArbeidstakerUtsendelsePeriode;
 
   const utenlandsoppdragData = skjema.data.utenlandsoppdraget;
   const utenlandsoppdragSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(

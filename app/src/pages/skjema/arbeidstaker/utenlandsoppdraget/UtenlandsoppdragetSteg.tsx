@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
-import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postUtenlandsoppdragetArbeidstaker } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
@@ -23,16 +23,6 @@ import {
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
-
-// Hent felt-definisjoner fra backend (statisk kopi)
-const utsendelsesLandFelt = getFelt(
-  "utenlandsoppdragetArbeidstaker",
-  "utsendelsesLand",
-);
-const utsendelsePeriodeFelt = getFelt(
-  "utenlandsoppdragetArbeidstaker",
-  "utsendelsePeriode",
-);
 
 export const stepKey = "utenlandsoppdraget";
 
@@ -50,6 +40,16 @@ function UtenlandsoppdragetStegContent({
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery =
     useInvalidateArbeidstakersSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  const utsendelsesLandFelt = getFelt(
+    "utenlandsoppdragetArbeidstaker",
+    "utsendelsesLand",
+  );
+  const utsendelsePeriodeFelt = getFelt(
+    "utenlandsoppdragetArbeidstaker",
+    "utsendelsePeriode",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.utenlandsoppdraget;
 

@@ -2,37 +2,37 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
-import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidssituasjonStepKey } from "../arbeidssituasjon/ArbeidssituasjonSteg.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
 
-// Hent felt-definisjoner fra statisk kopi
-const seksjon = getSeksjon("arbeidssituasjon");
-const harVaertIArbeidFelt = getFelt(
-  "arbeidssituasjon",
-  "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
-);
-const aktivitetFelt = getFelt(
-  "arbeidssituasjon",
-  "aktivitetIMaanedenFoerUtsendingen",
-);
-const skalJobbeForFlereFelt = getFelt(
-  "arbeidssituasjon",
-  "skalJobbeForFlereVirksomheter",
-);
-const virksomheterFelt = getFelt(
-  "arbeidssituasjon",
-  "virksomheterArbeidstakerJobberForIutsendelsesPeriode",
-);
-
 export function ArbeidssituasjonStegOppsummering({
   skjema,
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("arbeidssituasjon");
+  const harVaertIArbeidFelt = getFelt(
+    "arbeidssituasjon",
+    "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
+  );
+  const aktivitetFelt = getFelt(
+    "arbeidssituasjon",
+    "aktivitetIMaanedenFoerUtsendingen",
+  );
+  const skalJobbeForFlereFelt = getFelt(
+    "arbeidssituasjon",
+    "skalJobbeForFlereVirksomheter",
+  );
+  const virksomheterFelt = getFelt(
+    "arbeidssituasjon",
+    "virksomheterArbeidstakerJobberForIutsendelsesPeriode",
+  );
 
   const arbeidssituasjonData = skjema.data.arbeidssituasjon;
   const arbeidssituasjonSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(

@@ -2,29 +2,29 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
-import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidstakerensLonnStepKey } from "../arbeidstakerens-lonn/ArbeidstakerensLonnSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
 
-// Hent felt-definisjoner fra statisk kopi
-const seksjon = getSeksjon("arbeidstakerensLonn");
-const betalerAllLonnFelt = getFelt(
-  "arbeidstakerensLonn",
-  "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
-);
-const virksomheterFelt = getFelt(
-  "arbeidstakerensLonn",
-  "virksomheterSomUtbetalerLonnOgNaturalytelser",
-);
-
 export function ArbeidstakerensLonnStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("arbeidstakerensLonn");
+  const betalerAllLonnFelt = getFelt(
+    "arbeidstakerensLonn",
+    "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+  );
+  const virksomheterFelt = getFelt(
+    "arbeidstakerensLonn",
+    "virksomheterSomUtbetalerLonnOgNaturalytelser",
+  );
 
   const lonnData = skjema.data.arbeidstakerensLonn;
   const lonnSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(

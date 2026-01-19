@@ -7,8 +7,8 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postArbeidsstedIUtlandet } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
@@ -39,7 +39,8 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const { getSeksjon } = useSkjemaDefinisjon();
-  const arbeidsstedTypeFelt = getSeksjon("arbeidsstedIUtlandet").felter.arbeidsstedType;
+  const arbeidsstedTypeFelt = getSeksjon("arbeidsstedIUtlandet").felter
+    .arbeidsstedType;
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
 

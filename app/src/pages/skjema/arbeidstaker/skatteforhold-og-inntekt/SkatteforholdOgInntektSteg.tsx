@@ -9,8 +9,8 @@ import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postSkatteforholdOgInntekt } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
@@ -27,28 +27,6 @@ import { useTranslateError } from "~/utils/translation.ts";
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
-
-// Hent felt-definisjoner fra backend (statisk kopi)
-const erSkattepliktigFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "erSkattepliktigTilNorgeIHeleutsendingsperioden",
-);
-const mottarPengestotteFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "mottarPengestotteFraAnnetEosLandEllerSveits",
-);
-const landSomUtbetalerFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "landSomUtbetalerPengestotte",
-);
-const belopFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "pengestotteSomMottasFraAndreLandBelop",
-);
-const beskrivelseFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "pengestotteSomMottasFraAndreLandBeskrivelse",
-);
 
 export const stepKey = "skatteforhold-og-inntekt";
 
@@ -68,6 +46,28 @@ function SkatteforholdOgInntektStegContent({
   const translateError = useTranslateError();
   const invalidateArbeidstakerSkjemaQuery =
     useInvalidateArbeidstakersSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  const erSkattepliktigFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "erSkattepliktigTilNorgeIHeleutsendingsperioden",
+  );
+  const mottarPengestotteFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "mottarPengestotteFraAnnetEosLandEllerSveits",
+  );
+  const landSomUtbetalerFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "landSomUtbetalerPengestotte",
+  );
+  const belopFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "pengestotteSomMottasFraAndreLandBelop",
+  );
+  const beskrivelseFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "pengestotteSomMottasFraAndreLandBeskrivelse",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.skatteforholdOgInntekt;
 

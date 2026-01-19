@@ -21,8 +21,7 @@ const utenlandsoppdraget =
 const arbeidsstedIUtlandet =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet;
 const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
-const arbeidstakerensLonn =
-  SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
+const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
 const tilleggsopplysninger =
   SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidsgiver;
 

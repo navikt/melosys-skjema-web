@@ -13,7 +13,8 @@ import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
 const arbeidsstedIUtlandet =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet;
 const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
-const offshoreFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOffshore.felter;
+const offshoreFelter =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOffshore.felter;
 const paSkipFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaSkip.felter;
 const omBordPaFlyFelter =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOmBordPaFly.felter;
@@ -76,7 +77,9 @@ export class ArbeidsstedIUtlandetStegPage {
     });
 
     // Felles - alle seksjoner har navnPaVirksomhet med samme label
-    this.navnPaVirksomhetInput = page.getByLabel(paLandFelter.navnPaVirksomhet.label);
+    this.navnPaVirksomhetInput = page.getByLabel(
+      paLandFelter.navnPaVirksomhet.label,
+    );
 
     // På land
     const fastEllerVekslendeGroup = page.getByRole("group", {

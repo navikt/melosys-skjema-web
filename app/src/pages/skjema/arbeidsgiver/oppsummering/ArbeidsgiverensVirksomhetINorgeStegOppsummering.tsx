@@ -1,33 +1,33 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
 
-// Hent felt-definisjoner fra statisk kopi
-const seksjon = getSeksjon("arbeidsgiverensVirksomhetINorge");
-const erOffentligFelt = getFelt(
-  "arbeidsgiverensVirksomhetINorge",
-  "erArbeidsgiverenOffentligVirksomhet",
-);
-const erBemanningsbyraFelt = getFelt(
-  "arbeidsgiverensVirksomhetINorge",
-  "erArbeidsgiverenBemanningsEllerVikarbyraa",
-);
-const opprettholderDriftFelt = getFelt(
-  "arbeidsgiverensVirksomhetINorge",
-  "opprettholderArbeidsgiverenVanligDrift",
-);
-
 export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("arbeidsgiverensVirksomhetINorge");
+  const erOffentligFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "erArbeidsgiverenOffentligVirksomhet",
+  );
+  const erBemanningsbyraFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "erArbeidsgiverenBemanningsEllerVikarbyraa",
+  );
+  const opprettholderDriftFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "opprettholderArbeidsgiverenVanligDrift",
+  );
 
   const virksomhetData = skjema.data.arbeidsgiverensVirksomhetINorge;
   const virksomhetSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(

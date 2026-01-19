@@ -2,10 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
-import {
-  getSeksjon,
-  SKJEMA_DEFINISJON_A1,
-} from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import {
   OffshoreDto,
   OmBordPaFlyDto,
@@ -17,18 +14,6 @@ import { useBooleanToJaNei } from "~/utils/translation.ts";
 import { stepKey as arbeidsstedIUtlandetStepKey } from "../arbeidssted-i-utlandet/ArbeidsstedIUtlandetSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
-
-// Hent seksjoner og felter fra statiske definisjoner
-const hovedSeksjon = getSeksjon("arbeidsstedIUtlandet");
-const arbeidsstedIUtlandetFelter =
-  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet.felter;
-
-const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
-const offshoreFelter =
-  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOffshore.felter;
-const paSkipFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaSkip.felter;
-const omBordPaFlyFelter =
-  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOmBordPaFly.felter;
 
 // Hjelpefunksjon for å hente label for alternativ fra SELECT-felt
 function getAlternativLabel(
@@ -42,6 +27,11 @@ export function ArbeidsstedIUtlandetStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
+  const { getSeksjon } = useSkjemaDefinisjon();
+
+  const hovedSeksjon = getSeksjon("arbeidsstedIUtlandet");
+  const arbeidsstedIUtlandetFelter = hovedSeksjon.felter;
+  const paLandFelter = getSeksjon("arbeidsstedPaLand").felter;
 
   const arbeidsstedData = skjema.data.arbeidsstedIUtlandet;
   const arbeidsstedSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
@@ -113,6 +103,8 @@ export function ArbeidsstedIUtlandetStegOppsummering({
 
 function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const paLandFelter = getSeksjon("arbeidsstedPaLand").felter;
 
   return (
     <>
@@ -186,6 +178,9 @@ function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
 }
 
 function OffshoreOppsummering({ offshore }: { offshore: OffshoreDto }) {
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const offshoreFelter = getSeksjon("arbeidsstedOffshore").felter;
+
   return (
     <>
       {offshore.navnPaInnretning && (
@@ -226,6 +221,9 @@ function OffshoreOppsummering({ offshore }: { offshore: OffshoreDto }) {
 }
 
 function PaSkipOppsummering({ paSkip }: { paSkip: PaSkipDto }) {
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const paSkipFelter = getSeksjon("arbeidsstedPaSkip").felter;
+
   return (
     <>
       {paSkip.navnPaSkip && (
@@ -285,6 +283,8 @@ function OmBordPaFlyOppsummering({
   omBordPaFly: OmBordPaFlyDto;
 }) {
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const omBordPaFlyFelter = getSeksjon("arbeidsstedOmBordPaFly").felter;
 
   return (
     <>

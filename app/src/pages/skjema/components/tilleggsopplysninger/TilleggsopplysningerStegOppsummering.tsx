@@ -1,7 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { getSeksjon } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
@@ -11,12 +11,6 @@ import { useBooleanToJaNei } from "~/utils/translation.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 
 export const stepKey = "tilleggsopplysninger";
-
-// Hent felt-definisjoner fra statisk kopi
-// Vi bruker arbeidstaker-seksjonen da den har samme struktur som arbeidsgiver
-const seksjon = getSeksjon("tilleggsopplysningerArbeidstaker");
-const harFlereFelt = seksjon.felter.harFlereOpplysningerTilSoknaden;
-const tilleggsopplysningerFelt = seksjon.felter.tilleggsopplysningerTilSoknad;
 
 interface TilleggsopplysningerStegOppsummeringProps {
   skjema: ArbeidsgiversSkjemaDto | ArbeidstakersSkjemaDto;
@@ -29,6 +23,12 @@ export function TilleggsopplysningerStegOppsummering({
 }: TilleggsopplysningerStegOppsummeringProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+
+  // Hent felt-definisjoner - vi bruker arbeidstaker-seksjonen da den har samme struktur
+  const seksjon = getSeksjon("tilleggsopplysningerArbeidstaker");
+  const harFlereFelt = seksjon.felter.harFlereOpplysningerTilSoknaden;
+  const tilleggsopplysningerFelt = seksjon.felter.tilleggsopplysningerTilSoknad;
 
   const tilleggsopplysningerData = skjema.data.tilleggsopplysninger;
   const tilleggsopplysningerSteg = stegRekkefolge.find(

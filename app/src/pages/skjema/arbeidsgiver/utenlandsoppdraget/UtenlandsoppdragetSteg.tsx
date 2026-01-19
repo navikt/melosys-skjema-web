@@ -10,8 +10,8 @@ import { z } from "zod";
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
@@ -26,48 +26,6 @@ import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
-// Hent felt-definisjoner fra backend (statisk kopi)
-const utsendelseLandFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "utsendelseLand",
-);
-const utsendelsePeriodeFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerUtsendelsePeriode",
-);
-const harOppdragILandetFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidsgiverHarOppdragILandet",
-);
-const bleAnsattForOppdragFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerBleAnsattForUtenlandsoppdraget",
-);
-const forblirAnsattFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerForblirAnsattIHelePerioden",
-);
-const erstatterAnnenFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerErstatterAnnenPerson",
-);
-const vilJobbeEtterOppdragFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget",
-);
-const begrunnelseFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "utenlandsoppholdetsBegrunnelse",
-);
-const ansettelsesforholdFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "ansettelsesforholdBeskrivelse",
-);
-const forrigePeriodeFelt = getFelt(
-  "utenlandsoppdragetArbeidsgiver",
-  "forrigeArbeidstakerUtsendelsePeriode",
-);
-
 export const stepKey = "utenlandsoppdraget";
 
 // Date range constants for assignment period selection
@@ -81,6 +39,48 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  const utsendelseLandFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "utsendelseLand",
+  );
+  const utsendelsePeriodeFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerUtsendelsePeriode",
+  );
+  const harOppdragILandetFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidsgiverHarOppdragILandet",
+  );
+  const bleAnsattForOppdragFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerBleAnsattForUtenlandsoppdraget",
+  );
+  const forblirAnsattFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerForblirAnsattIHelePerioden",
+  );
+  const erstatterAnnenFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerErstatterAnnenPerson",
+  );
+  const vilJobbeEtterOppdragFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget",
+  );
+  const begrunnelseFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "utenlandsoppholdetsBegrunnelse",
+  );
+  const ansettelsesforholdFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "ansettelsesforholdBeskrivelse",
+  );
+  const forrigePeriodeFelt = getFelt(
+    "utenlandsoppdragetArbeidsgiver",
+    "forrigeArbeidstakerUtsendelsePeriode",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.utenlandsoppdraget;
 

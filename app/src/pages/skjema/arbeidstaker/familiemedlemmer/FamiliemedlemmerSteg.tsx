@@ -27,8 +27,8 @@ import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { getFelt, SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postFamiliemedlemmer } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -49,14 +49,6 @@ import {
   familiemedlemSchema,
 } from "./familiemedlemmerStegSchema.ts";
 
-// Hent felt-definisjoner fra backend (statisk kopi)
-const skalHaMedFelt = getFelt("familiemedlemmer", "skalHaMedFamiliemedlemmer");
-// Hent familiemedlemmer-feltet direkte for tilgang til leggTilLabel
-const familiemedlemmerListeFelt =
-  SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer.felter.familiemedlemmer;
-// Hent elementDefinisjon for familiemedlem-feltene
-const elementDef = familiemedlemmerListeFelt.elementDefinisjon;
-
 export const stepKey = "familiemedlemmer";
 
 type FamiliemedlemFormData = z.infer<typeof familiemedlemSchema>;
@@ -74,6 +66,11 @@ function FamiliemedlemmerStegContent({
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery =
     useInvalidateArbeidstakersSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+  const skalHaMedFelt = getFelt(
+    "familiemedlemmer",
+    "skalHaMedFamiliemedlemmer",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.familiemedlemmer;
 
@@ -147,6 +144,9 @@ function FamiliemedlemmerStegContent({
 function FamiliemedlemmerListe() {
   const { control } = useFormContext();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const familiemedlemmerListeFelt =
+    getSeksjon("familiemedlemmer").felter.familiemedlemmer;
 
   const { fields, append, remove, update } = useFieldArray({
     control,
@@ -207,6 +207,9 @@ function ValgteFamiliemedlemmer({
 }: ValgteFamiliemedlemmerProps) {
   const { t } = useTranslation();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const familiemedlemmerListeFelt =
+    getSeksjon("familiemedlemmer").felter.familiemedlemmer;
 
   const lukkEditModal = () => {
     setEditingIndex(null);
@@ -271,6 +274,9 @@ function LeggTilEllerEndreFamiliemedlemModalContent({
 }: LeggTilEllerEndreFamiliemedlemModalContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const elementDef =
+    getSeksjon("familiemedlemmer").felter.familiemedlemmer.elementDefinisjon;
 
   const modalForm = useForm<FamiliemedlemFormData>({
     resolver: zodResolver(familiemedlemSchema),
@@ -346,6 +352,10 @@ function FamiliemedlemOppsummering({
 }: {
   familiemedlem: FamiliemedlemField;
 }) {
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const elementDef =
+    getSeksjon("familiemedlemmer").felter.familiemedlemmer.elementDefinisjon;
+
   const fields = [
     {
       label: elementDef.fornavn.label,

@@ -9,8 +9,8 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
-import { getFelt } from "~/constants/skjemaDefinisjonA1";
 import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postArbeidssituasjon } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -23,24 +23,6 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
-
-// Hent felt-definisjoner fra backend (statisk kopi)
-const harVaertFelt = getFelt(
-  "arbeidssituasjon",
-  "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
-);
-const aktivitetFelt = getFelt(
-  "arbeidssituasjon",
-  "aktivitetIMaanedenFoerUtsendingen",
-);
-const skalJobbeFelt = getFelt(
-  "arbeidssituasjon",
-  "skalJobbeForFlereVirksomheter",
-);
-const virksomheterFelt = getFelt(
-  "arbeidssituasjon",
-  "virksomheterArbeidstakerJobberForIutsendelsesPeriode",
-);
 
 export const stepKey = "arbeidssituasjon";
 
@@ -58,6 +40,24 @@ function ArbeidssituasjonStegContent({
   const translateError = useTranslateError();
   const invalidateArbeidstakerSkjemaQuery =
     useInvalidateArbeidstakersSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  const harVaertFelt = getFelt(
+    "arbeidssituasjon",
+    "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
+  );
+  const aktivitetFelt = getFelt(
+    "arbeidssituasjon",
+    "aktivitetIMaanedenFoerUtsendingen",
+  );
+  const skalJobbeFelt = getFelt(
+    "arbeidssituasjon",
+    "skalJobbeForFlereVirksomheter",
+  );
+  const virksomheterFelt = getFelt(
+    "arbeidssituasjon",
+    "virksomheterArbeidstakerJobberForIutsendelsesPeriode",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidssituasjon;
 

@@ -2,41 +2,41 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
-import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as skatteforholdOgInntektStepKey } from "../skatteforhold-og-inntekt/SkatteforholdOgInntektSteg.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
 
-// Hent felt-definisjoner fra statisk kopi
-const seksjon = getSeksjon("skatteforholdOgInntekt");
-const erSkattepliktigFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "erSkattepliktigTilNorgeIHeleutsendingsperioden",
-);
-const mottarPengestotteFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "mottarPengestotteFraAnnetEosLandEllerSveits",
-);
-const landSomUtbetalerFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "landSomUtbetalerPengestotte",
-);
-const belopFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "pengestotteSomMottasFraAndreLandBelop",
-);
-const beskrivelseFelt = getFelt(
-  "skatteforholdOgInntekt",
-  "pengestotteSomMottasFraAndreLandBeskrivelse",
-);
-
 export function SkatteforholdOgInntektStegOppsummering({
   skjema,
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("skatteforholdOgInntekt");
+  const erSkattepliktigFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "erSkattepliktigTilNorgeIHeleutsendingsperioden",
+  );
+  const mottarPengestotteFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "mottarPengestotteFraAnnetEosLandEllerSveits",
+  );
+  const landSomUtbetalerFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "landSomUtbetalerPengestotte",
+  );
+  const belopFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "pengestotteSomMottasFraAndreLandBelop",
+  );
+  const beskrivelseFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "pengestotteSomMottasFraAndreLandBeskrivelse",
+  );
 
   const skatteforholdData = skjema.data.skatteforholdOgInntekt;
   const skatteforholdSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(

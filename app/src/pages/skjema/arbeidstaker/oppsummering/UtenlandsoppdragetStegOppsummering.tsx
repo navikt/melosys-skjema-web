@@ -2,24 +2,24 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart";
-import { getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
 import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
 
-// Hent felt-definisjoner fra statisk kopi
-const seksjon = getSeksjon("utenlandsoppdragetArbeidstaker");
-const utsendelsesLandFelt = getFelt(
-  "utenlandsoppdragetArbeidstaker",
-  "utsendelsesLand",
-);
-const utsendelsePeriodeFelt = seksjon.felter.utsendelsePeriode;
-
 export function UtenlandsoppdragetStegOppsummering({
   skjema,
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("utenlandsoppdragetArbeidstaker");
+  const utsendelsesLandFelt = getFelt(
+    "utenlandsoppdragetArbeidstaker",
+    "utsendelsesLand",
+  );
+  const utsendelsePeriodeFelt = seksjon.felter.utsendelsePeriode;
 
   const utenlandsoppdragetData = skjema.data.utenlandsoppdraget;
   const utenlandsoppdragetSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(

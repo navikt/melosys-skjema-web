@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { getFelt } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
@@ -22,17 +22,6 @@ import {
   TilleggsopplysningerFormData,
   tilleggsopplysningerSchema,
 } from "./tilleggsopplysningerStegSchema.ts";
-
-// Hent felt-definisjoner fra backend (statisk kopi)
-// Begge seksjonene (arbeidstaker/arbeidsgiver) har identiske labels
-const harFlereOpplysningerFelt = getFelt(
-  "tilleggsopplysningerArbeidstaker",
-  "harFlereOpplysningerTilSoknaden",
-);
-const tilleggsopplysningerFelt = getFelt(
-  "tilleggsopplysningerArbeidstaker",
-  "tilleggsopplysningerTilSoknad",
-);
 
 export const stepKey = "tilleggsopplysninger";
 
@@ -55,6 +44,17 @@ export function TilleggsopplysningerStegContent({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  // Hent felt-definisjoner - begge seksjonene har identiske labels
+  const harFlereOpplysningerFelt = getFelt(
+    "tilleggsopplysningerArbeidstaker",
+    "harFlereOpplysningerTilSoknaden",
+  );
+  const tilleggsopplysningerFelt = getFelt(
+    "tilleggsopplysningerArbeidstaker",
+    "tilleggsopplysningerTilSoknad",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.tilleggsopplysninger;
 

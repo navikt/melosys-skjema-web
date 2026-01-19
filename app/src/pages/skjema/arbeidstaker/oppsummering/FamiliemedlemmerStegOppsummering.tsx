@@ -1,10 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import {
-  getSeksjon,
-  SKJEMA_DEFINISJON_A1,
-} from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { Familiemedlem } from "~/types/melosysSkjemaTypes.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
@@ -12,18 +9,15 @@ import { stepKey as familiemedlemmerStepKey } from "../familiemedlemmer/Familiem
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidstakerSkjemaProps } from "../types.ts";
 
-// Hent felt-definisjoner fra statisk kopi
-const seksjon = getSeksjon("familiemedlemmer");
-const skalHaMedFelt = seksjon.felter.skalHaMedFamiliemedlemmer;
-const familiemedlemmerListeFelt =
-  SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer.felter.familiemedlemmer;
-const elementDef = familiemedlemmerListeFelt.elementDefinisjon;
-
 function FamiliemedlemOppsummeringItem({
   familiemedlem,
 }: {
   familiemedlem: Familiemedlem;
 }) {
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const elementDef =
+    getSeksjon("familiemedlemmer").felter.familiemedlemmer.elementDefinisjon;
+
   const fields = [
     {
       label: elementDef.fornavn.label,
@@ -60,6 +54,11 @@ export function FamiliemedlemmerStegOppsummering({
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("familiemedlemmer");
+  const skalHaMedFelt = seksjon.felter.skalHaMedFamiliemedlemmer;
+  const familiemedlemmerListeFelt = seksjon.felter.familiemedlemmer;
 
   const familiemedlemmerData = skjema.data.familiemedlemmer;
   const familiemedlemmerSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(
