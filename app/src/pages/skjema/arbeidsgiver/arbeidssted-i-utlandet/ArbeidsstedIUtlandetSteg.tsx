@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
 import { postArbeidsstedIUtlandet } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -30,19 +30,7 @@ import { OmBordPaFlyForm } from "./OmBordPaFlyForm.tsx";
 import { PaLandForm } from "./PaLandForm.tsx";
 import { PaSkipForm } from "./PaSkipForm.tsx";
 
-// Hent felt-definisjoner fra backend (statisk kopi)
-const arbeidsstedTypeFelt =
-  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet.felter.arbeidsstedType;
-
 export const stepKey = "arbeidssted-i-utlandet";
-
-// Hent alternativer fra definisjonen og map til ArbeidsstedType enum
-export const arbeidsstedTypeOptions = arbeidsstedTypeFelt.alternativer.map(
-  (alt) => ({
-    value: alt.verdi as ArbeidsstedType,
-    label: alt.label,
-  }),
-);
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
@@ -50,6 +38,8 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const arbeidsstedTypeFelt = getSeksjon("arbeidsstedIUtlandet").felter.arbeidsstedType;
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
 
@@ -115,9 +105,9 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <option value="">
               {t("arbeidsstedIUtlandetSteg.velgArbeidssted")}
             </option>
-            {arbeidsstedTypeOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            {arbeidsstedTypeFelt.alternativer.map((alt) => (
+              <option key={alt.verdi} value={alt.verdi}>
+                {alt.label}
               </option>
             ))}
           </Select>

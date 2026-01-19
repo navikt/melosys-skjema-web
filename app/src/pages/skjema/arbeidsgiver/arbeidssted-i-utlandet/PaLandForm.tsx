@@ -3,20 +3,19 @@ import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
-// Hent felt-definisjoner fra backend (statisk kopi)
-const felter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
-
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function PaLandForm() {
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedPaLand").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const fastEllerVekslendeArbeidssted = useWatch({

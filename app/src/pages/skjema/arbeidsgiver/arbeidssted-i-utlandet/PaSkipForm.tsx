@@ -3,20 +3,19 @@ import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
-import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { Farvann } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
-// Hent felt-definisjoner fra backend (statisk kopi)
-const felter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaSkip.felter;
-
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function PaSkipForm() {
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedPaSkip").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const seilerI = useWatch({ name: "paSkip.seilerI" });

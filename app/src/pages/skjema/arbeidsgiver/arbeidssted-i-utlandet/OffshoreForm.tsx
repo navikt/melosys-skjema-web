@@ -3,19 +3,18 @@ import { Controller, useFormContext } from "react-hook-form";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
-import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
-// Hent felt-definisjoner fra backend (statisk kopi)
-const felter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOffshore.felter;
-
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function OffshoreForm() {
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedOffshore").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.

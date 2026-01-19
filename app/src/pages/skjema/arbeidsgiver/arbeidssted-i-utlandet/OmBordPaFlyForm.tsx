@@ -4,19 +4,18 @@ import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
-// Hent felt-definisjoner fra backend (statisk kopi)
-const felter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOmBordPaFly.felter;
-
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function OmBordPaFlyForm() {
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedOmBordPaFly").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const erVanligHjemmebase = useWatch({
