@@ -26,7 +26,7 @@ import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 export const stepKey = "utenlandsoppdraget";
 
 // Date range constants for assignment period selection
-const YEARS_FORWARD_FROM_CURRENT = 5;
+const YEARS_FORWARD_FROM_CURRENT = 100;
 
 interface UtenlandsoppdragetStegContentProps {
   skjema: ArbeidstakersSkjemaDto;

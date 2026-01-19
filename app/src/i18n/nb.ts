@@ -194,6 +194,8 @@ export const nb = {
         "Er du skattepliktig til Norge i hele utsendingsperioden?",
       mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
         "Mottar du pengestøtte fra et annet EØS-land eller Sveits?",
+      mottarDuPengestotteBeskrivelse:
+        'Med "Pengestøtte" mener vi her penger du mottar som erstatning for tapt arbeidsinntekt. Sykepenger, foreldrepenger, dagpenger og arbeidsavklaringspenger er eksempler på slike pengestøtter i Norge.',
       fraHvilketLandMottarDuPengestotte:
         "Fra hvilket land mottar du pengestøtte?",
       hvorMyePengerMottarDuBruttoPerManed:
