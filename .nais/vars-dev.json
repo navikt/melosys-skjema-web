@@ -1,6 +1,7 @@
 {
   "ingresses": [
-    "https://melosys-skjema-web.intern.dev.nav.no"
+    "https://melosys-skjema-web.intern.dev.nav.no",
+    "https://melosys-skjema-web.ekstern.dev.nav.no"
   ],
   "minReplicas": "1",
   "maxReplicas": "2",
