@@ -333,7 +333,7 @@ export function ArbeidstakerVelger({
                 {t("oversiktFelles.arbeidstakerSelvUtfyllingCheckbox")}
               </Checkbox>
 
-              {/* Felt for F.nr og Fullt navn - vises kun når checkbox er huket av */}
+              {/* Felt for F.nr og etternavn - vises kun når checkbox er huket av */}
               {arbeidstakerSelvUtfylling && (
                 <div className="max-w-lg w-full mt-4">
                   {verifisertPerson ? (

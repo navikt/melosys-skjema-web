@@ -18,7 +18,6 @@ import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon
 import { Route as OversiktIndexRouteImport } from './routes/oversikt.index'
 import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
-import { Route as OversiktStartSoknadRouteImport } from './routes/oversikt.start-soknad'
 import { Route as SkjemaIdKvitteringRouteImport } from './routes/skjema.$id.kvittering'
 import { Route as SkjemaArbeidstakerIdIndexRouteImport } from './routes/skjema.arbeidstaker.$id.index'
 import { Route as SkjemaArbeidsgiverIdIndexRouteImport } from './routes/skjema.arbeidsgiver.$id.index'
@@ -83,11 +82,6 @@ const RepresentasjonVelgRadgiverfirmaRoute =
     path: '/velg-radgiverfirma',
     getParentRoute: () => RepresentasjonRoute,
   } as any)
-const OversiktStartSoknadRoute = OversiktStartSoknadRouteImport.update({
-  id: '/start-soknad',
-  path: '/start-soknad',
-  getParentRoute: () => OversiktRoute,
-} as any)
 const SkjemaIdKvitteringRoute = SkjemaIdKvitteringRouteImport.update({
   id: '/kvittering',
   path: '/kvittering',
@@ -195,7 +189,6 @@ export interface FileRoutesByFullPath {
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
-  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
   '/oversikt/': typeof OversiktIndexRoute
@@ -221,7 +214,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
   '/oversikt': typeof OversiktIndexRoute
@@ -251,7 +243,6 @@ export interface FileRoutesById {
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
-  '/oversikt/start-soknad': typeof OversiktStartSoknadRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
   '/oversikt/': typeof OversiktIndexRoute
@@ -282,7 +273,6 @@ export interface FileRouteTypes {
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
-    | '/oversikt/start-soknad'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/oversikt/'
@@ -308,7 +298,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/oversikt/start-soknad'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/oversikt'
@@ -337,7 +326,6 @@ export interface FileRouteTypes {
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
-    | '/oversikt/start-soknad'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/oversikt/'
@@ -433,13 +421,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/representasjon/velg-radgiverfirma'
       preLoaderRoute: typeof RepresentasjonVelgRadgiverfirmaRouteImport
       parentRoute: typeof RepresentasjonRoute
-    }
-    '/oversikt/start-soknad': {
-      id: '/oversikt/start-soknad'
-      path: '/start-soknad'
-      fullPath: '/oversikt/start-soknad'
-      preLoaderRoute: typeof OversiktStartSoknadRouteImport
-      parentRoute: typeof OversiktRoute
     }
     '/skjema/$id/kvittering': {
       id: '/skjema/$id/kvittering'
@@ -564,12 +545,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface OversiktRouteChildren {
-  OversiktStartSoknadRoute: typeof OversiktStartSoknadRoute
   OversiktIndexRoute: typeof OversiktIndexRoute
 }
 
 const OversiktRouteChildren: OversiktRouteChildren = {
-  OversiktStartSoknadRoute: OversiktStartSoknadRoute,
   OversiktIndexRoute: OversiktIndexRoute,
 }
 
