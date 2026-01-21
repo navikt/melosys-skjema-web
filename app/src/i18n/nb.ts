@@ -423,7 +423,7 @@ export const nb = {
       infoBullet2: "se påbegynte og tidligere innsendte søknader.",
       personVelgerLabel: "Velg person du skal fylle ut søknad for",
       personVelgerBeskrivelse:
-        "Listen inneholder alle personer du har fått fullmakt fra på nav.no.",
+        "Listen inneholder alle personer du har fått fullmakt på nav.no.",
     },
     oversiktFelles: {
       utkastTittel: "UTKAST",
@@ -470,11 +470,11 @@ export const nb = {
       arbeidstakerUtenFullmaktBeskrivelse:
         "Arbeidstakeren må selv fylle ut sin del av søknaden.",
       arbeidstakerFnrLabel: "Fødsels-/d-nummer",
-      arbeidstakerFulltNavnLabel: "Fullt navn",
+      arbeidstakerFulltNavnLabel: "Etternavn",
       arbeidstakerSokKnapp: "Søk",
       arbeidstakerFnrTom: "Skriv fødselsnummer",
       arbeidstakerFnrUgyldig: "Ugyldig fødselsnummer",
-      arbeidstakerFulltNavnTom: "Skriv fullt navn",
+      arbeidstakerFulltNavnTom: "Skriv etternavn",
       arbeidstakerVerifiseringFeilet:
         "Finner ikke person med oppgitt fødselsnummer og etternavn",
       arbeidstakerVerifisertLabel: "Person verifisert",
@@ -499,6 +499,8 @@ export const nb = {
       historikkStatusMottatt: "Mottatt",
       paginationForrige: "Forrige",
       paginationNeste: "Neste",
+      feilVedOpprettelse:
+        "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",
     },
     velgRadgiverfirma: {
       tittel: "Du er rådgiver og bruker Nav på vegne av et rådgivingsfirma",
@@ -516,21 +518,6 @@ export const nb = {
     },
     oppsummeringSteg: {
       tittel: "Oppsummering",
-    },
-    startSoknad: {
-      tittel: "Start søknad",
-      beskrivelse:
-        "Sjekk at informasjonen nedenfor stemmer før du starter søknaden.",
-      organisasjonsnavn: "Organisasjonsnavn",
-      organisasjonsnummer: "Organisasjonsnummer",
-      radgiverfirmaTittel: "Rådgiverfirma",
-      navn: "Navn",
-      fodselsnummer: "Fødselsnummer / D-nummer",
-      duHarFullmakt:
-        "Du har fullmakt til å fylle ut søknaden på vegne av arbeidstaker",
-      startSoknadKnapp: "Start søknad",
-      feilVedOpprettelse:
-        "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",
     },
     generellValidering: {
       erPakrevd: "er påkrevd",

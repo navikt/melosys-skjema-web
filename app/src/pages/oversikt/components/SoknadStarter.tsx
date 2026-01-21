@@ -6,13 +6,13 @@ import {
   Heading,
   VStack,
 } from "@navikt/ds-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
-import type { StartSoknadLocationState } from "~/routes/oversikt.start-soknad.tsx";
+import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   OpprettSoknadMedKontekstRequest,
   PersonDto,
@@ -57,7 +57,16 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
         }
       : valgtArbeidstaker;
 
-  const validerOgGaVidere = () => {
+  const opprettSoknadMutation = useMutation({
+    mutationFn: opprettSoknadMedKontekst,
+    onSuccess: (data) => {
+      void navigate({
+        to: `/skjema/${data.id}`,
+      });
+    },
+  });
+
+  const validerOgStartSoknad = () => {
     const validering = validerSoknadKontekst(
       kontekst,
       valgtArbeidsgiver,
@@ -80,21 +89,16 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     // Clear valideringsfeil hvis alt er ok
     setValideringsfeil([]);
 
-    // Naviger til oppsummeringssiden med state
-    const navState: StartSoknadLocationState = {
+    // Opprett søknad direkte
+    const request: OpprettSoknadMedKontekstRequest = {
+      representasjonstype: kontekst.representasjonstype,
+      radgiverfirma: kontekst.radgiverfirma,
       arbeidsgiver: valgtArbeidsgiver,
       arbeidstaker: effektivArbeidstaker,
-      kontekst: {
-        ...kontekst,
-        harFullmakt,
-      },
+      harFullmakt,
     };
 
-    void navigate({
-      to: "/oversikt/start-soknad",
-      // TanStack Router krever eksplisitt type assertion for custom state
-      state: navState as never,
-    });
+    opprettSoknadMutation.mutate(request);
   };
 
   // Clear valideringsfeil når arbeidsgiver/arbeidstaker endres
@@ -207,7 +211,18 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
           </Alert>
         )}
 
-        <Button className="w-fit" onClick={validerOgGaVidere} variant="primary">
+        {opprettSoknadMutation.isError && (
+          <Alert variant="error">
+            {t("oversiktFelles.feilVedOpprettelse")}
+          </Alert>
+        )}
+
+        <Button
+          className="w-fit"
+          loading={opprettSoknadMutation.isPending}
+          onClick={validerOgStartSoknad}
+          variant="primary"
+        >
           {t("oversiktFelles.gaTilSkjemaKnapp")}
         </Button>
       </VStack>
