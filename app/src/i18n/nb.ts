@@ -1,4 +1,4 @@
-export const nb = {
+  export const nb = {
   translation: {
     felles: {
       laster: "Laster...",
@@ -460,6 +460,8 @@ export const nb = {
         "Velg arbeidstaker du skal fylle ut søknad for",
       arbeidstakerMedFullmaktBeskrivelse:
         "Listen inneholder alle arbeidstakere du har fått fullmakt fra",
+      arbeidstakerIngenFullmakter:
+        "Du har ikke fått fullmakt fra noen arbeidstakere. Arbeidstaker kan gi deg fullmakt på",
       arbeidstakerSelvUtfyllingCheckbox:
         "Arbeidstakeren skal selv fylle ut sin del av søknaden",
       arbeidstakerMedFullmaktPlaceholder: "Fødsels-/d-nummer eller navn",
@@ -501,7 +503,7 @@ export const nb = {
     velgRadgiverfirma: {
       tittel: "Du er rådgiver og bruker Nav på vegne av et rådgivingsfirma",
       informasjon:
-        "For å kunne sende brev til riktig adresse må vi ha informasjon om hvilken virksomhet du jobber som rådgiver for.",
+        "For å kunne sende brev til riktig mottaker i Altinn, må vi ha informasjon om hvilket rådgivingsfirma du jobbe hos.",
       sokPaVirksomhet: "Søk på virksomhet (org.nr.)",
       organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
       feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",

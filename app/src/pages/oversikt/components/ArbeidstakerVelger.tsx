@@ -7,7 +7,9 @@ import {
   Checkbox,
   Heading,
   HStack,
+  InlineMessage,
   Label,
+  Link,
   TextField,
   UNSAFE_Combobox,
   VStack,
@@ -276,6 +278,17 @@ export function ArbeidstakerVelger({
                     />
                   </HStack>
                 </Box>
+              ) : !isLoading && personerMedFullmakt.length === 0 ? (
+                <InlineMessage className="mt-2" status="info">
+                  {t("oversiktFelles.arbeidstakerIngenFullmakter")}{" "}
+                  <Link
+                    href="https://www.nav.no/fullmakt"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    nav.no/fullmakt
+                  </Link>
+                </InlineMessage>
               ) : (
                 // Vi bruker tom label="" fordi vi viser egen Label og BodyShort over
                 // for å sikre at label og beskrivelse er synlig både når Combobox
