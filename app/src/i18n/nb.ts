@@ -1,4 +1,4 @@
-  export const nb = {
+export const nb = {
   translation: {
     felles: {
       laster: "Laster...",
