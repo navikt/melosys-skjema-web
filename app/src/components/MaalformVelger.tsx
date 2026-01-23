@@ -20,7 +20,7 @@ export function MaalformVelger() {
   return (
     <Dropdown>
       <Button as={Dropdown.Toggle} variant="tertiary-neutral">
-        <HStack align="center" gap="2">
+        <HStack align="center" gap="space-8">
           <GlobeIcon aria-hidden fontSize="1.25rem" />
           <span>{currentLanguage.label}</span>
           <ChevronDownIcon aria-hidden fontSize="1.25rem" />

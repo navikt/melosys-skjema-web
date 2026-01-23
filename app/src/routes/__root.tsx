@@ -12,7 +12,7 @@ function RootComponent() {
   return (
     <Page footerPosition="belowFold">
       <Page.Block gutters width="md">
-        <VStack as="main" gap="8" paddingBlock="8 0">
+        <VStack as="main" gap="space-32" paddingBlock="space-32 space-0">
           <AppHeader />
           <Outlet />
         </VStack>

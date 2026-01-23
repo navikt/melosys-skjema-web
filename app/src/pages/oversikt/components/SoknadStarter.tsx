@@ -135,14 +135,14 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   return (
     <Box
-      background="surface-info-subtle"
-      borderColor="border-subtle"
-      borderRadius="small"
+      background="info-soft"
+      borderColor="neutral-subtle"
+      borderRadius="2"
       borderWidth="1"
       className="surface-action-subtle"
-      padding="6"
+      padding="space-24"
     >
-      <VStack gap="6">
+      <VStack gap="space-24">
         <div>
           <Heading level="2" size="medium" spacing>
             {kontekst.representasjonstype === Representasjonstype.DEG_SELV

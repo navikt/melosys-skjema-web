@@ -116,12 +116,12 @@ export function InnsendteSoknaderTabell({
   if (isLoading) {
     return (
       <Box
-        background="surface-subtle"
-        borderRadius="small"
+        background="neutral-soft"
+        borderRadius="2"
         borderWidth="1"
-        padding="6"
+        padding="space-24"
       >
-        <VStack gap="6">
+        <VStack gap="space-24">
           <Heading level="2" size="medium">
             {t("oversiktFelles.historikkTittel")}
           </Heading>
@@ -135,12 +135,12 @@ export function InnsendteSoknaderTabell({
   if (isError) {
     return (
       <Box
-        background="surface-subtle"
-        borderRadius="small"
+        background="neutral-soft"
+        borderRadius="2"
         borderWidth="1"
-        padding="6"
+        padding="space-24"
       >
-        <VStack gap="4">
+        <VStack gap="space-16">
           <Heading level="2" size="medium">
             {t("oversiktFelles.historikkTittel")}
           </Heading>
@@ -159,18 +159,18 @@ export function InnsendteSoknaderTabell({
 
   return (
     <Box
-      background="surface-subtle"
-      borderRadius="small"
+      background="neutral-soft"
+      borderRadius="2"
       borderWidth="1"
-      padding="6"
+      padding="space-24"
     >
-      <VStack gap="6">
+      <VStack gap="space-24">
         <Heading level="2" size="medium">
           {t("oversiktFelles.historikkTittel")}
         </Heading>
 
         <HStack justify="end">
-          <HStack gap="2">
+          <HStack gap="space-8">
             <Search
               hideLabel
               label={t("oversiktFelles.historikkSokPlaceholder")}

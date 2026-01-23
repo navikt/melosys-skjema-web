@@ -31,7 +31,7 @@ function MaalformValg() {
   };
 
   return (
-    <HStack align="center" gap="2">
+    <HStack align="center" gap="space-8">
       <GlobeIcon aria-hidden fontSize="1.5rem" />
       {SUPPORTED_LANGUAGES.map((lang) => (
         <Button
@@ -115,7 +115,7 @@ export function KontekstVelger() {
 
   return (
     <>
-      <HStack align="center" gap="2">
+      <HStack align="center" gap="space-8">
         {displayText && (
           <span className="text-xl font-semibold text-text-action">
             {displayText}
@@ -127,7 +127,7 @@ export function KontekstVelger() {
           ref={buttonRef}
           variant="secondary"
         >
-          <HStack align="center" gap="2">
+          <HStack align="center" gap="space-8">
             {Icon && <Icon aria-hidden fontSize="2rem" />}
             <ChevronDownIcon aria-hidden fontSize="1.5rem" />
           </HStack>

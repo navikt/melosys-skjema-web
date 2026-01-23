@@ -12,7 +12,7 @@ export function ValgtOrganisasjon({
   valgtOrganisasjon,
 }: ValgtOrganisasjonProps) {
   return (
-    <HStack align="center" className="mt-4" gap="2">
+    <HStack align="center" className="mt-4" gap="space-8">
       <CheckmarkCircleFillIcon
         aria-hidden
         className="text-icon-success"

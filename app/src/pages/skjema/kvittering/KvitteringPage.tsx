@@ -52,20 +52,17 @@ function KvitteringPageContent({ response }: KvitteringPageContentProps) {
   const { t } = useTranslation();
 
   return (
-    <VStack gap="6">
+    <VStack gap="space-24">
       {/* Hovedtittel */}
       <Heading level="1" size="large">
         {t("kvittering.tittel")}
       </Heading>
-
       {/* Melding med referanse */}
       <BodyLong>
         {t("kvittering.melding")} <strong>{response.referanseId}</strong>.
       </BodyLong>
-
       {/* Info om oversiktssiden */}
       <Alert variant="info">{t("kvittering.infoOversikt")}</Alert>
-
       {/* Knapp til oversikt */}
       <Button
         as={Link}
