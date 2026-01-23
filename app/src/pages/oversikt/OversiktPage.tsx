@@ -84,7 +84,7 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
   };
 
   return (
-    <VStack gap="6">
+    <VStack gap="space-24">
       <GuidePanel poster>
         <Heading level="2" size="small" spacing>
           {getTittel()}
@@ -100,7 +100,6 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           ))}
         </ul>
       </GuidePanel>
-
       <UtkastListe kontekst={kontekst} />
       <SoknadStarter kontekst={kontekst} />
       <InnsendteSoknaderTabell kontekst={kontekst} />

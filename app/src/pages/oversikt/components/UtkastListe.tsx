@@ -51,7 +51,7 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
     return (
       <ExpansionCard aria-label={t("oversiktFelles.utkastTittel")} size="small">
         <ExpansionCard.Header className="rounded-small">
-          <HStack align="center" gap="2">
+          <HStack align="center" gap="space-8">
             <NotePencilDashIcon
               aria-hidden
               className="text-surface-action"
@@ -74,7 +74,7 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
     return (
       <ExpansionCard aria-label={t("oversiktFelles.utkastTittel")} size="small">
         <ExpansionCard.Header className="rounded-small">
-          <HStack align="center" gap="2">
+          <HStack align="center" gap="space-8">
             <NotePencilDashIcon
               aria-hidden
               className="text-surface-action"
@@ -105,7 +105,7 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
       size="small"
     >
       <ExpansionCard.Header className="rounded-small">
-        <HStack align="center" gap="2">
+        <HStack align="center" gap="space-8">
           <NotePencilDashIcon
             aria-hidden
             className="text-surface-action"
@@ -117,14 +117,14 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
         </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <VStack gap="3">
+        <VStack gap="space-12">
           <BodyShort>{t("oversiktFelles.utkastBeskrivelse")}</BodyShort>
 
-          <VStack as="ul" className="list-none p-0" gap="2">
+          <VStack as="ul" className="list-none p-0" gap="space-8">
             {utkast.map((item) => (
               <li key={item.id}>
                 <Box
-                  borderRadius="medium"
+                  borderRadius="4"
                   className="hover:bg-surface-action-subtle-hover border border-border-subtle transition-colors cursor-pointer"
                   onClick={() =>
                     navigate({ to: "/skjema/$id", params: { id: item.id } })
@@ -135,12 +135,12 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
                       navigate({ to: "/skjema/$id", params: { id: item.id } });
                     }
                   }}
-                  padding="4"
+                  padding="space-16"
                   role="button"
                   tabIndex={0}
                 >
-                  <HStack align="center" gap="4" justify="space-between">
-                    <VStack className="flex-1" gap="2">
+                  <HStack align="center" gap="space-16" justify="space-between">
+                    <VStack className="flex-1" gap="space-8">
                       {kontekst.representasjonstype !==
                         Representasjonstype.DEG_SELV && (
                         <div>
@@ -164,7 +164,7 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
                           {item.arbeidstakerFnrMaskert || "-"}
                         </BodyShort>
                       </div>
-                      <HStack gap="4">
+                      <HStack gap="space-16">
                         <div>
                           <BodyShort className="text-text-subtle" size="small">
                             {t("oversiktFelles.utkastOpprettet")}

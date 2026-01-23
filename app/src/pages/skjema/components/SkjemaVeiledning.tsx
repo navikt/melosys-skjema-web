@@ -29,7 +29,7 @@ export function SkjemaVeiledning({ onStartSoknad }: SkjemaVeiledningProps) {
   return (
     <Page>
       <Page.Block gutters width="text">
-        <VStack as="main" gap="8">
+        <VStack as="main" gap="space-32">
           <GuidePanel poster>
             <Heading level="2" size="medium" spacing>
               {t("skjemaVeiledning.hei")}, {userInfo.data?.name}
@@ -137,7 +137,7 @@ export function SkjemaVeiledning({ onStartSoknad }: SkjemaVeiledningProps) {
                 {t("skjemaVeiledning.lesMerOmViktigheten")}
               </Link>
             </BodyLong>
-            <Box paddingBlock="4 8">
+            <Box paddingBlock="space-16 space-32">
               <Checkbox>{t("skjemaVeiledning.jegBekrefter")}</Checkbox>
             </Box>
             <Button

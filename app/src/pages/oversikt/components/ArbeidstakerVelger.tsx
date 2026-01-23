@@ -225,13 +225,12 @@ export function ArbeidstakerVelger({
           {t("oversiktFelles.arbeidstakerTittel")}
         </Heading>
       )}
-
       <Box
-        borderColor={harFeil ? "border-danger" : "border-info"}
+        borderColor={harFeil ? "danger" : "info"}
         borderWidth="0 0 0 4"
-        paddingInline="4"
+        paddingInline="space-16"
       >
-        <VStack gap="6">
+        <VStack gap="space-24">
           {/* Med fullmakt */}
           <div
             className="navds-form-field navds-form-field--medium"
@@ -254,12 +253,12 @@ export function ArbeidstakerVelger({
             <div className="max-w-lg w-full">
               {harValgtMedFullmakt ? (
                 <Box
-                  background="surface-default"
-                  borderColor="border-subtle"
-                  borderRadius="small"
+                  background="default"
+                  borderColor="neutral-subtle"
+                  borderRadius="2"
                   borderWidth="1"
                   className="mt-2"
-                  padding="2"
+                  padding="space-8"
                 >
                   <HStack align="center" justify="space-between">
                     <BodyShort>
@@ -338,11 +337,11 @@ export function ArbeidstakerVelger({
                 <div className="max-w-lg w-full mt-4">
                   {verifisertPerson ? (
                     <Box
-                      background="surface-default"
-                      borderColor="border-subtle"
-                      borderRadius="small"
+                      background="default"
+                      borderColor="neutral-subtle"
+                      borderRadius="2"
                       borderWidth="1"
-                      padding="2"
+                      padding="space-8"
                     >
                       <HStack align="center" justify="space-between">
                         <BodyShort>
@@ -358,7 +357,7 @@ export function ArbeidstakerVelger({
                     </Box>
                   ) : (
                     <>
-                      <HStack align="start" gap="2" wrap={false}>
+                      <HStack align="start" gap="space-8" wrap={false}>
                         <TextField
                           error={fnrError ?? undefined}
                           label={t("oversiktFelles.arbeidstakerFnrLabel")}

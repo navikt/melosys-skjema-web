@@ -118,7 +118,6 @@ export function ArbeidsgiverVelger({
           {t("oversiktFelles.arbeidsgiverTittel")}
         </Heading>
       )}
-
       {kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
       isLoading &&
       !valgtArbeidsgiver ? (
@@ -133,9 +132,9 @@ export function ArbeidsgiverVelger({
         </div>
       ) : (
         <Box
-          borderColor={harFeil ? "border-danger" : "border-info"}
+          borderColor={harFeil ? "danger" : "info"}
           borderWidth="0 0 0 4"
-          paddingInline="4"
+          paddingInline="space-16"
         >
           {skalSokeEtterArbeidsgiver ? (
             // OrganisasjonSoker for DEG_SELV og ANNEN_PERSON

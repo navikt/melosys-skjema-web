@@ -41,8 +41,8 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
       onClick={() => onSelect(option.type)}
       type="button"
     >
-      <HStack align="center" gap="4" justify="space-between">
-        <HStack align="center" gap="4">
+      <HStack align="center" gap="space-16" justify="space-between">
+        <HStack align="center" gap="space-16">
           <Icon aria-hidden className="text-icon-action" fontSize="1.75rem" />
           <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
         </HStack>

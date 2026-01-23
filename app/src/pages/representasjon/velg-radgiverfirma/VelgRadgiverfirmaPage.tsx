@@ -50,7 +50,7 @@ export function VelgRadgiverfirmaPage() {
 
   return (
     <>
-      <VStack className="mt-8" gap="6">
+      <VStack className="mt-8" gap="space-24">
         <Heading level="1" size="medium">
           {t("velgRadgiverfirma.tittel")}
         </Heading>
@@ -67,7 +67,7 @@ export function VelgRadgiverfirmaPage() {
           <BodyShort className="text-red-600">{feilmelding}</BodyShort>
         )}
 
-        <HStack className="mt-4" gap="4" justify="end">
+        <HStack className="mt-4" gap="space-16" justify="end">
           <Button onClick={handleAvbryt} size="medium" variant="secondary">
             {t("felles.avbryt")}
           </Button>
