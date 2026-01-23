@@ -18,6 +18,7 @@ import {
   PersonDto,
   Representasjonstype,
   SimpleOrganisasjonDto,
+  Skjemadel,
 } from "~/types/melosysSkjemaTypes.ts";
 import { validerSoknadKontekst } from "~/utils/valideringUtils.ts";
 
@@ -35,9 +36,8 @@ interface SoknadStarterProps {
 export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [valgtArbeidsgiver, setValgtArbeidsgiver] = useState<
-    SimpleOrganisasjonDto | undefined
-  >(kontekst.arbeidsgiver);
+  const [valgtArbeidsgiver, setValgtArbeidsgiver] =
+    useState<SimpleOrganisasjonDto>(kontekst.arbeidsgiver);
   const [valgtArbeidstaker, setValgtArbeidstaker] = useState<
     PersonDto | undefined
   >(kontekst.arbeidstaker);
@@ -89,12 +89,21 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     // Clear valideringsfeil hvis alt er ok
     setValideringsfeil([]);
 
+    // TODO: Det kommer flere endringer senere som gjøre denne riktig, men dette er det nærmeste vi kommer nå
+    const skjemadel = [
+      Representasjonstype.RADGIVER,
+      Representasjonstype.ARBEIDSGIVER,
+    ].includes(kontekst.representasjonstype)
+      ? Skjemadel.ARBEIDSGIVERS_DEL
+      : Skjemadel.ARBEIDSTAKERS_DEL;
+
     // Opprett søknad direkte
     const request: OpprettSoknadMedKontekstRequest = {
       representasjonstype: kontekst.representasjonstype,
       radgiverfirma: kontekst.radgiverfirma,
       arbeidsgiver: valgtArbeidsgiver,
-      arbeidstaker: effektivArbeidstaker,
+      arbeidstaker: effektivArbeidstaker!, // Validated above
+      skjemadel,
       harFullmakt,
     };
 

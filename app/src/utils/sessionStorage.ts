@@ -1,6 +1,8 @@
-import type {
+import {
   OpprettSoknadMedKontekstRequest,
   OrganisasjonDto,
+  Representasjonstype,
+  SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
 export function getValgtRolle(): OrganisasjonDto | undefined {
@@ -48,8 +50,14 @@ export function getRepresentasjonKontekst():
   }
 }
 
+export type RepresentasjonsKontekst = {
+  representasjonstype: Representasjonstype;
+  harFullmakt: boolean;
+  radgiverfirma?: SimpleOrganisasjonDto;
+};
+
 export function setRepresentasjonKontekst(
-  kontekst: OpprettSoknadMedKontekstRequest,
+  kontekst: RepresentasjonsKontekst,
 ): void {
   try {
     sessionStorage.setItem(REPRESENTASJON_KEY, JSON.stringify(kontekst));

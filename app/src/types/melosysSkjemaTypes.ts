@@ -87,6 +87,11 @@ export enum SorteringsFelt {
   STATUS = "STATUS",
 }
 
+export enum Skjemadel {
+  ARBEIDSTAKERS_DEL = "ARBEIDSTAKERS_DEL",
+  ARBEIDSGIVERS_DEL = "ARBEIDSGIVERS_DEL",
+}
+
 export enum Representasjonstype {
   DEG_SELV = "DEG_SELV",
   ARBEIDSGIVER = "ARBEIDSGIVER",
@@ -101,8 +106,8 @@ export enum SkjemaStatus {
 
 export interface Organisasjon {
   navn?: Navn;
-  organisasjonsnummer: string;
   type: string;
+  organisasjonsnummer: string;
 }
 
 export interface SkjemaInnsendtKvittering {
@@ -114,9 +119,10 @@ export interface SkjemaInnsendtKvittering {
 
 export interface OpprettSoknadMedKontekstRequest {
   representasjonstype: Representasjonstype;
+  skjemadel: Skjemadel;
   radgiverfirma?: SimpleOrganisasjonDto;
-  arbeidsgiver?: SimpleOrganisasjonDto;
-  arbeidstaker?: PersonDto;
+  arbeidsgiver: SimpleOrganisasjonDto;
+  arbeidstaker: PersonDto;
   harFullmakt: boolean;
 }
 
@@ -163,7 +169,7 @@ export interface InnsendtSoknadOversiktDto {
   id: string;
   referanseId?: string;
   arbeidsgiverNavn?: string;
-  arbeidsgiverOrgnr?: string;
+  arbeidsgiverOrgnr: string;
   arbeidstakerNavn?: string;
   arbeidstakerFnrMaskert?: string;
   /** @format date-time */
@@ -393,6 +399,7 @@ export interface RadgiverfirmaInfo {
 export interface UtsendtArbeidstakerMetadata {
   representasjonstype: Representasjonstype;
   harFullmakt: boolean;
+  skjemadel: Skjemadel;
   radgiverfirma?: RadgiverfirmaInfo;
   arbeidsgiverNavn?: string;
   fullmektigFnr?: string;
@@ -593,7 +600,7 @@ export interface InngaarIJuridiskEnhet {
 
 export type JuridiskEnhet = UtilRequiredKeys<
   Organisasjon,
-  "organisasjonsnummer" | "type"
+  "type" | "organisasjonsnummer"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   juridiskEnhetDetaljer?: JuridiskEnhetDetaljer;
@@ -634,7 +641,7 @@ export interface OrganisasjonDetaljer {
 
 export type Organisasjonsledd = UtilRequiredKeys<
   Organisasjon,
-  "organisasjonsnummer" | "type"
+  "type" | "organisasjonsnummer"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   organisasjonsleddDetaljer?: OrganisasjonsleddDetaljer;
@@ -650,7 +657,7 @@ export interface OrganisasjonsleddDetaljer {
 
 export type Virksomhet = UtilRequiredKeys<
   Organisasjon,
-  "organisasjonsnummer" | "type"
+  "type" | "organisasjonsnummer"
 > & {
   organisasjonDetaljer?: OrganisasjonDetaljer;
   virksomhetDetaljer?: VirksomhetDetaljer;
