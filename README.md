@@ -92,6 +92,38 @@ Dette kommandoen:
 
 Kjør denne kommandoen når API-et har nye eller endrede datamodeller.
 
+### Skjemadefinisjon-sync
+
+Skjemadefinisjoner (labels, hjelpetekster, etc.) synkroniseres fra backend:
+
+```bash
+cd app
+npm run sync-skjema-definisjon
+```
+
+**Forutsetninger:**
+- Backend må kjøre på `localhost:8082`
+
+**Genererte filer:**
+```
+src/skjema-definisjoner/
+├── A1_nb.ts    # Norsk skjemadefinisjon
+├── A1_en.ts    # Engelsk skjemadefinisjon
+└── index.ts    # Re-eksport og hjelpefunksjoner
+```
+
+**Bruk i komponenter:**
+```typescript
+import { getSkjemaDefinisjon } from './skjema-definisjoner';
+
+const def = getSkjemaDefinisjon('nb');
+const felt = def.seksjoner.arbeidssituasjon.felter.harVaert...;
+console.log(felt.label);   // "Har du vært eller skal du være..."
+console.log(felt.jaLabel); // "Ja"
+```
+
+Kjør denne kommandoen når skjemadefinisjonene endres i backend.
+
 **Server (server/):**
 ```bash
 npm run build        # Bygg TypeScript
