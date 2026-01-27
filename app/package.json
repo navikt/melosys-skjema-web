@@ -11,6 +11,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "generate-types": "swagger-typescript-api generate --path https://melosys-skjema-api.intern.dev.nav.no/v3/api-docs --output ./src/types --union-enums --no-client -n melosysSkjemaTypes",
+    "sync-skjema-definisjon": "tsx scripts/sync-skjema-definisjon.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
+    "tsx": "4.20.6",
     "@navikt/aksel-stylelint": "8.1.0",
     "@playwright/test": "1.57.0",
     "@tanstack/router-vite-plugin": "1.150.0",
