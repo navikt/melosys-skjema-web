@@ -134,9 +134,7 @@ function SkatteforholdOgInntektStegContent({
 
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            description={t(
-              "skatteforholdOgInntektSteg.mottarDuPengestotteBeskrivelse",
-            )}
+            description={mottarPengestotteFelt.hjelpetekst}
             formFieldName="mottarPengestotteFraAnnetEosLandEllerSveits"
             legend={mottarPengestotteFelt.label}
           />
