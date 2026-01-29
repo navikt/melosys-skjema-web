@@ -202,7 +202,7 @@ export async function logSkjemaDefinisjonValidation(): Promise<void> {
     // Vis toast i UI så utvikler ser det
     toast.error(
       "Skjemadefinisjon ut av sync! Kjør: npm run sync-skjema-definisjon",
-      { duration: 10000 },
+      { duration: 10_000 },
     );
   }
 }
