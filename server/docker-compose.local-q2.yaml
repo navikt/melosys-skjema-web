@@ -15,7 +15,7 @@ services:
       ENV: "dev"
       EXPRESS_PORT: "4000"
       EXPRESS_HOST: "::"
-      API_URL: http://host.docker.internal:8089/api
+      API_URL: http://host.docker.internal:8090/api
       DEKORATOREN_API_URL: https://www.ekstern.dev.nav.no/person/nav-dekoratoren-api
       LOCAL_TOKEN: ${LOCAL_TOKEN}
       USE_LOCAL_TOKEN: "true"
