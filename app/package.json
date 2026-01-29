@@ -14,8 +14,7 @@
     "sync-skjema-definisjon": "tsx scripts/sync-skjema-definisjon.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:debug": "playwright test --debug",
-    "sync-skjema-definisjon": "node scripts/sync-skjema-definisjon.js"
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
@@ -38,7 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
-    "tsx": "4.20.6",
+    "tsx": "4.21.0",
     "@navikt/aksel-stylelint": "8.1.0",
     "@playwright/test": "1.57.0",
     "@tanstack/router-vite-plugin": "1.150.0",
