@@ -5,7 +5,12 @@
  * the static TypeScript file and the backend definition.
  */
 
-import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { toast } from "react-hot-toast";
+
+import {
+  SKJEMA_DEFINISJONER_A1,
+  type SupportedLanguage,
+} from "~/constants/skjemaDefinisjonA1";
 
 const API_PROXY_URL = "/api";
 
@@ -15,12 +20,11 @@ interface ValidationResult {
 }
 
 /**
- * Fetches the current definition from backend and compares with static.
- * Returns validation result with any differences found.
+ * Fetches the current definition from backend and compares with static for one language.
  */
-export async function validateSkjemaDefinisjon(
-  skjemaType: string = "A1",
-  sprak: string = "nb",
+async function validateForLanguage(
+  skjemaType: string,
+  sprak: SupportedLanguage,
 ): Promise<ValidationResult> {
   try {
     const response = await fetch(
@@ -30,33 +34,40 @@ export async function validateSkjemaDefinisjon(
     if (!response.ok) {
       return {
         isValid: false,
-        differences: [`Failed to fetch backend definition: ${response.status}`],
+        differences: [
+          `[${sprak}] Failed to fetch backend definition: ${response.status}`,
+        ],
       };
     }
 
     const backendDefinisjon = await response.json();
+    const staticDefinisjon = SKJEMA_DEFINISJONER_A1[sprak];
     const differences: string[] = [];
 
     // Compare version
-    if (backendDefinisjon.versjon !== SKJEMA_DEFINISJON_A1.versjon) {
+    if (backendDefinisjon.versjon !== staticDefinisjon.versjon) {
       differences.push(
-        `Version mismatch: static=${SKJEMA_DEFINISJON_A1.versjon}, backend=${backendDefinisjon.versjon}`,
+        `[${sprak}] Version mismatch: static=${staticDefinisjon.versjon}, backend=${backendDefinisjon.versjon}`,
       );
     }
 
     // Compare sections
-    const staticSeksjoner = Object.keys(SKJEMA_DEFINISJON_A1.seksjoner);
+    const staticSeksjoner = Object.keys(staticDefinisjon.seksjoner);
     const backendSeksjoner = Object.keys(backendDefinisjon.seksjoner || {});
 
     // Check for missing/extra sections
     for (const seksjon of staticSeksjoner) {
       if (!backendSeksjoner.includes(seksjon)) {
-        differences.push(`Section '${seksjon}' in static but not in backend`);
+        differences.push(
+          `[${sprak}] Section '${seksjon}' in static but not in backend`,
+        );
       }
     }
     for (const seksjon of backendSeksjoner) {
       if (!staticSeksjoner.includes(seksjon)) {
-        differences.push(`Section '${seksjon}' in backend but not in static`);
+        differences.push(
+          `[${sprak}] Section '${seksjon}' in backend but not in static`,
+        );
       }
     }
 
@@ -65,15 +76,15 @@ export async function validateSkjemaDefinisjon(
       if (!backendDefinisjon.seksjoner?.[seksjon]) continue;
 
       const staticSeksjon =
-        SKJEMA_DEFINISJON_A1.seksjoner[
-          seksjon as keyof typeof SKJEMA_DEFINISJON_A1.seksjoner
+        staticDefinisjon.seksjoner[
+          seksjon as keyof typeof staticDefinisjon.seksjoner
         ];
       const backendSeksjon = backendDefinisjon.seksjoner[seksjon];
 
       // Compare title
       if (staticSeksjon.tittel !== backendSeksjon.tittel) {
         differences.push(
-          `Section '${seksjon}' tittel mismatch: static="${staticSeksjon.tittel}", backend="${backendSeksjon.tittel}"`,
+          `[${sprak}] Section '${seksjon}' tittel mismatch: static="${staticSeksjon.tittel}", backend="${backendSeksjon.tittel}"`,
         );
       }
 
@@ -84,14 +95,14 @@ export async function validateSkjemaDefinisjon(
       for (const felt of staticFelter) {
         if (!backendFelter.includes(felt)) {
           differences.push(
-            `Field '${seksjon}.${felt}' in static but not in backend`,
+            `[${sprak}] Field '${seksjon}.${felt}' in static but not in backend`,
           );
         }
       }
       for (const felt of backendFelter) {
         if (!staticFelter.includes(felt)) {
           differences.push(
-            `Field '${seksjon}.${felt}' in backend but not in static`,
+            `[${sprak}] Field '${seksjon}.${felt}' in backend but not in static`,
           );
         }
       }
@@ -100,7 +111,6 @@ export async function validateSkjemaDefinisjon(
       for (const felt of staticFelter) {
         if (!backendSeksjon.felter?.[felt]) continue;
 
-        // Use any cast for runtime comparison (types are complex nested objects)
         const staticFelt = (staticSeksjon.felter as Record<string, unknown>)[
           felt
         ] as { label?: string };
@@ -108,7 +118,7 @@ export async function validateSkjemaDefinisjon(
 
         if (staticFelt?.label && staticFelt.label !== backendFelt?.label) {
           differences.push(
-            `Field '${seksjon}.${felt}' label mismatch:\n  static="${staticFelt.label}"\n  backend="${backendFelt?.label}"`,
+            `[${sprak}] Field '${seksjon}.${felt}' label mismatch:\n  static="${staticFelt.label}"\n  backend="${backendFelt?.label}"`,
           );
         }
       }
@@ -122,10 +132,32 @@ export async function validateSkjemaDefinisjon(
     return {
       isValid: false,
       differences: [
-        `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `[${sprak}] Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
       ],
     };
   }
+}
+
+/**
+ * Fetches the current definition from backend and compares with static.
+ * Validates all languages (nb, en).
+ */
+export async function validateSkjemaDefinisjon(
+  skjemaType: string = "A1",
+): Promise<ValidationResult> {
+  const languages: SupportedLanguage[] = ["nb", "en"];
+
+  // Valider alle språk parallelt
+  const results = await Promise.all(
+    languages.map((lang) => validateForLanguage(skjemaType, lang)),
+  );
+
+  const allDifferences = results.flatMap((r) => r.differences);
+
+  return {
+    isValid: allDifferences.length === 0,
+    differences: allDifferences,
+  };
 }
 
 /**
@@ -165,6 +197,12 @@ export async function logSkjemaDefinisjonValidation(): Promise<void> {
     // eslint-disable-next-line no-console
     console.error(
       "\n   Kjør 'npm run sync-skjema-definisjon' for å oppdatere.",
+    );
+
+    // Vis toast i UI så utvikler ser det
+    toast.error(
+      "Skjemadefinisjon ut av sync! Kjør: npm run sync-skjema-definisjon",
+      { duration: 10000 },
     );
   }
 }
