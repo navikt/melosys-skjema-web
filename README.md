@@ -94,35 +94,14 @@ Kjør denne kommandoen når API-et har nye eller endrede datamodeller.
 
 ### Skjemadefinisjon-sync
 
-Skjemadefinisjoner (labels, hjelpetekster, etc.) synkroniseres fra backend:
+Skjemadefinisjoner (labels, hjelpetekster) synkroniseres fra backend til `src/constants/skjemaDefinisjonA1.ts`:
 
 ```bash
 cd app
-npm run sync-skjema-definisjon
+npm run sync-skjema-definisjon   # Krever backend på localhost:8082
 ```
 
-**Forutsetninger:**
-- Backend må kjøre på `localhost:8082`
-
-**Genererte filer:**
-```
-src/skjema-definisjoner/
-├── A1_nb.ts    # Norsk skjemadefinisjon
-├── A1_en.ts    # Engelsk skjemadefinisjon
-└── index.ts    # Re-eksport og hjelpefunksjoner
-```
-
-**Bruk i komponenter:**
-```typescript
-import { getSkjemaDefinisjon } from './skjema-definisjoner';
-
-const def = getSkjemaDefinisjon('nb');
-const felt = def.seksjoner.arbeidssituasjon.felter.harVaert...;
-console.log(felt.label);   // "Har du vært eller skal du være..."
-console.log(felt.jaLabel); // "Ja"
-```
-
-Kjør denne kommandoen når skjemadefinisjonene endres i backend.
+Bruk `useSkjemaDefinisjon()` hook i komponenter - språk velges automatisk basert på i18n.
 
 **Server (server/):**
 ```bash
@@ -210,54 +189,16 @@ server/                        # Express server
 
 ## Skjemadefinisjon-arkitektur
 
-Skjemadefinisjoner (labels, valideringsregler, alternativer) kommer fra backend som én kilde til sannhet. Dette sikrer konsistens mellom frontend og backend, og muliggjør versjonering for etterlevelse.
+Skjemadefinisjoner (labels, hjelpetekster, alternativer) kommer fra backend som én kilde til sannhet.
 
 ```mermaid
-flowchart TB
-    subgraph Backend["melosys-skjema-api"]
-        JSON["skjemaDefinisjonA1.json<br/>(master data)"]
-    end
-
-    subgraph Sync["Sync-prosess"]
-        Script["npm run sync-skjema-definisjon"]
-    end
-
-    subgraph Frontend["melosys-skjema-web/app"]
-        TS["src/constants/skjemaDefinisjonA1.ts<br/>(TypeScript med 'as const')"]
-        Components["React-komponenter<br/>(skjema, oppsummering)"]
-        E2E["E2E-tester<br/>(Playwright page objects)"]
-    end
-
-    JSON -->|HTTP fetch| Script
-    Script -->|Genererer| TS
-    TS -->|Import| Components
-    TS -->|Import| E2E
+flowchart LR
+    JSON["Backend: definisjon.json<br/>(flerspråklig)"] -->|sync-script| TS["Frontend: skjemaDefinisjonA1.ts"]
+    TS --> Hook["useSkjemaDefinisjon()"]
+    Hook --> Components["Komponenter"]
 ```
 
-### Synkronisering
-
-```bash
-cd app
-npm run sync-skjema-definisjon
-```
-
-Dette henter skjemadefinisjonen fra backend og genererer `skjemaDefinisjonA1.ts` med full TypeScript-typing.
-
-### Bruk i kode
-
-```typescript
-import { SKJEMA_DEFINISJON_A1, getFelt, getSeksjon } from "~/constants/skjemaDefinisjonA1";
-
-// Hent seksjon
-const seksjon = getSeksjon("utenlandsoppdragetArbeidsgiver");
-
-// Hent felt med label
-const felt = getFelt("arbeidsstedPaLand", "vegadresse");
-console.log(felt.label); // "Vegadresse"
-
-// Direkte tilgang for felter med alternativer
-const alternativer = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet.felter.arbeidsstedType.alternativer;
-```
+Se `useSkjemaDefinisjon.ts` og `skjemaDefinisjonA1.ts` for detaljer.
 
 ## Kodestandarder
 
