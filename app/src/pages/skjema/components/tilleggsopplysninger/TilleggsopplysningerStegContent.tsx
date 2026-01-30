@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
@@ -43,6 +44,17 @@ export function TilleggsopplysningerStegContent({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  // Hent felt-definisjoner - begge seksjonene har identiske labels
+  const harFlereOpplysningerFelt = getFelt(
+    "tilleggsopplysningerArbeidstaker",
+    "harFlereOpplysningerTilSoknaden",
+  );
+  const tilleggsopplysningerFelt = getFelt(
+    "tilleggsopplysningerArbeidstaker",
+    "tilleggsopplysningerTilSoknad",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.tilleggsopplysninger;
 
@@ -105,9 +117,7 @@ export function TilleggsopplysningerStegContent({
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harFlereOpplysningerTilSoknaden"
-            legend={t(
-              "tilleggsopplysningerSteg.harDuNoenFlereOpplysningerTilSoknaden",
-            )}
+            legend={harFlereOpplysningerFelt.label}
           />
 
           {harFlereOpplysningerTilSoknaden && (
@@ -117,9 +127,7 @@ export function TilleggsopplysningerStegContent({
               error={translateError(
                 errors.tilleggsopplysningerTilSoknad?.message,
               )}
-              label={t(
-                "tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden",
-              )}
+              label={tilleggsopplysningerFelt.label}
             />
           )}
         </SkjemaSteg>

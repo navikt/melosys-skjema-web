@@ -9,6 +9,7 @@ import { z } from "zod";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
@@ -31,6 +32,16 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  const betalerAllLonnFelt = getFelt(
+    "arbeidstakerensLonn",
+    "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+  );
+  const virksomheterFelt = getFelt(
+    "arbeidstakerensLonn",
+    "virksomheterSomUtbetalerLonnOgNaturalytelser",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidstakerensLonn;
 
@@ -111,21 +122,15 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           <RadioGroupJaNeiFormPart
             className="mt-6"
             formFieldName="arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"
-            legend={t(
-              "arbeidstakerenslonnSteg.utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden",
-            )}
+            legend={betalerAllLonnFelt.label}
           />
 
           {arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden ===
             false && (
             <NorskeOgUtenlandskeVirksomheterFormPart
-              description={t(
-                "arbeidstakerenslonnSteg.leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser",
-              )}
+              description={virksomheterFelt.hjelpetekst}
               fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
-              label={t(
-                "arbeidstakerenslonnSteg.hvemUtbetalerLonnenOgEventuelleNaturalytelser",
-              )}
+              label={virksomheterFelt.label}
             />
           )}
         </SkjemaSteg>

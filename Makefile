@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: help local local-q2 local-q2-new-token get-token stop
+.PHONY: help local local-q2 local-q2-new-token get-token stop rebuild
 
 MOCK_OAUTH_CONTAINER := melosys-docker-compose-mock-oauth2-server-1
 
@@ -9,6 +9,7 @@ help:
 	@echo "  make local-q2           - Start med ekte Q2-token (krever LOCAL_TOKEN env var)"
 	@echo "  make local-q2-new-token - Hent nytt Q2-token og start"
 	@echo "  make get-token          - Hent nytt Q2-token (åpner nettleser)"
+	@echo "  make rebuild            - Tving rebuild av server-image"
 	@echo "  make stop               - Stopp alle tjenester"
 
 # Start with mock OAuth (Wonderwall)
@@ -22,9 +23,13 @@ local:
 		(printf "  \033[31m✗\033[0m Mock-oauth failed      \n"; \
 		echo ""; echo "    Container '$(MOCK_OAUTH_CONTAINER)' finnes ikke."; \
 		echo "    Kjør først: cd ~/nav/melosys-docker-compose && docker compose up -d mock-oauth2-server"; exit 1)
-	@printf "  \033[33m◐\033[0m Building server...      \r" && \
+	@if docker images -q melosys-skjema-web-express-server 2>/dev/null | grep -q .; then \
+		printf "  \033[32m✓\033[0m Server image exists (skipping build)\n"; \
+	else \
+		printf "  \033[33m◐\033[0m Building server...      \r" && \
 		cd server && docker compose build >/dev/null 2>&1 && \
-		printf "  \033[32m✓\033[0m Server built           \n"
+		printf "  \033[32m✓\033[0m Server built           \n"; \
+	fi
 	@printf "  \033[33m◐\033[0m Starting server...      \r" && \
 		cd server && docker compose up -d >/dev/null 2>&1 && \
 		printf "  \033[32m✓\033[0m Server running         \n"
@@ -48,9 +53,13 @@ endif
 	@echo ""
 	@printf "\033[36m⚡ Starting melosys-skjema-web (Q2 mode)\033[0m\n"
 	@echo ""
-	@printf "  \033[33m◐\033[0m Building server...  \r" && \
+	@if docker images -q melosys-skjema-web-local-q2-express-server 2>/dev/null | grep -q .; then \
+		printf "  \033[32m✓\033[0m Server image exists (skipping build)\n"; \
+	else \
+		printf "  \033[33m◐\033[0m Building server...  \r" && \
 		cd server && docker compose -f docker-compose.local-q2.yaml build >/dev/null 2>&1 && \
-		printf "  \033[32m✓\033[0m Server built       \n"
+		printf "  \033[32m✓\033[0m Server built       \n"; \
+	fi
 	@printf "  \033[33m◐\033[0m Starting server...  \r" && \
 		cd server && docker compose -f docker-compose.local-q2.yaml up -d >/dev/null 2>&1 && \
 		printf "  \033[32m✓\033[0m Server running     \n"
@@ -75,3 +84,10 @@ stop:
 	@docker stop $(MOCK_OAUTH_CONTAINER) 2>/dev/null || true
 	@pkill -f "npm run dev" 2>/dev/null || true
 	@echo "Stopped all services"
+
+# Force rebuild of server images
+rebuild:
+	@echo "Rebuilding server images..."
+	@cd server && docker compose build --no-cache
+	@cd server && docker compose -f docker-compose.local-q2.yaml build --no-cache
+	@echo "Done!"

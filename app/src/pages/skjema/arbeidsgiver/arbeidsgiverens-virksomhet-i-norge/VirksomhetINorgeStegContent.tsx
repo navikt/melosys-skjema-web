@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
@@ -33,6 +34,20 @@ export function VirksomhetINorgeStegContent({
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  const erOffentligFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "erArbeidsgiverenOffentligVirksomhet",
+  );
+  const erBemanningFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "erArbeidsgiverenBemanningsEllerVikarbyraa",
+  );
+  const opprettholderDriftFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "opprettholderArbeidsgiverenVanligDrift",
+  );
 
   const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
 
@@ -88,13 +103,9 @@ export function VirksomhetINorgeStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            description={t(
-              "arbeidsgiverensVirksomhetINorgeSteg.offentligeVirksomheterErStatsorganerOgUnderliggendeVirksomheter",
-            )}
+            description={erOffentligFelt.hjelpetekst}
             formFieldName="erArbeidsgiverenOffentligVirksomhet"
-            legend={t(
-              "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet",
-            )}
+            legend={erOffentligFelt.label}
           />
 
           {erArbeidsgiverenOffentligVirksomhet === false && (
@@ -102,20 +113,14 @@ export function VirksomhetINorgeStegContent({
               <RadioGroupJaNeiFormPart
                 className="mt-4"
                 formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
-                legend={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra",
-                )}
+                legend={erBemanningFelt.label}
               />
 
               <RadioGroupJaNeiFormPart
                 className="mt-4"
-                description={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden",
-                )}
+                description={opprettholderDriftFelt.hjelpetekst}
                 formFieldName="opprettholderArbeidsgiverenVanligDrift"
-                legend={t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge",
-                )}
+                legend={opprettholderDriftFelt.label}
               />
             </>
           )}

@@ -92,6 +92,17 @@ Dette kommandoen:
 
 Kjør denne kommandoen når API-et har nye eller endrede datamodeller.
 
+### Skjemadefinisjon-sync
+
+Skjemadefinisjoner (labels, hjelpetekster) synkroniseres fra backend til `src/constants/skjemaDefinisjonA1.ts`:
+
+```bash
+cd app
+npm run sync-skjema-definisjon   # Krever backend på localhost:8082
+```
+
+Bruk `useSkjemaDefinisjon()` hook i komponenter - språk velges automatisk basert på i18n.
+
 **Server (server/):**
 ```bash
 npm run build        # Bygg TypeScript
@@ -175,6 +186,19 @@ server/                        # Express server
 ├── tsconfig.json
 └── eslint.config.mjs
 ```
+
+## Skjemadefinisjon-arkitektur
+
+Skjemadefinisjoner (labels, hjelpetekster, alternativer) kommer fra backend som én kilde til sannhet.
+
+```mermaid
+flowchart LR
+    JSON["Backend: definisjon.json<br/>(flerspråklig)"] -->|sync-script| TS["Frontend: skjemaDefinisjonA1.ts"]
+    TS --> Hook["useSkjemaDefinisjon()"]
+    Hook --> Components["Komponenter"]
+```
+
+Se `useSkjemaDefinisjon.ts` og `skjemaDefinisjonA1.ts` for detaljer.
 
 ## Kodestandarder
 

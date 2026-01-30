@@ -1,9 +1,9 @@
 import { Radio, RadioGroup, TextField } from "@navikt/ds-react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { Farvann } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -13,8 +13,9 @@ import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function PaSkipForm() {
-  const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedPaSkip").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const seilerI = useWatch({ name: "paSkip.seilerI" });
@@ -34,7 +35,7 @@ export function PaSkipForm() {
             {...field}
             className="mt-4"
             error={translateError(fieldState.error?.message)}
-            label={t("arbeidsstedIUtlandetSteg.navnPaSkip")}
+            label={felter.navnPaSkip.label}
             value={field.value ?? ""}
           />
         )}
@@ -47,11 +48,9 @@ export function PaSkipForm() {
           <TextField
             {...field}
             className="mt-4"
-            description={t(
-              "arbeidsstedIUtlandetSteg.yrketTilArbeidstakerBeskrivelse",
-            )}
+            description={felter.yrketTilArbeidstaker.hjelpetekst}
             error={translateError(fieldState.error?.message)}
-            label={t("arbeidsstedIUtlandetSteg.yrketTilArbeidstaker")}
+            label={felter.yrketTilArbeidstaker.label}
             value={field.value ?? ""}
           />
         )}
@@ -64,16 +63,15 @@ export function PaSkipForm() {
           <RadioGroup
             className="mt-4"
             error={translateError(fieldState.error?.message)}
-            legend={t("arbeidsstedIUtlandetSteg.hvorSkalSkipetSeile")}
+            legend={felter.seilerI.label}
             onChange={field.onChange}
             value={field.value ?? ""}
           >
-            <Radio value={Farvann.INTERNASJONALT_FARVANN}>
-              {t("arbeidsstedIUtlandetSteg.internasjonaltFarvann")}
-            </Radio>
-            <Radio value={Farvann.TERRITORIALFARVANN}>
-              {t("arbeidsstedIUtlandetSteg.territorialfarvann")}
-            </Radio>
+            {felter.seilerI.alternativer.map((alt) => (
+              <Radio key={alt.verdi} value={alt.verdi}>
+                {alt.label}
+              </Radio>
+            ))}
           </RadioGroup>
         )}
       />
@@ -82,7 +80,7 @@ export function PaSkipForm() {
         <LandVelgerFormPart
           className="mt-4"
           formFieldName="paSkip.flaggland"
-          label={t("arbeidsstedIUtlandetSteg.flaggland")}
+          label={felter.flaggland.label}
         />
       )}
 
@@ -90,7 +88,7 @@ export function PaSkipForm() {
         <LandVelgerFormPart
           className="mt-4"
           formFieldName="paSkip.territorialfarvannLand"
-          label={t("arbeidsstedIUtlandetSteg.hvilketLandsTerritorialfarvann")}
+          label={felter.territorialfarvannLand.label}
         />
       )}
     </div>

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postArbeidsstedIUtlandet } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
@@ -31,31 +32,15 @@ import { PaSkipForm } from "./PaSkipForm.tsx";
 
 export const stepKey = "arbeidssted-i-utlandet";
 
-export const arbeidsstedTypeOptions = [
-  {
-    value: ArbeidsstedType.PA_LAND,
-    labelKey: "arbeidsstedIUtlandetSteg.paLand",
-  },
-  {
-    value: ArbeidsstedType.OFFSHORE,
-    labelKey: "arbeidsstedIUtlandetSteg.offshore",
-  },
-  {
-    value: ArbeidsstedType.PA_SKIP,
-    labelKey: "arbeidsstedIUtlandetSteg.paSkip",
-  },
-  {
-    value: ArbeidsstedType.OM_BORD_PA_FLY,
-    labelKey: "arbeidsstedIUtlandetSteg.omBordPaFly",
-  },
-];
-
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const arbeidsstedTypeFelt = getSeksjon("arbeidsstedIUtlandet").felter
+    .arbeidsstedType;
   const invalidateArbeidsgiverSkjemaQuery =
     useInvalidateArbeidsgiversSkjemaQuery();
 
@@ -114,16 +99,16 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
           <Select
             className="mt-4"
             error={translateError(errors.arbeidsstedType?.message)}
-            label={t("arbeidsstedIUtlandetSteg.hvorSkalArbeidetUtfores")}
+            label={arbeidsstedTypeFelt.label}
             style={{ width: "fit-content" }}
             {...register("arbeidsstedType")}
           >
             <option value="">
               {t("arbeidsstedIUtlandetSteg.velgArbeidssted")}
             </option>
-            {arbeidsstedTypeOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {t(option.labelKey)}
+            {arbeidsstedTypeFelt.alternativer.map((alt) => (
+              <option key={alt.verdi} value={alt.verdi}>
+                {alt.label}
               </option>
             ))}
           </Select>

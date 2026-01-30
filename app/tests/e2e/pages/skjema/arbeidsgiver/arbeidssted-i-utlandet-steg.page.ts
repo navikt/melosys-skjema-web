@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiversSkjemaDto,
@@ -7,6 +8,16 @@ import type {
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
+
+// Hent felter fra statiske definisjoner
+const arbeidsstedIUtlandet =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet;
+const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
+const offshoreFelter =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOffshore.felter;
+const paSkipFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaSkip.felter;
+const omBordPaFlyFelter =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOmBordPaFly.felter;
 
 export class ArbeidsstedIUtlandetStegPage {
   readonly page: Page;
@@ -59,49 +70,40 @@ export class ArbeidsstedIUtlandetStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.tittel,
+      name: arbeidsstedIUtlandet.tittel,
     });
     this.arbeidsstedTypeSelect = page.getByRole("combobox", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.hvorSkalArbeidetUtfores,
+      name: arbeidsstedIUtlandet.felter.arbeidsstedType.label,
     });
 
-    // Felles
+    // Felles - alle seksjoner har navnPaVirksomhet med samme label
     this.navnPaVirksomhetInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.navnPaVirksomhet,
+      paLandFelter.navnPaVirksomhet.label,
     );
 
     // På land
     const fastEllerVekslendeGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsstedIUtlandetSteg
-        .harFastArbeidsstedEllerVeksler,
+      name: paLandFelter.fastEllerVekslendeArbeidssted.label,
     });
     this.fastEllerVekslendeRadioGroup = {
       FAST: fastEllerVekslendeGroup.getByRole("radio", {
-        name: nb.translation.arbeidsstedIUtlandetSteg.fastArbeidssted,
+        name: paLandFelter.fastEllerVekslendeArbeidssted.alternativer[0].label,
       }),
       VEKSLENDE: fastEllerVekslendeGroup.getByRole("radio", {
-        name: nb.translation.arbeidsstedIUtlandetSteg.vekslerOfte,
+        name: paLandFelter.fastEllerVekslendeArbeidssted.alternativer[1].label,
       }),
     };
 
-    this.vegadresseInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.vegadresse,
-    );
-    this.nummerInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.nummer,
-    );
-    this.postkodeInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.postkode,
-    );
-    this.byStedInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.bySted,
-    );
+    this.vegadresseInput = page.getByLabel(paLandFelter.vegadresse.label);
+    this.nummerInput = page.getByLabel(paLandFelter.nummer.label);
+    this.postkodeInput = page.getByLabel(paLandFelter.postkode.label);
+    this.byStedInput = page.getByLabel(paLandFelter.bySted.label);
     this.beskrivelseVekslendeTextarea = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.beskriv,
+      paLandFelter.beskrivelseVekslende.label,
     );
 
     const erHjemmekontorGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.erHjemmekontor,
+      name: paLandFelter.erHjemmekontor.label,
     });
     this.erHjemmekontorRadioGroup = {
       JA: erHjemmekontorGroup.getByRole("radio", {
@@ -114,63 +116,60 @@ export class ArbeidsstedIUtlandetStegPage {
 
     // Offshore
     this.navnPaInnretningInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.navnPaInnretning,
+      offshoreFelter.navnPaInnretning.label,
     );
 
     const typeInnretningGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.hvilkenTypeInnretning,
+      name: offshoreFelter.typeInnretning.label,
     });
     this.typeInnretningRadioGroup = {
       PLATTFORM: typeInnretningGroup.getByRole("radio", {
-        name: nb.translation.arbeidsstedIUtlandetSteg.plattformEllerFast,
+        name: offshoreFelter.typeInnretning.alternativer[0].label,
       }),
       BORESKIP: typeInnretningGroup.getByRole("radio", {
-        name: nb.translation.arbeidsstedIUtlandetSteg.boreskipEllerFlyttbar,
+        name: offshoreFelter.typeInnretning.alternativer[1].label,
       }),
     };
 
     this.sokkelLandSelect = page.getByRole("combobox", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.hvilketLandsSokkel,
+      name: offshoreFelter.sokkelLand.label,
     });
 
     // På skip
-    this.navnPaSkipInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.navnPaSkip,
-    );
+    this.navnPaSkipInput = page.getByLabel(paSkipFelter.navnPaSkip.label);
     this.yrketTilArbeidstakerInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.yrketTilArbeidstaker,
+      paSkipFelter.yrketTilArbeidstaker.label,
     );
 
     const seilerIGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.hvorSkalSkipetSeile,
+      name: paSkipFelter.seilerI.label,
     });
     this.seilerIRadioGroup = {
       INTERNASJONALT: seilerIGroup.getByRole("radio", {
-        name: nb.translation.arbeidsstedIUtlandetSteg.internasjonaltFarvann,
+        name: paSkipFelter.seilerI.alternativer[0].label,
       }),
       TERRITORIALFARVANN: seilerIGroup.getByRole("radio", {
-        name: nb.translation.arbeidsstedIUtlandetSteg.territorialfarvann,
+        name: paSkipFelter.seilerI.alternativer[1].label,
       }),
     };
 
     this.flagglandSelect = page.getByRole("combobox", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.flaggland,
+      name: paSkipFelter.flaggland.label,
     });
     this.territorialfarvannLandSelect = page.getByRole("combobox", {
-      name: nb.translation.arbeidsstedIUtlandetSteg
-        .hvilketLandsTerritorialfarvann,
+      name: paSkipFelter.territorialfarvannLand.label,
     });
 
     // Om bord på fly
     this.hjemmebaseLandSelect = page.getByRole("combobox", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseLand,
+      name: omBordPaFlyFelter.hjemmebaseLand.label,
     });
     this.hjemmebaseNavnInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseNavn,
+      omBordPaFlyFelter.hjemmebaseNavn.label,
     );
 
     const erVanligHjemmebaseGroup = page.getByRole("group", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.erVanligHjemmebase,
+      name: omBordPaFlyFelter.erVanligHjemmebase.label,
     });
     this.erVanligHjemmebaseRadioGroup = {
       JA: erVanligHjemmebaseGroup.getByRole("radio", {
@@ -182,10 +181,10 @@ export class ArbeidsstedIUtlandetStegPage {
     };
 
     this.vanligHjemmebaseLandSelect = page.getByRole("combobox", {
-      name: nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseLand,
+      name: omBordPaFlyFelter.vanligHjemmebaseLand.label,
     });
     this.vanligHjemmebaseNavnInput = page.getByLabel(
-      nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseNavn,
+      omBordPaFlyFelter.vanligHjemmebaseNavn.label,
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {

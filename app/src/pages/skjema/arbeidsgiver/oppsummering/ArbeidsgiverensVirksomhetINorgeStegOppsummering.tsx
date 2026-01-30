@@ -1,6 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
@@ -12,6 +13,21 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("arbeidsgiverensVirksomhetINorge");
+  const erOffentligFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "erArbeidsgiverenOffentligVirksomhet",
+  );
+  const erBemanningsbyraFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "erArbeidsgiverenBemanningsEllerVikarbyraa",
+  );
+  const opprettholderDriftFelt = getFelt(
+    "arbeidsgiverensVirksomhetINorge",
+    "opprettholderArbeidsgiverenVanligDrift",
+  );
 
   const virksomhetData = skjema.data.arbeidsgiverensVirksomhetINorge;
   const virksomhetSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
@@ -22,19 +38,13 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
   return virksomhetData ? (
     <FormSummary className="mt-8">
       <FormSummary.Header>
-        <FormSummary.Heading level="2">
-          {t("arbeidsgiverensVirksomhetINorgeSteg.tittel")}
-        </FormSummary.Heading>
+        <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
       </FormSummary.Header>
 
       <FormSummary.Answers>
         {virksomhetData.erArbeidsgiverenOffentligVirksomhet !== undefined && (
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEnOffentligVirksomhet",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{erOffentligFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 virksomhetData.erArbeidsgiverenOffentligVirksomhet,
@@ -46,11 +56,7 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
         {virksomhetData.erArbeidsgiverenBemanningsEllerVikarbyraa !==
           undefined && (
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidsgiverensVirksomhetINorgeSteg.erArbeidsgiverenEtBemanningsEllerVikarbyra",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{erBemanningsbyraFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 virksomhetData.erArbeidsgiverenBemanningsEllerVikarbyraa,
@@ -63,9 +69,7 @@ export function ArbeidsgiverensVirksomhetINorgeStegOppsummering({
           undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>
-              {t(
-                "arbeidsgiverensVirksomhetINorgeSteg.opprettholderArbeidsgiverenVanligDriftINorge",
-              )}
+              {opprettholderDriftFelt.label}
             </FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(

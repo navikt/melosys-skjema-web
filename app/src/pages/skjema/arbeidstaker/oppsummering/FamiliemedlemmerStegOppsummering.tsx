@@ -1,6 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { Familiemedlem } from "~/types/melosysSkjemaTypes.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
@@ -13,21 +14,23 @@ function FamiliemedlemOppsummeringItem({
 }: {
   familiemedlem: Familiemedlem;
 }) {
-  const { t } = useTranslation();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const elementDef =
+    getSeksjon("familiemedlemmer").felter.familiemedlemmer.elementDefinisjon;
 
   const fields = [
     {
-      label: t("familiemedlemmerSteg.fornavn"),
+      label: elementDef.fornavn.label,
       value: familiemedlem.fornavn,
     },
     {
-      label: t("familiemedlemmerSteg.etternavn"),
+      label: elementDef.etternavn.label,
       value: familiemedlem.etternavn,
     },
     {
       label: familiemedlem.harNorskFodselsnummerEllerDnummer
-        ? t("familiemedlemmerSteg.fodselsnummer")
-        : t("familiemedlemmerSteg.fodselsdato"),
+        ? elementDef.fodselsnummer.label
+        : elementDef.fodselsdato.label,
       value: familiemedlem.harNorskFodselsnummerEllerDnummer
         ? familiemedlem.fodselsnummer
         : familiemedlem.fodselsdato,
@@ -51,6 +54,11 @@ export function FamiliemedlemmerStegOppsummering({
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("familiemedlemmer");
+  const skalHaMedFelt = seksjon.felter.skalHaMedFamiliemedlemmer;
+  const familiemedlemmerListeFelt = seksjon.felter.familiemedlemmer;
 
   const familiemedlemmerData = skjema.data.familiemedlemmer;
   const familiemedlemmerSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(
@@ -62,16 +70,12 @@ export function FamiliemedlemmerStegOppsummering({
     familiemedlemmerData && (
       <FormSummary className="mt-8">
         <FormSummary.Header>
-          <FormSummary.Heading level="2">
-            {t("familiemedlemmerSteg.tittel")}
-          </FormSummary.Heading>
+          <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
         </FormSummary.Header>
 
         <FormSummary.Answers>
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t("familiemedlemmerSteg.harDuFamiliemedlemmerSomSkalVaereMed")}
-            </FormSummary.Label>
+            <FormSummary.Label>{skalHaMedFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(familiemedlemmerData.skalHaMedFamiliemedlemmer)}
             </FormSummary.Value>
@@ -80,7 +84,7 @@ export function FamiliemedlemmerStegOppsummering({
           {familiemedlemmerData.familiemedlemmer.length > 0 && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t("familiemedlemmerSteg.familiemedlemmer")}
+                {familiemedlemmerListeFelt.label}
               </FormSummary.Label>
               <FormSummary.Value
                 style={{

@@ -1,6 +1,7 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import {
   ArbeidsgiversSkjemaDto,
   ArbeidstakersSkjemaDto,
@@ -22,6 +23,12 @@ export function TilleggsopplysningerStegOppsummering({
 }: TilleggsopplysningerStegOppsummeringProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+
+  // Hent felt-definisjoner - vi bruker arbeidstaker-seksjonen da den har samme struktur
+  const seksjon = getSeksjon("tilleggsopplysningerArbeidstaker");
+  const harFlereFelt = seksjon.felter.harFlereOpplysningerTilSoknaden;
+  const tilleggsopplysningerFelt = seksjon.felter.tilleggsopplysningerTilSoknad;
 
   const tilleggsopplysningerData = skjema.data.tilleggsopplysninger;
   const tilleggsopplysningerSteg = stegRekkefolge.find(
@@ -34,18 +41,12 @@ export function TilleggsopplysningerStegOppsummering({
     tilleggsopplysningerData && (
       <FormSummary className="mt-8">
         <FormSummary.Header>
-          <FormSummary.Heading level="2">
-            {t("tilleggsopplysningerSteg.tittel")}
-          </FormSummary.Heading>
+          <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
         </FormSummary.Header>
 
         <FormSummary.Answers>
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "tilleggsopplysningerSteg.harDuNoenFlereOpplysningerTilSoknaden",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{harFlereFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 tilleggsopplysningerData.harFlereOpplysningerTilSoknaden,
@@ -56,9 +57,7 @@ export function TilleggsopplysningerStegOppsummering({
           {tilleggsopplysningerData.tilleggsopplysningerTilSoknad && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t(
-                  "tilleggsopplysningerSteg.beskriveFlereOpplysningerTilSoknaden",
-                )}
+                {tilleggsopplysningerFelt.label}
               </FormSummary.Label>
               <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
                 {tilleggsopplysningerData.tilleggsopplysningerTilSoknad}

@@ -1,10 +1,9 @@
 import { Radio, RadioGroup, TextField } from "@navikt/ds-react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
-import { TypeInnretning } from "~/types/melosysSkjemaTypes.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
@@ -13,8 +12,9 @@ import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function OffshoreForm() {
-  const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedOffshore").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   // Note: React Hook Form's FieldErrors cannot narrow discriminated unions.
@@ -32,7 +32,7 @@ export function OffshoreForm() {
             {...field}
             className="mt-4"
             error={translateError(fieldState.error?.message)}
-            label={t("arbeidsstedIUtlandetSteg.navnPaInnretning")}
+            label={felter.navnPaInnretning.label}
             value={field.value ?? ""}
           />
         )}
@@ -45,18 +45,15 @@ export function OffshoreForm() {
           <RadioGroup
             className="mt-4"
             error={translateError(fieldState.error?.message)}
-            legend={t("arbeidsstedIUtlandetSteg.hvilkenTypeInnretning")}
+            legend={felter.typeInnretning.label}
             onChange={field.onChange}
             value={field.value ?? ""}
           >
-            <Radio value={TypeInnretning.PLATTFORM_ELLER_ANNEN_FAST_INNRETNING}>
-              {t("arbeidsstedIUtlandetSteg.plattformEllerFast")}
-            </Radio>
-            <Radio
-              value={TypeInnretning.BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING}
-            >
-              {t("arbeidsstedIUtlandetSteg.boreskipEllerFlyttbar")}
-            </Radio>
+            {felter.typeInnretning.alternativer.map((alt) => (
+              <Radio key={alt.verdi} value={alt.verdi}>
+                {alt.label}
+              </Radio>
+            ))}
           </RadioGroup>
         )}
       />
@@ -64,7 +61,7 @@ export function OffshoreForm() {
       <LandVelgerFormPart
         className="mt-4"
         formFieldName="offshore.sokkelLand"
-        label={t("arbeidsstedIUtlandetSteg.hvilketLandsSokkel")}
+        label={felter.sokkelLand.label}
       />
     </div>
   );

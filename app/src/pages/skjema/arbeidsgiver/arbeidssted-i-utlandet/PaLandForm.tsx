@@ -1,9 +1,9 @@
 import { Radio, RadioGroup, Textarea, TextField } from "@navikt/ds-react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -13,8 +13,9 @@ import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function PaLandForm() {
-  const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedPaLand").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const fastEllerVekslendeArbeidssted = useWatch({
@@ -35,18 +36,15 @@ export function PaLandForm() {
           <RadioGroup
             className="mt-4"
             error={translateError(fieldState.error?.message)}
-            legend={t(
-              "arbeidsstedIUtlandetSteg.harFastArbeidsstedEllerVeksler",
-            )}
+            legend={felter.fastEllerVekslendeArbeidssted.label}
             onChange={field.onChange}
             value={field.value ?? ""}
           >
-            <Radio size="small" value={FastEllerVekslendeArbeidssted.FAST}>
-              {t("arbeidsstedIUtlandetSteg.fastArbeidssted")}
-            </Radio>
-            <Radio size="small" value={FastEllerVekslendeArbeidssted.VEKSLENDE}>
-              {t("arbeidsstedIUtlandetSteg.vekslerOfte")}
-            </Radio>
+            {felter.fastEllerVekslendeArbeidssted.alternativer.map((alt) => (
+              <Radio key={alt.verdi} size="small" value={alt.verdi}>
+                {alt.label}
+              </Radio>
+            ))}
           </RadioGroup>
         )}
       />
@@ -61,7 +59,7 @@ export function PaLandForm() {
                 {...field}
                 className="mt-4"
                 error={translateError(fieldState.error?.message)}
-                label={t("arbeidsstedIUtlandetSteg.vegadresse")}
+                label={felter.vegadresse.label}
                 value={field.value ?? ""}
               />
             )}
@@ -74,7 +72,7 @@ export function PaLandForm() {
                 {...field}
                 className="mt-4"
                 error={translateError(fieldState.error?.message)}
-                label={t("arbeidsstedIUtlandetSteg.nummer")}
+                label={felter.nummer.label}
                 value={field.value ?? ""}
               />
             )}
@@ -87,7 +85,7 @@ export function PaLandForm() {
                 {...field}
                 className="mt-4"
                 error={translateError(fieldState.error?.message)}
-                label={t("arbeidsstedIUtlandetSteg.postkode")}
+                label={felter.postkode.label}
                 value={field.value ?? ""}
               />
             )}
@@ -100,7 +98,7 @@ export function PaLandForm() {
                 {...field}
                 className="mt-4"
                 error={translateError(fieldState.error?.message)}
-                label={t("arbeidsstedIUtlandetSteg.bySted")}
+                label={felter.bySted.label}
                 value={field.value ?? ""}
               />
             )}
@@ -118,7 +116,7 @@ export function PaLandForm() {
               {...field}
               className="mt-4"
               error={translateError(fieldState.error?.message)}
-              label={t("arbeidsstedIUtlandetSteg.beskriv")}
+              label={felter.beskrivelseVekslende.label}
               value={field.value ?? ""}
             />
           )}
@@ -128,7 +126,7 @@ export function PaLandForm() {
       <RadioGroupJaNeiFormPart
         className="mt-6"
         formFieldName="paLand.erHjemmekontor"
-        legend={t("arbeidsstedIUtlandetSteg.erHjemmekontor")}
+        legend={felter.erHjemmekontor.label}
       />
     </div>
   );

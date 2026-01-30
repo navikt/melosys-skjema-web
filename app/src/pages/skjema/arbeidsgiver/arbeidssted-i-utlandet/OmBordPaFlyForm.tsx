@@ -1,10 +1,10 @@
 import { TextField } from "@navikt/ds-react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
@@ -13,8 +13,9 @@ import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 export function OmBordPaFlyForm() {
-  const { t } = useTranslation();
   const translateError = useTranslateError();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const felter = getSeksjon("arbeidsstedOmBordPaFly").felter;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const erVanligHjemmebase = useWatch({
@@ -30,9 +31,9 @@ export function OmBordPaFlyForm() {
 
       <LandVelgerFormPart
         className="mt-4"
-        description={t("arbeidsstedIUtlandetSteg.hjemmebaseLandBeskrivelse")}
+        description={felter.hjemmebaseLand.hjelpetekst}
         formFieldName="omBordPaFly.hjemmebaseLand"
-        label={t("arbeidsstedIUtlandetSteg.hjemmebaseLand")}
+        label={felter.hjemmebaseLand.label}
       />
 
       <Controller
@@ -43,7 +44,7 @@ export function OmBordPaFlyForm() {
             {...field}
             className="mt-4"
             error={translateError(fieldState.error?.message)}
-            label={t("arbeidsstedIUtlandetSteg.hjemmebaseNavn")}
+            label={felter.hjemmebaseNavn.label}
             value={field.value ?? ""}
           />
         )}
@@ -52,7 +53,7 @@ export function OmBordPaFlyForm() {
       <RadioGroupJaNeiFormPart
         className="mt-6"
         formFieldName="omBordPaFly.erVanligHjemmebase"
-        legend={t("arbeidsstedIUtlandetSteg.erVanligHjemmebase")}
+        legend={felter.erVanligHjemmebase.label}
       />
 
       {erVanligHjemmebase === false && (
@@ -60,7 +61,7 @@ export function OmBordPaFlyForm() {
           <LandVelgerFormPart
             className="mt-4"
             formFieldName="omBordPaFly.vanligHjemmebaseLand"
-            label={t("arbeidsstedIUtlandetSteg.vanligHjemmebaseLand")}
+            label={felter.vanligHjemmebaseLand.label}
           />
 
           <Controller
@@ -71,7 +72,7 @@ export function OmBordPaFlyForm() {
                 {...field}
                 className="mt-4"
                 error={translateError(fieldState.error?.message)}
-                label={t("arbeidsstedIUtlandetSteg.vanligHjemmebaseNavn")}
+                label={felter.vanligHjemmebaseNavn.label}
                 value={field.value ?? ""}
               />
             )}

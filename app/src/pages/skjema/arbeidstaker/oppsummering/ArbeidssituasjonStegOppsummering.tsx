@@ -2,6 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { NorskeOgUtenlandskeVirksomheterOppsummering } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterOppsummering.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as arbeidssituasjonStepKey } from "../arbeidssituasjon/ArbeidssituasjonSteg.tsx";
@@ -13,6 +14,25 @@ export function ArbeidssituasjonStegOppsummering({
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("arbeidssituasjon");
+  const harVaertIArbeidFelt = getFelt(
+    "arbeidssituasjon",
+    "harVaertEllerSkalVaereILonnetArbeidFoerUtsending",
+  );
+  const aktivitetFelt = getFelt(
+    "arbeidssituasjon",
+    "aktivitetIMaanedenFoerUtsendingen",
+  );
+  const skalJobbeForFlereFelt = getFelt(
+    "arbeidssituasjon",
+    "skalJobbeForFlereVirksomheter",
+  );
+  const virksomheterFelt = getFelt(
+    "arbeidssituasjon",
+    "virksomheterArbeidstakerJobberForIutsendelsesPeriode",
+  );
 
   const arbeidssituasjonData = skjema.data.arbeidssituasjon;
   const arbeidssituasjonSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(
@@ -24,18 +44,12 @@ export function ArbeidssituasjonStegOppsummering({
     arbeidssituasjonData && (
       <FormSummary className="mt-8">
         <FormSummary.Header>
-          <FormSummary.Heading level="2">
-            {t("arbeidssituasjonSteg.tittel")}
-          </FormSummary.Heading>
+          <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
         </FormSummary.Header>
 
         <FormSummary.Answers>
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidssituasjonSteg.harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{harVaertIArbeidFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 arbeidssituasjonData.harVaertEllerSkalVaereILonnetArbeidFoerUtsending,
@@ -45,9 +59,7 @@ export function ArbeidssituasjonStegOppsummering({
 
           {arbeidssituasjonData.aktivitetIMaanedenFoerUtsendingen && (
             <FormSummary.Answer>
-              <FormSummary.Label>
-                {t("arbeidssituasjonSteg.beskriveAktivitetFoerUtsending")}
-              </FormSummary.Label>
+              <FormSummary.Label>{aktivitetFelt.label}</FormSummary.Label>
               <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
                 {arbeidssituasjonData.aktivitetIMaanedenFoerUtsendingen}
               </FormSummary.Value>
@@ -55,11 +67,7 @@ export function ArbeidssituasjonStegOppsummering({
           )}
 
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "arbeidssituasjonSteg.skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{skalJobbeForFlereFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 arbeidssituasjonData.skalJobbeForFlereVirksomheter,
@@ -68,9 +76,7 @@ export function ArbeidssituasjonStegOppsummering({
           </FormSummary.Answer>
 
           <NorskeOgUtenlandskeVirksomheterOppsummering
-            label={t(
-              "arbeidssituasjonSteg.hvemSkalDuJobbeForIUtsendelsesPerioden",
-            )}
+            label={virksomheterFelt.label}
             norskeOgUtenlandskeVirksomheter={
               arbeidssituasjonData.virksomheterArbeidstakerJobberForIutsendelsesPeriode
             }

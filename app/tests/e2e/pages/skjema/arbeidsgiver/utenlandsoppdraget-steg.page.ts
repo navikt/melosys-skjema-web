@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiversSkjemaDto,
@@ -7,6 +8,11 @@ import type {
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
+
+// Hent felter fra statiske definisjoner
+const utenlandsoppdraget =
+  SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidsgiver;
+const felter = utenlandsoppdraget.felter;
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
@@ -25,18 +31,20 @@ export class UtenlandsoppdragetStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.utenlandsoppdragetSteg.tittel,
+      name: utenlandsoppdraget.tittel,
     });
     this.utsendelseLandCombobox = page.getByRole("combobox", {
-      name: nb.translation.utenlandsoppdragetSteg
-        .hvilketLandSendesArbeidstakerenTil,
+      name: felter.utsendelseLand.label,
     });
-    this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
-    this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);
+    this.fraDatoInput = page.getByLabel(
+      felter.arbeidstakerUtsendelsePeriode.fraDatoLabel,
+    );
+    this.tilDatoInput = page.getByLabel(
+      felter.arbeidstakerUtsendelsePeriode.tilDatoLabel,
+    );
 
     const arbeidsgiverHarOppdragILandetGroup = page.getByRole("group", {
-      name: nb.translation.utenlandsoppdragetSteg
-        .harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil,
+      name: felter.arbeidsgiverHarOppdragILandet.label,
     });
     this.arbeidsgiverHarOppdragILandetRadioGroup = {
       JA: arbeidsgiverHarOppdragILandetGroup.getByRole("radio", {
@@ -50,8 +58,7 @@ export class UtenlandsoppdragetStegPage {
     const arbeidstakerBleAnsattForUtenlandsoppdragetGroup = page.getByRole(
       "group",
       {
-        name: nb.translation.utenlandsoppdragetSteg
-          .bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget,
+        name: felter.arbeidstakerBleAnsattForUtenlandsoppdraget.label,
       },
     );
     this.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup = {
@@ -66,8 +73,7 @@ export class UtenlandsoppdragetStegPage {
     const arbeidstakerForblirAnsattIHelePeriodenGroup = page.getByRole(
       "group",
       {
-        name: nb.translation.utenlandsoppdragetSteg
-          .vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden,
+        name: felter.arbeidstakerForblirAnsattIHelePerioden.label,
       },
     );
     this.arbeidstakerForblirAnsattIHelePeriodenRadioGroup = {
@@ -80,8 +86,7 @@ export class UtenlandsoppdragetStegPage {
     };
 
     const arbeidstakerErstatterAnnenPersonGroup = page.getByRole("group", {
-      name: nb.translation.utenlandsoppdragetSteg
-        .erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet,
+      name: felter.arbeidstakerErstatterAnnenPerson.label,
     });
     this.arbeidstakerErstatterAnnenPersonRadioGroup = {
       JA: arbeidstakerErstatterAnnenPersonGroup.getByRole("radio", {

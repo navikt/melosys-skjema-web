@@ -123,25 +123,13 @@ export const nb = {
     },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
-      harDuFamiliemedlemmerSomSkalVaereMed:
-        "Har du ektefelle, partner, samboer eller barn som skal være med deg?",
-      harDuFamiliemedlemmerSomSkalVaereMedBeskrivelse:
-        "Vi spør om dette fordi vi ønsker å behandle søknader fra flere i samme familie samtidig",
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
       informasjonOmEgenSoknad:
         "Familiemedlemmer må sende egen søknad. Du kan sende søknad for barn under 18 år ved å starte en ny søknad på vegne av barnet.",
-      familiemedlemmer: "Familiemedlemmer",
-      leggTilFamiliemedlem: "Legg til familiemedlem",
       endreFamiliemedlem: "Endre familiemedlem",
-      fornavn: "Fornavn",
-      etternavn: "Etternavn",
-      harNorskFodselsnummerEllerDnummer:
-        "Har personen norsk fødselsnummer eller D-nummer?",
       duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer:
         "Du må svare på om personen har norsk fødselsnummer eller D-nummer",
-      fodselsnummer: "Fødselsnummer / D-nummer",
-      fodselsdato: "Fødselsdato",
       fornavnErPakrevd: "Fornavn er påkrevd",
       etternavnErPakrevd: "Etternavn er påkrevd",
       fodselsnummerErPakrevd: "Fødselsnummer / D-nummer er påkrevd",
@@ -149,36 +137,19 @@ export const nb = {
     },
     tilleggsopplysningerSteg: {
       tittel: "Tilleggsopplysninger",
-      harDuNoenFlereOpplysningerTilSoknaden:
-        "Har du noen flere opplysninger til søknaden?",
       duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden:
         "Du må svare på om du har flere opplysninger til søknaden",
-      beskriveFlereOpplysningerTilSoknaden:
-        "Beskriv de flere opplysningene du har til søknaden",
       tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger:
         "Tilleggsopplysninger er påkrevd når du har flere opplysninger",
     },
     vedleggSteg: {
       tittel: "Vedlegg",
-      ingenVedleggLastetOpp: "Ingen vedlegg lastet opp",
       lastOppVedlegg: "Last opp vedlegg (valgfritt)",
       lastOppVedleggBeskrivelse:
         "Du kan laste opp PDF, Word-dokumenter eller bilder. Maks filstørrelse 10 MB per fil.",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
-      harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
-        "Har du vært eller skal du være i lønnet arbeid i Norge i minst én måned rett før utsendingen?",
-      beskriveAktivitetFoerUtsending:
-        "Beskriv aktiviteten din måneden før utsendingen",
-      beskriveAktivitetFoerUtsendingBeskrivelse:
-        "For eksempel studier, ferie eller selvstendig virksomhet",
-      skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver:
-        "Skal du også arbeide for en annen arbeidsgiver eller drive selvstendig virksomhet i utsendingsperioden?",
-      leggTilVirksomheterDuSkalJobbeForBeskrivelse:
-        "Legg til norske og/eller utenlandske virksomheter du skal jobbe for i utsendingsperioden.",
-      hvemSkalDuJobbeForIUtsendelsesPerioden:
-        "Hvem skal du jobbe for i utsendelsesperioden?",
       duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
         "Du må svare på om du har vært eller skal være i lønnet arbeid i Norge før utsending",
       duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid:
@@ -190,18 +161,6 @@ export const nb = {
     },
     skatteforholdOgInntektSteg: {
       tittel: "Skatteforhold og inntekt",
-      erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
-        "Er du skattepliktig til Norge i hele utsendingsperioden?",
-      mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
-        "Mottar du pengestøtte fra et annet EØS-land eller Sveits?",
-      mottarDuPengestotteBeskrivelse:
-        "Med «pengestøtte» tenker vi her på penger du mottar som erstatning for tapt arbeidsinntekt. Sykepenger, foreldrepenger, dagpenger og arbeidsavklaringspenger er eksempler på slike pengestøtter i Norge.",
-      fraHvilketLandMottarDuPengestotte:
-        "Fra hvilket land mottar du pengestøtte?",
-      hvorMyePengerMottarDuBruttoPerManed:
-        "Hvor mye penger mottar du brutto per måned",
-      oppgiBelopetINorskeKroner: "Oppgi beløpet i norske kroner",
-      hvaSlagsPengestotteMottarDu: "Hva slags pengestøtte mottar du",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
@@ -215,47 +174,7 @@ export const nb = {
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Arbeidssted i utlandet",
-      hvorSkalArbeidetUtfores: "Hvor skal arbeidet utføres?",
       velgArbeidssted: "Velg arbeidssted",
-      paLand: "På land",
-      offshore: "Offshore",
-      paSkip: "På skip",
-      omBordPaFly: "Om bord på fly",
-      harFastArbeidsstedEllerVeksler:
-        "Har arbeidstakeren fast arbeidssted i dette landet eller veksler det ofte?",
-      fastArbeidssted: "Fast arbeidssted",
-      vekslerOfte: "Veksler ofte",
-      vegadresse: "Vegadresse",
-      nummer: "Nummer",
-      postkode: "Postkode",
-      bySted: "By/sted/region",
-      beskriv: "Beskriv hvor arbeidstakeren skal jobbe",
-      erHjemmekontor: "Er arbeidstakeren utsendt for å jobbe på hjemmekontor?",
-      navnPaInnretning: "Navn på innretning",
-      hvilkenTypeInnretning: "Hvilken type innretning er dette?",
-      plattformEllerFast: "Plattform eller annen fast innretning",
-      boreskipEllerFlyttbar: "Boreskip eller annen flyttbar innretning",
-      hvilketLandsSokkel: "Hvilket lands sokkel er dette?",
-      navnPaSkip: "Hva er navnet på skipet arbeidstakeren skal jobbe på?",
-      yrketTilArbeidstaker: "Hva er yrket til arbeidstakeren?",
-      yrketTilArbeidstakerBeskrivelse:
-        "Vi trenger informasjon om hva slags arbeid arbeidstakeren utfører om bord på skipet",
-      hvorSkalSkipetSeile: "Hvor skal skipet seile?",
-      internasjonaltFarvann: "Internasjonalt farvann",
-      territorialfarvann: "Innenfor territorialfarvann",
-      flaggland: "Hva er flagglandet til skipet?",
-      hvilketLandsTerritorialfarvann: "Hvilket lands territorialfarvann?",
-      hjemmebaseLand:
-        "I hvilket land har arbeidstakeren hjemmebase i søknadsperioden?",
-      hjemmebaseLandBeskrivelse:
-        "Med hjemmebase mener vi flyplassen der arbeidstakeren starter og avslutter flyvningene sine",
-      hjemmebaseNavn: "Hva er navnet på hjemmebasen?",
-      erVanligHjemmebase:
-        "Er dette hjemmebasen arbeidstakeren jobber fra til vanlig?",
-      vanligHjemmebaseLand:
-        "I hvilket land ligger hjemmebasen arbeidstakeren vanligvis jobber fra?",
-      vanligHjemmebaseNavn:
-        "Hva er navnet på hjemmebasen arbeidstakeren vanligvis jobber fra?",
       // Feilmeldinger
       duMaVelgeArbeidsstedType: "Du må velge hvor arbeidet skal utføres",
       duMaVelgeFastEllerVekslende:
@@ -285,21 +204,10 @@ export const nb = {
         "Du må velge hvilket land den vanlige hjemmebasen ligger i",
       vanligHjemmebaseNavnErPakrevd:
         "Navnet på den vanlige hjemmebasen er påkrevd",
-      navnPaVirksomhet: "Navn på virksomheten",
       navnPaVirksomhetErPakrevd: "Navn på virksomheten er påkrevd",
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Arbeidsgiverens virksomhet i Norge",
-      erArbeidsgiverenEnOffentligVirksomhet:
-        "Er arbeidsgiveren en offentlig virksomhet?",
-      offentligeVirksomheterErStatsorganerOgUnderliggendeVirksomheter:
-        "Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter.",
-      erArbeidsgiverenEtBemanningsEllerVikarbyra:
-        "Er arbeidsgiveren et bemannings- eller vikarbyrå?",
-      opprettholderArbeidsgiverenVanligDriftINorge:
-        "Opprettholder arbeidsgiveren vanlig drift i Norge?",
-      medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
-        "Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden.",
       duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
         "Du må svare på om arbeidsgiveren er en offentlig virksomhet",
       duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
@@ -309,23 +217,6 @@ export const nb = {
     },
     utenlandsoppdragetSteg: {
       tittel: "Utenlandsoppdraget",
-      hvilketLandSendesArbeidstakerenTil:
-        "Hvilket land sendes arbeidstakeren til?",
-      utsendingsperiode: "Utsendingsperiode",
-      harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil:
-        "Har du som arbeidsgiver oppdrag i landet arbeidstaker skal sendes ut til?",
-      hvorforSkalArbeidstakerenArbeideIUtlandet:
-        "Hvorfor skal arbeidstakeren arbeide i utlandet?",
-      bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget:
-        "Ble arbeidstaker ansatt på grunn av dette utenlandsoppdraget?",
-      vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget:
-        "Vil arbeidstakeren arbeide for virksomheten i Norge etter utenlandsoppdraget?",
-      vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden:
-        "Vil arbeidstaker fortsatt være ansatt hos dere i hele utsendingsperioden?",
-      beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden:
-        "Beskriv arbeidstakerens ansettelsesforhold i utsendingsperioden",
-      erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet:
-        "Erstatter arbeidstaker en annen person som var sendt ut for å gjøre det samme arbeidet?",
       duMaVelgeHvilketLandArbeidstakerenSendesTil:
         "Du må velge hvilket land arbeidstakeren sendes til",
       duMaSvarePaOmDereHarOppdragILandet:
@@ -347,30 +238,14 @@ export const nb = {
         "Fra-dato for forrige arbeidstaker er påkrevd",
       tilDatoForForrigeArbeidstakerErPakrevd:
         "Til-dato for forrige arbeidstaker er påkrevd",
-      oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
-        "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
-      forrigeArbeidstakersUtsendelse: "Forrige arbeidstakers utsendelse",
     },
     utenlandsoppdragetArbeidstakerSteg: {
       tittel: "Utenlandsoppdraget",
-      iHvilketLandSkalDuUtforeArbeid: "I hvilket land skal du utføre arbeid?",
-      utsendingsperiode: "Utsendingsperiode",
-      oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
-        "Oppgi omtrentlig dato hvis du ikke vet nøyaktig dato.",
       duMaVelgeHvilketLandDuSkalUtforeArbeid:
         "Du må velge hvilket land du skal utføre arbeid",
-      fraDatoErPakrevd: "Fra-dato er påkrevd",
-      tilDatoErPakrevd: "Til-dato er påkrevd",
-      tilDatoKanIkkeVareForFraDato: "Til dato kan ikke være før fra dato",
     },
     arbeidstakerenslonnSteg: {
       tittel: "Arbeidstakerens lønn",
-      utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
-        "Utbetaler du som arbeidsgiver all lønn og eventuelle naturalytelser i utsendingsperioden?",
-      hvemUtbetalerLonnenOgEventuelleNaturalytelser:
-        "Hvem utbetaler lønnen og eventuelle naturalytelser?",
-      leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser:
-        "Legg til norske og/eller utenlandske virksomheter som utbetaler lønnen og eventuelle naturalytelser",
       duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
         "Du må svare på om du betaler all lønn og eventuelle naturalytelser i utsendingsperioden",
       duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:

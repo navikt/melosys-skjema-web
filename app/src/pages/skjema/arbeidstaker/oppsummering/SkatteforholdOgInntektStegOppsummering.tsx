@@ -2,6 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
 import { stepKey as skatteforholdOgInntektStepKey } from "../skatteforhold-og-inntekt/SkatteforholdOgInntektSteg.tsx";
@@ -13,6 +14,29 @@ export function SkatteforholdOgInntektStegOppsummering({
 }: ArbeidstakerSkjemaProps) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon, getFelt } = useSkjemaDefinisjon();
+
+  const seksjon = getSeksjon("skatteforholdOgInntekt");
+  const erSkattepliktigFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "erSkattepliktigTilNorgeIHeleutsendingsperioden",
+  );
+  const mottarPengestotteFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "mottarPengestotteFraAnnetEosLandEllerSveits",
+  );
+  const landSomUtbetalerFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "landSomUtbetalerPengestotte",
+  );
+  const belopFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "pengestotteSomMottasFraAndreLandBelop",
+  );
+  const beskrivelseFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "pengestotteSomMottasFraAndreLandBeskrivelse",
+  );
 
   const skatteforholdData = skjema.data.skatteforholdOgInntekt;
   const skatteforholdSteg = ARBEIDSTAKER_STEG_REKKEFOLGE.find(
@@ -24,18 +48,12 @@ export function SkatteforholdOgInntektStegOppsummering({
     skatteforholdData && (
       <FormSummary className="mt-8">
         <FormSummary.Header>
-          <FormSummary.Heading level="2">
-            {t("skatteforholdOgInntektSteg.tittel")}
-          </FormSummary.Heading>
+          <FormSummary.Heading level="2">{seksjon.tittel}</FormSummary.Heading>
         </FormSummary.Header>
 
         <FormSummary.Answers>
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "skatteforholdOgInntektSteg.erDuSkattepliktigTilNorgeIHeleUtsendingsperioden",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{erSkattepliktigFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 skatteforholdData.erSkattepliktigTilNorgeIHeleutsendingsperioden,
@@ -44,11 +62,7 @@ export function SkatteforholdOgInntektStegOppsummering({
           </FormSummary.Answer>
 
           <FormSummary.Answer>
-            <FormSummary.Label>
-              {t(
-                "skatteforholdOgInntektSteg.mottarDuPengestotteFraEtAnnetEosLandEllerSveits",
-              )}
-            </FormSummary.Label>
+            <FormSummary.Label>{mottarPengestotteFelt.label}</FormSummary.Label>
             <FormSummary.Value>
               {booleanToJaNei(
                 skatteforholdData.mottarPengestotteFraAnnetEosLandEllerSveits,
@@ -59,9 +73,7 @@ export function SkatteforholdOgInntektStegOppsummering({
           {skatteforholdData.landSomUtbetalerPengestotte && (
             <FormSummary.Answer>
               <FormSummary.Label>
-                {t(
-                  "skatteforholdOgInntektSteg.fraHvilketLandMottarDuPengestotte",
-                )}
+                {landSomUtbetalerFelt.label}
               </FormSummary.Label>
               <FormSummary.Value>
                 {landKodeTilNavn(skatteforholdData.landSomUtbetalerPengestotte)}
@@ -71,11 +83,7 @@ export function SkatteforholdOgInntektStegOppsummering({
 
           {skatteforholdData.pengestotteSomMottasFraAndreLandBelop && (
             <FormSummary.Answer>
-              <FormSummary.Label>
-                {t(
-                  "skatteforholdOgInntektSteg.hvorMyePengerMottarDuBruttoPerManed",
-                )}
-              </FormSummary.Label>
+              <FormSummary.Label>{belopFelt.label}</FormSummary.Label>
               <FormSummary.Value>
                 {skatteforholdData.pengestotteSomMottasFraAndreLandBelop}
               </FormSummary.Value>
@@ -84,9 +92,7 @@ export function SkatteforholdOgInntektStegOppsummering({
 
           {skatteforholdData.pengestotteSomMottasFraAndreLandBeskrivelse && (
             <FormSummary.Answer>
-              <FormSummary.Label>
-                {t("skatteforholdOgInntektSteg.hvaSlagsPengestotteMottarDu")}
-              </FormSummary.Label>
+              <FormSummary.Label>{beskrivelseFelt.label}</FormSummary.Label>
               <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
                 {skatteforholdData.pengestotteSomMottasFraAndreLandBeskrivelse}
               </FormSummary.Value>

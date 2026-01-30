@@ -2,28 +2,36 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import {
-  Farvann,
-  FastEllerVekslendeArbeidssted,
   OffshoreDto,
   OmBordPaFlyDto,
   PaLandDto,
   PaSkipDto,
-  TypeInnretning,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-import {
-  arbeidsstedTypeOptions,
-  stepKey as arbeidsstedIUtlandetStepKey,
-} from "../arbeidssted-i-utlandet/ArbeidsstedIUtlandetSteg.tsx";
+import { stepKey as arbeidsstedIUtlandetStepKey } from "../arbeidssted-i-utlandet/ArbeidsstedIUtlandetSteg.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
+
+// Hjelpefunksjon for å hente label for alternativ fra SELECT-felt
+function getAlternativLabel(
+  alternativer: ReadonlyArray<{ verdi: string; label: string }>,
+  verdi: string,
+): string {
+  return alternativer.find((alt) => alt.verdi === verdi)?.label || verdi;
+}
 
 export function ArbeidsstedIUtlandetStegOppsummering({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
+  const { getSeksjon } = useSkjemaDefinisjon();
+
+  const hovedSeksjon = getSeksjon("arbeidsstedIUtlandet");
+  const arbeidsstedIUtlandetFelter = hovedSeksjon.felter;
+  const paLandFelter = getSeksjon("arbeidsstedPaLand").felter;
 
   const arbeidsstedData = skjema.data.arbeidsstedIUtlandet;
   const arbeidsstedSteg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
@@ -41,20 +49,19 @@ export function ArbeidsstedIUtlandetStegOppsummering({
     <FormSummary className="mt-8">
       <FormSummary.Header>
         <FormSummary.Heading level="2">
-          {t("arbeidsstedIUtlandetSteg.tittel")}
+          {hovedSeksjon.tittel}
         </FormSummary.Heading>
       </FormSummary.Header>
 
       <FormSummary.Answers>
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.hvorSkalArbeidetUtfores")}
+            {arbeidsstedIUtlandetFelter.arbeidsstedType.label}
           </FormSummary.Label>
           <FormSummary.Value>
-            {t(
-              arbeidsstedTypeOptions.find(
-                (option) => option.value === arbeidsstedData.arbeidsstedType,
-              )?.labelKey || "",
+            {getAlternativLabel(
+              arbeidsstedIUtlandetFelter.arbeidsstedType.alternativer,
+              arbeidsstedData.arbeidsstedType,
             )}
           </FormSummary.Value>
         </FormSummary.Answer>
@@ -62,7 +69,7 @@ export function ArbeidsstedIUtlandetStegOppsummering({
         {navnPaVirksomhet && (
           <FormSummary.Answer>
             <FormSummary.Label>
-              {t("arbeidsstedIUtlandetSteg.navnPaVirksomhet")}
+              {paLandFelter.navnPaVirksomhet.label}
             </FormSummary.Label>
             <FormSummary.Value>{navnPaVirksomhet}</FormSummary.Value>
           </FormSummary.Answer>
@@ -95,30 +102,29 @@ export function ArbeidsstedIUtlandetStegOppsummering({
 }
 
 function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
-  const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const paLandFelter = getSeksjon("arbeidsstedPaLand").felter;
 
   return (
     <>
       {paLand.fastEllerVekslendeArbeidssted && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.harFastArbeidsstedEllerVeksler")}
+            {paLandFelter.fastEllerVekslendeArbeidssted.label}
           </FormSummary.Label>
           <FormSummary.Value>
-            {paLand.fastEllerVekslendeArbeidssted ===
-            FastEllerVekslendeArbeidssted.FAST
-              ? t("arbeidsstedIUtlandetSteg.fastArbeidssted")
-              : t("arbeidsstedIUtlandetSteg.vekslerOfte")}
+            {getAlternativLabel(
+              paLandFelter.fastEllerVekslendeArbeidssted.alternativer,
+              paLand.fastEllerVekslendeArbeidssted,
+            )}
           </FormSummary.Value>
         </FormSummary.Answer>
       )}
 
       {paLand.fastArbeidssted?.vegadresse && (
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.vegadresse")}
-          </FormSummary.Label>
+          <FormSummary.Label>{paLandFelter.vegadresse.label}</FormSummary.Label>
           <FormSummary.Value>
             {paLand.fastArbeidssted.vegadresse}
           </FormSummary.Value>
@@ -127,18 +133,14 @@ function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
 
       {paLand.fastArbeidssted?.nummer && (
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.nummer")}
-          </FormSummary.Label>
+          <FormSummary.Label>{paLandFelter.nummer.label}</FormSummary.Label>
           <FormSummary.Value>{paLand.fastArbeidssted.nummer}</FormSummary.Value>
         </FormSummary.Answer>
       )}
 
       {paLand.fastArbeidssted?.postkode && (
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.postkode")}
-          </FormSummary.Label>
+          <FormSummary.Label>{paLandFelter.postkode.label}</FormSummary.Label>
           <FormSummary.Value>
             {paLand.fastArbeidssted.postkode}
           </FormSummary.Value>
@@ -147,9 +149,7 @@ function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
 
       {paLand.fastArbeidssted?.bySted && (
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.bySted")}
-          </FormSummary.Label>
+          <FormSummary.Label>{paLandFelter.bySted.label}</FormSummary.Label>
           <FormSummary.Value>{paLand.fastArbeidssted.bySted}</FormSummary.Value>
         </FormSummary.Answer>
       )}
@@ -157,7 +157,7 @@ function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
       {paLand.beskrivelseVekslende && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.beskriv")}
+            {paLandFelter.beskrivelseVekslende.label}
           </FormSummary.Label>
           <FormSummary.Value>{paLand.beskrivelseVekslende}</FormSummary.Value>
         </FormSummary.Answer>
@@ -166,7 +166,7 @@ function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
       {paLand.erHjemmekontor !== undefined && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.erHjemmekontor")}
+            {paLandFelter.erHjemmekontor.label}
           </FormSummary.Label>
           <FormSummary.Value>
             {booleanToJaNei(paLand.erHjemmekontor)}
@@ -178,14 +178,15 @@ function PaLandOppsummering({ paLand }: { paLand: PaLandDto }) {
 }
 
 function OffshoreOppsummering({ offshore }: { offshore: OffshoreDto }) {
-  const { t } = useTranslation();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const offshoreFelter = getSeksjon("arbeidsstedOffshore").felter;
 
   return (
     <>
       {offshore.navnPaInnretning && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.navnPaInnretning")}
+            {offshoreFelter.navnPaInnretning.label}
           </FormSummary.Label>
           <FormSummary.Value>{offshore.navnPaInnretning}</FormSummary.Value>
         </FormSummary.Answer>
@@ -194,13 +195,13 @@ function OffshoreOppsummering({ offshore }: { offshore: OffshoreDto }) {
       {offshore.typeInnretning && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.hvilkenTypeInnretning")}
+            {offshoreFelter.typeInnretning.label}
           </FormSummary.Label>
           <FormSummary.Value>
-            {offshore.typeInnretning ===
-            TypeInnretning.PLATTFORM_ELLER_ANNEN_FAST_INNRETNING
-              ? t("arbeidsstedIUtlandetSteg.plattformEllerFast")
-              : t("arbeidsstedIUtlandetSteg.boreskipEllerFlyttbar")}
+            {getAlternativLabel(
+              offshoreFelter.typeInnretning.alternativer,
+              offshore.typeInnretning,
+            )}
           </FormSummary.Value>
         </FormSummary.Answer>
       )}
@@ -208,7 +209,7 @@ function OffshoreOppsummering({ offshore }: { offshore: OffshoreDto }) {
       {offshore.sokkelLand && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.hvilketLandsSokkel")}
+            {offshoreFelter.sokkelLand.label}
           </FormSummary.Label>
           <FormSummary.Value>
             {landKodeTilNavn(offshore.sokkelLand)}
@@ -220,15 +221,14 @@ function OffshoreOppsummering({ offshore }: { offshore: OffshoreDto }) {
 }
 
 function PaSkipOppsummering({ paSkip }: { paSkip: PaSkipDto }) {
-  const { t } = useTranslation();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const paSkipFelter = getSeksjon("arbeidsstedPaSkip").felter;
 
   return (
     <>
       {paSkip.navnPaSkip && (
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.navnPaSkip")}
-          </FormSummary.Label>
+          <FormSummary.Label>{paSkipFelter.navnPaSkip.label}</FormSummary.Label>
           <FormSummary.Value>{paSkip.navnPaSkip}</FormSummary.Value>
         </FormSummary.Answer>
       )}
@@ -236,7 +236,7 @@ function PaSkipOppsummering({ paSkip }: { paSkip: PaSkipDto }) {
       {paSkip.yrketTilArbeidstaker && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.yrketTilArbeidstaker")}
+            {paSkipFelter.yrketTilArbeidstaker.label}
           </FormSummary.Label>
           <FormSummary.Value>{paSkip.yrketTilArbeidstaker}</FormSummary.Value>
         </FormSummary.Answer>
@@ -244,22 +244,19 @@ function PaSkipOppsummering({ paSkip }: { paSkip: PaSkipDto }) {
 
       {paSkip.seilerI && (
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.hvorSkalSkipetSeile")}
-          </FormSummary.Label>
+          <FormSummary.Label>{paSkipFelter.seilerI.label}</FormSummary.Label>
           <FormSummary.Value>
-            {paSkip.seilerI === Farvann.INTERNASJONALT_FARVANN
-              ? t("arbeidsstedIUtlandetSteg.internasjonaltFarvann")
-              : t("arbeidsstedIUtlandetSteg.territorialfarvann")}
+            {getAlternativLabel(
+              paSkipFelter.seilerI.alternativer,
+              paSkip.seilerI,
+            )}
           </FormSummary.Value>
         </FormSummary.Answer>
       )}
 
       {paSkip.flaggland && (
         <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.flaggland")}
-          </FormSummary.Label>
+          <FormSummary.Label>{paSkipFelter.flaggland.label}</FormSummary.Label>
           <FormSummary.Value>
             {landKodeTilNavn(paSkip.flaggland)}
           </FormSummary.Value>
@@ -269,7 +266,7 @@ function PaSkipOppsummering({ paSkip }: { paSkip: PaSkipDto }) {
       {paSkip.territorialfarvannLand && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.hvilketLandsTerritorialfarvann")}
+            {paSkipFelter.territorialfarvannLand.label}
           </FormSummary.Label>
           <FormSummary.Value>
             {landKodeTilNavn(paSkip.territorialfarvannLand)}
@@ -285,15 +282,16 @@ function OmBordPaFlyOppsummering({
 }: {
   omBordPaFly: OmBordPaFlyDto;
 }) {
-  const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const { getSeksjon } = useSkjemaDefinisjon();
+  const omBordPaFlyFelter = getSeksjon("arbeidsstedOmBordPaFly").felter;
 
   return (
     <>
       {omBordPaFly.hjemmebaseLand && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.hjemmebaseLand")}
+            {omBordPaFlyFelter.hjemmebaseLand.label}
           </FormSummary.Label>
           <FormSummary.Value>
             {landKodeTilNavn(omBordPaFly.hjemmebaseLand)}
@@ -304,7 +302,7 @@ function OmBordPaFlyOppsummering({
       {omBordPaFly.hjemmebaseNavn && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.hjemmebaseNavn")}
+            {omBordPaFlyFelter.hjemmebaseNavn.label}
           </FormSummary.Label>
           <FormSummary.Value>{omBordPaFly.hjemmebaseNavn}</FormSummary.Value>
         </FormSummary.Answer>
@@ -313,7 +311,7 @@ function OmBordPaFlyOppsummering({
       {omBordPaFly.erVanligHjemmebase !== undefined && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.erVanligHjemmebase")}
+            {omBordPaFlyFelter.erVanligHjemmebase.label}
           </FormSummary.Label>
           <FormSummary.Value>
             {booleanToJaNei(omBordPaFly.erVanligHjemmebase)}
@@ -324,7 +322,7 @@ function OmBordPaFlyOppsummering({
       {omBordPaFly.vanligHjemmebaseLand && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.vanligHjemmebaseLand")}
+            {omBordPaFlyFelter.vanligHjemmebaseLand.label}
           </FormSummary.Label>
           <FormSummary.Value>
             {landKodeTilNavn(omBordPaFly.vanligHjemmebaseLand)}
@@ -335,7 +333,7 @@ function OmBordPaFlyOppsummering({
       {omBordPaFly.vanligHjemmebaseNavn && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("arbeidsstedIUtlandetSteg.vanligHjemmebaseNavn")}
+            {omBordPaFlyFelter.vanligHjemmebaseNavn.label}
           </FormSummary.Label>
           <FormSummary.Value>
             {omBordPaFly.vanligHjemmebaseNavn}
