@@ -190,10 +190,7 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
   const handleSearch = async () => {
     const result = await getOrganisasjonQuery.refetch();
     if (result.data) {
-      modalForm.setValue(
-        "organisasjonsnummer",
-        result.data.organisasjonsnummer,
-      );
+      modalForm.setValue("organisasjonsnummer", result.data.orgnr);
     }
   };
 
@@ -229,7 +226,7 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
           <ValgtOrganisasjon
             valgtOrganisasjon={{
               orgnr: valgtOrganisasjonsnummer,
-              navn: getOrganisasjonQuery.data?.navn?.sammensattnavn,
+              navn: getOrganisasjonQuery.data?.navn,
             }}
           />
         )}
