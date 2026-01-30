@@ -9,6 +9,11 @@
 
 type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
+export enum Sprak {
+  Nb = "nb",
+  En = "en",
+}
+
 export enum TypeInnretning {
   PLATTFORM_ELLER_ANNEN_FAST_INNRETNING = "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING",
   BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING = "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING",
@@ -104,10 +109,11 @@ export enum SkjemaStatus {
   SENDT = "SENDT",
 }
 
-export interface Organisasjon {
-  navn?: Navn;
+export interface FeltDefinisjonDto {
+  hjelpetekst?: string;
+  pakrevd: boolean;
+  label: string;
   type: string;
-  organisasjonsnummer: string;
 }
 
 export interface SkjemaInnsendtKvittering {
@@ -391,6 +397,13 @@ export interface VerifiserPersonResponse {
   fodselsdato: string;
 }
 
+export interface UtsendtArbeidstakerM2MSkjemaData {
+  arbeidstakersDel?: ArbeidstakersSkjemaDataDto;
+  arbeidsgiversDel?: ArbeidsgiversSkjemaDataDto;
+  referanseId: string;
+  journaposteringId: string;
+}
+
 export interface RadgiverfirmaInfo {
   orgnr: string;
   navn: string;
@@ -404,6 +417,135 @@ export interface UtsendtArbeidstakerMetadata {
   arbeidsgiverNavn?: string;
   fullmektigFnr?: string;
 }
+
+export interface AlternativDefinisjonDto {
+  verdi: string;
+  label: string;
+  beskrivelse?: string;
+}
+
+export type BooleanFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+> & {
+  jaLabel: string;
+  neiLabel: string;
+};
+
+export type CountrySelectFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+>;
+
+export type DateFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+>;
+
+/** Innsendt søknad med skjemadefinisjon for korrekt visning */
+export interface InnsendtSkjemaResponse {
+  /**
+   * Skjema-ID
+   * @format uuid
+   */
+  skjemaId: string;
+  /**
+   * Referansenummer
+   * @example "MEL-AB12CD"
+   */
+  referanseId: string;
+  /**
+   * Tidspunkt for innsending
+   * @format date-time
+   */
+  innsendtDato: string;
+  /**
+   * Språk som ble brukt ved innsending
+   * @example "nb"
+   */
+  innsendtSprak: Sprak;
+  /**
+   * Versjon av skjemadefinisjon som ble brukt
+   * @example 1
+   */
+  skjemaDefinisjonVersjon: string;
+  /** Arbeidstakers del av søknaden */
+  arbeidstakerData?: ArbeidstakersSkjemaDataDto;
+  /** Arbeidsgivers del av søknaden */
+  arbeidsgiverData?: ArbeidsgiversSkjemaDataDto;
+  /** Skjemadefinisjon for visning (basert på lagret versjon) */
+  definisjon: SkjemaDefinisjonDto;
+}
+
+export type ListeFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+> & {
+  leggTilLabel: string;
+  fjernLabel: string;
+  tomListeMelding?: string;
+  elementDefinisjon: Record<
+    string,
+    | BooleanFeltDefinisjon
+    | CountrySelectFeltDefinisjon
+    | DateFeltDefinisjon
+    | ListeFeltDefinisjon
+    | PeriodeFeltDefinisjon
+    | SelectFeltDefinisjon
+    | TextFeltDefinisjon
+    | TextareaFeltDefinisjon
+  >;
+};
+
+export type PeriodeFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+> & {
+  fraDatoLabel: string;
+  tilDatoLabel: string;
+};
+
+export interface SeksjonDefinisjonDto {
+  tittel: string;
+  beskrivelse?: string;
+  felter: Record<
+    string,
+    | BooleanFeltDefinisjon
+    | CountrySelectFeltDefinisjon
+    | DateFeltDefinisjon
+    | ListeFeltDefinisjon
+    | PeriodeFeltDefinisjon
+    | SelectFeltDefinisjon
+    | TextFeltDefinisjon
+    | TextareaFeltDefinisjon
+  >;
+}
+
+export type SelectFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+> & {
+  alternativer: AlternativDefinisjonDto[];
+};
+
+export interface SkjemaDefinisjonDto {
+  type: string;
+  versjon: string;
+  seksjoner: Record<string, SeksjonDefinisjonDto>;
+}
+
+export type TextFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+>;
+
+export type TextareaFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+> & {
+  /** @format int32 */
+  maxLength?: number;
+};
 
 export interface UtkastListeResponse {
   utkast: UtkastOversiktDto[];
@@ -423,6 +565,30 @@ export interface UtkastOversiktDto {
   /** @format date-time */
   sistEndretDato: string;
   status: SkjemaStatus;
+}
+
+/** Informasjon om aktiv versjon for en skjematype */
+export interface AktivVersjonResponse {
+  /**
+   * Skjematype
+   * @example "A1"
+   */
+  type: string;
+  /**
+   * Aktiv versjon
+   * @example 1
+   */
+  aktivVersjon: string;
+}
+
+/** Liste over støttede skjematyper */
+export interface StottedeTyperResponse {
+  /**
+   * Støttede skjematyper
+   * @uniqueItems true
+   * @example ["A1"]
+   */
+  typer: string[];
 }
 
 export interface Fullmakt {
@@ -552,129 +718,7 @@ export interface UtenlandsoppdragetTranslation {
   duMaOppgiForrigeArbeidstakerUtsendelsePeriode: string;
 }
 
-export interface Adresse {
-  adresselinje1?: string;
-  adresselinje2?: string;
-  adresselinje3?: string;
-  postnummer?: string;
-  poststed?: string;
-  landkode?: string;
-  kommunenummer?: string;
-}
-
-export interface BestaarAvOrganisasjonsledd {
-  organisasjonsledd?: Organisasjonsledd;
-  bruksperiode?: Bruksperiode;
-  gyldighetsperiode?: Gyldighetsperiode;
-}
-
-export interface Bruksperiode {
-  fom?: string;
-  tom?: string;
-}
-
-export interface DriverVirksomhet {
-  organisasjonsnummer?: string;
-  navn?: Navn;
-  bruksperiode?: Bruksperiode;
-  gyldighetsperiode?: Gyldighetsperiode;
-}
-
-export interface Enhetstype {
-  enhetstype?: string;
-}
-
-export interface Gyldighetsperiode {
-  /** @format date */
-  fom?: string;
-  /** @format date */
-  tom?: string;
-}
-
-export interface InngaarIJuridiskEnhet {
-  organisasjonsnummer?: string;
-  navn?: Navn;
-  bruksperiode?: Bruksperiode;
-  gyldighetsperiode?: Gyldighetsperiode;
-}
-
-export type JuridiskEnhet = UtilRequiredKeys<
-  Organisasjon,
-  "type" | "organisasjonsnummer"
-> & {
-  organisasjonDetaljer?: OrganisasjonDetaljer;
-  juridiskEnhetDetaljer?: JuridiskEnhetDetaljer;
-};
-
-export interface JuridiskEnhetDetaljer {
-  enhetstype?: string;
-  harAnsatte?: boolean;
-  sektorkode?: string;
-}
-
-export interface Naering {
-  naeringskode?: string;
-  hjelpeenhet?: boolean;
-}
-
-export interface Navn {
-  sammensattnavn?: string;
-  navnelinje1?: string;
-  navnelinje2?: string;
-  navnelinje3?: string;
-  navnelinje4?: string;
-  navnelinje5?: string;
-}
-
-export interface OrganisasjonDetaljer {
-  registreringsdato?: string;
-  /** @format date */
-  stiftelsesdato?: string;
-  /** @format date */
-  opphoersdato?: string;
-  enhetstyper?: Enhetstype[];
-  navn?: Navn[];
-  naeringer?: Naering[];
-  forretningsadresser?: Adresse[];
-  postadresser?: Adresse[];
-}
-
-export type Organisasjonsledd = UtilRequiredKeys<
-  Organisasjon,
-  "type" | "organisasjonsnummer"
-> & {
-  organisasjonDetaljer?: OrganisasjonDetaljer;
-  organisasjonsleddDetaljer?: OrganisasjonsleddDetaljer;
-  driverVirksomheter?: DriverVirksomhet[];
-  inngaarIJuridiskEnheter?: InngaarIJuridiskEnhet[];
-  organisasjonsleddOver?: BestaarAvOrganisasjonsledd[];
-};
-
-export interface OrganisasjonsleddDetaljer {
-  enhetstype?: string;
-  sektorkode?: string;
-}
-
-export type Virksomhet = UtilRequiredKeys<
-  Organisasjon,
-  "type" | "organisasjonsnummer"
-> & {
-  organisasjonDetaljer?: OrganisasjonDetaljer;
-  virksomhetDetaljer?: VirksomhetDetaljer;
-  bestaarAvOrganisasjonsledd?: BestaarAvOrganisasjonsledd[];
-  inngaarIJuridiskEnheter?: InngaarIJuridiskEnhet[];
-};
-
-export interface VirksomhetDetaljer {
-  enhetstype?: string;
-  ubemannetVirksomhet?: boolean;
-  /** @format date */
-  oppstartsdato?: string;
-  /** @format date */
-  nedleggelsesdato?: string;
-}
-
-export interface OrganisasjonMedJuridiskEnhet {
-  organisasjon: JuridiskEnhet | Organisasjonsledd | Virksomhet;
-  juridiskEnhet: JuridiskEnhet;
+export interface OrganisasjonMedJuridiskEnhetDto {
+  organisasjon: SimpleOrganisasjonDto;
+  juridiskEnhet: SimpleOrganisasjonDto;
 }

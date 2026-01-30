@@ -16,16 +16,16 @@ export function OrganisasjonNameLookup({ orgnummer }: { orgnummer: string }) {
     getOrganisasjonQueryOptions(orgnummer),
   );
 
-  if (!organisasjon?.navn?.sammensattnavn) {
+  if (!organisasjon?.navn) {
     return <span>{orgnummer}</span>;
   }
 
   return (
     <Tooltip content={orgnummer}>
       <span
-        aria-label={`${organisasjon.navn.sammensattnavn} med organisasjonsnummer ${orgnummer}`}
+        aria-label={`${organisasjon.navn} med organisasjonsnummer ${orgnummer}`}
       >
-        {organisasjon.navn.sammensattnavn}
+        {organisasjon.navn}
       </span>
     </Tooltip>
   );
