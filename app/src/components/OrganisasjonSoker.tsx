@@ -72,11 +72,8 @@ export function OrganisasjonSoker({
 
     if (response.data) {
       const org: SimpleOrganisasjonDto = {
-        orgnr: response.data.juridiskEnhet.organisasjonsnummer,
-        navn:
-          response.data.juridiskEnhet.navn?.sammensattnavn ||
-          response.data.juridiskEnhet.navn?.navnelinje1 ||
-          "",
+        orgnr: response.data.juridiskEnhet.orgnr,
+        navn: response.data.juridiskEnhet.navn || "",
       };
 
       setValgtOrganisasjon(org);
