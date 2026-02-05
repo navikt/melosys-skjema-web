@@ -61,7 +61,8 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     mutationFn: opprettSoknadMedKontekst,
     onSuccess: (data) => {
       void navigate({
-        to: `/skjema/${data.id}`,
+        to: "/skjema/$id",
+        params: { id: data.id },
       });
     },
   });
