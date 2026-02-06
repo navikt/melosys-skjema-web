@@ -13,13 +13,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import {
-  OpprettSoknadMedKontekstRequest,
-  Representasjonstype,
-} from "~/types/melosysSkjemaTypes.ts";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 
 interface UtkastListeProps {
-  kontekst: OpprettSoknadMedKontekstRequest;
+  kontekst: RepresentasjonsKontekst;
 }
 
 const formatDato = (dato: string) => {

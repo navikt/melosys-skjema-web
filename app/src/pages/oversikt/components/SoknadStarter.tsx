@@ -20,13 +20,14 @@ import {
   SimpleOrganisasjonDto,
   Skjemadel,
 } from "~/types/melosysSkjemaTypes.ts";
+import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 import { validerSoknadKontekst } from "~/utils/valideringUtils.ts";
 
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
 import { ArbeidstakerVelger } from "./ArbeidstakerVelger.tsx";
 
 interface SoknadStarterProps {
-  kontekst: OpprettSoknadMedKontekstRequest;
+  kontekst: RepresentasjonsKontekst;
 }
 
 /**

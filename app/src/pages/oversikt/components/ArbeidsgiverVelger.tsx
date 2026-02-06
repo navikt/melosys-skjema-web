@@ -13,13 +13,13 @@ import { useTranslation } from "react-i18next";
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
-  OpprettSoknadMedKontekstRequest,
   Representasjonstype,
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 
 interface ArbeidsgiverVelgerProps {
-  kontekst: OpprettSoknadMedKontekstRequest;
+  kontekst: RepresentasjonsKontekst;
   valgtArbeidsgiver?: SimpleOrganisasjonDto;
   onArbeidsgiverValgt: (organisasjon: SimpleOrganisasjonDto) => void;
   harFeil?: boolean;

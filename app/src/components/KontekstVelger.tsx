@@ -48,7 +48,12 @@ function MaalformValg() {
 }
 
 const KONTEKST_CONFIG: Record<
-  Exclude<Representasjonstype, Representasjonstype.DEG_SELV>,
+  Exclude<
+    Representasjonstype,
+    | Representasjonstype.DEG_SELV
+    | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT
+    | Representasjonstype.RADGIVER_MED_FULLMAKT
+  >,
   KontekstConfig
 > = {
   [Representasjonstype.ARBEIDSGIVER]: {
@@ -86,7 +91,9 @@ export function KontekstVelger() {
       KONTEKST_CONFIG[
         kontekst.representasjonstype as Exclude<
           Representasjonstype,
-          Representasjonstype.DEG_SELV
+          | Representasjonstype.DEG_SELV
+          | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT
+          | Representasjonstype.RADGIVER_MED_FULLMAKT
         >
       ];
     if (
@@ -105,7 +112,9 @@ export function KontekstVelger() {
     return KONTEKST_CONFIG[
       kontekst.representasjonstype as Exclude<
         Representasjonstype,
-        Representasjonstype.DEG_SELV
+        | Representasjonstype.DEG_SELV
+        | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT
+        | Representasjonstype.RADGIVER_MED_FULLMAKT
       >
     ].icon;
   };

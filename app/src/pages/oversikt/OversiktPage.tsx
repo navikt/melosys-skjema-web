@@ -6,13 +6,11 @@ import {
   SoknadStarter,
   UtkastListe,
 } from "~/pages/oversikt/components";
-import {
-  OpprettSoknadMedKontekstRequest,
-  Representasjonstype,
-} from "~/types/melosysSkjemaTypes.ts";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 
 interface OversiktPageProps {
-  kontekst: OpprettSoknadMedKontekstRequest;
+  kontekst: RepresentasjonsKontekst;
 }
 
 export function OversiktPage({ kontekst }: OversiktPageProps) {

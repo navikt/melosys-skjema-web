@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import {
   clearRepresentasjonKontekst,
+  RepresentasjonsKontekst,
   setRepresentasjonKontekst,
 } from "~/utils/sessionStorage.ts";
 
@@ -96,8 +97,8 @@ export function RepresentasjonVelger({
   ) => {
     clearRepresentasjonKontekst();
     setRepresentasjonKontekst({
-      representasjonstype,
-      harFullmakt: false,
+      representasjonstype:
+        representasjonstype as RepresentasjonsKontekst["representasjonstype"],
     });
 
     onVelg?.();

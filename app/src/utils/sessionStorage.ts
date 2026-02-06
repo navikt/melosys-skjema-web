@@ -1,5 +1,4 @@
 import {
-  OpprettSoknadMedKontekstRequest,
   OrganisasjonDto,
   Representasjonstype,
   SimpleOrganisasjonDto,
@@ -33,7 +32,7 @@ export function setValgtRolle(organisasjon: OrganisasjonDto): void {
 const REPRESENTASJON_KEY = "representasjonKontekst";
 
 export function getRepresentasjonKontekst():
-  | OpprettSoknadMedKontekstRequest
+  | RepresentasjonsKontekst
   | undefined {
   try {
     const kontekstData = sessionStorage.getItem(REPRESENTASJON_KEY);
@@ -42,7 +41,7 @@ export function getRepresentasjonKontekst():
       return undefined;
     }
 
-    return JSON.parse(kontekstData) as OpprettSoknadMedKontekstRequest;
+    return JSON.parse(kontekstData) as RepresentasjonsKontekst;
   } catch {
     // Clear corrupted data
     sessionStorage.removeItem(REPRESENTASJON_KEY);
@@ -51,8 +50,11 @@ export function getRepresentasjonKontekst():
 }
 
 export type RepresentasjonsKontekst = {
-  representasjonstype: Representasjonstype;
-  harFullmakt: boolean;
+  representasjonstype: Exclude<
+    Representasjonstype,
+    | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT
+    | Representasjonstype.RADGIVER_MED_FULLMAKT
+  >;
   radgiverfirma?: SimpleOrganisasjonDto;
 };
 
