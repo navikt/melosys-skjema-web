@@ -9,10 +9,6 @@
 
 type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
-export enum SkjemaType {
-  UTSENDT_ARBEIDSTAKER = "UTSENDT_ARBEIDSTAKER",
-}
-
 export enum Sprak {
   Nb = "nb",
   En = "en",
@@ -44,6 +40,10 @@ export enum Ansettelsesform {
   ARBEIDSTAKER_ELLER_FRILANSER = "ARBEIDSTAKER_ELLER_FRILANSER",
   SELVSTENDIG_NAERINGSDRIVENDE = "SELVSTENDIG_NAERINGSDRIVENDE",
   STATSANSATT = "STATSANSATT",
+}
+
+export enum SkjemaType {
+  UTSENDT_ARBEIDSTAKER = "UTSENDT_ARBEIDSTAKER",
 }
 
 export enum LandKode {
@@ -211,203 +211,6 @@ export interface UtenlandsoppdragetArbeidstakersDelDto {
   utsendelsePeriode: PeriodeDto;
 }
 
-export interface ArbeidssituasjonDto {
-  harVaertEllerSkalVaereILonnetArbeidFoerUtsending: boolean;
-  aktivitetIMaanedenFoerUtsendingen?: string;
-  skalJobbeForFlereVirksomheter: boolean;
-  virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheterMedAnsettelsesform;
-}
-
-export interface ArbeidstakersSkjemaDataDto {
-  utenlandsoppdraget?: UtenlandsoppdragetArbeidstakersDelDto;
-  arbeidssituasjon?: ArbeidssituasjonDto;
-  skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
-  familiemedlemmer?: FamiliemedlemmerDto;
-  tilleggsopplysninger?: TilleggsopplysningerDto;
-}
-
-export interface ArbeidstakersSkjemaDto {
-  /** @format uuid */
-  id: string;
-  fnr: string;
-  status: SkjemaStatus;
-  data: ArbeidstakersSkjemaDataDto;
-}
-
-export interface Familiemedlem {
-  fornavn: string;
-  etternavn: string;
-  harNorskFodselsnummerEllerDnummer: boolean;
-  fodselsnummer?: string;
-  /** @format date */
-  fodselsdato?: string;
-}
-
-export interface FamiliemedlemmerDto {
-  skalHaMedFamiliemedlemmer: boolean;
-  familiemedlemmer: Familiemedlem[];
-}
-
-export interface NorskVirksomhet {
-  /** @minLength 1 */
-  organisasjonsnummer: string;
-}
-
-export interface NorskeOgUtenlandskeVirksomheterMedAnsettelsesform {
-  norskeVirksomheter?: NorskVirksomhet[];
-  utenlandskeVirksomheter?: UtenlandskVirksomhetMedAnsettelsesform[];
-}
-
-export interface SkatteforholdOgInntektDto {
-  erSkattepliktigTilNorgeIHeleutsendingsperioden: boolean;
-  mottarPengestotteFraAnnetEosLandEllerSveits: boolean;
-  landSomUtbetalerPengestotte?: string;
-  pengestotteSomMottasFraAndreLandBelop?: string;
-  pengestotteSomMottasFraAndreLandBeskrivelse?: string;
-}
-
-export interface TilleggsopplysningerDto {
-  harFlereOpplysningerTilSoknaden: boolean;
-  tilleggsopplysningerTilSoknad?: string;
-}
-
-export interface UtenlandskVirksomhetMedAnsettelsesform {
-  navn: string;
-  organisasjonsnummer?: string;
-  vegnavnOgHusnummer: string;
-  bygning?: string;
-  postkode?: string;
-  byStedsnavn?: string;
-  region?: string;
-  land: string;
-  tilhorerSammeKonsern: boolean;
-  ansettelsesform: Ansettelsesform;
-}
-
-export interface UtenlandsoppdragetDto {
-  utsendelseLand: LandKode;
-  arbeidstakerUtsendelsePeriode: PeriodeDto;
-  arbeidsgiverHarOppdragILandet: boolean;
-  arbeidstakerBleAnsattForUtenlandsoppdraget: boolean;
-  arbeidstakerForblirAnsattIHelePerioden: boolean;
-  arbeidstakerErstatterAnnenPerson: boolean;
-  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget?: boolean;
-  utenlandsoppholdetsBegrunnelse?: string;
-  ansettelsesforholdBeskrivelse?: string;
-  forrigeArbeidstakerUtsendelsePeriode?: PeriodeDto;
-}
-
-export interface ArbeidsgiverensVirksomhetINorgeDto {
-  erArbeidsgiverenOffentligVirksomhet: boolean;
-  erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
-  opprettholderArbeidsgiverenVanligDrift?: boolean;
-}
-
-export interface ArbeidsgiversSkjemaDataDto {
-  arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
-  utenlandsoppdraget?: UtenlandsoppdragetDto;
-  arbeidstakerensLonn?: ArbeidstakerensLonnDto;
-  arbeidsstedIUtlandet?: ArbeidsstedIUtlandetDto;
-  tilleggsopplysninger?: TilleggsopplysningerDto;
-}
-
-export interface ArbeidsgiversSkjemaDto {
-  /** @format uuid */
-  id: string;
-  orgnr: string;
-  status: SkjemaStatus;
-  data: ArbeidsgiversSkjemaDataDto;
-}
-
-export interface ArbeidsstedIUtlandetDto {
-  arbeidsstedType: ArbeidsstedType;
-  paLand?: PaLandDto;
-  offshore?: OffshoreDto;
-  paSkip?: PaSkipDto;
-  omBordPaFly?: OmBordPaFlyDto;
-}
-
-export interface ArbeidstakerensLonnDto {
-  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: boolean;
-  virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
-}
-
-export interface NorskeOgUtenlandskeVirksomheter {
-  norskeVirksomheter?: NorskVirksomhet[];
-  utenlandskeVirksomheter?: UtenlandskVirksomhet[];
-}
-
-export interface OffshoreDto {
-  navnPaVirksomhet: string;
-  navnPaInnretning: string;
-  typeInnretning: TypeInnretning;
-  sokkelLand: LandKode;
-}
-
-export interface OmBordPaFlyDto {
-  navnPaVirksomhet: string;
-  hjemmebaseLand: LandKode;
-  hjemmebaseNavn: string;
-  erVanligHjemmebase: boolean;
-  vanligHjemmebaseLand?: LandKode;
-  vanligHjemmebaseNavn?: string;
-}
-
-export interface PaLandDto {
-  navnPaVirksomhet: string;
-  fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted;
-  fastArbeidssted?: PaLandFastArbeidsstedDto;
-  beskrivelseVekslende?: string;
-  erHjemmekontor: boolean;
-}
-
-export interface PaLandFastArbeidsstedDto {
-  vegadresse: string;
-  nummer: string;
-  postkode: string;
-  bySted: string;
-}
-
-export interface PaSkipDto {
-  navnPaVirksomhet: string;
-  navnPaSkip: string;
-  yrketTilArbeidstaker: string;
-  seilerI: Farvann;
-  flaggland?: LandKode;
-  territorialfarvannLand?: LandKode;
-}
-
-export interface UtenlandskVirksomhet {
-  navn: string;
-  organisasjonsnummer?: string;
-  vegnavnOgHusnummer: string;
-  bygning?: string;
-  postkode?: string;
-  byStedsnavn?: string;
-  region?: string;
-  land: string;
-  tilhorerSammeKonsern: boolean;
-}
-
-export interface VerifiserPersonRequest {
-  /** @minLength 1 */
-  fodselsnummer: string;
-  /** @minLength 1 */
-  etternavn: string;
-}
-
-export interface VerifiserPersonResponse {
-  navn: string;
-  /** @format date */
-  fodselsdato: string;
-}
-
-export interface UtsendtArbeidstakerM2MSkjemaData {
-  arbeidstakersDel?: ArbeidstakersSkjemaDataDto;
-  arbeidsgiversDel?: ArbeidsgiversSkjemaDataDto;
-  referanseId: string;
-}
-
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "skjemadel"
@@ -483,7 +286,194 @@ export interface UtsendtArbeidstakerMetadata {
   /** @format uuid */
   kobletSkjemaId?: string;
   juridiskEnhetOrgnr: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
   metadatatype: string;
+}
+
+export interface UtsendtArbeidstakerSkjemaData {
+  type: string;
+}
+
+export interface UtsendtArbeidstakerSkjemaDto {
+  /** @format uuid */
+  id: string;
+  status: SkjemaStatus;
+  type: SkjemaType;
+  fnr: string;
+  orgnr: string;
+  metadata:
+    | AnnenPersonMetadata
+    | ArbeidsgiverMedFullmaktMetadata
+    | ArbeidsgiverMetadata
+    | DegSelvMetadata
+    | RadgiverMedFullmaktMetadata
+    | RadgiverMetadata;
+  data: UtsendtArbeidstakerSkjemaData;
+}
+
+export interface TilleggsopplysningerDto {
+  harFlereOpplysningerTilSoknaden: boolean;
+  tilleggsopplysningerTilSoknad?: string;
+}
+
+export interface SkatteforholdOgInntektDto {
+  erSkattepliktigTilNorgeIHeleutsendingsperioden: boolean;
+  mottarPengestotteFraAnnetEosLandEllerSveits: boolean;
+  landSomUtbetalerPengestotte?: string;
+  pengestotteSomMottasFraAndreLandBelop?: string;
+  pengestotteSomMottasFraAndreLandBeskrivelse?: string;
+}
+
+export interface Familiemedlem {
+  fornavn: string;
+  etternavn: string;
+  harNorskFodselsnummerEllerDnummer: boolean;
+  fodselsnummer?: string;
+  /** @format date */
+  fodselsdato?: string;
+}
+
+export interface FamiliemedlemmerDto {
+  skalHaMedFamiliemedlemmer: boolean;
+  familiemedlemmer: Familiemedlem[];
+}
+
+export interface ArbeidssituasjonDto {
+  harVaertEllerSkalVaereILonnetArbeidFoerUtsending: boolean;
+  aktivitetIMaanedenFoerUtsendingen?: string;
+  skalJobbeForFlereVirksomheter: boolean;
+  virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheterMedAnsettelsesform;
+}
+
+export interface NorskVirksomhet {
+  /** @minLength 1 */
+  organisasjonsnummer: string;
+}
+
+export interface NorskeOgUtenlandskeVirksomheterMedAnsettelsesform {
+  norskeVirksomheter?: NorskVirksomhet[];
+  utenlandskeVirksomheter?: UtenlandskVirksomhetMedAnsettelsesform[];
+}
+
+export interface UtenlandskVirksomhetMedAnsettelsesform {
+  navn: string;
+  organisasjonsnummer?: string;
+  vegnavnOgHusnummer: string;
+  bygning?: string;
+  postkode?: string;
+  byStedsnavn?: string;
+  region?: string;
+  land: string;
+  tilhorerSammeKonsern: boolean;
+  ansettelsesform: Ansettelsesform;
+}
+
+export interface UtenlandsoppdragetDto {
+  utsendelseLand: LandKode;
+  arbeidstakerUtsendelsePeriode: PeriodeDto;
+  arbeidsgiverHarOppdragILandet: boolean;
+  arbeidstakerBleAnsattForUtenlandsoppdraget: boolean;
+  arbeidstakerForblirAnsattIHelePerioden: boolean;
+  arbeidstakerErstatterAnnenPerson: boolean;
+  arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget?: boolean;
+  utenlandsoppholdetsBegrunnelse?: string;
+  ansettelsesforholdBeskrivelse?: string;
+  forrigeArbeidstakerUtsendelsePeriode?: PeriodeDto;
+}
+
+export interface ArbeidstakerensLonnDto {
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: boolean;
+  virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
+}
+
+export interface NorskeOgUtenlandskeVirksomheter {
+  norskeVirksomheter?: NorskVirksomhet[];
+  utenlandskeVirksomheter?: UtenlandskVirksomhet[];
+}
+
+export interface UtenlandskVirksomhet {
+  navn: string;
+  organisasjonsnummer?: string;
+  vegnavnOgHusnummer: string;
+  bygning?: string;
+  postkode?: string;
+  byStedsnavn?: string;
+  region?: string;
+  land: string;
+  tilhorerSammeKonsern: boolean;
+}
+
+export interface ArbeidsstedIUtlandetDto {
+  arbeidsstedType: ArbeidsstedType;
+  paLand?: PaLandDto;
+  offshore?: OffshoreDto;
+  paSkip?: PaSkipDto;
+  omBordPaFly?: OmBordPaFlyDto;
+}
+
+export interface OffshoreDto {
+  navnPaVirksomhet: string;
+  navnPaInnretning: string;
+  typeInnretning: TypeInnretning;
+  sokkelLand: LandKode;
+}
+
+export interface OmBordPaFlyDto {
+  navnPaVirksomhet: string;
+  hjemmebaseLand: LandKode;
+  hjemmebaseNavn: string;
+  erVanligHjemmebase: boolean;
+  vanligHjemmebaseLand?: LandKode;
+  vanligHjemmebaseNavn?: string;
+}
+
+export interface PaLandDto {
+  navnPaVirksomhet: string;
+  fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted;
+  fastArbeidssted?: PaLandFastArbeidsstedDto;
+  beskrivelseVekslende?: string;
+  erHjemmekontor: boolean;
+}
+
+export interface PaLandFastArbeidsstedDto {
+  vegadresse: string;
+  nummer: string;
+  postkode: string;
+  bySted: string;
+}
+
+export interface PaSkipDto {
+  navnPaVirksomhet: string;
+  navnPaSkip: string;
+  yrketTilArbeidstaker: string;
+  seilerI: Farvann;
+  flaggland?: LandKode;
+  territorialfarvannLand?: LandKode;
+}
+
+export interface ArbeidsgiverensVirksomhetINorgeDto {
+  erArbeidsgiverenOffentligVirksomhet: boolean;
+  erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
+  opprettholderArbeidsgiverenVanligDrift?: boolean;
+}
+
+export interface VerifiserPersonRequest {
+  /** @minLength 1 */
+  fodselsnummer: string;
+  /** @minLength 1 */
+  etternavn: string;
+}
+
+export interface VerifiserPersonResponse {
+  navn: string;
+  /** @format date */
+  fodselsdato: string;
+}
+
+export interface UtsendtArbeidstakerM2MSkjemaData {
+  skjemaer: UtsendtArbeidstakerSkjemaDto[];
+  referanseId: string;
 }
 
 export interface AlternativDefinisjonDto {
@@ -538,9 +528,9 @@ export interface InnsendtSkjemaResponse {
    */
   skjemaDefinisjonVersjon: string;
   /** Arbeidstakers del av søknaden */
-  arbeidstakerData?: ArbeidstakersSkjemaDataDto;
+  arbeidstakerData?: UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
   /** Arbeidsgivers del av søknaden */
-  arbeidsgiverData?: ArbeidsgiversSkjemaDataDto;
+  arbeidsgiverData?: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto;
   /** Skjemadefinisjon for visning (basert på lagret versjon) */
   definisjon: SkjemaDefinisjonDto;
 }
@@ -614,6 +604,24 @@ export type TextareaFeltDefinisjon = UtilRequiredKeys<
   /** @format int32 */
   maxLength?: number;
 };
+
+export interface UtsendtArbeidstakerArbeidsgiversSkjemaDataDto {
+  type: string;
+  arbeidsgiverensVirksomhetINorge?: ArbeidsgiverensVirksomhetINorgeDto;
+  utenlandsoppdraget?: UtenlandsoppdragetDto;
+  arbeidstakerensLonn?: ArbeidstakerensLonnDto;
+  arbeidsstedIUtlandet?: ArbeidsstedIUtlandetDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
+}
+
+export interface UtsendtArbeidstakerArbeidstakersSkjemaDataDto {
+  type: string;
+  utenlandsoppdraget?: UtenlandsoppdragetArbeidstakersDelDto;
+  arbeidssituasjon?: ArbeidssituasjonDto;
+  skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
+  familiemedlemmer?: FamiliemedlemmerDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
+}
 
 export interface UtkastListeResponse {
   utkast: UtkastOversiktDto[];
