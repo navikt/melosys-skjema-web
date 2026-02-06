@@ -99,7 +99,9 @@ export function OrganisasjonSoker({
         onSearchClick={handleSearch}
         size="medium"
         value={searchValue}
-      />
+      >
+        <Search.Button type="button" />
+      </Search>
 
       {organisasjonQuery.isFetching && (
         <div aria-live="polite" className="mt-4" role="status">

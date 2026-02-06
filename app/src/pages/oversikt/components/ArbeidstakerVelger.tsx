@@ -16,6 +16,7 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -23,16 +24,13 @@ import {
   getPersonerMedFullmaktQuery,
   verifiserPerson,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { PersonDto, PersonMedFullmaktDto } from "~/types/melosysSkjemaTypes.ts";
+import { PersonMedFullmaktDto } from "~/types/melosysSkjemaTypes.ts";
+
+import { SoknadStarterFormData } from "./soknadStarterSchema.ts";
 
 const FNR_LENGTH = 11;
 
 interface ArbeidstakerVelgerProps {
-  onArbeidstakerValgt?: (
-    arbeidstaker?: PersonDto,
-    harFullmakt?: boolean,
-  ) => void;
-  harFeil?: boolean;
   visKunMedFullmakt?: boolean;
   erAnnenPerson?: boolean;
 }
@@ -60,18 +58,22 @@ const arbeidstakerSchema = z.object({
  * 1. Med fullmakt: Combobox for valg fra liste av personer med fullmakt
  * 2. Uten fullmakt: Manuell input av fnr/d-nr og etternavn med verifisering
  *
- * @param onArbeidstakerValgt
- * @param harFeil
  * @param visKunMedFullmakt - Hvis true, skjuler "uten fullmakt" seksjonen (brukes for ANNEN_PERSON)
  * @param erAnnenPerson
  */
 export function ArbeidstakerVelger({
-  onArbeidstakerValgt,
-  harFeil = false,
   visKunMedFullmakt = false,
   erAnnenPerson = false,
 }: ArbeidstakerVelgerProps) {
   const { t } = useTranslation();
+
+  const {
+    setValue,
+    formState: { errors },
+  } = useFormContext<SoknadStarterFormData>();
+
+  const harFeil = !!errors.arbeidstaker;
+
   const [fnr, setFnr] = useState("");
   const [etternavn, setEtternavn] = useState("");
   const [fnrError, setFnrError] = useState<string | null>(null);
@@ -119,23 +121,20 @@ export function ArbeidstakerVelger({
       // Clear validation errors from "uten fullmakt" section
       setFnrError(null);
       setEtternavnError(null);
-      if (onArbeidstakerValgt) {
-        // TODO: Her må det rettes opp eller avklares litt hvordan typene skal se ut
-        onArbeidstakerValgt(
-          {
-            fnr: person.fnr,
-            etternavn: person.navn,
-          },
-          true,
-        ); // Med fullmakt
-      }
+      // Set arbeidstaker and harFullmakt in form
+      setValue("arbeidstaker", {
+        fnr: person.fnr,
+        etternavn: person.navn,
+      });
+      setValue("harFullmakt", true);
     }
   };
 
   const handleClearMedFullmakt = () => {
     setSelectedPersonFnr(undefined);
     setMedFullmaktHarFokus(false);
-    onArbeidstakerValgt?.(undefined, false);
+    setValue("arbeidstaker", undefined);
+    setValue("harFullmakt", false);
   };
 
   const handleVerifiser = async () => {
@@ -175,16 +174,12 @@ export function ArbeidstakerVelger({
       });
       setVerifiseringFeil(null);
 
-      if (onArbeidstakerValgt) {
-        // TODO: Her må det rettes opp eller avklares litt hvordan typene skal se ut
-        onArbeidstakerValgt(
-          {
-            fnr,
-            etternavn: etternavn, // Etternavn fra brukerens input (for backend-validering)
-          },
-          false,
-        ); // Uten fullmakt
-      }
+      // Set arbeidstaker in form (uten fullmakt)
+      setValue("arbeidstaker", {
+        fnr,
+        etternavn: etternavn, // Etternavn fra brukerens input (for backend-validering)
+      });
+      setValue("harFullmakt", false);
     } catch (error: unknown) {
       setVerifisertPerson(undefined);
 
@@ -215,7 +210,8 @@ export function ArbeidstakerVelger({
     setEtternavnError(null);
     setVerifiseringFeil(null);
     setUtenFullmaktHarFokus(false);
-    onArbeidstakerValgt?.(undefined, false);
+    setValue("arbeidstaker", undefined);
+    setValue("harFullmakt", false);
   };
 
   return (

@@ -26,6 +26,7 @@ import {
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
+import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 
 const API_PROXY_URL = "/api";
 
@@ -415,7 +416,7 @@ export async function opprettSoknadMedKontekst(
  * - RADGIVER: Kun utkast for det spesifikke rådgiverfirmaet (krever radgiverfirmaOrgnr)
  * - ANNEN_PERSON: Alle utkast for personer brukeren har fullmakt for
  */
-export const getUtkastQuery = (kontekst: OpprettSoknadMedKontekstRequest) =>
+export const getUtkastQuery = (kontekst: RepresentasjonsKontekst) =>
   queryOptions<UtkastListeResponse>({
     queryKey: [
       "utkast",
@@ -429,7 +430,7 @@ export const getUtkastQuery = (kontekst: OpprettSoknadMedKontekstRequest) =>
   });
 
 async function fetchUtkast(
-  kontekst: OpprettSoknadMedKontekstRequest,
+  kontekst: RepresentasjonsKontekst,
 ): Promise<UtkastListeResponse> {
   const params = new URLSearchParams();
   params.append("representasjonstype", kontekst.representasjonstype);

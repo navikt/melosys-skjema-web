@@ -16,14 +16,14 @@ import { useTranslation } from "react-i18next";
 import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   HentInnsendteSoknaderRequest,
-  OpprettSoknadMedKontekstRequest,
   Representasjonstype,
   SorteringsFelt,
   Sorteringsretning,
 } from "~/types/melosysSkjemaTypes.ts";
+import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 
 interface InnsendteSoknaderTabellProps {
-  kontekst: OpprettSoknadMedKontekstRequest;
+  kontekst: RepresentasjonsKontekst;
 }
 
 const ANTALL_PER_SIDE = 5;

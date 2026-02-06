@@ -7,7 +7,7 @@
  */
 
 const SKJEMA_DEFINISJON_A1_NB = {
-  type: "A1",
+  type: "UTSENDT_ARBEIDSTAKER",
   versjon: "1",
   seksjoner: {
     utenlandsoppdragetArbeidstaker: {
@@ -575,7 +575,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
 } as const;
 
 const SKJEMA_DEFINISJON_A1_EN = {
-  type: "A1",
+  type: "UTSENDT_ARBEIDSTAKER",
   versjon: "1",
   seksjoner: {
     utenlandsoppdragetArbeidstaker: {
@@ -1178,7 +1178,7 @@ interface BaseFeltType {
 export function getSkjemaDefinisjon(
   lang: SupportedLanguage,
 ): SkjemaDefinisjonA1Type {
-  return SKJEMA_DEFINISJONER_A1[lang] as SkjemaDefinisjonA1Type;
+  return SKJEMA_DEFINISJONER_A1[lang] as unknown as SkjemaDefinisjonA1Type;
 }
 
 /**
@@ -1189,7 +1189,9 @@ export function getFeltForLang<S extends SeksjonsNavn>(
   seksjonNavn: S,
   feltNavn: FeltNavn<S>,
 ): BaseFeltType {
-  const definisjon = SKJEMA_DEFINISJONER_A1[lang] as SkjemaDefinisjonA1Type;
+  const definisjon = SKJEMA_DEFINISJONER_A1[
+    lang
+  ] as unknown as SkjemaDefinisjonA1Type;
   const seksjon = definisjon.seksjoner[seksjonNavn];
   return (seksjon.felter as Record<string, BaseFeltType>)[feltNavn as string]!;
 }
@@ -1219,6 +1221,8 @@ export function getSeksjonForLang<S extends SeksjonsNavn>(
   lang: SupportedLanguage,
   seksjonNavn: S,
 ) {
-  const definisjon = SKJEMA_DEFINISJONER_A1[lang] as SkjemaDefinisjonA1Type;
+  const definisjon = SKJEMA_DEFINISJONER_A1[
+    lang
+  ] as unknown as SkjemaDefinisjonA1Type;
   return definisjon.seksjoner[seksjonNavn];
 }
