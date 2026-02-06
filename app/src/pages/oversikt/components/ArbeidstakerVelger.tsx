@@ -26,6 +26,8 @@ import {
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { PersonMedFullmaktDto } from "~/types/melosysSkjemaTypes.ts";
 
+import { SoknadStarterFormData } from "./soknadStarterSchema.ts";
+
 const FNR_LENGTH = 11;
 
 interface ArbeidstakerVelgerProps {
@@ -68,7 +70,7 @@ export function ArbeidstakerVelger({
   const {
     setValue,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<SoknadStarterFormData>();
 
   const harFeil = !!errors.arbeidstaker;
 

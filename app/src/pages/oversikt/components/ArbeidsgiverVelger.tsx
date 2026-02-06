@@ -18,6 +18,8 @@ import {
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
+import { SoknadStarterFormData } from "./soknadStarterSchema.ts";
+
 /**
  * Arbeidsgiver-velger komponent som håndterer flere modi:
  * 1. OrganisasjonSoker: For DEG_SELV og ANNEN_PERSON (søk i Enhetsregisteret)
@@ -32,7 +34,7 @@ export function ArbeidsgiverVelger() {
     watch,
     setValue,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<SoknadStarterFormData>();
 
   const representasjonstype = watch("representasjonstype");
   const valgtArbeidsgiver = watch("arbeidsgiver");
