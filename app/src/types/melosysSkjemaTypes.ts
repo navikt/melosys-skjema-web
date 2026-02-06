@@ -9,6 +9,10 @@
 
 type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
+export enum SkjemaType {
+  UTSENDT_ARBEIDSTAKER = "UTSENDT_ARBEIDSTAKER",
+}
+
 export enum Sprak {
   Nb = "nb",
   En = "en",
@@ -110,9 +114,9 @@ export enum SkjemaStatus {
 }
 
 export interface FeltDefinisjonDto {
+  label: string;
   hjelpetekst?: string;
   pakrevd: boolean;
-  label: string;
   type: string;
 }
 
@@ -401,8 +405,48 @@ export interface UtsendtArbeidstakerM2MSkjemaData {
   arbeidstakersDel?: ArbeidstakersSkjemaDataDto;
   arbeidsgiversDel?: ArbeidsgiversSkjemaDataDto;
   referanseId: string;
-  journaposteringId: string;
 }
+
+export type AnnenPersonMetadata = UtilRequiredKeys<
+  UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
+  | "arbeidsgiverNavn"
+  | "juridiskEnhetOrgnr"
+  | "fullmektigFnr"
+  | "skjemadel"
+  | "harFullmakt"
+  | "metadatatype"
+>;
+
+export type ArbeidsgiverMetadata = UtilRequiredKeys<
+  UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
+  | "arbeidsgiverNavn"
+  | "juridiskEnhetOrgnr"
+  | "skjemadel"
+  | "harFullmakt"
+  | "metadatatype"
+>;
+
+export type DegSelvMetadata = UtilRequiredKeys<
+  UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
+  | "arbeidsgiverNavn"
+  | "juridiskEnhetOrgnr"
+  | "skjemadel"
+  | "harFullmakt"
+  | "metadatatype"
+>;
+
+export type RadgiverMetadata = UtilRequiredKeys<
+  UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
+  | "arbeidsgiverNavn"
+  | "juridiskEnhetOrgnr"
+  | "skjemadel"
+  | "harFullmakt"
+  | "metadatatype"
+>;
 
 export interface RadgiverfirmaInfo {
   orgnr: string;
@@ -411,11 +455,15 @@ export interface RadgiverfirmaInfo {
 
 export interface UtsendtArbeidstakerMetadata {
   representasjonstype: Representasjonstype;
-  harFullmakt: boolean;
-  skjemadel: Skjemadel;
+  arbeidsgiverNavn: string;
+  /** @format uuid */
+  kobletSkjemaId?: string;
+  juridiskEnhetOrgnr: string;
   radgiverfirma?: RadgiverfirmaInfo;
-  arbeidsgiverNavn?: string;
   fullmektigFnr?: string;
+  skjemadel: Skjemadel;
+  harFullmakt: boolean;
+  metadatatype: string;
 }
 
 export interface AlternativDefinisjonDto {
@@ -426,7 +474,7 @@ export interface AlternativDefinisjonDto {
 
 export type BooleanFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   jaLabel: string;
   neiLabel: string;
@@ -434,12 +482,12 @@ export type BooleanFeltDefinisjon = UtilRequiredKeys<
 
 export type CountrySelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 >;
 
 export type DateFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 >;
 
 /** Innsendt søknad med skjemadefinisjon for korrekt visning */
@@ -479,7 +527,7 @@ export interface InnsendtSkjemaResponse {
 
 export type ListeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   leggTilLabel: string;
   fjernLabel: string;
@@ -499,7 +547,7 @@ export type ListeFeltDefinisjon = UtilRequiredKeys<
 
 export type PeriodeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   fraDatoLabel: string;
   tilDatoLabel: string;
@@ -523,7 +571,7 @@ export interface SeksjonDefinisjonDto {
 
 export type SelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   alternativer: AlternativDefinisjonDto[];
 };
@@ -536,12 +584,12 @@ export interface SkjemaDefinisjonDto {
 
 export type TextFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 >;
 
 export type TextareaFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   /** @format int32 */
   maxLength?: number;
@@ -573,7 +621,7 @@ export interface AktivVersjonResponse {
    * Skjematype
    * @example "A1"
    */
-  type: string;
+  type: SkjemaType;
   /**
    * Aktiv versjon
    * @example 1
@@ -588,7 +636,7 @@ export interface StottedeTyperResponse {
    * @uniqueItems true
    * @example ["A1"]
    */
-  typer: string[];
+  typer: SkjemaType[];
 }
 
 export interface Fullmakt {
