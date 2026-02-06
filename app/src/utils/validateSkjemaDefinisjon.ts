@@ -143,7 +143,7 @@ async function validateForLanguage(
  * Validates all languages (nb, en).
  */
 export async function validateSkjemaDefinisjon(
-  skjemaType: string = "A1",
+  skjemaType: string = "UTSENDT_ARBEIDSTAKER",
 ): Promise<ValidationResult> {
   const languages: SupportedLanguage[] = ["nb", "en"];
 

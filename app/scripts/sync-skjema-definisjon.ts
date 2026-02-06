@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const LANGUAGES = ["nb", "en"];
-const SCHEMA_TYPE = "A1";
+const SCHEMA_TYPE = "UTSENDT_ARBEIDSTAKER";
 const SCHEMA_VERSION = "v1";
 
 function buildPossibleBasePaths(): string[] {
