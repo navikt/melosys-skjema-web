@@ -1,10 +1,11 @@
 import { getSkjemaAsArbeidsgiverQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { SkjemaStegLoader } from "~/pages/skjema/components/SkjemaStegLoader.tsx";
-import { ArbeidsgiversSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
+
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
 
 interface ArbeidsgiverStegLoaderProps {
   id: string;
-  children: (skjema: ArbeidsgiversSkjemaDto) => React.ReactNode;
+  children: (skjema: ArbeidsgiverSkjemaProps["skjema"]) => React.ReactNode;
 }
 
 export function ArbeidsgiverStegLoader({

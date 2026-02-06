@@ -8,13 +8,11 @@ import { useTranslation } from "react-i18next";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
-import {
-  ArbeidsgiversSkjemaDto,
-  ArbeidstakersSkjemaDto,
-  TilleggsopplysningerDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
+import { ArbeidsgiverSkjemaProps } from "../../arbeidsgiver/types.ts";
+import { ArbeidstakerSkjemaProps } from "../../arbeidstaker/types.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
@@ -25,8 +23,10 @@ import {
 
 export const stepKey = "tilleggsopplysninger";
 
+type SkjemaProps = ArbeidsgiverSkjemaProps | ArbeidstakerSkjemaProps;
+
 interface TilleggsopplysningerStegProps {
-  skjema: ArbeidsgiversSkjemaDto | ArbeidstakersSkjemaDto;
+  skjema: SkjemaProps["skjema"];
   postTilleggsopplysninger: (
     skjemaId: string,
     data: TilleggsopplysningerDto,
