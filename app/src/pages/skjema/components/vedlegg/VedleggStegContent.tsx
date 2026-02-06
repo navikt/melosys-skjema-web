@@ -2,19 +2,18 @@ import { FileUpload } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import {
-  ArbeidsgiversSkjemaDto,
-  ArbeidstakersSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
-
+import { ArbeidsgiverSkjemaProps } from "../../arbeidsgiver/types.ts";
+import { ArbeidstakerSkjemaProps } from "../../arbeidstaker/types.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
 
 export const stepKey = "vedlegg";
 
+type SkjemaProps = ArbeidsgiverSkjemaProps | ArbeidstakerSkjemaProps;
+
 interface VedleggStegProps {
-  skjema: ArbeidsgiversSkjemaDto | ArbeidstakersSkjemaDto;
+  skjema: SkjemaProps["skjema"];
   stegRekkefolge: StegRekkefolgeItem[];
 }
 

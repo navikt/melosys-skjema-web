@@ -1,20 +1,15 @@
 import { Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
-import {
-  ArbeidsgiversSkjemaDto,
-  ArbeidstakersSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 
-type SkjemaDto = ArbeidsgiversSkjemaDto | ArbeidstakersSkjemaDto;
-
-interface SkjemaStegLoaderProps<T extends SkjemaDto> {
+interface SkjemaStegLoaderProps<T extends UtsendtArbeidstakerSkjemaDto> {
   id: string;
   skjemaQuery: (id: string) => UseQueryOptions<T>;
   children: (skjema: T) => React.ReactNode;
 }
 
-export function SkjemaStegLoader<T extends SkjemaDto>({
+export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   id,
   skjemaQuery,
   children,

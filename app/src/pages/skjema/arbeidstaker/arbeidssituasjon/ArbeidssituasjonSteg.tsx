@@ -18,23 +18,17 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
+import { ArbeidstakerSkjemaProps } from "../types.ts";
 import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
 
 export const stepKey = "arbeidssituasjon";
 
 type ArbeidssituasjonFormData = z.infer<typeof arbeidssituasjonSchema>;
 
-interface ArbeidssituasjonStegContentProps {
-  skjema: ArbeidstakersSkjemaDto;
-}
-
-function ArbeidssituasjonStegContent({
-  skjema,
-}: ArbeidssituasjonStegContentProps) {
+function ArbeidssituasjonStegContent({ skjema }: ArbeidstakerSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();

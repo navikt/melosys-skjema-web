@@ -17,15 +17,13 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import {
-  ArbeidstakersSkjemaDto,
-  SkatteforholdOgInntektDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidstakerSkjemaProps } from "../types.ts";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
 
 export const stepKey = "skatteforhold-og-inntekt";
@@ -34,13 +32,9 @@ type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
 >;
 
-interface SkatteforholdOgInntektStegContentProps {
-  skjema: ArbeidstakersSkjemaDto;
-}
-
 function SkatteforholdOgInntektStegContent({
   skjema,
-}: SkatteforholdOgInntektStegContentProps) {
+}: ArbeidstakerSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();

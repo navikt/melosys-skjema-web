@@ -2,11 +2,9 @@ import { queryOptions } from "@tanstack/react-query";
 
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
-  ArbeidsgiversSkjemaDto,
   ArbeidssituasjonDto,
   ArbeidsstedIUtlandetDto,
   ArbeidstakerensLonnDto,
-  ArbeidstakersSkjemaDto,
   FamiliemedlemmerDto,
   HentInnsendteSoknaderRequest,
   InnsendteSoknaderResponse,
@@ -23,6 +21,7 @@ import {
   UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
   UtkastListeResponse,
+  UtsendtArbeidstakerSkjemaDto,
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -110,7 +109,7 @@ async function fetchAltinnTilganger(): Promise<OrganisasjonDto[]> {
 }
 
 export const getSkjemaAsArbeidsgiverQuery = (skjemaId: string) =>
-  queryOptions<ArbeidsgiversSkjemaDto>({
+  queryOptions<UtsendtArbeidstakerSkjemaDto>({
     queryKey: ["skjema", skjemaId],
     queryFn: () => fetchSkjemaAsArbeidsgiver(skjemaId),
     staleTime: 5 * 60 * 1000,
@@ -119,7 +118,7 @@ export const getSkjemaAsArbeidsgiverQuery = (skjemaId: string) =>
 
 async function fetchSkjemaAsArbeidsgiver(
   skjemaId: string,
-): Promise<ArbeidsgiversSkjemaDto> {
+): Promise<UtsendtArbeidstakerSkjemaDto> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidsgiver-view`,
     {
@@ -237,7 +236,7 @@ export const getInnsendtKvitteringQuery = (skjemaId: string) =>
   });
 
 export const getSkjemaAsArbeidstakerQuery = (skjemaId: string) =>
-  queryOptions<ArbeidstakersSkjemaDto>({
+  queryOptions<UtsendtArbeidstakerSkjemaDto>({
     queryKey: ["arbeidstaker-skjema", skjemaId],
     queryFn: () => fetchSkjemaAsArbeidstaker(skjemaId),
     staleTime: 5 * 60 * 1000,
@@ -246,7 +245,7 @@ export const getSkjemaAsArbeidstakerQuery = (skjemaId: string) =>
 
 async function fetchSkjemaAsArbeidstaker(
   skjemaId: string,
-): Promise<ArbeidstakersSkjemaDto> {
+): Promise<UtsendtArbeidstakerSkjemaDto> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidstaker-view`,
     {

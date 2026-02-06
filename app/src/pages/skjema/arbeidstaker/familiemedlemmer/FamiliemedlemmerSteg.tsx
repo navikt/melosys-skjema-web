@@ -37,13 +37,13 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import {
-  ArbeidstakersSkjemaDto,
   Familiemedlem,
   FamiliemedlemmerDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
+import { ArbeidstakerSkjemaProps } from "../types.ts";
 import {
   familiemedlemmerSchema,
   familiemedlemSchema,
@@ -55,13 +55,7 @@ type FamiliemedlemFormData = z.infer<typeof familiemedlemSchema>;
 type FamiliemedlemField = Familiemedlem & { id: string };
 type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
 
-interface FamiliemedlemmerStegContentProps {
-  skjema: ArbeidstakersSkjemaDto;
-}
-
-function FamiliemedlemmerStegContent({
-  skjema,
-}: FamiliemedlemmerStegContentProps) {
+function FamiliemedlemmerStegContent({ skjema }: ArbeidstakerSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery =
