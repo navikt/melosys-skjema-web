@@ -17,11 +17,6 @@ import {
   Representasjonstype,
   SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
-
-interface ArbeidsgiverVelgerProps {
-  kontekst: RepresentasjonsKontekst;
-}
 
 /**
  * Arbeidsgiver-velger komponent som håndterer flere modi:
@@ -29,7 +24,7 @@ interface ArbeidsgiverVelgerProps {
  * 2. Read-only: Når ARBEIDSGIVER har tilgang til kun én organisasjon
  * 3. Combobox: For RADGIVER eller ARBEIDSGIVER med flere organisasjoner (fra Altinn)
  */
-export function ArbeidsgiverVelger({ kontekst }: ArbeidsgiverVelgerProps) {
+export function ArbeidsgiverVelger() {
   const { t } = useTranslation();
   const hasAutoSelectedRef = useRef(false);
 
@@ -39,12 +34,13 @@ export function ArbeidsgiverVelger({ kontekst }: ArbeidsgiverVelgerProps) {
     formState: { errors },
   } = useFormContext();
 
+  const representasjonstype = watch("representasjonstype");
   const valgtArbeidsgiver = watch("arbeidsgiver");
   const harFeil = !!errors.arbeidsgiver;
 
   const skalHenteArbeidsgivere =
-    kontekst.representasjonstype === Representasjonstype.RADGIVER ||
-    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER;
+    representasjonstype === Representasjonstype.RADGIVER ||
+    representasjonstype === Representasjonstype.ARBEIDSGIVER;
 
   /**
    * Eager loading: Henter arbeidsgivere fra Altinn for både RADGIVER og ARBEIDSGIVER
@@ -65,7 +61,7 @@ export function ArbeidsgiverVelger({ kontekst }: ArbeidsgiverVelgerProps) {
    * som en event handler (callback) heller enn som en transformasjon.
    */
   if (
-    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
+    representasjonstype === Representasjonstype.ARBEIDSGIVER &&
     arbeidsgivere?.length === 1 &&
     !valgtArbeidsgiver &&
     !isLoading &&
@@ -86,11 +82,11 @@ export function ArbeidsgiverVelger({ kontekst }: ArbeidsgiverVelgerProps) {
   }
 
   const skalSokeEtterArbeidsgiver =
-    kontekst.representasjonstype === Representasjonstype.DEG_SELV ||
-    kontekst.representasjonstype === Representasjonstype.ANNEN_PERSON;
+    representasjonstype === Representasjonstype.DEG_SELV ||
+    representasjonstype === Representasjonstype.ANNEN_PERSON;
 
   const skalViseReadonly =
-    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
+    representasjonstype === Representasjonstype.ARBEIDSGIVER &&
     arbeidsgivere?.length === 1 &&
     !!valgtArbeidsgiver;
 
@@ -122,12 +118,12 @@ export function ArbeidsgiverVelger({ kontekst }: ArbeidsgiverVelgerProps) {
 
   return (
     <div>
-      {kontekst.representasjonstype !== Representasjonstype.DEG_SELV && (
+      {representasjonstype !== Representasjonstype.DEG_SELV && (
         <Heading level="3" size="medium" spacing>
           {t("oversiktFelles.arbeidsgiverTittel")}
         </Heading>
       )}
-      {kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
+      {representasjonstype === Representasjonstype.ARBEIDSGIVER &&
       isLoading &&
       !valgtArbeidsgiver ? (
         <Loader size="medium" title={t("felles.laster")} />

@@ -13,13 +13,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { getUserInfo, UserInfo } from "~/httpClients/dekoratorenClient.ts";
+import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import {
-  OpprettSoknadMedKontekstRequest,
-  Representasjonstype,
-  Skjemadel,
-} from "~/types/melosysSkjemaTypes.ts";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -27,6 +23,7 @@ import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
 import { ArbeidstakerVelger } from "./ArbeidstakerVelger.tsx";
 import {
   SoknadStarterFormData,
+  SoknadStarterOutput,
   soknadStarterSchema,
 } from "./soknadStarterSchema.ts";
 
@@ -35,8 +32,7 @@ interface SoknadStarterProps {
 }
 
 interface SoknadStarterContentProps {
-  kontekst: RepresentasjonsKontekst;
-  userInfo?: UserInfo;
+  defaultData: SoknadStarterFormData;
 }
 
 /**
@@ -61,38 +57,40 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     return <Loader size="medium" title={t("felles.laster")} />;
   }
 
-  return <SoknadStarterContent kontekst={kontekst} userInfo={userInfo} />;
+  // Bygg defaultData med representasjonstype og radgiverfirma
+  const defaultData: SoknadStarterFormData = {
+    representasjonstype: kontekst.representasjonstype,
+    radgiverfirma: kontekst.radgiverfirma,
+    harFullmakt: false,
+    ...(kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
+      userInfo && {
+        arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
+      }),
+  };
+
+  return <SoknadStarterContent defaultData={defaultData} />;
 }
 
 /**
  * Innholdskomponent for søknadsstarter med skjemalogikk.
  */
-function SoknadStarterContent({
-  kontekst,
-  userInfo,
-}: SoknadStarterContentProps) {
+function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const navigate = useNavigate();
 
-  // Beregn defaultValues basert på kontekst og userInfo (kun for DEG_SELV)
-  const lagretSkjemadata =
-    kontekst.representasjonstype === Representasjonstype.DEG_SELV && userInfo
-      ? ({
-          harFullmakt: false,
-          arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
-        } as SoknadStarterFormData)
-      : undefined;
-
   const formMethods = useForm({
     resolver: zodResolver(soknadStarterSchema),
-    ...(lagretSkjemadata && { defaultValues: lagretSkjemadata }),
+    defaultValues: defaultData,
   });
 
   const {
     handleSubmit,
+    watch,
     formState: { errors },
   } = formMethods;
+
+  const representasjonstype = watch("representasjonstype");
 
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
@@ -104,38 +102,9 @@ function SoknadStarterContent({
     },
   });
 
-  const onSubmit = (data: SoknadStarterFormData) => {
-    // Bestem representasjonstype basert på harFullmakt
-    let finalRepresentasjonstype: Representasjonstype =
-      kontekst.representasjonstype;
-    if (data.harFullmakt) {
-      if (kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER) {
-        finalRepresentasjonstype =
-          Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT;
-      } else if (
-        kontekst.representasjonstype === Representasjonstype.RADGIVER
-      ) {
-        finalRepresentasjonstype = Representasjonstype.RADGIVER_MED_FULLMAKT;
-      }
-    }
-
-    // Bestem skjemadel basert på representasjonstype
-    const skjemadel = [
-      Representasjonstype.RADGIVER,
-      Representasjonstype.ARBEIDSGIVER,
-    ].includes(kontekst.representasjonstype)
-      ? Skjemadel.ARBEIDSGIVERS_DEL
-      : Skjemadel.ARBEIDSTAKERS_DEL;
-
-    const request: OpprettSoknadMedKontekstRequest = {
-      representasjonstype: finalRepresentasjonstype,
-      radgiverfirma: kontekst.radgiverfirma,
-      arbeidsgiver: data.arbeidsgiver!,
-      arbeidstaker: data.arbeidstaker!,
-      skjemadel,
-    };
-
-    opprettSoknadMutation.mutate(request);
+  // onSubmit er nå triviell - data er allerede OpprettSoknadMedKontekstRequest
+  const onSubmit = (data: SoknadStarterOutput) => {
+    opprettSoknadMutation.mutate(data);
   };
 
   // Samle feilmeldinger for visning
@@ -165,22 +134,19 @@ function SoknadStarterContent({
           <VStack gap="space-24">
             <div>
               <Heading level="2" size="medium" spacing>
-                {kontekst.representasjonstype === Representasjonstype.DEG_SELV
+                {representasjonstype === Representasjonstype.DEG_SELV
                   ? t("oversiktFelles.soknadStarterTittelDegSelv")
-                  : kontekst.representasjonstype ===
-                      Representasjonstype.ANNEN_PERSON
+                  : representasjonstype === Representasjonstype.ANNEN_PERSON
                     ? t("oversiktFelles.soknadStarterTittelAnnenPerson")
                     : t("oversiktFelles.soknadStarterTittel")}
               </Heading>
-              {kontekst.representasjonstype ===
-                Representasjonstype.ANNEN_PERSON && (
+              {representasjonstype === Representasjonstype.ANNEN_PERSON && (
                 <BodyLong spacing>
                   {t("oversiktFelles.soknadStarterInfoAnnenPerson")}
                 </BodyLong>
               )}
-              {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
-                kontekst.representasjonstype ===
-                  Representasjonstype.ARBEIDSGIVER) && (
+              {(representasjonstype === Representasjonstype.RADGIVER ||
+                representasjonstype === Representasjonstype.ARBEIDSGIVER) && (
                 <BodyLong spacing>
                   {t("oversiktFelles.soknadStarterInfo")}
                 </BodyLong>
@@ -188,21 +154,19 @@ function SoknadStarterContent({
             </div>
 
             {/* For ANNEN_PERSON: Person først, så arbeidsgiver */}
-            {kontekst.representasjonstype ===
-              Representasjonstype.ANNEN_PERSON && (
+            {representasjonstype === Representasjonstype.ANNEN_PERSON && (
               <div>
                 <ArbeidstakerVelger erAnnenPerson visKunMedFullmakt />
               </div>
             )}
 
             <div>
-              <ArbeidsgiverVelger kontekst={kontekst} />
+              <ArbeidsgiverVelger />
             </div>
 
             {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}
-            {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
-              kontekst.representasjonstype ===
-                Representasjonstype.ARBEIDSGIVER) && (
+            {(representasjonstype === Representasjonstype.RADGIVER ||
+              representasjonstype === Representasjonstype.ARBEIDSGIVER) && (
               <div>
                 <ArbeidstakerVelger />
               </div>
