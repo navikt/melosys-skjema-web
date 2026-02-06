@@ -1,62 +1,98 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Alert,
   BodyLong,
   Box,
   Button,
   Heading,
+  Loader,
   VStack,
 } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
+import { getUserInfo, UserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   OpprettSoknadMedKontekstRequest,
-  PersonDto,
   Representasjonstype,
-  SimpleOrganisasjonDto,
   Skjemadel,
 } from "~/types/melosysSkjemaTypes.ts";
 import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
-import { validerSoknadKontekst } from "~/utils/valideringUtils.ts";
+import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
 import { ArbeidstakerVelger } from "./ArbeidstakerVelger.tsx";
+import {
+  SoknadStarterFormData,
+  soknadStarterSchema,
+} from "./soknadStarterSchema.ts";
 
 interface SoknadStarterProps {
   kontekst: RepresentasjonsKontekst;
 }
 
+interface SoknadStarterContentProps {
+  kontekst: RepresentasjonsKontekst;
+  userInfo?: UserInfo;
+}
+
 /**
  * Søknadsstarter-komponent som lar brukeren velge arbeidsgiver og arbeidstaker
  * før søknad startes.
+ *
+ * Wrapper-komponent som henter brukerinfo og forbereder defaultValues
+ * før SoknadStarterContent rendres.
  */
 export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [valgtArbeidsgiver, setValgtArbeidsgiver] =
-    useState<SimpleOrganisasjonDto>(kontekst.arbeidsgiver);
-  const [valgtArbeidstaker, setValgtArbeidstaker] = useState<
-    PersonDto | undefined
-  >(kontekst.arbeidstaker);
-  const [harFullmakt, setHarFullmakt] = useState<boolean>(kontekst.harFullmakt);
-  const [valideringsfeil, setValideringsfeil] = useState<string[]>([]);
 
   // Hent innlogget bruker for DEG_SELV-scenario
-  const { data: userInfo } = useQuery(getUserInfo());
+  const { data: userInfo, isLoading: isLoadingUserInfo } =
+    useQuery(getUserInfo());
 
-  // For DEG_SELV er arbeidstaker alltid innlogget bruker, beregnes direkte
-  // For andre typer brukes valgtArbeidstaker fra state
-  const effektivArbeidstaker =
+  // For DEG_SELV, vent på userInfo før vi rendrer skjemaet
+  if (
+    kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
+    isLoadingUserInfo
+  ) {
+    return <Loader size="medium" title={t("felles.laster")} />;
+  }
+
+  return <SoknadStarterContent kontekst={kontekst} userInfo={userInfo} />;
+}
+
+/**
+ * Innholdskomponent for søknadsstarter med skjemalogikk.
+ */
+function SoknadStarterContent({
+  kontekst,
+  userInfo,
+}: SoknadStarterContentProps) {
+  const { t } = useTranslation();
+  const translateError = useTranslateError();
+  const navigate = useNavigate();
+
+  // Beregn defaultValues basert på kontekst og userInfo (kun for DEG_SELV)
+  const lagretSkjemadata =
     kontekst.representasjonstype === Representasjonstype.DEG_SELV && userInfo
-      ? {
-          fnr: userInfo.userId,
-          etternavn: userInfo.name,
-        }
-      : valgtArbeidstaker;
+      ? ({
+          harFullmakt: false,
+          arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
+        } as SoknadStarterFormData)
+      : undefined;
+
+  const formMethods = useForm({
+    resolver: zodResolver(soknadStarterSchema),
+    ...(lagretSkjemadata && { defaultValues: lagretSkjemadata }),
+  });
+
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = formMethods;
 
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
@@ -68,30 +104,22 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     },
   });
 
-  const validerOgStartSoknad = () => {
-    const validering = validerSoknadKontekst(
-      kontekst,
-      valgtArbeidsgiver,
-      effektivArbeidstaker,
-    );
-
-    const feil: string[] = [];
-    if (validering.manglerArbeidsgiver) {
-      feil.push(t("oversiktFelles.valideringManglerArbeidsgiver"));
-    }
-    if (validering.manglerArbeidstaker) {
-      feil.push(t("oversiktFelles.valideringManglerArbeidstaker"));
-    }
-
-    if (!validering.gyldig) {
-      setValideringsfeil(feil);
-      return;
+  const onSubmit = (data: SoknadStarterFormData) => {
+    // Bestem representasjonstype basert på harFullmakt
+    let finalRepresentasjonstype: Representasjonstype =
+      kontekst.representasjonstype;
+    if (data.harFullmakt) {
+      if (kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER) {
+        finalRepresentasjonstype =
+          Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT;
+      } else if (
+        kontekst.representasjonstype === Representasjonstype.RADGIVER
+      ) {
+        finalRepresentasjonstype = Representasjonstype.RADGIVER_MED_FULLMAKT;
+      }
     }
 
-    // Clear valideringsfeil hvis alt er ok
-    setValideringsfeil([]);
-
-    // TODO: Det kommer flere endringer senere som gjøre denne riktig, men dette er det nærmeste vi kommer nå
+    // Bestem skjemadel basert på representasjonstype
     const skjemadel = [
       Representasjonstype.RADGIVER,
       Representasjonstype.ARBEIDSGIVER,
@@ -99,144 +127,117 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
       ? Skjemadel.ARBEIDSGIVERS_DEL
       : Skjemadel.ARBEIDSTAKERS_DEL;
 
-    // Opprett søknad direkte
     const request: OpprettSoknadMedKontekstRequest = {
-      representasjonstype: kontekst.representasjonstype,
+      representasjonstype: finalRepresentasjonstype,
       radgiverfirma: kontekst.radgiverfirma,
-      arbeidsgiver: valgtArbeidsgiver,
-      arbeidstaker: effektivArbeidstaker!, // Validated above
+      arbeidsgiver: data.arbeidsgiver!,
+      arbeidstaker: data.arbeidstaker!,
       skjemadel,
-      harFullmakt,
     };
 
     opprettSoknadMutation.mutate(request);
   };
 
-  // Clear valideringsfeil når arbeidsgiver/arbeidstaker endres
-  const handleArbeidsgiverValgt = (organisasjon: SimpleOrganisasjonDto) => {
-    setValgtArbeidsgiver(organisasjon);
-    // Fjern arbeidsgiver-feil hvis den finnes
-    setValideringsfeil((prev) =>
-      prev.filter(
-        (feil) => feil !== t("oversiktFelles.valideringManglerArbeidsgiver"),
-      ),
+  // Samle feilmeldinger for visning
+  const valideringsfeil: string[] = [];
+  if (errors.arbeidsgiver?.message) {
+    valideringsfeil.push(
+      translateError(errors.arbeidsgiver.message as string) ?? "",
     );
-  };
-
-  const handleArbeidstakerValgt = (
-    person?: PersonDto,
-    medFullmakt?: boolean,
-  ) => {
-    setValgtArbeidstaker(person);
-    setHarFullmakt(medFullmakt ?? false);
-    // Fjern arbeidstaker-feil hvis den finnes
-    setValideringsfeil((prev) =>
-      prev.filter(
-        (feil) => feil !== t("oversiktFelles.valideringManglerArbeidstaker"),
-      ),
+  }
+  if (errors.arbeidstaker?.message) {
+    valideringsfeil.push(
+      translateError(errors.arbeidstaker.message as string) ?? "",
     );
-  };
-
-  const harArbeidsgiverFeil = valideringsfeil.includes(
-    t("oversiktFelles.valideringManglerArbeidsgiver"),
-  );
-  const harArbeidstakerFeil = valideringsfeil.includes(
-    t("oversiktFelles.valideringManglerArbeidstaker"),
-  );
+  }
 
   return (
-    <Box
-      background="info-soft"
-      borderColor="neutral-subtle"
-      borderRadius="2"
-      borderWidth="1"
-      className="surface-action-subtle"
-      padding="space-24"
-    >
-      <VStack gap="space-24">
-        <div>
-          <Heading level="2" size="medium" spacing>
-            {kontekst.representasjonstype === Representasjonstype.DEG_SELV
-              ? t("oversiktFelles.soknadStarterTittelDegSelv")
-              : kontekst.representasjonstype ===
-                  Representasjonstype.ANNEN_PERSON
-                ? t("oversiktFelles.soknadStarterTittelAnnenPerson")
-                : t("oversiktFelles.soknadStarterTittel")}
-          </Heading>
-          {kontekst.representasjonstype ===
-            Representasjonstype.ANNEN_PERSON && (
-            <BodyLong spacing>
-              {t("oversiktFelles.soknadStarterInfoAnnenPerson")}
-            </BodyLong>
-          )}
-          {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
-            kontekst.representasjonstype ===
-              Representasjonstype.ARBEIDSGIVER) && (
-            <BodyLong spacing>{t("oversiktFelles.soknadStarterInfo")}</BodyLong>
-          )}
-        </div>
+    <FormProvider {...formMethods}>
+      <Box
+        background="info-soft"
+        borderColor="neutral-subtle"
+        borderRadius="2"
+        borderWidth="1"
+        className="surface-action-subtle"
+        padding="space-24"
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack gap="space-24">
+            <div>
+              <Heading level="2" size="medium" spacing>
+                {kontekst.representasjonstype === Representasjonstype.DEG_SELV
+                  ? t("oversiktFelles.soknadStarterTittelDegSelv")
+                  : kontekst.representasjonstype ===
+                      Representasjonstype.ANNEN_PERSON
+                    ? t("oversiktFelles.soknadStarterTittelAnnenPerson")
+                    : t("oversiktFelles.soknadStarterTittel")}
+              </Heading>
+              {kontekst.representasjonstype ===
+                Representasjonstype.ANNEN_PERSON && (
+                <BodyLong spacing>
+                  {t("oversiktFelles.soknadStarterInfoAnnenPerson")}
+                </BodyLong>
+              )}
+              {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
+                kontekst.representasjonstype ===
+                  Representasjonstype.ARBEIDSGIVER) && (
+                <BodyLong spacing>
+                  {t("oversiktFelles.soknadStarterInfo")}
+                </BodyLong>
+              )}
+            </div>
 
-        {/* For ANNEN_PERSON: Person først, så arbeidsgiver */}
-        {kontekst.representasjonstype === Representasjonstype.ANNEN_PERSON && (
-          <div>
-            <ArbeidstakerVelger
-              erAnnenPerson
-              harFeil={harArbeidstakerFeil}
-              onArbeidstakerValgt={handleArbeidstakerValgt}
-              visKunMedFullmakt
-            />
-          </div>
-        )}
+            {/* For ANNEN_PERSON: Person først, så arbeidsgiver */}
+            {kontekst.representasjonstype ===
+              Representasjonstype.ANNEN_PERSON && (
+              <div>
+                <ArbeidstakerVelger erAnnenPerson visKunMedFullmakt />
+              </div>
+            )}
 
-        <div>
-          <ArbeidsgiverVelger
-            harFeil={harArbeidsgiverFeil}
-            kontekst={kontekst}
-            onArbeidsgiverValgt={handleArbeidsgiverValgt}
-            valgtArbeidsgiver={valgtArbeidsgiver}
-          />
-        </div>
+            <div>
+              <ArbeidsgiverVelger kontekst={kontekst} />
+            </div>
 
-        {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}
-        {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
-          kontekst.representasjonstype ===
-            Representasjonstype.ARBEIDSGIVER) && (
-          <div>
-            <ArbeidstakerVelger
-              harFeil={harArbeidstakerFeil}
-              onArbeidstakerValgt={handleArbeidstakerValgt}
-            />
-          </div>
-        )}
+            {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}
+            {(kontekst.representasjonstype === Representasjonstype.RADGIVER ||
+              kontekst.representasjonstype ===
+                Representasjonstype.ARBEIDSGIVER) && (
+              <div>
+                <ArbeidstakerVelger />
+              </div>
+            )}
 
-        {valideringsfeil.length > 0 && (
-          <Alert variant="error">
-            <Heading level="3" size="small" spacing>
-              {t("oversiktFelles.valideringFeilTittel")}
-            </Heading>
-            <ul className="list-disc pl-5">
-              {valideringsfeil.map((feil, index) => (
-                <li key={index}>{feil}</li>
-              ))}
-            </ul>
-          </Alert>
-        )}
+            {valideringsfeil.length > 0 && (
+              <Alert variant="error">
+                <Heading level="3" size="small" spacing>
+                  {t("oversiktFelles.valideringFeilTittel")}
+                </Heading>
+                <ul className="list-disc pl-5">
+                  {valideringsfeil.map((feil, index) => (
+                    <li key={index}>{feil}</li>
+                  ))}
+                </ul>
+              </Alert>
+            )}
 
-        {opprettSoknadMutation.isError && (
-          <Alert variant="error">
-            {t("oversiktFelles.feilVedOpprettelse")}
-          </Alert>
-        )}
+            {opprettSoknadMutation.isError && (
+              <Alert variant="error">
+                {t("oversiktFelles.feilVedOpprettelse")}
+              </Alert>
+            )}
 
-        <Button
-          className="w-fit"
-          loading={opprettSoknadMutation.isPending}
-          onClick={validerOgStartSoknad}
-          variant="primary"
-        >
-          {t("oversiktFelles.gaTilSkjemaKnapp")}
-        </Button>
-      </VStack>
-    </Box>
+            <Button
+              className="w-fit"
+              loading={opprettSoknadMutation.isPending}
+              type="submit"
+              variant="primary"
+            >
+              {t("oversiktFelles.gaTilSkjemaKnapp")}
+            </Button>
+          </VStack>
+        </form>
+      </Box>
+    </FormProvider>
   );
 }

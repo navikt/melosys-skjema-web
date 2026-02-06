@@ -8,6 +8,7 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
@@ -20,9 +21,6 @@ import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 
 interface ArbeidsgiverVelgerProps {
   kontekst: RepresentasjonsKontekst;
-  valgtArbeidsgiver?: SimpleOrganisasjonDto;
-  onArbeidsgiverValgt: (organisasjon: SimpleOrganisasjonDto) => void;
-  harFeil?: boolean;
 }
 
 /**
@@ -31,14 +29,18 @@ interface ArbeidsgiverVelgerProps {
  * 2. Read-only: Når ARBEIDSGIVER har tilgang til kun én organisasjon
  * 3. Combobox: For RADGIVER eller ARBEIDSGIVER med flere organisasjoner (fra Altinn)
  */
-export function ArbeidsgiverVelger({
-  kontekst,
-  valgtArbeidsgiver,
-  onArbeidsgiverValgt,
-  harFeil = false,
-}: ArbeidsgiverVelgerProps) {
+export function ArbeidsgiverVelger({ kontekst }: ArbeidsgiverVelgerProps) {
   const { t } = useTranslation();
   const hasAutoSelectedRef = useRef(false);
+
+  const {
+    watch,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
+
+  const valgtArbeidsgiver = watch("arbeidsgiver");
+  const harFeil = !!errors.arbeidsgiver;
 
   const skalHenteArbeidsgivere =
     kontekst.representasjonstype === Representasjonstype.RADGIVER ||
@@ -75,7 +77,7 @@ export function ArbeidsgiverVelger({
       hasAutoSelectedRef.current = true;
       // Kjør i neste tick for å unngå state-oppdatering under render
       queueMicrotask(() => {
-        onArbeidsgiverValgt({
+        setValue("arbeidsgiver", {
           orgnr: forstOrg.orgnr,
           navn: forstOrg.navn,
         });
@@ -100,11 +102,18 @@ export function ArbeidsgiverVelger({
       }))
     : [];
 
-  const handleArbeidsgiverValgt = (value: string) => {
+  const handleArbeidsgiverValgt = (organisasjon: SimpleOrganisasjonDto) => {
+    setValue("arbeidsgiver", {
+      orgnr: organisasjon.orgnr,
+      navn: organisasjon.navn,
+    });
+  };
+
+  const handleComboboxValgt = (value: string) => {
     const valgtOrganisasjon = arbeidsgivere?.find((org) => org.orgnr === value);
 
     if (valgtOrganisasjon) {
-      onArbeidsgiverValgt({
+      setValue("arbeidsgiver", {
         orgnr: valgtOrganisasjon.orgnr,
         navn: valgtOrganisasjon.navn,
       });
@@ -140,7 +149,7 @@ export function ArbeidsgiverVelger({
             // OrganisasjonSoker for DEG_SELV og ANNEN_PERSON
             <OrganisasjonSoker
               label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
-              onOrganisasjonValgt={onArbeidsgiverValgt}
+              onOrganisasjonValgt={handleArbeidsgiverValgt}
             />
           ) : skalHenteArbeidsgivere ? (
             // Henter fra Altinn for RADGIVER og ARBEIDSGIVER
@@ -169,7 +178,7 @@ export function ArbeidsgiverVelger({
                 <UNSAFE_Combobox
                   description={t("oversiktFelles.arbeidsgiverVelgerInfo")}
                   label={t("oversiktFelles.arbeidsgiverVelgerLabel")}
-                  onToggleSelected={(value) => handleArbeidsgiverValgt(value)}
+                  onToggleSelected={(value) => handleComboboxValgt(value)}
                   options={options}
                   placeholder={t(
                     "oversiktFelles.arbeidsgiverVelgerPlaceholder",
