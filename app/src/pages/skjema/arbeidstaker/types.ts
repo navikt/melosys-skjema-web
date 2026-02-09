@@ -1,5 +1,8 @@
-import { ArbeidstakersSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
+import { UtsendtArbeidstakerArbeidstakersSkjemaDataDto } from "~/types/melosysSkjemaTypes.ts";
 
 export interface ArbeidstakerSkjemaProps {
-  skjema: ArbeidstakersSkjemaDto;
+  skjema: {
+    id: string;
+    data: UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
+  };
 }

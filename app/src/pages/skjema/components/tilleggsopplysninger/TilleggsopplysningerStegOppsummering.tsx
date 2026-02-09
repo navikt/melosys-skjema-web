@@ -2,18 +2,18 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
-import {
-  ArbeidsgiversSkjemaDto,
-  ArbeidstakersSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
+import { ArbeidsgiverSkjemaProps } from "../../arbeidsgiver/types.ts";
+import { ArbeidstakerSkjemaProps } from "../../arbeidstaker/types.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 
 export const stepKey = "tilleggsopplysninger";
 
+type SkjemaProps = ArbeidsgiverSkjemaProps | ArbeidstakerSkjemaProps;
+
 interface TilleggsopplysningerStegOppsummeringProps {
-  skjema: ArbeidsgiversSkjemaDto | ArbeidstakersSkjemaDto;
+  skjema: SkjemaProps["skjema"];
   stegRekkefolge: StegRekkefolgeItem[];
 }
 
