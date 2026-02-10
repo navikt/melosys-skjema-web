@@ -16,6 +16,7 @@ export default tseslint.config(
   {
     ignores: [
       "src/routeTree.gen.ts",
+      "src/types/melosysSkjemaTypes.ts",
       "dist/*",
       "playwright-report/**",
       ".tanstack/**",

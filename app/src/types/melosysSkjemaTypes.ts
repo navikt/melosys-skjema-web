@@ -1,3 +1,6 @@
+/* eslint-disable */
+/* tslint:disable */
+// @ts-nocheck
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -183,6 +186,8 @@ export interface InnsendtSoknadOversiktDto {
   arbeidsgiverOrgnr: string;
   arbeidstakerNavn?: string;
   arbeidstakerFnrMaskert?: string;
+  /** @format date */
+  arbeidstakerFodselsdato: string;
   /** @format date-time */
   innsendtDato: string;
   status: SkjemaStatus;
@@ -213,10 +218,10 @@ export interface UtenlandsoppdragetArbeidstakersDelDto {
 
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "skjemadel"
   | "representasjonstype"
   | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
@@ -224,10 +229,10 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "skjemadel"
   | "representasjonstype"
   | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
@@ -235,28 +240,28 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "skjemadel"
   | "representasjonstype"
   | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "metadatatype"
 >;
 
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "skjemadel"
   | "representasjonstype"
   | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "metadatatype"
 >;
 
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "skjemadel"
   | "representasjonstype"
   | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
@@ -265,10 +270,10 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "skjemadel"
   | "representasjonstype"
   | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "metadatatype"
 > & {
   radgiverfirma: RadgiverfirmaInfo;
@@ -280,12 +285,12 @@ export interface RadgiverfirmaInfo {
 }
 
 export interface UtsendtArbeidstakerMetadata {
-  skjemadel: Skjemadel;
   representasjonstype: Representasjonstype;
   arbeidsgiverNavn: string;
+  juridiskEnhetOrgnr: string;
   /** @format uuid */
   kobletSkjemaId?: string;
-  juridiskEnhetOrgnr: string;
+  skjemadel: Skjemadel;
   /** @format uuid */
   erstatterSkjemaId?: string;
   metadatatype: string;
