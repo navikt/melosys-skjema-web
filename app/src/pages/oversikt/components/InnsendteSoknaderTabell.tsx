@@ -194,6 +194,7 @@ export function InnsendteSoknaderTabell({
           </HStack>
         </HStack>
 
+        <div style={{ overflowX: "auto" }}>
         <Table
           onSortChange={handleSortChange}
           size="small"
@@ -263,9 +264,14 @@ export function InnsendteSoknaderTabell({
                     </Table.DataCell>
                   )}
                   <Table.DataCell>
-                    <Link to="/skjema/$id" params={{ id: soknad.id }}>
+                    <Link
+                      to="/skjema/$id"
+                      params={{ id: soknad.id }}
+                      style={{ color: "var(--a-blue-500)" }}
+                    >
                       <ExternalLinkIcon
                         title={t("oversiktFelles.historikkSeSkjema")}
+                        fontSize="1.5rem"
                       />
                     </Link>
                   </Table.DataCell>
@@ -274,6 +280,7 @@ export function InnsendteSoknaderTabell({
             )}
           </Table.Body>
         </Table>
+        </div>
 
         <HStack align="center" justify="space-between">
           <BodyShort className="text-text-subtle" size="small">
