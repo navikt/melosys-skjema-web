@@ -195,91 +195,91 @@ export function InnsendteSoknaderTabell({
         </HStack>
 
         <div style={{ overflowX: "auto" }}>
-        <Table
-          onSortChange={handleSortChange}
-          size="small"
-          sort={
-            sort
-              ? {
-                  orderBy: sort.orderBy.toLowerCase(),
-                  direction:
-                    sort.direction === Sorteringsretning.ASC
-                      ? "ascending"
-                      : "descending",
-                }
-              : undefined
-          }
-        >
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader sortKey="innsendt_dato" sortable>
-                {t("oversiktFelles.historikkKolonneInnsendt")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("oversiktFelles.historikkKolonneRefnr")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("oversiktFelles.historikkKolonneArbeidsgiver")}
-              </Table.ColumnHeader>
-              {!isDegSelv && !isAnnenPerson && (
-                <Table.ColumnHeader sortKey="arbeidstaker" sortable>
-                  {t("oversiktFelles.historikkKolonneArbeidstaker")}
-                </Table.ColumnHeader>
-              )}
-              {!isDegSelv && (
-                <Table.ColumnHeader>
-                  {t("oversiktFelles.historikkKolonneFodselsdato")}
-                </Table.ColumnHeader>
-              )}
-              <Table.ColumnHeader />
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {data.soknader.length === 0 ? (
+          <Table
+            onSortChange={handleSortChange}
+            size="small"
+            sort={
+              sort
+                ? {
+                    orderBy: sort.orderBy.toLowerCase(),
+                    direction:
+                      sort.direction === Sorteringsretning.ASC
+                        ? "ascending"
+                        : "descending",
+                  }
+                : undefined
+            }
+          >
+            <Table.Header>
               <Table.Row>
-                <Table.DataCell colSpan={antallKolonner}>
-                  <BodyShort className="text-center p-4">
-                    {t("oversiktFelles.historikkIngenResultater")}
-                  </BodyShort>
-                </Table.DataCell>
+                <Table.ColumnHeader sortKey="innsendt_dato" sortable>
+                  {t("oversiktFelles.historikkKolonneInnsendt")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("oversiktFelles.historikkKolonneRefnr")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("oversiktFelles.historikkKolonneArbeidsgiver")}
+                </Table.ColumnHeader>
+                {!isDegSelv && !isAnnenPerson && (
+                  <Table.ColumnHeader sortKey="arbeidstaker" sortable>
+                    {t("oversiktFelles.historikkKolonneArbeidstaker")}
+                  </Table.ColumnHeader>
+                )}
+                {!isDegSelv && (
+                  <Table.ColumnHeader>
+                    {t("oversiktFelles.historikkKolonneFodselsdato")}
+                  </Table.ColumnHeader>
+                )}
+                <Table.ColumnHeader />
               </Table.Row>
-            ) : (
-              data.soknader.map((soknad) => (
-                <Table.Row key={soknad.id}>
-                  <Table.DataCell>
-                    {formatDato(soknad.innsendtDato)}
-                  </Table.DataCell>
-                  <Table.DataCell>{soknad.referanseId || "-"}</Table.DataCell>
-                  <Table.DataCell>
-                    {soknad.arbeidsgiverNavn || "-"}
-                  </Table.DataCell>
-                  {!isDegSelv && !isAnnenPerson && (
-                    <Table.DataCell>
-                      {soknad.arbeidstakerNavn || "-"}
-                    </Table.DataCell>
-                  )}
-                  {!isDegSelv && (
-                    <Table.DataCell>
-                      {soknad.arbeidstakerFodselsdato || "-"}
-                    </Table.DataCell>
-                  )}
-                  <Table.DataCell>
-                    <Link
-                      to="/skjema/$id"
-                      params={{ id: soknad.id }}
-                      style={{ color: "var(--a-blue-500)" }}
-                    >
-                      <ExternalLinkIcon
-                        title={t("oversiktFelles.historikkSeSkjema")}
-                        fontSize="1.5rem"
-                      />
-                    </Link>
+            </Table.Header>
+            <Table.Body>
+              {data.soknader.length === 0 ? (
+                <Table.Row>
+                  <Table.DataCell colSpan={antallKolonner}>
+                    <BodyShort className="text-center p-4">
+                      {t("oversiktFelles.historikkIngenResultater")}
+                    </BodyShort>
                   </Table.DataCell>
                 </Table.Row>
-              ))
-            )}
-          </Table.Body>
-        </Table>
+              ) : (
+                data.soknader.map((soknad) => (
+                  <Table.Row key={soknad.id}>
+                    <Table.DataCell>
+                      {formatDato(soknad.innsendtDato)}
+                    </Table.DataCell>
+                    <Table.DataCell>{soknad.referanseId || "-"}</Table.DataCell>
+                    <Table.DataCell>
+                      {soknad.arbeidsgiverNavn || "-"}
+                    </Table.DataCell>
+                    {!isDegSelv && !isAnnenPerson && (
+                      <Table.DataCell>
+                        {soknad.arbeidstakerNavn || "-"}
+                      </Table.DataCell>
+                    )}
+                    {!isDegSelv && (
+                      <Table.DataCell>
+                        {soknad.arbeidstakerFodselsdato || "-"}
+                      </Table.DataCell>
+                    )}
+                    <Table.DataCell>
+                      <Link
+                        params={{ id: soknad.id }}
+                        style={{ color: "var(--a-blue-500)" }}
+                        to="/skjema/$id"
+                      >
+                        <ExternalLinkIcon
+                          fontSize="1.5rem"
+                          title={t("oversiktFelles.historikkSeSkjema")}
+                        />
+                      </Link>
+                    </Table.DataCell>
+                  </Table.Row>
+                ))
+              )}
+            </Table.Body>
+          </Table>
         </div>
 
         <HStack align="center" justify="space-between">
