@@ -473,7 +473,7 @@ export const en = {
       historikkTittel: "Previously submitted applications",
       historikkSokPlaceholder: "Search...",
       historikkKolonneVirksomhet: "Company",
-      historikkKolonneArbeidstaker: "Employee name",
+      historikkKolonneArbeidstaker: "Employee",
       historikkKolonneFnr: "Birth/D-no",
       historikkKolonneInnsendt: "Submitted",
       historikkKolonneRefnr: "Ref.no.",

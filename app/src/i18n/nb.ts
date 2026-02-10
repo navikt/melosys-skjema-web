@@ -361,7 +361,7 @@ export const nb = {
       historikkTittel: "Tidligere innsendte søknader",
       historikkSokPlaceholder: "Søk...",
       historikkKolonneVirksomhet: "Virksomhet",
-      historikkKolonneArbeidstaker: "Navn arbeidstaker",
+      historikkKolonneArbeidstaker: "Arbeidstaker",
       historikkKolonneFnr: "F.nr/D-nr",
       historikkKolonneInnsendt: "Innsendt",
       historikkKolonneRefnr: "Refnr.",
