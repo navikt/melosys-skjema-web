@@ -477,6 +477,9 @@ export const en = {
       historikkKolonneFnr: "Birth/D-no",
       historikkKolonneInnsendt: "Submitted",
       historikkKolonneRefnr: "Ref.no.",
+      historikkKolonneFodselsdato: "Date of birth",
+      historikkKolonneArbeidsgiver: "Employer",
+      historikkSeSkjema: "View application",
       historikkKolonneStatus: "Status",
       historikkAntallTreff: "{{antall}} results",
       historikkFeilmelding:

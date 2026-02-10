@@ -365,6 +365,9 @@ export const nb = {
       historikkKolonneFnr: "F.nr/D-nr",
       historikkKolonneInnsendt: "Innsendt",
       historikkKolonneRefnr: "Refnr.",
+      historikkKolonneFodselsdato: "Fødselsdato",
+      historikkKolonneArbeidsgiver: "Arbeidsgiver",
+      historikkSeSkjema: "Se skjema",
       historikkKolonneStatus: "Status",
       historikkAntallTreff: "{{antall}} treff",
       historikkFeilmelding:

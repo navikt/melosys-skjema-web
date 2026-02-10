@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@navikt/aksel-icons";
 import {
   BodyShort,
   Box,
@@ -10,6 +11,7 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -157,6 +159,13 @@ export function InnsendteSoknaderTabell({
 
   const totaltAntallSider = Math.ceil(data.totaltAntall / data.antallPerSide);
 
+  const isDegSelv =
+    kontekst.representasjonstype === Representasjonstype.DEG_SELV;
+  const isAnnenPerson =
+    kontekst.representasjonstype === Representasjonstype.ANNEN_PERSON;
+  // DEG_SELV=4, ANNEN_PERSON=5, ARBEIDSGIVER/RADGIVER=6
+  const antallKolonner = isDegSelv ? 4 : isAnnenPerson ? 5 : 6;
+
   return (
     <Box
       background="neutral-soft"
@@ -202,51 +211,38 @@ export function InnsendteSoknaderTabell({
         >
           <Table.Header>
             <Table.Row>
-              {kontekst.representasjonstype ===
-              Representasjonstype.ANNEN_PERSON ? (
-                <>
-                  <Table.ColumnHeader sortKey="innsendt_dato" sortable>
-                    {t("oversiktFelles.historikkKolonneInnsendt")}
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader>
-                    {t("oversiktFelles.historikkKolonneRefnr")}
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="arbeidstaker" sortable>
-                    {t("felles.navn")}
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader>
-                    {t("oversiktFelles.historikkKolonneFnr")}
-                  </Table.ColumnHeader>
-                </>
-              ) : (
-                <>
-                  <Table.ColumnHeader sortKey="arbeidsgiver" sortable>
-                    {t("oversiktFelles.historikkKolonneVirksomhet")}
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="arbeidstaker" sortable>
-                    {t("oversiktFelles.historikkKolonneArbeidstaker")}
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader>
-                    {t("oversiktFelles.historikkKolonneFnr")}
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader sortKey="innsendt_dato" sortable>
-                    {t("oversiktFelles.historikkKolonneInnsendt")}
-                  </Table.ColumnHeader>
-                </>
+              <Table.ColumnHeader sortKey="innsendt_dato" sortable>
+                {t("oversiktFelles.historikkKolonneInnsendt")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("oversiktFelles.historikkKolonneRefnr")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("oversiktFelles.historikkKolonneArbeidsgiver")}
+              </Table.ColumnHeader>
+              {!isDegSelv && !isAnnenPerson && (
+                <Table.ColumnHeader sortKey="arbeidstaker" sortable>
+                  {t("oversiktFelles.historikkKolonneArbeidstaker")}
+                </Table.ColumnHeader>
               )}
+              {!isDegSelv && (
+                <Table.ColumnHeader>
+                  {t("oversiktFelles.historikkKolonneFodselsdato")}
+                </Table.ColumnHeader>
+              )}
+              <Table.ColumnHeader />
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {data.soknader.length === 0 ? (
               <Table.Row>
-                <Table.DataCell colSpan={4}>
+                <Table.DataCell colSpan={antallKolonner}>
                   <BodyShort className="text-center p-4">
                     {t("oversiktFelles.historikkIngenResultater")}
                   </BodyShort>
                 </Table.DataCell>
               </Table.Row>
-            ) : kontekst.representasjonstype ===
-              Representasjonstype.ANNEN_PERSON ? (
+            ) : (
               data.soknader.map((soknad) => (
                 <Table.Row key={soknad.id}>
                   <Table.DataCell>
@@ -254,31 +250,24 @@ export function InnsendteSoknaderTabell({
                   </Table.DataCell>
                   <Table.DataCell>{soknad.referanseId || "-"}</Table.DataCell>
                   <Table.DataCell>
-                    {soknad.arbeidstakerNavn || "-"}
+                    {soknad.arbeidsgiverNavn || "-"}
                   </Table.DataCell>
+                  {!isDegSelv && !isAnnenPerson && (
+                    <Table.DataCell>
+                      {soknad.arbeidstakerNavn || "-"}
+                    </Table.DataCell>
+                  )}
+                  {!isDegSelv && (
+                    <Table.DataCell>
+                      {soknad.arbeidstakerFodselsdato || "-"}
+                    </Table.DataCell>
+                  )}
                   <Table.DataCell>
-                    {soknad.arbeidstakerFnrMaskert || "-"}
-                  </Table.DataCell>
-                </Table.Row>
-              ))
-            ) : (
-              data.soknader.map((soknad) => (
-                <Table.Row key={soknad.id}>
-                  <Table.DataCell>
-                    {soknad.arbeidsgiverNavn && soknad.arbeidsgiverOrgnr
-                      ? `${soknad.arbeidsgiverNavn} (${soknad.arbeidsgiverOrgnr})`
-                      : soknad.arbeidsgiverNavn ||
-                        soknad.arbeidsgiverOrgnr ||
-                        "-"}
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    {soknad.arbeidstakerNavn || "-"}
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    {soknad.arbeidstakerFnrMaskert || "-"}
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    {formatDato(soknad.innsendtDato)}
+                    <Link to="/skjema/$id" params={{ id: soknad.id }}>
+                      <ExternalLinkIcon
+                        title={t("oversiktFelles.historikkSeSkjema")}
+                      />
+                    </Link>
                   </Table.DataCell>
                 </Table.Row>
               ))
