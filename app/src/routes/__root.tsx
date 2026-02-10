@@ -11,7 +11,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootComponent() {
   return (
     <Page footerPosition="belowFold">
-      <Page.Block gutters width="md">
+      <Page.Block gutters style={{ paddingInline: "24px" }} width="md">
         <VStack as="main" gap="space-32" paddingBlock="space-32 space-0">
           <AppHeader />
           <Outlet />
