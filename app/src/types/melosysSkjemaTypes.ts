@@ -183,7 +183,8 @@ export interface InnsendtSoknadOversiktDto {
   arbeidsgiverOrgnr: string;
   arbeidstakerNavn?: string;
   arbeidstakerFnrMaskert?: string;
-  arbeidstakerFodselsdato?: string;
+  /** @format date */
+  arbeidstakerFodselsdato: string;
   /** @format date-time */
   innsendtDato: string;
   status: SkjemaStatus;

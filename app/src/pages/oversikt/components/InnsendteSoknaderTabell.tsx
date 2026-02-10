@@ -260,9 +260,7 @@ export function InnsendteSoknaderTabell({
                     )}
                     {!isDegSelv && (
                       <Table.DataCell>
-                        {soknad.arbeidstakerFodselsdato
-                          ? formatDato(soknad.arbeidstakerFodselsdato)
-                          : "-"}
+                        {formatDato(soknad.arbeidstakerFodselsdato)}
                       </Table.DataCell>
                     )}
                     <Table.DataCell>
