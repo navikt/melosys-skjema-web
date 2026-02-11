@@ -1,4 +1,5 @@
 import { FormSummary } from "@navikt/ds-react";
+import { useTranslation } from "react-i18next";
 
 import type { SeksjonDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
@@ -7,12 +8,16 @@ import { FeltOppsummering } from "./FeltOppsummering.tsx";
 interface SeksjonOppsummeringProps {
   seksjon: SeksjonDefinisjonDto;
   data: Record<string, unknown>;
+  editHref?: string;
 }
 
 export function SeksjonOppsummering({
-  seksjon,
   data,
+  editHref,
+  seksjon,
 }: SeksjonOppsummeringProps) {
+  const { t } = useTranslation();
+
   const felterMedData = Object.entries(seksjon.felter).filter(
     ([feltNavn]) => data[feltNavn] !== undefined && data[feltNavn] !== null,
   );
@@ -29,6 +34,13 @@ export function SeksjonOppsummering({
           <FeltOppsummering felt={felt} key={feltNavn} verdi={data[feltNavn]} />
         ))}
       </FormSummary.Answers>
+      {editHref && (
+        <FormSummary.Footer>
+          <FormSummary.EditLink href={editHref}>
+            {t("felles.endreSvar")}
+          </FormSummary.EditLink>
+        </FormSummary.Footer>
+      )}
     </FormSummary>
   );
 }

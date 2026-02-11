@@ -1,4 +1,6 @@
 import type {
+  NorskeOgUtenlandskeVirksomheter,
+  NorskeOgUtenlandskeVirksomheterMedAnsettelsesform,
   PaLandDto,
   SeksjonDefinisjonDto,
   SkjemaDefinisjonDto,
@@ -6,10 +8,11 @@ import type {
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-interface ResolvedSeksjon {
+export interface ResolvedSeksjon {
   seksjonNavn: string;
   seksjon: SeksjonDefinisjonDto;
   data: Record<string, unknown>;
+  stegKey?: string;
 }
 
 function flattenPaLand(
@@ -28,8 +31,32 @@ function flattenPaLand(
   };
 }
 
+/**
+ * Flater ut nestet virksomheter-struktur til en flat array
+ * som matcher definisjons-elementDefinisjon.
+ */
+function flattenVirksomheter(
+  virksomheter?:
+    | NorskeOgUtenlandskeVirksomheter
+    | NorskeOgUtenlandskeVirksomheterMedAnsettelsesform,
+): Record<string, unknown>[] | undefined {
+  if (!virksomheter) return undefined;
+
+  const result: Record<string, unknown>[] = [];
+
+  for (const v of virksomheter.norskeVirksomheter ?? []) {
+    result.push({ organisasjonsnummer: v.organisasjonsnummer });
+  }
+  for (const v of virksomheter.utenlandskeVirksomheter ?? []) {
+    result.push(v as unknown as Record<string, unknown>);
+  }
+
+  return result.length > 0 ? result : undefined;
+}
+
 interface SeksjonMappingEntry {
   seksjonNavn: string;
+  stegKey: string;
   data: Record<string, unknown> | undefined;
 }
 
@@ -39,22 +66,36 @@ function mapArbeidstakerSeksjoner(
   return [
     {
       seksjonNavn: "utenlandsoppdragetArbeidstaker",
+      stegKey: "utenlandsoppdraget",
       data: dto.utenlandsoppdraget as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidssituasjon",
-      data: dto.arbeidssituasjon as Record<string, unknown> | undefined,
+      stegKey: "arbeidssituasjon",
+      data: dto.arbeidssituasjon
+        ? {
+            ...(dto.arbeidssituasjon as unknown as Record<string, unknown>),
+            virksomheterArbeidstakerJobberForIutsendelsesPeriode:
+              flattenVirksomheter(
+                dto.arbeidssituasjon
+                  .virksomheterArbeidstakerJobberForIutsendelsesPeriode,
+              ),
+          }
+        : undefined,
     },
     {
       seksjonNavn: "skatteforholdOgInntekt",
+      stegKey: "skatteforhold-og-inntekt",
       data: dto.skatteforholdOgInntekt as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "familiemedlemmer",
+      stegKey: "familiemedlemmer",
       data: dto.familiemedlemmer as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "tilleggsopplysningerArbeidstaker",
+      stegKey: "tilleggsopplysninger",
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
   ];
@@ -66,46 +107,63 @@ function mapArbeidsgiverSeksjoner(
   return [
     {
       seksjonNavn: "arbeidsgiverensVirksomhetINorge",
+      stegKey: "arbeidsgiverens-virksomhet-i-norge",
       data: dto.arbeidsgiverensVirksomhetINorge as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "utenlandsoppdragetArbeidsgiver",
+      stegKey: "utenlandsoppdraget",
       data: dto.utenlandsoppdraget as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedIUtlandet",
+      stegKey: "arbeidssted-i-utlandet",
       data: dto.arbeidsstedIUtlandet as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedPaLand",
+      stegKey: "arbeidssted-i-utlandet",
       data: flattenPaLand(dto.arbeidsstedIUtlandet?.paLand),
     },
     {
       seksjonNavn: "arbeidsstedOffshore",
+      stegKey: "arbeidssted-i-utlandet",
       data: dto.arbeidsstedIUtlandet?.offshore as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidsstedPaSkip",
+      stegKey: "arbeidssted-i-utlandet",
       data: dto.arbeidsstedIUtlandet?.paSkip as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidsstedOmBordPaFly",
+      stegKey: "arbeidssted-i-utlandet",
       data: dto.arbeidsstedIUtlandet?.omBordPaFly as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidstakerensLonn",
-      data: dto.arbeidstakerensLonn as Record<string, unknown> | undefined,
+      stegKey: "arbeidstakerens-lonn",
+      data: dto.arbeidstakerensLonn
+        ? {
+            ...(dto.arbeidstakerensLonn as unknown as Record<string, unknown>),
+            virksomheterSomUtbetalerLonnOgNaturalytelser: flattenVirksomheter(
+              dto.arbeidstakerensLonn
+                .virksomheterSomUtbetalerLonnOgNaturalytelser,
+            ),
+          }
+        : undefined,
     },
     {
       seksjonNavn: "tilleggsopplysningerArbeidsgiver",
+      stegKey: "tilleggsopplysninger",
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
   ];
@@ -131,9 +189,9 @@ export function renderSeksjoner(
           dto as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
         );
 
-  return mappinger.flatMap(({ seksjonNavn, data }) => {
+  return mappinger.flatMap(({ seksjonNavn, stegKey, data }) => {
     const seksjon = definisjon.seksjoner[seksjonNavn];
     if (!seksjon || !data) return [];
-    return [{ seksjonNavn, seksjon, data }];
+    return [{ seksjonNavn, seksjon, data, stegKey }];
   });
 }
