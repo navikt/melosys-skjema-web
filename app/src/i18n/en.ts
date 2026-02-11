@@ -537,6 +537,14 @@ export const en = {
         "You must answer whether the company belongs to the same consortium",
       ansettelsesformErPakrevd: "You must select an employment form",
     },
+    innsendtSkjema: {
+      tittel: "Submitted application",
+      arbeidstakersDel: "Employee's section",
+      arbeidsgiverDel: "Employer's section",
+      tilbakeTilOversikt: "Back to overview",
+      feilVedLasting:
+        "Could not retrieve submitted application. Please try again later.",
+    },
     kvittering: {
       tittel: "Thank you!",
       melding: "We have received your application with reference",

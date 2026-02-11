@@ -408,6 +408,14 @@ export const nb = {
         "Du må svare på om virksomheten tilhører samme konsern",
       ansettelsesformErPakrevd: "Du må velge en ansettelsesform",
     },
+    innsendtSkjema: {
+      tittel: "Innsendt søknad",
+      arbeidstakersDel: "Arbeidstakerens del",
+      arbeidsgiverDel: "Arbeidsgiverens del",
+      tilbakeTilOversikt: "Tilbake til oversikt",
+      feilVedLasting:
+        "Kunne ikke hente innsendt søknad. Prøv igjen senere.",
+    },
     kvittering: {
       tittel: "Takk!",
       melding: "Vi har mottatt din søknad med referanse",

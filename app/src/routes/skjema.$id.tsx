@@ -21,8 +21,11 @@ export const Route = createFileRoute("/skjema/$id")({
   beforeLoad: async ({ params, location }) => {
     const { id } = params;
 
-    // Hvis vi er på vei til kvittering, ikke redirect
-    if (location.pathname.endsWith("/kvittering")) {
+    // Hvis vi er på vei til kvittering eller innsendt-visning, ikke redirect
+    if (
+      location.pathname.endsWith("/kvittering") ||
+      location.pathname.endsWith("/innsendt")
+    ) {
       return;
     }
 

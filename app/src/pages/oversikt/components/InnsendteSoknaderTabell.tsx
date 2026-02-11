@@ -267,7 +267,7 @@ export function InnsendteSoknaderTabell({
                       <Link
                         params={{ id: soknad.id }}
                         style={{ color: "var(--a-blue-500)" }}
-                        to="/skjema/$id"
+                        to="/skjema/$id/innsendt"
                       >
                         <ExternalLinkIcon
                           fontSize="1.5rem"

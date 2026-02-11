@@ -8,6 +8,7 @@ import {
   FamiliemedlemmerDto,
   HentInnsendteSoknaderRequest,
   InnsendteSoknaderResponse,
+  InnsendtSkjemaResponse,
   OpprettSoknadMedKontekstRequest,
   OpprettSoknadMedKontekstResponse,
   OrganisasjonDto,
@@ -509,6 +510,35 @@ async function fetchInnsendteSoknader(
 
   return response.json();
 }
+
+// ============ Innsendt skjema (readonly-visning) ============
+
+async function fetchInnsendtSkjema(
+  skjemaId: string,
+  sprak: string = "nb",
+): Promise<InnsendtSkjemaResponse> {
+  const params = new URLSearchParams({ sprak });
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/innsendt?${params.toString()}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export const getInnsendtSkjemaQuery = (skjemaId: string, sprak: string = "nb") =>
+  queryOptions<InnsendtSkjemaResponse>({
+    queryKey: ["innsendt-skjema", skjemaId, sprak],
+    queryFn: () => fetchInnsendtSkjema(skjemaId, sprak),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
 
 // ============ Skjemadefinisjon ============
 
