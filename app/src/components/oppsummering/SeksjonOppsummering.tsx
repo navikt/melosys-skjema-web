@@ -25,22 +25,20 @@ export function SeksjonOppsummering({
   if (felterMedData.length === 0) return null;
 
   return (
-    <FormSummary>
+    <FormSummary className="mt-8">
       <FormSummary.Header>
         <FormSummary.Heading level="3">{seksjon.tittel}</FormSummary.Heading>
+        {editHref && (
+          <FormSummary.EditLink href={editHref}>
+            {t("felles.endreSvar")}
+          </FormSummary.EditLink>
+        )}
       </FormSummary.Header>
       <FormSummary.Answers>
         {felterMedData.map(([feltNavn, felt]) => (
           <FeltOppsummering felt={felt} key={feltNavn} verdi={data[feltNavn]} />
         ))}
       </FormSummary.Answers>
-      {editHref && (
-        <FormSummary.Footer>
-          <FormSummary.EditLink href={editHref}>
-            {t("felles.endreSvar")}
-          </FormSummary.EditLink>
-        </FormSummary.Footer>
-      )}
     </FormSummary>
   );
 }
