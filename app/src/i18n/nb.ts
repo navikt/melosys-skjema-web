@@ -413,8 +413,7 @@ export const nb = {
       arbeidstakersDel: "Arbeidstakerens del",
       arbeidsgiverDel: "Arbeidsgiverens del",
       tilbakeTilOversikt: "Tilbake til oversikt",
-      feilVedLasting:
-        "Kunne ikke hente innsendt søknad. Prøv igjen senere.",
+      feilVedLasting: "Kunne ikke hente innsendt søknad. Prøv igjen senere.",
     },
     kvittering: {
       tittel: "Takk!",

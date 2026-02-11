@@ -532,7 +532,10 @@ async function fetchInnsendtSkjema(
   return response.json();
 }
 
-export const getInnsendtSkjemaQuery = (skjemaId: string, sprak: string = "nb") =>
+export const getInnsendtSkjemaQuery = (
+  skjemaId: string,
+  sprak: string = "nb",
+) =>
   queryOptions<InnsendtSkjemaResponse>({
     queryKey: ["innsendt-skjema", skjemaId, sprak],
     queryFn: () => fetchInnsendtSkjema(skjemaId, sprak),
