@@ -147,4 +147,4 @@ vite.config.ts.timestamp-*
 /app/test-results/
 
 # Build output copied during CI
-/server/public/
+/build/

@@ -7,7 +7,7 @@
     "build": "pnpm -r build",
     "build:app": "pnpm --filter app build",
     "build:server": "pnpm --filter server build",
-    "build:ci": "pnpm --filter app build && cp -r app/dist/ server/public && pnpm --filter server build",
+    "build:ci": "pnpm -r build && rm -rf build && pnpm --filter server deploy --prod build && cp -r app/dist build/public",
     "lint": "pnpm -r lint",
     "lint:fix": "pnpm -r lint:fix",
     "check-types": "pnpm -r check-types"
