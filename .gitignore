@@ -145,3 +145,6 @@ vite.config.ts.timestamp-*
 .idea
 /app/playwright-report/
 /app/test-results/
+
+# Build output copied during CI
+/server/public/
