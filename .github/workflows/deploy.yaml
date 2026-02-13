@@ -7,13 +7,10 @@ on:
     paths:
       - '.github/workflows/deploy.yaml'
       - 'app/**'
-      -  'server/**'
+      - 'server/**'
       - '.nais/**'
+      - 'Dockerfile'
   workflow_dispatch:
-
-defaults:
-  run:
-    working-directory: apps
 
 permissions:
   contents: read
@@ -42,29 +39,15 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@navikt'
 
-      - name: Install app dependencies
-        working-directory: app
-        run: npm ci
+      - uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-      - name: Build app
-        working-directory: app
-        run: npm run build
-
-      - name: Copy app dist into public directory of server
-        working-directory: app
-        run: cp -r dist/ ../server/public
-
-      - name: Install server dependencies
-        working-directory: server
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-      - name: Build server
-        working-directory: server
-        run: npm run build
+      - name: Build
+        run: pnpm build:ci
 
       - name: Build and push Docker image
         uses: nais/docker-build-push@v0
@@ -73,8 +56,8 @@ jobs:
         with:
           team: teammelosys
           image_suffix: melosys-skjema-web
-          docker_context: server
-          dockerfile: server/Dockerfile
+          docker_context: .
+          dockerfile: Dockerfile
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
     outputs:
