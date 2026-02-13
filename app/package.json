@@ -38,7 +38,7 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.2",
+    "@eslint/js": "10.0.1",
     "@navikt/aksel-stylelint": "8.4.1",
     "@playwright/test": "1.58.2",
     "@tanstack/router-vite-plugin": "1.159.5",
@@ -47,12 +47,12 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.4",
     "baseline-browser-mapping": "^2.9.19",
-    "eslint": "9.39.2",
+    "eslint": "10.0.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-simple-import-sort": "12.1.1",
-    "eslint-plugin-unicorn": "62.0.0",
+    "eslint-plugin-unicorn": "63.0.0",
     "globals": "17.3.0",
     "prettier": "3.8.1",
     "swagger-typescript-api": "13.2.17",
