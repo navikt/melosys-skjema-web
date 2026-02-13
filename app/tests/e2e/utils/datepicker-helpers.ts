@@ -12,10 +12,13 @@ export async function selectDateFromCalendar(
   date: string,
 ) {
   // Parse date string (format: DD.MM.YYYY)
-  const [day, month, year] = date.split(".");
-  const dayNumber = Number.parseInt(day);
-  const monthNumber = Number.parseInt(month);
-  const yearNumber = Number.parseInt(year);
+  const parts = date.split(".");
+  const day = parts[0] ?? "";
+  const month = parts[1] ?? "";
+  const year = parts[2] ?? "";
+  const dayNumber = Number.parseInt(day, 10);
+  const monthNumber = Number.parseInt(month, 10);
+  const yearNumber = Number.parseInt(year, 10);
 
   // Find and click the calendar button next to this input
   // The button is a sibling of the input's container

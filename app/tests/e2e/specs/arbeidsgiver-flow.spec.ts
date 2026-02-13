@@ -48,9 +48,8 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     );
 
     // Sett opp mock slik at steget ikke automatisk navigerer tilbake til arbeidsgiveren-steg, innholdet i arbeidsgiveren data her har ikke noe å si atm.
-    await virksomhetStegPage.mockArbeidsgiverenStegData({
-      organisasjonsnummer: testOrganization.orgnr,
-      organisasjonNavn: testOrganization.navn,
+    await virksomhetStegPage.mockArbeidsgiverensVirksomhetINorgeStegData({
+      erArbeidsgiverenOffentligVirksomhet: false,
     });
 
     // Naviger direkte til steget
@@ -304,6 +303,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await mockFetchArbeidsgiverSkjema(page, {
       ...testArbeidsgiverSkjema,
       data: {
+        type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
         arbeidsgiverensVirksomhetINorge: arbeidsgiverensVirksomhetINorgeData,
         utenlandsoppdraget: utenlandsoppdragetData,
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,

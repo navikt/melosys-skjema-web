@@ -24,7 +24,7 @@ export class UtenlandsoppdragetStegPage {
     });
     this.utsendelsesLandCombobox = page.getByRole("combobox", {
       name: nb.translation.utenlandsoppdragetArbeidstakerSteg
-        .iHvilketLandSkalDuUtforeArbeid,
+        .duMaVelgeHvilketLandDuSkalUtforeArbeid,
     });
     this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
     this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);

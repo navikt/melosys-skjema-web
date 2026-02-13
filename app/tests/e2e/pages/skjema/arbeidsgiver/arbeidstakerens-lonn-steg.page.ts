@@ -25,7 +25,7 @@ export class ArbeidstakerensLonnStegPage {
       "group",
       {
         name: nb.translation.arbeidstakerenslonnSteg
-          .utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden,
+          .duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden,
       },
     );
     this.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup = {

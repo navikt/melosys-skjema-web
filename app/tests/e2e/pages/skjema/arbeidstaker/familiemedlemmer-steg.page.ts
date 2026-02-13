@@ -23,7 +23,7 @@ export class FamiliemedlemmerStegPage {
 
     const harDuFamiliemedlemmerSomSkalVaereMedGroup = page.getByRole("group", {
       name: nb.translation.familiemedlemmerSteg
-        .harDuFamiliemedlemmerSomSkalVaereMed,
+        .duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed,
     });
     this.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup = {
       JA: harDuFamiliemedlemmerSomSkalVaereMedGroup.getByRole("radio", {
