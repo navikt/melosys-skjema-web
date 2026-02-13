@@ -1,11 +1,16 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiversSkjemaDto,
   ArbeidstakerensLonnDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+
+// Hent felter fra statiske definisjoner
+const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
+const felter = arbeidstakerensLonn.felter;
 
 export class ArbeidstakerensLonnStegPage {
   readonly page: Page;
@@ -18,14 +23,14 @@ export class ArbeidstakerensLonnStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.arbeidstakerenslonnSteg.tittel,
+      name: arbeidstakerensLonn.tittel,
     });
 
     const arbeidsgiverBetalerAllLonnOgNaturaytelserGroup = page.getByRole(
       "group",
       {
-        name: nb.translation.arbeidstakerenslonnSteg
-          .duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden,
+        name: felter
+          .arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden.label,
       },
     );
     this.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup = {

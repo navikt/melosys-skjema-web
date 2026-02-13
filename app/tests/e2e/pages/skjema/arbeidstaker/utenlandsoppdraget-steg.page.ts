@@ -1,11 +1,17 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidstakersSkjemaDto,
   UtenlandsoppdragetArbeidstakersDelDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
+
+// Hent felter fra statiske definisjoner
+const utenlandsoppdraget =
+  SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidstaker;
+const felter = utenlandsoppdraget.felter;
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
@@ -20,11 +26,10 @@ export class UtenlandsoppdragetStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.utenlandsoppdragetArbeidstakerSteg.tittel,
+      name: utenlandsoppdraget.tittel,
     });
     this.utsendelsesLandCombobox = page.getByRole("combobox", {
-      name: nb.translation.utenlandsoppdragetArbeidstakerSteg
-        .duMaVelgeHvilketLandDuSkalUtforeArbeid,
+      name: felter.utsendelsesLand.label,
     });
     this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
     this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);
