@@ -17,7 +17,7 @@ import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummeri
 import { getInnsendtSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import type { InnsendtSkjemaResponse } from "~/types/melosysSkjemaTypes.ts";
 
-import { renderSeksjoner } from "./dataMapping.ts";
+import { resolveSeksjoner } from "../../../components/oppsummering/dataMapping.ts";
 
 interface InnsendtSkjemaPageProps {
   id: string;
@@ -62,16 +62,14 @@ function InnsendtSkjemaPageContent({
   const { t } = useTranslation();
 
   const arbeidstakerSeksjoner = response.arbeidstakerData
-    ? renderSeksjoner(
-        "arbeidstaker",
+    ? resolveSeksjoner(
         response.arbeidstakerData,
         response.definisjon,
       )
     : [];
 
   const arbeidsgiverSeksjoner = response.arbeidsgiverData
-    ? renderSeksjoner(
-        "arbeidsgiver",
+    ? resolveSeksjoner(
         response.arbeidsgiverData,
         response.definisjon,
       )

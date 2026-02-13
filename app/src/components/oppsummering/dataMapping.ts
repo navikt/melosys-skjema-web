@@ -8,7 +8,7 @@ import type {
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-export interface ResolvedSeksjon {
+interface ResolvedSeksjon {
   seksjonNavn: string;
   seksjon: SeksjonDefinisjonDto;
   data: Record<string, unknown>;
@@ -169,27 +169,43 @@ function mapArbeidsgiverSeksjoner(
   ];
 }
 
+// dto.type verdier - vil bli eksponert som enum fra API i fremtiden
+const ARBEIDSTAKERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL";
+const ARBEIDSGIVERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL";
+
+function getSeksjonMappinger(
+  dto:
+    | UtsendtArbeidstakerArbeidstakersSkjemaDataDto
+    | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+): SeksjonMappingEntry[] {
+  switch (dto.type) {
+    case ARBEIDSTAKERS_DEL: {
+      return mapArbeidstakerSeksjoner(
+        dto as UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
+      );
+    }
+    case ARBEIDSGIVERS_DEL: {
+      return mapArbeidsgiverSeksjoner(
+        dto as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+      );
+    }
+    default: {
+      throw new Error(`Ukjent skjematype: ${dto.type}`);
+    }
+  }
+}
+
 /**
  * Kobler DTO-data med skjemadefinisjonens seksjoner.
  * Returnerer kun seksjoner som har både definisjon og data.
  */
-export function renderSeksjoner(
-  rolle: "arbeidstaker" | "arbeidsgiver",
+export function resolveSeksjoner(
   dto:
     | UtsendtArbeidstakerArbeidstakersSkjemaDataDto
     | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   definisjon: SkjemaDefinisjonDto,
 ): ResolvedSeksjon[] {
-  const mappinger =
-    rolle === "arbeidstaker"
-      ? mapArbeidstakerSeksjoner(
-          dto as UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
-        )
-      : mapArbeidsgiverSeksjoner(
-          dto as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
-        );
-
-  return mappinger.flatMap(({ seksjonNavn, stegKey, data }) => {
+  return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {
     const seksjon = definisjon.seksjoner[seksjonNavn];
     if (!seksjon || !data) return [];
     return [{ seksjonNavn, seksjon, data, stegKey }];

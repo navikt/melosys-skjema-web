@@ -1,8 +1,8 @@
+import { resolveSeksjoner } from "~/components/oppsummering/dataMapping.ts";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { SendInnSkjemaKnapp } from "~/pages/skjema/components/SendInnSkjemaKnapp.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { renderSeksjoner } from "~/pages/skjema/innsendt/dataMapping.ts";
 import type { SkjemaDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
@@ -30,8 +30,7 @@ function ArbeidstakerOppsummeringStegContent({
 }: ArbeidstakerSkjemaProps) {
   const { definisjon } = useSkjemaDefinisjon();
 
-  const seksjoner = renderSeksjoner(
-    "arbeidstaker",
+  const seksjoner = resolveSeksjoner(
     skjema.data,
     definisjon as unknown as SkjemaDefinisjonDto,
   );
