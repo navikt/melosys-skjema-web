@@ -82,9 +82,10 @@ make local    # Start server og app med mock OAuth
 ```bash
 pnpm dev               # Start frontend dev server
 pnpm dev:server        # Start backend dev server
-pnpm build             # Bygg frontend for produksjon
-pnpm lint              # Kjør ESLint på frontend
-pnpm check-types       # Kjør TypeScript typesjekk på frontend
+pnpm build             # Bygg alle workspaces
+pnpm build:ci          # Bygg for deployment (brukes i CI)
+pnpm lint              # Kjør ESLint på alle workspaces
+pnpm check-types       # Kjør TypeScript typesjekk på alle workspaces
 ```
 
 **Frontend (app/):**
@@ -136,6 +137,7 @@ package.json                   # Rot package.json med workspace-scripts
 pnpm-workspace.yaml            # pnpm workspace konfigurasjon
 pnpm-lock.yaml                 # Felles lockfil for alle pakker
 .npmrc                         # NPM registry konfigurasjon
+Dockerfile                     # Docker container config
 
 app/                           # Frontend-applikasjon
 ├── src/
@@ -200,8 +202,7 @@ server/                        # Express server
 │   ├── logger.ts              # Winston logging setup
 │   └── server.ts              # Express app setup
 ├── dist/                      # Compiled TypeScript output
-├── Dockerfile                 # Docker container config
-├── docker-compose.yaml        # Docker compose setup
+├── docker-compose.yaml        # Docker compose setup (lokal utvikling)
 ├── package.json
 ├── tsconfig.json
 └── eslint.config.mjs
