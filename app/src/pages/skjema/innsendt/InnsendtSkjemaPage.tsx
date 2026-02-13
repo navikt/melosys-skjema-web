@@ -62,17 +62,11 @@ function InnsendtSkjemaPageContent({
   const { t } = useTranslation();
 
   const arbeidstakerSeksjoner = response.arbeidstakerData
-    ? resolveSeksjoner(
-        response.arbeidstakerData,
-        response.definisjon,
-      )
+    ? resolveSeksjoner(response.arbeidstakerData, response.definisjon)
     : [];
 
   const arbeidsgiverSeksjoner = response.arbeidsgiverData
-    ? resolveSeksjoner(
-        response.arbeidsgiverData,
-        response.definisjon,
-      )
+    ? resolveSeksjoner(response.arbeidsgiverData, response.definisjon)
     : [];
 
   return (
