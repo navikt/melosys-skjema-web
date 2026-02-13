@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
@@ -144,3 +145,6 @@ vite.config.ts.timestamp-*
 .idea
 /app/playwright-report/
 /app/test-results/
+
+# Build output copied during CI
+/build/

@@ -209,8 +209,8 @@ export interface FileRoutesByFullPath {
   '/skjema/arbeidstaker/$id/tilleggsopplysninger': typeof SkjemaArbeidstakerIdTilleggsopplysningerRoute
   '/skjema/arbeidstaker/$id/utenlandsoppdraget': typeof SkjemaArbeidstakerIdUtenlandsoppdragetRoute
   '/skjema/arbeidstaker/$id/vedlegg': typeof SkjemaArbeidstakerIdVedleggRoute
-  '/skjema/arbeidsgiver/$id': typeof SkjemaArbeidsgiverIdIndexRoute
-  '/skjema/arbeidstaker/$id': typeof SkjemaArbeidstakerIdIndexRoute
+  '/skjema/arbeidsgiver/$id/': typeof SkjemaArbeidsgiverIdIndexRoute
+  '/skjema/arbeidstaker/$id/': typeof SkjemaArbeidstakerIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -293,8 +293,8 @@ export interface FileRouteTypes {
     | '/skjema/arbeidstaker/$id/tilleggsopplysninger'
     | '/skjema/arbeidstaker/$id/utenlandsoppdraget'
     | '/skjema/arbeidstaker/$id/vedlegg'
-    | '/skjema/arbeidsgiver/$id'
-    | '/skjema/arbeidstaker/$id'
+    | '/skjema/arbeidsgiver/$id/'
+    | '/skjema/arbeidstaker/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -432,14 +432,14 @@ declare module '@tanstack/react-router' {
     '/skjema/arbeidstaker/$id/': {
       id: '/skjema/arbeidstaker/$id/'
       path: '/arbeidstaker/$id'
-      fullPath: '/skjema/arbeidstaker/$id'
+      fullPath: '/skjema/arbeidstaker/$id/'
       preLoaderRoute: typeof SkjemaArbeidstakerIdIndexRouteImport
       parentRoute: typeof SkjemaRoute
     }
     '/skjema/arbeidsgiver/$id/': {
       id: '/skjema/arbeidsgiver/$id/'
       path: '/arbeidsgiver/$id'
-      fullPath: '/skjema/arbeidsgiver/$id'
+      fullPath: '/skjema/arbeidsgiver/$id/'
       preLoaderRoute: typeof SkjemaArbeidsgiverIdIndexRouteImport
       parentRoute: typeof SkjemaRoute
     }

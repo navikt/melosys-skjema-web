@@ -31,12 +31,22 @@ Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 
 ## Utvikling
 
+Prosjektet bruker **pnpm** med workspaces. Installer pnpm globalt hvis du ikke har det:
+```bash
+npm install -g pnpm
+```
+
+### Installer dependencies
+
+```bash
+pnpm install
+```
+
 ### Lokal utvikling mot ekte backend i dev-gcp
 
 1. Start react app:
    ```bash
-   cd app
-   npm run dev
+   pnpm dev
    ```
 
 2. Åpne url i nettleser:
@@ -68,12 +78,22 @@ make local    # Start server og app med mock OAuth
 
 ### Kommandoer
 
+**Fra rot (workspace-scripts):**
+```bash
+pnpm dev               # Start frontend dev server
+pnpm dev:server        # Start backend dev server
+pnpm build             # Bygg alle workspaces
+pnpm build:ci          # Bygg for deployment (brukes i CI)
+pnpm lint              # Kjør ESLint på alle workspaces
+pnpm check-types       # Kjør TypeScript typesjekk på alle workspaces
+```
+
 **Frontend (app/):**
 ```bash
-npm run dev            # Start dev server
-npm run build          # Bygg for produksjon
-npm run lint           # Kjør ESLint
-npm run generate-types # Generer TypeScript-typer fra API
+pnpm --filter app dev            # Start dev server
+pnpm --filter app build          # Bygg for produksjon
+pnpm --filter app lint           # Kjør ESLint
+pnpm --filter app generate-types # Generer TypeScript-typer fra API
 ```
 
 ### Typegenerering
@@ -81,8 +101,7 @@ npm run generate-types # Generer TypeScript-typer fra API
 Applikasjonen bruker automatisk genererte TypeScript-typer fra API-et:
 
 ```bash
-cd app
-npm run generate-types
+pnpm --filter app generate-types
 ```
 
 Dette kommandoen:
@@ -97,24 +116,29 @@ Kjør denne kommandoen når API-et har nye eller endrede datamodeller.
 Skjemadefinisjoner (labels, hjelpetekster) synkroniseres fra backend til `src/constants/skjemaDefinisjonA1.ts`:
 
 ```bash
-cd app
-npm run sync-skjema-definisjon   # Krever backend på localhost:8082
+pnpm --filter app sync-skjema-definisjon   # Krever backend på localhost:8082
 ```
 
 Bruk `useSkjemaDefinisjon()` hook i komponenter - språk velges automatisk basert på i18n.
 
 **Server (server/):**
 ```bash
-npm run build        # Bygg TypeScript
-docker-compose up -d --build  # Bygg og start server
-npm run start        # Start bygget server
-npm run lint         # Kjør ESLint
-npm run lint:fix     # Fiks ESLint-feil
+pnpm --filter server build        # Bygg TypeScript
+docker-compose up -d --build      # Bygg og start server
+pnpm --filter server start        # Start bygget server
+pnpm --filter server lint         # Kjør ESLint
+pnpm --filter server lint:fix     # Fiks ESLint-feil
 ```
 
 ## Prosjektstruktur
 
 ```
+package.json                   # Rot package.json med workspace-scripts
+pnpm-workspace.yaml            # pnpm workspace konfigurasjon
+pnpm-lock.yaml                 # Felles lockfil for alle pakker
+.npmrc                         # NPM registry konfigurasjon
+Dockerfile                     # Docker container config
+
 app/                           # Frontend-applikasjon
 ├── src/
 │   ├── routes/                # TanStack Router ruter
@@ -163,7 +187,6 @@ app/                           # Frontend-applikasjon
 │   └── routeTree.gen.ts       # Autogenererte router typer
 ├── index.html                 # HTML template
 ├── package.json
-├── package-lock.json
 ├── vite.config.ts
 ├── tsconfig.json
 ├── tsconfig.node.json
@@ -179,10 +202,8 @@ server/                        # Express server
 │   ├── logger.ts              # Winston logging setup
 │   └── server.ts              # Express app setup
 ├── dist/                      # Compiled TypeScript output
-├── Dockerfile                 # Docker container config
-├── docker-compose.yaml        # Docker compose setup
+├── docker-compose.yaml        # Docker compose setup (lokal utvikling)
 ├── package.json
-├── package-lock.json
 ├── tsconfig.json
 └── eslint.config.mjs
 ```

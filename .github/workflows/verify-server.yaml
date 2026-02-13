@@ -22,16 +22,15 @@ jobs:
           node-version: '22'
           registry-url: https://npm.pkg.github.com/
           scope: '@navikt'
+      - uses: pnpm/action-setup@v4
+
       - name: Install dependencies
-        working-directory: server
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Run ESLint
-        working-directory: server
-        run: npm run lint
+        run: pnpm --filter server lint
 
       - name: Check for typescript errors
-        working-directory: server
-        run: npm run check-types
+        run: pnpm --filter server check-types

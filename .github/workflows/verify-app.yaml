@@ -22,24 +22,21 @@ jobs:
           node-version: '22'
           registry-url: https://npm.pkg.github.com/
           scope: '@navikt'
+      - uses: pnpm/action-setup@v4
+
       - name: Install dependencies
-        working-directory: app
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Run ESLint
-        working-directory: app
-        run: npm run lint
+        run: pnpm --filter app lint
 
       - name: Check for typescript errors
-        working-directory: app
-        run: npm run check-types
+        run: pnpm --filter app check-types
 
       - name: Install Playwright Browsers
-        working-directory: app
-        run: npx playwright install chromium
+        run: pnpm --filter app exec playwright install chromium
 
       - name: Run tests
-        working-directory: app
-        run: npm run test:e2e
+        run: pnpm --filter app test:e2e
