@@ -42,29 +42,21 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@navikt'
 
-      - name: Install app dependencies
-        working-directory: app
-        run: npm ci
+      - uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Build app
-        working-directory: app
-        run: npm run build
+        run: pnpm --filter app build
 
       - name: Copy app dist into public directory of server
-        working-directory: app
-        run: cp -r dist/ ../server/public
-
-      - name: Install server dependencies
-        working-directory: server
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: cp -r app/dist/ server/public
 
       - name: Build server
-        working-directory: server
-        run: npm run build
+        run: pnpm --filter server build
 
       - name: Build and push Docker image
         uses: nais/docker-build-push@v0
