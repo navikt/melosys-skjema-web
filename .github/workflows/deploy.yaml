@@ -11,10 +11,6 @@ on:
       - '.nais/**'
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: apps
-
 permissions:
   contents: read
   id-token: write
