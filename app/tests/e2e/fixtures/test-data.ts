@@ -28,14 +28,18 @@ export const testArbeidsgiverSkjema: ArbeidsgiversSkjemaDto = {
   id: testArbeidsgiverSkjemaId,
   orgnr: "123456789",
   status: SkjemaStatus.UTKAST,
-  data: {},
+  data: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
+  },
 };
 
 export const testArbeidstakerSkjema: ArbeidstakersSkjemaDto = {
   id: testArbeidstakerSkjemaId,
   fnr: testUserInfo.userId,
   status: SkjemaStatus.UTKAST,
-  data: {},
+  data: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+  },
 };
 
 export const formFieldValues = {

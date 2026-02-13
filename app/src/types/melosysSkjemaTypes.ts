@@ -803,3 +803,18 @@ export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
 }
+
+// Type aliases for e2e-tester - wrapper-typer rundt skjema-data
+export interface ArbeidsgiversSkjemaDto {
+  id: string;
+  orgnr: string;
+  status: SkjemaStatus;
+  data: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto;
+}
+
+export interface ArbeidstakersSkjemaDto {
+  id: string;
+  fnr: string;
+  status: SkjemaStatus;
+  data: UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
+}

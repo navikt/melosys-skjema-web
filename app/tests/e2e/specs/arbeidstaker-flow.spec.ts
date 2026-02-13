@@ -226,6 +226,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await mockFetchArbeidstakerSkjema(page, {
       ...testArbeidstakerSkjema,
       data: {
+        type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
         arbeidssituasjon: arbeidssituasjonData,
         utenlandsoppdraget: utenlandsoppdragetData,
         familiemedlemmer: familiemedlemmerData,

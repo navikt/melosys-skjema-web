@@ -1,19 +1,13 @@
+import { resolveSeksjoner } from "~/components/oppsummering/dataMapping.ts";
+import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { SendInnSkjemaKnapp } from "~/pages/skjema/components/SendInnSkjemaKnapp.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { TilleggsopplysningerStegOppsummering } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegOppsummering.tsx";
+import type { SkjemaDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
-import { stepKey as arbeidsgiverensVirksomhetINorgeStepKey } from "../arbeidsgiverens-virksomhet-i-norge/ArbeidsgiverensVirksomhetINorgeSteg.tsx";
-import { stepKey as arbeidsstedIUtlandetStepKey } from "../arbeidssted-i-utlandet/ArbeidsstedIUtlandetSteg.tsx";
-import { stepKey as arbeidstakerensLonnStepKey } from "../arbeidstakerens-lonn/ArbeidstakerensLonnSteg.tsx";
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
 import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { stepKey as tilleggsopplysningerStepKey } from "../tilleggsopplysninger/TilleggsopplysningerSteg.tsx";
 import { ArbeidsgiverSkjemaProps } from "../types.ts";
-import { stepKey as utenlandsoppdragetStepKey } from "../utenlandsoppdraget/UtenlandsoppdragetSteg.tsx";
-import { ArbeidsgiverensVirksomhetINorgeStegOppsummering } from "./ArbeidsgiverensVirksomhetINorgeStegOppsummering.tsx";
-import { ArbeidsstedIUtlandetStegOppsummering } from "./ArbeidsstedIUtlandetStegOppsummering.tsx";
-import { ArbeidstakerensLonnStegOppsummering } from "./ArbeidstakerensLonnStegOppsummering.tsx";
-import { UtenlandsoppdragetStegOppsummering } from "./UtenlandsoppdragetStegOppsummering.tsx";
 
 const oppsummeringStepKey = "oppsummering";
 
@@ -34,45 +28,12 @@ export function ArbeidsgiverOppsummeringSteg({
 function ArbeidsgiverOppsummeringStegContent({
   skjema,
 }: ArbeidsgiverSkjemaProps) {
-  const renderStepSummary = (stepKey: string) => {
-    switch (stepKey) {
-      case arbeidsgiverensVirksomhetINorgeStepKey: {
-        return (
-          <ArbeidsgiverensVirksomhetINorgeStegOppsummering
-            key={stepKey}
-            skjema={skjema}
-          />
-        );
-      }
-      case utenlandsoppdragetStepKey: {
-        return (
-          <UtenlandsoppdragetStegOppsummering key={stepKey} skjema={skjema} />
-        );
-      }
-      case arbeidsstedIUtlandetStepKey: {
-        return (
-          <ArbeidsstedIUtlandetStegOppsummering key={stepKey} skjema={skjema} />
-        );
-      }
-      case arbeidstakerensLonnStepKey: {
-        return (
-          <ArbeidstakerensLonnStegOppsummering key={stepKey} skjema={skjema} />
-        );
-      }
-      case tilleggsopplysningerStepKey: {
-        return (
-          <TilleggsopplysningerStegOppsummering
-            key={stepKey}
-            skjema={skjema}
-            stegRekkefolge={ARBEIDSGIVER_STEG_REKKEFOLGE}
-          />
-        );
-      }
-      default: {
-        return null;
-      }
-    }
-  };
+  const { definisjon } = useSkjemaDefinisjon();
+
+  const seksjoner = resolveSeksjoner(
+    skjema.data,
+    definisjon as unknown as SkjemaDefinisjonDto,
+  );
 
   return (
     <SkjemaSteg
@@ -82,9 +43,20 @@ function ArbeidsgiverOppsummeringStegContent({
       }}
       nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjema.id} />}
     >
-      {ARBEIDSGIVER_STEG_REKKEFOLGE.filter(
-        (steg) => steg.key !== oppsummeringStepKey,
-      ).map((steg) => renderStepSummary(steg.key))}
+      {seksjoner.map(({ seksjonNavn, seksjon, data, stegKey }) => {
+        const steg = ARBEIDSGIVER_STEG_REKKEFOLGE.find(
+          (s) => s.key === stegKey,
+        );
+        const editHref = steg?.route.replace("$id", skjema.id) ?? "";
+        return (
+          <SeksjonOppsummering
+            data={data}
+            editHref={editHref}
+            key={seksjonNavn}
+            seksjon={seksjon}
+          />
+        );
+      })}
     </SkjemaSteg>
   );
 }

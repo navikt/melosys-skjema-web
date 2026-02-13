@@ -1,11 +1,16 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidstakersSkjemaDto,
   FamiliemedlemmerDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+
+// Hent felter fra statiske definisjoner
+const familiemedlemmerSeksjon = SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer;
+const felter = familiemedlemmerSeksjon.felter;
 
 export class FamiliemedlemmerStegPage {
   readonly page: Page;
@@ -18,12 +23,11 @@ export class FamiliemedlemmerStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.familiemedlemmerSteg.tittel,
+      name: familiemedlemmerSeksjon.tittel,
     });
 
     const harDuFamiliemedlemmerSomSkalVaereMedGroup = page.getByRole("group", {
-      name: nb.translation.familiemedlemmerSteg
-        .harDuFamiliemedlemmerSomSkalVaereMed,
+      name: felter.skalHaMedFamiliemedlemmer.label,
     });
     this.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup = {
       JA: harDuFamiliemedlemmerSomSkalVaereMedGroup.getByRole("radio", {

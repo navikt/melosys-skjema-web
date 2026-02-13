@@ -3,7 +3,6 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidsgiverenDto,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsgiversSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
@@ -78,12 +77,14 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     );
   }
 
-  async mockArbeidsgiverenStegData(arbeidsgiverenData: ArbeidsgiverenDto) {
+  async mockArbeidsgiverensVirksomhetINorgeStegData(
+    virksomhetINorgeData: ArbeidsgiverensVirksomhetINorgeDto,
+  ) {
     await mockFetchArbeidsgiverSkjema(this.page, {
       ...this.skjema,
       data: {
         ...this.skjema.data,
-        arbeidsgiveren: arbeidsgiverenData,
+        arbeidsgiverensVirksomhetINorge: virksomhetINorgeData,
       },
     });
   }
