@@ -25,6 +25,7 @@ interface RepresentationOption {
     className?: string;
   }>;
   labelKey: string;
+  descriptionKey?: string;
 }
 
 interface RepresentationCardProps {
@@ -38,14 +39,19 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
 
   return (
     <button
-      className="w-full text-left border border-border-subtle rounded px-4 py-4 hover:bg-surface-action-subtle transition-colors"
+      className="w-full text-left border border-border-subtle rounded px-4 py-4 hover:bg-surface-action-subtle transition-colors cursor-pointer"
       onClick={() => onSelect(option.type)}
       type="button"
     >
       <HStack align="center" gap="space-16" justify="space-between">
         <HStack align="center" gap="space-16">
           <Icon aria-hidden className="text-icon-action" fontSize="1.75rem" />
-          <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
+          <div>
+            <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
+            {option.descriptionKey && (
+              <BodyShort size="small">{t(option.descriptionKey)}</BodyShort>
+            )}
+          </div>
         </HStack>
         <ChevronRightIcon
           aria-hidden
@@ -67,16 +73,19 @@ const REPRESENTATION_OPTIONS: RepresentationOption[] = [
     type: Representasjonstype.ARBEIDSGIVER,
     icon: BriefcaseIcon,
     labelKey: "landingsside.dinArbeidsgiver",
+    descriptionKey: "landingsside.dinArbeidsgiverBeskrivelse",
   },
   {
     type: Representasjonstype.RADGIVER,
     icon: HandshakeIcon,
     labelKey: "landingsside.enArbeidsgiverSomRadgiver",
+    descriptionKey: "landingsside.enArbeidsgiverSomRadgiverBeskrivelse",
   },
   {
     type: Representasjonstype.ANNEN_PERSON,
     icon: PersonGroupIcon,
     labelKey: "landingsside.annenPerson",
+    descriptionKey: "landingsside.annenPersonBeskrivelse",
   },
 ];
 

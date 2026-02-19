@@ -253,11 +253,16 @@ export const nb = {
     },
     landingsside: {
       hei: "Hei",
-      hvemVilDuBrukeNavPaVegneAv: "Hvem vil du bruke Nav på vegne av?",
+      hvemVilDuBrukeNavPaVegneAv: "Hvem skal du opptre som?",
       degSelv: "DEG SELV",
-      dinArbeidsgiver: "DIN ARBEIDSGIVER",
-      enArbeidsgiverSomRadgiver: "EN ARBEIDSGIVER SOM RÅDGIVER",
-      annenPerson: "ANNEN PERSON",
+      dinArbeidsgiver: "ARBEIDSGIVER",
+      dinArbeidsgiverBeskrivelse:
+        "som fyller ut søknad for arbeidsgiver/arbeidstaker",
+      enArbeidsgiverSomRadgiver: "RÅDGIVER",
+      enArbeidsgiverSomRadgiverBeskrivelse:
+        "som fyller ut søknad for arbeidsgiver/arbeidstaker",
+      annenPerson: "PRIVATPERSON",
+      annenPersonBeskrivelse: "som fyller ut søknad for en annen person",
       avbryt: "Avbryt",
     },
     appHeader: {

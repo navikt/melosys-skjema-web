@@ -365,11 +365,16 @@ export const en = {
     },
     landingsside: {
       hei: "Hello",
-      hvemVilDuBrukeNavPaVegneAv: "Who do you want to use Nav on behalf of?",
+      hvemVilDuBrukeNavPaVegneAv: "Who will you act as?",
       degSelv: "YOURSELF",
-      dinArbeidsgiver: "YOUR EMPLOYER",
-      enArbeidsgiverSomRadgiver: "AN EMPLOYER AS AN ADVISOR",
-      annenPerson: "ANOTHER PERSON",
+      dinArbeidsgiver: "EMPLOYER",
+      dinArbeidsgiverBeskrivelse:
+        "filling out an application for employer/employee",
+      enArbeidsgiverSomRadgiver: "ADVISOR",
+      enArbeidsgiverSomRadgiverBeskrivelse:
+        "filling out an application for employer/employee",
+      annenPerson: "PRIVATE PERSON",
+      annenPersonBeskrivelse: "filling out an application for another person",
       avbryt: "Cancel",
     },
     appHeader: {
