@@ -374,8 +374,7 @@ export const en = {
       enArbeidsgiverSomRadgiverBeskrivelse:
         "filling out an application for employer/employee",
       annenPerson: "PRIVATE PERSON",
-      annenPersonBeskrivelse:
-        "filling out an application for another person",
+      annenPersonBeskrivelse: "filling out an application for another person",
       avbryt: "Cancel",
     },
     appHeader: {
