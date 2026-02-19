@@ -39,7 +39,7 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
 
   return (
     <button
-      className="w-full text-left border border-border-subtle rounded px-4 py-4 hover:bg-surface-action-subtle transition-colors"
+      className="w-full text-left border border-border-subtle rounded px-4 py-4 hover:bg-surface-action-subtle transition-colors cursor-pointer"
       onClick={() => onSelect(option.type)}
       type="button"
     >
