@@ -6,7 +6,7 @@ import {
   Skjemadel,
 } from "~/types/melosysSkjemaTypes.ts";
 
-function medFullmakt(
+function representasjonstypeMedFullmakt(
   representasjonstype: Representasjonstype,
 ): Representasjonstype {
   if (representasjonstype === Representasjonstype.ARBEIDSGIVER)
@@ -66,7 +66,7 @@ export const soknadStarterSchema = z
 
     return {
       representasjonstype: data.skalFylleUtForArbeidstaker
-        ? medFullmakt(data.representasjonstype)
+        ? representasjonstypeMedFullmakt(data.representasjonstype)
         : data.representasjonstype,
       radgiverfirma: data.radgiverfirma,
       arbeidsgiver: data.arbeidsgiver!,
