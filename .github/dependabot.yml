@@ -2,9 +2,9 @@ version: 2
 
 updates:
   - package-ecosystem: npm
-    directory: "/"
-    cooldown:
-      default-days: 7
+    directories:
+      - "/app"
+      - "/server"
     schedule:
       interval: daily
     open-pull-requests-limit: 10
