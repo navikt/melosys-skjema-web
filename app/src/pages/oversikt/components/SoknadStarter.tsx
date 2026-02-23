@@ -62,6 +62,10 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     representasjonstype: kontekst.representasjonstype,
     radgiverfirma: kontekst.radgiverfirma,
     harFullmakt: false,
+    // Rådgiver fyller alltid ut for arbeidstaker
+    ...(kontekst.representasjonstype === Representasjonstype.RADGIVER && {
+      skalFylleUtForArbeidstaker: true,
+    }),
     ...(kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
       userInfo && {
         arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
