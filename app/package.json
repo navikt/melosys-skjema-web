@@ -52,7 +52,7 @@
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-simple-import-sort": "12.1.1",
-    "eslint-plugin-unicorn": "62.0.0",
+    "eslint-plugin-unicorn": "63.0.0",
     "globals": "17.3.0",
     "prettier": "3.8.1",
     "swagger-typescript-api": "13.2.17",
