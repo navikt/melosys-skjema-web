@@ -49,7 +49,7 @@ export const utenlandskVirksomhetSchema = z.object({
 
 export const utenlandskVirksomhetMedAnsettelsesformSchema =
   utenlandskVirksomhetSchema.extend({
-    ansettelsesform: z.nativeEnum(Ansettelsesform, {
+    ansettelsesform: z.enum(Ansettelsesform, {
       message: "generellValidering.ansettelsesformErPakrevd",
     }),
   });

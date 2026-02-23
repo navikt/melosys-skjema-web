@@ -4,7 +4,6 @@ import {
   BodyShort,
   Box,
   Button,
-  Checkbox,
   Heading,
   HStack,
   InlineMessage,
@@ -16,10 +15,11 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import {
   getPersonerMedFullmaktQuery,
   verifiserPerson,
@@ -73,6 +73,9 @@ export function ArbeidstakerVelger({
   } = useFormContext<SoknadStarterFormData>();
 
   const harFeil = !!errors.arbeidstaker;
+  const skalFylleUtForArbeidstaker = useWatch<SoknadStarterFormData>({
+    name: "skalFylleUtForArbeidstaker",
+  });
 
   const [fnr, setFnr] = useState("");
   const [etternavn, setEtternavn] = useState("");
@@ -86,10 +89,6 @@ export function ArbeidstakerVelger({
   const [selectedPersonFnr, setSelectedPersonFnr] = useState<
     string | undefined
   >();
-  const [medFullmaktHarFokus, setMedFullmaktHarFokus] = useState(false);
-  const [utenFullmaktHarFokus, setUtenFullmaktHarFokus] = useState(false);
-  const [arbeidstakerSelvUtfylling, setArbeidstakerSelvUtfylling] =
-    useState(false);
 
   // Lazy loading av personer med fullmakt
   const {
@@ -107,11 +106,15 @@ export function ArbeidstakerVelger({
   );
 
   const harValgtMedFullmakt = selectedPersonFnr !== undefined;
-  const harValgtUtenFullmakt = verifisertPerson !== undefined;
-  const skalDisableMedFullmakt =
+
+  // For ARBEIDSGIVER/RADGIVER: radioen styrer hva som vises
+  const visRadio = !erAnnenPerson && !visKunMedFullmakt;
+  const visMedFullmakt =
+    erAnnenPerson || visKunMedFullmakt || skalFylleUtForArbeidstaker === true;
+  const visUtenFullmakt =
     !visKunMedFullmakt &&
-    (harValgtUtenFullmakt || utenFullmaktHarFokus || arbeidstakerSelvUtfylling);
-  const skalDisableUtenFullmakt = harValgtMedFullmakt || medFullmaktHarFokus;
+    !erAnnenPerson &&
+    skalFylleUtForArbeidstaker === false;
 
   const handleComboboxChange = (value: string) => {
     const person = personerMedFullmakt.find((p) => p.fnr === value);
@@ -121,20 +124,17 @@ export function ArbeidstakerVelger({
       // Clear validation errors from "uten fullmakt" section
       setFnrError(null);
       setEtternavnError(null);
-      // Set arbeidstaker and harFullmakt in form
+      // Set arbeidstaker in form
       setValue("arbeidstaker", {
         fnr: person.fnr,
         etternavn: person.navn,
       });
-      setValue("harFullmakt", true);
     }
   };
 
   const handleClearMedFullmakt = () => {
     setSelectedPersonFnr(undefined);
-    setMedFullmaktHarFokus(false);
     setValue("arbeidstaker", undefined);
-    setValue("harFullmakt", false);
   };
 
   const handleVerifiser = async () => {
@@ -179,7 +179,6 @@ export function ArbeidstakerVelger({
         fnr,
         etternavn: etternavn, // Etternavn fra brukerens input (for backend-validering)
       });
-      setValue("harFullmakt", false);
     } catch (error: unknown) {
       setVerifisertPerson(undefined);
 
@@ -209,9 +208,7 @@ export function ArbeidstakerVelger({
     setFnrError(null);
     setEtternavnError(null);
     setVerifiseringFeil(null);
-    setUtenFullmaktHarFokus(false);
     setValue("arbeidstaker", undefined);
-    setValue("harFullmakt", false);
   };
 
   return (
@@ -227,175 +224,152 @@ export function ArbeidstakerVelger({
         paddingInline="space-16"
       >
         <VStack gap="space-24">
-          {/* Med fullmakt */}
-          <div
-            className="navds-form-field navds-form-field--medium"
-            style={{
-              opacity: skalDisableMedFullmakt ? 0.5 : 1,
-              pointerEvents: skalDisableMedFullmakt ? "none" : "auto",
-            }}
-          >
-            <Label className="navds-form-field__label">
-              {erAnnenPerson
-                ? t("oversiktAnnenPerson.personVelgerLabel")
-                : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
-            </Label>
-            <BodyShort className="navds-form-field__description">
-              {erAnnenPerson
-                ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
-                : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
-            </BodyShort>
+          {/* Radio for ARBEIDSGIVER/RADGIVER */}
+          {visRadio && (
+            <RadioGroupJaNeiFormPart
+              formFieldName="skalFylleUtForArbeidstaker"
+              legend={t("oversiktFelles.skalFylleUtForArbeidstakerLabel")}
+            />
+          )}
 
+          {/* Med fullmakt */}
+          {visMedFullmakt && (
+            <div className="navds-form-field navds-form-field--medium">
+              <Label className="navds-form-field__label">
+                {erAnnenPerson
+                  ? t("oversiktAnnenPerson.personVelgerLabel")
+                  : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+              </Label>
+              <BodyShort className="navds-form-field__description">
+                {erAnnenPerson
+                  ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
+                  : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
+              </BodyShort>
+
+              <div className="max-w-lg w-full">
+                {harValgtMedFullmakt ? (
+                  <Box
+                    background="default"
+                    borderColor="neutral-subtle"
+                    borderRadius="2"
+                    borderWidth="1"
+                    className="mt-2"
+                    padding="space-8"
+                  >
+                    <HStack align="center" justify="space-between">
+                      <BodyShort>
+                        {
+                          personerMedFullmakt.find(
+                            (p) => p.fnr === selectedPersonFnr,
+                          )?.navn
+                        }{" "}
+                        - {selectedPersonFnr}
+                      </BodyShort>
+                      <Button
+                        icon={<XMarkIcon aria-hidden />}
+                        onClick={handleClearMedFullmakt}
+                        size="small"
+                        variant="tertiary"
+                      />
+                    </HStack>
+                  </Box>
+                ) : !isLoading && personerMedFullmakt.length === 0 ? (
+                  <InlineMessage className="mt-2" status="info">
+                    {t("oversiktFelles.arbeidstakerIngenFullmakter")}{" "}
+                    <Link
+                      href="https://www.nav.no/fullmakt"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      nav.no/fullmakt
+                    </Link>
+                  </InlineMessage>
+                ) : (
+                  // Vi bruker tom label="" fordi vi viser egen Label og BodyShort over
+                  // for å sikre at label og beskrivelse er synlig både når Combobox
+                  // vises og når valgt person vises i boks. Combobox har ikke innebygd clear-knapp.
+                  <UNSAFE_Combobox
+                    error={
+                      error
+                        ? "Kunne ikke laste personer med fullmakt"
+                        : undefined
+                    }
+                    isLoading={isLoading}
+                    label=""
+                    onToggleSelected={handleComboboxChange}
+                    options={comboboxOptions}
+                    placeholder={t(
+                      "oversiktFelles.arbeidstakerMedFullmaktPlaceholder",
+                    )}
+                    shouldAutocomplete
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Uten fullmakt */}
+          {visUtenFullmakt && (
             <div className="max-w-lg w-full">
-              {harValgtMedFullmakt ? (
+              {verifisertPerson ? (
                 <Box
                   background="default"
                   borderColor="neutral-subtle"
                   borderRadius="2"
                   borderWidth="1"
-                  className="mt-2"
                   padding="space-8"
                 >
                   <HStack align="center" justify="space-between">
                     <BodyShort>
-                      {
-                        personerMedFullmakt.find(
-                          (p) => p.fnr === selectedPersonFnr,
-                        )?.navn
-                      }{" "}
-                      - {selectedPersonFnr}
+                      {verifisertPerson.navn} - {verifisertPerson.fnr}
                     </BodyShort>
                     <Button
                       icon={<XMarkIcon aria-hidden />}
-                      onClick={handleClearMedFullmakt}
+                      onClick={handleFjernVerifisertPerson}
                       size="small"
                       variant="tertiary"
                     />
                   </HStack>
                 </Box>
-              ) : !isLoading && personerMedFullmakt.length === 0 ? (
-                <InlineMessage className="mt-2" status="info">
-                  {t("oversiktFelles.arbeidstakerIngenFullmakter")}{" "}
-                  <Link
-                    href="https://www.nav.no/fullmakt"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    nav.no/fullmakt
-                  </Link>
-                </InlineMessage>
               ) : (
-                // Vi bruker tom label="" fordi vi viser egen Label og BodyShort over
-                // for å sikre at label og beskrivelse er synlig både når Combobox
-                // vises og når valgt person vises i boks. Combobox har ikke innebygd clear-knapp.
-                <UNSAFE_Combobox
-                  error={
-                    error ? "Kunne ikke laste personer med fullmakt" : undefined
-                  }
-                  isLoading={isLoading}
-                  label=""
-                  onBlur={() => setMedFullmaktHarFokus(false)}
-                  onFocus={() => setMedFullmaktHarFokus(true)}
-                  onToggleSelected={handleComboboxChange}
-                  options={comboboxOptions}
-                  placeholder={t(
-                    "oversiktFelles.arbeidstakerMedFullmaktPlaceholder",
-                  )}
-                  shouldAutocomplete
-                />
-              )}
-            </div>
-          </div>
-
-          {/* Checkbox for selvutfylling - vises for RADGIVER/ARBEIDSGIVER */}
-          {!visKunMedFullmakt && (
-            <div
-              style={{
-                opacity: skalDisableUtenFullmakt ? 0.5 : 1,
-                pointerEvents: skalDisableUtenFullmakt ? "none" : "auto",
-              }}
-            >
-              <Checkbox
-                checked={arbeidstakerSelvUtfylling}
-                onChange={(e) => {
-                  setArbeidstakerSelvUtfylling(e.target.checked);
-                  if (!e.target.checked) {
-                    // Clear data når checkbox uncheckes
-                    handleFjernVerifisertPerson();
-                  }
-                }}
-              >
-                {t("oversiktFelles.arbeidstakerSelvUtfyllingCheckbox")}
-              </Checkbox>
-
-              {/* Felt for F.nr og etternavn - vises kun når checkbox er huket av */}
-              {arbeidstakerSelvUtfylling && (
-                <div className="max-w-lg w-full mt-4">
-                  {verifisertPerson ? (
-                    <Box
-                      background="default"
-                      borderColor="neutral-subtle"
-                      borderRadius="2"
-                      borderWidth="1"
-                      padding="space-8"
-                    >
-                      <HStack align="center" justify="space-between">
-                        <BodyShort>
-                          {verifisertPerson.navn} - {verifisertPerson.fnr}
-                        </BodyShort>
-                        <Button
-                          icon={<XMarkIcon aria-hidden />}
-                          onClick={handleFjernVerifisertPerson}
-                          size="small"
-                          variant="tertiary"
-                        />
-                      </HStack>
+                <>
+                  <HStack align="start" gap="space-8" wrap={false}>
+                    <TextField
+                      error={fnrError ?? undefined}
+                      label={t("oversiktFelles.arbeidstakerFnrLabel")}
+                      maxLength={FNR_LENGTH}
+                      onChange={(e) => {
+                        setFnr(e.target.value);
+                        setFnrError(null);
+                      }}
+                      value={fnr}
+                    />
+                    <TextField
+                      error={etternavnError ?? undefined}
+                      label={t("oversiktFelles.arbeidstakerFulltNavnLabel")}
+                      onChange={(e) => {
+                        setEtternavn(e.target.value);
+                        setEtternavnError(null);
+                      }}
+                      value={etternavn}
+                    />
+                    <Box className="mt-8">
+                      <Button
+                        loading={verifiserer}
+                        onClick={handleVerifiser}
+                        variant="secondary"
+                      >
+                        {t("oversiktFelles.arbeidstakerSokKnapp")}
+                      </Button>
                     </Box>
-                  ) : (
-                    <>
-                      <HStack align="start" gap="space-8" wrap={false}>
-                        <TextField
-                          error={fnrError ?? undefined}
-                          label={t("oversiktFelles.arbeidstakerFnrLabel")}
-                          maxLength={FNR_LENGTH}
-                          onBlur={() => setUtenFullmaktHarFokus(false)}
-                          onChange={(e) => {
-                            setFnr(e.target.value);
-                            setFnrError(null);
-                          }}
-                          onFocus={() => setUtenFullmaktHarFokus(true)}
-                          value={fnr}
-                        />
-                        <TextField
-                          error={etternavnError ?? undefined}
-                          label={t("oversiktFelles.arbeidstakerFulltNavnLabel")}
-                          onBlur={() => setUtenFullmaktHarFokus(false)}
-                          onChange={(e) => {
-                            setEtternavn(e.target.value);
-                            setEtternavnError(null);
-                          }}
-                          onFocus={() => setUtenFullmaktHarFokus(true)}
-                          value={etternavn}
-                        />
-                        <Box className="mt-8">
-                          <Button
-                            loading={verifiserer}
-                            onClick={handleVerifiser}
-                            variant="secondary"
-                          >
-                            {t("oversiktFelles.arbeidstakerSokKnapp")}
-                          </Button>
-                        </Box>
-                      </HStack>
+                  </HStack>
 
-                      {verifiseringFeil && (
-                        <Alert size="small" variant="error">
-                          {verifiseringFeil}
-                        </Alert>
-                      )}
-                    </>
+                  {verifiseringFeil && (
+                    <Alert size="small" variant="error">
+                      {verifiseringFeil}
+                    </Alert>
                   )}
-                </div>
+                </>
               )}
             </div>
           )}

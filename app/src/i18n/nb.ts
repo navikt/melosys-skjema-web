@@ -336,6 +336,8 @@ export const nb = {
       feilVedHentingAvArbeidsgivere:
         "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
       arbeidstakerTittel: "Arbeidstaker",
+      skalFylleUtForArbeidstakerLabel:
+        "Skal du fylle ut søknaden for arbeidstaker?",
       arbeidstakerMedFullmaktLabel:
         "Velg arbeidstaker du skal fylle ut søknad for",
       arbeidstakerMedFullmaktBeskrivelse:

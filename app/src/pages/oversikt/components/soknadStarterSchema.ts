@@ -6,9 +6,19 @@ import {
   Skjemadel,
 } from "~/types/melosysSkjemaTypes.ts";
 
+function representasjonstypeMedFullmakt(
+  representasjonstype: Representasjonstype,
+): Representasjonstype {
+  if (representasjonstype === Representasjonstype.ARBEIDSGIVER)
+    return Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT;
+  if (representasjonstype === Representasjonstype.RADGIVER)
+    return Representasjonstype.RADGIVER_MED_FULLMAKT;
+  return representasjonstype;
+}
+
 export const soknadStarterSchema = z
   .object({
-    representasjonstype: z.nativeEnum(Representasjonstype),
+    representasjonstype: z.enum(Representasjonstype),
     radgiverfirma: z
       .object({
         orgnr: z.string().min(1),
@@ -27,7 +37,7 @@ export const soknadStarterSchema = z
         etternavn: z.string().optional(),
       })
       .optional(),
-    harFullmakt: z.boolean(),
+    skalFylleUtForArbeidstaker: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
     if (!data.arbeidsgiver) {
@@ -46,17 +56,6 @@ export const soknadStarterSchema = z
     }
   })
   .transform((data): OpprettSoknadMedKontekstRequest => {
-    // Beregn final representasjonstype med fullmakt
-    let finalRepresentasjonstype = data.representasjonstype;
-    if (data.harFullmakt) {
-      if (data.representasjonstype === Representasjonstype.ARBEIDSGIVER) {
-        finalRepresentasjonstype =
-          Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT;
-      } else if (data.representasjonstype === Representasjonstype.RADGIVER) {
-        finalRepresentasjonstype = Representasjonstype.RADGIVER_MED_FULLMAKT;
-      }
-    }
-
     // Beregn skjemadel basert på representasjonstype
     const skjemadel = [
       Representasjonstype.RADGIVER,
@@ -66,7 +65,9 @@ export const soknadStarterSchema = z
       : Skjemadel.ARBEIDSTAKERS_DEL;
 
     return {
-      representasjonstype: finalRepresentasjonstype,
+      representasjonstype: data.skalFylleUtForArbeidstaker
+        ? representasjonstypeMedFullmakt(data.representasjonstype)
+        : data.representasjonstype,
       radgiverfirma: data.radgiverfirma,
       arbeidsgiver: data.arbeidsgiver!,
       arbeidstaker: data.arbeidstaker!,
