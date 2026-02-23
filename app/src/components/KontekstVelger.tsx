@@ -6,7 +6,7 @@ import {
   PersonCircleIcon,
   PersonGroupIcon,
 } from "@navikt/aksel-icons";
-import { Button, HStack, Popover } from "@navikt/ds-react";
+import { Button, HStack, Label, Popover } from "@navikt/ds-react";
 import { setParams } from "@navikt/nav-dekoratoren-moduler";
 import type { ComponentType } from "react";
 import { useRef, useState } from "react";
@@ -16,6 +16,7 @@ import { RepresentasjonVelger } from "~/components/RepresentasjonVelger.tsx";
 import { useKontekst } from "~/hooks/useKontekst.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
+import { truncateText } from "~/utils/truncateText.ts";
 
 interface KontekstConfig {
   icon: ComponentType<{ "aria-hidden"?: boolean; fontSize?: string }>;
@@ -100,7 +101,7 @@ export function KontekstVelger() {
       kontekst.representasjonstype === Representasjonstype.RADGIVER &&
       kontekst.radgiverfirma
     ) {
-      return kontekst.radgiverfirma.navn;
+      return truncateText(kontekst.radgiverfirma.navn, 23);
     }
     return t(config.tekstKey);
   };
@@ -126,9 +127,9 @@ export function KontekstVelger() {
     <>
       <HStack align="center" gap="space-8">
         {displayText && (
-          <span className="text-xl font-semibold text-text-action">
+          <Label as="span" style={{ color: "var(--ax-border-accent)" }}>
             {displayText}
-          </span>
+          </Label>
         )}
         <Button
           aria-label={t("kontekstVelger.byttKontekstAriaLabel")}
