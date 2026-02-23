@@ -8,7 +8,7 @@ import {
 
 export const soknadStarterSchema = z
   .object({
-    representasjonstype: z.nativeEnum(Representasjonstype),
+    representasjonstype: z.enum(Representasjonstype),
     radgiverfirma: z
       .object({
         orgnr: z.string().min(1),
