@@ -5,6 +5,8 @@ updates:
     directories:
       - "/app"
       - "/server"
+    cooldown:
+      default-days: 7
     schedule:
       interval: daily
     open-pull-requests-limit: 10
