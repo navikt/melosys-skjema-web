@@ -28,6 +28,7 @@ export const soknadStarterSchema = z
       })
       .optional(),
     harFullmakt: z.boolean(),
+    skalFylleUtForArbeidstaker: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
     if (!data.arbeidsgiver) {

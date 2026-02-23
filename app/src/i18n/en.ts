@@ -450,6 +450,8 @@ export const en = {
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
       arbeidstakerTittel: "Employee",
+      skalFylleUtForArbeidstakerLabel:
+        "Will you fill out the application for the employee?",
       arbeidstakerMedFullmaktLabel:
         "Select the employee you want to fill out an application for",
       arbeidstakerMedFullmaktBeskrivelse:
