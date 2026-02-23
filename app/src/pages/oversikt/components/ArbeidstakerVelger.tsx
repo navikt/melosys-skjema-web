@@ -124,19 +124,17 @@ export function ArbeidstakerVelger({
       // Clear validation errors from "uten fullmakt" section
       setFnrError(null);
       setEtternavnError(null);
-      // Set arbeidstaker and harFullmakt in form
+      // Set arbeidstaker in form
       setValue("arbeidstaker", {
         fnr: person.fnr,
         etternavn: person.navn,
       });
-      setValue("harFullmakt", true);
     }
   };
 
   const handleClearMedFullmakt = () => {
     setSelectedPersonFnr(undefined);
     setValue("arbeidstaker", undefined);
-    setValue("harFullmakt", false);
   };
 
   const handleVerifiser = async () => {
@@ -181,7 +179,6 @@ export function ArbeidstakerVelger({
         fnr,
         etternavn: etternavn, // Etternavn fra brukerens input (for backend-validering)
       });
-      setValue("harFullmakt", false);
     } catch (error: unknown) {
       setVerifisertPerson(undefined);
 
@@ -212,7 +209,6 @@ export function ArbeidstakerVelger({
     setEtternavnError(null);
     setVerifiseringFeil(null);
     setValue("arbeidstaker", undefined);
-    setValue("harFullmakt", false);
   };
 
   return (

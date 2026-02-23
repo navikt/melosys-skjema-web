@@ -27,7 +27,6 @@ export const soknadStarterSchema = z
         etternavn: z.string().optional(),
       })
       .optional(),
-    harFullmakt: z.boolean(),
     skalFylleUtForArbeidstaker: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
@@ -49,7 +48,7 @@ export const soknadStarterSchema = z
   .transform((data): OpprettSoknadMedKontekstRequest => {
     // Beregn final representasjonstype med fullmakt
     let finalRepresentasjonstype = data.representasjonstype;
-    if (data.harFullmakt) {
+    if (data.skalFylleUtForArbeidstaker === true) {
       if (data.representasjonstype === Representasjonstype.ARBEIDSGIVER) {
         finalRepresentasjonstype =
           Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT;
