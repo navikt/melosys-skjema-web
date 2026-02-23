@@ -11,7 +11,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootComponent() {
   return (
     <Page footerPosition="belowFold">
-      <div style={{ backgroundColor: "var(--ax-bg-neutral-soft)", width: "100%" }}>
+      <div
+        style={{ backgroundColor: "var(--ax-bg-neutral-soft)", width: "100%" }}
+      >
         <Page.Block gutters style={{ paddingInline: "24px" }} width="md">
           <AppHeader />
         </Page.Block>
