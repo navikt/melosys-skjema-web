@@ -13,6 +13,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
+import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
@@ -164,7 +165,20 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
             )}
 
             <div>
-              <ArbeidsgiverVelger />
+              {representasjonstype !== Representasjonstype.DEG_SELV && (
+                <Heading level="3" size="medium" spacing>
+                  {t("oversiktFelles.arbeidsgiverTittel")}
+                </Heading>
+              )}
+              {representasjonstype === Representasjonstype.DEG_SELV ||
+              representasjonstype === Representasjonstype.ANNEN_PERSON ? (
+                <OrganisasjonSoker
+                  formFieldName="arbeidsgiver"
+                  label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
+                />
+              ) : (
+                <ArbeidsgiverVelger formFieldName="arbeidsgiver" />
+              )}
             </div>
 
             {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}
