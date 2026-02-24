@@ -13,10 +13,7 @@ import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import {
-  Representasjonstype,
-  SimpleOrganisasjonDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 
 import { SoknadStarterFormData } from "./soknadStarterSchema.ts";
 
@@ -100,13 +97,6 @@ export function ArbeidsgiverVelger() {
       }))
     : [];
 
-  const handleArbeidsgiverValgt = (organisasjon: SimpleOrganisasjonDto) => {
-    setValue("arbeidsgiver", {
-      orgnr: organisasjon.orgnr,
-      navn: organisasjon.navn,
-    });
-  };
-
   const handleComboboxValgt = (value: string) => {
     const valgtOrganisasjon = arbeidsgivere?.find((org) => org.orgnr === value);
 
@@ -146,8 +136,8 @@ export function ArbeidsgiverVelger() {
           {skalSokeEtterArbeidsgiver ? (
             // OrganisasjonSoker for DEG_SELV og ANNEN_PERSON
             <OrganisasjonSoker
+              formFieldName="arbeidsgiver"
               label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
-              onOrganisasjonValgt={handleArbeidsgiverValgt}
             />
           ) : skalHenteArbeidsgivere ? (
             // Henter fra Altinn for RADGIVER og ARBEIDSGIVER

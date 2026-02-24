@@ -1,43 +1,35 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { BodyShort, Button, Heading, HStack, VStack } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { Route } from "~/routes/representasjon.velg-radgiverfirma.tsx";
-import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 import {
   clearRepresentasjonKontekst,
   setRepresentasjonKontekst,
 } from "~/utils/sessionStorage.ts";
 
+import {
+  RadgiverfirmaFormData,
+  radgiverfirmaSchema,
+} from "./radgiverfirmaSchema.ts";
+
 export function VelgRadgiverfirmaPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { kontekst } = Route.useRouteContext();
-  const [valgtFirma, setValgtFirma] = useState<SimpleOrganisasjonDto | null>(
-    null,
-  );
-  const [feilmelding, setFeilmelding] = useState<string | null>(null);
 
-  const handleOrganisasjonValgt = (
-    organisasjon: SimpleOrganisasjonDto,
-  ): void => {
-    setValgtFirma(organisasjon);
-    setFeilmelding(null);
-  };
+  const formMethods = useForm({
+    resolver: zodResolver(radgiverfirmaSchema),
+  });
 
-  const handleOk = (): void => {
-    if (!valgtFirma) {
-      setFeilmelding(t("velgRadgiverfirma.duMaSokeForstFeil"));
-      return;
-    }
-
+  const velgRadgiverfirma = (data: RadgiverfirmaFormData): void => {
     setRepresentasjonKontekst({
       ...kontekst,
-      radgiverfirma: valgtFirma,
+      radgiverfirma: data.radgiverfirma,
     });
-
     void navigate({ to: "/oversikt" });
   };
 
@@ -49,33 +41,36 @@ export function VelgRadgiverfirmaPage() {
   if (!kontekst) return null;
 
   return (
-    <>
-      <VStack className="mt-8" gap="space-24">
-        <Heading level="1" size="medium">
-          {t("velgRadgiverfirma.tittel")}
-        </Heading>
+    <FormProvider {...formMethods}>
+      <form onSubmit={formMethods.handleSubmit(velgRadgiverfirma)}>
+        <VStack className="mt-8" gap="space-24">
+          <Heading level="1" size="medium">
+            {t("velgRadgiverfirma.tittel")}
+          </Heading>
 
-        <BodyShort>{t("velgRadgiverfirma.informasjon")}</BodyShort>
+          <BodyShort>{t("velgRadgiverfirma.informasjon")}</BodyShort>
 
-        <OrganisasjonSoker
-          autoFocus
-          label={t("velgRadgiverfirma.sokPaVirksomhet")}
-          onOrganisasjonValgt={handleOrganisasjonValgt}
-        />
+          <OrganisasjonSoker
+            autoFocus
+            formFieldName="radgiverfirma"
+            label={t("velgRadgiverfirma.sokPaVirksomhet")}
+          />
 
-        {feilmelding && (
-          <BodyShort className="text-red-600">{feilmelding}</BodyShort>
-        )}
-
-        <HStack className="mt-4" gap="space-16" justify="end">
-          <Button onClick={handleAvbryt} size="medium" variant="secondary">
-            {t("felles.avbryt")}
-          </Button>
-          <Button onClick={handleOk} size="medium">
-            {t("velgRadgiverfirma.ok")}
-          </Button>
-        </HStack>
-      </VStack>
-    </>
+          <HStack className="mt-4" gap="space-16" justify="end">
+            <Button
+              onClick={handleAvbryt}
+              size="medium"
+              type="button"
+              variant="secondary"
+            >
+              {t("felles.avbryt")}
+            </Button>
+            <Button size="medium" type="submit">
+              {t("velgRadgiverfirma.ok")}
+            </Button>
+          </HStack>
+        </VStack>
+      </form>
+    </FormProvider>
   );
 }
