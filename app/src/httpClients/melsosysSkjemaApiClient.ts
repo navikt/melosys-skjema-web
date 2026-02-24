@@ -578,3 +578,79 @@ export const getSkjemaDefinisjonQuery = (type: string, sprak: string = "nb") =>
     staleTime: 60 * 60 * 1000, // 1 time - definisjoner endres sjelden
     gcTime: 120 * 60 * 1000, // 2 timer
   });
+
+// ============ Vedlegg ============
+
+export interface VedleggResponse {
+  id: string;
+  filnavn: string;
+  filtype: "PDF" | "JPEG" | "PNG";
+  filstorrelse: number;
+  opprettetDato: string;
+}
+
+export class VedleggError extends Error {
+  status: number;
+  errorCode?: string;
+
+  constructor(message: string, status: number, errorCode?: string) {
+    super(message);
+    this.name = "VedleggError";
+    this.status = status;
+    this.errorCode = errorCode;
+  }
+}
+
+export async function lastOppVedlegg(
+  skjemaId: string,
+  fil: File,
+): Promise<VedleggResponse> {
+  const formData = new FormData();
+  formData.append("fil", fil);
+
+  const response = await fetch(`${API_PROXY_URL}/skjema/${skjemaId}/vedlegg`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new VedleggError(
+      body.message || "Kunne ikke laste opp vedlegg",
+      response.status,
+      body.error,
+    );
+  }
+
+  return response.json();
+}
+
+export async function hentVedlegg(
+  skjemaId: string,
+): Promise<VedleggResponse[]> {
+  const response = await fetch(`${API_PROXY_URL}/skjema/${skjemaId}/vedlegg`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function slettVedlegg(
+  skjemaId: string,
+  vedleggId: string,
+): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/${skjemaId}/vedlegg/${vedleggId}`,
+    {
+      method: "DELETE",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}

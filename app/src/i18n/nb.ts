@@ -144,9 +144,15 @@ export const nb = {
     },
     vedleggSteg: {
       tittel: "Vedlegg",
+      ingenVedleggLastetOpp: "Ingen vedlegg lastet opp",
       lastOppVedlegg: "Last opp vedlegg (valgfritt)",
       lastOppVedleggBeskrivelse:
-        "Du kan laste opp PDF, Word-dokumenter eller bilder. Maks filstørrelse 10 MB per fil.",
+        "Du kan laste opp PDF eller bilder (JPG, PNG). Maks filstørrelse 10 MB per fil.",
+      feilForStor: "Filen er for stor. Maks filstørrelse er 10 MB.",
+      feilUgyldigFormat: "Ugyldig filformat. Kun PDF, JPG og PNG er tillatt.",
+      feilVirusFunnet:
+        "Filen ble avvist fordi den kan inneholde skadelig innhold.",
+      feilUkjent: "Kunne ikke laste opp filen. Prøv igjen senere.",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
