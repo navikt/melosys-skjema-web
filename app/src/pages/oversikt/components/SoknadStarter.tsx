@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Alert,
   BodyLong,
+  BodyShort,
   Box,
   Button,
   Heading,
@@ -15,7 +16,10 @@ import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
-import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  listAltinnTilganger,
+  opprettSoknadMedKontekst,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
@@ -46,19 +50,37 @@ interface SoknadStarterContentProps {
 export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
 
+  const skalHenteArbeidsgivere =
+    kontekst.representasjonstype === Representasjonstype.RADGIVER ||
+    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER;
+
   // Hent innlogget bruker for DEG_SELV-scenario
   const { data: userInfo, isLoading: isLoadingUserInfo } =
     useQuery(getUserInfo());
 
-  // For DEG_SELV, vent på userInfo før vi rendrer skjemaet
+  // Hent Altinn-tilganger for RADGIVER/ARBEIDSGIVER
+  const { data: arbeidsgivere, isLoading: isLoadingArbeidsgivere } = useQuery({
+    ...listAltinnTilganger(),
+    enabled: skalHenteArbeidsgivere,
+    retry: false,
+  });
+
+  // Vent på nødvendig data før vi rendrer skjemaet
   if (
-    kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
-    isLoadingUserInfo
+    (kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
+      isLoadingUserInfo) ||
+    (skalHenteArbeidsgivere && isLoadingArbeidsgivere)
   ) {
     return <Loader size="medium" title={t("felles.laster")} />;
   }
 
   // Bygg defaultData med representasjonstype og radgiverfirma
+  const enesteAltinnArbeidsgiver =
+    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
+    arbeidsgivere?.length === 1
+      ? arbeidsgivere[0]
+      : undefined;
+
   const defaultData: SoknadStarterFormData = {
     representasjonstype: kontekst.representasjonstype,
     radgiverfirma: kontekst.radgiverfirma,
@@ -70,6 +92,12 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
       userInfo && {
         arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
       }),
+    ...(enesteAltinnArbeidsgiver && {
+      arbeidsgiver: {
+        orgnr: enesteAltinnArbeidsgiver.orgnr,
+        navn: enesteAltinnArbeidsgiver.navn,
+      },
+    }),
   };
 
   return <SoknadStarterContent defaultData={defaultData} />;
@@ -95,6 +123,10 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
   } = formMethods;
 
   const representasjonstype = watch("representasjonstype");
+  const forhandsvalgtArbeidsgiver =
+    representasjonstype === Representasjonstype.ARBEIDSGIVER
+      ? defaultData.arbeidsgiver
+      : undefined;
 
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
@@ -176,6 +208,15 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
                   formFieldName="arbeidsgiver"
                   label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
                 />
+              ) : forhandsvalgtArbeidsgiver ? (
+                <div>
+                  <BodyShort size={"medium"} weight="semibold">
+                    {forhandsvalgtArbeidsgiver.navn}
+                  </BodyShort>
+                  <BodyShort size="small">
+                    Org.nr: {forhandsvalgtArbeidsgiver.orgnr}
+                  </BodyShort>
+                </div>
               ) : (
                 <ArbeidsgiverVelger formFieldName="arbeidsgiver" />
               )}

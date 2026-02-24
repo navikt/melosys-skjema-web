@@ -1,20 +1,10 @@
-import {
-  Alert,
-  BodyShort,
-  Heading,
-  Loader,
-  UNSAFE_Combobox,
-} from "@navikt/ds-react";
+import { Alert, Heading, Loader, UNSAFE_Combobox } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import {
-  OrganisasjonDto,
-  Representasjonstype,
-} from "~/types/melosysSkjemaTypes.ts";
+import { OrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 interface ArbeidsgiverVelgerProps {
   formFieldName: string;
@@ -66,49 +56,15 @@ interface ArbeidsgiverVelgerContentProps {
  *
  * Modi:
  * 1. Tom liste → Alert med warning
- * 2. ARBEIDSGIVER med 1 org → auto-select + readonly-visning
- * 3. Ellers → Combobox
+ * 2. Ellers → Combobox
  */
 function ArbeidsgiverVelgerContent({
   arbeidsgivere,
   formFieldName,
 }: ArbeidsgiverVelgerContentProps) {
   const { t } = useTranslation();
-  const hasAutoSelectedRef = useRef(false);
 
-  const { control, setValue } = useFormContext();
-
-  const representasjonstype = useWatch({
-    control,
-    name: "representasjonstype",
-  });
-  const valgtArbeidsgiver = useWatch({ control, name: formFieldName });
-
-  /**
-   * Auto-select hvis ARBEIDSGIVER har tilgang til kun én organisasjon.
-   */
-  if (
-    representasjonstype === Representasjonstype.ARBEIDSGIVER &&
-    arbeidsgivere.length === 1 &&
-    !valgtArbeidsgiver &&
-    !hasAutoSelectedRef.current
-  ) {
-    const forstOrg = arbeidsgivere[0];
-    if (forstOrg) {
-      hasAutoSelectedRef.current = true;
-      queueMicrotask(() => {
-        setValue(formFieldName, {
-          orgnr: forstOrg.orgnr,
-          navn: forstOrg.navn,
-        });
-      });
-    }
-  }
-
-  const skalViseReadonly =
-    representasjonstype === Representasjonstype.ARBEIDSGIVER &&
-    arbeidsgivere.length === 1 &&
-    !!valgtArbeidsgiver;
+  const { setValue } = useFormContext();
 
   if (arbeidsgivere.length === 0) {
     return (
@@ -122,17 +78,6 @@ function ArbeidsgiverVelgerContent({
           {t("oversiktFelles.ingenArbeidsgivereLenke")}
         </a>
       </Alert>
-    );
-  }
-
-  if (skalViseReadonly && valgtArbeidsgiver) {
-    return (
-      <div>
-        <BodyShort size={"medium"} weight="semibold">
-          {valgtArbeidsgiver.navn}
-        </BodyShort>
-        <BodyShort size="small">Org.nr: {valgtArbeidsgiver.orgnr}</BodyShort>
-      </div>
     );
   }
 
