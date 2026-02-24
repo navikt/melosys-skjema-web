@@ -9,6 +9,7 @@ import {
   lastOppVedlegg,
   slettVedlegg,
   VedleggError,
+  vedleggInnholdUrl,
   VedleggResponse,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
@@ -172,14 +173,11 @@ export function VedleggStegContent({
                   action: "delete",
                   onClick: () => handleSlettEksisterende(vedlegg.id),
                 }}
-                file={
-                  new File([], vedlegg.filnavn, {
-                    type:
-                      vedlegg.filtype === "PDF"
-                        ? "application/pdf"
-                        : `image/${vedlegg.filtype.toLowerCase()}`,
-                  })
-                }
+                file={{
+                  name: vedlegg.filnavn,
+                  size: vedlegg.filstorrelse,
+                }}
+                href={vedleggInnholdUrl(skjema.id, vedlegg.id)}
                 key={vedlegg.id}
               />
             ))}
@@ -192,6 +190,11 @@ export function VedleggStegContent({
                 }}
                 error={item.status === "error" ? item.errorMessage : undefined}
                 file={item.fil}
+                href={
+                  item.vedleggId
+                    ? vedleggInnholdUrl(skjema.id, item.vedleggId)
+                    : undefined
+                }
                 key={`new-${index}`}
                 status={item.status === "uploading" ? "uploading" : undefined}
               />

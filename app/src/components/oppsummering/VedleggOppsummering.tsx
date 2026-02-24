@@ -1,9 +1,10 @@
-import { BodyShort, FormSummary } from "@navikt/ds-react";
+import { BodyShort, FormSummary, Link as DsLink } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
   hentVedlegg,
+  vedleggInnholdUrl,
   VedleggResponse,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
@@ -45,7 +46,14 @@ export function VedleggOppsummering({
         ) : (
           vedlegg.map((v) => (
             <FormSummary.Answer key={v.id}>
-              <FormSummary.Label>{v.filnavn}</FormSummary.Label>
+              <FormSummary.Label>
+                <DsLink
+                  href={vedleggInnholdUrl(skjemaId, v.id)}
+                  target="_blank"
+                >
+                  {v.filnavn}
+                </DsLink>
+              </FormSummary.Label>
               <FormSummary.Value>
                 {v.filtype} — {formatFilstorrelse(v.filstorrelse)}
               </FormSummary.Value>
