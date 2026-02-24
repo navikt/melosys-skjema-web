@@ -11,7 +11,7 @@ import {
 } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
@@ -118,11 +118,14 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
 
   const {
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = formMethods;
 
-  const representasjonstype = watch("representasjonstype");
+  const representasjonstype = useWatch({
+    control,
+    name: "representasjonstype",
+  });
   const forhandsvalgtArbeidsgiver =
     representasjonstype === Representasjonstype.ARBEIDSGIVER
       ? defaultData.arbeidsgiver
