@@ -639,10 +639,7 @@ export async function hentVedlegg(
   return response.json();
 }
 
-export function vedleggInnholdUrl(
-  skjemaId: string,
-  vedleggId: string,
-): string {
+export function vedleggInnholdUrl(skjemaId: string, vedleggId: string): string {
   return `${API_PROXY_URL}/skjema/${skjemaId}/vedlegg/${vedleggId}/innhold`;
 }
 
