@@ -494,6 +494,7 @@ export const en = {
       historikkIngenResultater: "No applications found",
       historikkStatusSendt: "Submitted",
       historikkStatusMottatt: "Received",
+      orgnrLabel: "Org. no:",
       paginationForrige: "Previous",
       paginationNeste: "Next",
     },

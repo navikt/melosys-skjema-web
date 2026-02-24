@@ -384,6 +384,7 @@ export const nb = {
       historikkStatusMottatt: "Mottatt",
       paginationForrige: "Forrige",
       paginationNeste: "Neste",
+      orgnrLabel: "Org.nr:",
       feilVedOpprettelse:
         "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",
     },

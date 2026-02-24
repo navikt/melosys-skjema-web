@@ -217,7 +217,8 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
                     {forhandsvalgtArbeidsgiver.navn}
                   </BodyShort>
                   <BodyShort size="small">
-                    Org.nr: {forhandsvalgtArbeidsgiver.orgnr}
+                    {t("oversiktFelles.orgnrLabel")}{" "}
+                    {forhandsvalgtArbeidsgiver.orgnr}
                   </BodyShort>
                 </div>
               ) : (
