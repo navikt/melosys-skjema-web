@@ -506,8 +506,6 @@ export const en = {
       feilVedSok: "Something went wrong with the search. Try again later.",
       rateLimitOverskredet:
         "You have searched too many times. Wait a minute before trying again.",
-      duMaSokeForstFeil:
-        "You must search for and select an advisory firm before you can continue",
       valgtFirma: "Selected advisory firm",
       ok: "Ok",
     },

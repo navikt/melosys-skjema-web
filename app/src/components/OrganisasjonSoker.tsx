@@ -1,6 +1,6 @@
-import { Loader, Search } from "@navikt/ds-react";
+import { Loader, TextField } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ValgtOrganisasjon } from "~/components/virksomheter/ValgtOrganisasjon.tsx";
@@ -11,12 +11,14 @@ import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 interface OrganisasjonSokerProps {
   /** Label for søkefeltet */
   label: string;
-  /** Callback når organisasjon er funnet og validert */
-  onOrganisasjonValgt: (organisasjon: SimpleOrganisasjonDto) => void;
+  /** Callback når organisasjon er funnet/validert, eller null når den fjernes */
+  onOrganisasjonValgt: (organisasjon: SimpleOrganisasjonDto | null) => void;
   /** Initial verdi for søkefeltet */
   initialValue?: string;
   /** Om søkefeltet skal ha autofokus */
   autoFocus?: boolean;
+  /** Når true, vis valideringsfeil selv om bruker ikke har søkt ennå */
+  submitted?: boolean;
 }
 
 export function OrganisasjonSoker({
@@ -24,20 +26,19 @@ export function OrganisasjonSoker({
   onOrganisasjonValgt,
   initialValue = "",
   autoFocus = false,
+  submitted = false,
 }: OrganisasjonSokerProps) {
   const { t } = useTranslation();
-  const [validationError, setValidationError] = useState<string | null>(null);
   const [searchValue, setSearchValue] = useState<string>(initialValue);
   const [valgtOrganisasjon, setValgtOrganisasjon] =
     useState<SimpleOrganisasjonDto | null>(null);
 
   const organisasjonQuery = useQuery({
     ...getOrganisasjonMedJuridiskEnhetQuery(searchValue || ""),
-    enabled: false, // Disable auto-fetch, vi kaller refetch manuelt
+    enabled: false,
   });
 
-  const getErrorMessage = (): string | null => {
-    if (validationError) return validationError;
+  const getApiErrorMessage = (): string | null => {
     if (!organisasjonQuery.isError) return null;
 
     const error = organisasjonQuery.error;
@@ -53,55 +54,57 @@ export function OrganisasjonSoker({
     return t("velgRadgiverfirma.feilVedSok");
   };
 
-  const handleSearch = async (value: string): Promise<void> => {
-    const result = radgiverfirmaSchema.safeParse({
-      organisasjonsnummer: value,
-    });
+  const getDisplayError = (): string | undefined => {
+    const apiError = getApiErrorMessage();
+    if (apiError) return apiError;
 
-    if (!result.success) {
-      const errorMessage = result.error.issues[0]?.message;
-      setValidationError(errorMessage ? t(errorMessage) : null);
-      setValgtOrganisasjon(null);
-      return;
+    if (submitted && !valgtOrganisasjon) {
+      const result = radgiverfirmaSchema.safeParse({
+        organisasjonsnummer: searchValue,
+      });
+      if (!result.success) {
+        const errorMessage = result.error.issues[0]?.message;
+        return errorMessage ? t(errorMessage) : undefined;
+      }
     }
 
-    setValidationError(null);
-
-    // Fetch organisasjon
-    const response = await organisasjonQuery.refetch();
-
-    if (response.data) {
-      const org: SimpleOrganisasjonDto = {
-        orgnr: response.data.juridiskEnhet.orgnr,
-        navn: response.data.juridiskEnhet.navn || "",
-      };
-
-      setValgtOrganisasjon(org);
-      onOrganisasjonValgt(org);
-    }
+    return undefined;
   };
 
-  const handleClear = (): void => {
-    setSearchValue("");
-    setValidationError(null);
+  useEffect(() => {
+    if (/^\d{9}$/.test(searchValue)) {
+      void organisasjonQuery.refetch().then((response) => {
+        if (response.data) {
+          const org: SimpleOrganisasjonDto = {
+            orgnr: response.data.juridiskEnhet.orgnr,
+            navn: response.data.juridiskEnhet.navn || "",
+          };
+          setValgtOrganisasjon(org);
+          onOrganisasjonValgt(org);
+        }
+      });
+    }
+  }, [searchValue]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const digitsOnly = e.target.value.replaceAll(/\D/g, "");
+    setSearchValue(digitsOnly);
     setValgtOrganisasjon(null);
+    onOrganisasjonValgt(null);
   };
 
   return (
     <div className="max-w-md w-full">
-      <Search
+      <TextField
         autoFocus={autoFocus}
-        error={getErrorMessage() || undefined}
-        hideLabel={false}
+        error={getDisplayError()}
+        inputMode="numeric"
         label={label}
-        onChange={(value: string) => setSearchValue(value)}
-        onClear={handleClear}
-        onSearchClick={handleSearch}
+        maxLength={9}
+        onChange={handleChange}
         size="medium"
         value={searchValue}
-      >
-        <Search.Button type="button" />
-      </Search>
+      />
 
       {organisasjonQuery.isFetching && (
         <div aria-live="polite" className="mt-4" role="status">

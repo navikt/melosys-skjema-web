@@ -18,18 +18,18 @@ export function VelgRadgiverfirmaPage() {
   const [valgtFirma, setValgtFirma] = useState<SimpleOrganisasjonDto | null>(
     null,
   );
-  const [feilmelding, setFeilmelding] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleOrganisasjonValgt = (
-    organisasjon: SimpleOrganisasjonDto,
+    organisasjon: SimpleOrganisasjonDto | null,
   ): void => {
     setValgtFirma(organisasjon);
-    setFeilmelding(null);
+    setSubmitted(false);
   };
 
   const handleOk = (): void => {
     if (!valgtFirma) {
-      setFeilmelding(t("velgRadgiverfirma.duMaSokeForstFeil"));
+      setSubmitted(true);
       return;
     }
 
@@ -61,11 +61,8 @@ export function VelgRadgiverfirmaPage() {
           autoFocus
           label={t("velgRadgiverfirma.sokPaVirksomhet")}
           onOrganisasjonValgt={handleOrganisasjonValgt}
+          submitted={submitted}
         />
-
-        {feilmelding && (
-          <BodyShort className="text-red-600">{feilmelding}</BodyShort>
-        )}
 
         <HStack className="mt-4" gap="space-16" justify="end">
           <Button onClick={handleAvbryt} size="medium" variant="secondary">
