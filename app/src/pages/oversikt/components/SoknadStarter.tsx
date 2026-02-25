@@ -140,6 +140,40 @@ function SoknadStarterContent({
     });
   }
 
+  function renderArbeidsgiverValg() {
+    if (
+      representasjonstype === Representasjonstype.DEG_SELV ||
+      representasjonstype === Representasjonstype.ANNEN_PERSON
+    ) {
+      return (
+        <OrganisasjonSoker
+          formFieldName="arbeidsgiver"
+          label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
+        />
+      );
+    }
+
+    if (forhandsvalgtArbeidsgiver) {
+      return (
+        <div>
+          <BodyShort size={"medium"} weight="semibold">
+            {forhandsvalgtArbeidsgiver.navn}
+          </BodyShort>
+          <BodyShort size="small">
+            {t("oversiktFelles.orgnrLabel")} {forhandsvalgtArbeidsgiver.orgnr}
+          </BodyShort>
+        </div>
+      );
+    }
+
+    return (
+      <ArbeidsgiverVelger
+        arbeidsgivere={altinnArbeidsgivere}
+        formFieldName="arbeidsgiver"
+      />
+    );
+  }
+
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
     onSuccess: (data) => {
@@ -214,28 +248,7 @@ function SoknadStarterContent({
                   {t("oversiktFelles.arbeidsgiverTittel")}
                 </Heading>
               )}
-              {representasjonstype === Representasjonstype.DEG_SELV ||
-              representasjonstype === Representasjonstype.ANNEN_PERSON ? (
-                <OrganisasjonSoker
-                  formFieldName="arbeidsgiver"
-                  label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
-                />
-              ) : forhandsvalgtArbeidsgiver ? (
-                <div>
-                  <BodyShort size={"medium"} weight="semibold">
-                    {forhandsvalgtArbeidsgiver.navn}
-                  </BodyShort>
-                  <BodyShort size="small">
-                    {t("oversiktFelles.orgnrLabel")}{" "}
-                    {forhandsvalgtArbeidsgiver.orgnr}
-                  </BodyShort>
-                </div>
-              ) : (
-                <ArbeidsgiverVelger
-                  arbeidsgivere={altinnArbeidsgivere}
-                  formFieldName="arbeidsgiver"
-                />
-              )}
+              {renderArbeidsgiverValg()}
             </div>
 
             {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}
