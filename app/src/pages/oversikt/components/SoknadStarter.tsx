@@ -20,7 +20,10 @@ import {
   listAltinnTilganger,
   opprettSoknadMedKontekst,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import {
+  OrganisasjonDto,
+  Representasjonstype,
+} from "~/types/melosysSkjemaTypes.ts";
 import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -38,6 +41,7 @@ interface SoknadStarterProps {
 
 interface SoknadStarterContentProps {
   defaultData: SoknadStarterFormData;
+  altinnArbeidsgivere: OrganisasjonDto[];
 }
 
 /**
@@ -75,12 +79,6 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   }
 
   // Bygg defaultData med representasjonstype og radgiverfirma
-  const enesteAltinnArbeidsgiver =
-    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER &&
-    arbeidsgivere?.length === 1
-      ? arbeidsgivere[0]
-      : undefined;
-
   const defaultData: SoknadStarterFormData = {
     representasjonstype: kontekst.representasjonstype,
     radgiverfirma: kontekst.radgiverfirma,
@@ -92,21 +90,23 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
       userInfo && {
         arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
       }),
-    ...(enesteAltinnArbeidsgiver && {
-      arbeidsgiver: {
-        orgnr: enesteAltinnArbeidsgiver.orgnr,
-        navn: enesteAltinnArbeidsgiver.navn,
-      },
-    }),
   };
 
-  return <SoknadStarterContent defaultData={defaultData} />;
+  return (
+    <SoknadStarterContent
+      altinnArbeidsgivere={arbeidsgivere ?? []}
+      defaultData={defaultData}
+    />
+  );
 }
 
 /**
  * Innholdskomponent for søknadsstarter med skjemalogikk.
  */
-function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
+function SoknadStarterContent({
+  defaultData,
+  altinnArbeidsgivere,
+}: SoknadStarterContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const navigate = useNavigate();
@@ -119,6 +119,7 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = formMethods;
 
@@ -127,9 +128,17 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
     name: "representasjonstype",
   });
   const forhandsvalgtArbeidsgiver =
-    representasjonstype === Representasjonstype.ARBEIDSGIVER
-      ? defaultData.arbeidsgiver
+    representasjonstype === Representasjonstype.ARBEIDSGIVER &&
+    altinnArbeidsgivere.length === 1
+      ? altinnArbeidsgivere[0]
       : undefined;
+
+  if (forhandsvalgtArbeidsgiver) {
+    setValue("arbeidsgiver", {
+      orgnr: forhandsvalgtArbeidsgiver.orgnr,
+      navn: forhandsvalgtArbeidsgiver.navn,
+    });
+  }
 
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
@@ -222,7 +231,10 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
                   </BodyShort>
                 </div>
               ) : (
-                <ArbeidsgiverVelger formFieldName="arbeidsgiver" />
+                <ArbeidsgiverVelger
+                  arbeidsgivere={altinnArbeidsgivere}
+                  formFieldName="arbeidsgiver"
+                />
               )}
             </div>
 

@@ -1,67 +1,25 @@
-import { Alert, Heading, Loader, UNSAFE_Combobox } from "@navikt/ds-react";
-import { useQuery } from "@tanstack/react-query";
+import { Alert, Heading, UNSAFE_Combobox } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { listAltinnTilganger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { OrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 interface ArbeidsgiverVelgerProps {
-  formFieldName: string;
-}
-
-/**
- * Wrapper som henter Altinn-tilganger og viser Loader/Error.
- * Rendrer ArbeidsgiverVelgerContent når data er klare.
- */
-export function ArbeidsgiverVelger({ formFieldName }: ArbeidsgiverVelgerProps) {
-  const { t } = useTranslation();
-
-  const {
-    data: arbeidsgivere,
-    isLoading,
-    isError,
-  } = useQuery({
-    ...listAltinnTilganger(),
-    retry: false,
-  });
-
-  if (isLoading) {
-    return <Loader size="medium" title={t("felles.laster")} />;
-  }
-
-  if (isError) {
-    return (
-      <Alert variant="error">
-        {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}
-      </Alert>
-    );
-  }
-
-  return (
-    <ArbeidsgiverVelgerContent
-      arbeidsgivere={arbeidsgivere ?? []}
-      formFieldName={formFieldName}
-    />
-  );
-}
-
-interface ArbeidsgiverVelgerContentProps {
   arbeidsgivere: OrganisasjonDto[];
   formFieldName: string;
 }
 
 /**
- * Innhold for arbeidsgiver-velger (RADGIVER/ARBEIDSGIVER).
+ * Arbeidsgiver-velger (RADGIVER/ARBEIDSGIVER).
  *
  * Modi:
  * 1. Tom liste → Alert med warning
  * 2. Ellers → Combobox
  */
-function ArbeidsgiverVelgerContent({
+export function ArbeidsgiverVelger({
   arbeidsgivere,
   formFieldName,
-}: ArbeidsgiverVelgerContentProps) {
+}: ArbeidsgiverVelgerProps) {
   const { t } = useTranslation();
 
   const { setValue } = useFormContext();
