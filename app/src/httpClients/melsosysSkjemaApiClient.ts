@@ -581,7 +581,8 @@ export const getSkjemaDefinisjonQuery = (type: string, sprak: string = "nb") =>
 
 // ============ Vedlegg ============
 
-export interface VedleggResponse {
+// TODO: Erstatt med generert type fra melosysSkjemaTypes.ts etter at e2e-tester er oppdatert (pnpm run generate-types)
+export interface VedleggDto {
   id: string;
   filnavn: string;
   filtype: "PDF" | "JPEG" | "PNG";
@@ -604,7 +605,7 @@ export class VedleggError extends Error {
 export async function lastOppVedlegg(
   skjemaId: string,
   fil: File,
-): Promise<VedleggResponse> {
+): Promise<VedleggDto> {
   const formData = new FormData();
   formData.append("fil", fil);
 
@@ -625,9 +626,7 @@ export async function lastOppVedlegg(
   return response.json();
 }
 
-export async function hentVedlegg(
-  skjemaId: string,
-): Promise<VedleggResponse[]> {
+export async function hentVedlegg(skjemaId: string): Promise<VedleggDto[]> {
   const response = await fetch(`${API_PROXY_URL}/skjema/${skjemaId}/vedlegg`, {
     method: "GET",
   });

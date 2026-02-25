@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import {
   hentVedlegg,
+  VedleggDto,
   vedleggInnholdUrl,
-  VedleggResponse,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
 interface VedleggOppsummeringProps {
@@ -18,7 +18,7 @@ export function VedleggOppsummering({
   editHref,
 }: VedleggOppsummeringProps) {
   const { t } = useTranslation();
-  const [vedlegg, setVedlegg] = useState<VedleggResponse[]>([]);
+  const [vedlegg, setVedlegg] = useState<VedleggDto[]>([]);
 
   useEffect(() => {
     hentVedlegg(skjemaId)

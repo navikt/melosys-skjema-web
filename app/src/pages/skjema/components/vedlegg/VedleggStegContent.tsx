@@ -8,9 +8,9 @@ import {
   hentVedlegg,
   lastOppVedlegg,
   slettVedlegg,
+  VedleggDto,
   VedleggError,
   vedleggInnholdUrl,
-  VedleggResponse,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
 import { ArbeidsgiverSkjemaProps } from "../../arbeidsgiver/types.ts";
@@ -42,9 +42,9 @@ export function VedleggStegContent({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [vedleggItems, setVedleggItems] = useState<VedleggItem[]>([]);
-  const [eksisterendeVedlegg, setEksisterendeVedlegg] = useState<
-    VedleggResponse[]
-  >([]);
+  const [eksisterendeVedlegg, setEksisterendeVedlegg] = useState<VedleggDto[]>(
+    [],
+  );
 
   useEffect(() => {
     hentVedlegg(skjema.id)
