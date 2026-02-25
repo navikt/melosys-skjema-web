@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Alert,
   BodyLong,
+  BodyShort,
   Box,
   Button,
   Heading,
@@ -10,12 +11,19 @@ import {
 } from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
+import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
-import { opprettSoknadMedKontekst } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import {
+  listAltinnTilganger,
+  opprettSoknadMedKontekst,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  OrganisasjonDto,
+  Representasjonstype,
+} from "~/types/melosysSkjemaTypes.ts";
 import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -33,6 +41,7 @@ interface SoknadStarterProps {
 
 interface SoknadStarterContentProps {
   defaultData: SoknadStarterFormData;
+  altinnArbeidsgivere: OrganisasjonDto[];
 }
 
 /**
@@ -45,14 +54,26 @@ interface SoknadStarterContentProps {
 export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
 
+  const skalHenteArbeidsgivere =
+    kontekst.representasjonstype === Representasjonstype.RADGIVER ||
+    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER;
+
   // Hent innlogget bruker for DEG_SELV-scenario
   const { data: userInfo, isLoading: isLoadingUserInfo } =
     useQuery(getUserInfo());
 
-  // For DEG_SELV, vent på userInfo før vi rendrer skjemaet
+  // Hent Altinn-tilganger for RADGIVER/ARBEIDSGIVER
+  const { data: arbeidsgivere, isLoading: isLoadingArbeidsgivere } = useQuery({
+    ...listAltinnTilganger(),
+    enabled: skalHenteArbeidsgivere,
+    retry: false,
+  });
+
+  // Vent på nødvendig data før vi rendrer skjemaet
   if (
-    kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
-    isLoadingUserInfo
+    (kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
+      isLoadingUserInfo) ||
+    (skalHenteArbeidsgivere && isLoadingArbeidsgivere)
   ) {
     return <Loader size="medium" title={t("felles.laster")} />;
   }
@@ -71,13 +92,21 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
       }),
   };
 
-  return <SoknadStarterContent defaultData={defaultData} />;
+  return (
+    <SoknadStarterContent
+      altinnArbeidsgivere={arbeidsgivere ?? []}
+      defaultData={defaultData}
+    />
+  );
 }
 
 /**
  * Innholdskomponent for søknadsstarter med skjemalogikk.
  */
-function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
+function SoknadStarterContent({
+  defaultData,
+  altinnArbeidsgivere,
+}: SoknadStarterContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const navigate = useNavigate();
@@ -89,11 +118,61 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
 
   const {
     handleSubmit,
-    watch,
+    control,
+    setValue,
     formState: { errors },
   } = formMethods;
 
-  const representasjonstype = watch("representasjonstype");
+  const representasjonstype = useWatch({
+    control,
+    name: "representasjonstype",
+  });
+  const forhandsvalgtArbeidsgiver =
+    representasjonstype === Representasjonstype.ARBEIDSGIVER &&
+    altinnArbeidsgivere.length === 1
+      ? altinnArbeidsgivere[0]
+      : undefined;
+
+  if (forhandsvalgtArbeidsgiver) {
+    setValue("arbeidsgiver", {
+      orgnr: forhandsvalgtArbeidsgiver.orgnr,
+      navn: forhandsvalgtArbeidsgiver.navn,
+    });
+  }
+
+  function renderArbeidsgiverValg() {
+    if (
+      representasjonstype === Representasjonstype.DEG_SELV ||
+      representasjonstype === Representasjonstype.ANNEN_PERSON
+    ) {
+      return (
+        <OrganisasjonSoker
+          formFieldName="arbeidsgiver"
+          label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
+        />
+      );
+    }
+
+    if (forhandsvalgtArbeidsgiver) {
+      return (
+        <div>
+          <BodyShort size={"medium"} weight="semibold">
+            {forhandsvalgtArbeidsgiver.navn}
+          </BodyShort>
+          <BodyShort size="small">
+            {t("oversiktFelles.orgnrLabel")} {forhandsvalgtArbeidsgiver.orgnr}
+          </BodyShort>
+        </div>
+      );
+    }
+
+    return (
+      <ArbeidsgiverVelger
+        arbeidsgivere={altinnArbeidsgivere}
+        formFieldName="arbeidsgiver"
+      />
+    );
+  }
 
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknadMedKontekst,
@@ -164,7 +243,12 @@ function SoknadStarterContent({ defaultData }: SoknadStarterContentProps) {
             )}
 
             <div>
-              <ArbeidsgiverVelger />
+              {representasjonstype !== Representasjonstype.DEG_SELV && (
+                <Heading level="3" size="medium" spacing>
+                  {t("oversiktFelles.arbeidsgiverTittel")}
+                </Heading>
+              )}
+              {renderArbeidsgiverValg()}
             </div>
 
             {/* For RADGIVER og ARBEIDSGIVER: Arbeidstaker etter arbeidsgiver */}

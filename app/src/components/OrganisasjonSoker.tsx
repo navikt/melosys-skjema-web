@@ -1,115 +1,101 @@
-import { Loader, Search } from "@navikt/ds-react";
+import { Loader, TextField } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { ValgtOrganisasjon } from "~/components/virksomheter/ValgtOrganisasjon.tsx";
 import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient";
-import { radgiverfirmaSchema } from "~/pages/representasjon/velg-radgiverfirma/radgiverfirmaSchema";
-import { SimpleOrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 interface OrganisasjonSokerProps {
-  /** Label for søkefeltet */
+  /** Feltnavn i react-hook-form (SimpleOrganisasjonDto | null) */
+  formFieldName: string;
+  /** Label for tekstfeltet */
   label: string;
-  /** Callback når organisasjon er funnet og validert */
-  onOrganisasjonValgt: (organisasjon: SimpleOrganisasjonDto) => void;
-  /** Initial verdi for søkefeltet */
-  initialValue?: string;
-  /** Om søkefeltet skal ha autofokus */
+  /** Om feltet skal ha autofokus */
   autoFocus?: boolean;
 }
 
 export function OrganisasjonSoker({
+  formFieldName,
   label,
-  onOrganisasjonValgt,
-  initialValue = "",
   autoFocus = false,
 }: OrganisasjonSokerProps) {
   const { t } = useTranslation();
-  const [validationError, setValidationError] = useState<string | null>(null);
-  const [searchValue, setSearchValue] = useState<string>(initialValue);
-  const [valgtOrganisasjon, setValgtOrganisasjon] =
-    useState<SimpleOrganisasjonDto | null>(null);
+  const {
+    control,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
+  const [searchValue, setSearchValue] = useState("");
 
-  const organisasjonQuery = useQuery({
-    ...getOrganisasjonMedJuridiskEnhetQuery(searchValue || ""),
-    enabled: false, // Disable auto-fetch, vi kaller refetch manuelt
+  const stripped = searchValue.replaceAll(/\s/g, "");
+  const isValidOrgNr = /^\d{9}$/.test(stripped);
+
+  const query = useQuery({
+    ...getOrganisasjonMedJuridiskEnhetQuery(stripped),
+    enabled: isValidOrgNr,
   });
 
-  const getErrorMessage = (): string | null => {
-    if (validationError) return validationError;
-    if (!organisasjonQuery.isError) return null;
+  const valgtOrganisasjon = useWatch({ control, name: formFieldName });
 
-    const error = organisasjonQuery.error;
-    const statusMatch = error.message.match(/status:\s*(\d+)/);
-    const status = statusMatch ? statusMatch[1] : null;
+  // Synk query-data til form-verdi
+  const queryOrg = query.data
+    ? {
+        orgnr: query.data.juridiskEnhet.orgnr,
+        navn: query.data.juridiskEnhet.navn || "",
+      }
+    : null;
 
-    if (status === "429") {
-      return t("velgRadgiverfirma.rateLimitOverskredet");
+  if (queryOrg && valgtOrganisasjon?.orgnr !== queryOrg.orgnr) {
+    setValue(formFieldName, queryOrg, { shouldValidate: true });
+  }
+
+  if (!queryOrg && valgtOrganisasjon) {
+    setValue(formFieldName, null);
+  }
+
+  const formError = errors[formFieldName]?.message;
+
+  const getErrorMessage = (): string | undefined => {
+    if (query.isError) {
+      const statusMatch = query.error.message.match(/status:\s*(\d+)/);
+      const status = statusMatch ? statusMatch[1] : null;
+
+      if (status === "429") {
+        return t("velgRadgiverfirma.rateLimitOverskredet");
+      }
+      if (status === "404") {
+        return t("velgRadgiverfirma.organisasjonIkkeFunnet");
+      }
+      return t("velgRadgiverfirma.feilVedSok");
     }
-    if (status === "404") {
-      return t("velgRadgiverfirma.organisasjonIkkeFunnet");
-    }
-    return t("velgRadgiverfirma.feilVedSok");
-  };
 
-  const handleSearch = async (value: string): Promise<void> => {
-    const result = radgiverfirmaSchema.safeParse({
-      organisasjonsnummer: value,
-    });
-
-    if (!result.success) {
-      const errorMessage = result.error.issues[0]?.message;
-      setValidationError(errorMessage ? t(errorMessage) : null);
-      setValgtOrganisasjon(null);
-      return;
+    if (typeof formError === "string") {
+      return t(formError);
     }
 
-    setValidationError(null);
-
-    // Fetch organisasjon
-    const response = await organisasjonQuery.refetch();
-
-    if (response.data) {
-      const org: SimpleOrganisasjonDto = {
-        orgnr: response.data.juridiskEnhet.orgnr,
-        navn: response.data.juridiskEnhet.navn || "",
-      };
-
-      setValgtOrganisasjon(org);
-      onOrganisasjonValgt(org);
-    }
-  };
-
-  const handleClear = (): void => {
-    setSearchValue("");
-    setValidationError(null);
-    setValgtOrganisasjon(null);
+    return undefined;
   };
 
   return (
     <div className="max-w-md w-full">
-      <Search
+      <TextField
         autoFocus={autoFocus}
-        error={getErrorMessage() || undefined}
-        hideLabel={false}
+        error={getErrorMessage()}
         label={label}
-        onChange={(value: string) => setSearchValue(value)}
-        onClear={handleClear}
-        onSearchClick={handleSearch}
+        onChange={(e) => setSearchValue(e.target.value)}
         size="medium"
         value={searchValue}
-      >
-        <Search.Button type="button" />
-      </Search>
+      />
 
-      {organisasjonQuery.isFetching && (
+      {query.isFetching && (
         <div aria-live="polite" className="mt-4" role="status">
           <Loader size="medium" title={t("felles.laster")} />
         </div>
       )}
 
-      {valgtOrganisasjon && !organisasjonQuery.isFetching && (
+      {valgtOrganisasjon && !query.isFetching && (
         <ValgtOrganisasjon valgtOrganisasjon={valgtOrganisasjon} />
       )}
     </div>

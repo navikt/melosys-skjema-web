@@ -494,13 +494,14 @@ export const en = {
       historikkIngenResultater: "No applications found",
       historikkStatusSendt: "Submitted",
       historikkStatusMottatt: "Received",
+      orgnrLabel: "Org. no:",
       paginationForrige: "Previous",
       paginationNeste: "Next",
     },
     velgRadgiverfirma: {
-      tittel: "You are an advisor and use Nav on behalf of an advisory firm",
+      tittel: "Which advisory firm do you work for?",
       informasjon:
-        "In order to send letters to the correct address, we need information about which company you work as an advisor for.",
+        "We need this information to send letters to the correct recipient in Altinn.",
       sokPaVirksomhet: "Search for company (org.no.)",
       organisasjonIkkeFunnet: "No organization found with this number",
       feilVedSok: "Something went wrong with the search. Try again later.",

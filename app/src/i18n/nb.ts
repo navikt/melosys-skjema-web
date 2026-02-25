@@ -384,13 +384,14 @@ export const nb = {
       historikkStatusMottatt: "Mottatt",
       paginationForrige: "Forrige",
       paginationNeste: "Neste",
+      orgnrLabel: "Org.nr:",
       feilVedOpprettelse:
         "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",
     },
     velgRadgiverfirma: {
-      tittel: "Du er rådgiver og bruker Nav på vegne av et rådgivingsfirma",
+      tittel: "Hvilket rådgivingsfirma jobber du hos?",
       informasjon:
-        "For å kunne sende brev til riktig mottaker i Altinn, må vi ha informasjon om hvilket rådgivingsfirma du jobbe hos.",
+        "Vi trenger denne informasjonen for å sende brev til riktig mottaker i Altinn.",
       sokPaVirksomhet: "Søk på virksomhet (org.nr.)",
       organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
       feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",
