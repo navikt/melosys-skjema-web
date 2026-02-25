@@ -29,11 +29,10 @@ export function OrganisasjonSoker({
   } = useFormContext();
   const [searchValue, setSearchValue] = useState("");
 
-  const stripped = searchValue.replaceAll(/\s/g, "");
-  const isValidOrgNr = /^\d{9}$/.test(stripped);
+  const isValidOrgNr = /^\d{9}$/.test(searchValue);
 
   const query = useQuery({
-    ...getOrganisasjonMedJuridiskEnhetQuery(stripped),
+    ...getOrganisasjonMedJuridiskEnhetQuery(searchValue),
     enabled: isValidOrgNr,
   });
 
@@ -78,13 +77,23 @@ export function OrganisasjonSoker({
     return undefined;
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const digitsOnly = e.target.value.replaceAll(/\D/g, "");
+    setSearchValue(digitsOnly);
+    if (valgtOrganisasjon) {
+      setValue(formFieldName, null);
+    }
+  };
+
   return (
     <div className="max-w-md w-full">
       <TextField
         autoFocus={autoFocus}
         error={getErrorMessage()}
+        inputMode="numeric"
         label={label}
-        onChange={(e) => setSearchValue(e.target.value)}
+        maxLength={9}
+        onChange={handleChange}
         size="medium"
         value={searchValue}
       />
