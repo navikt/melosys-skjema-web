@@ -206,7 +206,7 @@ export class ArbeidsstedIUtlandetStegPage {
       data: {
         ...this.skjema.data,
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
-      } as unknown as UtsendtArbeidstakerSkjemaDto["data"],
+      } as UtsendtArbeidstakerSkjemaDto["data"],
     });
   }
 

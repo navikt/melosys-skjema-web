@@ -85,7 +85,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
       data: {
         ...this.skjema.data,
         arbeidsgiverensVirksomhetINorge: virksomhetINorgeData,
-      } as unknown as UtsendtArbeidstakerSkjemaDto["data"],
+      } as UtsendtArbeidstakerSkjemaDto["data"],
     });
   }
 

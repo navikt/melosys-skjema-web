@@ -310,7 +310,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
         arbeidstakerensLonn: arbeidstakerensLonnData,
         tilleggsopplysninger: tilleggsopplysningerData,
-      } as unknown as UtsendtArbeidstakerSkjemaDto["data"],
+      } as UtsendtArbeidstakerSkjemaDto["data"],
     });
 
     // Naviger direkte til oppsummering

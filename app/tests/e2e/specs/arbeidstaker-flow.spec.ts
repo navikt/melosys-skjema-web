@@ -233,7 +233,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
         familiemedlemmer: familiemedlemmerData,
         skatteforholdOgInntekt: skatteforholdOgInntektData,
         tilleggsopplysninger: tilleggsopplysningerData,
-      } as unknown as UtsendtArbeidstakerSkjemaDto["data"],
+      } as UtsendtArbeidstakerSkjemaDto["data"],
     });
 
     const oppsummeringPage = new OppsummeringStegPage(
