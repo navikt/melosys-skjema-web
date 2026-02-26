@@ -2,9 +2,8 @@ import { Page } from "@playwright/test";
 
 import { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import type {
-  ArbeidsgiversSkjemaDto,
-  ArbeidstakersSkjemaDto,
   OrganisasjonDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import { skjemaInnsendtKvittering } from "./test-data";
 
@@ -36,7 +35,7 @@ export async function mockUserInfo(page: Page, userInfo: UserInfo) {
 
 export async function mockFetchArbeidsgiverSkjema(
   page: Page,
-  skjemaDto: ArbeidsgiversSkjemaDto,
+  skjemaDto: UtsendtArbeidstakerSkjemaDto,
 ) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/${skjemaDto.id}/arbeidsgiver-view`,
@@ -138,7 +137,7 @@ export async function mockPostTilleggsopplysningerArbeidsgiver(
 
 export async function mockFetchArbeidstakerSkjema(
   page: Page,
-  skjemaDto: ArbeidstakersSkjemaDto,
+  skjemaDto: UtsendtArbeidstakerSkjemaDto,
 ) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/${skjemaDto.id}/arbeidstaker-view`,
@@ -279,7 +278,7 @@ export async function mockGetEregOrganisasjon(page: Page) {
 
 export async function setupApiMocksForArbeidsgiver(
   page: Page,
-  skjema: ArbeidsgiversSkjemaDto,
+  skjema: UtsendtArbeidstakerSkjemaDto,
   tilganger: OrganisasjonDto[],
   testUserInfo: UserInfo,
 ) {
@@ -297,7 +296,7 @@ export async function setupApiMocksForArbeidsgiver(
 
 export async function setupApiMocksForArbeidstaker(
   page: Page,
-  skjema: ArbeidstakersSkjemaDto,
+  skjema: UtsendtArbeidstakerSkjemaDto,
   userInfo: UserInfo,
 ) {
   await mockUserInfo(page, userInfo);

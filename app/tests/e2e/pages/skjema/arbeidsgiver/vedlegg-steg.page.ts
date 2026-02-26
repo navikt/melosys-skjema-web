@@ -1,15 +1,15 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "../../../../../src/i18n/nb";
-import type { ArbeidsgiversSkjemaDto } from "../../../../../src/types/melosysSkjemaTypes";
+import type { UtsendtArbeidstakerSkjemaDto } from "../../../../../src/types/melosysSkjemaTypes";
 
 export class VedleggStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidsgiversSkjemaDto;
+  readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly lagreOgFortsettButton: Locator;
 
-  constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
+  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {

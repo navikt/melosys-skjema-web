@@ -183,7 +183,13 @@ export const en = {
       ingenVedleggLastetOpp: "No attachments uploaded",
       lastOppVedlegg: "Upload attachments (optional)",
       lastOppVedleggBeskrivelse:
-        "You can upload PDF, Word documents or images. Maximum file size 10 MB per file.",
+        "You can upload PDF or images (JPG, PNG). Maximum file size 10 MB per file.",
+      feilForStor: "The file is too large. Maximum file size is 10 MB.",
+      feilUgyldigFormat:
+        "Invalid file format. Only PDF, JPG and PNG are allowed.",
+      feilVirusFunnet:
+        "The file was rejected because it may contain harmful content.",
+      feilUkjent: "Could not upload the file. Please try again later.",
     },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",

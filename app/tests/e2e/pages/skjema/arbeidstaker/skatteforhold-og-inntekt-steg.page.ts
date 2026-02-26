@@ -3,8 +3,8 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidstakersSkjemaDto,
   SkatteforholdOgInntektDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 
@@ -15,7 +15,7 @@ const felter = skatteforholdOgInntekt.felter;
 
 export class SkatteforholdOgInntektStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidstakersSkjemaDto;
+  readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly erSkattepliktigTilNorgeRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly mottarPengestotteFraAnnetEosLandRadioGroup: RadioButtonGroupJaNeiLocator;
@@ -24,7 +24,7 @@ export class SkatteforholdOgInntektStegPage {
   readonly pengestotteBeskrivelseInput: Locator;
   readonly lagreOgFortsettButton: Locator;
 
-  constructor(page: Page, skjema: ArbeidstakersSkjemaDto) {
+  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {

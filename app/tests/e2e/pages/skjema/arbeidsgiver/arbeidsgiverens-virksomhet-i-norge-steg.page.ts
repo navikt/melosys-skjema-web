@@ -4,7 +4,7 @@ import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinis
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiverensVirksomhetINorgeDto,
-  ArbeidsgiversSkjemaDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
@@ -16,14 +16,14 @@ const felter = virksomhetINorge.felter;
 
 export class ArbeidsgiverensVirksomhetINorgeStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidsgiversSkjemaDto;
+  readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly offentligVirksomhetRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly bemanningsEllerVikarbyraRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly vanligDriftRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly lagreOgFortsettButton: Locator;
 
-  constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
+  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
@@ -85,7 +85,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
       data: {
         ...this.skjema.data,
         arbeidsgiverensVirksomhetINorge: virksomhetINorgeData,
-      },
+      } as UtsendtArbeidstakerSkjemaDto["data"],
     });
   }
 

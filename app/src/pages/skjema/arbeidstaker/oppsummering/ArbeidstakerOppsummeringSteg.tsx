@@ -1,5 +1,6 @@
 import { resolveSeksjoner } from "~/components/oppsummering/dataMapping.ts";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
+import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { SendInnSkjemaKnapp } from "~/pages/skjema/components/SendInnSkjemaKnapp.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
@@ -57,6 +58,14 @@ function ArbeidstakerOppsummeringStegContent({
           />
         );
       })}
+      <VedleggOppsummering
+        editHref={
+          ARBEIDSTAKER_STEG_REKKEFOLGE.find(
+            (s) => s.key === "vedlegg",
+          )?.route.replace("$id", skjema.id) ?? ""
+        }
+        skjemaId={skjema.id}
+      />
     </SkjemaSteg>
   );
 }

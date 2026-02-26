@@ -118,11 +118,28 @@ export enum SkjemaStatus {
   SENDT = "SENDT",
 }
 
+export enum VedleggFiltype {
+  PDF = "PDF",
+  JPEG = "JPEG",
+  PNG = "PNG",
+}
+
 export interface FeltDefinisjonDto {
   hjelpetekst?: string;
   pakrevd: boolean;
   label: string;
   type: string;
+}
+
+export interface VedleggDto {
+  /** @format uuid */
+  id: string;
+  filnavn: string;
+  filtype: VedleggFiltype;
+  /** @format int64 */
+  filstorrelse: number;
+  /** @format date-time */
+  opprettetDato: string;
 }
 
 export interface SkjemaInnsendtKvittering {
@@ -219,8 +236,8 @@ export interface UtenlandsoppdragetArbeidstakersDelDto {
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "arbeidsgiverNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
@@ -230,8 +247,8 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "arbeidsgiverNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
@@ -241,8 +258,8 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "arbeidsgiverNavn"
   | "skjemadel"
   | "metadatatype"
 >;
@@ -250,8 +267,8 @@ export type ArbeidsgiverMetadata = UtilRequiredKeys<
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "arbeidsgiverNavn"
   | "skjemadel"
   | "metadatatype"
 >;
@@ -259,8 +276,8 @@ export type DegSelvMetadata = UtilRequiredKeys<
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "arbeidsgiverNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
@@ -271,8 +288,8 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "arbeidsgiverNavn"
   | "juridiskEnhetOrgnr"
+  | "arbeidsgiverNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
@@ -286,11 +303,11 @@ export interface RadgiverfirmaInfo {
 
 export interface UtsendtArbeidstakerMetadata {
   representasjonstype: Representasjonstype;
-  arbeidsgiverNavn: string;
   juridiskEnhetOrgnr: string;
+  arbeidsgiverNavn: string;
+  skjemadel: Skjemadel;
   /** @format uuid */
   kobletSkjemaId?: string;
-  skjemadel: Skjemadel;
   /** @format uuid */
   erstatterSkjemaId?: string;
   metadatatype: string;
@@ -476,9 +493,15 @@ export interface VerifiserPersonResponse {
   fodselsdato: string;
 }
 
-export interface UtsendtArbeidstakerM2MSkjemaData {
-  skjemaer: UtsendtArbeidstakerSkjemaDto[];
+export interface UtsendtArbeidstakerSkjemaM2MDto {
+  skjema: UtsendtArbeidstakerSkjemaDto;
+  kobletSkjema?: UtsendtArbeidstakerSkjemaDto;
+  tidligereInnsendteSkjema: UtsendtArbeidstakerSkjemaDto[];
   referanseId: string;
+  /** @format date-time */
+  innsendtTidspunkt: string;
+  innsenderFnr: string;
+  vedlegg: VedleggDto[];
 }
 
 export interface AlternativDefinisjonDto {
@@ -514,7 +537,7 @@ export interface InnsendtSkjemaResponse {
   skjemaId: string;
   /**
    * Referansenummer
-   * @example "MEL-AB12CD"
+   * @example "AB12CD"
    */
   referanseId: string;
   /**
@@ -802,19 +825,4 @@ export interface UtenlandsoppdragetTranslation {
 export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
-}
-
-// Type aliases for e2e-tester - wrapper-typer rundt skjema-data
-export interface ArbeidsgiversSkjemaDto {
-  id: string;
-  orgnr: string;
-  status: SkjemaStatus;
-  data: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto;
-}
-
-export interface ArbeidstakersSkjemaDto {
-  id: string;
-  fnr: string;
-  status: SkjemaStatus;
-  data: UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
 }

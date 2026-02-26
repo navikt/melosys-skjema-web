@@ -14,6 +14,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
+import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
 import { getInnsendtSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import type { InnsendtSkjemaResponse } from "~/types/melosysSkjemaTypes.ts";
 
@@ -109,6 +110,8 @@ function InnsendtSkjemaPageContent({
           ))}
         </VStack>
       )}
+
+      <VedleggOppsummering skjemaId={response.skjemaId} />
 
       <Button
         as={Link}
