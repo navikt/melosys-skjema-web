@@ -5,12 +5,12 @@ import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinis
 import { nb } from "../../../../../src/i18n/nb";
 import type {
   ArbeidsgiverensVirksomhetINorgeDto,
-  ArbeidsgiversSkjemaDto,
   ArbeidsstedIUtlandetDto,
   ArbeidstakerensLonnDto,
   NorskeOgUtenlandskeVirksomheter,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 
 // Hent felter fra statiske definisjoner
@@ -27,11 +27,11 @@ const tilleggsopplysninger =
 
 export class OppsummeringStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidsgiversSkjemaDto;
+  readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly sendSoknadButton: Locator;
 
-  constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
+  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {

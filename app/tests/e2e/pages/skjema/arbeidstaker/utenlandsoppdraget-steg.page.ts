@@ -3,8 +3,8 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidstakersSkjemaDto,
   UtenlandsoppdragetArbeidstakersDelDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
 
@@ -15,14 +15,14 @@ const felter = utenlandsoppdraget.felter;
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidstakersSkjemaDto;
+  readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly utsendelsesLandCombobox: Locator;
   readonly fraDatoInput: Locator;
   readonly tilDatoInput: Locator;
   readonly lagreOgFortsettButton: Locator;
 
-  constructor(page: Page, skjema: ArbeidstakersSkjemaDto) {
+  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {

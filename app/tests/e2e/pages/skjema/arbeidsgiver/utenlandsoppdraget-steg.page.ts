@@ -3,8 +3,8 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidsgiversSkjemaDto,
   UtenlandsoppdragetDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
@@ -16,7 +16,7 @@ const felter = utenlandsoppdraget.felter;
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidsgiversSkjemaDto;
+  readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly utsendelseLandCombobox: Locator;
   readonly fraDatoInput: Locator;
@@ -27,7 +27,7 @@ export class UtenlandsoppdragetStegPage {
   readonly arbeidstakerErstatterAnnenPersonRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly lagreOgFortsettButton: Locator;
 
-  constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
+  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {

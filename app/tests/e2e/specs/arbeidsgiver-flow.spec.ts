@@ -8,6 +8,7 @@ import {
   FastEllerVekslendeArbeidssted,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import {
   mockFetchArbeidsgiverSkjema,
@@ -309,7 +310,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
         arbeidstakerensLonn: arbeidstakerensLonnData,
         tilleggsopplysninger: tilleggsopplysningerData,
-      },
+      } as unknown as UtsendtArbeidstakerSkjemaDto["data"],
     });
 
     // Naviger direkte til oppsummering

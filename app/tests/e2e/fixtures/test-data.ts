@@ -2,12 +2,14 @@
 
 import type { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import {
-  type ArbeidsgiversSkjemaDto,
-  type ArbeidstakersSkjemaDto,
+  type ArbeidsgiverMetadata,
+  type DegSelvMetadata,
   LandKode,
   type OrganisasjonDto,
   type SkjemaInnsendtKvittering,
   SkjemaStatus,
+  SkjemaType,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 
 export const testOrganization: OrganisasjonDto = {
@@ -24,19 +26,29 @@ export const testUserInfo: UserInfo = {
 export const testArbeidsgiverSkjemaId = "test-arbeidsgiver-skjema-id";
 export const testArbeidstakerSkjemaId = "test-arbeidstaker-skjema-id";
 
-export const testArbeidsgiverSkjema: ArbeidsgiversSkjemaDto = {
+export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
   id: testArbeidsgiverSkjemaId,
   orgnr: "123456789",
+  fnr: "",
   status: SkjemaStatus.UTKAST,
+  type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+  metadata: {
+    metadatatype: "ArbeidsgiverMetadata",
+  } as unknown as ArbeidsgiverMetadata,
   data: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
   },
 };
 
-export const testArbeidstakerSkjema: ArbeidstakersSkjemaDto = {
+export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
   id: testArbeidstakerSkjemaId,
   fnr: testUserInfo.userId,
+  orgnr: "",
   status: SkjemaStatus.UTKAST,
+  type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+  metadata: {
+    metadatatype: "DegSelvMetadata",
+  } as unknown as DegSelvMetadata,
   data: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
   },

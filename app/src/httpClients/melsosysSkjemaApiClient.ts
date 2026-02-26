@@ -23,6 +23,7 @@ import {
   UtenlandsoppdragetDto,
   UtkastListeResponse,
   UtsendtArbeidstakerSkjemaDto,
+  VedleggDto,
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -581,15 +582,6 @@ export const getSkjemaDefinisjonQuery = (type: string, sprak: string = "nb") =>
 
 // ============ Vedlegg ============
 
-// TODO: Erstatt med generert type fra melosysSkjemaTypes.ts etter at e2e-tester er oppdatert (pnpm run generate-types)
-export interface VedleggDto {
-  id: string;
-  filnavn: string;
-  filtype: "PDF" | "JPEG" | "PNG";
-  filstorrelse: number;
-  opprettetDato: string;
-}
-
 export class VedleggError extends Error {
   status: number;
   errorCode?: string;
@@ -657,3 +649,5 @@ export async function slettVedlegg(
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 }
+
+export { type VedleggDto } from "~/types/melosysSkjemaTypes.ts";

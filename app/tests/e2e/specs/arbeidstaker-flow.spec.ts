@@ -6,6 +6,7 @@ import {
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
   UtenlandsoppdragetArbeidstakersDelDto,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import {
   mockFetchArbeidstakerSkjema,
@@ -232,7 +233,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
         familiemedlemmer: familiemedlemmerData,
         skatteforholdOgInntekt: skatteforholdOgInntektData,
         tilleggsopplysninger: tilleggsopplysningerData,
-      },
+      } as unknown as UtsendtArbeidstakerSkjemaDto["data"],
     });
 
     const oppsummeringPage = new OppsummeringStegPage(

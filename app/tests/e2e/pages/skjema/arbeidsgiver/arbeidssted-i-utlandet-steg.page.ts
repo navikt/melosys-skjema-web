@@ -3,8 +3,8 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
-  ArbeidsgiversSkjemaDto,
   ArbeidsstedIUtlandetDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
@@ -21,7 +21,7 @@ const omBordPaFlyFelter =
 
 export class ArbeidsstedIUtlandetStegPage {
   readonly page: Page;
-  readonly skjema: ArbeidsgiversSkjemaDto;
+  readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly arbeidsstedTypeSelect: Locator;
   readonly lagreOgFortsettButton: Locator;
@@ -66,7 +66,7 @@ export class ArbeidsstedIUtlandetStegPage {
   readonly vanligHjemmebaseLandSelect: Locator;
   readonly vanligHjemmebaseNavnInput: Locator;
 
-  constructor(page: Page, skjema: ArbeidsgiversSkjemaDto) {
+  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
@@ -206,7 +206,7 @@ export class ArbeidsstedIUtlandetStegPage {
       data: {
         ...this.skjema.data,
         arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
-      },
+      } as unknown as UtsendtArbeidstakerSkjemaDto["data"],
     });
   }
 
