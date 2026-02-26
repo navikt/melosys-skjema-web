@@ -1,9 +1,10 @@
-import { requireEnvironment } from "./utils.js";
+const clusterName = process.env.NAIS_CLUSTER_NAME ?? "";
+const env = clusterName.startsWith("prod") ? "prod" : "dev";
 
 const app = {
-  env: requireEnvironment("ENV") as "dev" | "prod",
-  host: requireEnvironment("EXPRESS_HOST"),
-  port: Number(requireEnvironment("EXPRESS_PORT")),
+  env: env as "dev" | "prod",
+  host: process.env.EXPRESS_HOST ?? "::",
+  port: Number(process.env.EXPRESS_PORT ?? "8080"),
 };
 
 export default {

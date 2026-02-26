@@ -8,12 +8,10 @@ metadata:
 spec:
   port: 8080
   ingresses:
-  {{#each ingresses as |url|}}
-     - {{url}}
-  {{/each}}
+    - https://melosys-skjema-web.intern.nav.no
   replicas:
-    min: {{minReplicas}}
-    max: {{maxReplicas}}
+    min: 2
+    max: 4
     cpuThresholdPercentage: 50
   resources:
     limits:
@@ -48,6 +46,7 @@ spec:
         - application: nav-dekoratoren-api
           namespace: personbruker
         - application: melosys-skjema-api
+          namespace: teammelosys
   prometheus:
     enabled: true
     path: internal/prometheus
@@ -57,17 +56,9 @@ spec:
         - id: loki
         - id: elastic
   env:
-    - name: NODE_ENV
-      value: "production"
-    - name: EXPRESS_HOST
-      value: "::"
-    - name: EXPRESS_PORT
-      value: "8080"
-    - name: ENV
-      value: {{ENV}}
     - name: API_URL
-      value: {{API_URL}}
+      value: http://melosys-skjema-api/api
     - name: API_SCOPE
-      value: {{API_SCOPE}}
+      value: prod-gcp:teammelosys:melosys-skjema-api
     - name: DEKORATOREN_API_URL
-      value: {{DEKORATOREN_API_URL}}
+      value: https://www.nav.no/person/nav-dekoratoren-api
