@@ -5,7 +5,7 @@ MOCK_OAUTH_CONTAINER := melosys-docker-compose-mock-oauth2-server-1
 
 help:
 	@echo "Tilgjengelige kommandoer:"
-	@echo "  make local              - Start med mock OAuth (Wonderwall)"
+	@echo "  make local              - Start med mock OAuth (henter token automatisk)"
 	@echo "  make local-q2           - Start med ekte Q2-token (krever LOCAL_TOKEN env var)"
 	@echo "  make local-q2-new-token - Hent nytt Q2-token og start"
 	@echo "  make get-token          - Hent nytt Q2-token (åpner nettleser)"
@@ -21,10 +21,10 @@ build-server:
 	@mkdir -p build/public
 	@printf "  \033[32m✓\033[0m Server built            \n"
 
-# Start with mock OAuth (Wonderwall)
+# Start with mock OAuth (token fetched automatically from mock-oauth2-server)
 local: build-server
 	@echo ""
-	@printf "\033[36m⚡ Starting melosys-skjema-web (Wonderwall mode)\033[0m\n"
+	@printf "\033[36m⚡ Starting melosys-skjema-web (mock OAuth mode)\033[0m\n"
 	@echo ""
 	@printf "  \033[33m◐\033[0m Starting mock-oauth...  \r" && \
 		docker start $(MOCK_OAUTH_CONTAINER) 2>/dev/null && \
