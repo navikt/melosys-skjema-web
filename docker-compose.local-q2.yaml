@@ -1,11 +1,7 @@
 name: melosys-skjema-web-local-q2
 services:
   express-server:
-    build:
-      context: .
-      dockerfile: "Dockerfile.dev"
-      secrets:
-        - npmrc
+    build: .
     ports:
       - "4000:4000"
     extra_hosts:
@@ -19,7 +15,3 @@ services:
       DEKORATOREN_API_URL: https://www.ekstern.dev.nav.no/person/nav-dekoratoren-api
       LOCAL_TOKEN: ${LOCAL_TOKEN}
       USE_LOCAL_TOKEN: "true"
-
-secrets:
-  npmrc:
-    file: ~/.npmrc

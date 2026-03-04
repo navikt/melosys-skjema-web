@@ -40,13 +40,16 @@ export const setupApiProxy = (router: Router) => {
 };
 
 export const setupDekoratorenApiProxy = (router: Router) => {
-  if (useLocalToken) {
+  const mockDekoratoren =
+    useLocalToken || process.env.MOCK_DEKORATOREN === "true";
+
+  if (mockDekoratoren) {
     // Mock auth endpoint for local development
     router.get("/nav-dekoratoren-api/auth", (_req, res) => {
       res.json({
         authenticated: true,
         name: "Lokal Bruker",
-        ident: "12345678901",
+        userId: "12345678901",
       });
     });
   } else {

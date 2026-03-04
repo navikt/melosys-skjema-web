@@ -1,11 +1,7 @@
 name: melosys-skjema-web
 services:
   express-server:
-    build:
-      context: .
-      dockerfile: "Dockerfile.dev"
-      secrets:
-        - npmrc
+    build: .
     ports:
       - "8081:8081"
     extra_hosts:
@@ -17,6 +13,7 @@ services:
       API_SCOPE: melosys-localhost
       API_URL: http://host.docker.internal:8089/api
       DEKORATOREN_API_URL: https://www.ekstern.dev.nav.no/person/nav-dekoratoren-api
+      MOCK_DEKORATOREN: "true"
       ENV: dev
       TOKEN_X_ISSUER: isso
       TOKEN_X_TOKEN_ENDPOINT: http://host.docker.internal:8082/isso/token
@@ -40,12 +37,4 @@ services:
       --log-format=text
     restart: on-failure
     extra_hosts:
-      # Wonderwall needs to both reach and redirect user agents to the mock-oauth2-server:
-      # - 'mock-oauth2-server:8888' resolves from the container, but is not resolvable for user agents at the host (e.g. during redirects).
-      # - 'localhost:8888' allows user agents to resolve redirects to the mock-oauth2-server, but breaks connectivity from the container itself.
-      # This additional mapping allows the container to reach the mock-oauth2-server at 'localhost' through the host network, as well as allowing user agents to correctly resolve redirects.
       - localhost:host-gateway
-
-secrets:
-  npmrc:
-    file: ~/.npmrc
