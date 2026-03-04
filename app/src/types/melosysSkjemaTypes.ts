@@ -125,8 +125,8 @@ export enum VedleggFiltype {
 }
 
 export interface FeltDefinisjonDto {
-  hjelpetekst?: string;
   pakrevd: boolean;
+  hjelpetekst?: string;
   label: string;
   type: string;
 }

@@ -31,48 +31,24 @@ import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
 
 const API_PROXY_URL = "/api";
 
-type ArbeidsgiverStegData =
+type StegData =
   | ArbeidsgiverensVirksomhetINorgeDto
   | UtenlandsoppdragetDto
   | ArbeidsstedIUtlandetDto
   | ArbeidstakerensLonnDto
-  | TilleggsopplysningerDto;
-
-type ArbeidstakerStegData =
+  | TilleggsopplysningerDto
   | ArbeidssituasjonDto
   | UtenlandsoppdragetArbeidstakersDelDto
   | SkatteforholdOgInntektDto
-  | FamiliemedlemmerDto
-  | TilleggsopplysningerDto;
+  | FamiliemedlemmerDto;
 
-async function postArbeidsgiverStegData(
+async function postStegData(
   skjemaId: string,
   stegNavn: string,
-  data: ArbeidsgiverStegData,
+  data: StegData,
 ): Promise<void> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/${stegNavn}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-}
-
-async function postArbeidstakerStegData(
-  skjemaId: string,
-  stegNavn: string,
-  data: ArbeidstakerStegData,
-): Promise<void> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/${stegNavn}`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/${stegNavn}`,
     {
       method: "POST",
       headers: {
@@ -139,14 +115,14 @@ export async function postArbeidssituasjon(
   skjemaId: string,
   request: ArbeidssituasjonDto,
 ): Promise<void> {
-  return postArbeidstakerStegData(skjemaId, "arbeidssituasjon", request);
+  return postStegData(skjemaId, "arbeidssituasjon", request);
 }
 
 export async function postSkatteforholdOgInntekt(
   skjemaId: string,
   request: SkatteforholdOgInntektDto,
 ): Promise<void> {
-  return postArbeidstakerStegData(
+  return postStegData(
     skjemaId,
     "skatteforhold-og-inntekt",
     request,
@@ -157,7 +133,7 @@ export async function postArbeidsgiverensVirksomhetINorge(
   skjemaId: string,
   request: ArbeidsgiverensVirksomhetINorgeDto,
 ): Promise<void> {
-  return postArbeidsgiverStegData(
+  return postStegData(
     skjemaId,
     "arbeidsgiverens-virksomhet-i-norge",
     request,
@@ -168,28 +144,28 @@ export async function postUtenlandsoppdraget(
   skjemaId: string,
   request: UtenlandsoppdragetDto,
 ): Promise<void> {
-  return postArbeidsgiverStegData(skjemaId, "utenlandsoppdraget", request);
+  return postStegData(skjemaId, "utenlandsoppdraget", request);
 }
 
 export async function postArbeidsstedIUtlandet(
   skjemaId: string,
   request: ArbeidsstedIUtlandetDto,
 ): Promise<void> {
-  return postArbeidsgiverStegData(skjemaId, "arbeidssted-i-utlandet", request);
+  return postStegData(skjemaId, "arbeidssted-i-utlandet", request);
 }
 
 export async function postArbeidstakerensLonn(
   skjemaId: string,
   request: ArbeidstakerensLonnDto,
 ): Promise<void> {
-  return postArbeidsgiverStegData(skjemaId, "arbeidstakerens-lonn", request);
+  return postStegData(skjemaId, "arbeidstakerens-lonn", request);
 }
 
-export async function postTilleggsopplysningerArbeidsgiver(
+export async function postTilleggsopplysninger(
   skjemaId: string,
   request: TilleggsopplysningerDto,
 ): Promise<void> {
-  return postArbeidsgiverStegData(skjemaId, "tilleggsopplysninger", request);
+  return postStegData(skjemaId, "tilleggsopplysninger", request);
 }
 
 export async function sendInnSkjema(
@@ -266,21 +242,14 @@ export async function postUtenlandsoppdragetArbeidstaker(
   skjemaId: string,
   request: UtenlandsoppdragetArbeidstakersDelDto,
 ): Promise<void> {
-  return postArbeidstakerStegData(skjemaId, "utenlandsoppdraget", request);
+  return postStegData(skjemaId, "utsendingsperiode-og-land", request);
 }
 
 export async function postFamiliemedlemmer(
   skjemaId: string,
   request: FamiliemedlemmerDto,
 ): Promise<void> {
-  return postArbeidstakerStegData(skjemaId, "familiemedlemmer", request);
-}
-
-export async function postTilleggsopplysninger(
-  skjemaId: string,
-  request: TilleggsopplysningerDto,
-): Promise<void> {
-  return postArbeidstakerStegData(skjemaId, "tilleggsopplysninger", request);
+  return postStegData(skjemaId, "familiemedlemmer", request);
 }
 
 export const getOrganisasjonMedJuridiskEnhetQuery = (orgnummer: string) =>

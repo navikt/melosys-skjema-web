@@ -1,5 +1,5 @@
 import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
-import { postTilleggsopplysningerArbeidsgiver } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { postTilleggsopplysninger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { TilleggsopplysningerStegContent } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegContent.tsx";
 
 import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
@@ -21,7 +21,7 @@ export function TilleggsopplysningerSteg({
       {(skjema) => (
         <TilleggsopplysningerStegContent
           invalidateSkjemaQuery={invalidateArbeidsgiversSkjemaQuery}
-          postTilleggsopplysninger={postTilleggsopplysningerArbeidsgiver}
+          postTilleggsopplysninger={postTilleggsopplysninger}
           skjema={skjema}
           stegRekkefolge={ARBEIDSGIVER_STEG_REKKEFOLGE}
         />
