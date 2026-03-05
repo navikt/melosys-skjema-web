@@ -71,9 +71,7 @@ export class SkatteforholdOgInntektStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/${this.skjema.id}/skatteforhold-og-inntekt`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/skatteforhold-og-inntekt`);
   }
 
   async assertIsVisible() {

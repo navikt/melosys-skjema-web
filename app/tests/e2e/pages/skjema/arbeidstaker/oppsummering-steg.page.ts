@@ -47,9 +47,7 @@ export class OppsummeringStegPage {
     await expect(this.heading).toBeVisible();
   }
 
-  async assertUtsendingsperiodeOgLandData(
-    data: UtsendingsperiodeOgLandDto,
-  ) {
+  async assertUtsendingsperiodeOgLandData(data: UtsendingsperiodeOgLandDto) {
     await expect(
       this.page.locator(
         `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsesLand.label}") + dd`,

@@ -39,9 +39,7 @@ export class UtsendingsperiodeOgLandStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/${this.skjema.id}/utsendingsperiode-og-land`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/utsendingsperiode-og-land`);
   }
 
   async assertIsVisible() {

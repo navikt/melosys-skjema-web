@@ -48,9 +48,7 @@ export class ArbeidstakerensLonnStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/${this.skjema.id}/arbeidstakerens-lonn`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/arbeidstakerens-lonn`);
   }
 
   async assertIsVisible() {

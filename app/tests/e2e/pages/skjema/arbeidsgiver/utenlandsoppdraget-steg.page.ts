@@ -90,9 +90,7 @@ export class UtenlandsoppdragetStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/${this.skjema.id}/utenlandsoppdraget`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/utenlandsoppdraget`);
   }
 
   async assertIsVisible() {

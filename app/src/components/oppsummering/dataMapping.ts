@@ -1,8 +1,8 @@
 import {
-  type SkjemaData,
   isArbeidsgiverOgArbeidstakersDel,
   isArbeidsgiversDel,
   isArbeidstakersDel,
+  type SkjemaData,
 } from "~/pages/skjema/types.ts";
 import type {
   NorskeOgUtenlandskeVirksomheter,

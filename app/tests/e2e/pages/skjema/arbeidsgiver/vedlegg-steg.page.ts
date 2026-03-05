@@ -34,8 +34,6 @@ export class VedleggStegPage {
   }
 
   async assertNavigatedToNextStep() {
-    await expect(this.page).toHaveURL(
-      `/skjema/${this.skjema.id}/oppsummering`,
-    );
+    await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/oppsummering`);
   }
 }

@@ -44,9 +44,7 @@ export class FamiliemedlemmerStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/${this.skjema.id}/familiemedlemmer`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/familiemedlemmer`);
   }
 
   async assertIsVisible() {

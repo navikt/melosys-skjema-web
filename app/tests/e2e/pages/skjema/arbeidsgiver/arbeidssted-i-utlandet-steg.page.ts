@@ -193,9 +193,7 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/${this.skjema.id}/arbeidssted-i-utlandet`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/arbeidssted-i-utlandet`);
   }
 
   async mockArbeidsstedIUtlandetData(

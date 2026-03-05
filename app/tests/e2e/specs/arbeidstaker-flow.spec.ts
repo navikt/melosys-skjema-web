@@ -73,15 +73,18 @@ test.describe("Arbeidstaker komplett flyt", () => {
       formFieldValues.utsendelseLand,
     );
 
-    await utsendingsperiodeOgLandStegPage.fillFraDato(formFieldValues.periodeFra);
-    await utsendingsperiodeOgLandStegPage.fillTilDato(formFieldValues.periodeTil);
+    await utsendingsperiodeOgLandStegPage.fillFraDato(
+      formFieldValues.periodeFra,
+    );
+    await utsendingsperiodeOgLandStegPage.fillTilDato(
+      formFieldValues.periodeTil,
+    );
 
     // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedUtsendingsperiodeOgLandPayload: UtsendingsperiodeOgLandDto =
-      {
-        utsendelseLand: formFieldValues.utsendelseLand.value,
-        utsendelsePeriode: formFieldValues.periode,
-      };
+    const expectedUtsendingsperiodeOgLandPayload: UtsendingsperiodeOgLandDto = {
+      utsendelseLand: formFieldValues.utsendelseLand.value,
+      utsendelsePeriode: formFieldValues.periode,
+    };
 
     await utsendingsperiodeOgLandStegPage.lagreOgFortsettAndExpectPayload(
       expectedUtsendingsperiodeOgLandPayload,
@@ -251,7 +254,9 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await oppsummeringPage.assertArbeidssituasjonData(arbeidssituasjonData);
 
     // Verifiser data fra utsendingsperiode og land-steget
-    await oppsummeringPage.assertUtsendingsperiodeOgLandData(utsendingsperiodeOgLandData);
+    await oppsummeringPage.assertUtsendingsperiodeOgLandData(
+      utsendingsperiodeOgLandData,
+    );
 
     // Verifiser data fra skatteforhold og inntekt-steget
     await oppsummeringPage.assertSkatteforholdOgInntektData(
