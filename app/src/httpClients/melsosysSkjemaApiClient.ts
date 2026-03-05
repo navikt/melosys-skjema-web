@@ -122,22 +122,14 @@ export async function postSkatteforholdOgInntekt(
   skjemaId: string,
   request: SkatteforholdOgInntektDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    "skatteforhold-og-inntekt",
-    request,
-  );
+  return postStegData(skjemaId, "skatteforhold-og-inntekt", request);
 }
 
 export async function postArbeidsgiverensVirksomhetINorge(
   skjemaId: string,
   request: ArbeidsgiverensVirksomhetINorgeDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    "arbeidsgiverens-virksomhet-i-norge",
-    request,
-  );
+  return postStegData(skjemaId, "arbeidsgiverens-virksomhet-i-norge", request);
 }
 
 export async function postUtenlandsoppdraget(

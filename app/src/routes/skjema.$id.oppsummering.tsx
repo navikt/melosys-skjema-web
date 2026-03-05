@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ArbeidsgiverOppsummeringSteg } from "~/pages/skjema/arbeidsgiver/oppsummering/ArbeidsgiverOppsummeringSteg.tsx";
-import { ArbeidstakerOppsummeringSteg } from "~/pages/skjema/arbeidstaker/oppsummering/ArbeidstakerOppsummeringSteg.tsx";
+import { ArbeidsgiverOppsummeringSteg } from "~/pages/skjema/oppsummering/ArbeidsgiverOppsummeringSteg.tsx";
+import { ArbeidstakerOppsummeringSteg } from "~/pages/skjema/oppsummering-arbeidstaker/ArbeidstakerOppsummeringSteg.tsx";
 
 import type { SkjemaType } from "./skjema.$id.tsx";
 

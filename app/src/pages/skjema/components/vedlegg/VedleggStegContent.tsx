@@ -13,8 +13,8 @@ import {
   vedleggInnholdUrl,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
-import { ArbeidsgiverSkjemaProps } from "../../arbeidsgiver/types.ts";
-import { ArbeidstakerSkjemaProps } from "../../arbeidstaker/types.ts";
+import { ArbeidsgiverSkjemaProps } from "../../types.ts";
+import { ArbeidstakerSkjemaProps } from "../../types.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";

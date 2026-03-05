@@ -1,0 +1,151 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
+
+import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
+import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
+import {
+  getNextStep,
+  SkjemaSteg,
+} from "~/pages/skjema/components/SkjemaSteg.tsx";
+import { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
+
+import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { ArbeidsgiverSkjemaProps } from "../types.ts";
+import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
+
+export const stepKey = "arbeidstakerens-lonn";
+
+type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
+
+function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
+  const { getFelt } = useSkjemaDefinisjon();
+
+  const betalerAllLonnFelt = getFelt(
+    "arbeidstakerensLonn",
+    "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+  );
+  const virksomheterFelt = getFelt(
+    "arbeidstakerensLonn",
+    "virksomheterSomUtbetalerLonnOgNaturalytelser",
+  );
+
+  const lagretSkjemadataForSteg = skjema.data?.arbeidstakerensLonn;
+
+  const formMethods = useForm({
+    resolver: zodResolver(arbeidstakerensLonnSchema),
+    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
+  });
+
+  const { handleSubmit, setError, clearErrors, control } = formMethods;
+
+  const arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden = useWatch(
+    {
+      control,
+      name: "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+    },
+  );
+
+  const registerArbeidstakerLonnMutation = useMutation({
+    mutationFn: (data: ArbeidstakerensLonnFormData) => {
+      return postArbeidstakerensLonn(skjema.id, data as ArbeidstakerensLonnDto);
+    },
+    onSuccess: async () => {
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
+      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      if (nextStep) {
+        navigate({
+          to: nextStep.route,
+          params: { id: skjema.id },
+        });
+      }
+    },
+    onError: () => {
+      toast.error(t("felles.feil"));
+    },
+  });
+
+  const onSubmit = (data: ArbeidstakerensLonnFormData) => {
+    // Custom validation - require at least one company (Norwegian or foreign)
+    if (!data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
+      const antallNorskeVirksomheter =
+        data.virksomheterSomUtbetalerLonnOgNaturalytelser?.norskeVirksomheter
+          ?.length || 0;
+      const antallUtenlandskeVirksomheter =
+        data.virksomheterSomUtbetalerLonnOgNaturalytelser
+          ?.utenlandskeVirksomheter?.length || 0;
+
+      if (antallNorskeVirksomheter + antallUtenlandskeVirksomheter === 0) {
+        setError("virksomheterSomUtbetalerLonnOgNaturalytelser", {
+          type: "required",
+          message: t(
+            "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
+          ),
+        });
+        return;
+      }
+    }
+
+    // Clear any previous errors
+    clearErrors("virksomheterSomUtbetalerLonnOgNaturalytelser");
+
+    registerArbeidstakerLonnMutation.mutate(data);
+  };
+
+  return (
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <SkjemaSteg
+          config={{
+            stepKey,
+            stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
+          }}
+          nesteKnapp={
+            <NesteStegKnapp
+              loading={registerArbeidstakerLonnMutation.isPending}
+            />
+          }
+        >
+          <RadioGroupJaNeiFormPart
+            className="mt-6"
+            formFieldName="arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"
+            legend={betalerAllLonnFelt.label}
+          />
+
+          {arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden ===
+            false && (
+            <NorskeOgUtenlandskeVirksomheterFormPart
+              description={virksomheterFelt.hjelpetekst}
+              fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
+              label={virksomheterFelt.label}
+            />
+          )}
+        </SkjemaSteg>
+      </form>
+    </FormProvider>
+  );
+}
+
+interface ArbeidstakerensLonnStegProps {
+  id: string;
+}
+
+export function ArbeidstakerensLonnSteg({ id }: ArbeidstakerensLonnStegProps) {
+  return (
+    <ArbeidsgiverStegLoader id={id}>
+      {(skjema) => <ArbeidstakerensLonnStegContent skjema={skjema} />}
+    </ArbeidsgiverStegLoader>
+  );
+}

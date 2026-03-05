@@ -11,8 +11,10 @@ import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import { ArbeidsgiverSkjemaProps } from "../../arbeidsgiver/types.ts";
-import { ArbeidstakerSkjemaProps } from "../../arbeidstaker/types.ts";
+import {
+  ArbeidsgiverSkjemaProps,
+  ArbeidstakerSkjemaProps,
+} from "../../types.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
