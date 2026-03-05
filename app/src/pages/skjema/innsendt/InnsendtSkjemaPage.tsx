@@ -16,7 +16,12 @@ import { useTranslation } from "react-i18next";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
 import { getInnsendtSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { InnsendtSkjemaResponse } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  InnsendtSkjemaResponse,
+  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+  UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 import { resolveSeksjoner } from "../../../components/oppsummering/dataMapping.ts";
 
@@ -55,6 +60,50 @@ export function InnsendtSkjemaPage({ id }: InnsendtSkjemaPageProps) {
   return <InnsendtSkjemaPageContent response={data} />;
 }
 
+// dto.type verdier
+const ARBEIDSTAKERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL";
+const ARBEIDSGIVERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL";
+const ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL =
+  "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL";
+
+function getArbeidstakerData(
+  skjemaData: InnsendtSkjemaResponse["skjemaData"],
+): UtsendtArbeidstakerArbeidstakersSkjemaDataDto | undefined {
+  if (skjemaData.type === ARBEIDSTAKERS_DEL) {
+    return skjemaData as UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
+  }
+  if (skjemaData.type === ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
+    const combined =
+      skjemaData as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto;
+    return {
+      ...combined.arbeidstakersData,
+      tilleggsopplysninger: combined.tilleggsopplysninger,
+      utsendingsperiodeOgLand: combined.utsendingsperiodeOgLand,
+      type: ARBEIDSTAKERS_DEL,
+    } as UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
+  }
+  return undefined;
+}
+
+function getArbeidsgiverData(
+  skjemaData: InnsendtSkjemaResponse["skjemaData"],
+): UtsendtArbeidstakerArbeidsgiversSkjemaDataDto | undefined {
+  if (skjemaData.type === ARBEIDSGIVERS_DEL) {
+    return skjemaData as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto;
+  }
+  if (skjemaData.type === ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
+    const combined =
+      skjemaData as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto;
+    return {
+      ...combined.arbeidsgiversData,
+      tilleggsopplysninger: combined.tilleggsopplysninger,
+      utsendingsperiodeOgLand: combined.utsendingsperiodeOgLand,
+      type: ARBEIDSGIVERS_DEL,
+    } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto;
+  }
+  return undefined;
+}
+
 function InnsendtSkjemaPageContent({
   response,
 }: {
@@ -62,13 +111,15 @@ function InnsendtSkjemaPageContent({
 }) {
   const { t } = useTranslation();
 
-  const arbeidstakerSeksjoner = response.arbeidstakerData
-    ? resolveSeksjoner(response.arbeidstakerData, response.definisjon)
-    : [];
+  const arbeidstakerSeksjoner = (() => {
+    const data = getArbeidstakerData(response.skjemaData);
+    return data ? resolveSeksjoner(data, response.definisjon) : [];
+  })();
 
-  const arbeidsgiverSeksjoner = response.arbeidsgiverData
-    ? resolveSeksjoner(response.arbeidsgiverData, response.definisjon)
-    : [];
+  const arbeidsgiverSeksjoner = (() => {
+    const data = getArbeidsgiverData(response.skjemaData);
+    return data ? resolveSeksjoner(data, response.definisjon) : [];
+  })();
 
   return (
     <VStack gap="space-24">

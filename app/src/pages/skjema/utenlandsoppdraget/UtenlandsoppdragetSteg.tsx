@@ -8,46 +8,63 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
-import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
-import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getSkjemaQuery,
+  postUtenlandsoppdraget,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import type { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "../types.ts";
-import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import {
+  isArbeidsgiverData,
+  isCombinedData,
+  type SkjemaData,
+} from "../types.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
 export const stepKey = "utenlandsoppdraget";
+
+function getUtenlandsoppdraget(
+  data?: SkjemaData,
+): UtenlandsoppdragetDto | undefined {
+  if (!data) return undefined;
+  if (isArbeidsgiverData(data)) return data.utenlandsoppdraget;
+  if (isCombinedData(data)) return data.arbeidsgiversData?.utenlandsoppdraget;
+  return undefined;
+}
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
 
 type UtenlandsoppdragFormData = z.infer<typeof utenlandsoppdragSchema>;
 
-function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
+function UtenlandsoppdragetStegContent({
+  skjemaId,
+  stegData,
+  stegRekkefolge,
+}: {
+  skjemaId: string;
+  stegData?: UtenlandsoppdragetDto;
+  stegRekkefolge: StegRekkefolgeItem[];
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
 
-  const utsendelseLandFelt = getFelt(
-    "utenlandsoppdragetArbeidsgiver",
-    "utsendelseLand",
-  );
-  const utsendelsePeriodeFelt = getFelt(
-    "utenlandsoppdragetArbeidsgiver",
-    "arbeidstakerUtsendelsePeriode",
-  );
   const harOppdragILandetFelt = getFelt(
     "utenlandsoppdragetArbeidsgiver",
     "arbeidsgiverHarOppdragILandet",
@@ -81,11 +98,9 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     "forrigeArbeidstakerUtsendelsePeriode",
   );
 
-  const lagretSkjemadataForSteg = skjema.data?.utenlandsoppdraget;
-
   const formMethods = useForm({
     resolver: zodResolver(utenlandsoppdragSchema),
-    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
+    ...(stegData && { defaultValues: stegData }),
   });
 
   const {
@@ -124,15 +139,15 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const registerUtenlandsoppdragMutation = useMutation({
     mutationFn: (data: UtenlandsoppdragFormData) => {
-      return postUtenlandsoppdraget(skjema.id, data);
+      return postUtenlandsoppdraget(skjemaId, data);
     },
     onSuccess: async () => {
-      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
-      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      await invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      const nextStep = getNextStep(stepKey, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjema.id },
+          params: { id: skjemaId },
         });
       }
     },
@@ -151,7 +166,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
         <SkjemaSteg
           config={{
             stepKey,
-            stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
+            stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={
             <NesteStegKnapp
@@ -159,38 +174,8 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             />
           }
         >
-          <LandVelgerFormPart
-            className="mt-4"
-            formFieldName="utsendelseLand"
-            label={utsendelseLandFelt.label}
-          />
-
-          <PeriodeFormPart
-            className="mt-6"
-            defaultFraDato={
-              lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.fraDato
-                ? new Date(
-                    lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
-                      .fraDato,
-                  )
-                : undefined
-            }
-            defaultTilDato={
-              lagretSkjemadataForSteg?.arbeidstakerUtsendelsePeriode?.tilDato
-                ? new Date(
-                    lagretSkjemadataForSteg.arbeidstakerUtsendelsePeriode
-                      .tilDato,
-                  )
-                : undefined
-            }
-            formFieldName="arbeidstakerUtsendelsePeriode"
-            label={utsendelsePeriodeFelt.label}
-            tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
-            {...dateLimits}
-          />
-
           <RadioGroupJaNeiFormPart
-            className="mt-6"
+            className="mt-4"
             formFieldName="arbeidsgiverHarOppdragILandet"
             legend={harOppdragILandetFelt.label}
           />
@@ -247,20 +232,16 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
             <PeriodeFormPart
               className="mt-6"
               defaultFraDato={
-                lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
-                  ?.fraDato
+                stegData?.forrigeArbeidstakerUtsendelsePeriode?.fraDato
                   ? new Date(
-                      lagretSkjemadataForSteg
-                        .forrigeArbeidstakerUtsendelsePeriode.fraDato,
+                      stegData.forrigeArbeidstakerUtsendelsePeriode.fraDato,
                     )
                   : undefined
               }
               defaultTilDato={
-                lagretSkjemadataForSteg?.forrigeArbeidstakerUtsendelsePeriode
-                  ?.tilDato
+                stegData?.forrigeArbeidstakerUtsendelsePeriode?.tilDato
                   ? new Date(
-                      lagretSkjemadataForSteg
-                        .forrigeArbeidstakerUtsendelsePeriode.tilDato,
+                      stegData.forrigeArbeidstakerUtsendelsePeriode.tilDato,
                     )
                   : undefined
               }
@@ -275,14 +256,16 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   );
 }
 
-interface UtenlandsoppdragetStegProps {
-  id: string;
-}
-
-export function UtenlandsoppdragetSteg({ id }: UtenlandsoppdragetStegProps) {
+export function UtenlandsoppdragetSteg({ id }: { id: string }) {
   return (
-    <ArbeidsgiverStegLoader id={id}>
-      {(skjema) => <UtenlandsoppdragetStegContent skjema={skjema} />}
-    </ArbeidsgiverStegLoader>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
+      {(skjema) => (
+        <UtenlandsoppdragetStegContent
+          skjemaId={skjema.id}
+          stegData={getUtenlandsoppdraget(skjema.data)}
+          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
+        />
+      )}
+    </SkjemaStegLoader>
   );
 }

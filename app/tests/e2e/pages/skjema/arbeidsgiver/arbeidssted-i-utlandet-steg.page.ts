@@ -194,7 +194,7 @@ export class ArbeidsstedIUtlandetStegPage {
 
   async goto() {
     await this.page.goto(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
+      `/skjema/${this.skjema.id}/arbeidssted-i-utlandet`,
     );
   }
 
@@ -220,7 +220,7 @@ export class ArbeidsstedIUtlandetStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/arbeidssted-i-utlandet`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
@@ -236,7 +236,7 @@ export class ArbeidsstedIUtlandetStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidstakerens-lonn`,
+      `/skjema/${this.skjema.id}/arbeidstakerens-lonn`,
     );
   }
 }

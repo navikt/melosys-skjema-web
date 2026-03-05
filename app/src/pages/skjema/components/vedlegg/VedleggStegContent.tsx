@@ -13,18 +13,14 @@ import {
   vedleggInnholdUrl,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
-import { ArbeidsgiverSkjemaProps } from "../../types.ts";
-import { ArbeidstakerSkjemaProps } from "../../types.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
 
 export const stepKey = "vedlegg";
 
-type SkjemaProps = ArbeidsgiverSkjemaProps | ArbeidstakerSkjemaProps;
-
 interface VedleggStegProps {
-  skjema: SkjemaProps["skjema"];
+  skjemaId: string;
   stegRekkefolge: StegRekkefolgeItem[];
 }
 
@@ -36,7 +32,7 @@ interface VedleggItem {
 }
 
 export function VedleggStegContent({
-  skjema,
+  skjemaId,
   stegRekkefolge,
 }: VedleggStegProps) {
   const navigate = useNavigate();
@@ -47,10 +43,10 @@ export function VedleggStegContent({
   );
 
   useEffect(() => {
-    hentVedlegg(skjema.id)
+    hentVedlegg(skjemaId)
       .then(setEksisterendeVedlegg)
       .catch(() => {});
-  }, [skjema.id]);
+  }, [skjemaId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +54,7 @@ export function VedleggStegContent({
     if (nextStep) {
       navigate({
         to: nextStep.route,
-        params: { id: skjema.id },
+        params: { id: skjemaId },
       });
     }
   };
@@ -99,7 +95,7 @@ export function VedleggStegContent({
     setVedleggItems((prev) => [...prev, ...rejectedItems, ...acceptedItems]);
 
     for (const fil of partitioned.accepted) {
-      lastOppVedlegg(skjema.id, fil)
+      lastOppVedlegg(skjemaId, fil)
         .then((response) => {
           setVedleggItems((prev) =>
             prev.map((item) =>
@@ -128,13 +124,13 @@ export function VedleggStegContent({
   const handleSlettNyItem = (fil: File) => {
     const item = vedleggItems.find((v) => v.fil === fil);
     if (item?.vedleggId) {
-      slettVedlegg(skjema.id, item.vedleggId).catch(() => {});
+      slettVedlegg(skjemaId, item.vedleggId).catch(() => {});
     }
     setVedleggItems((prev) => prev.filter((v) => v.fil !== fil));
   };
 
   const handleSlettEksisterende = (vedleggId: string) => {
-    slettVedlegg(skjema.id, vedleggId)
+    slettVedlegg(skjemaId, vedleggId)
       .then(() => {
         setEksisterendeVedlegg((prev) =>
           prev.filter((v) => v.id !== vedleggId),
@@ -177,7 +173,7 @@ export function VedleggStegContent({
                   name: vedlegg.filnavn,
                   size: vedlegg.filstorrelse,
                 }}
-                href={vedleggInnholdUrl(skjema.id, vedlegg.id)}
+                href={vedleggInnholdUrl(skjemaId, vedlegg.id)}
                 key={vedlegg.id}
               />
             ))}
@@ -192,7 +188,7 @@ export function VedleggStegContent({
                 file={item.fil}
                 href={
                   item.vedleggId
-                    ? vedleggInnholdUrl(skjema.id, item.vedleggId)
+                    ? vedleggInnholdUrl(skjemaId, item.vedleggId)
                     : undefined
                 }
                 key={`new-${index}`}

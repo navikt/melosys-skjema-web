@@ -1,22 +1,31 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import type { SkjemaType } from "./skjema.$id.tsx";
+import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
 export const Route = createFileRoute("/skjema/$id/")({
   beforeLoad: ({ params, context }) => {
-    const { skjemaType } = context as { skjemaType: SkjemaType };
+    const { skjemadel } = context as { skjemadel: Skjemadel };
     const { id } = params;
 
-    if (skjemaType === "arbeidsgiver") {
-      throw redirect({
-        to: "/skjema/$id/arbeidsgiverens-virksomhet-i-norge",
-        params: { id },
-      });
+    switch (skjemadel) {
+      case Skjemadel.ARBEIDSGIVERS_DEL: {
+        throw redirect({
+          to: "/skjema/$id/arbeidsgiverens-virksomhet-i-norge",
+          params: { id },
+        });
+      }
+      case Skjemadel.ARBEIDSTAKERS_DEL: {
+        throw redirect({
+          to: "/skjema/$id/utenlandsoppdraget",
+          params: { id },
+        });
+      }
+      case Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL: {
+        throw redirect({
+          to: "/skjema/$id/utsendingsperiode-og-land",
+          params: { id },
+        });
+      }
     }
-
-    throw redirect({
-      to: "/skjema/$id/utenlandsoppdraget",
-      params: { id },
-    });
   },
 });

@@ -1,40 +1,33 @@
-import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
+import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { postTilleggsopplysninger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { TilleggsopplysningerStegContent } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegContent.tsx";
+import type { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes.ts";
 
-import {
-  ARBEIDSGIVER_STEG_REKKEFOLGE,
-  ARBEIDSTAKER_STEG_REKKEFOLGE,
-} from "../stegRekkefølge.ts";
-import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import type { SkjemaData } from "../types.ts";
 
 export { stepKey } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegContent.tsx";
 
-interface TilleggsopplysningerStegProps {
-  id: string;
-  skjemaType: "arbeidsgiver" | "arbeidstaker";
+// tilleggsopplysninger lives on the base type, so all 3 variants have it
+function getTilleggsopplysninger(
+  data?: SkjemaData,
+): TilleggsopplysningerDto | undefined {
+  if (!data) return undefined;
+  return data.tilleggsopplysninger;
 }
 
-export function TilleggsopplysningerSteg({
-  id,
-  skjemaType,
-}: TilleggsopplysningerStegProps) {
-  const invalidateSkjemaQuery = useInvalidateSkjemaQuery();
-  const stegRekkefolge =
-    skjemaType === "arbeidsgiver"
-      ? ARBEIDSGIVER_STEG_REKKEFOLGE
-      : ARBEIDSTAKER_STEG_REKKEFOLGE;
-
+export function TilleggsopplysningerSteg({ id }: { id: string }) {
   return (
-    <ArbeidsgiverStegLoader id={id}>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
       {(skjema) => (
         <TilleggsopplysningerStegContent
-          invalidateSkjemaQuery={invalidateSkjemaQuery}
           postTilleggsopplysninger={postTilleggsopplysninger}
-          skjema={skjema}
-          stegRekkefolge={stegRekkefolge}
+          skjemaId={skjema.id}
+          stegData={getTilleggsopplysninger(skjema.data)}
+          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
         />
       )}
-    </ArbeidsgiverStegLoader>
+    </SkjemaStegLoader>
   );
 }

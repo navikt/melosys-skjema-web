@@ -11,10 +11,6 @@ import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import {
-  ArbeidsgiverSkjemaProps,
-  ArbeidstakerSkjemaProps,
-} from "../../types.ts";
 import { StegRekkefolgeItem } from "../Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "../NesteStegKnapp.tsx";
 import { getNextStep, SkjemaSteg } from "../SkjemaSteg.tsx";
@@ -25,22 +21,20 @@ import {
 
 export const stepKey = "tilleggsopplysninger";
 
-type SkjemaProps = ArbeidsgiverSkjemaProps | ArbeidstakerSkjemaProps;
-
 interface TilleggsopplysningerStegProps {
-  skjema: SkjemaProps["skjema"];
+  skjemaId: string;
+  stegData?: TilleggsopplysningerDto;
   postTilleggsopplysninger: (
     skjemaId: string,
     data: TilleggsopplysningerDto,
   ) => Promise<void>;
-  invalidateSkjemaQuery: (skjemaId: string) => void;
   stegRekkefolge: StegRekkefolgeItem[];
 }
 
 export function TilleggsopplysningerStegContent({
-  skjema,
+  skjemaId,
+  stegData,
   postTilleggsopplysninger,
-  invalidateSkjemaQuery,
   stegRekkefolge,
 }: TilleggsopplysningerStegProps) {
   const navigate = useNavigate();
@@ -58,11 +52,9 @@ export function TilleggsopplysningerStegContent({
     "tilleggsopplysningerTilSoknad",
   );
 
-  const lagretSkjemadataForSteg = skjema.data?.tilleggsopplysninger;
-
   const formMethods = useForm({
     resolver: zodResolver(tilleggsopplysningerSchema),
-    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
+    ...(stegData && { defaultValues: stegData }),
   });
 
   const {
@@ -79,17 +71,16 @@ export function TilleggsopplysningerStegContent({
   const postTilleggsopplysningerMutation = useMutation({
     mutationFn: (data: TilleggsopplysningerFormData) => {
       return postTilleggsopplysninger(
-        skjema.id,
+        skjemaId,
         data as TilleggsopplysningerDto,
       );
     },
     onSuccess: () => {
-      invalidateSkjemaQuery(skjema.id);
       const nextStep = getNextStep(stepKey, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjema.id },
+          params: { id: skjemaId },
         });
       }
     },

@@ -4,6 +4,7 @@ import { ArbeidsstedIUtlandetSteg } from "~/pages/skjema/arbeidssted-i-utlandet/
 
 function ArbeidsstedIUtlandetStegRoute() {
   const { id } = Route.useParams();
+
   return <ArbeidsstedIUtlandetSteg id={id} />;
 }
 

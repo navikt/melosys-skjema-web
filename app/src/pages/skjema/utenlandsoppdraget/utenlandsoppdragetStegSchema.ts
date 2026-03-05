@@ -1,15 +1,9 @@
 import { z } from "zod";
 
 import { periodeSchema } from "~/components/date/periodeSchema.ts";
-import { LandKode } from "~/types/melosysSkjemaTypes.ts";
 
 export const utenlandsoppdragSchema = z
   .object({
-    utsendelseLand: z.enum(LandKode, {
-      error:
-        "utenlandsoppdragetSteg.duMaVelgeHvilketLandArbeidstakerenSendesTil",
-    }),
-    arbeidstakerUtsendelsePeriode: periodeSchema,
     arbeidsgiverHarOppdragILandet: z.boolean({
       error: "utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet",
     }),

@@ -1,9 +1,16 @@
+import {
+  ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
+  ARBEIDSGIVERS_DEL,
+  ARBEIDSTAKERS_DEL,
+  type SkjemaData,
+} from "~/pages/skjema/types.ts";
 import type {
   NorskeOgUtenlandskeVirksomheter,
   NorskeOgUtenlandskeVirksomheterMedAnsettelsesform,
   PaLandDto,
   SeksjonDefinisjonDto,
   SkjemaDefinisjonDto,
+  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -66,8 +73,8 @@ function mapArbeidstakerSeksjoner(
   return [
     {
       seksjonNavn: "utenlandsoppdragetArbeidstaker",
-      stegKey: "utenlandsoppdraget",
-      data: dto.utenlandsoppdraget as Record<string, unknown> | undefined,
+      stegKey: "utsendingsperiode-og-land",
+      data: dto.utsendingsperiodeOgLand as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidssituasjon",
@@ -169,28 +176,35 @@ function mapArbeidsgiverSeksjoner(
   ];
 }
 
-// dto.type verdier - vil bli eksponert som enum fra API i fremtiden
-const ARBEIDSTAKERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL";
-const ARBEIDSGIVERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL";
-
-function getSeksjonMappinger(
-  dto:
-    | UtsendtArbeidstakerArbeidstakersSkjemaDataDto
-    | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+function mapCombinedSeksjoner(
+  dto: UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): SeksjonMappingEntry[] {
+  return [
+    ...mapArbeidsgiverSeksjoner({
+      ...dto.arbeidsgiversData,
+      tilleggsopplysninger: dto.tilleggsopplysninger,
+    } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto),
+    ...mapArbeidstakerSeksjoner({
+      ...dto.arbeidstakersData,
+      utsendingsperiodeOgLand: dto.utsendingsperiodeOgLand,
+      tilleggsopplysninger: dto.tilleggsopplysninger,
+    } as UtsendtArbeidstakerArbeidstakersSkjemaDataDto),
+  ];
+}
+
+function getSeksjonMappinger(dto: SkjemaData): SeksjonMappingEntry[] {
   switch (dto.type) {
     case ARBEIDSTAKERS_DEL: {
-      return mapArbeidstakerSeksjoner(
-        dto as UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
-      );
+      return mapArbeidstakerSeksjoner(dto);
     }
     case ARBEIDSGIVERS_DEL: {
-      return mapArbeidsgiverSeksjoner(
-        dto as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
-      );
+      return mapArbeidsgiverSeksjoner(dto);
+    }
+    case ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL: {
+      return mapCombinedSeksjoner(dto);
     }
     default: {
-      throw new Error(`Ukjent skjematype: ${dto.type}`);
+      throw new Error(`Ukjent skjematype: ${(dto as SkjemaData).type}`);
     }
   }
 }
@@ -200,9 +214,7 @@ function getSeksjonMappinger(
  * Returnerer kun seksjoner som har både definisjon og data.
  */
 export function resolveSeksjoner(
-  dto:
-    | UtsendtArbeidstakerArbeidstakersSkjemaDataDto
-    | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+  dto: SkjemaData,
   definisjon: SkjemaDefinisjonDto,
 ): ResolvedSeksjon[] {
   return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {

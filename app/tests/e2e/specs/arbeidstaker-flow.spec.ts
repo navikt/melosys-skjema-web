@@ -5,7 +5,7 @@ import {
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
-  UtenlandsoppdragetArbeidstakersDelDto,
+  UtsendingsperiodeOgLandDto,
   type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import {
@@ -22,7 +22,7 @@ import { FamiliemedlemmerStegPage } from "../pages/skjema/arbeidstaker/familieme
 import { OppsummeringStegPage } from "../pages/skjema/arbeidstaker/oppsummering-steg.page";
 import { SkatteforholdOgInntektStegPage } from "../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";
 import { TilleggsopplysningerStegPage } from "../pages/skjema/arbeidstaker/tilleggsopplysninger-steg.page";
-import { UtenlandsoppdragetStegPage } from "../pages/skjema/arbeidstaker/utenlandsoppdraget-steg.page";
+import { UtsendingsperiodeOgLandStegPage } from "../pages/skjema/arbeidstaker/utsendingsperiode-og-land-steg.page";
 import { VedleggStegPage } from "../pages/skjema/arbeidstaker/vedlegg-steg.page";
 
 test.describe("Arbeidstaker komplett flyt", () => {
@@ -50,45 +50,45 @@ test.describe("Arbeidstaker komplett flyt", () => {
     await veiledningPage.assertStartSoknadButtonVisible();
     await veiledningPage.startSoknad();
 
-    await veiledningPage.assertNavigatedToUtenlandsoppdraget(
+    await veiledningPage.assertNavigatedToUtsendingsperiodeOgLand(
       testArbeidstakerSkjema.id,
     );
   });
 
-  test("skal fylle ut utenlandsoppdraget steg og gjøre forventet POST request", async ({
+  test("skal fylle ut utsendingsperiode og land steg og gjøre forventet POST request", async ({
     page,
   }) => {
-    const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
+    const utsendingsperiodeOgLandStegPage = new UtsendingsperiodeOgLandStegPage(
       page,
       testArbeidstakerSkjema,
     );
 
     // Naviger direkte til steget
-    await utenlandsoppdragetStegPage.goto();
+    await utsendingsperiodeOgLandStegPage.goto();
 
-    await utenlandsoppdragetStegPage.assertIsVisible();
+    await utsendingsperiodeOgLandStegPage.assertIsVisible();
 
     // Svar på spørsmål
-    await utenlandsoppdragetStegPage.utsendelsesLandCombobox.selectOption(
+    await utsendingsperiodeOgLandStegPage.utsendelseLandCombobox.selectOption(
       formFieldValues.utsendelseLand,
     );
 
-    await utenlandsoppdragetStegPage.fillFraDato(formFieldValues.periodeFra);
-    await utenlandsoppdragetStegPage.fillTilDato(formFieldValues.periodeTil);
+    await utsendingsperiodeOgLandStegPage.fillFraDato(formFieldValues.periodeFra);
+    await utsendingsperiodeOgLandStegPage.fillTilDato(formFieldValues.periodeTil);
 
     // Lagre og fortsett og verifiser forventet payload i POST request
-    const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetArbeidstakersDelDto =
+    const expectedUtsendingsperiodeOgLandPayload: UtsendingsperiodeOgLandDto =
       {
-        utsendelsesLand: formFieldValues.utsendelseLand.value,
+        utsendelseLand: formFieldValues.utsendelseLand.value,
         utsendelsePeriode: formFieldValues.periode,
       };
 
-    await utenlandsoppdragetStegPage.lagreOgFortsettAndExpectPayload(
-      expectedUtenlandsoppdragetPayload,
+    await utsendingsperiodeOgLandStegPage.lagreOgFortsettAndExpectPayload(
+      expectedUtsendingsperiodeOgLandPayload,
     );
 
     // Verifiser navigering til neste steg
-    await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
+    await utsendingsperiodeOgLandStegPage.assertNavigatedToNextStep();
   });
 
   test("skal fylle ut skatteforhold og inntekt steg og gjøre forventet POST request", async ({
@@ -199,8 +199,8 @@ test.describe("Arbeidstaker komplett flyt", () => {
   test("Oppsummering viser alle utfylte data fra tidligere steg", async ({
     page,
   }) => {
-    const utenlandsoppdragetData: UtenlandsoppdragetArbeidstakersDelDto = {
-      utsendelsesLand: formFieldValues.utsendelseLand.value,
+    const utsendingsperiodeOgLandData: UtsendingsperiodeOgLandDto = {
+      utsendelseLand: formFieldValues.utsendelseLand.value,
       utsendelsePeriode: formFieldValues.periode,
     };
 
@@ -229,7 +229,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
       data: {
         type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
         arbeidssituasjon: arbeidssituasjonData,
-        utenlandsoppdraget: utenlandsoppdragetData,
+        utsendingsperiodeOgLand: utsendingsperiodeOgLandData,
         familiemedlemmer: familiemedlemmerData,
         skatteforholdOgInntekt: skatteforholdOgInntektData,
         tilleggsopplysninger: tilleggsopplysningerData,
@@ -250,8 +250,8 @@ test.describe("Arbeidstaker komplett flyt", () => {
     // Verifiser data fra arbeidssituasjon-steget
     await oppsummeringPage.assertArbeidssituasjonData(arbeidssituasjonData);
 
-    // Verifiser data fra utenlandsoppdraget-steget
-    await oppsummeringPage.assertUtenlandsoppdragetData(utenlandsoppdragetData);
+    // Verifiser data fra utsendingsperiode og land-steget
+    await oppsummeringPage.assertUtsendingsperiodeOgLandData(utsendingsperiodeOgLandData);
 
     // Verifiser data fra skatteforhold og inntekt-steget
     await oppsummeringPage.assertSkatteforholdOgInntektData(

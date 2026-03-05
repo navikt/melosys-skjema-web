@@ -10,6 +10,7 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
@@ -17,8 +18,6 @@ import {
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
 
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "../types.ts";
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 
 export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
@@ -28,8 +27,14 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
 >;
 
 export function VirksomhetINorgeStegContent({
-  skjema,
-}: ArbeidsgiverSkjemaProps) {
+  skjemaId,
+  stegData,
+  stegRekkefolge,
+}: {
+  skjemaId: string;
+  stegData?: ArbeidsgiverensVirksomhetINorgeDto;
+  stegRekkefolge: StegRekkefolgeItem[];
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
@@ -48,11 +53,9 @@ export function VirksomhetINorgeStegContent({
     "opprettholderArbeidsgiverenVanligDrift",
   );
 
-  const lagretSkjemadataForSteg = skjema.data?.arbeidsgiverensVirksomhetINorge;
-
   const formMethods = useForm({
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
-    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
+    ...(stegData && { defaultValues: stegData }),
   });
 
   const { handleSubmit, control } = formMethods;
@@ -65,17 +68,17 @@ export function VirksomhetINorgeStegContent({
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
       return postArbeidsgiverensVirksomhetINorge(
-        skjema.id,
+        skjemaId,
         data as ArbeidsgiverensVirksomhetINorgeDto,
       );
     },
     onSuccess: async () => {
-      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
-      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      await invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      const nextStep = getNextStep(stepKey, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjema.id },
+          params: { id: skjemaId },
         });
       }
     },
@@ -94,7 +97,7 @@ export function VirksomhetINorgeStegContent({
         <SkjemaSteg
           config={{
             stepKey,
-            stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
+            stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />

@@ -4,6 +4,7 @@ import { ArbeidstakerensLonnSteg } from "~/pages/skjema/arbeidstakerens-lonn/Arb
 
 function ArbeidstakerensLonnStegRoute() {
   const { id } = Route.useParams();
+
   return <ArbeidstakerensLonnSteg id={id} />;
 }
 

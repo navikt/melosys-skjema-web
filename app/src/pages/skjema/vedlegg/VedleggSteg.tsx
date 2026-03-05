@@ -1,29 +1,20 @@
+import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { VedleggStegContent } from "~/pages/skjema/components/vedlegg/VedleggStegContent.tsx";
 
-import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
-import {
-  ARBEIDSGIVER_STEG_REKKEFOLGE,
-  ARBEIDSTAKER_STEG_REKKEFOLGE,
-} from "../stegRekkefølge.ts";
+import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 
 export { stepKey } from "~/pages/skjema/components/vedlegg/VedleggStegContent.tsx";
 
-interface VedleggStegProps {
-  id: string;
-  skjemaType: "arbeidsgiver" | "arbeidstaker";
-}
-
-export function VedleggSteg({ id, skjemaType }: VedleggStegProps) {
-  const stegRekkefolge =
-    skjemaType === "arbeidsgiver"
-      ? ARBEIDSGIVER_STEG_REKKEFOLGE
-      : ARBEIDSTAKER_STEG_REKKEFOLGE;
-
+export function VedleggSteg({ id }: { id: string }) {
   return (
-    <ArbeidsgiverStegLoader id={id}>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
       {(skjema) => (
-        <VedleggStegContent skjema={skjema} stegRekkefolge={stegRekkefolge} />
+        <VedleggStegContent
+          skjemaId={skjema.id}
+          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
+        />
       )}
-    </ArbeidsgiverStegLoader>
+    </SkjemaStegLoader>
   );
 }

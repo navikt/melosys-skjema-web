@@ -4,6 +4,7 @@ import { ArbeidsgiverensVirksomhetINorgeSteg } from "~/pages/skjema/arbeidsgiver
 
 function ArbeidsgiverensVirksomhetINorgeStegRoute() {
   const { id } = Route.useParams();
+
   return <ArbeidsgiverensVirksomhetINorgeSteg id={id} />;
 }
 

@@ -1,11 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-import {
-  Representasjonstype,
-  UtsendtArbeidstakerMetadata,
-} from "~/types/melosysSkjemaTypes.ts";
-
-export type SkjemaType = "arbeidsgiver" | "arbeidstaker";
+import { UtsendtArbeidstakerMetadata } from "~/types/melosysSkjemaTypes.ts";
 
 const API_PROXY_URL = "/api";
 
@@ -19,20 +14,10 @@ async function fetchSkjemaMetadata(
   return response.json();
 }
 
-function resolveSkjemaType(
-  representasjonstype: Representasjonstype,
-): SkjemaType {
-  return representasjonstype === Representasjonstype.DEG_SELV ||
-    representasjonstype === Representasjonstype.ANNEN_PERSON
-    ? "arbeidstaker"
-    : "arbeidsgiver";
-}
-
 export const Route = createFileRoute("/skjema/$id")({
   beforeLoad: async ({ params }) => {
     const metadata = await fetchSkjemaMetadata(params.id);
-    const skjemaType = resolveSkjemaType(metadata.representasjonstype);
-    return { skjemaType };
+    return { skjemadel: metadata.skjemadel };
   },
   component: SkjemaIdLayout,
 });

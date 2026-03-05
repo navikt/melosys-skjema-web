@@ -9,21 +9,29 @@ import { z } from "zod";
 
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
-import { postArbeidsstedIUtlandet } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getSkjemaQuery,
+  postArbeidsstedIUtlandet,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import {
-  ArbeidsstedIUtlandetDto,
+  type ArbeidsstedIUtlandetDto,
   ArbeidsstedType,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "../types.ts";
-import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import {
+  isArbeidsgiverData,
+  isCombinedData,
+  type SkjemaData,
+} from "../types.ts";
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { OffshoreForm } from "./OffshoreForm.tsx";
 import { OmBordPaFlyForm } from "./OmBordPaFlyForm.tsx";
@@ -32,9 +40,26 @@ import { PaSkipForm } from "./PaSkipForm.tsx";
 
 export const stepKey = "arbeidssted-i-utlandet";
 
+function getArbeidsstedIUtlandet(
+  data?: SkjemaData,
+): ArbeidsstedIUtlandetDto | undefined {
+  if (!data) return undefined;
+  if (isArbeidsgiverData(data)) return data.arbeidsstedIUtlandet;
+  if (isCombinedData(data)) return data.arbeidsgiversData?.arbeidsstedIUtlandet;
+  return undefined;
+}
+
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
-function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
+function ArbeidsstedIUtlandetStegContent({
+  skjemaId,
+  stegData,
+  stegRekkefolge,
+}: {
+  skjemaId: string;
+  stegData?: ArbeidsstedIUtlandetDto;
+  stegRekkefolge: StegRekkefolgeItem[];
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -43,11 +68,9 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     .arbeidsstedType;
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
 
-  const lagretSkjemadataForSteg = skjema.data?.arbeidsstedIUtlandet;
-
   const formMethods = useForm({
     resolver: zodResolver(arbeidsstedIUtlandetSchema),
-    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
+    ...(stegData && { defaultValues: stegData }),
   });
 
   const {
@@ -62,15 +85,15 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const registerArbeidsstedMutation = useMutation({
     mutationFn: (data: ArbeidsstedIUtlandetFormData) => {
       const apiPayload = data as ArbeidsstedIUtlandetDto;
-      return postArbeidsstedIUtlandet(skjema.id, apiPayload);
+      return postArbeidsstedIUtlandet(skjemaId, apiPayload);
     },
     onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjema.id);
-      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      const nextStep = getNextStep(stepKey, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjema.id },
+          params: { id: skjemaId },
         });
       }
     },
@@ -89,7 +112,7 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
         <SkjemaSteg
           config={{
             stepKey,
-            stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
+            stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={registerArbeidsstedMutation.isPending} />
@@ -127,16 +150,16 @@ function ArbeidsstedIUtlandetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   );
 }
 
-interface ArbeidsstedIUtlandetStegProps {
-  id: string;
-}
-
-export function ArbeidsstedIUtlandetSteg({
-  id,
-}: ArbeidsstedIUtlandetStegProps) {
+export function ArbeidsstedIUtlandetSteg({ id }: { id: string }) {
   return (
-    <ArbeidsgiverStegLoader id={id}>
-      {(skjema) => <ArbeidsstedIUtlandetStegContent skjema={skjema} />}
-    </ArbeidsgiverStegLoader>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
+      {(skjema) => (
+        <ArbeidsstedIUtlandetStegContent
+          skjemaId={skjema.id}
+          stegData={getArbeidsstedIUtlandet(skjema.data)}
+          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
+        />
+      )}
+    </SkjemaStegLoader>
   );
 }

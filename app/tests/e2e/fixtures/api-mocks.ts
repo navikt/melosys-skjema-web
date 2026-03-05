@@ -117,7 +117,7 @@ export async function mockPostArbeidstakerensLonn(
   );
 }
 
-export async function mockPostTilleggsopplysningerArbeidsgiver(
+export async function mockPostTilleggsopplysninger(
   page: Page,
   skjemaId: string,
 ) {
@@ -150,7 +150,7 @@ export async function mockPostArbeidssituasjon(page: Page, skjemaId: string) {
   );
 }
 
-export async function mockPostUtenlandsoppdragetArbeidstaker(
+export async function mockPostUtsendingsperiodeOgLand(
   page: Page,
   skjemaId: string,
 ) {
@@ -189,24 +189,6 @@ export async function mockPostSkatteforholdOgInntekt(
 ) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/${skjemaId}/skatteforhold-og-inntekt`,
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      }
-    },
-  );
-}
-
-export async function mockPostTilleggsopplysninger(
-  page: Page,
-  skjemaId: string,
-) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/tilleggsopplysninger`,
     async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
@@ -272,7 +254,7 @@ export async function setupApiMocksForArbeidsgiver(
   await mockPostUtenlandsoppdraget(page, skjema.id);
   await mockPostArbeidsstedIUtlandet(page, skjema.id);
   await mockPostArbeidstakerensLonn(page, skjema.id);
-  await mockPostTilleggsopplysningerArbeidsgiver(page, skjema.id);
+  await mockPostTilleggsopplysninger(page, skjema.id);
   await mockSendInnSkjema(page, skjema.id);
 }
 
@@ -285,7 +267,7 @@ export async function setupApiMocksForArbeidstaker(
   await mockHentTilganger(page, []);
   await mockFetchSkjema(page, skjema);
   await mockPostArbeidssituasjon(page, skjema.id);
-  await mockPostUtenlandsoppdragetArbeidstaker(page, skjema.id);
+  await mockPostUtsendingsperiodeOgLand(page, skjema.id);
   await mockGetEregOrganisasjon(page);
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);

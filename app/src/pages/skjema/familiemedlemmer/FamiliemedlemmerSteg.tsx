@@ -29,8 +29,11 @@ import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
-import { postFamiliemedlemmer } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
+import {
+  getSkjemaQuery,
+  postFamiliemedlemmer,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
@@ -42,8 +45,13 @@ import {
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-import { ArbeidstakerSkjemaProps } from "../types.ts";
-import { ArbeidstakerStegLoader } from "../components/ArbeidstakerStegLoader.tsx";
+import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import {
+  isArbeidstakerData,
+  isCombinedData,
+  type SkjemaData,
+} from "../types.ts";
 import {
   familiemedlemmerSchema,
   familiemedlemSchema,
@@ -51,11 +59,28 @@ import {
 
 export const stepKey = "familiemedlemmer";
 
+function getFamiliemedlemmer(
+  data?: SkjemaData,
+): FamiliemedlemmerDto | undefined {
+  if (!data) return undefined;
+  if (isArbeidstakerData(data)) return data.familiemedlemmer;
+  if (isCombinedData(data)) return data.arbeidstakersData?.familiemedlemmer;
+  return undefined;
+}
+
 type FamiliemedlemFormData = z.infer<typeof familiemedlemSchema>;
 type FamiliemedlemField = Familiemedlem & { id: string };
 type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
 
-function FamiliemedlemmerStegContent({ skjema }: ArbeidstakerSkjemaProps) {
+function FamiliemedlemmerStegContent({
+  skjemaId,
+  stegData,
+  stegRekkefolge,
+}: {
+  skjemaId: string;
+  stegData?: FamiliemedlemmerDto;
+  stegRekkefolge: StegRekkefolgeItem[];
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery = useInvalidateSkjemaQuery();
@@ -65,11 +90,9 @@ function FamiliemedlemmerStegContent({ skjema }: ArbeidstakerSkjemaProps) {
     "skalHaMedFamiliemedlemmer",
   );
 
-  const lagretSkjemadataForSteg = skjema.data?.familiemedlemmer;
-
   const formMethods = useForm({
     resolver: zodResolver(familiemedlemmerSchema),
-    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
+    ...(stegData && { defaultValues: stegData }),
   });
 
   const { handleSubmit, control } = formMethods;
@@ -80,15 +103,15 @@ function FamiliemedlemmerStegContent({ skjema }: ArbeidstakerSkjemaProps) {
 
   const postFamiliemedlemmerMutation = useMutation({
     mutationFn: (data: FamiliemedlemmerFormData) => {
-      return postFamiliemedlemmer(skjema.id, data as FamiliemedlemmerDto);
+      return postFamiliemedlemmer(skjemaId, data as FamiliemedlemmerDto);
     },
     onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjema.id);
-      const nextStep = getNextStep(stepKey, ARBEIDSTAKER_STEG_REKKEFOLGE);
+      invalidateArbeidstakerSkjemaQuery(skjemaId);
+      const nextStep = getNextStep(stepKey, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjema.id },
+          params: { id: skjemaId },
         });
       }
     },
@@ -107,7 +130,7 @@ function FamiliemedlemmerStegContent({ skjema }: ArbeidstakerSkjemaProps) {
         <SkjemaSteg
           config={{
             stepKey,
-            stegRekkefolge: ARBEIDSTAKER_STEG_REKKEFOLGE,
+            stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={postFamiliemedlemmerMutation.isPending} />
@@ -404,14 +427,16 @@ function FamiliemedlemRow({
   );
 }
 
-interface FamiliemedlemmerStegProps {
-  id: string;
-}
-
-export function FamiliemedlemmerSteg({ id }: FamiliemedlemmerStegProps) {
+export function FamiliemedlemmerSteg({ id }: { id: string }) {
   return (
-    <ArbeidstakerStegLoader id={id}>
-      {(skjema) => <FamiliemedlemmerStegContent skjema={skjema} />}
-    </ArbeidstakerStegLoader>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
+      {(skjema) => (
+        <FamiliemedlemmerStegContent
+          skjemaId={skjema.id}
+          stegData={getFamiliemedlemmer(skjema.data)}
+          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
+        />
+      )}
+    </SkjemaStegLoader>
   );
 }

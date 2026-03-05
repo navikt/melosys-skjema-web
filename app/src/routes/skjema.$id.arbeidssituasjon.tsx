@@ -4,6 +4,7 @@ import { ArbeidssituasjonSteg } from "~/pages/skjema/arbeidssituasjon/Arbeidssit
 
 function ArbeidssituasjonStegRoute() {
   const { id } = Route.useParams();
+
   return <ArbeidssituasjonSteg id={id} />;
 }
 

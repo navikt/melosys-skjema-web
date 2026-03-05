@@ -19,9 +19,9 @@ import {
   SkatteforholdOgInntektDto,
   SkjemaInnsendtKvittering,
   TilleggsopplysningerDto,
-  UtenlandsoppdragetArbeidstakersDelDto,
   UtenlandsoppdragetDto,
   UtkastListeResponse,
+  UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
   VedleggDto,
   VerifiserPersonRequest,
@@ -38,7 +38,7 @@ type StegData =
   | ArbeidstakerensLonnDto
   | TilleggsopplysningerDto
   | ArbeidssituasjonDto
-  | UtenlandsoppdragetArbeidstakersDelDto
+  | UtsendingsperiodeOgLandDto
   | SkatteforholdOgInntektDto
   | FamiliemedlemmerDto;
 
@@ -205,9 +205,9 @@ export const getInnsendtKvitteringQuery = (skjemaId: string) =>
     gcTime: 10 * 60 * 1000,
   });
 
-export async function postUtenlandsoppdragetArbeidstaker(
+export async function postUtsendingsperiodeOgLand(
   skjemaId: string,
-  request: UtenlandsoppdragetArbeidstakersDelDto,
+  request: UtsendingsperiodeOgLandDto,
 ): Promise<void> {
   return postStegData(skjemaId, "utsendingsperiode-og-land", request);
 }

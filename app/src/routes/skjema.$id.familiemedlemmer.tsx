@@ -4,6 +4,7 @@ import { FamiliemedlemmerSteg } from "~/pages/skjema/familiemedlemmer/Familiemed
 
 function FamiliemedlemmerStegRoute() {
   const { id } = Route.useParams();
+
   return <FamiliemedlemmerSteg id={id} />;
 }
 

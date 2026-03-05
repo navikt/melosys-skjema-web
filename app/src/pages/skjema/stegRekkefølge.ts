@@ -1,4 +1,5 @@
 import { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
+import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
 export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
   {
@@ -40,9 +41,9 @@ export const ARBEIDSGIVER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
 
 export const ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
   {
-    key: "utenlandsoppdraget",
+    key: "utsendingsperiode-og-land",
     title: "utenlandsoppdragetArbeidstakerSteg.tittel",
-    route: "/skjema/$id/utenlandsoppdraget",
+    route: "/skjema/$id/utsendingsperiode-og-land",
   },
   {
     key: "arbeidssituasjon",
@@ -75,3 +76,13 @@ export const ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
     route: "/skjema/$id/oppsummering",
   },
 ];
+
+export const ARBEIDSGIVER_OG_ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] =
+  [];
+
+export const STEG_REKKEFOLGE: Record<Skjemadel, StegRekkefolgeItem[]> = {
+  [Skjemadel.ARBEIDSGIVERS_DEL]: ARBEIDSGIVER_STEG_REKKEFOLGE,
+  [Skjemadel.ARBEIDSTAKERS_DEL]: ARBEIDSTAKER_STEG_REKKEFOLGE,
+  [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL]:
+    ARBEIDSGIVER_OG_ARBEIDSTAKER_STEG_REKKEFOLGE,
+};

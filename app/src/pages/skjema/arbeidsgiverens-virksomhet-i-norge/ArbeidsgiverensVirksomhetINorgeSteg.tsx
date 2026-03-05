@@ -1,28 +1,37 @@
+import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { VirksomhetINorgeStegContent } from "~/pages/skjema/arbeidsgiverens-virksomhet-i-norge/VirksomhetINorgeStegContent.tsx";
+import type { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
 
-import { ArbeidsgiverSkjemaProps } from "../types.ts";
-import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import {
+  isArbeidsgiverData,
+  isCombinedData,
+  type SkjemaData,
+} from "../types.ts";
 
 export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 
-function ArbeidsgiverensVirksomhetINorgeStegContent({
-  skjema,
-}: ArbeidsgiverSkjemaProps) {
-  return <VirksomhetINorgeStegContent skjema={skjema} />;
+function getArbeidsgiverensVirksomhetINorge(
+  data?: SkjemaData,
+): ArbeidsgiverensVirksomhetINorgeDto | undefined {
+  if (!data) return undefined;
+  if (isArbeidsgiverData(data)) return data.arbeidsgiverensVirksomhetINorge;
+  if (isCombinedData(data))
+    return data.arbeidsgiversData?.arbeidsgiverensVirksomhetINorge;
+  return undefined;
 }
 
-interface ArbeidsgiverensVirksomhetINorgeStegProps {
-  id: string;
-}
-
-export function ArbeidsgiverensVirksomhetINorgeSteg({
-  id,
-}: ArbeidsgiverensVirksomhetINorgeStegProps) {
+export function ArbeidsgiverensVirksomhetINorgeSteg({ id }: { id: string }) {
   return (
-    <ArbeidsgiverStegLoader id={id}>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
       {(skjema) => (
-        <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />
+        <VirksomhetINorgeStegContent
+          skjemaId={skjema.id}
+          stegData={getArbeidsgiverensVirksomhetINorge(skjema.data)}
+          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
+        />
       )}
-    </ArbeidsgiverStegLoader>
+    </SkjemaStegLoader>
   );
 }

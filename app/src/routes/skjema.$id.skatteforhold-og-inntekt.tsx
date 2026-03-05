@@ -4,6 +4,7 @@ import { SkatteforholdOgInntektSteg } from "~/pages/skjema/skatteforhold-og-innt
 
 function SkatteforholdOgInntektStegRoute() {
   const { id } = Route.useParams();
+
   return <SkatteforholdOgInntektSteg id={id} />;
 }
 

@@ -11,7 +11,8 @@ export type StegKey =
   | "oppsummering"
   | "arbeidssituasjon"
   | "skatteforhold-og-inntekt"
-  | "familiemedlemmer";
+  | "familiemedlemmer"
+  | "utsendingsperiode-og-land";
 
 export interface StegRekkefolgeItem {
   key: StegKey;

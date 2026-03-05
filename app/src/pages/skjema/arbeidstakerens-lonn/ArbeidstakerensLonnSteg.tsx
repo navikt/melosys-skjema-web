@@ -10,24 +10,49 @@ import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.ts
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
-import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getSkjemaQuery,
+  postArbeidstakerensLonn,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
+import type { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
 
-import { ARBEIDSGIVER_STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { ArbeidsgiverSkjemaProps } from "../types.ts";
-import { ArbeidsgiverStegLoader } from "../components/ArbeidsgiverStegLoader.tsx";
+import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import {
+  isArbeidsgiverData,
+  isCombinedData,
+  type SkjemaData,
+} from "../types.ts";
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 
 export const stepKey = "arbeidstakerens-lonn";
 
+function getArbeidstakerensLonn(
+  data?: SkjemaData,
+): ArbeidstakerensLonnDto | undefined {
+  if (!data) return undefined;
+  if (isArbeidsgiverData(data)) return data.arbeidstakerensLonn;
+  if (isCombinedData(data)) return data.arbeidsgiversData?.arbeidstakerensLonn;
+  return undefined;
+}
+
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
-function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
+function ArbeidstakerensLonnStegContent({
+  skjemaId,
+  stegData,
+  stegRekkefolge,
+}: {
+  skjemaId: string;
+  stegData?: ArbeidstakerensLonnDto;
+  stegRekkefolge: StegRekkefolgeItem[];
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
@@ -42,11 +67,9 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
     "virksomheterSomUtbetalerLonnOgNaturalytelser",
   );
 
-  const lagretSkjemadataForSteg = skjema.data?.arbeidstakerensLonn;
-
   const formMethods = useForm({
     resolver: zodResolver(arbeidstakerensLonnSchema),
-    ...(lagretSkjemadataForSteg && { defaultValues: lagretSkjemadataForSteg }),
+    ...(stegData && { defaultValues: stegData }),
   });
 
   const { handleSubmit, setError, clearErrors, control } = formMethods;
@@ -60,15 +83,15 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
 
   const registerArbeidstakerLonnMutation = useMutation({
     mutationFn: (data: ArbeidstakerensLonnFormData) => {
-      return postArbeidstakerensLonn(skjema.id, data as ArbeidstakerensLonnDto);
+      return postArbeidstakerensLonn(skjemaId, data as ArbeidstakerensLonnDto);
     },
     onSuccess: async () => {
-      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
-      const nextStep = getNextStep(stepKey, ARBEIDSGIVER_STEG_REKKEFOLGE);
+      await invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      const nextStep = getNextStep(stepKey, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjema.id },
+          params: { id: skjemaId },
         });
       }
     },
@@ -110,7 +133,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
         <SkjemaSteg
           config={{
             stepKey,
-            stegRekkefolge: ARBEIDSGIVER_STEG_REKKEFOLGE,
+            stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={
             <NesteStegKnapp
@@ -138,14 +161,16 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   );
 }
 
-interface ArbeidstakerensLonnStegProps {
-  id: string;
-}
-
-export function ArbeidstakerensLonnSteg({ id }: ArbeidstakerensLonnStegProps) {
+export function ArbeidstakerensLonnSteg({ id }: { id: string }) {
   return (
-    <ArbeidsgiverStegLoader id={id}>
-      {(skjema) => <ArbeidstakerensLonnStegContent skjema={skjema} />}
-    </ArbeidsgiverStegLoader>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
+      {(skjema) => (
+        <ArbeidstakerensLonnStegContent
+          skjemaId={skjema.id}
+          stegData={getArbeidstakerensLonn(skjema.data)}
+          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
+        />
+      )}
+    </SkjemaStegLoader>
   );
 }
