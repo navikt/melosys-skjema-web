@@ -72,20 +72,18 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yaml
+          RESOURCE: .nais/nais-dev.yaml
           WORKLOAD_IMAGE: ${{needs.build.outputs.image}}
-          VARS: .nais/vars-dev.json
 
-#  deploy-prod:
-#    name: Deploy prod-gcp
-#    needs: build
-#    if: github.ref == 'refs/heads/main'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v6
-#      - uses: nais/deploy/actions/deploy@v2
-#        env:
-#          CLUSTER: prod-gcp
-#          RESOURCE: .nais/nais.yaml
-#          VARS: .nais/vars-prod.json
-#          WORKLOAD_IMAGE: ${{needs.build.outputs.image}}
+  # TODO: Skal skilles ut i releases, men det gjøres i MELOSYS-7933. I førsteomgang deployer vi automatisk til prod ved merge.
+  deploy-prod:
+    name: Deploy prod-gcp
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais-prod.yaml
+          WORKLOAD_IMAGE: ${{needs.build.outputs.image}}
