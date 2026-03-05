@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea } from "@navikt/ds-react";
+import { ErrorMessage, Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -21,27 +21,31 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  ArbeidssituasjonDto,
+  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
+} from "~/types/melosysSkjemaTypes.ts";
+import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import {
-  isArbeidstakerData,
-  isCombinedData,
-  type SkjemaData,
-} from "../types.ts";
 import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
 
 export const stepKey = "arbeidssituasjon";
 
 function getArbeidssituasjon(
-  data?: SkjemaData,
+  skjemadel: Skjemadel,
+  data?: UtsendtArbeidstakerArbeidstakersSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): ArbeidssituasjonDto | undefined {
   if (!data) return undefined;
-  if (isArbeidstakerData(data)) return data.arbeidssituasjon;
-  if (isCombinedData(data)) return data.arbeidstakersData?.arbeidssituasjon;
-  return undefined;
+  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
+    return (data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
+      .arbeidssituasjon;
+  }
+  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
+    .arbeidstakersData?.arbeidssituasjon;
 }
 
 type ArbeidssituasjonFormData = z.infer<typeof arbeidssituasjonSchema>;
@@ -175,13 +179,26 @@ function ArbeidssituasjonStegContent({
 export function ArbeidssituasjonSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <ArbeidssituasjonStegContent
-          skjemaId={skjema.id}
-          stegData={getArbeidssituasjon(skjema.data)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => {
+        const { skjemadel } = skjema.metadata;
+        if (
+          skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL &&
+          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+        ) {
+          return (
+            <ErrorMessage>
+              Steget er ikke tilgjengelig for denne skjemadelen
+            </ErrorMessage>
+          );
+        }
+        return (
+          <ArbeidssituasjonStegContent
+            skjemaId={skjema.id}
+            stegData={getArbeidssituasjon(skjemadel, skjema.data)}
+            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
+          />
+        );
+      }}
     </SkjemaStegLoader>
   );
 }

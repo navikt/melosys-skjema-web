@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea } from "@navikt/ds-react";
+import { ErrorMessage, Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -21,28 +21,32 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  UtenlandsoppdragetDto,
+  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+} from "~/types/melosysSkjemaTypes.ts";
+import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import {
-  isArbeidsgiverData,
-  isCombinedData,
-  type SkjemaData,
-} from "../types.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
 export const stepKey = "utenlandsoppdraget";
 
 function getUtenlandsoppdraget(
-  data?: SkjemaData,
+  skjemadel: Skjemadel,
+  data?: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): UtenlandsoppdragetDto | undefined {
   if (!data) return undefined;
-  if (isArbeidsgiverData(data)) return data.utenlandsoppdraget;
-  if (isCombinedData(data)) return data.arbeidsgiversData?.utenlandsoppdraget;
-  return undefined;
+  if (skjemadel === Skjemadel.ARBEIDSGIVERS_DEL) {
+    return (data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
+      .utenlandsoppdraget;
+  }
+  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
+    .arbeidsgiversData?.utenlandsoppdraget;
 }
 
 // Date range constants for assignment period selection
@@ -259,13 +263,26 @@ function UtenlandsoppdragetStegContent({
 export function UtenlandsoppdragetSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <UtenlandsoppdragetStegContent
-          skjemaId={skjema.id}
-          stegData={getUtenlandsoppdraget(skjema.data)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => {
+        const { skjemadel } = skjema.metadata;
+        if (
+          skjemadel !== Skjemadel.ARBEIDSGIVERS_DEL &&
+          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+        ) {
+          return (
+            <ErrorMessage>
+              Steget er ikke tilgjengelig for denne skjemadelen
+            </ErrorMessage>
+          );
+        }
+        return (
+          <UtenlandsoppdragetStegContent
+            skjemaId={skjema.id}
+            stegData={getUtenlandsoppdraget(skjemadel, skjema.data)}
+            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
+          />
+        );
+      }}
     </SkjemaStegLoader>
   );
 }

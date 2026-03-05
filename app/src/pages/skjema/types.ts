@@ -18,19 +18,19 @@ export const ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL =
 
 // --- Type guards ---
 
-export function isArbeidsgiverData(
+export function isArbeidsgiversDel(
   data: SkjemaData,
 ): data is UtsendtArbeidstakerArbeidsgiversSkjemaDataDto {
   return data.type === ARBEIDSGIVERS_DEL;
 }
 
-export function isArbeidstakerData(
+export function isArbeidstakersDel(
   data: SkjemaData,
 ): data is UtsendtArbeidstakerArbeidstakersSkjemaDataDto {
   return data.type === ARBEIDSTAKERS_DEL;
 }
 
-export function isCombinedData(
+export function isArbeidsgiverOgArbeidstakersDel(
   data: SkjemaData,
 ): data is UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto {
   return data.type === ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL;

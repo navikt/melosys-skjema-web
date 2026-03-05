@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ErrorMessage } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -20,26 +21,30 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  ArbeidstakerensLonnDto,
+  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+} from "~/types/melosysSkjemaTypes.ts";
+import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import {
-  isArbeidsgiverData,
-  isCombinedData,
-  type SkjemaData,
-} from "../types.ts";
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 
 export const stepKey = "arbeidstakerens-lonn";
 
 function getArbeidstakerensLonn(
-  data?: SkjemaData,
+  skjemadel: Skjemadel,
+  data?: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): ArbeidstakerensLonnDto | undefined {
   if (!data) return undefined;
-  if (isArbeidsgiverData(data)) return data.arbeidstakerensLonn;
-  if (isCombinedData(data)) return data.arbeidsgiversData?.arbeidstakerensLonn;
-  return undefined;
+  if (skjemadel === Skjemadel.ARBEIDSGIVERS_DEL) {
+    return (data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
+      .arbeidstakerensLonn;
+  }
+  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
+    .arbeidsgiversData?.arbeidstakerensLonn;
 }
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
@@ -164,13 +169,26 @@ function ArbeidstakerensLonnStegContent({
 export function ArbeidstakerensLonnSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <ArbeidstakerensLonnStegContent
-          skjemaId={skjema.id}
-          stegData={getArbeidstakerensLonn(skjema.data)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => {
+        const { skjemadel } = skjema.metadata;
+        if (
+          skjemadel !== Skjemadel.ARBEIDSGIVERS_DEL &&
+          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+        ) {
+          return (
+            <ErrorMessage>
+              Steget er ikke tilgjengelig for denne skjemadelen
+            </ErrorMessage>
+          );
+        }
+        return (
+          <ArbeidstakerensLonnStegContent
+            skjemaId={skjema.id}
+            stegData={getArbeidstakerensLonn(skjemadel, skjema.data)}
+            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
+          />
+        );
+      }}
     </SkjemaStegLoader>
   );
 }

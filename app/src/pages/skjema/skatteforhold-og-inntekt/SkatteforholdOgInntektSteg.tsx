@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea, TextField } from "@navikt/ds-react";
+import { ErrorMessage, Textarea, TextField } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -21,29 +21,32 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  SkatteforholdOgInntektDto,
+  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
+} from "~/types/melosysSkjemaTypes.ts";
+import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import {
-  isArbeidstakerData,
-  isCombinedData,
-  type SkjemaData,
-} from "../types.ts";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
 
 export const stepKey = "skatteforhold-og-inntekt";
 
 function getSkatteforholdOgInntekt(
-  data?: SkjemaData,
+  skjemadel: Skjemadel,
+  data?: UtsendtArbeidstakerArbeidstakersSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): SkatteforholdOgInntektDto | undefined {
   if (!data) return undefined;
-  if (isArbeidstakerData(data)) return data.skatteforholdOgInntekt;
-  if (isCombinedData(data))
-    return data.arbeidstakersData?.skatteforholdOgInntekt;
-  return undefined;
+  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
+    return (data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
+      .skatteforholdOgInntekt;
+  }
+  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
+    .arbeidstakersData?.skatteforholdOgInntekt;
 }
 
 type SkatteforholdOgInntektFormData = z.infer<
@@ -198,13 +201,26 @@ function SkatteforholdOgInntektStegContent({
 export function SkatteforholdOgInntektSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <SkatteforholdOgInntektStegContent
-          skjemaId={skjema.id}
-          stegData={getSkatteforholdOgInntekt(skjema.data)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => {
+        const { skjemadel } = skjema.metadata;
+        if (
+          skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL &&
+          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+        ) {
+          return (
+            <ErrorMessage>
+              Steget er ikke tilgjengelig for denne skjemadelen
+            </ErrorMessage>
+          );
+        }
+        return (
+          <SkatteforholdOgInntektStegContent
+            skjemaId={skjema.id}
+            stegData={getSkatteforholdOgInntekt(skjemadel, skjema.data)}
+            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
+          />
+        );
+      }}
     </SkjemaStegLoader>
   );
 }

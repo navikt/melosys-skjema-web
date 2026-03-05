@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
+  ErrorMessage,
   FormSummary,
   InlineMessage,
   Label,
@@ -42,16 +43,14 @@ import {
 import {
   Familiemedlem,
   FamiliemedlemmerDto,
+  Skjemadel,
+  type UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  type UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import {
-  isArbeidstakerData,
-  isCombinedData,
-  type SkjemaData,
-} from "../types.ts";
 import {
   familiemedlemmerSchema,
   familiemedlemSchema,
@@ -60,12 +59,16 @@ import {
 export const stepKey = "familiemedlemmer";
 
 function getFamiliemedlemmer(
-  data?: SkjemaData,
+  skjemadel: Skjemadel,
+  data?: UtsendtArbeidstakerArbeidstakersSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): FamiliemedlemmerDto | undefined {
   if (!data) return undefined;
-  if (isArbeidstakerData(data)) return data.familiemedlemmer;
-  if (isCombinedData(data)) return data.arbeidstakersData?.familiemedlemmer;
-  return undefined;
+  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
+    return (data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
+      .familiemedlemmer;
+  }
+  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
+    .arbeidstakersData?.familiemedlemmer;
 }
 
 type FamiliemedlemFormData = z.infer<typeof familiemedlemSchema>;
@@ -430,13 +433,26 @@ function FamiliemedlemRow({
 export function FamiliemedlemmerSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <FamiliemedlemmerStegContent
-          skjemaId={skjema.id}
-          stegData={getFamiliemedlemmer(skjema.data)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => {
+        const { skjemadel } = skjema.metadata;
+        if (
+          skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL &&
+          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+        ) {
+          return (
+            <ErrorMessage>
+              Steget er ikke tilgjengelig for denne skjemadelen
+            </ErrorMessage>
+          );
+        }
+        return (
+          <FamiliemedlemmerStegContent
+            skjemaId={skjema.id}
+            stegData={getFamiliemedlemmer(skjemadel, skjema.data)}
+            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
+          />
+        );
+      }}
     </SkjemaStegLoader>
   );
 }

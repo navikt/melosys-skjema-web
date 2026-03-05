@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select } from "@navikt/ds-react";
+import { ErrorMessage, Select } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -22,16 +22,14 @@ import {
 import {
   type ArbeidsstedIUtlandetDto,
   ArbeidsstedType,
+  Skjemadel,
+  type UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  type UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import {
-  isArbeidsgiverData,
-  isCombinedData,
-  type SkjemaData,
-} from "../types.ts";
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { OffshoreForm } from "./OffshoreForm.tsx";
 import { OmBordPaFlyForm } from "./OmBordPaFlyForm.tsx";
@@ -41,12 +39,16 @@ import { PaSkipForm } from "./PaSkipForm.tsx";
 export const stepKey = "arbeidssted-i-utlandet";
 
 function getArbeidsstedIUtlandet(
-  data?: SkjemaData,
+  skjemadel: Skjemadel,
+  data?: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): ArbeidsstedIUtlandetDto | undefined {
   if (!data) return undefined;
-  if (isArbeidsgiverData(data)) return data.arbeidsstedIUtlandet;
-  if (isCombinedData(data)) return data.arbeidsgiversData?.arbeidsstedIUtlandet;
-  return undefined;
+  if (skjemadel === Skjemadel.ARBEIDSGIVERS_DEL) {
+    return (data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
+      .arbeidsstedIUtlandet;
+  }
+  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
+    .arbeidsgiversData?.arbeidsstedIUtlandet;
 }
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
@@ -153,13 +155,26 @@ function ArbeidsstedIUtlandetStegContent({
 export function ArbeidsstedIUtlandetSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <ArbeidsstedIUtlandetStegContent
-          skjemaId={skjema.id}
-          stegData={getArbeidsstedIUtlandet(skjema.data)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => {
+        const { skjemadel } = skjema.metadata;
+        if (
+          skjemadel !== Skjemadel.ARBEIDSGIVERS_DEL &&
+          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+        ) {
+          return (
+            <ErrorMessage>
+              Steget er ikke tilgjengelig for denne skjemadelen
+            </ErrorMessage>
+          );
+        }
+        return (
+          <ArbeidsstedIUtlandetStegContent
+            skjemaId={skjema.id}
+            stegData={getArbeidsstedIUtlandet(skjemadel, skjema.data)}
+            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
+          />
+        );
+      }}
     </SkjemaStegLoader>
   );
 }
