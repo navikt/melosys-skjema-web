@@ -21,32 +21,16 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type {
-  ArbeidssituasjonDto,
-  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-  UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes.ts";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getArbeidssituasjon } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
 
 export const stepKey = "arbeidssituasjon";
-
-function getArbeidssituasjon(
-  skjemadel: Skjemadel,
-  data?: UtsendtArbeidstakerArbeidstakersSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-): ArbeidssituasjonDto | undefined {
-  if (!data) return undefined;
-  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
-    return (data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
-      .arbeidssituasjon;
-  }
-  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
-    .arbeidstakersData?.arbeidssituasjon;
-}
 
 type ArbeidssituasjonFormData = z.infer<typeof arbeidssituasjonSchema>;
 
@@ -194,7 +178,7 @@ export function ArbeidssituasjonSteg({ id }: { id: string }) {
         return (
           <ArbeidssituasjonStegContent
             skjemaId={skjema.id}
-            stegData={getArbeidssituasjon(skjemadel, skjema.data)}
+            stegData={getArbeidssituasjon(skjema)}
             stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
           />
         );

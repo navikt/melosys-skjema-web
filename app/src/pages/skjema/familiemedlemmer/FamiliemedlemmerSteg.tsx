@@ -44,12 +44,11 @@ import {
   Familiemedlem,
   FamiliemedlemmerDto,
   Skjemadel,
-  type UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-  type UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getFamiliemedlemmer } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import {
   familiemedlemmerSchema,
@@ -57,19 +56,6 @@ import {
 } from "./familiemedlemmerStegSchema.ts";
 
 export const stepKey = "familiemedlemmer";
-
-function getFamiliemedlemmer(
-  skjemadel: Skjemadel,
-  data?: UtsendtArbeidstakerArbeidstakersSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-): FamiliemedlemmerDto | undefined {
-  if (!data) return undefined;
-  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
-    return (data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
-      .familiemedlemmer;
-  }
-  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
-    .arbeidstakersData?.familiemedlemmer;
-}
 
 type FamiliemedlemFormData = z.infer<typeof familiemedlemSchema>;
 type FamiliemedlemField = Familiemedlem & { id: string };
@@ -448,7 +434,7 @@ export function FamiliemedlemmerSteg({ id }: { id: string }) {
         return (
           <FamiliemedlemmerStegContent
             skjemaId={skjema.id}
-            stegData={getFamiliemedlemmer(skjemadel, skjema.data)}
+            stegData={getFamiliemedlemmer(skjema)}
             stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
           />
         );

@@ -21,33 +21,17 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type {
-  SkatteforholdOgInntektDto,
-  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-  UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import type { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes.ts";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getSkatteforholdOgInntekt } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
 
 export const stepKey = "skatteforhold-og-inntekt";
-
-function getSkatteforholdOgInntekt(
-  skjemadel: Skjemadel,
-  data?: UtsendtArbeidstakerArbeidstakersSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-): SkatteforholdOgInntektDto | undefined {
-  if (!data) return undefined;
-  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
-    return (data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
-      .skatteforholdOgInntekt;
-  }
-  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
-    .arbeidstakersData?.skatteforholdOgInntekt;
-}
 
 type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
@@ -216,7 +200,7 @@ export function SkatteforholdOgInntektSteg({ id }: { id: string }) {
         return (
           <SkatteforholdOgInntektStegContent
             skjemaId={skjema.id}
-            stegData={getSkatteforholdOgInntekt(skjemadel, skjema.data)}
+            stegData={getSkatteforholdOgInntekt(skjema)}
             stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
           />
         );

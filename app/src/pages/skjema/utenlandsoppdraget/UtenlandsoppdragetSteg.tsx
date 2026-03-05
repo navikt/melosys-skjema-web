@@ -21,33 +21,17 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type {
-  UtenlandsoppdragetDto,
-  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-  UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import type { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getUtenlandsoppdraget } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
 export const stepKey = "utenlandsoppdraget";
-
-function getUtenlandsoppdraget(
-  skjemadel: Skjemadel,
-  data?: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-): UtenlandsoppdragetDto | undefined {
-  if (!data) return undefined;
-  if (skjemadel === Skjemadel.ARBEIDSGIVERS_DEL) {
-    return (data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
-      .utenlandsoppdraget;
-  }
-  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
-    .arbeidsgiversData?.utenlandsoppdraget;
-}
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
@@ -278,7 +262,7 @@ export function UtenlandsoppdragetSteg({ id }: { id: string }) {
         return (
           <UtenlandsoppdragetStegContent
             skjemaId={skjema.id}
-            stegData={getUtenlandsoppdraget(skjemadel, skjema.data)}
+            stegData={getUtenlandsoppdraget(skjema)}
             stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
           />
         );

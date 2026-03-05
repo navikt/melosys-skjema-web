@@ -23,12 +23,11 @@ import {
   type ArbeidsstedIUtlandetDto,
   ArbeidsstedType,
   Skjemadel,
-  type UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-  type UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getArbeidsstedIUtlandet } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { OffshoreForm } from "./OffshoreForm.tsx";
@@ -37,19 +36,6 @@ import { PaLandForm } from "./PaLandForm.tsx";
 import { PaSkipForm } from "./PaSkipForm.tsx";
 
 export const stepKey = "arbeidssted-i-utlandet";
-
-function getArbeidsstedIUtlandet(
-  skjemadel: Skjemadel,
-  data?: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-): ArbeidsstedIUtlandetDto | undefined {
-  if (!data) return undefined;
-  if (skjemadel === Skjemadel.ARBEIDSGIVERS_DEL) {
-    return (data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
-      .arbeidsstedIUtlandet;
-  }
-  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
-    .arbeidsgiversData?.arbeidsstedIUtlandet;
-}
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
@@ -170,7 +156,7 @@ export function ArbeidsstedIUtlandetSteg({ id }: { id: string }) {
         return (
           <ArbeidsstedIUtlandetStegContent
             skjemaId={skjema.id}
-            stegData={getArbeidsstedIUtlandet(skjemadel, skjema.data)}
+            stegData={getArbeidsstedIUtlandet(skjema)}
             stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
           />
         );

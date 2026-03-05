@@ -21,31 +21,15 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type {
-  ArbeidstakerensLonnDto,
-  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-  UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import type { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getArbeidstakerensLonn } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 
 export const stepKey = "arbeidstakerens-lonn";
-
-function getArbeidstakerensLonn(
-  skjemadel: Skjemadel,
-  data?: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
-): ArbeidstakerensLonnDto | undefined {
-  if (!data) return undefined;
-  if (skjemadel === Skjemadel.ARBEIDSGIVERS_DEL) {
-    return (data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
-      .arbeidstakerensLonn;
-  }
-  return (data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto)
-    .arbeidsgiversData?.arbeidstakerensLonn;
-}
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
@@ -184,7 +168,7 @@ export function ArbeidstakerensLonnSteg({ id }: { id: string }) {
         return (
           <ArbeidstakerensLonnStegContent
             skjemaId={skjema.id}
-            stegData={getArbeidstakerensLonn(skjemadel, skjema.data)}
+            stegData={getArbeidstakerensLonn(skjema)}
             stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
           />
         );

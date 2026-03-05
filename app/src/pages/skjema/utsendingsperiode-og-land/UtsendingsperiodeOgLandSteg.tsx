@@ -22,19 +22,11 @@ import {
 import type { UtsendingsperiodeOgLandDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getUtsendingsperiodeOgLand } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import type { SkjemaData } from "../types.ts";
 import { utsendingsperiodeOgLandSchema } from "./utsendingsperiodeOgLandStegSchema.ts";
 
 export const stepKey = "utsendingsperiode-og-land";
-
-// utsendingsperiodeOgLand lives on the base type, so all 3 variants have it
-function getUtsendingsperiodeOgLand(
-  data?: SkjemaData,
-): UtsendingsperiodeOgLandDto | undefined {
-  if (!data) return undefined;
-  return data.utsendingsperiodeOgLand;
-}
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
@@ -151,7 +143,7 @@ export function UtsendingsperiodeOgLandSteg({ id }: { id: string }) {
       {(skjema) => (
         <UtsendingsperiodeOgLandStegContent
           skjemaId={skjema.id}
-          stegData={getUtsendingsperiodeOgLand(skjema.data)}
+          stegData={getUtsendingsperiodeOgLand(skjema)}
           stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
         />
       )}

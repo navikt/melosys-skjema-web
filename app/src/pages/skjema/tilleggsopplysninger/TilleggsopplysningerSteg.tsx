@@ -22,8 +22,8 @@ import type { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { getTilleggsopplysninger } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import type { SkjemaData } from "../types.ts";
 import {
   type TilleggsopplysningerFormData,
   tilleggsopplysningerSchema,
@@ -31,21 +31,13 @@ import {
 
 export const stepKey = "tilleggsopplysninger";
 
-// tilleggsopplysninger lives on the base type, so all 3 variants have it
-function getTilleggsopplysninger(
-  data?: SkjemaData,
-): TilleggsopplysningerDto | undefined {
-  if (!data) return undefined;
-  return data.tilleggsopplysninger;
-}
-
 export function TilleggsopplysningerSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
       {(skjema) => (
         <TilleggsopplysningerStegContent
           skjemaId={skjema.id}
-          stegData={getTilleggsopplysninger(skjema.data)}
+          stegData={getTilleggsopplysninger(skjema)}
           stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
         />
       )}
