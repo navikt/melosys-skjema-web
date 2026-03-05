@@ -4,36 +4,36 @@ export const ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
   {
     key: "utenlandsoppdraget",
     title: "utenlandsoppdragetArbeidstakerSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/utenlandsoppdraget",
+    route: "/skjema/$id/utenlandsoppdraget",
   },
   {
     key: "arbeidssituasjon",
     title: "arbeidssituasjonSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/arbeidssituasjon",
+    route: "/skjema/$id/arbeidssituasjon",
   },
   {
     key: "skatteforhold-og-inntekt",
     title: "skatteforholdOgInntektSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/skatteforhold-og-inntekt",
+    route: "/skjema/$id/skatteforhold-og-inntekt",
   },
   {
     key: "familiemedlemmer",
     title: "familiemedlemmerSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/familiemedlemmer",
+    route: "/skjema/$id/familiemedlemmer",
   },
   {
     key: "tilleggsopplysninger",
     title: "tilleggsopplysningerSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/tilleggsopplysninger",
+    route: "/skjema/$id/tilleggsopplysninger",
   },
   {
     key: "vedlegg",
     title: "vedleggSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/vedlegg",
+    route: "/skjema/$id/vedlegg",
   },
   {
     key: "oppsummering",
     title: "oppsummeringSteg.tittel",
-    route: "/skjema/arbeidstaker/$id/oppsummering",
+    route: "/skjema/$id/oppsummering",
   },
 ];
