@@ -20,6 +20,7 @@ import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
 import { Route as SkjemaIdIndexRouteImport } from './routes/skjema.$id.index'
 import { Route as SkjemaIdVedleggRouteImport } from './routes/skjema.$id.vedlegg'
+import { Route as SkjemaIdUtsendingsperiodeOgLandRouteImport } from './routes/skjema.$id.utsendingsperiode-og-land'
 import { Route as SkjemaIdUtenlandsoppdragetRouteImport } from './routes/skjema.$id.utenlandsoppdraget'
 import { Route as SkjemaIdTilleggsopplysningerRouteImport } from './routes/skjema.$id.tilleggsopplysninger'
 import { Route as SkjemaIdSkatteforholdOgInntektRouteImport } from './routes/skjema.$id.skatteforhold-og-inntekt'
@@ -88,6 +89,12 @@ const SkjemaIdVedleggRoute = SkjemaIdVedleggRouteImport.update({
   path: '/vedlegg',
   getParentRoute: () => SkjemaIdRoute,
 } as any)
+const SkjemaIdUtsendingsperiodeOgLandRoute =
+  SkjemaIdUtsendingsperiodeOgLandRouteImport.update({
+    id: '/utsendingsperiode-og-land',
+    path: '/utsendingsperiode-og-land',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
 const SkjemaIdUtenlandsoppdragetRoute =
   SkjemaIdUtenlandsoppdragetRouteImport.update({
     id: '/utenlandsoppdraget',
@@ -173,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/skjema/$id/skatteforhold-og-inntekt': typeof SkjemaIdSkatteforholdOgInntektRoute
   '/skjema/$id/tilleggsopplysninger': typeof SkjemaIdTilleggsopplysningerRoute
   '/skjema/$id/utenlandsoppdraget': typeof SkjemaIdUtenlandsoppdragetRoute
+  '/skjema/$id/utsendingsperiode-og-land': typeof SkjemaIdUtsendingsperiodeOgLandRoute
   '/skjema/$id/vedlegg': typeof SkjemaIdVedleggRoute
   '/skjema/$id/': typeof SkjemaIdIndexRoute
 }
@@ -193,6 +201,7 @@ export interface FileRoutesByTo {
   '/skjema/$id/skatteforhold-og-inntekt': typeof SkjemaIdSkatteforholdOgInntektRoute
   '/skjema/$id/tilleggsopplysninger': typeof SkjemaIdTilleggsopplysningerRoute
   '/skjema/$id/utenlandsoppdraget': typeof SkjemaIdUtenlandsoppdragetRoute
+  '/skjema/$id/utsendingsperiode-og-land': typeof SkjemaIdUtsendingsperiodeOgLandRoute
   '/skjema/$id/vedlegg': typeof SkjemaIdVedleggRoute
   '/skjema/$id': typeof SkjemaIdIndexRoute
 }
@@ -218,6 +227,7 @@ export interface FileRoutesById {
   '/skjema/$id/skatteforhold-og-inntekt': typeof SkjemaIdSkatteforholdOgInntektRoute
   '/skjema/$id/tilleggsopplysninger': typeof SkjemaIdTilleggsopplysningerRoute
   '/skjema/$id/utenlandsoppdraget': typeof SkjemaIdUtenlandsoppdragetRoute
+  '/skjema/$id/utsendingsperiode-og-land': typeof SkjemaIdUtsendingsperiodeOgLandRoute
   '/skjema/$id/vedlegg': typeof SkjemaIdVedleggRoute
   '/skjema/$id/': typeof SkjemaIdIndexRoute
 }
@@ -244,6 +254,7 @@ export interface FileRouteTypes {
     | '/skjema/$id/skatteforhold-og-inntekt'
     | '/skjema/$id/tilleggsopplysninger'
     | '/skjema/$id/utenlandsoppdraget'
+    | '/skjema/$id/utsendingsperiode-og-land'
     | '/skjema/$id/vedlegg'
     | '/skjema/$id/'
   fileRoutesByTo: FileRoutesByTo
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/skjema/$id/skatteforhold-og-inntekt'
     | '/skjema/$id/tilleggsopplysninger'
     | '/skjema/$id/utenlandsoppdraget'
+    | '/skjema/$id/utsendingsperiode-og-land'
     | '/skjema/$id/vedlegg'
     | '/skjema/$id'
   id:
@@ -288,6 +300,7 @@ export interface FileRouteTypes {
     | '/skjema/$id/skatteforhold-og-inntekt'
     | '/skjema/$id/tilleggsopplysninger'
     | '/skjema/$id/utenlandsoppdraget'
+    | '/skjema/$id/utsendingsperiode-og-land'
     | '/skjema/$id/vedlegg'
     | '/skjema/$id/'
   fileRoutesById: FileRoutesById
@@ -376,6 +389,13 @@ declare module '@tanstack/react-router' {
       path: '/vedlegg'
       fullPath: '/skjema/$id/vedlegg'
       preLoaderRoute: typeof SkjemaIdVedleggRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/utsendingsperiode-og-land': {
+      id: '/skjema/$id/utsendingsperiode-og-land'
+      path: '/utsendingsperiode-og-land'
+      fullPath: '/skjema/$id/utsendingsperiode-og-land'
+      preLoaderRoute: typeof SkjemaIdUtsendingsperiodeOgLandRouteImport
       parentRoute: typeof SkjemaIdRoute
     }
     '/skjema/$id/utenlandsoppdraget': {
@@ -496,6 +516,7 @@ interface SkjemaIdRouteChildren {
   SkjemaIdSkatteforholdOgInntektRoute: typeof SkjemaIdSkatteforholdOgInntektRoute
   SkjemaIdTilleggsopplysningerRoute: typeof SkjemaIdTilleggsopplysningerRoute
   SkjemaIdUtenlandsoppdragetRoute: typeof SkjemaIdUtenlandsoppdragetRoute
+  SkjemaIdUtsendingsperiodeOgLandRoute: typeof SkjemaIdUtsendingsperiodeOgLandRoute
   SkjemaIdVedleggRoute: typeof SkjemaIdVedleggRoute
   SkjemaIdIndexRoute: typeof SkjemaIdIndexRoute
 }
@@ -513,6 +534,7 @@ const SkjemaIdRouteChildren: SkjemaIdRouteChildren = {
   SkjemaIdSkatteforholdOgInntektRoute: SkjemaIdSkatteforholdOgInntektRoute,
   SkjemaIdTilleggsopplysningerRoute: SkjemaIdTilleggsopplysningerRoute,
   SkjemaIdUtenlandsoppdragetRoute: SkjemaIdUtenlandsoppdragetRoute,
+  SkjemaIdUtsendingsperiodeOgLandRoute: SkjemaIdUtsendingsperiodeOgLandRoute,
   SkjemaIdVedleggRoute: SkjemaIdVedleggRoute,
   SkjemaIdIndexRoute: SkjemaIdIndexRoute,
 }

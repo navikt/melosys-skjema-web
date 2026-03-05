@@ -15,7 +15,6 @@ import {
   setupApiMocksForArbeidsgiver,
 } from "../fixtures/api-mocks";
 import {
-  formFieldValues,
   testArbeidsgiverSkjema,
   testOrganization,
   testUserInfo,

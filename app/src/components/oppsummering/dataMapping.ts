@@ -1,8 +1,8 @@
 import {
-  ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
-  ARBEIDSGIVERS_DEL,
-  ARBEIDSTAKERS_DEL,
   type SkjemaData,
+  isArbeidsgiverOgArbeidstakersDel,
+  isArbeidsgiversDel,
+  isArbeidstakersDel,
 } from "~/pages/skjema/types.ts";
 import type {
   NorskeOgUtenlandskeVirksomheter,
@@ -193,20 +193,16 @@ function mapCombinedSeksjoner(
 }
 
 function getSeksjonMappinger(dto: SkjemaData): SeksjonMappingEntry[] {
-  switch (dto.type) {
-    case ARBEIDSTAKERS_DEL: {
-      return mapArbeidstakerSeksjoner(dto);
-    }
-    case ARBEIDSGIVERS_DEL: {
-      return mapArbeidsgiverSeksjoner(dto);
-    }
-    case ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL: {
-      return mapCombinedSeksjoner(dto);
-    }
-    default: {
-      throw new Error(`Ukjent skjematype: ${(dto as SkjemaData).type}`);
-    }
+  if (isArbeidstakersDel(dto)) {
+    return mapArbeidstakerSeksjoner(dto);
   }
+  if (isArbeidsgiversDel(dto)) {
+    return mapArbeidsgiverSeksjoner(dto);
+  }
+  if (isArbeidsgiverOgArbeidstakersDel(dto)) {
+    return mapCombinedSeksjoner(dto);
+  }
+  throw new Error(`Ukjent skjematype: ${(dto as SkjemaData).type}`);
 }
 
 /**
