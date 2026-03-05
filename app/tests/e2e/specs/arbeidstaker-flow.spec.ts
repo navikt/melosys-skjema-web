@@ -9,7 +9,7 @@ import {
   type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import {
-  mockFetchArbeidstakerSkjema,
+  mockFetchSkjema,
   setupApiMocksForArbeidstaker,
 } from "../fixtures/api-mocks";
 import {
@@ -224,7 +224,7 @@ test.describe("Arbeidstaker komplett flyt", () => {
     };
 
     // Mock komplett skjema data for oppsummering
-    await mockFetchArbeidstakerSkjema(page, {
+    await mockFetchSkjema(page, {
       ...testArbeidstakerSkjema,
       data: {
         type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",

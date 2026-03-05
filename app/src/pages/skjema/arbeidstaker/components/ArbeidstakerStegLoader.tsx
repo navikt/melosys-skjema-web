@@ -1,4 +1,4 @@
-import { getSkjemaAsArbeidstakerQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ArbeidstakerSkjemaProps } from "~/pages/skjema/arbeidstaker/types.ts";
 import { SkjemaStegLoader } from "~/pages/skjema/components/SkjemaStegLoader.tsx";
 
@@ -12,7 +12,7 @@ export function ArbeidstakerStegLoader({
   children,
 }: ArbeidstakerStegLoaderProps) {
   return (
-    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaAsArbeidstakerQuery}>
+    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
       {children}
     </SkjemaStegLoader>
   );

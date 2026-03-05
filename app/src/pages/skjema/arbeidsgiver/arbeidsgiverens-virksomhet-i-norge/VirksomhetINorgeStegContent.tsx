@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -33,7 +33,7 @@ export function VirksomhetINorgeStegContent({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery =
-    useInvalidateArbeidsgiversSkjemaQuery();
+    useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
 
   const erOffentligFelt = getFelt(

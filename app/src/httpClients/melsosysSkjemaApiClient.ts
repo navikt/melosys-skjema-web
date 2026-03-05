@@ -86,19 +86,19 @@ async function fetchAltinnTilganger(): Promise<OrganisasjonDto[]> {
   return response.json();
 }
 
-export const getSkjemaAsArbeidsgiverQuery = (skjemaId: string) =>
+export const getSkjemaQuery = (skjemaId: string) =>
   queryOptions<UtsendtArbeidstakerSkjemaDto>({
     queryKey: ["skjema", skjemaId],
-    queryFn: () => fetchSkjemaAsArbeidsgiver(skjemaId),
+    queryFn: () => fetchSkjema(skjemaId),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 
-async function fetchSkjemaAsArbeidsgiver(
+async function fetchSkjema(
   skjemaId: string,
 ): Promise<UtsendtArbeidstakerSkjemaDto> {
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidsgiver-view`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}`,
     {
       method: "GET",
     },
@@ -212,31 +212,6 @@ export const getInnsendtKvitteringQuery = (skjemaId: string) =>
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
-
-export const getSkjemaAsArbeidstakerQuery = (skjemaId: string) =>
-  queryOptions<UtsendtArbeidstakerSkjemaDto>({
-    queryKey: ["arbeidstaker-skjema", skjemaId],
-    queryFn: () => fetchSkjemaAsArbeidstaker(skjemaId),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
-
-async function fetchSkjemaAsArbeidstaker(
-  skjemaId: string,
-): Promise<UtsendtArbeidstakerSkjemaDto> {
-  const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidstaker-view`,
-    {
-      method: "GET",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-}
 
 export async function postUtenlandsoppdragetArbeidstaker(
   skjemaId: string,

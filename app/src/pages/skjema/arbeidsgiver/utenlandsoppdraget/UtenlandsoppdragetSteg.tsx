@@ -10,7 +10,7 @@ import { z } from "zod";
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postUtenlandsoppdraget } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -38,7 +38,7 @@ function UtenlandsoppdragetStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery =
-    useInvalidateArbeidsgiversSkjemaQuery();
+    useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
 
   const utsendelseLandFelt = getFelt(

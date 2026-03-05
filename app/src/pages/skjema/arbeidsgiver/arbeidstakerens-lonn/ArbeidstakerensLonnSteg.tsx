@@ -8,7 +8,7 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
-import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postArbeidstakerensLonn } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -31,7 +31,7 @@ function ArbeidstakerensLonnStegContent({ skjema }: ArbeidsgiverSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery =
-    useInvalidateArbeidsgiversSkjemaQuery();
+    useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
 
   const betalerAllLonnFelt = getFelt(

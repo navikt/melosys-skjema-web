@@ -18,8 +18,19 @@ import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon
 import { Route as OversiktIndexRouteImport } from './routes/oversikt.index'
 import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
+import { Route as SkjemaIdIndexRouteImport } from './routes/skjema.$id.index'
+import { Route as SkjemaIdVedleggRouteImport } from './routes/skjema.$id.vedlegg'
+import { Route as SkjemaIdUtenlandsoppdragetRouteImport } from './routes/skjema.$id.utenlandsoppdraget'
+import { Route as SkjemaIdTilleggsopplysningerRouteImport } from './routes/skjema.$id.tilleggsopplysninger'
+import { Route as SkjemaIdSkatteforholdOgInntektRouteImport } from './routes/skjema.$id.skatteforhold-og-inntekt'
+import { Route as SkjemaIdOppsummeringRouteImport } from './routes/skjema.$id.oppsummering'
 import { Route as SkjemaIdKvitteringRouteImport } from './routes/skjema.$id.kvittering'
 import { Route as SkjemaIdInnsendtRouteImport } from './routes/skjema.$id.innsendt'
+import { Route as SkjemaIdFamiliemedlemmerRouteImport } from './routes/skjema.$id.familiemedlemmer'
+import { Route as SkjemaIdArbeidstakerensLonnRouteImport } from './routes/skjema.$id.arbeidstakerens-lonn'
+import { Route as SkjemaIdArbeidsstedIUtlandetRouteImport } from './routes/skjema.$id.arbeidssted-i-utlandet'
+import { Route as SkjemaIdArbeidssituasjonRouteImport } from './routes/skjema.$id.arbeidssituasjon'
+import { Route as SkjemaIdArbeidsgiverensVirksomhetINorgeRouteImport } from './routes/skjema.$id.arbeidsgiverens-virksomhet-i-norge'
 import { Route as SkjemaArbeidstakerIdIndexRouteImport } from './routes/skjema.arbeidstaker.$id.index'
 import { Route as SkjemaArbeidsgiverIdIndexRouteImport } from './routes/skjema.arbeidsgiver.$id.index'
 import { Route as SkjemaArbeidstakerIdVedleggRouteImport } from './routes/skjema.arbeidstaker.$id.vedlegg'
@@ -83,6 +94,39 @@ const RepresentasjonVelgRadgiverfirmaRoute =
     path: '/velg-radgiverfirma',
     getParentRoute: () => RepresentasjonRoute,
   } as any)
+const SkjemaIdIndexRoute = SkjemaIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SkjemaIdRoute,
+} as any)
+const SkjemaIdVedleggRoute = SkjemaIdVedleggRouteImport.update({
+  id: '/vedlegg',
+  path: '/vedlegg',
+  getParentRoute: () => SkjemaIdRoute,
+} as any)
+const SkjemaIdUtenlandsoppdragetRoute =
+  SkjemaIdUtenlandsoppdragetRouteImport.update({
+    id: '/utenlandsoppdraget',
+    path: '/utenlandsoppdraget',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
+const SkjemaIdTilleggsopplysningerRoute =
+  SkjemaIdTilleggsopplysningerRouteImport.update({
+    id: '/tilleggsopplysninger',
+    path: '/tilleggsopplysninger',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
+const SkjemaIdSkatteforholdOgInntektRoute =
+  SkjemaIdSkatteforholdOgInntektRouteImport.update({
+    id: '/skatteforhold-og-inntekt',
+    path: '/skatteforhold-og-inntekt',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
+const SkjemaIdOppsummeringRoute = SkjemaIdOppsummeringRouteImport.update({
+  id: '/oppsummering',
+  path: '/oppsummering',
+  getParentRoute: () => SkjemaIdRoute,
+} as any)
 const SkjemaIdKvitteringRoute = SkjemaIdKvitteringRouteImport.update({
   id: '/kvittering',
   path: '/kvittering',
@@ -93,6 +137,36 @@ const SkjemaIdInnsendtRoute = SkjemaIdInnsendtRouteImport.update({
   path: '/innsendt',
   getParentRoute: () => SkjemaIdRoute,
 } as any)
+const SkjemaIdFamiliemedlemmerRoute =
+  SkjemaIdFamiliemedlemmerRouteImport.update({
+    id: '/familiemedlemmer',
+    path: '/familiemedlemmer',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
+const SkjemaIdArbeidstakerensLonnRoute =
+  SkjemaIdArbeidstakerensLonnRouteImport.update({
+    id: '/arbeidstakerens-lonn',
+    path: '/arbeidstakerens-lonn',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
+const SkjemaIdArbeidsstedIUtlandetRoute =
+  SkjemaIdArbeidsstedIUtlandetRouteImport.update({
+    id: '/arbeidssted-i-utlandet',
+    path: '/arbeidssted-i-utlandet',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
+const SkjemaIdArbeidssituasjonRoute =
+  SkjemaIdArbeidssituasjonRouteImport.update({
+    id: '/arbeidssituasjon',
+    path: '/arbeidssituasjon',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
+const SkjemaIdArbeidsgiverensVirksomhetINorgeRoute =
+  SkjemaIdArbeidsgiverensVirksomhetINorgeRouteImport.update({
+    id: '/arbeidsgiverens-virksomhet-i-norge',
+    path: '/arbeidsgiverens-virksomhet-i-norge',
+    getParentRoute: () => SkjemaIdRoute,
+  } as any)
 const SkjemaArbeidstakerIdIndexRoute =
   SkjemaArbeidstakerIdIndexRouteImport.update({
     id: '/arbeidstaker/$id/',
@@ -200,8 +274,19 @@ export interface FileRoutesByFullPath {
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
+  '/skjema/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaIdArbeidsgiverensVirksomhetINorgeRoute
+  '/skjema/$id/arbeidssituasjon': typeof SkjemaIdArbeidssituasjonRoute
+  '/skjema/$id/arbeidssted-i-utlandet': typeof SkjemaIdArbeidsstedIUtlandetRoute
+  '/skjema/$id/arbeidstakerens-lonn': typeof SkjemaIdArbeidstakerensLonnRoute
+  '/skjema/$id/familiemedlemmer': typeof SkjemaIdFamiliemedlemmerRoute
   '/skjema/$id/innsendt': typeof SkjemaIdInnsendtRoute
   '/skjema/$id/kvittering': typeof SkjemaIdKvitteringRoute
+  '/skjema/$id/oppsummering': typeof SkjemaIdOppsummeringRoute
+  '/skjema/$id/skatteforhold-og-inntekt': typeof SkjemaIdSkatteforholdOgInntektRoute
+  '/skjema/$id/tilleggsopplysninger': typeof SkjemaIdTilleggsopplysningerRoute
+  '/skjema/$id/utenlandsoppdraget': typeof SkjemaIdUtenlandsoppdragetRoute
+  '/skjema/$id/vedlegg': typeof SkjemaIdVedleggRoute
+  '/skjema/$id/': typeof SkjemaIdIndexRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
@@ -222,12 +307,22 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
-  '/skjema/$id': typeof SkjemaIdRouteWithChildren
   '/oversikt': typeof OversiktIndexRoute
   '/representasjon': typeof RepresentasjonIndexRoute
   '/skjema': typeof SkjemaIndexRoute
+  '/skjema/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaIdArbeidsgiverensVirksomhetINorgeRoute
+  '/skjema/$id/arbeidssituasjon': typeof SkjemaIdArbeidssituasjonRoute
+  '/skjema/$id/arbeidssted-i-utlandet': typeof SkjemaIdArbeidsstedIUtlandetRoute
+  '/skjema/$id/arbeidstakerens-lonn': typeof SkjemaIdArbeidstakerensLonnRoute
+  '/skjema/$id/familiemedlemmer': typeof SkjemaIdFamiliemedlemmerRoute
   '/skjema/$id/innsendt': typeof SkjemaIdInnsendtRoute
   '/skjema/$id/kvittering': typeof SkjemaIdKvitteringRoute
+  '/skjema/$id/oppsummering': typeof SkjemaIdOppsummeringRoute
+  '/skjema/$id/skatteforhold-og-inntekt': typeof SkjemaIdSkatteforholdOgInntektRoute
+  '/skjema/$id/tilleggsopplysninger': typeof SkjemaIdTilleggsopplysningerRoute
+  '/skjema/$id/utenlandsoppdraget': typeof SkjemaIdUtenlandsoppdragetRoute
+  '/skjema/$id/vedlegg': typeof SkjemaIdVedleggRoute
+  '/skjema/$id': typeof SkjemaIdIndexRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
@@ -256,8 +351,19 @@ export interface FileRoutesById {
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
+  '/skjema/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaIdArbeidsgiverensVirksomhetINorgeRoute
+  '/skjema/$id/arbeidssituasjon': typeof SkjemaIdArbeidssituasjonRoute
+  '/skjema/$id/arbeidssted-i-utlandet': typeof SkjemaIdArbeidsstedIUtlandetRoute
+  '/skjema/$id/arbeidstakerens-lonn': typeof SkjemaIdArbeidstakerensLonnRoute
+  '/skjema/$id/familiemedlemmer': typeof SkjemaIdFamiliemedlemmerRoute
   '/skjema/$id/innsendt': typeof SkjemaIdInnsendtRoute
   '/skjema/$id/kvittering': typeof SkjemaIdKvitteringRoute
+  '/skjema/$id/oppsummering': typeof SkjemaIdOppsummeringRoute
+  '/skjema/$id/skatteforhold-og-inntekt': typeof SkjemaIdSkatteforholdOgInntektRoute
+  '/skjema/$id/tilleggsopplysninger': typeof SkjemaIdTilleggsopplysningerRoute
+  '/skjema/$id/utenlandsoppdraget': typeof SkjemaIdUtenlandsoppdragetRoute
+  '/skjema/$id/vedlegg': typeof SkjemaIdVedleggRoute
+  '/skjema/$id/': typeof SkjemaIdIndexRoute
   '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge': typeof SkjemaArbeidsgiverIdArbeidsgiverensVirksomhetINorgeRoute
   '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet': typeof SkjemaArbeidsgiverIdArbeidsstedIUtlandetRoute
   '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn': typeof SkjemaArbeidsgiverIdArbeidstakerensLonnRoute
@@ -287,8 +393,19 @@ export interface FileRouteTypes {
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
+    | '/skjema/$id/arbeidsgiverens-virksomhet-i-norge'
+    | '/skjema/$id/arbeidssituasjon'
+    | '/skjema/$id/arbeidssted-i-utlandet'
+    | '/skjema/$id/arbeidstakerens-lonn'
+    | '/skjema/$id/familiemedlemmer'
     | '/skjema/$id/innsendt'
     | '/skjema/$id/kvittering'
+    | '/skjema/$id/oppsummering'
+    | '/skjema/$id/skatteforhold-og-inntekt'
+    | '/skjema/$id/tilleggsopplysninger'
+    | '/skjema/$id/utenlandsoppdraget'
+    | '/skjema/$id/vedlegg'
+    | '/skjema/$id/'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
@@ -309,12 +426,22 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/representasjon/velg-radgiverfirma'
-    | '/skjema/$id'
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
+    | '/skjema/$id/arbeidsgiverens-virksomhet-i-norge'
+    | '/skjema/$id/arbeidssituasjon'
+    | '/skjema/$id/arbeidssted-i-utlandet'
+    | '/skjema/$id/arbeidstakerens-lonn'
+    | '/skjema/$id/familiemedlemmer'
     | '/skjema/$id/innsendt'
     | '/skjema/$id/kvittering'
+    | '/skjema/$id/oppsummering'
+    | '/skjema/$id/skatteforhold-og-inntekt'
+    | '/skjema/$id/tilleggsopplysninger'
+    | '/skjema/$id/utenlandsoppdraget'
+    | '/skjema/$id/vedlegg'
+    | '/skjema/$id'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
@@ -342,8 +469,19 @@ export interface FileRouteTypes {
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
+    | '/skjema/$id/arbeidsgiverens-virksomhet-i-norge'
+    | '/skjema/$id/arbeidssituasjon'
+    | '/skjema/$id/arbeidssted-i-utlandet'
+    | '/skjema/$id/arbeidstakerens-lonn'
+    | '/skjema/$id/familiemedlemmer'
     | '/skjema/$id/innsendt'
     | '/skjema/$id/kvittering'
+    | '/skjema/$id/oppsummering'
+    | '/skjema/$id/skatteforhold-og-inntekt'
+    | '/skjema/$id/tilleggsopplysninger'
+    | '/skjema/$id/utenlandsoppdraget'
+    | '/skjema/$id/vedlegg'
+    | '/skjema/$id/'
     | '/skjema/arbeidsgiver/$id/arbeidsgiverens-virksomhet-i-norge'
     | '/skjema/arbeidsgiver/$id/arbeidssted-i-utlandet'
     | '/skjema/arbeidsgiver/$id/arbeidstakerens-lonn'
@@ -434,6 +572,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RepresentasjonVelgRadgiverfirmaRouteImport
       parentRoute: typeof RepresentasjonRoute
     }
+    '/skjema/$id/': {
+      id: '/skjema/$id/'
+      path: '/'
+      fullPath: '/skjema/$id/'
+      preLoaderRoute: typeof SkjemaIdIndexRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/vedlegg': {
+      id: '/skjema/$id/vedlegg'
+      path: '/vedlegg'
+      fullPath: '/skjema/$id/vedlegg'
+      preLoaderRoute: typeof SkjemaIdVedleggRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/utenlandsoppdraget': {
+      id: '/skjema/$id/utenlandsoppdraget'
+      path: '/utenlandsoppdraget'
+      fullPath: '/skjema/$id/utenlandsoppdraget'
+      preLoaderRoute: typeof SkjemaIdUtenlandsoppdragetRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/tilleggsopplysninger': {
+      id: '/skjema/$id/tilleggsopplysninger'
+      path: '/tilleggsopplysninger'
+      fullPath: '/skjema/$id/tilleggsopplysninger'
+      preLoaderRoute: typeof SkjemaIdTilleggsopplysningerRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/skatteforhold-og-inntekt': {
+      id: '/skjema/$id/skatteforhold-og-inntekt'
+      path: '/skatteforhold-og-inntekt'
+      fullPath: '/skjema/$id/skatteforhold-og-inntekt'
+      preLoaderRoute: typeof SkjemaIdSkatteforholdOgInntektRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/oppsummering': {
+      id: '/skjema/$id/oppsummering'
+      path: '/oppsummering'
+      fullPath: '/skjema/$id/oppsummering'
+      preLoaderRoute: typeof SkjemaIdOppsummeringRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
     '/skjema/$id/kvittering': {
       id: '/skjema/$id/kvittering'
       path: '/kvittering'
@@ -446,6 +626,41 @@ declare module '@tanstack/react-router' {
       path: '/innsendt'
       fullPath: '/skjema/$id/innsendt'
       preLoaderRoute: typeof SkjemaIdInnsendtRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/familiemedlemmer': {
+      id: '/skjema/$id/familiemedlemmer'
+      path: '/familiemedlemmer'
+      fullPath: '/skjema/$id/familiemedlemmer'
+      preLoaderRoute: typeof SkjemaIdFamiliemedlemmerRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/arbeidstakerens-lonn': {
+      id: '/skjema/$id/arbeidstakerens-lonn'
+      path: '/arbeidstakerens-lonn'
+      fullPath: '/skjema/$id/arbeidstakerens-lonn'
+      preLoaderRoute: typeof SkjemaIdArbeidstakerensLonnRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/arbeidssted-i-utlandet': {
+      id: '/skjema/$id/arbeidssted-i-utlandet'
+      path: '/arbeidssted-i-utlandet'
+      fullPath: '/skjema/$id/arbeidssted-i-utlandet'
+      preLoaderRoute: typeof SkjemaIdArbeidsstedIUtlandetRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/arbeidssituasjon': {
+      id: '/skjema/$id/arbeidssituasjon'
+      path: '/arbeidssituasjon'
+      fullPath: '/skjema/$id/arbeidssituasjon'
+      preLoaderRoute: typeof SkjemaIdArbeidssituasjonRouteImport
+      parentRoute: typeof SkjemaIdRoute
+    }
+    '/skjema/$id/arbeidsgiverens-virksomhet-i-norge': {
+      id: '/skjema/$id/arbeidsgiverens-virksomhet-i-norge'
+      path: '/arbeidsgiverens-virksomhet-i-norge'
+      fullPath: '/skjema/$id/arbeidsgiverens-virksomhet-i-norge'
+      preLoaderRoute: typeof SkjemaIdArbeidsgiverensVirksomhetINorgeRouteImport
       parentRoute: typeof SkjemaIdRoute
     }
     '/skjema/arbeidstaker/$id/': {
@@ -590,13 +805,36 @@ const RepresentasjonRouteWithChildren = RepresentasjonRoute._addFileChildren(
 )
 
 interface SkjemaIdRouteChildren {
+  SkjemaIdArbeidsgiverensVirksomhetINorgeRoute: typeof SkjemaIdArbeidsgiverensVirksomhetINorgeRoute
+  SkjemaIdArbeidssituasjonRoute: typeof SkjemaIdArbeidssituasjonRoute
+  SkjemaIdArbeidsstedIUtlandetRoute: typeof SkjemaIdArbeidsstedIUtlandetRoute
+  SkjemaIdArbeidstakerensLonnRoute: typeof SkjemaIdArbeidstakerensLonnRoute
+  SkjemaIdFamiliemedlemmerRoute: typeof SkjemaIdFamiliemedlemmerRoute
   SkjemaIdInnsendtRoute: typeof SkjemaIdInnsendtRoute
   SkjemaIdKvitteringRoute: typeof SkjemaIdKvitteringRoute
+  SkjemaIdOppsummeringRoute: typeof SkjemaIdOppsummeringRoute
+  SkjemaIdSkatteforholdOgInntektRoute: typeof SkjemaIdSkatteforholdOgInntektRoute
+  SkjemaIdTilleggsopplysningerRoute: typeof SkjemaIdTilleggsopplysningerRoute
+  SkjemaIdUtenlandsoppdragetRoute: typeof SkjemaIdUtenlandsoppdragetRoute
+  SkjemaIdVedleggRoute: typeof SkjemaIdVedleggRoute
+  SkjemaIdIndexRoute: typeof SkjemaIdIndexRoute
 }
 
 const SkjemaIdRouteChildren: SkjemaIdRouteChildren = {
+  SkjemaIdArbeidsgiverensVirksomhetINorgeRoute:
+    SkjemaIdArbeidsgiverensVirksomhetINorgeRoute,
+  SkjemaIdArbeidssituasjonRoute: SkjemaIdArbeidssituasjonRoute,
+  SkjemaIdArbeidsstedIUtlandetRoute: SkjemaIdArbeidsstedIUtlandetRoute,
+  SkjemaIdArbeidstakerensLonnRoute: SkjemaIdArbeidstakerensLonnRoute,
+  SkjemaIdFamiliemedlemmerRoute: SkjemaIdFamiliemedlemmerRoute,
   SkjemaIdInnsendtRoute: SkjemaIdInnsendtRoute,
   SkjemaIdKvitteringRoute: SkjemaIdKvitteringRoute,
+  SkjemaIdOppsummeringRoute: SkjemaIdOppsummeringRoute,
+  SkjemaIdSkatteforholdOgInntektRoute: SkjemaIdSkatteforholdOgInntektRoute,
+  SkjemaIdTilleggsopplysningerRoute: SkjemaIdTilleggsopplysningerRoute,
+  SkjemaIdUtenlandsoppdragetRoute: SkjemaIdUtenlandsoppdragetRoute,
+  SkjemaIdVedleggRoute: SkjemaIdVedleggRoute,
+  SkjemaIdIndexRoute: SkjemaIdIndexRoute,
 }
 
 const SkjemaIdRouteWithChildren = SkjemaIdRoute._addFileChildren(

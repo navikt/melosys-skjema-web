@@ -9,7 +9,7 @@ import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postSkatteforholdOgInntekt } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
@@ -39,7 +39,7 @@ function SkatteforholdOgInntektStegContent({
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidstakerSkjemaQuery =
-    useInvalidateArbeidstakersSkjemaQuery();
+    useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
 
   const erSkattepliktigFelt = getFelt(

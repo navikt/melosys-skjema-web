@@ -1,4 +1,4 @@
-import { useInvalidateArbeidsgiversSkjemaQuery } from "~/hooks/useInvalidateArbeidsgiversSkjemaQuery.ts";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { postTilleggsopplysninger } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { TilleggsopplysningerStegContent } from "~/pages/skjema/components/tilleggsopplysninger/TilleggsopplysningerStegContent.tsx";
 
@@ -15,7 +15,7 @@ export function TilleggsopplysningerSteg({
   id,
 }: TilleggsopplysningerStegProps) {
   const invalidateArbeidsgiversSkjemaQuery =
-    useInvalidateArbeidsgiversSkjemaQuery();
+    useInvalidateSkjemaQuery();
   return (
     <ArbeidsgiverStegLoader id={id}>
       {(skjema) => (

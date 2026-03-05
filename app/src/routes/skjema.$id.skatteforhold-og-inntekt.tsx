@@ -1,0 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
+
+import { SkatteforholdOgInntektSteg } from "~/pages/skjema/arbeidstaker/skatteforhold-og-inntekt/SkatteforholdOgInntektSteg.tsx";
+
+function SkatteforholdOgInntektStegRoute() {
+  const { id } = Route.useParams();
+  return <SkatteforholdOgInntektSteg id={id} />;
+}
+
+export const Route = createFileRoute(
+  "/skjema/$id/skatteforhold-og-inntekt",
+)({
+  component: SkatteforholdOgInntektStegRoute,
+});

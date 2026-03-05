@@ -27,7 +27,7 @@ import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import { useInvalidateArbeidstakersSkjemaQuery } from "~/hooks/useInvalidateArbeidstakersSkjemaQuery.ts";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon";
 import { postFamiliemedlemmer } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { ARBEIDSTAKER_STEG_REKKEFOLGE } from "~/pages/skjema/arbeidstaker/stegRekkefølge.ts";
@@ -59,7 +59,7 @@ function FamiliemedlemmerStegContent({ skjema }: ArbeidstakerSkjemaProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery =
-    useInvalidateArbeidstakersSkjemaQuery();
+    useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
   const skalHaMedFelt = getFelt(
     "familiemedlemmer",

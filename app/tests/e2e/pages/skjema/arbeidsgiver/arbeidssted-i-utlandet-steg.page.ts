@@ -7,7 +7,7 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
+import { mockFetchSkjema } from "../../../fixtures/api-mocks";
 
 // Hent felter fra statiske definisjoner
 const arbeidsstedIUtlandet =
@@ -201,7 +201,7 @@ export class ArbeidsstedIUtlandetStegPage {
   async mockArbeidsstedIUtlandetData(
     arbeidsstedIUtlandetData: ArbeidsstedIUtlandetDto,
   ) {
-    await mockFetchArbeidsgiverSkjema(this.page, {
+    await mockFetchSkjema(this.page, {
       ...this.skjema,
       data: {
         ...this.skjema.data,
