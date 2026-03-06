@@ -317,6 +317,11 @@ export const en = {
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
         "You must answer whether the employer maintains normal operations in Norway",
     },
+    utsendingsperiodeOgLandSteg: {
+      tittel: "Posting period and country",
+      duMaVelgeHvilketLandDuSkalUtforeArbeid:
+        "You must select which country you will perform work in",
+    },
     utenlandsoppdragetSteg: {
       tittel: "The Foreign Assignment",
       hvilketLandSendesArbeidstakerenTil:

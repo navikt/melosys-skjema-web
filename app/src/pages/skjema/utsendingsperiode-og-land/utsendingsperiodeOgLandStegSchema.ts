@@ -5,8 +5,7 @@ import { LandKode } from "~/types/melosysSkjemaTypes.ts";
 
 export const utsendingsperiodeOgLandSchema = z.object({
   utsendelseLand: z.enum(LandKode, {
-    error:
-      "utenlandsoppdragetArbeidstakerSteg.duMaVelgeHvilketLandDuSkalUtforeArbeid",
+    error: "utsendingsperiodeOgLandSteg.duMaVelgeHvilketLandDuSkalUtforeArbeid",
   }),
 
   utsendelsePeriode: periodeSchema,

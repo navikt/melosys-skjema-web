@@ -248,8 +248,8 @@ export const nb = {
       tilDatoForForrigeArbeidstakerErPakrevd:
         "Til-dato for forrige arbeidstaker er påkrevd",
     },
-    utenlandsoppdragetArbeidstakerSteg: {
-      tittel: "Utenlandsoppdraget",
+    utsendingsperiodeOgLandSteg: {
+      tittel: "Utsendingsperiode og land",
       duMaVelgeHvilketLandDuSkalUtforeArbeid:
         "Du må velge hvilket land du skal utføre arbeid",
     },
