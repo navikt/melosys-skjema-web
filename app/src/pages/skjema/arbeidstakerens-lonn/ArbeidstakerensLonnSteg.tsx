@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ErrorMessage } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -154,19 +153,16 @@ function ArbeidstakerensLonnStegContent({
 
 export function ArbeidstakerensLonnSteg({ id }: { id: string }) {
   return (
-    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
+    <SkjemaStegLoader
+      allowedSkjemadeler={[
+        Skjemadel.ARBEIDSGIVERS_DEL,
+        Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
+      ]}
+      id={id}
+      skjemaQuery={getSkjemaQuery}
+    >
       {(skjema) => {
         const { skjemadel } = skjema.metadata;
-        if (
-          skjemadel !== Skjemadel.ARBEIDSGIVERS_DEL &&
-          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
-        ) {
-          return (
-            <ErrorMessage>
-              Steget er ikke tilgjengelig for denne skjemadelen
-            </ErrorMessage>
-          );
-        }
         return (
           <ArbeidstakerensLonnStegContent
             skjemaId={skjema.id}

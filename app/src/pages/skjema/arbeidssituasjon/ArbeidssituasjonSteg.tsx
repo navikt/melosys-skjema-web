@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ErrorMessage, Textarea } from "@navikt/ds-react";
+import { Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -161,19 +161,16 @@ function ArbeidssituasjonStegContent({
 
 export function ArbeidssituasjonSteg({ id }: { id: string }) {
   return (
-    <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
+    <SkjemaStegLoader
+      allowedSkjemadeler={[
+        Skjemadel.ARBEIDSTAKERS_DEL,
+        Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
+      ]}
+      id={id}
+      skjemaQuery={getSkjemaQuery}
+    >
       {(skjema) => {
         const { skjemadel } = skjema.metadata;
-        if (
-          skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL &&
-          skjemadel !== Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
-        ) {
-          return (
-            <ErrorMessage>
-              Steget er ikke tilgjengelig for denne skjemadelen
-            </ErrorMessage>
-          );
-        }
         return (
           <ArbeidssituasjonStegContent
             skjemaId={skjema.id}
