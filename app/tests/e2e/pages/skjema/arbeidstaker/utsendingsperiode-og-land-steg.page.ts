@@ -13,6 +13,9 @@ const utsendingsperiodeOgLand =
   SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidstaker;
 const felter = utsendingsperiodeOgLand.felter;
 
+// Tittel hentes fra i18n, ikke fra skjemadefinisjonen
+const stegTittel = nb.translation.utsendingsperiodeOgLandSteg.tittel;
+
 export class UtsendingsperiodeOgLandStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
@@ -26,7 +29,7 @@ export class UtsendingsperiodeOgLandStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: utsendingsperiodeOgLand.tittel,
+      name: stegTittel,
     });
     this.utsendelseLandCombobox = page.getByRole("combobox", {
       name: felter.utsendelsesLand.label,
