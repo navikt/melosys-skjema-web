@@ -1,5 +1,6 @@
 import { Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import {
   Skjemadel,
@@ -20,33 +21,30 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   allowedSkjemadeler,
 }: SkjemaStegLoaderProps<T>) {
   const { data: skjema, isLoading, error } = useQuery(skjemaQuery(id));
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
       <HStack style={{ gap: "var(--a-spacing-2)" }}>
         <Loader />
-        <Detail>Laster skjema</Detail>
+        <Detail>{t("felles.laster")}</Detail>
       </HStack>
     );
   }
 
   if (error) {
-    return <ErrorMessage>Feil ved lasting av skjema</ErrorMessage>;
+    return <ErrorMessage>{t("felles.feilVedLastingAvSkjema")}</ErrorMessage>;
   }
 
   if (!skjema) {
-    return <ErrorMessage>Fant ikke skjema</ErrorMessage>;
+    return <ErrorMessage>{t("felles.fantIkkeSkjema")}</ErrorMessage>;
   }
 
   if (
     allowedSkjemadeler &&
     !allowedSkjemadeler.includes(skjema.metadata.skjemadel)
   ) {
-    return (
-      <ErrorMessage>
-        Steget er ikke tilgjengelig for denne skjemadelen
-      </ErrorMessage>
-    );
+    return <ErrorMessage>{t("felles.stegIkkeTilgjengelig")}</ErrorMessage>;
   }
 
   return <>{children(skjema)}</>;

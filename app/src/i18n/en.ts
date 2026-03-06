@@ -3,6 +3,9 @@ export const en = {
     felles: {
       laster: "Loading...",
       feil: "An error occurred",
+      feilVedLastingAvSkjema: "Error loading form",
+      fantIkkeSkjema: "Form not found",
+      stegIkkeTilgjengelig: "This step is not available for this form part",
       brukerinfoMangler: "User information missing",
       kunneIkkeOppretteSkjema: "Could not create form. Please try again.",
       manglerOrganisasjonsnummer: "Organization number missing",

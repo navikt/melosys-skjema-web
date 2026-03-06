@@ -3,6 +3,9 @@ export const nb = {
     felles: {
       laster: "Laster...",
       feil: "Det oppstod en feil",
+      feilVedLastingAvSkjema: "Feil ved lasting av skjema",
+      fantIkkeSkjema: "Fant ikke skjema",
+      stegIkkeTilgjengelig: "Steget er ikke tilgjengelig for denne skjemadelen",
       brukerinfoMangler: "Brukerinfo mangler",
       kunneIkkeOppretteSkjema: "Kunne ikke opprette skjema. Prøv igjen.",
       manglerOrganisasjonsnummer: "Mangler organisasjonsnummer",
