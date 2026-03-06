@@ -3,6 +3,7 @@ import { Page } from "@playwright/test";
 import { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import type {
   OrganisasjonDto,
+  UtsendtArbeidstakerMetadata,
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import { skjemaInnsendtKvittering } from "./test-data";
@@ -29,6 +30,20 @@ export async function mockUserInfo(page: Page, userInfo: UserInfo) {
         authenticated: true,
         ...userInfo,
       }),
+    });
+  });
+}
+
+export async function mockSkjemaMetadata(
+  page: Page,
+  skjemaId: string,
+  metadata: UtsendtArbeidstakerMetadata,
+) {
+  await page.route(`/api/skjema/${skjemaId}/metadata`, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(metadata),
     });
   });
 }
@@ -248,6 +263,7 @@ export async function setupApiMocksForArbeidsgiver(
 ) {
   await mockHentTilganger(page, tilganger);
   await mockUserInfo(page, testUserInfo);
+  await mockSkjemaMetadata(page, skjema.id, skjema.metadata);
   await mockFetchSkjema(page, skjema);
   await mockGetEregOrganisasjon(page);
   await mockPostVirksomhetINorge(page, skjema.id);
@@ -265,6 +281,7 @@ export async function setupApiMocksForArbeidstaker(
 ) {
   await mockUserInfo(page, userInfo);
   await mockHentTilganger(page, []);
+  await mockSkjemaMetadata(page, skjema.id, skjema.metadata);
   await mockFetchSkjema(page, skjema);
   await mockPostArbeidssituasjon(page, skjema.id);
   await mockPostUtsendingsperiodeOgLand(page, skjema.id);
