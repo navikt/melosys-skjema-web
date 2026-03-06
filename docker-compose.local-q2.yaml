@@ -1,0 +1,17 @@
+name: melosys-skjema-web-local-q2
+services:
+  express-server:
+    build: .
+    ports:
+      - "4000:4000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      NODE_ENV: "development"
+      ENV: "dev"
+      EXPRESS_PORT: "4000"
+      EXPRESS_HOST: "::"
+      API_URL: http://host.docker.internal:8090/api
+      DEKORATOREN_API_URL: https://www.ekstern.dev.nav.no/person/nav-dekoratoren-api
+      LOCAL_TOKEN: ${LOCAL_TOKEN}
+      USE_LOCAL_TOKEN: "true"
