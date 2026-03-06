@@ -3,6 +3,7 @@ import { Page } from "@playwright/test";
 import { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import type {
   OrganisasjonDto,
+  UtsendtArbeidstakerMetadata,
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import { skjemaInnsendtKvittering } from "./test-data";
@@ -33,12 +34,26 @@ export async function mockUserInfo(page: Page, userInfo: UserInfo) {
   });
 }
 
-export async function mockFetchArbeidsgiverSkjema(
+export async function mockSkjemaMetadata(
+  page: Page,
+  skjemaId: string,
+  metadata: UtsendtArbeidstakerMetadata,
+) {
+  await page.route(`/api/skjema/${skjemaId}/metadata`, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(metadata),
+    });
+  });
+}
+
+export async function mockFetchSkjema(
   page: Page,
   skjemaDto: UtsendtArbeidstakerSkjemaDto,
 ) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/${skjemaDto.id}/arbeidsgiver-view`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaDto.id}`,
     async (route) => {
       if (route.request().method() === "GET") {
         await route.fulfill({
@@ -53,7 +68,7 @@ export async function mockFetchArbeidsgiverSkjema(
 
 export async function mockPostVirksomhetINorge(page: Page, skjemaId: string) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidsgiverens-virksomhet-i-norge`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidsgiverens-virksomhet-i-norge`,
     async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
@@ -68,7 +83,7 @@ export async function mockPostVirksomhetINorge(page: Page, skjemaId: string) {
 
 export async function mockPostUtenlandsoppdraget(page: Page, skjemaId: string) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/utenlandsoppdraget`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/utenlandsoppdraget`,
     async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
@@ -86,7 +101,7 @@ export async function mockPostArbeidsstedIUtlandet(
   skjemaId: string,
 ) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidssted-i-utlandet`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidssted-i-utlandet`,
     async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
@@ -104,109 +119,7 @@ export async function mockPostArbeidstakerensLonn(
   skjemaId: string,
 ) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/arbeidstakerens-lonn`,
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      }
-    },
-  );
-}
-
-export async function mockPostTilleggsopplysningerArbeidsgiver(
-  page: Page,
-  skjemaId: string,
-) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${skjemaId}/tilleggsopplysninger`,
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      }
-    },
-  );
-}
-
-export async function mockFetchArbeidstakerSkjema(
-  page: Page,
-  skjemaDto: UtsendtArbeidstakerSkjemaDto,
-) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/${skjemaDto.id}/arbeidstaker-view`,
-    async (route) => {
-      if (route.request().method() === "GET") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify(skjemaDto),
-        });
-      }
-    },
-  );
-}
-
-export async function mockPostArbeidssituasjon(page: Page, skjemaId: string) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/arbeidssituasjon`,
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      }
-    },
-  );
-}
-
-export async function mockPostUtenlandsoppdragetArbeidstaker(
-  page: Page,
-  skjemaId: string,
-) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/utenlandsoppdraget`,
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      }
-    },
-  );
-}
-
-export async function mockPostFamiliemedlemmer(page: Page, skjemaId: string) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/familiemedlemmer`,
-    async (route) => {
-      if (route.request().method() === "POST") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      }
-    },
-  );
-}
-
-export async function mockPostSkatteforholdOgInntekt(
-  page: Page,
-  skjemaId: string,
-) {
-  await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/skatteforhold-og-inntekt`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidstakerens-lonn`,
     async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
@@ -224,7 +137,73 @@ export async function mockPostTilleggsopplysninger(
   skjemaId: string,
 ) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${skjemaId}/tilleggsopplysninger`,
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/tilleggsopplysninger`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostArbeidssituasjon(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidssituasjon`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostUtsendingsperiodeOgLand(
+  page: Page,
+  skjemaId: string,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/utsendingsperiode-og-land`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostFamiliemedlemmer(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/familiemedlemmer`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
+export async function mockPostSkatteforholdOgInntekt(
+  page: Page,
+  skjemaId: string,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/skatteforhold-og-inntekt`,
     async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
@@ -284,13 +263,14 @@ export async function setupApiMocksForArbeidsgiver(
 ) {
   await mockHentTilganger(page, tilganger);
   await mockUserInfo(page, testUserInfo);
-  await mockFetchArbeidsgiverSkjema(page, skjema);
+  await mockSkjemaMetadata(page, skjema.id, skjema.metadata);
+  await mockFetchSkjema(page, skjema);
   await mockGetEregOrganisasjon(page);
   await mockPostVirksomhetINorge(page, skjema.id);
   await mockPostUtenlandsoppdraget(page, skjema.id);
   await mockPostArbeidsstedIUtlandet(page, skjema.id);
   await mockPostArbeidstakerensLonn(page, skjema.id);
-  await mockPostTilleggsopplysningerArbeidsgiver(page, skjema.id);
+  await mockPostTilleggsopplysninger(page, skjema.id);
   await mockSendInnSkjema(page, skjema.id);
 }
 
@@ -301,9 +281,10 @@ export async function setupApiMocksForArbeidstaker(
 ) {
   await mockUserInfo(page, userInfo);
   await mockHentTilganger(page, []);
-  await mockFetchArbeidstakerSkjema(page, skjema);
+  await mockSkjemaMetadata(page, skjema.id, skjema.metadata);
+  await mockFetchSkjema(page, skjema);
   await mockPostArbeidssituasjon(page, skjema.id);
-  await mockPostUtenlandsoppdragetArbeidstaker(page, skjema.id);
+  await mockPostUtsendingsperiodeOgLand(page, skjema.id);
   await mockGetEregOrganisasjon(page);
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);

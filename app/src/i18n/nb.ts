@@ -3,6 +3,9 @@ export const nb = {
     felles: {
       laster: "Laster...",
       feil: "Det oppstod en feil",
+      feilVedLastingAvSkjema: "Feil ved lasting av skjema",
+      fantIkkeSkjema: "Fant ikke skjema",
+      stegIkkeTilgjengelig: "Steget er ikke tilgjengelig for denne skjemadelen",
       brukerinfoMangler: "Brukerinfo mangler",
       kunneIkkeOppretteSkjema: "Kunne ikke opprette skjema. Prøv igjen.",
       manglerOrganisasjonsnummer: "Mangler organisasjonsnummer",
@@ -245,8 +248,8 @@ export const nb = {
       tilDatoForForrigeArbeidstakerErPakrevd:
         "Til-dato for forrige arbeidstaker er påkrevd",
     },
-    utenlandsoppdragetArbeidstakerSteg: {
-      tittel: "Utenlandsoppdraget",
+    utsendingsperiodeOgLandSteg: {
+      tittel: "Utsendingsperiode og land",
       duMaVelgeHvilketLandDuSkalUtforeArbeid:
         "Du må velge hvilket land du skal utføre arbeid",
     },

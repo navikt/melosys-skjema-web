@@ -1,6 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { landKodeTilNavn } from "../../../../../src/components/LandVelgerFormPart";
 import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
@@ -43,7 +42,7 @@ export class OppsummeringStegPage {
   }
 
   async goto() {
-    await this.page.goto(`/skjema/arbeidsgiver/${this.skjema.id}/oppsummering`);
+    await this.page.goto(`/skjema/${this.skjema.id}/oppsummering`);
   }
 
   async assertIsVisible() {
@@ -89,24 +88,6 @@ export class OppsummeringStegPage {
   }
 
   async assertUtenlandsoppdragetData(data: UtenlandsoppdragetDto) {
-    await expect(
-      this.page.locator(
-        `dt:has-text("${utenlandsoppdraget.felter.utsendelseLand.label}") + dd`,
-      ),
-    ).toHaveText(landKodeTilNavn(data.utsendelseLand));
-
-    await expect(
-      this.page.locator(
-        `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerUtsendelsePeriode.fraDatoLabel}") + dd`,
-      ),
-    ).toHaveText(data.arbeidstakerUtsendelsePeriode.fraDato);
-
-    await expect(
-      this.page.locator(
-        `dt:has-text("${utenlandsoppdraget.felter.arbeidstakerUtsendelsePeriode.tilDatoLabel}") + dd`,
-      ),
-    ).toHaveText(data.arbeidstakerUtsendelsePeriode.tilDato);
-
     await expect(
       this.page.locator(
         `dt:has-text("${utenlandsoppdraget.felter.arbeidsgiverHarOppdragILandet.label}") + dd`,

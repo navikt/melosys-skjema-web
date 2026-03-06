@@ -7,7 +7,6 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
 
 // Hent felter fra statiske definisjoner
 const utenlandsoppdraget =
@@ -18,9 +17,6 @@ export class UtenlandsoppdragetStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
-  readonly utsendelseLandCombobox: Locator;
-  readonly fraDatoInput: Locator;
-  readonly tilDatoInput: Locator;
   readonly arbeidsgiverHarOppdragILandetRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly arbeidstakerForblirAnsattIHelePeriodenRadioGroup: RadioButtonGroupJaNeiLocator;
@@ -33,15 +29,6 @@ export class UtenlandsoppdragetStegPage {
     this.heading = page.getByRole("heading", {
       name: utenlandsoppdraget.tittel,
     });
-    this.utsendelseLandCombobox = page.getByRole("combobox", {
-      name: felter.utsendelseLand.label,
-    });
-    this.fraDatoInput = page.getByLabel(
-      felter.arbeidstakerUtsendelsePeriode.fraDatoLabel,
-    );
-    this.tilDatoInput = page.getByLabel(
-      felter.arbeidstakerUtsendelsePeriode.tilDatoLabel,
-    );
 
     const arbeidsgiverHarOppdragILandetGroup = page.getByRole("group", {
       name: felter.arbeidsgiverHarOppdragILandet.label,
@@ -103,9 +90,7 @@ export class UtenlandsoppdragetStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/arbeidsgiver/${this.skjema.id}/utenlandsoppdraget`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/utenlandsoppdraget`);
   }
 
   async assertIsVisible() {
@@ -118,7 +103,7 @@ export class UtenlandsoppdragetStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/utenlandsoppdraget`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/utenlandsoppdraget`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
@@ -134,15 +119,7 @@ export class UtenlandsoppdragetStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
+      `/skjema/${this.skjema.id}/arbeidssted-i-utlandet`,
     );
-  }
-
-  async fillFraDato(date: string) {
-    await selectDateFromCalendar(this.page, this.fraDatoInput, date);
-  }
-
-  async fillTilDato(date: string) {
-    await selectDateFromCalendar(this.page, this.tilDatoInput, date);
   }
 }

@@ -48,9 +48,7 @@ export class ArbeidstakerensLonnStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidstakerens-lonn`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/arbeidstakerens-lonn`);
   }
 
   async assertIsVisible() {
@@ -63,7 +61,7 @@ export class ArbeidstakerensLonnStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidstakerens-lonn`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/arbeidstakerens-lonn`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
@@ -79,7 +77,7 @@ export class ArbeidstakerensLonnStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/tilleggsopplysninger`,
+      `/skjema/${this.skjema.id}/tilleggsopplysninger`,
     );
   }
 }

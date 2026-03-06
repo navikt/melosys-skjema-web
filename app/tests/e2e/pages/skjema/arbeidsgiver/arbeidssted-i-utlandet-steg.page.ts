@@ -7,7 +7,7 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
+import { mockFetchSkjema } from "../../../fixtures/api-mocks";
 
 // Hent felter fra statiske definisjoner
 const arbeidsstedIUtlandet =
@@ -193,15 +193,13 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/arbeidssted-i-utlandet`);
   }
 
   async mockArbeidsstedIUtlandetData(
     arbeidsstedIUtlandetData: ArbeidsstedIUtlandetDto,
   ) {
-    await mockFetchArbeidsgiverSkjema(this.page, {
+    await mockFetchSkjema(this.page, {
       ...this.skjema,
       data: {
         ...this.skjema.data,
@@ -220,7 +218,7 @@ export class ArbeidsstedIUtlandetStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidssted-i-utlandet`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/arbeidssted-i-utlandet`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
@@ -236,7 +234,7 @@ export class ArbeidsstedIUtlandetStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidstakerens-lonn`,
+      `/skjema/${this.skjema.id}/arbeidstakerens-lonn`,
     );
   }
 }

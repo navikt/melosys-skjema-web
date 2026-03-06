@@ -1,9 +1,17 @@
+import { StegKey } from "~/constants/stegKeys.ts";
+import {
+  isArbeidsgiverOgArbeidstakersDel,
+  isArbeidsgiversDel,
+  isArbeidstakersDel,
+  type SkjemaData,
+} from "~/pages/skjema/types.ts";
 import type {
   NorskeOgUtenlandskeVirksomheter,
   NorskeOgUtenlandskeVirksomheterMedAnsettelsesform,
   PaLandDto,
   SeksjonDefinisjonDto,
   SkjemaDefinisjonDto,
+  UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -66,12 +74,18 @@ function mapArbeidstakerSeksjoner(
   return [
     {
       seksjonNavn: "utenlandsoppdragetArbeidstaker",
-      stegKey: "utenlandsoppdraget",
-      data: dto.utenlandsoppdraget as Record<string, unknown> | undefined,
+      stegKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
+      data: dto.utsendingsperiodeOgLand
+        ? {
+            // Definisjon bruker "utsendelsesLand" (med s), mens DTO bruker "utsendelseLand"
+            utsendelsesLand: dto.utsendingsperiodeOgLand.utsendelseLand,
+            utsendelsePeriode: dto.utsendingsperiodeOgLand.utsendelsePeriode,
+          }
+        : undefined,
     },
     {
       seksjonNavn: "arbeidssituasjon",
-      stegKey: "arbeidssituasjon",
+      stegKey: StegKey.ARBEIDSSITUASJON,
       data: dto.arbeidssituasjon
         ? {
             ...(dto.arbeidssituasjon as unknown as Record<string, unknown>),
@@ -85,17 +99,17 @@ function mapArbeidstakerSeksjoner(
     },
     {
       seksjonNavn: "skatteforholdOgInntekt",
-      stegKey: "skatteforhold-og-inntekt",
+      stegKey: StegKey.SKATTEFORHOLD_OG_INNTEKT,
       data: dto.skatteforholdOgInntekt as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "familiemedlemmer",
-      stegKey: "familiemedlemmer",
+      stegKey: StegKey.FAMILIEMEDLEMMER,
       data: dto.familiemedlemmer as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "tilleggsopplysningerArbeidstaker",
-      stegKey: "tilleggsopplysninger",
+      stegKey: StegKey.TILLEGGSOPPLYSNINGER,
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
   ];
@@ -107,50 +121,50 @@ function mapArbeidsgiverSeksjoner(
   return [
     {
       seksjonNavn: "arbeidsgiverensVirksomhetINorge",
-      stegKey: "arbeidsgiverens-virksomhet-i-norge",
+      stegKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
       data: dto.arbeidsgiverensVirksomhetINorge as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "utenlandsoppdragetArbeidsgiver",
-      stegKey: "utenlandsoppdraget",
+      stegKey: StegKey.UTENLANDSOPPDRAGET,
       data: dto.utenlandsoppdraget as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedIUtlandet",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedPaLand",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: flattenPaLand(dto.arbeidsstedIUtlandet?.paLand),
     },
     {
       seksjonNavn: "arbeidsstedOffshore",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.offshore as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidsstedPaSkip",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.paSkip as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidsstedOmBordPaFly",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.omBordPaFly as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidstakerensLonn",
-      stegKey: "arbeidstakerens-lonn",
+      stegKey: StegKey.ARBEIDSTAKERENS_LONN,
       data: dto.arbeidstakerensLonn
         ? {
             ...(dto.arbeidstakerensLonn as unknown as Record<string, unknown>),
@@ -163,36 +177,39 @@ function mapArbeidsgiverSeksjoner(
     },
     {
       seksjonNavn: "tilleggsopplysningerArbeidsgiver",
-      stegKey: "tilleggsopplysninger",
+      stegKey: StegKey.TILLEGGSOPPLYSNINGER,
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
   ];
 }
 
-// dto.type verdier - vil bli eksponert som enum fra API i fremtiden
-const ARBEIDSTAKERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL";
-const ARBEIDSGIVERS_DEL = "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL";
-
-function getSeksjonMappinger(
-  dto:
-    | UtsendtArbeidstakerArbeidstakersSkjemaDataDto
-    | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+function mapCombinedSeksjoner(
+  dto: UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): SeksjonMappingEntry[] {
-  switch (dto.type) {
-    case ARBEIDSTAKERS_DEL: {
-      return mapArbeidstakerSeksjoner(
-        dto as UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
-      );
-    }
-    case ARBEIDSGIVERS_DEL: {
-      return mapArbeidsgiverSeksjoner(
-        dto as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
-      );
-    }
-    default: {
-      throw new Error(`Ukjent skjematype: ${dto.type}`);
-    }
+  return [
+    ...mapArbeidsgiverSeksjoner({
+      ...dto.arbeidsgiversData,
+      tilleggsopplysninger: dto.tilleggsopplysninger,
+    } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto),
+    ...mapArbeidstakerSeksjoner({
+      ...dto.arbeidstakersData,
+      utsendingsperiodeOgLand: dto.utsendingsperiodeOgLand,
+      tilleggsopplysninger: dto.tilleggsopplysninger,
+    } as UtsendtArbeidstakerArbeidstakersSkjemaDataDto),
+  ];
+}
+
+function getSeksjonMappinger(dto: SkjemaData): SeksjonMappingEntry[] {
+  if (isArbeidstakersDel(dto)) {
+    return mapArbeidstakerSeksjoner(dto);
   }
+  if (isArbeidsgiversDel(dto)) {
+    return mapArbeidsgiverSeksjoner(dto);
+  }
+  if (isArbeidsgiverOgArbeidstakersDel(dto)) {
+    return mapCombinedSeksjoner(dto);
+  }
+  throw new Error(`Ukjent skjematype: ${(dto as SkjemaData).type}`);
 }
 
 /**
@@ -200,9 +217,7 @@ function getSeksjonMappinger(
  * Returnerer kun seksjoner som har både definisjon og data.
  */
 export function resolveSeksjoner(
-  dto:
-    | UtsendtArbeidstakerArbeidstakersSkjemaDataDto
-    | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+  dto: SkjemaData,
   definisjon: SkjemaDefinisjonDto,
 ): ResolvedSeksjon[] {
   return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {

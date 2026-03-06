@@ -7,7 +7,7 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { mockFetchArbeidsgiverSkjema } from "../../../fixtures/api-mocks";
+import { mockFetchSkjema } from "../../../fixtures/api-mocks";
 
 // Hent felter fra statiske definisjoner
 const virksomhetINorge =
@@ -73,14 +73,14 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
 
   async goto() {
     await this.page.goto(
-      `/skjema/arbeidsgiver/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
+      `/skjema/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
     );
   }
 
   async mockArbeidsgiverensVirksomhetINorgeStegData(
     virksomhetINorgeData: ArbeidsgiverensVirksomhetINorgeDto,
   ) {
-    await mockFetchArbeidsgiverSkjema(this.page, {
+    await mockFetchSkjema(this.page, {
       ...this.skjema,
       data: {
         ...this.skjema.data,
@@ -99,7 +99,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
@@ -115,7 +115,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/utenlandsoppdraget`,
+      `/skjema/${this.skjema.id}/utenlandsoppdraget`,
     );
   }
 }

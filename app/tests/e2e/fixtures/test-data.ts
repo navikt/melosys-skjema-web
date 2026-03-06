@@ -6,6 +6,8 @@ import {
   type DegSelvMetadata,
   LandKode,
   type OrganisasjonDto,
+  Representasjonstype,
+  Skjemadel,
   type SkjemaInnsendtKvittering,
   SkjemaStatus,
   SkjemaType,
@@ -34,7 +36,11 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
   type: SkjemaType.UTSENDT_ARBEIDSTAKER,
   metadata: {
     metadatatype: "ArbeidsgiverMetadata",
-  } as unknown as ArbeidsgiverMetadata,
+    representasjonstype: Representasjonstype.ARBEIDSGIVER,
+    juridiskEnhetOrgnr: "123456789",
+    arbeidsgiverNavn: "Test Bedrift AS",
+    skjemadel: Skjemadel.ARBEIDSGIVERS_DEL,
+  } as ArbeidsgiverMetadata,
   data: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
   },
@@ -48,7 +54,11 @@ export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
   type: SkjemaType.UTSENDT_ARBEIDSTAKER,
   metadata: {
     metadatatype: "DegSelvMetadata",
-  } as unknown as DegSelvMetadata,
+    representasjonstype: Representasjonstype.DEG_SELV,
+    juridiskEnhetOrgnr: "123456789",
+    arbeidsgiverNavn: "Test Bedrift AS",
+    skjemadel: Skjemadel.ARBEIDSTAKERS_DEL,
+  } as DegSelvMetadata,
   data: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
   },

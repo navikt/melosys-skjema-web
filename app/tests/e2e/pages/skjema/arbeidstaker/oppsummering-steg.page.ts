@@ -8,12 +8,12 @@ import type {
   FamiliemedlemmerDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
-  UtenlandsoppdragetArbeidstakersDelDto,
+  UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
 
 // Hent felter fra statiske definisjoner
-const utenlandsoppdraget =
+const utsendingsperiodeOgLand =
   SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidstaker;
 const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
 const skatteforholdOgInntekt =
@@ -40,31 +40,29 @@ export class OppsummeringStegPage {
   }
 
   async goto() {
-    await this.page.goto(`/skjema/arbeidstaker/${this.skjema.id}/oppsummering`);
+    await this.page.goto(`/skjema/${this.skjema.id}/oppsummering`);
   }
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
   }
 
-  async assertUtenlandsoppdragetData(
-    data: UtenlandsoppdragetArbeidstakersDelDto,
-  ) {
+  async assertUtsendingsperiodeOgLandData(data: UtsendingsperiodeOgLandDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${utenlandsoppdraget.felter.utsendelsesLand.label}") + dd`,
+        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsesLand.label}") + dd`,
       ),
-    ).toHaveText(landKodeTilNavn(data.utsendelsesLand));
+    ).toHaveText(landKodeTilNavn(data.utsendelseLand));
 
     await expect(
       this.page.locator(
-        `dt:has-text("${utenlandsoppdraget.felter.utsendelsePeriode.fraDatoLabel}") + dd`,
+        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsePeriode.fraDatoLabel}") + dd`,
       ),
     ).toHaveText(data.utsendelsePeriode.fraDato);
 
     await expect(
       this.page.locator(
-        `dt:has-text("${utenlandsoppdraget.felter.utsendelsePeriode.tilDatoLabel}") + dd`,
+        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsePeriode.tilDatoLabel}") + dd`,
       ),
     ).toHaveText(data.utsendelsePeriode.tilDato);
   }

@@ -11,11 +11,10 @@ import {
   type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 import {
-  mockFetchArbeidsgiverSkjema,
+  mockFetchSkjema,
   setupApiMocksForArbeidsgiver,
 } from "../fixtures/api-mocks";
 import {
-  formFieldValues,
   testArbeidsgiverSkjema,
   testOrganization,
   testUserInfo,
@@ -92,12 +91,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     await utenlandsoppdragetStegPage.assertIsVisible();
 
     // Svar på spørsmål
-    await utenlandsoppdragetStegPage.utsendelseLandCombobox.selectOption(
-      formFieldValues.utsendelseLand,
-    );
-    await utenlandsoppdragetStegPage.fillFraDato(formFieldValues.periodeFra);
-    await utenlandsoppdragetStegPage.fillTilDato(formFieldValues.periodeTil);
-
     await utenlandsoppdragetStegPage.arbeidsgiverHarOppdragILandetRadioGroup.JA.click();
     await utenlandsoppdragetStegPage.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup.NEI.click();
     await utenlandsoppdragetStegPage.arbeidstakerForblirAnsattIHelePeriodenRadioGroup.JA.click();
@@ -105,8 +98,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
 
     // Lagre og fortsett og verifiser forventet payload i POST request
     const expectedUtenlandsoppdragetPayload: UtenlandsoppdragetDto = {
-      utsendelseLand: formFieldValues.utsendelseLand.value,
-      arbeidstakerUtsendelsePeriode: formFieldValues.periode,
       arbeidsgiverHarOppdragILandet: true,
       arbeidstakerBleAnsattForUtenlandsoppdraget: false,
       arbeidstakerForblirAnsattIHelePerioden: true,
@@ -269,8 +260,6 @@ test.describe("Arbeidsgiver komplett flyt", () => {
       };
 
     const utenlandsoppdragetData: UtenlandsoppdragetDto = {
-      utsendelseLand: formFieldValues.utsendelseLand.value,
-      arbeidstakerUtsendelsePeriode: formFieldValues.periode,
       arbeidsgiverHarOppdragILandet: true,
       arbeidstakerBleAnsattForUtenlandsoppdraget: false,
       arbeidstakerForblirAnsattIHelePerioden: true,
@@ -301,7 +290,7 @@ test.describe("Arbeidsgiver komplett flyt", () => {
     };
 
     // Mock komplett skjema data for oppsummering
-    await mockFetchArbeidsgiverSkjema(page, {
+    await mockFetchSkjema(page, {
       ...testArbeidsgiverSkjema,
       data: {
         type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",

@@ -50,9 +50,7 @@ export class TilleggsopplysningerStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/arbeidsgiver/${this.skjema.id}/tilleggsopplysninger`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/tilleggsopplysninger`);
   }
 
   async assertIsVisible() {
@@ -65,7 +63,7 @@ export class TilleggsopplysningerStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidsgiver/${this.skjema.id}/tilleggsopplysninger`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/tilleggsopplysninger`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
@@ -80,8 +78,6 @@ export class TilleggsopplysningerStegPage {
   }
 
   async assertNavigatedToNextStep() {
-    await expect(this.page).toHaveURL(
-      `/skjema/arbeidsgiver/${this.skjema.id}/vedlegg`,
-    );
+    await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/vedlegg`);
   }
 }

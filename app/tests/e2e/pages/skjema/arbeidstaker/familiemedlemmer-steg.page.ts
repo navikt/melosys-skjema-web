@@ -44,9 +44,7 @@ export class FamiliemedlemmerStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/arbeidstaker/${this.skjema.id}/familiemedlemmer`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/familiemedlemmer`);
   }
 
   async assertIsVisible() {
@@ -59,7 +57,7 @@ export class FamiliemedlemmerStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${this.skjema.id}/familiemedlemmer`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/familiemedlemmer`,
     );
     await this.lagreOgFortsettButton.click();
     return await requestPromise;
@@ -73,7 +71,7 @@ export class FamiliemedlemmerStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/tilleggsopplysninger`,
+      `/skjema/${this.skjema.id}/tilleggsopplysninger`,
     );
   }
 }

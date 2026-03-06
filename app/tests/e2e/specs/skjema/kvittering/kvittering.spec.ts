@@ -2,16 +2,24 @@ import { test } from "@playwright/test";
 
 import {
   Representasjonstype,
+  Skjemadel,
   SkjemaInnsendtKvittering,
   SkjemaStatus,
 } from "../../../../../src/types/melosysSkjemaTypes";
-import { mockUserInfo } from "../../../fixtures/api-mocks";
+import { mockSkjemaMetadata, mockUserInfo } from "../../../fixtures/api-mocks";
 import { testUserInfo } from "../../../fixtures/test-data";
 import { KvitteringPage } from "../../../pages/skjema/kvittering/kvittering-page";
 
 test.describe("Kvittering page", () => {
   test.beforeEach(async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
+    await mockSkjemaMetadata(page, "test-skjema-id", {
+      representasjonstype: Representasjonstype.DEG_SELV,
+      juridiskEnhetOrgnr: "123456789",
+      arbeidsgiverNavn: "Test Bedrift AS",
+      skjemadel: Skjemadel.ARBEIDSTAKERS_DEL,
+      metadatatype: "DegSelvMetadata",
+    });
     // Set representation type in sessionStorage before navigation
     await page.addInitScript((repType) => {
       sessionStorage.setItem(

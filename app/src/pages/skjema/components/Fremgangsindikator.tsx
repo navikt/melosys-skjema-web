@@ -1,17 +1,9 @@
 import { FormProgress } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-export type StegKey =
-  | "arbeidsgiverens-virksomhet-i-norge"
-  | "utenlandsoppdraget"
-  | "arbeidssted-i-utlandet"
-  | "arbeidstakerens-lonn"
-  | "tilleggsopplysninger"
-  | "vedlegg"
-  | "oppsummering"
-  | "arbeidssituasjon"
-  | "skatteforhold-og-inntekt"
-  | "familiemedlemmer";
+import type { StegKey } from "~/constants/stegKeys.ts";
+
+export type { StegKey } from "~/constants/stegKeys.ts";
 
 export interface StegRekkefolgeItem {
   key: StegKey;

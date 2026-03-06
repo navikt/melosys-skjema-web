@@ -71,9 +71,7 @@ export class SkatteforholdOgInntektStegPage {
   }
 
   async goto() {
-    await this.page.goto(
-      `/skjema/arbeidstaker/${this.skjema.id}/skatteforhold-og-inntekt`,
-    );
+    await this.page.goto(`/skjema/${this.skjema.id}/skatteforhold-og-inntekt`);
   }
 
   async assertIsVisible() {
@@ -86,7 +84,7 @@ export class SkatteforholdOgInntektStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/arbeidstaker/${this.skjema.id}/skatteforhold-og-inntekt`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/skatteforhold-og-inntekt`,
     );
     await this.lagreOgFortsettButton.click();
     return await requestPromise;
@@ -102,7 +100,7 @@ export class SkatteforholdOgInntektStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/familiemedlemmer`,
+      `/skjema/${this.skjema.id}/familiemedlemmer`,
     );
   }
 }

@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { StegKey } from "~/constants/stegKeys.ts";
 import {
   Fremgangsindikator,
   StegRekkefolgeItem,
@@ -11,7 +12,7 @@ import {
 import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
 
 interface StegConfig {
-  stepKey: string;
+  stepKey: StegKey;
   stegRekkefolge: StegRekkefolgeItem[];
 }
 
@@ -68,7 +69,7 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
 }
 
 export function getStepNumber(
-  key: string,
+  key: StegKey,
   stegRekkefolge: StegRekkefolgeItem[],
 ): number {
   const index = stegRekkefolge.findIndex((step) => step.key === key);
@@ -76,7 +77,7 @@ export function getStepNumber(
 }
 
 export function getPreviousStep(
-  key: string,
+  key: StegKey,
   stegRekkefolge: StegRekkefolgeItem[],
 ): StegRekkefolgeItem | undefined {
   const currentIndex = stegRekkefolge.findIndex((step) => step.key === key);
@@ -84,7 +85,7 @@ export function getPreviousStep(
 }
 
 export function getNextStep(
-  key: string,
+  key: StegKey,
   stegRekkefolge: StegRekkefolgeItem[],
 ): StegRekkefolgeItem | undefined {
   const currentIndex = stegRekkefolge.findIndex((step) => step.key === key);
@@ -94,7 +95,7 @@ export function getNextStep(
 }
 
 function getRelativeRoute(
-  key: string,
+  key: StegKey,
   direction: "prev" | "next",
   stegRekkefolge: StegRekkefolgeItem[],
 ): string | undefined {

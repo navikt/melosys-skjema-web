@@ -3,6 +3,9 @@ export const en = {
     felles: {
       laster: "Loading...",
       feil: "An error occurred",
+      feilVedLastingAvSkjema: "Error loading form",
+      fantIkkeSkjema: "Form not found",
+      stegIkkeTilgjengelig: "This step is not available for this form part",
       brukerinfoMangler: "User information missing",
       kunneIkkeOppretteSkjema: "Could not create form. Please try again.",
       manglerOrganisasjonsnummer: "Organization number missing",
@@ -313,6 +316,11 @@ export const en = {
         "You must answer whether the employer is a staffing or temporary work agency",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
         "You must answer whether the employer maintains normal operations in Norway",
+    },
+    utsendingsperiodeOgLandSteg: {
+      tittel: "Posting period and country",
+      duMaVelgeHvilketLandDuSkalUtforeArbeid:
+        "You must select which country you will perform work in",
     },
     utenlandsoppdragetSteg: {
       tittel: "The Foreign Assignment",

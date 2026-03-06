@@ -22,7 +22,7 @@ export class VedleggStegPage {
   }
 
   async goto() {
-    await this.page.goto(`/skjema/arbeidstaker/${this.skjema.id}/vedlegg`);
+    await this.page.goto(`/skjema/${this.skjema.id}/vedlegg`);
   }
 
   async assertIsVisible() {
@@ -34,8 +34,6 @@ export class VedleggStegPage {
   }
 
   async assertNavigatedToNextStep() {
-    await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${this.skjema.id}/oppsummering`,
-    );
+    await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/oppsummering`);
   }
 }

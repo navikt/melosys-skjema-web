@@ -21,9 +21,9 @@ export class ArbeidstakerSkjemaVeiledningPage {
     await this.startSoknadButton.click();
   }
 
-  async assertNavigatedToUtenlandsoppdraget(skjemaId: string) {
+  async assertNavigatedToUtsendingsperiodeOgLand(skjemaId: string) {
     await expect(this.page).toHaveURL(
-      `/skjema/arbeidstaker/${skjemaId}/utenlandsoppdraget`,
+      `/skjema/${skjemaId}/utsendingsperiode-og-land`,
     );
   }
 }
