@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
@@ -30,8 +31,6 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtenlandsoppdraget } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
-
-export const stepKey = "utenlandsoppdraget";
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
@@ -131,7 +130,7 @@ function UtenlandsoppdragetStegContent({
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(StegKey.UTENLANDSOPPDRAGET, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -153,7 +152,7 @@ function UtenlandsoppdragetStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.UTENLANDSOPPDRAGET,
             stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={

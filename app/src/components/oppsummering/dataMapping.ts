@@ -1,3 +1,4 @@
+import { StegKey } from "~/constants/stegKeys.ts";
 import {
   isArbeidsgiverOgArbeidstakersDel,
   isArbeidsgiversDel,
@@ -73,7 +74,7 @@ function mapArbeidstakerSeksjoner(
   return [
     {
       seksjonNavn: "utenlandsoppdragetArbeidstaker",
-      stegKey: "utsendingsperiode-og-land",
+      stegKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
       data: dto.utsendingsperiodeOgLand
         ? {
             // Definisjon bruker "utsendelsesLand" (med s), mens DTO bruker "utsendelseLand"
@@ -84,7 +85,7 @@ function mapArbeidstakerSeksjoner(
     },
     {
       seksjonNavn: "arbeidssituasjon",
-      stegKey: "arbeidssituasjon",
+      stegKey: StegKey.ARBEIDSSITUASJON,
       data: dto.arbeidssituasjon
         ? {
             ...(dto.arbeidssituasjon as unknown as Record<string, unknown>),
@@ -98,17 +99,17 @@ function mapArbeidstakerSeksjoner(
     },
     {
       seksjonNavn: "skatteforholdOgInntekt",
-      stegKey: "skatteforhold-og-inntekt",
+      stegKey: StegKey.SKATTEFORHOLD_OG_INNTEKT,
       data: dto.skatteforholdOgInntekt as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "familiemedlemmer",
-      stegKey: "familiemedlemmer",
+      stegKey: StegKey.FAMILIEMEDLEMMER,
       data: dto.familiemedlemmer as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "tilleggsopplysningerArbeidstaker",
-      stegKey: "tilleggsopplysninger",
+      stegKey: StegKey.TILLEGGSOPPLYSNINGER,
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
   ];
@@ -120,50 +121,50 @@ function mapArbeidsgiverSeksjoner(
   return [
     {
       seksjonNavn: "arbeidsgiverensVirksomhetINorge",
-      stegKey: "arbeidsgiverens-virksomhet-i-norge",
+      stegKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
       data: dto.arbeidsgiverensVirksomhetINorge as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "utenlandsoppdragetArbeidsgiver",
-      stegKey: "utenlandsoppdraget",
+      stegKey: StegKey.UTENLANDSOPPDRAGET,
       data: dto.utenlandsoppdraget as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedIUtlandet",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet as Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedPaLand",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: flattenPaLand(dto.arbeidsstedIUtlandet?.paLand),
     },
     {
       seksjonNavn: "arbeidsstedOffshore",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.offshore as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidsstedPaSkip",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.paSkip as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidsstedOmBordPaFly",
-      stegKey: "arbeidssted-i-utlandet",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.omBordPaFly as
         | Record<string, unknown>
         | undefined,
     },
     {
       seksjonNavn: "arbeidstakerensLonn",
-      stegKey: "arbeidstakerens-lonn",
+      stegKey: StegKey.ARBEIDSTAKERENS_LONN,
       data: dto.arbeidstakerensLonn
         ? {
             ...(dto.arbeidstakerensLonn as unknown as Record<string, unknown>),
@@ -176,7 +177,7 @@ function mapArbeidsgiverSeksjoner(
     },
     {
       seksjonNavn: "tilleggsopplysningerArbeidsgiver",
-      stegKey: "tilleggsopplysninger",
+      stegKey: StegKey.TILLEGGSOPPLYSNINGER,
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
   ];

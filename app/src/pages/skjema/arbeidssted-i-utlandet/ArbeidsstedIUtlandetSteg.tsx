@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
@@ -34,8 +35,6 @@ import { OffshoreForm } from "./OffshoreForm.tsx";
 import { OmBordPaFlyForm } from "./OmBordPaFlyForm.tsx";
 import { PaLandForm } from "./PaLandForm.tsx";
 import { PaSkipForm } from "./PaSkipForm.tsx";
-
-export const stepKey = "arbeidssted-i-utlandet";
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
@@ -77,7 +76,10 @@ function ArbeidsstedIUtlandetStegContent({
     },
     onSuccess: () => {
       invalidateArbeidsgiverSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(
+        StegKey.ARBEIDSSTED_I_UTLANDET,
+        stegRekkefolge,
+      );
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -99,7 +101,7 @@ function ArbeidsstedIUtlandetStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.ARBEIDSSTED_I_UTLANDET,
             stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={

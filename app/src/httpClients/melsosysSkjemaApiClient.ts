@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
+import { StegKey } from "~/constants/stegKeys.ts";
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidssituasjonDto,
@@ -44,7 +45,7 @@ type StegData =
 
 async function postStegData(
   skjemaId: string,
-  stegNavn: string,
+  stegNavn: StegKey,
   data: StegData,
 ): Promise<void> {
   const response = await fetch(
@@ -115,49 +116,53 @@ export async function postArbeidssituasjon(
   skjemaId: string,
   request: ArbeidssituasjonDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "arbeidssituasjon", request);
+  return postStegData(skjemaId, StegKey.ARBEIDSSITUASJON, request);
 }
 
 export async function postSkatteforholdOgInntekt(
   skjemaId: string,
   request: SkatteforholdOgInntektDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "skatteforhold-og-inntekt", request);
+  return postStegData(skjemaId, StegKey.SKATTEFORHOLD_OG_INNTEKT, request);
 }
 
 export async function postArbeidsgiverensVirksomhetINorge(
   skjemaId: string,
   request: ArbeidsgiverensVirksomhetINorgeDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "arbeidsgiverens-virksomhet-i-norge", request);
+  return postStegData(
+    skjemaId,
+    StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
+    request,
+  );
 }
 
 export async function postUtenlandsoppdraget(
   skjemaId: string,
   request: UtenlandsoppdragetDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "utenlandsoppdraget", request);
+  return postStegData(skjemaId, StegKey.UTENLANDSOPPDRAGET, request);
 }
 
 export async function postArbeidsstedIUtlandet(
   skjemaId: string,
   request: ArbeidsstedIUtlandetDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "arbeidssted-i-utlandet", request);
+  return postStegData(skjemaId, StegKey.ARBEIDSSTED_I_UTLANDET, request);
 }
 
 export async function postArbeidstakerensLonn(
   skjemaId: string,
   request: ArbeidstakerensLonnDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "arbeidstakerens-lonn", request);
+  return postStegData(skjemaId, StegKey.ARBEIDSTAKERENS_LONN, request);
 }
 
 export async function postTilleggsopplysninger(
   skjemaId: string,
   request: TilleggsopplysningerDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "tilleggsopplysninger", request);
+  return postStegData(skjemaId, StegKey.TILLEGGSOPPLYSNINGER, request);
 }
 
 export async function sendInnSkjema(
@@ -209,14 +214,14 @@ export async function postUtsendingsperiodeOgLand(
   skjemaId: string,
   request: UtsendingsperiodeOgLandDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "utsendingsperiode-og-land", request);
+  return postStegData(skjemaId, StegKey.UTSENDINGSPERIODE_OG_LAND, request);
 }
 
 export async function postFamiliemedlemmer(
   skjemaId: string,
   request: FamiliemedlemmerDto,
 ): Promise<void> {
-  return postStegData(skjemaId, "familiemedlemmer", request);
+  return postStegData(skjemaId, StegKey.FAMILIEMEDLEMMER, request);
 }
 
 export const getOrganisasjonMedJuridiskEnhetQuery = (orgnummer: string) =>

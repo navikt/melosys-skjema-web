@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
   getSkjemaQuery,
@@ -28,8 +29,6 @@ import {
   type TilleggsopplysningerFormData,
   tilleggsopplysningerSchema,
 } from "./tilleggsopplysningerStegSchema.ts";
-
-export const stepKey = "tilleggsopplysninger";
 
 export function TilleggsopplysningerSteg({ id }: { id: string }) {
   return (
@@ -93,7 +92,10 @@ function TilleggsopplysningerStegContent({
       );
     },
     onSuccess: () => {
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(
+        StegKey.TILLEGGSOPPLYSNINGER,
+        stegRekkefolge,
+      );
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -115,7 +117,7 @@ function TilleggsopplysningerStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.TILLEGGSOPPLYSNINGER,
             stegRekkefolge,
           }}
           nesteKnapp={

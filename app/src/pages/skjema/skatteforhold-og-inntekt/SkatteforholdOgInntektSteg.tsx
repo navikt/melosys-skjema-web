@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
@@ -30,8 +31,6 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getSkatteforholdOgInntekt } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
-
-export const stepKey = "skatteforhold-og-inntekt";
 
 type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
@@ -99,7 +98,10 @@ function SkatteforholdOgInntektStegContent({
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(
+        StegKey.SKATTEFORHOLD_OG_INNTEKT,
+        stegRekkefolge,
+      );
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -121,7 +123,7 @@ function SkatteforholdOgInntektStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.SKATTEFORHOLD_OG_INNTEKT,
             stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={

@@ -8,8 +8,6 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 
-export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
-
 export function ArbeidsgiverensVirksomhetINorgeSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>

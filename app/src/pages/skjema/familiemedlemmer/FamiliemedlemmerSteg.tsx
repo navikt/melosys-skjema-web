@@ -28,6 +28,7 @@ import { EndreKnapp } from "~/components/EndreKnapp.tsx";
 import { FjernKnapp } from "~/components/FjernKnapp.tsx";
 import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
@@ -54,8 +55,6 @@ import {
   familiemedlemmerSchema,
   familiemedlemSchema,
 } from "./familiemedlemmerStegSchema.ts";
-
-export const stepKey = "familiemedlemmer";
 
 type FamiliemedlemFormData = z.infer<typeof familiemedlemSchema>;
 type FamiliemedlemField = Familiemedlem & { id: string };
@@ -96,7 +95,7 @@ function FamiliemedlemmerStegContent({
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(StegKey.FAMILIEMEDLEMMER, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -118,7 +117,7 @@ function FamiliemedlemmerStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.FAMILIEMEDLEMMER,
             stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={

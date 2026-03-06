@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
@@ -28,8 +29,6 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidstakerensLonn } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
-
-export const stepKey = "arbeidstakerens-lonn";
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
@@ -76,7 +75,10 @@ function ArbeidstakerensLonnStegContent({
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(
+        StegKey.ARBEIDSTAKERENS_LONN,
+        stegRekkefolge,
+      );
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -121,7 +123,7 @@ function ArbeidstakerensLonnStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.ARBEIDSTAKERENS_LONN,
             stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={

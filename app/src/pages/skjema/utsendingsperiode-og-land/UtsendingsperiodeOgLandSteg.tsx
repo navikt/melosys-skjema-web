@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
@@ -25,8 +26,6 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtsendingsperiodeOgLand } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { utsendingsperiodeOgLandSchema } from "./utsendingsperiodeOgLandStegSchema.ts";
-
-export const stepKey = "utsendingsperiode-og-land";
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
@@ -77,7 +76,10 @@ function UtsendingsperiodeOgLandStegContent({
     },
     onSuccess: async () => {
       await invalidateSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(
+        StegKey.UTSENDINGSPERIODE_OG_LAND,
+        stegRekkefolge,
+      );
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -99,7 +101,7 @@ function UtsendingsperiodeOgLandStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
             stegRekkefolge,
           }}
           nesteKnapp={

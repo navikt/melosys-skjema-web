@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { StegKey } from "~/constants/stegKeys.ts";
 import {
   getSkjemaQuery,
   hentVedlegg,
@@ -22,8 +23,6 @@ import {
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-
-export const stepKey = "vedlegg";
 
 export function VedleggSteg({ id }: { id: string }) {
   return (
@@ -67,7 +66,7 @@ function VedleggStegContent({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const nextStep = getNextStep(stepKey, stegRekkefolge);
+    const nextStep = getNextStep(StegKey.VEDLEGG, stegRekkefolge);
     if (nextStep) {
       navigate({
         to: nextStep.route,
@@ -162,7 +161,7 @@ function VedleggStegContent({
     <form onSubmit={handleSubmit}>
       <SkjemaSteg
         config={{
-          stepKey,
+          stepKey: StegKey.VEDLEGG,
           stegRekkefolge,
         }}
         nesteKnapp={<NesteStegKnapp />}

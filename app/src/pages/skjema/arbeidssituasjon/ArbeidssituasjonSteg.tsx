@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
@@ -29,8 +30,6 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidssituasjon } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
-
-export const stepKey = "arbeidssituasjon";
 
 type ArbeidssituasjonFormData = z.infer<typeof arbeidssituasjonSchema>;
 
@@ -93,7 +92,7 @@ function ArbeidssituasjonStegContent({
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(StegKey.ARBEIDSSITUASJON, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -115,7 +114,7 @@ function ArbeidssituasjonStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.ARBEIDSSITUASJON,
             stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={

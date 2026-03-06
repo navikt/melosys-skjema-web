@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { postArbeidsgiverensVirksomhetINorge } from "~/httpClients/melsosysSkjemaApiClient.ts";
@@ -19,8 +20,6 @@ import {
 import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
-
-export const stepKey = "arbeidsgiverens-virksomhet-i-norge";
 
 type ArbeidsgiverensVirksomhetFormData = z.infer<
   typeof arbeidsgiverensVirksomhetSchema
@@ -74,7 +73,10 @@ export function VirksomhetINorgeStegContent({
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjemaId);
-      const nextStep = getNextStep(stepKey, stegRekkefolge);
+      const nextStep = getNextStep(
+        StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
+        stegRekkefolge,
+      );
       if (nextStep) {
         navigate({
           to: nextStep.route,
@@ -96,7 +98,7 @@ export function VirksomhetINorgeStegContent({
       <form onSubmit={handleSubmit(onSubmit)}>
         <SkjemaSteg
           config={{
-            stepKey,
+            stepKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
             stegRekkefolge: stegRekkefolge,
           }}
           nesteKnapp={

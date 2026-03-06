@@ -1,6 +1,7 @@
 import { resolveSeksjoner } from "~/components/oppsummering/dataMapping.ts";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
+import { StegKey } from "~/constants/stegKeys.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
@@ -11,8 +12,6 @@ import type { SkjemaDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import type { SkjemaData } from "../types.ts";
-
-const oppsummeringStepKey = "oppsummering";
 
 export function OppsummeringSteg({ id }: { id: string }) {
   return (
@@ -44,7 +43,7 @@ function OppsummeringStegContent({
   return (
     <SkjemaSteg
       config={{
-        stepKey: oppsummeringStepKey,
+        stepKey: StegKey.OPPSUMMERING,
         stegRekkefolge: stegRekkefolge,
       }}
       nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjemaId} />}
@@ -64,7 +63,7 @@ function OppsummeringStegContent({
       <VedleggOppsummering
         editHref={
           stegRekkefolge
-            .find((s) => s.key === "vedlegg")
+            .find((s) => s.key === StegKey.VEDLEGG)
             ?.route.replace("$id", skjemaId) ?? ""
         }
         skjemaId={skjemaId}
