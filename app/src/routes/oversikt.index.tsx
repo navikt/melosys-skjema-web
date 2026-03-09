@@ -12,13 +12,13 @@ const VALID_KONTEKST_TYPES = [
 ] as const;
 
 const oversiktSearchSchema = z.object({
-  kontekst: z.enum(VALID_KONTEKST_TYPES).optional().catch(undefined),
-  radgiverOrgnr: z.string().optional().catch(undefined),
+  kontekst: z.enum(VALID_KONTEKST_TYPES).optional(),
+  radgiverOrgnr: z.string().optional(),
 });
 
 export const Route = createFileRoute("/oversikt/")({
   component: OversiktRoute,
-  validateSearch: oversiktSearchSchema,
+  validateSearch: (search) => oversiktSearchSchema.parse(search),
   beforeLoad: ({ search }) => {
     // Redirect til landingsside hvis kontekst mangler eller er ugyldig
     if (!search.kontekst) {

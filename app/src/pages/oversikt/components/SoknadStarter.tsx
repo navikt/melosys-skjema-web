@@ -71,13 +71,14 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
   });
 
   // Slå opp rådgiverfirma-navn for RADGIVER-kontekst
-  const { data: radgiverOrganisasjon, isLoading: isLoadingRadgiver } =
-    useQuery({
+  const { data: radgiverOrganisasjon, isLoading: isLoadingRadgiver } = useQuery(
+    {
       ...getOrganisasjonMedJuridiskEnhetQuery(kontekst.radgiverOrgnr ?? ""),
       enabled:
         kontekst.representasjonstype === Representasjonstype.RADGIVER &&
         !!kontekst.radgiverOrgnr,
-    });
+    },
+  );
 
   // Vent på nødvendig data før vi rendrer skjemaet
   if (
@@ -117,9 +118,9 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   return (
     <SoknadStarterContent
-      key={`${kontekst.representasjonstype}-${kontekst.radgiverOrgnr ?? ""}`}
       altinnArbeidsgivere={arbeidsgivere ?? []}
       defaultData={defaultData}
+      key={`${kontekst.representasjonstype}-${kontekst.radgiverOrgnr ?? ""}`}
     />
   );
 }

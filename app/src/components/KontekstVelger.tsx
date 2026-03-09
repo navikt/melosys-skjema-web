@@ -8,6 +8,7 @@ import {
 } from "@navikt/aksel-icons";
 import { Button, HStack, Label, Popover } from "@navikt/ds-react";
 import { setParams } from "@navikt/nav-dekoratoren-moduler";
+import { useQuery } from "@tanstack/react-query";
 import type { ComponentType } from "react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,7 +19,6 @@ import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkje
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
 import { truncateText } from "~/utils/truncateText.ts";
-import { useQuery } from "@tanstack/react-query";
 
 interface KontekstConfig {
   icon: ComponentType<{ "aria-hidden"?: boolean; fontSize?: string }>;

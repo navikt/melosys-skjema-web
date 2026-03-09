@@ -5,12 +5,12 @@ import { VelgRadgiverfirmaPage } from "~/pages/representasjon/velg-radgiverfirma
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 
 const velgRadgiverfirmaSearchSchema = z.object({
-  kontekst: z.literal(Representasjonstype.RADGIVER).optional().catch(undefined),
+  kontekst: z.literal(Representasjonstype.RADGIVER).optional(),
 });
 
 export const Route = createFileRoute("/representasjon/velg-radgiverfirma")({
   component: VelgRadgiverfirmaPage,
-  validateSearch: velgRadgiverfirmaSearchSchema,
+  validateSearch: (search) => velgRadgiverfirmaSearchSchema.parse(search),
   beforeLoad: ({ search }) => {
     if (search.kontekst !== Representasjonstype.RADGIVER) {
       throw redirect({ to: "/" });

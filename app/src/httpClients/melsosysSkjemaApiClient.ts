@@ -360,11 +360,7 @@ export async function opprettSoknadMedKontekst(
  */
 export const getUtkastQuery = (kontekst: RepresentasjonsKontekst) =>
   queryOptions<UtkastListeResponse>({
-    queryKey: [
-      "utkast",
-      kontekst.representasjonstype,
-      kontekst.radgiverOrgnr,
-    ],
+    queryKey: ["utkast", kontekst.representasjonstype, kontekst.radgiverOrgnr],
     queryFn: () => fetchUtkast(kontekst),
     staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
     gcTime: 5 * 60 * 1000, // 5 minutter
