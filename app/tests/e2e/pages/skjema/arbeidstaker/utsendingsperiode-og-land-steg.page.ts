@@ -10,7 +10,7 @@ import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
 
 // Hent felter fra statiske definisjoner
 const utsendingsperiodeOgLand =
-  SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidstaker;
+  SKJEMA_DEFINISJON_A1.seksjoner.utsendingsperiodeOgLand;
 const felter = utsendingsperiodeOgLand.felter;
 
 // Tittel hentes fra i18n, ikke fra skjemadefinisjonen
@@ -32,7 +32,7 @@ export class UtsendingsperiodeOgLandStegPage {
       name: stegTittel,
     });
     this.utsendelseLandCombobox = page.getByRole("combobox", {
-      name: felter.utsendelsesLand.label,
+      name: felter.utsendelsePeriode.label,
     });
     this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
     this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);
