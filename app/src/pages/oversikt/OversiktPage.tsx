@@ -7,7 +7,7 @@ import {
   UtkastListe,
 } from "~/pages/oversikt/components";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
 
 interface OversiktPageProps {
   kontekst: RepresentasjonsKontekst;

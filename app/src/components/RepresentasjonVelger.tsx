@@ -11,14 +11,10 @@ import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import {
-  clearRepresentasjonKontekst,
-  RepresentasjonsKontekst,
-  setRepresentasjonKontekst,
-} from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
 
 interface RepresentationOption {
-  type: Representasjonstype;
+  type: RepresentasjonsKontekst["representasjonstype"];
   icon: ComponentType<{
     "aria-hidden"?: boolean;
     fontSize?: string;
@@ -30,7 +26,7 @@ interface RepresentationOption {
 
 interface RepresentationCardProps {
   option: RepresentationOption;
-  onSelect: (type: Representasjonstype) => void;
+  onSelect: (type: RepresentasjonsKontekst["representasjonstype"]) => void;
 }
 
 function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
@@ -102,20 +98,20 @@ export function RepresentasjonVelger({
   const navigate = useNavigate();
 
   const handleVelgRepresentasjon = (
-    representasjonstype: Representasjonstype,
+    representasjonstype: RepresentasjonsKontekst["representasjonstype"],
   ) => {
-    clearRepresentasjonKontekst();
-    setRepresentasjonKontekst({
-      representasjonstype:
-        representasjonstype as RepresentasjonsKontekst["representasjonstype"],
-    });
-
     onVelg?.();
 
     if (representasjonstype === Representasjonstype.RADGIVER) {
-      void navigate({ to: "/representasjon/velg-radgiverfirma" });
+      void navigate({
+        to: "/representasjon/velg-radgiverfirma",
+        search: { kontekst: Representasjonstype.RADGIVER },
+      });
     } else {
-      void navigate({ to: "/oversikt" });
+      void navigate({
+        to: "/oversikt",
+        search: { kontekst: representasjonstype },
+      });
     }
   };
 

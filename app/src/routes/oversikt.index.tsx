@@ -1,35 +1,50 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { OversiktPage } from "~/pages/oversikt/OversiktPage.tsx";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
+
+const VALID_KONTEKST_TYPES = [
+  Representasjonstype.DEG_SELV,
+  Representasjonstype.ARBEIDSGIVER,
+  Representasjonstype.RADGIVER,
+  Representasjonstype.ANNEN_PERSON,
+] as const;
+
+const oversiktSearchSchema = z.object({
+  kontekst: z.enum(VALID_KONTEKST_TYPES).optional().catch(undefined),
+  radgiverOrgnr: z.string().optional().catch(undefined),
+});
 
 export const Route = createFileRoute("/oversikt/")({
   component: OversiktRoute,
-  beforeLoad: () => {
-    const kontekst = getRepresentasjonKontekst();
-
-    // Redirect til landingsside hvis ingen kontekst er valgt
-    if (!kontekst) {
+  validateSearch: oversiktSearchSchema,
+  beforeLoad: ({ search }) => {
+    // Redirect til landingsside hvis kontekst mangler eller er ugyldig
+    if (!search.kontekst) {
       throw redirect({ to: "/" });
     }
 
     // Redirect til velg rådgiverfirma hvis RADGIVER men ingen firma valgt
     if (
-      kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-      !kontekst.radgiverfirma
+      search.kontekst === Representasjonstype.RADGIVER &&
+      !search.radgiverOrgnr
     ) {
-      throw redirect({ to: "/representasjon/velg-radgiverfirma" });
+      throw redirect({
+        to: "/representasjon/velg-radgiverfirma",
+        search: { kontekst: Representasjonstype.RADGIVER },
+      });
     }
-
-    return {
-      kontekst,
-    };
   },
 });
 
 function OversiktRoute() {
-  const { kontekst } = Route.useRouteContext();
+  const { kontekst, radgiverOrgnr } = Route.useSearch();
 
-  return <OversiktPage kontekst={kontekst} />;
+  // beforeLoad garanterer at kontekst finnes her
+  return (
+    <OversiktPage
+      kontekst={{ representasjonstype: kontekst!, radgiverOrgnr }}
+    />
+  );
 }

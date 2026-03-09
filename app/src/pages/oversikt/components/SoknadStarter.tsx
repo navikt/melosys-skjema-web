@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import {
+  getOrganisasjonMedJuridiskEnhetQuery,
   listAltinnTilganger,
   opprettSoknadMedKontekst,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
@@ -24,7 +25,7 @@ import {
   OrganisasjonDto,
   Representasjonstype,
 } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
@@ -69,19 +70,41 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     retry: false,
   });
 
+  // Slå opp rådgiverfirma-navn for RADGIVER-kontekst
+  const { data: radgiverOrganisasjon, isLoading: isLoadingRadgiver } =
+    useQuery({
+      ...getOrganisasjonMedJuridiskEnhetQuery(kontekst.radgiverOrgnr ?? ""),
+      enabled:
+        kontekst.representasjonstype === Representasjonstype.RADGIVER &&
+        !!kontekst.radgiverOrgnr,
+    });
+
   // Vent på nødvendig data før vi rendrer skjemaet
   if (
     (kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
       isLoadingUserInfo) ||
-    (skalHenteArbeidsgivere && isLoadingArbeidsgivere)
+    (skalHenteArbeidsgivere && isLoadingArbeidsgivere) ||
+    (kontekst.representasjonstype === Representasjonstype.RADGIVER &&
+      isLoadingRadgiver)
   ) {
     return <Loader size="medium" title={t("felles.laster")} />;
   }
 
+  // Bygg radgiverfirma-objekt fra API-oppslag
+  const radgiverfirma =
+    kontekst.representasjonstype === Representasjonstype.RADGIVER &&
+    kontekst.radgiverOrgnr &&
+    radgiverOrganisasjon
+      ? {
+          orgnr: radgiverOrganisasjon.juridiskEnhet.orgnr,
+          navn: radgiverOrganisasjon.juridiskEnhet.navn ?? "",
+        }
+      : undefined;
+
   // Bygg defaultData med representasjonstype og radgiverfirma
   const defaultData: SoknadStarterFormData = {
     representasjonstype: kontekst.representasjonstype,
-    radgiverfirma: kontekst.radgiverfirma,
+    radgiverfirma,
     // Setter default skalFylleUtForArbeidstaker:true for rådgiver, siden det er mest vanlig at de fyller ut på vegne av arbeidstaker.
     ...(kontekst.representasjonstype === Representasjonstype.RADGIVER && {
       skalFylleUtForArbeidstaker: true,
@@ -94,6 +117,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   return (
     <SoknadStarterContent
+      key={`${kontekst.representasjonstype}-${kontekst.radgiverOrgnr ?? ""}`}
       altinnArbeidsgivere={arbeidsgivere ?? []}
       defaultData={defaultData}
     />

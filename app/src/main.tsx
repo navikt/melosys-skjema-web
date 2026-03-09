@@ -8,7 +8,6 @@ import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
 import { initReactI18next } from "react-i18next";
 
-import { OpprettSoknadMedKontekstRequest } from "~/types/melosysSkjemaTypes.ts";
 import { logSkjemaDefinisjonValidation } from "~/utils/validateSkjemaDefinisjon";
 
 import { resources } from "./i18n/i18n.ts";
@@ -37,7 +36,6 @@ export const queryClient = new QueryClient();
 
 export interface RouterContext {
   queryClient: QueryClient;
-  kontekst?: OpprettSoknadMedKontekstRequest;
 }
 
 const router = createRouter({

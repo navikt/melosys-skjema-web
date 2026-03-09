@@ -167,7 +167,7 @@ function InnsendtSkjemaPageContent({
       <Button
         as={Link}
         style={{ width: "fit-content" }}
-        to="/oversikt"
+        to="/"
         variant="secondary"
       >
         {t("innsendtSkjema.tilbakeTilOversikt")}

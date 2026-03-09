@@ -28,7 +28,7 @@ import {
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
 
 const API_PROXY_URL = "/api";
 
@@ -363,7 +363,7 @@ export const getUtkastQuery = (kontekst: RepresentasjonsKontekst) =>
     queryKey: [
       "utkast",
       kontekst.representasjonstype,
-      kontekst.radgiverfirma?.orgnr,
+      kontekst.radgiverOrgnr,
     ],
     queryFn: () => fetchUtkast(kontekst),
     staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
@@ -380,9 +380,9 @@ async function fetchUtkast(
   // For RADGIVER må vi sende med rådgiverfirmaets orgnr
   if (
     kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-    kontekst.radgiverfirma?.orgnr
+    kontekst.radgiverOrgnr
   ) {
-    params.append("radgiverfirmaOrgnr", kontekst.radgiverfirma.orgnr);
+    params.append("radgiverfirmaOrgnr", kontekst.radgiverOrgnr);
   }
 
   const response = await fetch(

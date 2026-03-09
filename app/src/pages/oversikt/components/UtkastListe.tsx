@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
 
 interface UtkastListeProps {
   kontekst: RepresentasjonsKontekst;

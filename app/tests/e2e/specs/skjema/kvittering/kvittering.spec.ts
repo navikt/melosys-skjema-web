@@ -20,15 +20,6 @@ test.describe("Kvittering page", () => {
       skjemadel: Skjemadel.ARBEIDSTAKERS_DEL,
       metadatatype: "DegSelvMetadata",
     });
-    // Set representation type in sessionStorage before navigation
-    await page.addInitScript((repType) => {
-      sessionStorage.setItem(
-        "representasjonKontekst",
-        JSON.stringify({
-          representasjonstype: repType,
-        }),
-      );
-    }, Representasjonstype.DEG_SELV);
   });
 
   test("should display receipt after successful submission", async ({
@@ -52,6 +43,6 @@ test.describe("Kvittering page", () => {
     await kvitteringPage.assertTilOversiktLinkIsVisible();
 
     await kvitteringPage.clickTilOversiktLink();
-    await kvitteringPage.assertNavigatedToOversikt();
+    await kvitteringPage.assertNavigatedToLandingsside();
   });
 });

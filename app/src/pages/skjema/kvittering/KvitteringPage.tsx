@@ -67,7 +67,7 @@ function KvitteringPageContent({ response }: KvitteringPageContentProps) {
       <Button
         as={Link}
         style={{ width: "fit-content" }}
-        to="/oversikt"
+        to="/"
         variant="primary"
       >
         {t("kvittering.tilOversikt")}
