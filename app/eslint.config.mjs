@@ -1,6 +1,6 @@
 import eslint from "@eslint/js";
+import eslintReact from "@eslint-react/eslint-plugin";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import reactLint from "eslint-plugin-react";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import tseslint from "typescript-eslint";
@@ -25,14 +25,7 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  {
-    ...reactLint.configs.flat.recommended,
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
-  },
+  eslintReact.configs.recommended,
   {
     plugins: {
       "simple-import-sort": simpleImportSort,
@@ -46,9 +39,7 @@ export default tseslint.config(
   {
     rules: {
       eqeqeq: ["error", "always"],
-      "react/jsx-key": "error",
-      "react/jsx-sort-props": "error",
-      "react/react-in-jsx-scope": "off",
+      "@eslint-react/no-missing-key": "error",
       "no-console": "error",
       ...IGNORED_UNICORN_RULES,
     },
