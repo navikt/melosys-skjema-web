@@ -32,7 +32,7 @@ export class UtsendingsperiodeOgLandStegPage {
       name: stegTittel,
     });
     this.utsendelseLandCombobox = page.getByRole("combobox", {
-      name: felter.utsendelsePeriode.label,
+      name: felter.utsendelseLand.label,
     });
     this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
     this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);
