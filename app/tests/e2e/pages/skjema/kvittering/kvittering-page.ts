@@ -49,9 +49,9 @@ export class KvitteringPage {
   }
 
   async assertNavigatedToLandingsside() {
-    // Etter at vi fjernet sessionStorage-kontekst, navigerer "Til oversikt"-lenken
-    // til landingssiden (/) der brukeren velger representasjonskontekst på nytt
-    await expect(this.page).toHaveURL(/\/$/);
+    // "Til oversikt"-lenken navigerer til / som redirecter til /representasjon
+    // der brukeren velger representasjonskontekst på nytt
+    await expect(this.page).toHaveURL(/\/representasjon$/);
   }
 
   async mockKvittering(kvittering: SkjemaInnsendtKvittering) {

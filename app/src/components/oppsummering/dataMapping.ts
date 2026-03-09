@@ -73,12 +73,11 @@ function mapArbeidstakerSeksjoner(
 ): SeksjonMappingEntry[] {
   return [
     {
-      seksjonNavn: "utenlandsoppdragetArbeidstaker",
+      seksjonNavn: "utsendingsperiodeOgLand",
       stegKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
       data: dto.utsendingsperiodeOgLand
         ? {
-            // Definisjon bruker "utsendelsesLand" (med s), mens DTO bruker "utsendelseLand"
-            utsendelsesLand: dto.utsendingsperiodeOgLand.utsendelseLand,
+            utsendelseLand: dto.utsendingsperiodeOgLand.utsendelseLand,
             utsendelsePeriode: dto.utsendingsperiodeOgLand.utsendelsePeriode,
           }
         : undefined,
