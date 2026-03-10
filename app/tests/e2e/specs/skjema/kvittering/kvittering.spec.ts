@@ -1,31 +1,50 @@
 import { test } from "@playwright/test";
 
 import {
+  type DegSelvMetadata,
   Representasjonstype,
   Skjemadel,
   SkjemaInnsendtKvittering,
   SkjemaStatus,
+  SkjemaType,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "../../../../../src/types/melosysSkjemaTypes";
-import { mockSkjemaMetadata, mockUserInfo } from "../../../fixtures/api-mocks";
+import {
+  mockFetchSkjema,
+  mockSkjemaMetadata,
+  mockUserInfo,
+} from "../../../fixtures/api-mocks";
 import { testUserInfo } from "../../../fixtures/test-data";
 import { KvitteringPage } from "../../../pages/skjema/kvittering/kvittering-page";
 
 test.describe("Kvittering page", () => {
+  const skjemaId = "test-skjema-id";
+  const metadata: DegSelvMetadata = {
+    representasjonstype: Representasjonstype.DEG_SELV,
+    juridiskEnhetOrgnr: "123456789",
+    arbeidsgiverNavn: "Test Bedrift AS",
+    skjemadel: Skjemadel.ARBEIDSTAKERS_DEL,
+    metadatatype: "DegSelvMetadata",
+  };
+  const skjema: UtsendtArbeidstakerSkjemaDto = {
+    id: skjemaId,
+    fnr: testUserInfo.userId,
+    orgnr: "",
+    status: SkjemaStatus.UTKAST,
+    type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+    metadata,
+    data: { type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL" },
+  };
+
   test.beforeEach(async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
-    await mockSkjemaMetadata(page, "test-skjema-id", {
-      representasjonstype: Representasjonstype.DEG_SELV,
-      juridiskEnhetOrgnr: "123456789",
-      arbeidsgiverNavn: "Test Bedrift AS",
-      skjemadel: Skjemadel.ARBEIDSTAKERS_DEL,
-      metadatatype: "DegSelvMetadata",
-    });
+    await mockSkjemaMetadata(page, skjemaId, metadata);
+    await mockFetchSkjema(page, skjema);
   });
 
   test("should display receipt after successful submission", async ({
     page,
   }) => {
-    const skjemaId = "test-skjema-id";
     const kvittering: SkjemaInnsendtKvittering = {
       skjemaId: skjemaId,
       status: SkjemaStatus.SENDT,

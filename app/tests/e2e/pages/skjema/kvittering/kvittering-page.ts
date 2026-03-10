@@ -49,9 +49,7 @@ export class KvitteringPage {
   }
 
   async assertNavigatedToLandingsside() {
-    // "Til oversikt"-lenken navigerer til / som redirecter til /representasjon
-    // der brukeren velger representasjonskontekst på nytt
-    await expect(this.page).toHaveURL(/\/representasjon$/);
+    await expect(this.page).toHaveURL(/\/oversikt\?representasjonstype=/);
   }
 
   async mockKvittering(kvittering: SkjemaInnsendtKvittering) {
