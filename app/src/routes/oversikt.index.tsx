@@ -1,44 +1,41 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { z } from "zod";
 
 import { OversiktPage } from "~/pages/oversikt/OversiktPage.tsx";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import { VALID_KONTEKST_TYPES } from "~/types/representasjon.ts";
-
-const oversiktSearchSchema = z.object({
-  kontekst: z.enum(VALID_KONTEKST_TYPES).optional(),
-  radgiverOrgnr: z.coerce.string().optional(),
-});
+import { representasjonsKontekstSchema } from "~/types/representasjon.ts";
 
 export const Route = createFileRoute("/oversikt/")({
   component: OversiktRoute,
-  validateSearch: (search) => oversiktSearchSchema.parse(search),
+  validateSearch: (search) => representasjonsKontekstSchema.parse(search),
   beforeLoad: ({ search }) => {
-    // Redirect til landingsside hvis kontekst mangler eller er ugyldig
-    if (!search.kontekst) {
+    // Redirect til landingsside hvis representasjonstype mangler eller er ugyldig
+    if (!search.representasjonstype) {
       throw redirect({ to: "/" });
     }
 
     // Redirect til velg rådgiverfirma hvis RADGIVER men ingen firma valgt
     if (
-      search.kontekst === Representasjonstype.RADGIVER &&
+      search.representasjonstype === Representasjonstype.RADGIVER &&
       !search.radgiverOrgnr
     ) {
       throw redirect({
         to: "/representasjon/velg-radgiverfirma",
-        search: { kontekst: Representasjonstype.RADGIVER },
+        search: { representasjonstype: Representasjonstype.RADGIVER },
       });
     }
   },
 });
 
 function OversiktRoute() {
-  const { kontekst, radgiverOrgnr } = Route.useSearch();
+  const search = Route.useSearch();
 
-  // beforeLoad garanterer at kontekst finnes her
+  // beforeLoad garanterer at representasjonstype finnes her
   return (
     <OversiktPage
-      kontekst={{ representasjonstype: kontekst!, radgiverOrgnr }}
+      kontekst={{
+        representasjonstype: search.representasjonstype!,
+        radgiverOrgnr: search.radgiverOrgnr,
+      }}
     />
   );
 }

@@ -10,23 +10,28 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
-import { getInnsendtSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  getInnsendtSkjemaQuery,
+  getSkjemaQuery,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import type {
   InnsendtSkjemaResponse,
   UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
+  UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { toRepresentasjonsKontekst } from "~/types/representasjon.ts";
 
 import { resolveSeksjoner } from "../../../components/oppsummering/dataMapping.ts";
 
 interface InnsendtSkjemaPageProps {
-  id: string;
+  skjemaId: string;
 }
 
 const formatDato = (dato: string) => {
@@ -37,14 +42,17 @@ const formatDato = (dato: string) => {
   });
 };
 
-export function InnsendtSkjemaPage({ id }: InnsendtSkjemaPageProps) {
+export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProps) {
   const { i18n, t } = useTranslation();
   const sprak = i18n.language === "en" ? "en" : "nb";
-  const { data, error, isLoading } = useQuery(
-    getInnsendtSkjemaQuery(id, sprak),
-  );
+  const {
+    data: innsendtSkjema,
+    error: innsendtError,
+    isLoading: innsendtLoading,
+  } = useQuery(getInnsendtSkjemaQuery(skjemaId, sprak));
+  const { data: skjema, isLoading: skjemaLoading, error: skjemaError } = useQuery(getSkjemaQuery(skjemaId));
 
-  if (isLoading) {
+  if (innsendtLoading || skjemaLoading) {
     return (
       <HStack style={{ gap: "var(--a-spacing-2)" }}>
         <Loader />
@@ -53,11 +61,11 @@ export function InnsendtSkjemaPage({ id }: InnsendtSkjemaPageProps) {
     );
   }
 
-  if (error || !data) {
+  if (innsendtError || skjemaError || !innsendtSkjema || !skjema) {
     return <Alert variant="error">{t("innsendtSkjema.feilVedLasting")}</Alert>;
   }
 
-  return <InnsendtSkjemaPageContent response={data} />;
+  return <InnsendtSkjemaPageContent response={innsendtSkjema} skjema={skjema} />;
 }
 
 // dto.type verdier
@@ -106,10 +114,22 @@ function getArbeidsgiverData(
 
 function InnsendtSkjemaPageContent({
   response,
+  skjema,
 }: {
   response: InnsendtSkjemaResponse;
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const kontekst = toRepresentasjonsKontekst(skjema.metadata);
+
+  const handleTilOversikt = () => {
+    void navigate({
+      to: "/oversikt",
+      search: kontekst,
+    });
+  };
 
   const arbeidstakerSeksjoner = (() => {
     const data = getArbeidstakerData(response.skjemaData);
@@ -165,9 +185,8 @@ function InnsendtSkjemaPageContent({
       <VedleggOppsummering skjemaId={response.skjemaId} />
 
       <Button
-        as={Link}
+        onClick={handleTilOversikt}
         style={{ width: "fit-content" }}
-        to="/"
         variant="secondary"
       >
         {t("innsendtSkjema.tilbakeTilOversikt")}

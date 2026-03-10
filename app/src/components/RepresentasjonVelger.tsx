@@ -105,12 +105,12 @@ export function RepresentasjonVelger({
     if (representasjonstype === Representasjonstype.RADGIVER) {
       void navigate({
         to: "/representasjon/velg-radgiverfirma",
-        search: { kontekst: Representasjonstype.RADGIVER },
+        search: { representasjonstype: Representasjonstype.RADGIVER },
       });
     } else {
       void navigate({
         to: "/oversikt",
-        search: { kontekst: representasjonstype },
+        search: { representasjonstype },
       });
     }
   };

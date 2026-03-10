@@ -1,9 +1,9 @@
 import { useLocation } from "@tanstack/react-router";
 
-import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
-import { VALID_KONTEKST_TYPES } from "~/types/representasjon.ts";
-
-const validKontekstSet = new Set<string>(VALID_KONTEKST_TYPES);
+import {
+  type RepresentasjonsKontekst,
+  representasjonsKontekstSchema,
+} from "~/types/representasjon.ts";
 
 /**
  * Hook som leser representasjonskontekst fra URL search params.
@@ -13,15 +13,9 @@ const validKontekstSet = new Set<string>(VALID_KONTEKST_TYPES);
 export function useKontekst(): RepresentasjonsKontekst | undefined {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.searchStr);
-  const kontekst = searchParams.get("kontekst");
+  const result = representasjonsKontekstSchema.safeParse(
+    Object.fromEntries(searchParams),
+  );
 
-  if (!kontekst || !validKontekstSet.has(kontekst)) {
-    return undefined;
-  }
-
-  return {
-    representasjonstype:
-      kontekst as RepresentasjonsKontekst["representasjonstype"],
-    radgiverOrgnr: searchParams.get("radgiverOrgnr") ?? undefined,
-  };
+  return result.success ? result.data : undefined;
 }

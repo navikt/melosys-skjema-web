@@ -10,25 +10,33 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { getInnsendtKvitteringQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { SkjemaInnsendtKvittering } from "~/types/melosysSkjemaTypes.ts";
+import {
+  getInnsendtKvitteringQuery,
+  getSkjemaQuery,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type {
+  SkjemaInnsendtKvittering,
+  UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
+import { toRepresentasjonsKontekst } from "~/types/representasjon.ts";
 
 interface KvitteringPageProps {
-  id: string;
+  skjemaId: string;
 }
 
-export function KvitteringPage({ id }: KvitteringPageProps) {
+export function KvitteringPage({ skjemaId }: KvitteringPageProps) {
   const { t } = useTranslation();
   const {
     data: kvittering,
-    isLoading,
-    error,
-  } = useQuery(getInnsendtKvitteringQuery(id));
+    isLoading: kvitteringLoading,
+    error: kvitteringError,
+  } = useQuery(getInnsendtKvitteringQuery(skjemaId));
+  const { data: skjema, isLoading: skjemaLoading, error: skjemaError } = useQuery(getSkjemaQuery(skjemaId));
 
-  if (isLoading) {
+  if (kvitteringLoading || skjemaLoading) {
     return (
       <HStack style={{ gap: "var(--a-spacing-2)" }}>
         <Loader />
@@ -37,37 +45,46 @@ export function KvitteringPage({ id }: KvitteringPageProps) {
     );
   }
 
-  return error ? (
-    <ErrorMessage>{t("felles.feil")}</ErrorMessage>
-  ) : (
-    <KvitteringPageContent response={kvittering!} />
-  );
+  if (kvitteringError || skjemaError || !kvittering || !skjema) {
+    return <ErrorMessage>{t("felles.feil")}</ErrorMessage>;
+  }
+
+  return <KvitteringPageContent response={kvittering} skjema={skjema} />;
 }
 
 interface KvitteringPageContentProps {
   response: SkjemaInnsendtKvittering;
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }
 
-function KvitteringPageContent({ response }: KvitteringPageContentProps) {
+function KvitteringPageContent({
+  response,
+  skjema,
+}: KvitteringPageContentProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const kontekst = toRepresentasjonsKontekst(skjema.metadata);
+
+  const handleTilOversikt = () => {
+    void navigate({
+      to: "/oversikt",
+      search: kontekst,
+    });
+  };
 
   return (
     <VStack gap="space-24">
-      {/* Hovedtittel */}
       <Heading level="1" size="large">
         {t("kvittering.tittel")}
       </Heading>
-      {/* Melding med referanse */}
       <BodyLong>
         {t("kvittering.melding")} <strong>{response.referanseId}</strong>.
       </BodyLong>
-      {/* Info om oversiktssiden */}
       <Alert variant="info">{t("kvittering.infoOversikt")}</Alert>
-      {/* Knapp til oversikt */}
       <Button
-        as={Link}
+        onClick={handleTilOversikt}
         style={{ width: "fit-content" }}
-        to="/"
         variant="primary"
       >
         {t("kvittering.tilOversikt")}

@@ -1,18 +1,14 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { z } from "zod";
 
 import { VelgRadgiverfirmaPage } from "~/pages/representasjon/velg-radgiverfirma/VelgRadgiverfirmaPage.tsx";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-
-const velgRadgiverfirmaSearchSchema = z.object({
-  kontekst: z.literal(Representasjonstype.RADGIVER).optional(),
-});
+import { representasjonsKontekstSchema } from "~/types/representasjon.ts";
 
 export const Route = createFileRoute("/representasjon/velg-radgiverfirma")({
   component: VelgRadgiverfirmaPage,
-  validateSearch: (search) => velgRadgiverfirmaSearchSchema.parse(search),
+  validateSearch: (search) => representasjonsKontekstSchema.parse(search),
   beforeLoad: ({ search }) => {
-    if (search.kontekst !== Representasjonstype.RADGIVER) {
+    if (search.representasjonstype !== Representasjonstype.RADGIVER) {
       throw redirect({ to: "/" });
     }
   },

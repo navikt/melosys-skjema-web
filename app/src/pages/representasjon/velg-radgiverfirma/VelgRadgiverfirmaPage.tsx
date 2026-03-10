@@ -24,7 +24,7 @@ export function VelgRadgiverfirmaPage() {
     void navigate({
       to: "/oversikt",
       search: {
-        kontekst: Representasjonstype.RADGIVER,
+        representasjonstype: Representasjonstype.RADGIVER,
         radgiverOrgnr: data.radgiverfirma.orgnr,
       },
     });
