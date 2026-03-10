@@ -22,14 +22,28 @@ echo ""
 
 original_branch=$(git branch --show-current)
 
+failed_branches=()
+
 for branch in $branches; do
   echo "========================================="
   echo "Processing: $branch"
   echo "========================================="
 
-  git checkout -B "$branch" "origin/$branch"
-  git rebase -X theirs origin/main
-  pnpm install
+  if ! git checkout -B "$branch" "origin/$branch" ||
+     ! git rebase -X theirs origin/main; then
+    echo "FEIL: $branch — avbryter rebase og hopper videre."
+    git rebase --abort 2>/dev/null || true
+    failed_branches+=("$branch")
+    echo ""
+    continue
+  fi
+
+  if ! pnpm install; then
+    echo "FEIL: $branch — pnpm install feilet, hopper videre."
+    failed_branches+=("$branch")
+    echo ""
+    continue
+  fi
 
   if git diff --quiet pnpm-lock.yaml 2>/dev/null; then
     echo "No lockfile changes on $branch."
@@ -43,5 +57,14 @@ for branch in $branches; do
   echo ""
 done
 
-echo "Done. Switching back to $original_branch."
+echo "Switching back to $original_branch."
 git checkout "$original_branch"
+
+if [ ${#failed_branches[@]} -gt 0 ]; then
+  echo ""
+  echo "Følgende brancher feilet:"
+  printf '  - %s\n' "${failed_branches[@]}"
+  exit 1
+fi
+
+echo "Done. Alle brancher prosessert uten feil."
