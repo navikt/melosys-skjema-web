@@ -1,7 +1,12 @@
 import "./index.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import {
+  createRouter,
+  parseSearchWith,
+  RouterProvider,
+  stringifySearchWith,
+} from "@tanstack/react-router";
 import i18n from "i18next";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -45,6 +50,11 @@ const router = createRouter({
     queryClient,
   },
   defaultPreload: "intent",
+  // Ikke JSON-serialiser search params — bruker plain key=value i URL-en
+  // slik at f.eks. orgnr vises som radgiverOrgnr=123456789 i stedet for
+  // radgiverOrgnr=%22123456789%22
+  stringifySearch: stringifySearchWith((value) => value as string),
+  parseSearch: parseSearchWith((value) => value),
 });
 
 declare module "@tanstack/react-router" {

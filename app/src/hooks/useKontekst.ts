@@ -1,14 +1,9 @@
 import { useLocation } from "@tanstack/react-router";
 
-import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import { VALID_KONTEKST_TYPES } from "~/types/representasjon.ts";
 
-const VALID_KONTEKST_TYPES = new Set<string>([
-  Representasjonstype.DEG_SELV,
-  Representasjonstype.ARBEIDSGIVER,
-  Representasjonstype.RADGIVER,
-  Representasjonstype.ANNEN_PERSON,
-]);
+const validKontekstSet = new Set<string>(VALID_KONTEKST_TYPES);
 
 /**
  * Hook som leser representasjonskontekst fra URL search params.
@@ -20,7 +15,7 @@ export function useKontekst(): RepresentasjonsKontekst | undefined {
   const searchParams = new URLSearchParams(location.searchStr);
   const kontekst = searchParams.get("kontekst");
 
-  if (!kontekst || !VALID_KONTEKST_TYPES.has(kontekst)) {
+  if (!kontekst || !validKontekstSet.has(kontekst)) {
     return undefined;
   }
 

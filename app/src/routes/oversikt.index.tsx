@@ -3,17 +3,11 @@ import { z } from "zod";
 
 import { OversiktPage } from "~/pages/oversikt/OversiktPage.tsx";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-
-const VALID_KONTEKST_TYPES = [
-  Representasjonstype.DEG_SELV,
-  Representasjonstype.ARBEIDSGIVER,
-  Representasjonstype.RADGIVER,
-  Representasjonstype.ANNEN_PERSON,
-] as const;
+import { VALID_KONTEKST_TYPES } from "~/types/representasjon.ts";
 
 const oversiktSearchSchema = z.object({
   kontekst: z.enum(VALID_KONTEKST_TYPES).optional(),
-  radgiverOrgnr: z.string().optional(),
+  radgiverOrgnr: z.coerce.string().optional(),
 });
 
 export const Route = createFileRoute("/oversikt/")({
