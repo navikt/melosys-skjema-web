@@ -29,7 +29,6 @@ export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
         response,
       );
 
-      // Invalidér skjema-cache slik at KvitteringPage får oppdatert metadata
       void queryClient.invalidateQueries({
         queryKey: getSkjemaQuery(response.skjemaId).queryKey,
       });
