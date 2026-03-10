@@ -221,6 +221,20 @@ flowchart LR
 
 Se `useSkjemaDefinisjon.ts` og `skjemaDefinisjonA1.ts` for detaljer.
 
+## Dependabot og lockfil
+
+Dependabot oppdaterer `package.json` med nye versjoner, men kjører ikke `pnpm install` — så lockfilen blir utdatert og bygget feiler.
+
+Vi ønsker ikke å kjøre `pnpm install` uten fryst lockfil (`--frozen-lockfile`) i GitHub Actions, da ondsinnede install-scripts i avhengigheter kan stjele `GITHUB_TOKEN` og lese privat kildekode. Derfor kjøres install lokalt.
+
+Scriptet `dependabot-install.sh` automatiserer dette for alle dependabot-brancher:
+
+```bash
+./dependabot-install.sh
+```
+
+Scriptet finner alle remote `dependabot/*`-brancher, rebaser på `origin/main`, kjører `pnpm install`, og pusher oppdatert lockfil.
+
 ## Kodestandarder
 
 - ESLint med strenge regler (Unicorn, React, import-sorting)
