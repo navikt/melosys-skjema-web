@@ -36,11 +36,14 @@ function tilKontekstType(
   representasjonstype: Representasjonstype,
 ): RepresentasjonsKontekst["representasjonstype"] {
   switch (representasjonstype) {
-    case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT:
+    case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
       return Representasjonstype.ARBEIDSGIVER;
-    case Representasjonstype.RADGIVER_MED_FULLMAKT:
+    }
+    case Representasjonstype.RADGIVER_MED_FULLMAKT: {
       return Representasjonstype.RADGIVER;
-    default:
+    }
+    default: {
       return representasjonstype as RepresentasjonsKontekst["representasjonstype"];
+    }
   }
 }

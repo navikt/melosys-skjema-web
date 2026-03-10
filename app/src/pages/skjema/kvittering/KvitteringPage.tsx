@@ -34,7 +34,11 @@ export function KvitteringPage({ skjemaId }: KvitteringPageProps) {
     isLoading: kvitteringLoading,
     error: kvitteringError,
   } = useQuery(getInnsendtKvitteringQuery(skjemaId));
-  const { data: skjema, isLoading: skjemaLoading, error: skjemaError } = useQuery(getSkjemaQuery(skjemaId));
+  const {
+    data: skjema,
+    isLoading: skjemaLoading,
+    error: skjemaError,
+  } = useQuery(getSkjemaQuery(skjemaId));
 
   if (kvitteringLoading || skjemaLoading) {
     return (

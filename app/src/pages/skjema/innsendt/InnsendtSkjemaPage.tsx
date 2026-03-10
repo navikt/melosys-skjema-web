@@ -50,7 +50,11 @@ export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProps) {
     error: innsendtError,
     isLoading: innsendtLoading,
   } = useQuery(getInnsendtSkjemaQuery(skjemaId, sprak));
-  const { data: skjema, isLoading: skjemaLoading, error: skjemaError } = useQuery(getSkjemaQuery(skjemaId));
+  const {
+    data: skjema,
+    isLoading: skjemaLoading,
+    error: skjemaError,
+  } = useQuery(getSkjemaQuery(skjemaId));
 
   if (innsendtLoading || skjemaLoading) {
     return (
@@ -65,7 +69,9 @@ export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProps) {
     return <Alert variant="error">{t("innsendtSkjema.feilVedLasting")}</Alert>;
   }
 
-  return <InnsendtSkjemaPageContent response={innsendtSkjema} skjema={skjema} />;
+  return (
+    <InnsendtSkjemaPageContent response={innsendtSkjema} skjema={skjema} />
+  );
 }
 
 // dto.type verdier
