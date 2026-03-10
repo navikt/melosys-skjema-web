@@ -1,7 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-# Find all remote dependabot branches, rebase on main, run pnpm install, and push
+# Find all remote dependabot branches, rebase on main, run pnpm install, and push.
+#
+# Dependabot-brancher har kun package.json i diff. Eventuelle rebase-konflikter
+# vil derfor alltid være i pnpm-lock.yaml. Vi bruker -X theirs for å automatisk
+# løse disse, og regenererer lockfilen med pnpm install etterpå.
 
 git fetch origin main
 
@@ -24,24 +28,7 @@ for branch in $branches; do
   echo "========================================="
 
   git checkout -B "$branch" "origin/$branch"
-
-  # Rebase on main, resolve lockfile conflicts by regenerating
-  if ! git rebase origin/main; then
-    # Accept theirs for lockfile conflicts and regenerate with pnpm install
-    if git diff --name-only --diff-filter=U | grep -q pnpm-lock.yaml; then
-      git checkout --theirs pnpm-lock.yaml
-      pnpm install
-      git add pnpm-lock.yaml
-      GIT_EDITOR="true" git rebase --continue || true
-    else
-      echo "SKIPPING $branch — rebase conflict is not lockfile-related"
-      git rebase --abort
-      echo ""
-      continue
-    fi
-  fi
-
-  # Run pnpm install (may produce changes even without rebase conflict)
+  git rebase -X theirs origin/main
   pnpm install
 
   if git diff --quiet pnpm-lock.yaml 2>/dev/null; then
