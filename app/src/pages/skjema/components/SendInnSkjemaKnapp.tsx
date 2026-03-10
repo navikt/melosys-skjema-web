@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import {
   getInnsendtKvitteringQuery,
+  getSkjemaQuery,
   sendInnSkjema,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
@@ -27,6 +28,11 @@ export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
         getInnsendtKvitteringQuery(response.skjemaId).queryKey,
         response,
       );
+
+      // Invalidér skjema-cache slik at KvitteringPage får oppdatert metadata
+      void queryClient.invalidateQueries({
+        queryKey: getSkjemaQuery(response.skjemaId).queryKey,
+      });
 
       navigate({
         to: "/skjema/$id/kvittering",
