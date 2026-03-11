@@ -32,7 +32,7 @@ function OversiktRoute() {
   return (
     <OversiktPage
       kontekst={{
-        representasjonstype: search.representasjonstype!,
+        representasjonstype: search.representasjonstype,
         radgiverOrgnr: search.radgiverOrgnr,
       }}
     />

@@ -1,4 +1,4 @@
-import { useLocation } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 
 import {
   type RepresentasjonsKontekst,
@@ -11,11 +11,8 @@ import {
  * ikke har tilgang til child-rutens validateSearch.
  */
 export function useKontekst(): RepresentasjonsKontekst | undefined {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.searchStr);
-  const result = representasjonsKontekstSchema.safeParse(
-    Object.fromEntries(searchParams),
-  );
+  const search = useSearch({ strict: false });
+  const result = representasjonsKontekstSchema.safeParse(search);
 
   return result.success ? result.data : undefined;
 }

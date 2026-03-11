@@ -53,7 +53,7 @@ const router = createRouter({
   // Ikke JSON-serialiser search params — bruker plain key=value i URL-en
   // slik at f.eks. orgnr vises som radgiverOrgnr=123456789 i stedet for
   // radgiverOrgnr=%22123456789%22
-  stringifySearch: stringifySearchWith((value) => value as string),
+  stringifySearch: stringifySearchWith(String),
   parseSearch: parseSearchWith((value) => value),
 });
 
