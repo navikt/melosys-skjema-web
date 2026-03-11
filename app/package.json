@@ -56,7 +56,7 @@
     "eslint-plugin-unicorn": "63.0.0",
     "globals": "17.4.0",
     "prettier": "3.8.1",
-    "swagger-typescript-api": "13.2.18",
+    "swagger-typescript-api": "13.3.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.56.1",
