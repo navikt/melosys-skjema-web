@@ -227,13 +227,13 @@ Dependabot oppdaterer `package.json` med nye versjoner, men kjører ikke `pnpm i
 
 Vi ønsker ikke å kjøre `pnpm install` uten fryst lockfil (`--frozen-lockfile`) i GitHub Actions, da ondsinnede install-scripts i avhengigheter kan stjele `GITHUB_TOKEN` og lese privat kildekode. Derfor kjøres install lokalt.
 
-Scriptet `dependabot-install.sh` automatiserer dette for alle dependabot-brancher:
+Scriptet `dependabot-rebase-install.sh` automatiserer dette for alle dependabot-brancher:
 
 ```bash
-./dependabot-install.sh
+./dependabot-rebase-install.sh
 ```
 
-Scriptet finner alle remote `dependabot/*`-brancher, rebaser på `origin/main`, kjører `pnpm install`, og pusher oppdatert lockfil.
+Scriptet finner alle åpne dependabot-PRs, rebaser på `origin/main`, kjører `pnpm install`, og pusher oppdatert lockfil.
 
 ## Kodestandarder
 

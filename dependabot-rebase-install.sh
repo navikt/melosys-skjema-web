@@ -7,16 +7,16 @@ set -euo pipefail
 # vil derfor alltid være i pnpm-lock.yaml. Vi bruker -X theirs for å automatisk
 # løse disse, og regenererer lockfilen med pnpm install etterpå.
 
-git fetch origin main
+git fetch origin --prune
 
-branches=$(git branch -r | grep 'origin/dependabot/' | sed 's/^ *//' | sed 's|origin/||')
+branches=$(gh pr list --author 'app/dependabot' --json headRefName --jq '.[].headRefName')
 
 if [ -z "$branches" ]; then
   echo "No dependabot branches found."
   exit 0
 fi
 
-echo "Found dependabot branches:"
+echo "Found open dependabot PRs:"
 echo "$branches"
 echo ""
 
@@ -34,6 +34,13 @@ for branch in $branches; do
     echo "FEIL: $branch — avbryter rebase og hopper videre."
     git rebase --abort 2>/dev/null || true
     failed_branches+=("$branch")
+    echo ""
+    continue
+  fi
+
+  # If rebase dropped all commits, the branch is identical to main — skip it
+  if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then
+    echo "Alle commits droppet under rebase (allerede i main). Hopper over $branch."
     echo ""
     continue
   fi
