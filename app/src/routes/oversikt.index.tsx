@@ -20,7 +20,6 @@ export const Route = createFileRoute("/oversikt/")({
     ) {
       throw redirect({
         to: "/representasjon/velg-radgiverfirma",
-        search: { representasjonstype: Representasjonstype.RADGIVER },
       });
     }
   },

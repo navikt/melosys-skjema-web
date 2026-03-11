@@ -105,7 +105,6 @@ export function RepresentasjonVelger({
     if (representasjonstype === Representasjonstype.RADGIVER) {
       void navigate({
         to: "/representasjon/velg-radgiverfirma",
-        search: { representasjonstype: Representasjonstype.RADGIVER },
       });
     } else {
       void navigate({

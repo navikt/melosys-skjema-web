@@ -34,7 +34,7 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
   });
 
   if (isRadgiver && isError) {
-    return <Navigate to="/representasjon" />;
+    return <Navigate to="/representasjon/velg-radgiverfirma" />;
   }
 
   if (isRadgiver && isLoading) {
