@@ -1,13 +1,24 @@
-import { BodyShort, GuidePanel, Heading, VStack } from "@navikt/ds-react";
+import {
+  Alert,
+  BodyShort,
+  GuidePanel,
+  Heading,
+  Loader,
+  VStack,
+} from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
+import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   InnsendteSoknaderTabell,
   SoknadStarter,
   UtkastListe,
 } from "~/pages/oversikt/components";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import { ValideringError } from "~/utils/valideringUtils.ts";
 
 interface OversiktPageProps {
   kontekst: RepresentasjonsKontekst;
@@ -15,6 +26,25 @@ interface OversiktPageProps {
 
 export function OversiktPage({ kontekst }: OversiktPageProps) {
   const { t } = useTranslation();
+
+  const isRadgiver =
+    kontekst.representasjonstype === Representasjonstype.RADGIVER;
+
+  const { isLoading, isError, error } = useQuery({
+    ...getOrganisasjonMedJuridiskEnhetQuery(kontekst.radgiverOrgnr ?? ""),
+    enabled: isRadgiver && !!kontekst.radgiverOrgnr,
+  });
+
+  if (isRadgiver && isError) {
+    if (error instanceof ValideringError) {
+      return <Navigate to="/representasjon/velg-radgiverfirma" />;
+    }
+    return <Alert variant="error">{t("velgRadgiverfirma.feilVedSok")}</Alert>;
+  }
+
+  if (isRadgiver && isLoading) {
+    return <Loader size="medium" title={t("felles.laster")} />;
+  }
 
   const getTittel = () => {
     switch (kontekst.representasjonstype) {

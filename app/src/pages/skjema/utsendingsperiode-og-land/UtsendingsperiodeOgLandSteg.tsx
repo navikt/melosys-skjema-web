@@ -45,11 +45,11 @@ function UtsendingsperiodeOgLandStegContent({
   const { getFelt } = useSkjemaDefinisjon();
 
   const utsendelseLandFelt = getFelt(
-    "utenlandsoppdragetArbeidstaker",
-    "utsendelsesLand",
+    "utsendingsperiodeOgLand",
+    "utsendelseLand",
   );
   const utsendelsePeriodeFelt = getFelt(
-    "utenlandsoppdragetArbeidstaker",
+    "utsendingsperiodeOgLand",
     "utsendelsePeriode",
   );
 

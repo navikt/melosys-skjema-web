@@ -10,10 +10,10 @@ const SKJEMA_DEFINISJON_A1_NB = {
   type: "UTSENDT_ARBEIDSTAKER",
   versjon: "1",
   seksjoner: {
-    utenlandsoppdragetArbeidstaker: {
+    utsendingsperiodeOgLand: {
       tittel: "Utenlandsoppdraget",
       felter: {
-        utsendelsesLand: {
+        utsendelseLand: {
           type: "COUNTRY_SELECT",
           label: "I hvilket land skal du utføre arbeid?",
           pakrevd: true,
@@ -578,10 +578,10 @@ const SKJEMA_DEFINISJON_A1_EN = {
   type: "UTSENDT_ARBEIDSTAKER",
   versjon: "1",
   seksjoner: {
-    utenlandsoppdragetArbeidstaker: {
+    utsendingsperiodeOgLand: {
       tittel: "Foreign assignment",
       felter: {
-        utsendelsesLand: {
+        utsendelseLand: {
           type: "COUNTRY_SELECT",
           label: "In which country will you be working?",
           pakrevd: true,

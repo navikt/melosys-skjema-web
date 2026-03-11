@@ -22,7 +22,7 @@ import {
   SorteringsFelt,
   Sorteringsretning,
 } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
 
 interface InnsendteSoknaderTabellProps {
   kontekst: RepresentasjonsKontekst;
@@ -79,7 +79,7 @@ export function InnsendteSoknaderTabell({
     sortering: sort?.orderBy,
     retning: sort?.direction ?? undefined,
     representasjonstype: kontekst.representasjonstype,
-    radgiverfirmaOrgnr: kontekst.radgiverfirma?.orgnr,
+    radgiverfirmaOrgnr: kontekst.radgiverOrgnr,
   };
 
   // Hent data

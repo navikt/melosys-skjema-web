@@ -1,15 +1,16 @@
 import { z } from "zod";
 
+import { organisasjonsnummerHarGyldigFormat } from "~/utils/valideringUtils.ts";
+
 export const radgiverfirmaSchema = z.object({
   radgiverfirma: z.object(
     {
       orgnr: z
         .string()
         .min(1, "generellValidering.organisasjonsnummerErPakrevd")
-        .regex(
-          /^\d{9}$/,
-          "generellValidering.organisasjonsnummerMaVare9Siffer",
-        ),
+        .refine(organisasjonsnummerHarGyldigFormat, {
+          message: "generellValidering.organisasjonsnummerHarUgyldigFormat",
+        }),
       navn: z.string(),
     },
     "velgRadgiverfirma.duMaSokeForstFeil",

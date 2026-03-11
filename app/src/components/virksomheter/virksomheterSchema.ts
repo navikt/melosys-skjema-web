@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { Ansettelsesform } from "~/types/melosysSkjemaTypes";
+import { organisasjonsnummerHarGyldigFormat } from "~/utils/valideringUtils.ts";
 
 export const norskVirksomhetSchema = z.object({
   organisasjonsnummer: z
@@ -10,8 +11,8 @@ export const norskVirksomhetSchema = z.object({
     .min(1, {
       message: "generellValidering.organisasjonsnummerErPakrevd",
     })
-    .regex(/^\d{9}$/, {
-      message: "generellValidering.organisasjonsnummerMaVare9Siffer",
+    .refine(organisasjonsnummerHarGyldigFormat, {
+      message: "generellValidering.organisasjonsnummerHarUgyldigFormat",
     }),
 });
 

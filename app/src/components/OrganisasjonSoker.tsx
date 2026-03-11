@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { ValgtOrganisasjon } from "~/components/virksomheter/ValgtOrganisasjon.tsx";
 import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient";
+import { ValideringError } from "~/utils/valideringUtils.ts";
 
 interface OrganisasjonSokerProps {
   /** Feltnavn i react-hook-form (SimpleOrganisasjonDto | null) */
@@ -58,6 +59,10 @@ export function OrganisasjonSoker({
 
   const getErrorMessage = (): string | undefined => {
     if (query.isError) {
+      if (query.error instanceof ValideringError) {
+        return t("velgRadgiverfirma.ugyldigOrganisasjonsnummer");
+      }
+
       const statusMatch = query.error.message.match(/status:\s*(\d+)/);
       const status = statusMatch ? statusMatch[1] : null;
 

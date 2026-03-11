@@ -2,34 +2,39 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { OversiktPage } from "~/pages/oversikt/OversiktPage.tsx";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import { getRepresentasjonKontekst } from "~/utils/sessionStorage";
+import { representasjonsKontekstSchema } from "~/types/representasjon.ts";
 
 export const Route = createFileRoute("/oversikt/")({
   component: OversiktRoute,
-  beforeLoad: () => {
-    const kontekst = getRepresentasjonKontekst();
-
-    // Redirect til landingsside hvis ingen kontekst er valgt
-    if (!kontekst) {
+  validateSearch: (search) => representasjonsKontekstSchema.parse(search),
+  beforeLoad: ({ search }) => {
+    // Redirect til landingsside hvis representasjonstype mangler eller er ugyldig
+    if (!search.representasjonstype) {
       throw redirect({ to: "/" });
     }
 
     // Redirect til velg rådgiverfirma hvis RADGIVER men ingen firma valgt
     if (
-      kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-      !kontekst.radgiverfirma
+      search.representasjonstype === Representasjonstype.RADGIVER &&
+      !search.radgiverOrgnr
     ) {
-      throw redirect({ to: "/representasjon/velg-radgiverfirma" });
+      throw redirect({
+        to: "/representasjon/velg-radgiverfirma",
+      });
     }
-
-    return {
-      kontekst,
-    };
   },
 });
 
 function OversiktRoute() {
-  const { kontekst } = Route.useRouteContext();
+  const search = Route.useSearch();
 
-  return <OversiktPage kontekst={kontekst} />;
+  // beforeLoad garanterer at representasjonstype finnes her
+  return (
+    <OversiktPage
+      kontekst={{
+        representasjonstype: search.representasjonstype,
+        radgiverOrgnr: search.radgiverOrgnr,
+      }}
+    />
+  );
 }

@@ -4,7 +4,7 @@ import { InnsendtSkjemaPage } from "~/pages/skjema/innsendt/InnsendtSkjemaPage.t
 
 function InnsendtSkjemaRoute() {
   const { id } = Route.useParams();
-  return <InnsendtSkjemaPage id={id} />;
+  return <InnsendtSkjemaPage skjemaId={id} />;
 }
 
 export const Route = createFileRoute("/skjema/$id/innsendt")({

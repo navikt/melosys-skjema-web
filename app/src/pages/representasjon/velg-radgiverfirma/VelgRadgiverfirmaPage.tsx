@@ -5,11 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
-import { Route } from "~/routes/representasjon.velg-radgiverfirma.tsx";
-import {
-  clearRepresentasjonKontekst,
-  setRepresentasjonKontekst,
-} from "~/utils/sessionStorage.ts";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 
 import {
   RadgiverfirmaFormData,
@@ -19,26 +15,24 @@ import {
 export function VelgRadgiverfirmaPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { kontekst } = Route.useRouteContext();
 
   const formMethods = useForm({
     resolver: zodResolver(radgiverfirmaSchema),
   });
 
   const velgRadgiverfirma = (data: RadgiverfirmaFormData): void => {
-    setRepresentasjonKontekst({
-      ...kontekst,
-      radgiverfirma: data.radgiverfirma,
+    void navigate({
+      to: "/oversikt",
+      search: {
+        representasjonstype: Representasjonstype.RADGIVER,
+        radgiverOrgnr: data.radgiverfirma.orgnr,
+      },
     });
-    void navigate({ to: "/oversikt" });
   };
 
   const handleAvbryt = (): void => {
-    clearRepresentasjonKontekst();
     void navigate({ to: "/" });
   };
-
-  if (!kontekst) return null;
 
   return (
     <FormProvider {...formMethods}>

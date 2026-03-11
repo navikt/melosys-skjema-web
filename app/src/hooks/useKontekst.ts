@@ -1,16 +1,18 @@
-import { useLocation } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 
 import {
-  getRepresentasjonKontekst,
-  RepresentasjonsKontekst,
-} from "~/utils/sessionStorage.ts";
+  type RepresentasjonsKontekst,
+  representasjonsKontekstSchema,
+} from "~/types/representasjon.ts";
 
 /**
- * Hook som leser representasjonskontekst fra sessionStorage og trigger re-render ved ruteendringer.
- * Sentraliserer logikken for å lese kontekst reaktivt.
+ * Hook som leser representasjonskontekst fra URL search params.
+ * Brukes av AppHeader og KontekstVelger som rendres i root og
+ * ikke har tilgang til child-rutens validateSearch.
  */
 export function useKontekst(): RepresentasjonsKontekst | undefined {
-  // useLocation trigger re-render ved ruteendringer, slik at kontekst leses på nytt
-  useLocation();
-  return getRepresentasjonKontekst();
+  const search = useSearch({ strict: false });
+  const result = representasjonsKontekstSchema.safeParse(search);
+
+  return result.success ? result.data : undefined;
 }

@@ -48,8 +48,8 @@ export class KvitteringPage {
     await this.tilOversiktLink.click();
   }
 
-  async assertNavigatedToOversikt() {
-    await expect(this.page).toHaveURL(/\/oversikt/);
+  async assertNavigatedToLandingsside() {
+    await expect(this.page).toHaveURL(/\/oversikt\?representasjonstype=/);
   }
 
   async mockKvittering(kvittering: SkjemaInnsendtKvittering) {

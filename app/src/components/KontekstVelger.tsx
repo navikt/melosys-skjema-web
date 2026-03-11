@@ -8,12 +8,14 @@ import {
 } from "@navikt/aksel-icons";
 import { Button, HStack, Label, Popover } from "@navikt/ds-react";
 import { setParams } from "@navikt/nav-dekoratoren-moduler";
+import { useQuery } from "@tanstack/react-query";
 import type { ComponentType } from "react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RepresentasjonVelger } from "~/components/RepresentasjonVelger.tsx";
 import { useKontekst } from "~/hooks/useKontekst.ts";
+import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
 import { truncateText } from "~/utils/truncateText.ts";
@@ -77,6 +79,14 @@ export function KontekstVelger() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const kontekst = useKontekst();
 
+  // Slå opp firmanavn for RADGIVER-kontekst
+  const { data: organisasjonData } = useQuery({
+    ...getOrganisasjonMedJuridiskEnhetQuery(kontekst?.radgiverOrgnr ?? ""),
+    enabled:
+      kontekst?.representasjonstype === Representasjonstype.RADGIVER &&
+      !!kontekst.radgiverOrgnr,
+  });
+
   if (!kontekst) {
     return null;
   }
@@ -99,9 +109,12 @@ export function KontekstVelger() {
       ];
     if (
       kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-      kontekst.radgiverfirma
+      organisasjonData
     ) {
-      return truncateText(kontekst.radgiverfirma.navn, 23);
+      return truncateText(
+        organisasjonData.juridiskEnhet.navn ?? kontekst.radgiverOrgnr ?? "",
+        23,
+      );
     }
     return t(config.tekstKey);
   };

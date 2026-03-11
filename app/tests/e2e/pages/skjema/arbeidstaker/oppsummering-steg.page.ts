@@ -14,7 +14,7 @@ import type {
 
 // Hent felter fra statiske definisjoner
 const utsendingsperiodeOgLand =
-  SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidstaker;
+  SKJEMA_DEFINISJON_A1.seksjoner.utsendingsperiodeOgLand;
 const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
 const skatteforholdOgInntekt =
   SKJEMA_DEFINISJON_A1.seksjoner.skatteforholdOgInntekt;
@@ -50,7 +50,7 @@ export class OppsummeringStegPage {
   async assertUtsendingsperiodeOgLandData(data: UtsendingsperiodeOgLandDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsesLand.label}") + dd`,
+        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelseLand.label}") + dd`,
       ),
     ).toHaveText(landKodeTilNavn(data.utsendelseLand));
 

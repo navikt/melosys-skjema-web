@@ -28,7 +28,11 @@ import {
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
-import { RepresentasjonsKontekst } from "~/utils/sessionStorage.ts";
+import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import {
+  organisasjonsnummerHarGyldigFormat,
+  ValideringError,
+} from "~/utils/valideringUtils.ts";
 
 const API_PROXY_URL = "/api";
 
@@ -236,6 +240,10 @@ export const getOrganisasjonMedJuridiskEnhetQuery = (orgnummer: string) =>
 async function fetchOrganisasjonMedJuridiskEnhet(
   orgnummer: string,
 ): Promise<OrganisasjonMedJuridiskEnhetDto> {
+  if (!organisasjonsnummerHarGyldigFormat(orgnummer)) {
+    throw new ValideringError(`Ugyldig organisasjonsnummer: ${orgnummer}`);
+  }
+
   const response = await fetch(
     `${API_PROXY_URL}/ereg/organisasjon-med-juridisk-enhet/${orgnummer}`,
     {
@@ -262,6 +270,10 @@ export const getOrganisasjonQueryOptions = (orgnummer: string) =>
 async function fetchOrganisasjon(
   orgnummer: string,
 ): Promise<SimpleOrganisasjonDto> {
+  if (!organisasjonsnummerHarGyldigFormat(orgnummer)) {
+    throw new ValideringError(`Ugyldig organisasjonsnummer: ${orgnummer}`);
+  }
+
   const response = await fetch(
     `${API_PROXY_URL}/ereg/organisasjon/${orgnummer}`,
     {
@@ -360,11 +372,7 @@ export async function opprettSoknadMedKontekst(
  */
 export const getUtkastQuery = (kontekst: RepresentasjonsKontekst) =>
   queryOptions<UtkastListeResponse>({
-    queryKey: [
-      "utkast",
-      kontekst.representasjonstype,
-      kontekst.radgiverfirma?.orgnr,
-    ],
+    queryKey: ["utkast", kontekst.representasjonstype, kontekst.radgiverOrgnr],
     queryFn: () => fetchUtkast(kontekst),
     staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
     gcTime: 5 * 60 * 1000, // 5 minutter
@@ -380,9 +388,14 @@ async function fetchUtkast(
   // For RADGIVER må vi sende med rådgiverfirmaets orgnr
   if (
     kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-    kontekst.radgiverfirma?.orgnr
+    kontekst.radgiverOrgnr
   ) {
-    params.append("radgiverfirmaOrgnr", kontekst.radgiverfirma.orgnr);
+    if (!organisasjonsnummerHarGyldigFormat(kontekst.radgiverOrgnr)) {
+      throw new ValideringError(
+        `Ugyldig organisasjonsnummer: ${kontekst.radgiverOrgnr}`,
+      );
+    }
+    params.append("radgiverfirmaOrgnr", kontekst.radgiverOrgnr);
   }
 
   const response = await fetch(
@@ -435,6 +448,15 @@ export const getInnsendteSoknaderQuery = (
 async function fetchInnsendteSoknader(
   request: HentInnsendteSoknaderRequest,
 ): Promise<InnsendteSoknaderResponse> {
+  if (
+    request.radgiverfirmaOrgnr &&
+    !organisasjonsnummerHarGyldigFormat(request.radgiverfirmaOrgnr)
+  ) {
+    throw new ValideringError(
+      `Ugyldig organisasjonsnummer: ${request.radgiverfirmaOrgnr}`,
+    );
+  }
+
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/innsendte`,
     {
