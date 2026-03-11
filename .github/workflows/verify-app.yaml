@@ -35,6 +35,9 @@ jobs:
       - name: Check for typescript errors
         run: pnpm --filter app check-types
 
+      - name: Run unit tests
+        run: pnpm --filter app test
+
       - name: Install Playwright Browsers
         run: pnpm --filter app exec playwright install chromium
 
