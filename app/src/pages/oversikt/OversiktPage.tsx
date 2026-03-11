@@ -1,6 +1,15 @@
-import { BodyShort, GuidePanel, Heading, VStack } from "@navikt/ds-react";
+import {
+  BodyShort,
+  GuidePanel,
+  Heading,
+  Loader,
+  VStack,
+} from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
+import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   InnsendteSoknaderTabell,
   SoknadStarter,
@@ -15,6 +24,22 @@ interface OversiktPageProps {
 
 export function OversiktPage({ kontekst }: OversiktPageProps) {
   const { t } = useTranslation();
+
+  const isRadgiver =
+    kontekst.representasjonstype === Representasjonstype.RADGIVER;
+
+  const { isLoading, isError } = useQuery({
+    ...getOrganisasjonMedJuridiskEnhetQuery(kontekst.radgiverOrgnr ?? ""),
+    enabled: isRadgiver && !!kontekst.radgiverOrgnr,
+  });
+
+  if (isRadgiver && isError) {
+    return <Navigate to="/representasjon" />;
+  }
+
+  if (isRadgiver && isLoading) {
+    return <Loader size="medium" title={t("felles.laster")} />;
+  }
 
   const getTittel = () => {
     switch (kontekst.representasjonstype) {

@@ -14,6 +14,10 @@ import {
   type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 
+// Gyldige organisasjonsnummer (MOD11-validert)
+export const korrektFormatertOrgnr = "974760673";
+export const korrektFormatertOrgnr2 = "910253158";
+
 export const testOrganization: OrganisasjonDto = {
   orgnr: "123456789",
   navn: "Test Bedrift AS",

@@ -29,6 +29,7 @@ import {
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
 import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import { organisasjonsnummerHarGyldigFormat } from "~/utils/valideringUtils.ts";
 
 const API_PROXY_URL = "/api";
 
@@ -236,6 +237,10 @@ export const getOrganisasjonMedJuridiskEnhetQuery = (orgnummer: string) =>
 async function fetchOrganisasjonMedJuridiskEnhet(
   orgnummer: string,
 ): Promise<OrganisasjonMedJuridiskEnhetDto> {
+  if (!organisasjonsnummerHarGyldigFormat(orgnummer)) {
+    throw new Error(`Ugyldig organisasjonsnummer: ${orgnummer}`);
+  }
+
   const response = await fetch(
     `${API_PROXY_URL}/ereg/organisasjon-med-juridisk-enhet/${orgnummer}`,
     {
@@ -262,6 +267,10 @@ export const getOrganisasjonQueryOptions = (orgnummer: string) =>
 async function fetchOrganisasjon(
   orgnummer: string,
 ): Promise<SimpleOrganisasjonDto> {
+  if (!organisasjonsnummerHarGyldigFormat(orgnummer)) {
+    throw new Error(`Ugyldig organisasjonsnummer: ${orgnummer}`);
+  }
+
   const response = await fetch(
     `${API_PROXY_URL}/ereg/organisasjon/${orgnummer}`,
     {
@@ -378,6 +387,9 @@ async function fetchUtkast(
     kontekst.representasjonstype === Representasjonstype.RADGIVER &&
     kontekst.radgiverOrgnr
   ) {
+    if (!organisasjonsnummerHarGyldigFormat(kontekst.radgiverOrgnr)) {
+      throw new Error(`Ugyldig organisasjonsnummer: ${kontekst.radgiverOrgnr}`);
+    }
     params.append("radgiverfirmaOrgnr", kontekst.radgiverOrgnr);
   }
 
@@ -431,6 +443,15 @@ export const getInnsendteSoknaderQuery = (
 async function fetchInnsendteSoknader(
   request: HentInnsendteSoknaderRequest,
 ): Promise<InnsendteSoknaderResponse> {
+  if (
+    request.radgiverfirmaOrgnr &&
+    !organisasjonsnummerHarGyldigFormat(request.radgiverfirmaOrgnr)
+  ) {
+    throw new Error(
+      `Ugyldig organisasjonsnummer: ${request.radgiverfirmaOrgnr}`,
+    );
+  }
+
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/innsendte`,
     {
