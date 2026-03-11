@@ -3,7 +3,6 @@ import { idnr } from "@navikt/fnrvalidator";
 export class ValideringError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "ValideringError";
   }
 }
 

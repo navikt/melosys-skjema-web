@@ -1,4 +1,5 @@
 import {
+  Alert,
   BodyShort,
   GuidePanel,
   Heading,
@@ -17,6 +18,7 @@ import {
 } from "~/pages/oversikt/components";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import { ValideringError } from "~/utils/valideringUtils.ts";
 
 interface OversiktPageProps {
   kontekst: RepresentasjonsKontekst;
@@ -28,13 +30,16 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
   const isRadgiver =
     kontekst.representasjonstype === Representasjonstype.RADGIVER;
 
-  const { isLoading, isError } = useQuery({
+  const { isLoading, isError, error } = useQuery({
     ...getOrganisasjonMedJuridiskEnhetQuery(kontekst.radgiverOrgnr ?? ""),
     enabled: isRadgiver && !!kontekst.radgiverOrgnr,
   });
 
   if (isRadgiver && isError) {
-    return <Navigate to="/representasjon/velg-radgiverfirma" />;
+    if (error instanceof ValideringError) {
+      return <Navigate to="/representasjon/velg-radgiverfirma" />;
+    }
+    return <Alert variant="error">{t("velgRadgiverfirma.feilVedSok")}</Alert>;
   }
 
   if (isRadgiver && isLoading) {

@@ -59,7 +59,7 @@ export function OrganisasjonSoker({
 
   const getErrorMessage = (): string | undefined => {
     if (query.isError) {
-      if (query.error.name === ValideringError.name) {
+      if (query.error instanceof ValideringError) {
         return t("velgRadgiverfirma.ugyldigOrganisasjonsnummer");
       }
 
