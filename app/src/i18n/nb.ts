@@ -404,6 +404,7 @@ export const nb = {
       sokPaVirksomhet: "Søk på virksomhet (org.nr.)",
       organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
       feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",
+      ugyldigOrganisasjonsnummer: "Organisasjonsnummeret er ugyldig",
       rateLimitOverskredet:
         "Du har søkt for mange ganger. Vent et minutt før du prøver igjen.",
       duMaSokeForstFeil:

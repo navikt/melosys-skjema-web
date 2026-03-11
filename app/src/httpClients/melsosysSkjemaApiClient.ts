@@ -29,7 +29,10 @@ import {
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
 import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
-import { organisasjonsnummerHarGyldigFormat } from "~/utils/valideringUtils.ts";
+import {
+  organisasjonsnummerHarGyldigFormat,
+  ValideringError,
+} from "~/utils/valideringUtils.ts";
 
 const API_PROXY_URL = "/api";
 
@@ -238,7 +241,7 @@ async function fetchOrganisasjonMedJuridiskEnhet(
   orgnummer: string,
 ): Promise<OrganisasjonMedJuridiskEnhetDto> {
   if (!organisasjonsnummerHarGyldigFormat(orgnummer)) {
-    throw new Error(`Ugyldig organisasjonsnummer: ${orgnummer}`);
+    throw new ValideringError(`Ugyldig organisasjonsnummer: ${orgnummer}`);
   }
 
   const response = await fetch(
@@ -268,7 +271,7 @@ async function fetchOrganisasjon(
   orgnummer: string,
 ): Promise<SimpleOrganisasjonDto> {
   if (!organisasjonsnummerHarGyldigFormat(orgnummer)) {
-    throw new Error(`Ugyldig organisasjonsnummer: ${orgnummer}`);
+    throw new ValideringError(`Ugyldig organisasjonsnummer: ${orgnummer}`);
   }
 
   const response = await fetch(
@@ -388,7 +391,9 @@ async function fetchUtkast(
     kontekst.radgiverOrgnr
   ) {
     if (!organisasjonsnummerHarGyldigFormat(kontekst.radgiverOrgnr)) {
-      throw new Error(`Ugyldig organisasjonsnummer: ${kontekst.radgiverOrgnr}`);
+      throw new ValideringError(
+        `Ugyldig organisasjonsnummer: ${kontekst.radgiverOrgnr}`,
+      );
     }
     params.append("radgiverfirmaOrgnr", kontekst.radgiverOrgnr);
   }
@@ -447,7 +452,7 @@ async function fetchInnsendteSoknader(
     request.radgiverfirmaOrgnr &&
     !organisasjonsnummerHarGyldigFormat(request.radgiverfirmaOrgnr)
   ) {
-    throw new Error(
+    throw new ValideringError(
       `Ugyldig organisasjonsnummer: ${request.radgiverfirmaOrgnr}`,
     );
   }

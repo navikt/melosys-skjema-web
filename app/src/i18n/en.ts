@@ -519,6 +519,7 @@ export const en = {
       sokPaVirksomhet: "Search for company (org.no.)",
       organisasjonIkkeFunnet: "No organization found with this number",
       feilVedSok: "Something went wrong with the search. Try again later.",
+      ugyldigOrganisasjonsnummer: "The organization number is invalid",
       rateLimitOverskredet:
         "You have searched too many times. Wait a minute before trying again.",
       duMaSokeForstFeil:
