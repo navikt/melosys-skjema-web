@@ -1,5 +1,5 @@
 import { FormProgress, HStack } from "@navikt/ds-react";
-import { ComponentType, ReactNode } from "react";
+import { ComponentType, ReactNode, SVGProps } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { StegKey } from "~/constants/stegKeys.ts";
@@ -10,7 +10,7 @@ export interface StegRekkefolgeItem {
   key: StegKey;
   title: string;
   route: string;
-  icon?: ComponentType<{ "aria-hidden": boolean; fontSize: string }>;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
 }
 
 type FremgangsindikatorProps = {
