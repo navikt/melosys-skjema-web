@@ -36,8 +36,8 @@ export const Fremgangsindikator = ({
         <FremgangsindikatorSteg href={step.key} key={step.key}>
           {step.icon ? (
             <HStack align="center" gap="space-2">
-              <step.icon aria-hidden fontSize="1.25rem" />
               {t(step.title)}
+              <step.icon aria-hidden fontSize="1.25rem" />
             </HStack>
           ) : (
             t(step.title)
