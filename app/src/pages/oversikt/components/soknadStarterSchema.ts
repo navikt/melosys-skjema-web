@@ -1,9 +1,8 @@
 import { z } from "zod";
 
 import {
-  OpprettSoknadMedKontekstRequest,
+  OpprettUtsendtArbeidstakerSoknadRequest,
   Representasjonstype,
-  Skjemadel,
 } from "~/types/melosysSkjemaTypes.ts";
 
 function representasjonstypeMedFullmakt(
@@ -55,15 +54,7 @@ export const soknadStarterSchema = z
       });
     }
   })
-  .transform((data): OpprettSoknadMedKontekstRequest => {
-    // Beregn skjemadel basert på representasjonstype
-    const skjemadel = [
-      Representasjonstype.RADGIVER,
-      Representasjonstype.ARBEIDSGIVER,
-    ].includes(data.representasjonstype)
-      ? Skjemadel.ARBEIDSGIVERS_DEL
-      : Skjemadel.ARBEIDSTAKERS_DEL;
-
+  .transform((data): OpprettUtsendtArbeidstakerSoknadRequest => {
     return {
       representasjonstype: data.skalFylleUtForArbeidstaker
         ? representasjonstypeMedFullmakt(data.representasjonstype)
@@ -71,7 +62,6 @@ export const soknadStarterSchema = z
       radgiverfirma: data.radgiverfirma,
       arbeidsgiver: data.arbeidsgiver!,
       arbeidstaker: data.arbeidstaker!,
-      skjemadel,
     };
   });
 
