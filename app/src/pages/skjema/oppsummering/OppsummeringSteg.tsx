@@ -55,6 +55,7 @@ function OppsummeringStegContent({
           <SeksjonOppsummering
             data={data}
             editHref={editHref}
+            icon={steg?.icon}
             key={seksjonNavn}
             seksjon={seksjon}
           />

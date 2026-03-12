@@ -1,4 +1,5 @@
-import { FormSummary } from "@navikt/ds-react";
+import { FormSummary, HStack } from "@navikt/ds-react";
+import { ComponentType, SVGProps } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { SeksjonDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
@@ -9,11 +10,13 @@ interface SeksjonOppsummeringProps {
   seksjon: SeksjonDefinisjonDto;
   data: Record<string, unknown>;
   editHref?: string;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
 }
 
 export function SeksjonOppsummering({
   data,
   editHref,
+  icon: Icon,
   seksjon,
 }: SeksjonOppsummeringProps) {
   const { t } = useTranslation();
@@ -27,7 +30,16 @@ export function SeksjonOppsummering({
   return (
     <FormSummary className="mt-8">
       <FormSummary.Header>
-        <FormSummary.Heading level="3">{seksjon.tittel}</FormSummary.Heading>
+        <FormSummary.Heading level="3">
+          {Icon ? (
+            <HStack align="center" gap="space-2">
+              {seksjon.tittel}
+              <Icon aria-hidden fontSize="1.25rem" />
+            </HStack>
+          ) : (
+            seksjon.tittel
+          )}
+        </FormSummary.Heading>
         {editHref && (
           <FormSummary.EditLink href={editHref}>
             {t("felles.endreSvar")}
