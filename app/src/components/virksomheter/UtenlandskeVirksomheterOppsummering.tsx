@@ -146,9 +146,9 @@ export function UtenlandskeVirksomheterOppsummering({
           gap: "var(--a-spacing-2)",
         }}
       >
-        {virksomheter.map((virksomhet, index) => (
+        {virksomheter.map((virksomhet) => (
           <UtenlandskVirksomhetOppsummering
-            key={`utenlandsk-${index}`}
+            key={`${virksomhet.navn}-${virksomhet.land}`}
             virksomhet={virksomhet}
           />
         ))}

@@ -380,8 +380,8 @@ function FamiliemedlemOppsummering({
 
   return (
     <FormSummary.Answers>
-      {fields.map((field, index) => (
-        <FormSummary.Answer key={index}>
+      {fields.map((field) => (
+        <FormSummary.Answer key={field.label}>
           <FormSummary.Label>{field.label}</FormSummary.Label>
           <FormSummary.Value>{field.value}</FormSummary.Value>
         </FormSummary.Answer>

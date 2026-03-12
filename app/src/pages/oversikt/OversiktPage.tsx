@@ -121,8 +121,8 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           {getHerKanDu()}
         </BodyShort>
         <ul className="list-disc pl-6 space-y-1">
-          {getInfoBullets().map((bullet, index) => (
-            <li key={index}>
+          {getInfoBullets().map((bullet) => (
+            <li key={bullet}>
               <BodyShort size="small">{bullet}</BodyShort>
             </li>
           ))}

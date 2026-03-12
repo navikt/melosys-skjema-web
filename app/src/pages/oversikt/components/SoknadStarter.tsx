@@ -290,8 +290,8 @@ function SoknadStarterContent({
                   {t("oversiktFelles.valideringFeilTittel")}
                 </Heading>
                 <ul className="list-disc pl-5">
-                  {valideringsfeil.map((feil, index) => (
-                    <li key={index}>{feil}</li>
+                  {valideringsfeil.map((feil) => (
+                    <li key={feil}>{feil}</li>
                   ))}
                 </ul>
               </Alert>
