@@ -209,7 +209,6 @@ function SoknadStarterContent({
     },
   });
 
-  // onSubmit er nå triviell - data er allerede OpprettSoknadMedKontekstRequest
   const onSubmit = (data: SoknadStarterOutput) => {
     opprettSoknadMutation.mutate(data);
   };

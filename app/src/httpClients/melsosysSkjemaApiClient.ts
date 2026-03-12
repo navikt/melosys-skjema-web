@@ -10,8 +10,8 @@ import {
   HentInnsendteSoknaderRequest,
   InnsendteSoknaderResponse,
   InnsendtSkjemaResponse,
-  OpprettSoknadMedKontekstRequest,
-  OpprettSoknadMedKontekstResponse,
+  OpprettUtsendtArbeidstakerSoknadRequest,
+  OpprettUtsendtArbeidstakerSoknadResponse,
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhetDto,
   PersonMedFullmaktDto,
@@ -336,8 +336,8 @@ export async function verifiserPerson(
 }
 
 export async function opprettSoknadMedKontekst(
-  kontekst: OpprettSoknadMedKontekstRequest,
-): Promise<OpprettSoknadMedKontekstResponse> {
+  kontekst: OpprettUtsendtArbeidstakerSoknadRequest,
+): Promise<OpprettUtsendtArbeidstakerSoknadResponse> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/opprett-med-kontekst`,
     {

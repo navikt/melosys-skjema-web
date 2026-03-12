@@ -418,8 +418,8 @@ export interface UtsendtArbeidstakerMetadata {
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
-  tilleggsopplysninger?: TilleggsopplysningerDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
   type: string;
 }
 
@@ -450,9 +450,8 @@ export interface SkjemaInnsendtKvittering {
   status: SkjemaStatus;
 }
 
-export interface OpprettSoknadMedKontekstRequest {
+export interface OpprettUtsendtArbeidstakerSoknadRequest {
   representasjonstype: Representasjonstype;
-  skjemadel: Skjemadel;
   radgiverfirma?: SimpleOrganisasjonDto;
   arbeidsgiver: SimpleOrganisasjonDto;
   arbeidstaker: PersonDto;
@@ -471,7 +470,7 @@ export interface SimpleOrganisasjonDto {
   navn: string;
 }
 
-export interface OpprettSoknadMedKontekstResponse {
+export interface OpprettUtsendtArbeidstakerSoknadResponse {
   /** @format uuid */
   id: string;
   status: SkjemaStatus;
@@ -594,7 +593,7 @@ export interface InnsendtSkjemaResponse {
   innsendtSprak: Sprak;
   /**
    * Versjon av skjemadefinisjon som ble brukt
-   * @example 1
+   * @example "1"
    */
   skjemaDefinisjonVersjon: string;
   /** Skjemadata (polymorfisk — bruk 'type'-feltet for å avgjøre variant) */
@@ -705,7 +704,7 @@ export interface AktivVersjonResponse {
   type: SkjemaType;
   /**
    * Aktiv versjon
-   * @example 1
+   * @example "1"
    */
   aktivVersjon: string;
 }
@@ -798,6 +797,7 @@ export interface FellesTranslation {
   organisasjonsnummerHarUgyldigFormat: string;
   organisasjonsnummerFinnesIkke: string;
   ugyldigFodselsellerDNummer: string;
+  feltErPaakrevd: string;
 }
 
 export interface OmBordPaFlyTranslation {
