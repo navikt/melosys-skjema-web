@@ -1,3 +1,7 @@
+import { Alert } from "@navikt/ds-react";
+import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
+
 import { resolveSeksjoner } from "~/components/oppsummering/dataMapping.ts";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
@@ -12,6 +16,7 @@ import type { SkjemaDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import type { SkjemaData } from "../types.ts";
+import { isArbeidsgiverOgArbeidstakersDel } from "../types.ts";
 
 export function OppsummeringSteg({ id }: { id: string }) {
   return (
@@ -36,9 +41,12 @@ function OppsummeringStegContent({
   data: SkjemaData;
   stegRekkefolge: StegRekkefolgeItem[];
 }) {
+  const { t } = useTranslation();
   const { definisjon } = useSkjemaDefinisjon();
 
   const seksjoner = resolveSeksjoner(data, definisjon as SkjemaDefinisjonDto);
+
+  const erKombinertSkjema = isArbeidsgiverOgArbeidstakersDel(data);
 
   return (
     <SkjemaSteg
@@ -52,12 +60,18 @@ function OppsummeringStegContent({
         const steg = stegRekkefolge.find((s) => s.key === stegKey);
         const editHref = steg?.route.replace("$id", skjemaId) ?? "";
         return (
-          <SeksjonOppsummering
-            data={data}
-            editHref={editHref}
-            key={seksjonNavn}
-            seksjon={seksjon}
-          />
+          <Fragment key={seksjonNavn}>
+            {erKombinertSkjema && stegKey === StegKey.ARBEIDSSITUASJON && (
+              <Alert className="mt-8" variant="info">
+                {t("oppsummeringSteg.svarPaVegneAvArbeidstaker")}
+              </Alert>
+            )}
+            <SeksjonOppsummering
+              data={data}
+              editHref={editHref}
+              seksjon={seksjon}
+            />
+          </Fragment>
         );
       })}
       <VedleggOppsummering

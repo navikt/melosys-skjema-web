@@ -123,6 +123,10 @@ export const en = {
     },
     arbeidssituasjonSteg: {
       tittel: "Work situation",
+      fullmaktFraArbeidstakerTittel:
+        "You have power of attorney from the employee",
+      fullmaktFraArbeidstakerBeskrivelse:
+        "The following questions are answered on behalf of the employee.",
       harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
         "Have you been or will you be in paid employment in Norway for at least one month right before the posting?",
       beskriveAktivitetFoerUtsending:
@@ -376,6 +380,8 @@ export const en = {
     },
     oppsummeringSteg: {
       tittel: "Summary",
+      svarPaVegneAvArbeidstaker:
+        "The following answers are on behalf of the employee.",
     },
     landingsside: {
       hei: "Hello",
