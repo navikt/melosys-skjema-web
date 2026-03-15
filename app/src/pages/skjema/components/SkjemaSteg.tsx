@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, Heading } from "@navikt/ds-react";
+import { Button, Heading, HStack } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -48,7 +48,14 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         stegRekkefolge={config.stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">
-        {title}
+        {stepInfo?.icon ? (
+          <HStack align="center" gap="space-4">
+            {title}
+            <stepInfo.icon aria-hidden fontSize="1.5rem" />
+          </HStack>
+        ) : (
+          title
+        )}
       </Heading>
       {children}
       <div className="flex gap-4 justify-center mt-8">

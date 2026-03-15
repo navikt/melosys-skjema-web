@@ -1,3 +1,5 @@
+import { BriefcaseIcon, PersonRectangleIcon } from "@navikt/aksel-icons";
+
 import { StegKey } from "~/constants/stegKeys.ts";
 import { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
@@ -6,24 +8,28 @@ const ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
   title: "arbeidsgiverensVirksomhetINorgeSteg.tittel",
   route: "/skjema/$id/arbeidsgiverens-virksomhet-i-norge",
+  icon: BriefcaseIcon,
 };
 
 const UTENLANDSOPPDRAGET_STEG: StegRekkefolgeItem = {
   key: StegKey.UTENLANDSOPPDRAGET,
   title: "utenlandsoppdragetSteg.tittel",
   route: "/skjema/$id/utenlandsoppdraget",
+  icon: BriefcaseIcon,
 };
 
 const ARBEIDSSTED_I_UTLANDET_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSSTED_I_UTLANDET,
   title: "arbeidsstedIUtlandetSteg.tittel",
   route: "/skjema/$id/arbeidssted-i-utlandet",
+  icon: BriefcaseIcon,
 };
 
 const ARBEIDSTAKERENS_LONN_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSTAKERENS_LONN,
   title: "arbeidstakerenslonnSteg.tittel",
   route: "/skjema/$id/arbeidstakerens-lonn",
+  icon: BriefcaseIcon,
 };
 
 const UTSENDINGSPERIODE_OG_LAND_STEG: StegRekkefolgeItem = {
@@ -36,18 +42,21 @@ const ARBEIDSSITUASJON_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSSITUASJON,
   title: "arbeidssituasjonSteg.tittel",
   route: "/skjema/$id/arbeidssituasjon",
+  icon: PersonRectangleIcon,
 };
 
 const SKATTEFORHOLD_OG_INNTEKT_STEG: StegRekkefolgeItem = {
   key: StegKey.SKATTEFORHOLD_OG_INNTEKT,
   title: "skatteforholdOgInntektSteg.tittel",
   route: "/skjema/$id/skatteforhold-og-inntekt",
+  icon: PersonRectangleIcon,
 };
 
 const FAMILIEMEDLEMMER_STEG: StegRekkefolgeItem = {
   key: StegKey.FAMILIEMEDLEMMER,
   title: "familiemedlemmerSteg.tittel",
   route: "/skjema/$id/familiemedlemmer",
+  icon: PersonRectangleIcon,
 };
 
 const TILLEGGSOPPLYSNINGER_STEG: StegRekkefolgeItem = {
