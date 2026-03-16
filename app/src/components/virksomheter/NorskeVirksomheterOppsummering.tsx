@@ -57,9 +57,9 @@ export function NorskeVirksomheterOppsummering({
           gap: "var(--a-spacing-2)",
         }}
       >
-        {virksomheter.map((virksomhet, index) => (
+        {virksomheter.map((virksomhet) => (
           <NorskVirksomhetOppsummering
-            key={`norsk-${index}`}
+            key={virksomhet.organisasjonsnummer}
             virksomhet={virksomhet}
           />
         ))}

@@ -38,6 +38,7 @@ export function VedleggSteg({ id }: { id: string }) {
 }
 
 interface VedleggItem {
+  id: string;
   vedleggId?: string;
   fil: File;
   status: "uploading" | "idle" | "error";
@@ -97,6 +98,7 @@ function VedleggStegContent({
   const handleSelect = (_files: unknown, partitioned: FilesPartitioned) => {
     const rejectedItems: VedleggItem[] = partitioned.rejected.map(
       ({ file, reasons }) => ({
+        id: crypto.randomUUID(),
         fil: file,
         status: "error" as const,
         errorMessage: getRejectionMessage(reasons),
@@ -104,45 +106,46 @@ function VedleggStegContent({
     );
 
     const acceptedItems: VedleggItem[] = partitioned.accepted.map((fil) => ({
+      id: crypto.randomUUID(),
       fil,
       status: "uploading" as const,
     }));
 
     setVedleggItems((prev) => [...prev, ...rejectedItems, ...acceptedItems]);
 
-    for (const fil of partitioned.accepted) {
-      lastOppVedlegg(skjemaId, fil)
+    for (const item of acceptedItems) {
+      lastOppVedlegg(skjemaId, item.fil)
         .then((response) => {
           setVedleggItems((prev) =>
-            prev.map((item) =>
-              item.fil === fil
-                ? { ...item, vedleggId: response.id, status: "idle" as const }
-                : item,
+            prev.map((v) =>
+              v.id === item.id
+                ? { ...v, vedleggId: response.id, status: "idle" as const }
+                : v,
             ),
           );
         })
         .catch((error) => {
           setVedleggItems((prev) =>
-            prev.map((item) =>
-              item.fil === fil
+            prev.map((v) =>
+              v.id === item.id
                 ? {
-                    ...item,
+                    ...v,
                     status: "error" as const,
                     errorMessage: getErrorMessage(error),
                   }
-                : item,
+                : v,
             ),
           );
         });
     }
   };
 
-  const handleSlettNyItem = (fil: File) => {
-    const item = vedleggItems.find((v) => v.fil === fil);
+  const handleSlettNyItem = (itemId: string) => {
+    const item = vedleggItems.find((v) => v.id === itemId);
     if (item?.vedleggId) {
       slettVedlegg(skjemaId, item.vedleggId).catch(() => {});
     }
-    setVedleggItems((prev) => prev.filter((v) => v.fil !== fil));
+    setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
   };
 
   const handleSlettEksisterende = (vedleggId: string) => {
@@ -194,11 +197,11 @@ function VedleggStegContent({
               />
             ))}
 
-            {vedleggItems.map((item, index) => (
+            {vedleggItems.map((item) => (
               <FileUpload.Item
                 button={{
                   action: "delete",
-                  onClick: () => handleSlettNyItem(item.fil),
+                  onClick: () => handleSlettNyItem(item.id),
                 }}
                 error={item.status === "error" ? item.errorMessage : undefined}
                 file={item.fil}
@@ -207,7 +210,7 @@ function VedleggStegContent({
                     ? vedleggInnholdUrl(skjemaId, item.vedleggId)
                     : undefined
                 }
-                key={`new-${index}`}
+                key={item.id}
                 status={item.status === "uploading" ? "uploading" : undefined}
               />
             ))}

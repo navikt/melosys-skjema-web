@@ -32,11 +32,6 @@ export function VedleggOppsummering({
         <FormSummary.Heading level="3">
           {t("vedleggSteg.tittel")}
         </FormSummary.Heading>
-        {editHref && (
-          <FormSummary.EditLink href={editHref}>
-            {t("felles.endreSvar")}
-          </FormSummary.EditLink>
-        )}
       </FormSummary.Header>
       <FormSummary.Answers>
         {vedlegg.length === 0 ? (
@@ -61,6 +56,13 @@ export function VedleggOppsummering({
           ))
         )}
       </FormSummary.Answers>
+      {editHref && (
+        <FormSummary.Footer>
+          <FormSummary.EditLink href={editHref}>
+            {t("felles.endreSvar")}
+          </FormSummary.EditLink>
+        </FormSummary.Footer>
+      )}
     </FormSummary>
   );
 }

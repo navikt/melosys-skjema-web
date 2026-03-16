@@ -30,18 +30,21 @@ export function ListeFeltOppsummering({
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {verdi.map((item, index) => (
-              <Table.Row key={index}>
-                {elementFelter.map(([id, subfelt]) => (
-                  <Table.DataCell key={id}>
-                    {formaterVerdi(
-                      subfelt,
-                      (item as Record<string, unknown>)[id],
-                    )}
-                  </Table.DataCell>
-                ))}
-              </Table.Row>
-            ))}
+            {verdi.map((item) => {
+              const record = item as Record<string, unknown>;
+              const rowKey = elementFelter
+                .map(([id]) => String(record[id] ?? ""))
+                .join("-");
+              return (
+                <Table.Row key={rowKey}>
+                  {elementFelter.map(([id, subfelt]) => (
+                    <Table.DataCell key={id}>
+                      {formaterVerdi(subfelt, record[id])}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table>
       </FormSummary.Value>
