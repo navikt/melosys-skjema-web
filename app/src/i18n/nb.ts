@@ -159,6 +159,9 @@ export const nb = {
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
+      fullmaktFraArbeidstakerTittel: "Du har fullmakt fra arbeidstaker",
+      fullmaktFraArbeidstakerBeskrivelse:
+        "De neste spørsmålene svarer du på vegne av arbeidstaker.",
       duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
         "Du må svare på om du har vært eller skal være i lønnet arbeid i Norge før utsending",
       duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid:
@@ -414,6 +417,8 @@ export const nb = {
     },
     oppsummeringSteg: {
       tittel: "Oppsummering",
+      svarPaVegneAvArbeidstaker:
+        "De neste svarene er på vegne av arbeidstaker.",
     },
     generellValidering: {
       erPakrevd: "er påkrevd",

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading, Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -37,10 +37,12 @@ function ArbeidssituasjonStegContent({
   skjemaId,
   stegData,
   stegRekkefolge,
+  skjemadel,
 }: {
   skjemaId: string;
   stegData?: ArbeidssituasjonDto;
   stegRekkefolge: StegRekkefolgeItem[];
+  skjemadel: Skjemadel;
 }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -121,6 +123,17 @@ function ArbeidssituasjonStegContent({
             <NesteStegKnapp loading={postArbeidssituasjonMutation.isPending} />
           }
         >
+          {skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL && (
+            <Alert className="mt-4" variant="info">
+              <Heading level="2" size="small" spacing>
+                {t("arbeidssituasjonSteg.fullmaktFraArbeidstakerTittel")}
+              </Heading>
+              <BodyLong>
+                {t("arbeidssituasjonSteg.fullmaktFraArbeidstakerBeskrivelse")}
+              </BodyLong>
+            </Alert>
+          )}
+
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
@@ -174,6 +187,7 @@ export function ArbeidssituasjonSteg({ id }: { id: string }) {
         return (
           <ArbeidssituasjonStegContent
             skjemaId={skjema.id}
+            skjemadel={skjemadel}
             stegData={getArbeidssituasjon(skjema)}
             stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
           />
