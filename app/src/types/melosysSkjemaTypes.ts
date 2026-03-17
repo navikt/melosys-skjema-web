@@ -110,6 +110,7 @@ export enum LandKode {
   LV = "LV",
   MT = "MT",
   NL = "NL",
+  NO = "NO",
   PL = "PL",
   PT = "PT",
   RO = "RO",
@@ -406,13 +407,13 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
 };
 
 export interface UtsendtArbeidstakerMetadata {
+  /** @format uuid */
+  erstatterSkjemaId?: string;
   representasjonstype: Representasjonstype;
   juridiskEnhetOrgnr: string;
   arbeidsgiverNavn: string;
   /** @format uuid */
   kobletSkjemaId?: string;
-  /** @format uuid */
-  erstatterSkjemaId?: string;
   skjemadel: Skjemadel;
   metadatatype: string;
 }
@@ -508,7 +509,7 @@ export interface InnsendtSoknadOversiktDto {
   /** @format date-time */
   innsendtDato: string;
   status: SkjemaStatus;
-  harPdf: boolean;
+  fullmaktAktiv?: boolean;
 }
 
 export interface InnsendteSoknaderResponse {
@@ -603,6 +604,8 @@ export interface InnsendtSkjemaResponse {
     | UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
   /** Skjemadefinisjon for visning (basert på lagret versjon) */
   definisjon: SkjemaDefinisjonDto;
+  /** Indikerer om fullmakt er aktiv. null=ikke relevant, true=aktiv, false=tapt (arbeidstaker-data strippet). */
+  fullmaktAktiv?: boolean;
 }
 
 export type ListeFeltDefinisjon = UtilRequiredKeys<
@@ -774,6 +777,7 @@ export interface ErrorMessageTranslation {
   periodeTranslation: PeriodeTranslation;
   skatteforholdOgInntektTranslation: SkatteforholdOgInntektTranslation;
   tilleggsopplysningerTranslation: TilleggsopplysningerTranslation;
+  utsendingsperiodeOgLandTranslation: UtsendingsperiodeOgLandTranslation;
   utenlandsoppdragetTranslation: UtenlandsoppdragetTranslation;
   utenlandsoppdragetArbeidstakerTranslation: UtenlandsoppdragetArbeidstakerTranslation;
   familiemedlemmerTranslation: FamiliemedlemmerTranslation;
@@ -845,6 +849,10 @@ export interface UtenlandsoppdragetTranslation {
   duMaOppgiOmArbeidstakerVilJobbeEtterOppdraget: string;
   duMaOppgiBeskrivelseAvAnsettelsesforhold: string;
   duMaOppgiForrigeArbeidstakerUtsendelsePeriode: string;
+}
+
+export interface UtsendingsperiodeOgLandTranslation {
+  norgeErIkkeGyldigSomUtsendelsesland: string;
 }
 
 export interface OrganisasjonMedJuridiskEnhetDto {

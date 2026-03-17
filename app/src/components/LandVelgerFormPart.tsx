@@ -9,6 +9,7 @@ type LandVelgerFormPartProps = {
   formFieldName: string;
   label: string;
   className?: string;
+  inkluderNorge?: boolean;
 } & Omit<SelectProps, "children" | "onChange" | "value">;
 
 const landOptions = [
@@ -49,10 +50,17 @@ const landOptions = [
   { value: LandKode.AX, label: "Åland" },
 ];
 
+const landOptionsMedNorge = [
+  ...landOptions.slice(0, 20),
+  { value: LandKode.NO, label: "Norge" },
+  ...landOptions.slice(20),
+];
+
 export function LandVelgerFormPart({
   formFieldName,
   label,
   className,
+  inkluderNorge,
   ...selectProps
 }: LandVelgerFormPartProps) {
   const { register, getFieldState, formState } = useFormContext();
@@ -61,6 +69,8 @@ export function LandVelgerFormPart({
 
   const fieldState = getFieldState(formFieldName, formState);
   const error = translateError(fieldState.error?.message as string);
+
+  const options = inkluderNorge ? landOptionsMedNorge : landOptions;
 
   return (
     <Select
@@ -71,7 +81,7 @@ export function LandVelgerFormPart({
       {...selectProps}
     >
       <option value="">{t("landVelgerFormPart.velgLand")}</option>
-      {landOptions.map((land) => (
+      {options.map((land) => (
         <option key={land.value} value={land.value}>
           {land.label}
         </option>
@@ -81,7 +91,7 @@ export function LandVelgerFormPart({
 }
 
 export function landKodeTilNavn(landkode: string): string {
-  const land = landOptions.find((land) => land.value === landkode);
+  const land = landOptionsMedNorge.find((land) => land.value === landkode);
 
   return land ? land.label : landkode;
 }

@@ -80,6 +80,7 @@ export function PaSkipForm() {
         <LandVelgerFormPart
           className="mt-4"
           formFieldName="paSkip.flaggland"
+          inkluderNorge
           label={felter.flaggland.label}
         />
       )}
@@ -88,6 +89,7 @@ export function PaSkipForm() {
         <LandVelgerFormPart
           className="mt-4"
           formFieldName="paSkip.territorialfarvannLand"
+          inkluderNorge
           label={felter.territorialfarvannLand.label}
         />
       )}

@@ -61,6 +61,7 @@ export function OffshoreForm() {
       <LandVelgerFormPart
         className="mt-4"
         formFieldName="offshore.sokkelLand"
+        inkluderNorge
         label={felter.sokkelLand.label}
       />
     </div>
