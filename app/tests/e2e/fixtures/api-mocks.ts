@@ -2,7 +2,11 @@ import { Page } from "@playwright/test";
 
 import { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import type {
+  InnsendteSoknaderResponse,
+  InnsendtSkjemaResponse,
   OrganisasjonDto,
+  OrganisasjonMedJuridiskEnhetDto,
+  UtkastListeResponse,
   UtsendtArbeidstakerMetadata,
   UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
@@ -255,6 +259,24 @@ export async function mockGetEregOrganisasjon(page: Page) {
   });
 }
 
+export async function mockGetEregOrganisasjonMedJuridiskEnhet(
+  page: Page,
+  response: OrganisasjonMedJuridiskEnhetDto,
+) {
+  await page.route(
+    "/api/ereg/organisasjon-med-juridisk-enhet/*",
+    async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(response),
+        });
+      }
+    },
+  );
+}
+
 export async function setupApiMocksForArbeidsgiver(
   page: Page,
   skjema: UtsendtArbeidstakerSkjemaDto,
@@ -290,4 +312,88 @@ export async function setupApiMocksForArbeidstaker(
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
   await mockPostTilleggsopplysninger(page, skjema.id);
   await mockSendInnSkjema(page, skjema.id);
+}
+
+// ============ Oversikt page mocks ============
+
+export async function mockUtkastListe(
+  page: Page,
+  response: UtkastListeResponse,
+) {
+  await page.route(
+    /\/api\/skjema\/utsendt-arbeidstaker\/utkast/,
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(response),
+      });
+    },
+  );
+}
+
+export async function mockInnsendteSoknader(
+  page: Page,
+  response: InnsendteSoknaderResponse,
+) {
+  await page.route(
+    "/api/skjema/utsendt-arbeidstaker/innsendte",
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(response),
+      });
+    },
+  );
+}
+
+export async function mockOpprettSoknad(page: Page, responseId: string) {
+  await page.route(
+    "/api/skjema/utsendt-arbeidstaker/opprett-med-kontekst",
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ id: responseId, status: "UTKAST" }),
+      });
+    },
+  );
+}
+
+// ============ Innsendt skjema mocks ============
+
+export async function mockInnsendtSkjema(
+  page: Page,
+  skjemaId: string,
+  response: InnsendtSkjemaResponse,
+) {
+  await page.route(
+    new RegExp(`/api/skjema/utsendt-arbeidstaker/${skjemaId}/innsendt`),
+    async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(response),
+        });
+      }
+    },
+  );
+}
+
+// ============ Oversikt composite setup ============
+
+export async function setupApiMocksForOversikt(
+  page: Page,
+  userInfo: UserInfo,
+  organisasjoner: OrganisasjonDto[],
+  utkast: UtkastListeResponse,
+  innsendteSoknader: InnsendteSoknaderResponse,
+) {
+  await mockUserInfo(page, userInfo);
+  await mockHentTilganger(page, organisasjoner);
+  await mockGetEregOrganisasjon(page);
+  await mockUtkastListe(page, utkast);
+  await mockInnsendteSoknader(page, innsendteSoknader);
 }

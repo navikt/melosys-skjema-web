@@ -4,6 +4,8 @@ import type { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import {
   type ArbeidsgiverMetadata,
   type DegSelvMetadata,
+  type InnsendteSoknaderResponse,
+  type InnsendtSkjemaResponse,
   LandKode,
   type OrganisasjonDto,
   Representasjonstype,
@@ -11,6 +13,8 @@ import {
   type SkjemaInnsendtKvittering,
   SkjemaStatus,
   SkjemaType,
+  Sprak,
+  type UtkastListeResponse,
   type UtsendtArbeidstakerSkjemaDto,
 } from "../../../src/types/melosysSkjemaTypes";
 
@@ -97,4 +101,84 @@ export const skjemaInnsendtKvittering: SkjemaInnsendtKvittering = {
   skjemaId: "test-skjema-id",
   status: SkjemaStatus.SENDT,
   referanseId: "ABC123XYZ",
+};
+
+// ============ Oversikt test data ============
+
+export const emptyUtkastListe: UtkastListeResponse = {
+  utkast: [],
+  antall: 0,
+};
+
+export const testUtkastListe: UtkastListeResponse = {
+  utkast: [
+    {
+      id: "utkast-1",
+      arbeidsgiverNavn: "Test Bedrift AS",
+      arbeidsgiverOrgnr: "123456789",
+      arbeidstakerNavn: "Test Bruker",
+      arbeidstakerFnrMaskert: "123456*****",
+      opprettetDato: "2026-01-15T10:00:00Z",
+      sistEndretDato: "2026-01-16T14:30:00Z",
+      status: SkjemaStatus.UTKAST,
+    },
+  ],
+  antall: 1,
+};
+
+export const emptyInnsendteSoknader: InnsendteSoknaderResponse = {
+  soknader: [],
+  totaltAntall: 0,
+  side: 1,
+  antallPerSide: 5,
+};
+
+export const testInnsendteSoknader: InnsendteSoknaderResponse = {
+  soknader: [
+    {
+      id: "innsendt-1",
+      referanseId: "REF001",
+      arbeidsgiverNavn: "Test Bedrift AS",
+      arbeidsgiverOrgnr: "123456789",
+      arbeidstakerNavn: "Test Bruker",
+      arbeidstakerFnrMaskert: "123456*****",
+      arbeidstakerFodselsdato: "1990-01-01",
+      innsendtDato: "2026-01-10T12:00:00Z",
+      status: SkjemaStatus.SENDT,
+      harPdf: false,
+    },
+  ],
+  totaltAntall: 1,
+  side: 1,
+  antallPerSide: 5,
+};
+
+// ============ Innsendt skjema test data ============
+
+export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
+  skjemaId: testArbeidstakerSkjemaId,
+  referanseId: "REF-AT-001",
+  innsendtDato: "2026-01-10T12:00:00Z",
+  innsendtSprak: Sprak.Nb,
+  skjemaDefinisjonVersjon: "1",
+  skjemaData: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+  } as InnsendtSkjemaResponse["skjemaData"],
+  definisjon: {
+    seksjoner: {},
+  } as unknown as InnsendtSkjemaResponse["definisjon"],
+};
+
+export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
+  skjemaId: testArbeidsgiverSkjemaId,
+  referanseId: "REF-AG-001",
+  innsendtDato: "2026-01-10T12:00:00Z",
+  innsendtSprak: Sprak.Nb,
+  skjemaDefinisjonVersjon: "1",
+  skjemaData: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
+  } as InnsendtSkjemaResponse["skjemaData"],
+  definisjon: {
+    seksjoner: {},
+  } as unknown as InnsendtSkjemaResponse["definisjon"],
 };
