@@ -6,6 +6,7 @@ import type {
   ArbeidsgiverensVirksomhetINorgeDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
+
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 import { mockFetchSkjema } from "../../../fixtures/api-mocks";
 

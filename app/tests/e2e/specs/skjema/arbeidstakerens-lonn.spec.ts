@@ -1,9 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-import {
-  ArbeidstakerensLonnDto,
-  LandKode,
-} from "~/types/melosysSkjemaTypes";
+import { ArbeidstakerensLonnDto, LandKode } from "~/types/melosysSkjemaTypes";
+
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import {
   korrektFormatertOrgnr,

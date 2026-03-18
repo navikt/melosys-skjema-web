@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 import { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes";
+
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import {
   formFieldValues,

@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 import { FamiliemedlemmerDto } from "~/types/melosysSkjemaTypes";
+
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
 import { FamiliemedlemmerStegPage } from "../../pages/skjema/arbeidstaker/familiemedlemmer-steg.page";

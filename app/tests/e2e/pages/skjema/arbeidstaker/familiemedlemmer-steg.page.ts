@@ -6,6 +6,7 @@ import type {
   FamiliemedlemmerDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
+
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 
 // Hent felter fra statiske definisjoner

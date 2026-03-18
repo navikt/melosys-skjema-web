@@ -8,6 +8,7 @@ import {
   LandKode,
   TypeInnretning,
 } from "~/types/melosysSkjemaTypes";
+
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import {
   testArbeidsgiverSkjema,

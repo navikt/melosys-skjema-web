@@ -2,10 +2,8 @@ import { expect, test } from "@playwright/test";
 
 import { nb } from "~/i18n/nb";
 import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes";
-import {
-  Ansettelsesform,
-  LandKode,
-} from "~/types/melosysSkjemaTypes";
+import { Ansettelsesform, LandKode } from "~/types/melosysSkjemaTypes";
+
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import {
   korrektFormatertOrgnr,
