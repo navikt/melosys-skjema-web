@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "../../../../src/i18n/nb";
-import { Representasjonstype } from "../../../../src/types/melosysSkjemaTypes";
+import { nb } from "~/i18n/nb";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 const translations = nb.translation;
 

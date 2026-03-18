@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "../../../../../src/i18n/nb";
-import type { UtsendtArbeidstakerSkjemaDto } from "../../../../../src/types/melosysSkjemaTypes";
+import { nb } from "~/i18n/nb";
+import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes";
 
 export class VedleggStegPage {
   readonly page: Page;

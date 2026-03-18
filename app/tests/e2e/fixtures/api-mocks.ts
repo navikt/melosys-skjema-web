@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 
-import { UserInfo } from "../../../src/httpClients/dekoratorenClient";
+import { UserInfo } from "~/httpClients/dekoratorenClient";
 import type {
   InnsendteSoknaderResponse,
   InnsendtSkjemaResponse,
@@ -11,7 +11,7 @@ import type {
   UtsendtArbeidstakerMetadata,
   UtsendtArbeidstakerSkjemaDto,
   VedleggDto,
-} from "../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 import { skjemaInnsendtKvittering } from "./test-data";
 
 export async function mockHentTilganger(

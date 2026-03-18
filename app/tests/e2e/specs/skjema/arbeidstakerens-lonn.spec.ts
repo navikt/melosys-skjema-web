@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import {
   ArbeidstakerensLonnDto,
   LandKode,
-} from "../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import {
   korrektFormatertOrgnr,

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { Representasjonstype } from "../../../src/types/melosysSkjemaTypes";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 import {
   interceptOpprettSoknad,
   mockGetEregOrganisasjonMedJuridiskEnhet,

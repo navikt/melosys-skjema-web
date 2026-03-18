@@ -1,6 +1,6 @@
 // Test data constants that can be reused across tests
 
-import type { UserInfo } from "../../../src/httpClients/dekoratorenClient";
+import type { UserInfo } from "~/httpClients/dekoratorenClient";
 import {
   type ArbeidsgiverMedFullmaktMetadata,
   type ArbeidsgiverMetadata,
@@ -19,7 +19,7 @@ import {
   Sprak,
   type UtkastListeResponse,
   type UtsendtArbeidstakerSkjemaDto,
-} from "../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 
 // Gyldige organisasjonsnummer (MOD11-validert)
 export const korrektFormatertOrgnr = "974760673";

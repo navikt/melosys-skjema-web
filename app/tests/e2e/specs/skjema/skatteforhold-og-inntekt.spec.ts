@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { SkatteforholdOgInntektDto } from "../../../../src/types/melosysSkjemaTypes";
+import { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes";
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
 import { SkatteforholdOgInntektStegPage } from "../../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";

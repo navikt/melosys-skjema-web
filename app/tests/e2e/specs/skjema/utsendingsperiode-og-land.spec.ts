@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { UtsendingsperiodeOgLandDto } from "../../../../src/types/melosysSkjemaTypes";
+import { UtsendingsperiodeOgLandDto } from "~/types/melosysSkjemaTypes";
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import {
   formFieldValues,

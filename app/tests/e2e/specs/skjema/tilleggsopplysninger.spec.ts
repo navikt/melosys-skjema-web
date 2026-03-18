@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { TilleggsopplysningerDto } from "../../../../src/types/melosysSkjemaTypes";
+import { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes";
 import {
   setupApiMocksForArbeidsgiver,
   setupApiMocksForArbeidstaker,

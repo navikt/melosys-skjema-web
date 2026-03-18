@@ -12,7 +12,7 @@ import {
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
   type UtsendtArbeidstakerSkjemaDto,
-} from "../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 import {
   mockFetchSkjema,
   setupApiMocksForArbeidsgiver,

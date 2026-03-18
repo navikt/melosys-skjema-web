@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
-import { nb } from "../../../../../src/i18n/nb";
+import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { nb } from "~/i18n/nb";
 import type {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidsstedIUtlandetDto,
@@ -10,7 +10,7 @@ import type {
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
   UtsendtArbeidstakerSkjemaDto,
-} from "../../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 
 // Hent felter fra statiske definisjoner
 const virksomhetINorge =

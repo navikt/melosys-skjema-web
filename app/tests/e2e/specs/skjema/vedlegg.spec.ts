@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { VedleggFiltype } from "../../../../src/types/melosysSkjemaTypes";
+import { VedleggFiltype } from "~/types/melosysSkjemaTypes";
 import {
   mockHentVedlegg,
   mockLastOppVedlegg,

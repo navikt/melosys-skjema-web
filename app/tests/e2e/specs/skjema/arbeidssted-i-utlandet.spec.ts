@@ -7,7 +7,7 @@ import {
   FastEllerVekslendeArbeidssted,
   LandKode,
   TypeInnretning,
-} from "../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import {
   testArbeidsgiverSkjema,

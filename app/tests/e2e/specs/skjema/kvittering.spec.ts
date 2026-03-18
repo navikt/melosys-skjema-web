@@ -8,7 +8,7 @@ import {
   SkjemaStatus,
   SkjemaType,
   type UtsendtArbeidstakerSkjemaDto,
-} from "../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 import {
   mockFetchSkjema,
   mockSkjemaMetadata,

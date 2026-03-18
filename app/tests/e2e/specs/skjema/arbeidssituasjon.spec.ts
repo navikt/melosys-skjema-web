@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-import { nb } from "../../../../src/i18n/nb";
-import type { ArbeidssituasjonDto } from "../../../../src/types/melosysSkjemaTypes";
+import { nb } from "~/i18n/nb";
+import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes";
 import {
   Ansettelsesform,
   LandKode,
-} from "../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import {
   korrektFormatertOrgnr,
