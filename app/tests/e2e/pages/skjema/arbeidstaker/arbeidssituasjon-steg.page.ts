@@ -3,22 +3,23 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import { nb } from "~/i18n/nb";
 import type {
-  ArbeidstakerensLonnDto,
+  ArbeidssituasjonDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
 
-// Hent felter fra statiske definisjoner
-const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
-const felter = arbeidstakerensLonn.felter;
+const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
+const felter = arbeidssituasjon.felter;
 const t = nb.translation;
 
-export class ArbeidstakerensLonnStegPage {
+export class ArbeidssituasjonStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
-  readonly arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup: RadioButtonGroupJaNeiLocator;
+  readonly harVaertILonnetArbeidRadioGroup: RadioButtonGroupJaNeiLocator;
+  readonly aktivitetTextarea: Locator;
+  readonly skalJobbeForFlereVirksomheterRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly leggTilNorskVirksomhetButton: Locator;
   readonly leggTilUtenlandskVirksomhetButton: Locator;
   readonly lagreOgFortsettButton: Locator;
@@ -27,21 +28,33 @@ export class ArbeidstakerensLonnStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: arbeidstakerensLonn.tittel,
+      name: arbeidssituasjon.tittel,
     });
 
-    const arbeidsgiverBetalerAllLonnOgNaturaytelserGroup = page.getByRole(
-      "group",
-      {
-        name: felter
-          .arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden.label,
-      },
-    );
-    this.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup = {
-      JA: arbeidsgiverBetalerAllLonnOgNaturaytelserGroup.getByRole("radio", {
+    const harVaertGroup = page.getByRole("group", {
+      name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
+    });
+    this.harVaertILonnetArbeidRadioGroup = {
+      JA: harVaertGroup.getByRole("radio", {
         name: t.felles.ja,
       }),
-      NEI: arbeidsgiverBetalerAllLonnOgNaturaytelserGroup.getByRole("radio", {
+      NEI: harVaertGroup.getByRole("radio", {
+        name: t.felles.nei,
+      }),
+    };
+
+    this.aktivitetTextarea = page.getByLabel(
+      felter.aktivitetIMaanedenFoerUtsendingen.label,
+    );
+
+    const skalJobbeGroup = page.getByRole("group", {
+      name: felter.skalJobbeForFlereVirksomheter.label,
+    });
+    this.skalJobbeForFlereVirksomheterRadioGroup = {
+      JA: skalJobbeGroup.getByRole("radio", {
+        name: t.felles.ja,
+      }),
+      NEI: skalJobbeGroup.getByRole("radio", {
         name: t.felles.nei,
       }),
     };
@@ -59,7 +72,7 @@ export class ArbeidstakerensLonnStegPage {
   }
 
   async goto() {
-    await this.page.goto(`/skjema/${this.skjema.id}/arbeidstakerens-lonn`);
+    await this.page.goto(`/skjema/${this.skjema.id}/arbeidssituasjon`);
   }
 
   async assertIsVisible() {
@@ -83,25 +96,25 @@ export class ArbeidstakerensLonnStegPage {
       .getByRole("button", { name: t.oversiktFelles.arbeidstakerSokKnapp })
       .click();
 
-    // Wait for the org lookup to resolve — ValgtOrganisasjon renders the org name
+    // Wait for org lookup to resolve — ValgtOrganisasjon renders the org name
     await dialog
       .getByText("Test Organisasjon AS")
       .waitFor({ state: "visible" });
 
     await dialog.getByRole("button", { name: t.felles.lagre }).click();
-
-    // Wait for modal to close
     await expect(dialog).not.toBeVisible();
   }
 
   /**
-   * Opens the "Legg til utenlandsk virksomhet" modal, fills required fields, clicks Lagre.
+   * Opens the "Legg til utenlandsk virksomhet" modal with ansettelsesform
+   * (since arbeidssituasjon uses includeAnsettelsesform=true).
    */
-  async leggTilUtenlandskVirksomhet(opts: {
+  async leggTilUtenlandskVirksomhetMedAnsettelsesform(opts: {
     navn: string;
     vegnavnOgHusnummer: string;
     land: string;
     tilhorerSammeKonsern: boolean;
+    ansettelsesformLabel: string;
   }) {
     await this.leggTilUtenlandskVirksomhetButton.click();
 
@@ -131,9 +144,15 @@ export class ArbeidstakerensLonnStegPage {
       ? konsernGroup.getByRole("radio", { name: t.felles.ja }).click()
       : konsernGroup.getByRole("radio", { name: t.felles.nei }).click());
 
-    await dialog.getByRole("button", { name: t.felles.lagre }).click();
+    // Ansettelsesform radio group (only in arbeidssituasjon context)
+    const ansettelsesformGroup = dialog.getByRole("group", {
+      name: t.utenlandskeVirksomheterFormPart.ansettelsesform,
+    });
+    await ansettelsesformGroup
+      .getByRole("radio", { name: opts.ansettelsesformLabel })
+      .click();
 
-    // Wait for modal to close
+    await dialog.getByRole("button", { name: t.felles.lagre }).click();
     await expect(dialog).not.toBeVisible();
   }
 
@@ -143,15 +162,13 @@ export class ArbeidstakerensLonnStegPage {
 
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
-      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/arbeidstakerens-lonn`,
+      `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/arbeidssituasjon`,
     );
     await this.lagreOgFortsett();
     return await requestPromise;
   }
 
-  async lagreOgFortsettAndExpectPayload(
-    expectedPayload: ArbeidstakerensLonnDto,
-  ) {
+  async lagreOgFortsettAndExpectPayload(expectedPayload: ArbeidssituasjonDto) {
     const apiCall = await this.lagreOgFortsettAndWaitForApiRequest();
     expect(apiCall.postDataJSON()).toStrictEqual(expectedPayload);
     return apiCall;
@@ -159,7 +176,7 @@ export class ArbeidstakerensLonnStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
-      `/skjema/${this.skjema.id}/tilleggsopplysninger`,
+      `/skjema/${this.skjema.id}/skatteforhold-og-inntekt`,
     );
   }
 }

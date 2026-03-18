@@ -1,11 +1,18 @@
 import { Page } from "@playwright/test";
 
-import { UserInfo } from "../../../src/httpClients/dekoratorenClient";
+import { UserInfo } from "~/httpClients/dekoratorenClient";
 import type {
+  InnsendteSoknaderResponse,
+  InnsendtSkjemaResponse,
   OrganisasjonDto,
+  OrganisasjonMedJuridiskEnhetDto,
+  PersonMedFullmaktDto,
+  UtkastListeResponse,
   UtsendtArbeidstakerMetadata,
   UtsendtArbeidstakerSkjemaDto,
-} from "../../../src/types/melosysSkjemaTypes";
+  VedleggDto,
+} from "~/types/melosysSkjemaTypes";
+
 import { skjemaInnsendtKvittering } from "./test-data";
 
 export async function mockHentTilganger(
@@ -232,27 +239,40 @@ export async function mockSendInnSkjema(page: Page, skjemaId: string) {
   );
 }
 
-export async function mockGetEregOrganisasjon(page: Page) {
+export async function mockGetEregOrganisasjon(
+  page: Page,
+  navn = "Test Organisasjon AS",
+) {
   await page.route("/api/ereg/organisasjon/*", async (route) => {
     if (route.request().method() === "GET") {
+      // Extract the orgnr from the URL so the response matches the search value
+      const url = route.request().url();
+      const orgnrFromUrl = url.split("/api/ereg/organisasjon/")[1];
       await route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({
-          organisasjon: {
-            organisasjonsnummer: "123456789",
-            navn: "Test Organisasjon AS",
-            type: "Virksomhet",
-          },
-          juridiskEnhet: {
-            organisasjonsnummer: "123456789",
-            navn: "Test Organisasjon AS",
-            type: "AS",
-          },
-        }),
+        body: JSON.stringify({ orgnr: orgnrFromUrl, navn }),
       });
     }
   });
+}
+
+export async function mockGetEregOrganisasjonMedJuridiskEnhet(
+  page: Page,
+  response: OrganisasjonMedJuridiskEnhetDto,
+) {
+  await page.route(
+    "/api/ereg/organisasjon-med-juridisk-enhet/*",
+    async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(response),
+        });
+      }
+    },
+  );
 }
 
 export async function setupApiMocksForArbeidsgiver(
@@ -290,4 +310,208 @@ export async function setupApiMocksForArbeidstaker(
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
   await mockPostTilleggsopplysninger(page, skjema.id);
   await mockSendInnSkjema(page, skjema.id);
+}
+
+export async function setupApiMocksForKombinert(
+  page: Page,
+  skjema: UtsendtArbeidstakerSkjemaDto,
+  tilganger: OrganisasjonDto[],
+  userInfo: UserInfo,
+) {
+  await mockHentTilganger(page, tilganger);
+  await mockUserInfo(page, userInfo);
+  await mockSkjemaMetadata(page, skjema.id, skjema.metadata);
+  await mockFetchSkjema(page, skjema);
+  await mockGetEregOrganisasjon(page);
+  // Arbeidsgiver steps
+  await mockPostVirksomhetINorge(page, skjema.id);
+  await mockPostUtenlandsoppdraget(page, skjema.id);
+  await mockPostArbeidsstedIUtlandet(page, skjema.id);
+  await mockPostArbeidstakerensLonn(page, skjema.id);
+  // Arbeidstaker steps
+  await mockPostArbeidssituasjon(page, skjema.id);
+  await mockPostSkatteforholdOgInntekt(page, skjema.id);
+  await mockPostFamiliemedlemmer(page, skjema.id);
+  await mockPostUtsendingsperiodeOgLand(page, skjema.id);
+  // Shared steps
+  await mockPostTilleggsopplysninger(page, skjema.id);
+  await mockSendInnSkjema(page, skjema.id);
+}
+
+// ============ Oversikt SoknadStarter mocks ============
+
+export async function mockPersonerMedFullmakt(
+  page: Page,
+  personer: PersonMedFullmaktDto[],
+) {
+  await page.route("/api/representasjon/personer", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(personer),
+    });
+  });
+}
+
+export async function mockVerifiserPerson(
+  page: Page,
+  response: { navn: string; fodselsdato: string },
+) {
+  await page.route("/api/arbeidstaker/verifiser-person", async (route) => {
+    if (route.request().method() === "POST") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(response),
+      });
+    }
+  });
+}
+
+// ============ Oversikt page mocks ============
+
+export async function mockUtkastListe(
+  page: Page,
+  response: UtkastListeResponse,
+) {
+  await page.route(
+    /\/api\/skjema\/utsendt-arbeidstaker\/utkast/,
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(response),
+      });
+    },
+  );
+}
+
+export async function mockInnsendteSoknader(
+  page: Page,
+  response: InnsendteSoknaderResponse,
+) {
+  await page.route(
+    "/api/skjema/utsendt-arbeidstaker/innsendte",
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(response),
+      });
+    },
+  );
+}
+
+export async function mockOpprettSoknad(page: Page, responseId: string) {
+  await page.route(
+    "/api/skjema/utsendt-arbeidstaker/opprett-med-kontekst",
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ id: responseId, status: "UTKAST" }),
+      });
+    },
+  );
+}
+
+/**
+ * Intercepts the opprett-soknad POST request and returns the request body.
+ * Use this variant when you need to assert on the POST payload.
+ */
+export function interceptOpprettSoknad(
+  page: Page,
+  responseId: string,
+): Promise<unknown> {
+  return new Promise((resolve) => {
+    void page.route(
+      "/api/skjema/utsendt-arbeidstaker/opprett-med-kontekst",
+      async (route) => {
+        const body = route.request().postDataJSON();
+        resolve(body);
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ id: responseId, status: "UTKAST" }),
+        });
+      },
+    );
+  });
+}
+
+// ============ Vedlegg mocks ============
+
+export async function mockHentVedlegg(
+  page: Page,
+  skjemaId: string,
+  vedlegg: VedleggDto[] = [],
+) {
+  await page.route(
+    new RegExp(`/api/skjema/${skjemaId}/vedlegg$`),
+    async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(vedlegg),
+        });
+      }
+    },
+  );
+}
+
+export async function mockLastOppVedlegg(
+  page: Page,
+  skjemaId: string,
+  response: VedleggDto,
+) {
+  await page.route(
+    new RegExp(`/api/skjema/${skjemaId}/vedlegg$`),
+    async (route) => {
+      await (route.request().method() === "POST"
+        ? route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify(response),
+          })
+        : route.fallback());
+    },
+  );
+}
+
+// ============ Innsendt skjema mocks ============
+
+export async function mockInnsendtSkjema(
+  page: Page,
+  skjemaId: string,
+  response: InnsendtSkjemaResponse,
+) {
+  await page.route(
+    new RegExp(`/api/skjema/utsendt-arbeidstaker/${skjemaId}/innsendt`),
+    async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(response),
+        });
+      }
+    },
+  );
+}
+
+// ============ Oversikt composite setup ============
+
+export async function setupApiMocksForOversikt(
+  page: Page,
+  userInfo: UserInfo,
+  organisasjoner: OrganisasjonDto[],
+  utkast: UtkastListeResponse,
+  innsendteSoknader: InnsendteSoknaderResponse,
+) {
+  await mockUserInfo(page, userInfo);
+  await mockHentTilganger(page, organisasjoner);
+  await mockGetEregOrganisasjon(page);
+  await mockUtkastListe(page, utkast);
+  await mockInnsendteSoknader(page, innsendteSoknader);
 }

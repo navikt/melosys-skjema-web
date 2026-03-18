@@ -8,16 +8,17 @@ import {
   SkjemaStatus,
   SkjemaType,
   type UtsendtArbeidstakerSkjemaDto,
-} from "../../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
+
 import {
   mockFetchSkjema,
   mockSkjemaMetadata,
   mockUserInfo,
-} from "../../../fixtures/api-mocks";
-import { testUserInfo } from "../../../fixtures/test-data";
-import { KvitteringPage } from "../../../pages/skjema/kvittering/kvittering-page";
+} from "../../fixtures/api-mocks";
+import { testUserInfo } from "../../fixtures/test-data";
+import { KvitteringPage } from "../../pages/skjema/kvittering/kvittering-page";
 
-test.describe("Kvittering page", () => {
+test.describe("Kvittering", () => {
   const skjemaId = "test-skjema-id";
   const metadata: DegSelvMetadata = {
     representasjonstype: Representasjonstype.DEG_SELV,
@@ -42,9 +43,7 @@ test.describe("Kvittering page", () => {
     await mockFetchSkjema(page, skjema);
   });
 
-  test("should display receipt after successful submission", async ({
-    page,
-  }) => {
+  test("viser kvittering etter vellykket innsending", async ({ page }) => {
     const kvittering: SkjemaInnsendtKvittering = {
       skjemaId: skjemaId,
       status: SkjemaStatus.SENDT,

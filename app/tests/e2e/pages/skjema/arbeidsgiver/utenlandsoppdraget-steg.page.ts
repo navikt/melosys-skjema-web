@@ -1,12 +1,14 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
-import { nb } from "../../../../../src/i18n/nb";
+import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
+import { nb } from "~/i18n/nb";
 import type {
   UtenlandsoppdragetDto,
   UtsendtArbeidstakerSkjemaDto,
-} from "../../../../../src/types/melosysSkjemaTypes";
+} from "~/types/melosysSkjemaTypes";
+
 import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
 
 // Hent felter fra statiske definisjoner
 const utenlandsoppdraget =
@@ -21,6 +23,11 @@ export class UtenlandsoppdragetStegPage {
   readonly arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly arbeidstakerForblirAnsattIHelePeriodenRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly arbeidstakerErstatterAnnenPersonRadioGroup: RadioButtonGroupJaNeiLocator;
+  readonly arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdragetRadioGroup: RadioButtonGroupJaNeiLocator;
+  readonly utenlandsoppholdetsBegrunnelseTextarea: Locator;
+  readonly ansettelsesforholdBeskrivelseTextarea: Locator;
+  readonly forrigeArbeidstakerFraDatoInput: Locator;
+  readonly forrigeArbeidstakerTilDatoInput: Locator;
   readonly lagreOgFortsettButton: Locator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
@@ -84,6 +91,33 @@ export class UtenlandsoppdragetStegPage {
       }),
     };
 
+    // Conditional fields
+    const arbeidstakerVilJobbeEtterOppdragetGroup = page.getByRole("group", {
+      name: felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget.label,
+    });
+    this.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdragetRadioGroup = {
+      JA: arbeidstakerVilJobbeEtterOppdragetGroup.getByRole("radio", {
+        name: nb.translation.felles.ja,
+      }),
+      NEI: arbeidstakerVilJobbeEtterOppdragetGroup.getByRole("radio", {
+        name: nb.translation.felles.nei,
+      }),
+    };
+
+    this.utenlandsoppholdetsBegrunnelseTextarea = page.getByLabel(
+      felter.utenlandsoppholdetsBegrunnelse.label,
+    );
+    this.ansettelsesforholdBeskrivelseTextarea = page.getByLabel(
+      felter.ansettelsesforholdBeskrivelse.label,
+    );
+
+    this.forrigeArbeidstakerFraDatoInput = page.getByLabel(
+      felter.forrigeArbeidstakerUtsendelsePeriode.fraDatoLabel,
+    );
+    this.forrigeArbeidstakerTilDatoInput = page.getByLabel(
+      felter.forrigeArbeidstakerUtsendelsePeriode.tilDatoLabel,
+    );
+
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
     });
@@ -120,6 +154,22 @@ export class UtenlandsoppdragetStegPage {
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidssted-i-utlandet`,
+    );
+  }
+
+  async fillForrigeArbeidstakerFraDato(date: string) {
+    await selectDateFromCalendar(
+      this.page,
+      this.forrigeArbeidstakerFraDatoInput,
+      date,
+    );
+  }
+
+  async fillForrigeArbeidstakerTilDato(date: string) {
+    await selectDateFromCalendar(
+      this.page,
+      this.forrigeArbeidstakerTilDatoInput,
+      date,
     );
   }
 }
