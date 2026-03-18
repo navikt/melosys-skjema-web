@@ -148,7 +148,6 @@ export const testInnsendteSoknader: InnsendteSoknaderResponse = {
       arbeidstakerFodselsdato: "1990-01-01",
       innsendtDato: "2026-01-10T12:00:00Z",
       status: SkjemaStatus.SENDT,
-      harPdf: false,
     },
   ],
   totaltAntall: 1,
