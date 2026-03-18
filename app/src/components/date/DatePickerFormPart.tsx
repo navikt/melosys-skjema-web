@@ -25,13 +25,18 @@ export function DatePickerFormPart({
   ...datePickerOptions
 }: DatePickerFormPartProps) {
   const {
+    register,
     setValue,
     formState: { errors },
   } = useFormContext();
   const translateError = useTranslateError();
 
+  // Registrer feltet i react-hook-form slik at valideringsfeil
+  // fra zodResolver legges inn i formState.errors for dette feltet
+  register(formFieldName);
+
   const fieldError = get(errors, formFieldName)?.message as string | undefined;
-  const error = translateError(externalError ?? fieldError);
+  const error = translateError(externalError || fieldError);
 
   const datePicker = useDatepicker({
     onDateChange: (date) =>

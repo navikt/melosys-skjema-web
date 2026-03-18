@@ -30,7 +30,7 @@ test.describe("Utsendingsperiode og land", () => {
     await utsendingsperiodeOgLandStegPage.goto();
     await utsendingsperiodeOgLandStegPage.assertIsVisible();
 
-    await utsendingsperiodeOgLandStegPage.utsendelseLandCombobox.selectOption(
+    await utsendingsperiodeOgLandStegPage.velgLand(
       formFieldValues.utsendelseLand,
     );
 
