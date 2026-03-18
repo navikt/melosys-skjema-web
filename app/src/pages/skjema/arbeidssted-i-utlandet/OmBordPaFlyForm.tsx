@@ -33,6 +33,7 @@ export function OmBordPaFlyForm() {
         className="mt-4"
         description={felter.hjemmebaseLand.hjelpetekst}
         formFieldName="omBordPaFly.hjemmebaseLand"
+        inkluderNorge
         label={felter.hjemmebaseLand.label}
       />
 
@@ -61,6 +62,7 @@ export function OmBordPaFlyForm() {
           <LandVelgerFormPart
             className="mt-4"
             formFieldName="omBordPaFly.vanligHjemmebaseLand"
+            inkluderNorge
             label={felter.vanligHjemmebaseLand.label}
           />
 

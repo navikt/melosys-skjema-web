@@ -1,6 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { landKodeTilNavn } from "../../../../../src/components/LandVelgerFormPart";
 import { SKJEMA_DEFINISJON_A1 } from "../../../../../src/constants/skjemaDefinisjonA1";
 import { nb } from "../../../../../src/i18n/nb";
 import type {
@@ -52,7 +51,7 @@ export class OppsummeringStegPage {
       this.page.locator(
         `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelseLand.label}") + dd`,
       ),
-    ).toHaveText(landKodeTilNavn(data.utsendelseLand));
+    ).toHaveText(nb.translation.land[data.utsendelseLand]);
 
     await expect(
       this.page.locator(
@@ -121,7 +120,11 @@ export class OppsummeringStegPage {
         this.page.locator(
           `dt:has-text("${skatteforholdOgInntekt.felter.landSomUtbetalerPengestotte.label}") + dd`,
         ),
-      ).toHaveText(landKodeTilNavn(data.landSomUtbetalerPengestotte));
+      ).toHaveText(
+        nb.translation.land[
+          data.landSomUtbetalerPengestotte as keyof typeof nb.translation.land
+        ],
+      );
     }
 
     if (data.pengestotteSomMottasFraAndreLandBelop !== undefined) {

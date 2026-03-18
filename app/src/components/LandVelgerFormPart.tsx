@@ -1,4 +1,5 @@
 import { Select, SelectProps } from "@navikt/ds-react";
+import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -9,50 +10,54 @@ type LandVelgerFormPartProps = {
   formFieldName: string;
   label: string;
   className?: string;
+  inkluderNorge?: boolean;
 } & Omit<SelectProps, "children" | "onChange" | "value">;
 
-const landOptions = [
-  { value: LandKode.BE, label: "Belgia" },
-  { value: LandKode.BG, label: "Bulgaria" },
-  { value: LandKode.DK, label: "Danmark" },
-  { value: LandKode.EE, label: "Estland" },
-  { value: LandKode.FI, label: "Finland" },
-  { value: LandKode.FR, label: "Frankrike" },
-  { value: LandKode.FO, label: "Færøyene" },
-  { value: LandKode.GL, label: "Grønland" },
-  { value: LandKode.GR, label: "Hellas" },
-  { value: LandKode.IE, label: "Irland" },
-  { value: LandKode.IS, label: "Island" },
-  { value: LandKode.IT, label: "Italia" },
-  { value: LandKode.HR, label: "Kroatia" },
-  { value: LandKode.CY, label: "Kypros" },
-  { value: LandKode.LV, label: "Latvia" },
-  { value: LandKode.LI, label: "Liechtenstein" },
-  { value: LandKode.LT, label: "Litauen" },
-  { value: LandKode.LU, label: "Luxembourg" },
-  { value: LandKode.MT, label: "Malta" },
-  { value: LandKode.NL, label: "Nederland" },
-  { value: LandKode.PL, label: "Polen" },
-  { value: LandKode.PT, label: "Portugal" },
-  { value: LandKode.RO, label: "Romania" },
-  { value: LandKode.SK, label: "Slovakia" },
-  { value: LandKode.SI, label: "Slovenia" },
-  { value: LandKode.ES, label: "Spania" },
-  { value: LandKode.GB, label: "Storbritannia" },
-  { value: LandKode.SJ, label: "Svalbard og Jan Mayen" },
-  { value: LandKode.CH, label: "Sveits" },
-  { value: LandKode.SE, label: "Sverige" },
-  { value: LandKode.CZ, label: "Tsjekkia" },
-  { value: LandKode.DE, label: "Tyskland" },
-  { value: LandKode.HU, label: "Ungarn" },
-  { value: LandKode.AT, label: "Østerrike" },
-  { value: LandKode.AX, label: "Åland" },
+const landKoder: LandKode[] = [
+  LandKode.AT,
+  LandKode.AX,
+  LandKode.BE,
+  LandKode.BG,
+  LandKode.CH,
+  LandKode.CY,
+  LandKode.CZ,
+  LandKode.DE,
+  LandKode.DK,
+  LandKode.EE,
+  LandKode.ES,
+  LandKode.FI,
+  LandKode.FO,
+  LandKode.FR,
+  LandKode.GB,
+  LandKode.GL,
+  LandKode.GR,
+  LandKode.HR,
+  LandKode.HU,
+  LandKode.IE,
+  LandKode.IS,
+  LandKode.IT,
+  LandKode.LI,
+  LandKode.LT,
+  LandKode.LU,
+  LandKode.LV,
+  LandKode.MT,
+  LandKode.NL,
+  LandKode.PL,
+  LandKode.PT,
+  LandKode.RO,
+  LandKode.SE,
+  LandKode.SI,
+  LandKode.SJ,
+  LandKode.SK,
 ];
+
+const landKoderMedNorge: LandKode[] = [...landKoder, LandKode.NO];
 
 export function LandVelgerFormPart({
   formFieldName,
   label,
   className,
+  inkluderNorge,
   ...selectProps
 }: LandVelgerFormPartProps) {
   const { register, getFieldState, formState } = useFormContext();
@@ -61,6 +66,16 @@ export function LandVelgerFormPart({
 
   const fieldState = getFieldState(formFieldName, formState);
   const error = translateError(fieldState.error?.message as string);
+
+  const koder = inkluderNorge ? landKoderMedNorge : landKoder;
+
+  const options = useMemo(
+    () =>
+      koder
+        .map((kode) => ({ value: kode, label: t(`land.${kode}`) }))
+        .toSorted((a, b) => a.label.localeCompare(b.label)),
+    [koder, t],
+  );
 
   return (
     <Select
@@ -71,17 +86,11 @@ export function LandVelgerFormPart({
       {...selectProps}
     >
       <option value="">{t("landVelgerFormPart.velgLand")}</option>
-      {landOptions.map((land) => (
+      {options.map((land) => (
         <option key={land.value} value={land.value}>
           {land.label}
         </option>
       ))}
     </Select>
   );
-}
-
-export function landKodeTilNavn(landkode: string): string {
-  const land = landOptions.find((land) => land.value === landkode);
-
-  return land ? land.label : landkode;
 }

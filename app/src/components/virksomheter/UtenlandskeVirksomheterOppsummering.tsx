@@ -1,7 +1,6 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
 import {
   Ansettelsesform,
   UtenlandskVirksomhet,
@@ -89,9 +88,7 @@ export function UtenlandskVirksomhetOppsummering({
         <FormSummary.Label>
           {t("utenlandskeVirksomheterFormPart.land")}
         </FormSummary.Label>
-        <FormSummary.Value>
-          {landKodeTilNavn(virksomhet.land)}
-        </FormSummary.Value>
+        <FormSummary.Value>{t(`land.${virksomhet.land}`)}</FormSummary.Value>
       </FormSummary.Answer>
       <FormSummary.Answer>
         <FormSummary.Label>
