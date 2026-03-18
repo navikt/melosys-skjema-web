@@ -1,4 +1,5 @@
 import { FormSummary, Table } from "@navikt/ds-react";
+import { useTranslation } from "react-i18next";
 
 import type { ListeFeltDefinisjon } from "~/types/melosysSkjemaTypes.ts";
 
@@ -13,6 +14,7 @@ export function ListeFeltOppsummering({
   felt,
   verdi,
 }: ListeFeltOppsummeringProps) {
+  const { t } = useTranslation();
   if (!verdi || verdi.length === 0) return null;
 
   const elementFelter = Object.entries(felt.elementDefinisjon);
@@ -39,7 +41,7 @@ export function ListeFeltOppsummering({
                 <Table.Row key={rowKey}>
                   {elementFelter.map(([id, subfelt]) => (
                     <Table.DataCell key={id}>
-                      {formaterVerdi(subfelt, record[id])}
+                      {formaterVerdi(subfelt, record[id], t)}
                     </Table.DataCell>
                   ))}
                 </Table.Row>

@@ -1,4 +1,5 @@
-import { landKodeTilNavn } from "~/components/LandVelgerFormPart.tsx";
+import type { TFunction } from "i18next";
+
 import type {
   BooleanFeltDefinisjon,
   CountrySelectFeltDefinisjon,
@@ -28,7 +29,11 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export function formaterVerdi(felt: FeltUnion, verdi: unknown): string {
+export function formaterVerdi(
+  felt: FeltUnion,
+  verdi: unknown,
+  t: TFunction,
+): string {
   if (verdi === null || verdi === undefined) return "\u2013";
 
   switch (felt.type) {
@@ -57,7 +62,7 @@ export function formaterVerdi(felt: FeltUnion, verdi: unknown): string {
     }
 
     case "COUNTRY_SELECT": {
-      return landKodeTilNavn(String(verdi));
+      return t(`land.${String(verdi)}`);
     }
 
     default: {
