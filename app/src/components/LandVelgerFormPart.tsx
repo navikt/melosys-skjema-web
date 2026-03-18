@@ -51,10 +51,9 @@ const landOptions = [
 ];
 
 const landOptionsMedNorge = [
-  ...landOptions.slice(0, 20),
+  ...landOptions,
   { value: LandKode.NO, label: "Norge" },
-  ...landOptions.slice(20),
-];
+].toSorted((a, b) => a.label.localeCompare(b.label, "nb"));
 
 export function LandVelgerFormPart({
   formFieldName,
