@@ -17,11 +17,13 @@ import {
   mockFetchSkjema,
   setupApiMocksForArbeidsgiver,
   setupApiMocksForArbeidstaker,
+  setupApiMocksForKombinert,
 } from "../../fixtures/api-mocks";
 import {
   formFieldValues,
   testArbeidsgiverSkjema,
   testArbeidstakerSkjema,
+  testKombinertSkjema,
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
@@ -184,6 +186,115 @@ test.describe("Oppsummering", () => {
       await oppsummeringStegPage.assertArbeidstakerensLonnData(
         arbeidstakerensLonnData,
       );
+      await oppsummeringStegPage.assertTilleggsopplysningerData(
+        tilleggsopplysningerData,
+      );
+
+      await oppsummeringStegPage.sendInnAndExpectPost();
+      await oppsummeringStegPage.assertNavigatedToKvittering();
+    });
+  });
+
+  test.describe("Kombinert (arbeidsgiver og arbeidstakers del)", () => {
+    const arbeidsgiversData = {
+      arbeidsgiverensVirksomhetINorge: {
+        erArbeidsgiverenOffentligVirksomhet: false,
+        erArbeidsgiverenBemanningsEllerVikarbyraa: false,
+        opprettholderArbeidsgiverenVanligDrift: true,
+      } as ArbeidsgiverensVirksomhetINorgeDto,
+      utenlandsoppdraget: {
+        arbeidsgiverHarOppdragILandet: true,
+        arbeidstakerBleAnsattForUtenlandsoppdraget: false,
+        arbeidstakerForblirAnsattIHelePerioden: true,
+        arbeidstakerErstatterAnnenPerson: false,
+      } as UtenlandsoppdragetDto,
+      arbeidsstedIUtlandet: {
+        arbeidsstedType: ArbeidsstedType.PA_LAND,
+        paLand: {
+          navnPaVirksomhet: "Test Virksomhet AS",
+          fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
+          fastArbeidssted: {
+            vegadresse: "Storgata",
+            nummer: "1",
+            postkode: "0123",
+            bySted: "Stockholm",
+          },
+          erHjemmekontor: false,
+        },
+      } as ArbeidsstedIUtlandetDto,
+      arbeidstakerensLonn: {
+        arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
+      } as ArbeidstakerensLonnDto,
+    };
+
+    const arbeidstakersData = {
+      arbeidssituasjon: {
+        harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
+        skalJobbeForFlereVirksomheter: false,
+      } as ArbeidssituasjonDto,
+      skatteforholdOgInntekt: {
+        erSkattepliktigTilNorgeIHeleutsendingsperioden: true,
+        mottarPengestotteFraAnnetEosLandEllerSveits: false,
+      } as SkatteforholdOgInntektDto,
+      familiemedlemmer: {
+        skalHaMedFamiliemedlemmer: false,
+        familiemedlemmer: [],
+      } as FamiliemedlemmerDto,
+    };
+
+    const utsendingsperiodeOgLandData = {
+      utsendelseLand: formFieldValues.utsendelseLand.value,
+      utsendelsePeriode: formFieldValues.periode,
+    };
+
+    const tilleggsopplysningerData: TilleggsopplysningerDto = {
+      harFlereOpplysningerTilSoknaden: false,
+    };
+
+    test.beforeEach(async ({ page }) => {
+      await setupApiMocksForKombinert(
+        page,
+        testKombinertSkjema,
+        [testOrganization],
+        testUserInfo,
+      );
+    });
+
+    test("viser alle utfylte data fra begge deler og sender inn", async ({
+      page,
+    }) => {
+      await mockFetchSkjema(page, {
+        ...testKombinertSkjema,
+        data: {
+          type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL",
+          arbeidsgiversData,
+          arbeidstakersData,
+          utsendingsperiodeOgLand: utsendingsperiodeOgLandData,
+          tilleggsopplysninger: tilleggsopplysningerData,
+        } as UtsendtArbeidstakerSkjemaDto["data"],
+      });
+
+      // Use arbeidsgiver page object since it has the arbeidsgiver assertion methods
+      const oppsummeringStegPage = new ArbeidsgiverOppsummeringStegPage(
+        page,
+        testKombinertSkjema,
+      );
+
+      await oppsummeringStegPage.goto();
+      await oppsummeringStegPage.assertIsVisible();
+
+      // Verify arbeidsgiver data is shown
+      await oppsummeringStegPage.assertArbeidsgiverensVirksomhetINorgeData(
+        arbeidsgiversData.arbeidsgiverensVirksomhetINorge,
+      );
+      await oppsummeringStegPage.assertUtenlandsoppdragetData(
+        arbeidsgiversData.utenlandsoppdraget,
+      );
+      await oppsummeringStegPage.assertArbeidstakerensLonnData(
+        arbeidsgiversData.arbeidstakerensLonn,
+      );
+
+      // Verify tilleggsopplysninger
       await oppsummeringStegPage.assertTilleggsopplysningerData(
         tilleggsopplysningerData,
       );

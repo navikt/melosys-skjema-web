@@ -11,6 +11,8 @@ import {
   testArbeidstakerSkjema,
   testInnsendtSkjemaArbeidsgiverDel,
   testInnsendtSkjemaArbeidstakersDel,
+  testInnsendtSkjemaKombinertDel,
+  testKombinertSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { InnsendtSkjemaPage } from "../../pages/skjema/innsendt/innsendt-skjema.page";
@@ -60,5 +62,27 @@ test.describe("Innsendt skjema", () => {
     await innsendtPage.goto();
     await innsendtPage.assertIsVisible();
     await innsendtPage.assertReferanseIdVisible("REF-AG-001");
+  });
+
+  test("Viser innsendt — kombinert (arbeidsgiver og arbeidstakers del)", async ({
+    page,
+  }) => {
+    await mockUserInfo(page, testUserInfo);
+    await mockSkjemaMetadata(
+      page,
+      testKombinertSkjema.id,
+      testKombinertSkjema.metadata,
+    );
+    await mockFetchSkjema(page, testKombinertSkjema);
+    await mockInnsendtSkjema(
+      page,
+      testKombinertSkjema.id,
+      testInnsendtSkjemaKombinertDel,
+    );
+
+    const innsendtPage = new InnsendtSkjemaPage(page, testKombinertSkjema.id);
+    await innsendtPage.goto();
+    await innsendtPage.assertIsVisible();
+    await innsendtPage.assertReferanseIdVisible("REF-KO-001");
   });
 });

@@ -185,6 +185,121 @@ test.describe("Arbeidssted i utlandet", () => {
     await arbeidsstedPage.assertNavigatedToNextStep();
   });
 
+  test("variant: PA_LAND — vekslende arbeidssted", async ({ page }) => {
+    const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    await arbeidsstedPage.goto();
+    await arbeidsstedPage.assertIsVisible();
+
+    await arbeidsstedPage.arbeidsstedTypeSelect.selectOption(
+      ArbeidsstedType.PA_LAND,
+    );
+    await arbeidsstedPage.navnPaVirksomhetInput.fill("Vekslende Corp AS");
+    await arbeidsstedPage.fastEllerVekslendeRadioGroup.VEKSLENDE.click();
+
+    // Verify vekslende-specific fields appear and fast-fields disappear
+    await expect(arbeidsstedPage.beskrivelseVekslendeTextarea).toBeVisible();
+    await expect(arbeidsstedPage.vegadresseInput).not.toBeVisible();
+
+    await arbeidsstedPage.beskrivelseVekslendeTextarea.fill(
+      "Arbeidstaker veksler mellom flere lokasjoner i Sverige",
+    );
+    await arbeidsstedPage.erHjemmekontorRadioGroup.JA.click();
+
+    const expectedPayload: ArbeidsstedIUtlandetDto = {
+      arbeidsstedType: ArbeidsstedType.PA_LAND,
+      paLand: {
+        navnPaVirksomhet: "Vekslende Corp AS",
+        fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.VEKSLENDE,
+        beskrivelseVekslende:
+          "Arbeidstaker veksler mellom flere lokasjoner i Sverige",
+        erHjemmekontor: true,
+      },
+    };
+
+    await arbeidsstedPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await arbeidsstedPage.assertNavigatedToNextStep();
+  });
+
+  test("variant: PA_SKIP — territorialfarvann", async ({ page }) => {
+    const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    await arbeidsstedPage.goto();
+    await arbeidsstedPage.assertIsVisible();
+
+    await arbeidsstedPage.arbeidsstedTypeSelect.selectOption(
+      ArbeidsstedType.PA_SKIP,
+    );
+
+    await arbeidsstedPage.navnPaVirksomhetInput.fill("Rederi AS");
+    await arbeidsstedPage.navnPaSkipInput.fill("MS Fjordline");
+    await arbeidsstedPage.yrketTilArbeidstakerInput.fill("Matros");
+    await arbeidsstedPage.seilerIRadioGroup.TERRITORIALFARVANN.click();
+
+    // Verify territorialfarvannLand appears
+    await expect(arbeidsstedPage.territorialfarvannLandSelect).toBeVisible();
+    // Verify flaggland is NOT visible for territorialfarvann
+    await expect(arbeidsstedPage.flagglandSelect).not.toBeVisible();
+
+    await arbeidsstedPage.territorialfarvannLandSelect.selectOption("DK");
+
+    const expectedPayload: ArbeidsstedIUtlandetDto = {
+      arbeidsstedType: ArbeidsstedType.PA_SKIP,
+      paSkip: {
+        navnPaVirksomhet: "Rederi AS",
+        navnPaSkip: "MS Fjordline",
+        yrketTilArbeidstaker: "Matros",
+        seilerI: Farvann.TERRITORIALFARVANN,
+        territorialfarvannLand: LandKode.DK,
+      },
+    };
+
+    await arbeidsstedPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await arbeidsstedPage.assertNavigatedToNextStep();
+  });
+
+  test("variant: OM_BORD_PA_FLY — vanlig hjemmebase", async ({ page }) => {
+    const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    await arbeidsstedPage.goto();
+    await arbeidsstedPage.assertIsVisible();
+
+    await arbeidsstedPage.arbeidsstedTypeSelect.selectOption(
+      ArbeidsstedType.OM_BORD_PA_FLY,
+    );
+
+    await arbeidsstedPage.navnPaVirksomhetInput.fill("Nordic Airlines AS");
+    await arbeidsstedPage.hjemmebaseLandSelect.selectOption("SE");
+    await arbeidsstedPage.hjemmebaseNavnInput.fill("Arlanda");
+    await arbeidsstedPage.erVanligHjemmebaseRadioGroup.JA.click();
+
+    // Verify extra fields do NOT appear when vanlig hjemmebase
+    await expect(arbeidsstedPage.vanligHjemmebaseLandSelect).not.toBeVisible();
+    await expect(arbeidsstedPage.vanligHjemmebaseNavnInput).not.toBeVisible();
+
+    const expectedPayload: ArbeidsstedIUtlandetDto = {
+      arbeidsstedType: ArbeidsstedType.OM_BORD_PA_FLY,
+      omBordPaFly: {
+        navnPaVirksomhet: "Nordic Airlines AS",
+        hjemmebaseLand: LandKode.SE,
+        hjemmebaseNavn: "Arlanda",
+        erVanligHjemmebase: true,
+      },
+    };
+
+    await arbeidsstedPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await arbeidsstedPage.assertNavigatedToNextStep();
+  });
+
   test("variant: OM_BORD_PA_FLY — ikke vanlig hjemmebase", async ({ page }) => {
     const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
       page,

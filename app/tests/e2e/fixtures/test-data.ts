@@ -2,12 +2,15 @@
 
 import type { UserInfo } from "../../../src/httpClients/dekoratorenClient";
 import {
+  type ArbeidsgiverMedFullmaktMetadata,
   type ArbeidsgiverMetadata,
   type DegSelvMetadata,
   type InnsendteSoknaderResponse,
   type InnsendtSkjemaResponse,
   LandKode,
   type OrganisasjonDto,
+  type OrganisasjonMedJuridiskEnhetDto,
+  type PersonMedFullmaktDto,
   Representasjonstype,
   Skjemadel,
   type SkjemaInnsendtKvittering,
@@ -177,6 +180,93 @@ export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
   skjemaDefinisjonVersjon: "1",
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
+  } as InnsendtSkjemaResponse["skjemaData"],
+  definisjon: {
+    seksjoner: {},
+  } as unknown as InnsendtSkjemaResponse["definisjon"],
+};
+
+// ============ SoknadStarter test data ============
+
+export const testOpprettSoknadResponseId = "opprettet-soknad-id-123";
+
+/** Person med fullmakt — used for "med fullmakt" combobox selection */
+export const testPersonMedFullmakt: PersonMedFullmaktDto = {
+  fnr: "01019000083",
+  navn: "Fullmakt Person",
+  fodselsdato: "1990-01-01",
+};
+
+/** Arbeidstaker for "uten fullmakt" flow — fnr + etternavn typed manually */
+export const testArbeidstakerUtenFullmakt = {
+  fnr: "01019000083",
+  etternavn: "Testersen",
+};
+
+/** VerifiserPerson response for uten-fullmakt flow */
+export const testVerifiserPersonResponse = {
+  navn: "Ola Testersen",
+  fodselsdato: "1990-01-01",
+};
+
+/** Arbeidsgiver org used in ARBEIDSGIVER/RADGIVER flows (from Altinn tilganger) */
+export const testArbeidsgiverOrganization: OrganisasjonDto = {
+  orgnr: korrektFormatertOrgnr,
+  navn: "Arbeidsgiveren AS",
+  organisasjonsform: "AS",
+};
+
+/** Rådgiverfirma org for RADGIVER flow (from ereg lookup) */
+export const testRadgiverfirmaOrgnr = korrektFormatertOrgnr2;
+export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
+  organisasjon: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiver Filial" },
+  juridiskEnhet: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiverfirma AS" },
+};
+
+/** Ereg response for DEG_SELV org search (OrganisasjonSoker) */
+export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
+  organisasjon: {
+    orgnr: korrektFormatertOrgnr,
+    navn: "Arbeidsgiver Virksomhet",
+  },
+  juridiskEnhet: { orgnr: korrektFormatertOrgnr, navn: "Arbeidsgiver AS" },
+};
+
+// ============ Kombinert (arbeidsgiver og arbeidstakers del) test data ============
+
+export const testKombinertSkjemaId = "test-kombinert-skjema-id";
+
+export const testKombinertSkjema: UtsendtArbeidstakerSkjemaDto = {
+  id: testKombinertSkjemaId,
+  orgnr: "123456789",
+  fnr: "",
+  status: SkjemaStatus.UTKAST,
+  type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+  metadata: {
+    metadatatype: "ArbeidsgiverMedFullmaktMetadata",
+    representasjonstype: Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT,
+    juridiskEnhetOrgnr: "123456789",
+    arbeidsgiverNavn: "Test Bedrift AS",
+    skjemadel: Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
+    fullmektigFnr: "01019000083",
+  } as ArbeidsgiverMedFullmaktMetadata,
+  data: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL",
+    arbeidsgiversData: {},
+    arbeidstakersData: {},
+  },
+};
+
+export const testInnsendtSkjemaKombinertDel: InnsendtSkjemaResponse = {
+  skjemaId: testKombinertSkjemaId,
+  referanseId: "REF-KO-001",
+  innsendtDato: "2026-01-10T12:00:00Z",
+  innsendtSprak: Sprak.Nb,
+  skjemaDefinisjonVersjon: "1",
+  skjemaData: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL",
+    arbeidsgiversData: {},
+    arbeidstakersData: {},
   } as InnsendtSkjemaResponse["skjemaData"],
   definisjon: {
     seksjoner: {},

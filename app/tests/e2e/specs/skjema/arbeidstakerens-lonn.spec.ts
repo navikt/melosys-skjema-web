@@ -1,8 +1,12 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-import { ArbeidstakerensLonnDto } from "../../../../src/types/melosysSkjemaTypes";
+import {
+  ArbeidstakerensLonnDto,
+  LandKode,
+} from "../../../../src/types/melosysSkjemaTypes";
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import {
+  korrektFormatertOrgnr,
   testArbeidsgiverSkjema,
   testOrganization,
   testUserInfo,
@@ -20,23 +24,94 @@ test.describe("Arbeidstakerens lønn", () => {
   });
 
   test("happy case - arbeidsgiver betaler all lønn", async ({ page }) => {
-    const arbeidstakerensLonnStegPage = new ArbeidstakerensLonnStegPage(
+    const lonnPage = new ArbeidstakerensLonnStegPage(
       page,
       testArbeidsgiverSkjema,
     );
 
-    await arbeidstakerensLonnStegPage.goto();
-    await arbeidstakerensLonnStegPage.assertIsVisible();
+    await lonnPage.goto();
+    await lonnPage.assertIsVisible();
 
-    await arbeidstakerensLonnStegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.JA.click();
+    await lonnPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.JA.click();
 
     const expectedPayload: ArbeidstakerensLonnDto = {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
 
-    await arbeidstakerensLonnStegPage.lagreOgFortsettAndExpectPayload(
-      expectedPayload,
+    await lonnPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await lonnPage.assertNavigatedToNextStep();
+  });
+
+  test("variant: ikke alt — legg til norsk virksomhet", async ({ page }) => {
+    const lonnPage = new ArbeidstakerensLonnStegPage(
+      page,
+      testArbeidsgiverSkjema,
     );
-    await arbeidstakerensLonnStegPage.assertNavigatedToNextStep();
+
+    await lonnPage.goto();
+    await lonnPage.assertIsVisible();
+
+    await lonnPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    // Virksomheter section should appear
+    await expect(lonnPage.leggTilNorskVirksomhetButton).toBeVisible();
+    await expect(lonnPage.leggTilUtenlandskVirksomhetButton).toBeVisible();
+
+    await lonnPage.leggTilNorskVirksomhet(korrektFormatertOrgnr);
+
+    const expectedPayload: ArbeidstakerensLonnDto = {
+      arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: false,
+      virksomheterSomUtbetalerLonnOgNaturalytelser: {
+        norskeVirksomheter: [{ organisasjonsnummer: korrektFormatertOrgnr }],
+        utenlandskeVirksomheter: [],
+      },
+    };
+
+    await lonnPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await lonnPage.assertNavigatedToNextStep();
+  });
+
+  test("variant: ikke alt — legg til utenlandsk virksomhet", async ({
+    page,
+  }) => {
+    const lonnPage = new ArbeidstakerensLonnStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    await lonnPage.goto();
+    await lonnPage.assertIsVisible();
+
+    await lonnPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await lonnPage.leggTilUtenlandskVirksomhet({
+      navn: "Foreign Corp AB",
+      vegnavnOgHusnummer: "Kungsgatan 10",
+      land: "SE",
+      tilhorerSammeKonsern: false,
+    });
+
+    const expectedPayload: ArbeidstakerensLonnDto = {
+      arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: false,
+      virksomheterSomUtbetalerLonnOgNaturalytelser: {
+        norskeVirksomheter: [],
+        utenlandskeVirksomheter: [
+          {
+            navn: "Foreign Corp AB",
+            organisasjonsnummer: "",
+            vegnavnOgHusnummer: "Kungsgatan 10",
+            bygning: "",
+            postkode: "",
+            byStedsnavn: "",
+            region: "",
+            land: LandKode.SE,
+            tilhorerSammeKonsern: false,
+          },
+        ],
+      },
+    };
+
+    await lonnPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await lonnPage.assertNavigatedToNextStep();
   });
 });

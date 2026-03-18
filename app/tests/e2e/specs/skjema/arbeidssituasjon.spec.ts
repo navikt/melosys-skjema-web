@@ -1,8 +1,17 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
+import { nb } from "../../../../src/i18n/nb";
 import type { ArbeidssituasjonDto } from "../../../../src/types/melosysSkjemaTypes";
+import {
+  Ansettelsesform,
+  LandKode,
+} from "../../../../src/types/melosysSkjemaTypes";
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
-import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
+import {
+  korrektFormatertOrgnr,
+  testArbeidstakerSkjema,
+  testUserInfo,
+} from "../../fixtures/test-data";
 import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidstaker/arbeidssituasjon-steg.page";
 
 test.describe("Arbeidssituasjon", () => {
@@ -60,6 +69,88 @@ test.describe("Arbeidssituasjon", () => {
       harVaertEllerSkalVaereILonnetArbeidFoerUtsending: false,
       aktivitetIMaanedenFoerUtsendingen: "Studier og ferie",
       skalJobbeForFlereVirksomheter: false,
+    };
+
+    await arbeidssituasjonPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await arbeidssituasjonPage.assertNavigatedToNextStep();
+  });
+
+  test("variant: flere virksomheter — norsk virksomhet", async ({ page }) => {
+    const arbeidssituasjonPage = new ArbeidssituasjonStegPage(
+      page,
+      testArbeidstakerSkjema,
+    );
+
+    await arbeidssituasjonPage.goto();
+    await arbeidssituasjonPage.assertIsVisible();
+
+    await arbeidssituasjonPage.harVaertILonnetArbeidRadioGroup.JA.click();
+    await arbeidssituasjonPage.skalJobbeForFlereVirksomheterRadioGroup.JA.click();
+
+    // Virksomheter section should appear
+    await expect(
+      arbeidssituasjonPage.leggTilNorskVirksomhetButton,
+    ).toBeVisible();
+
+    await arbeidssituasjonPage.leggTilNorskVirksomhet(korrektFormatertOrgnr);
+
+    const expectedPayload: ArbeidssituasjonDto = {
+      harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
+      skalJobbeForFlereVirksomheter: true,
+      virksomheterArbeidstakerJobberForIutsendelsesPeriode: {
+        norskeVirksomheter: [{ organisasjonsnummer: korrektFormatertOrgnr }],
+        utenlandskeVirksomheter: [],
+      },
+    };
+
+    await arbeidssituasjonPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await arbeidssituasjonPage.assertNavigatedToNextStep();
+  });
+
+  test("variant: flere virksomheter — utenlandsk virksomhet", async ({
+    page,
+  }) => {
+    const arbeidssituasjonPage = new ArbeidssituasjonStegPage(
+      page,
+      testArbeidstakerSkjema,
+    );
+
+    await arbeidssituasjonPage.goto();
+    await arbeidssituasjonPage.assertIsVisible();
+
+    await arbeidssituasjonPage.harVaertILonnetArbeidRadioGroup.JA.click();
+    await arbeidssituasjonPage.skalJobbeForFlereVirksomheterRadioGroup.JA.click();
+
+    await arbeidssituasjonPage.leggTilUtenlandskVirksomhetMedAnsettelsesform({
+      navn: "Swedish Corp AB",
+      vegnavnOgHusnummer: "Drottninggatan 5",
+      land: "SE",
+      tilhorerSammeKonsern: true,
+      ansettelsesformLabel:
+        nb.translation.utenlandskeVirksomheterFormPart
+          .arbeidstakerEllerFrilanser,
+    });
+
+    const expectedPayload: ArbeidssituasjonDto = {
+      harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
+      skalJobbeForFlereVirksomheter: true,
+      virksomheterArbeidstakerJobberForIutsendelsesPeriode: {
+        norskeVirksomheter: [],
+        utenlandskeVirksomheter: [
+          {
+            navn: "Swedish Corp AB",
+            organisasjonsnummer: "",
+            vegnavnOgHusnummer: "Drottninggatan 5",
+            bygning: "",
+            postkode: "",
+            byStedsnavn: "",
+            region: "",
+            land: LandKode.SE,
+            tilhorerSammeKonsern: true,
+            ansettelsesform: Ansettelsesform.ARBEIDSTAKER_ELLER_FRILANSER,
+          },
+        ],
+      },
     };
 
     await arbeidssituasjonPage.lagreOgFortsettAndExpectPayload(expectedPayload);

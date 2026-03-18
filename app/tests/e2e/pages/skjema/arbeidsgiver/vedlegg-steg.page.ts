@@ -8,6 +8,7 @@ export class VedleggStegPage {
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
   readonly lagreOgFortsettButton: Locator;
+  readonly fileInput: Locator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
@@ -19,6 +20,8 @@ export class VedleggStegPage {
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
     });
+
+    this.fileInput = page.locator("input[type='file']");
   }
 
   async goto() {
@@ -27,6 +30,18 @@ export class VedleggStegPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
+  }
+
+  async uploadFile(fileName: string, mimeType: string, content: Buffer) {
+    await this.fileInput.setInputFiles({
+      name: fileName,
+      mimeType,
+      buffer: content,
+    });
+  }
+
+  async assertFileItemVisible(fileName: string) {
+    await expect(this.page.getByText(fileName)).toBeVisible();
   }
 
   async lagreOgFortsett() {

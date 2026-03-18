@@ -240,10 +240,14 @@ export class OppsummeringStegPage {
   }
 
   async assertTilleggsopplysningerData(data: TilleggsopplysningerDto) {
+    // Use .first() because kombinert view shows tilleggsopplysninger in both
+    // arbeidsgiver and arbeidstaker sections, causing duplicate dt/dd matches
     await expect(
-      this.page.locator(
-        `dt:has-text("${tilleggsopplysninger.felter.harFlereOpplysningerTilSoknaden.label}") + dd`,
-      ),
+      this.page
+        .locator(
+          `dt:has-text("${tilleggsopplysninger.felter.harFlereOpplysningerTilSoknaden.label}") + dd`,
+        )
+        .first(),
     ).toHaveText(
       data.harFlereOpplysningerTilSoknaden
         ? nb.translation.felles.ja
@@ -252,9 +256,11 @@ export class OppsummeringStegPage {
 
     if (data.tilleggsopplysningerTilSoknad !== undefined) {
       await expect(
-        this.page.locator(
-          `dt:has-text("${tilleggsopplysninger.felter.tilleggsopplysningerTilSoknad.label}") + dd`,
-        ),
+        this.page
+          .locator(
+            `dt:has-text("${tilleggsopplysninger.felter.tilleggsopplysningerTilSoknad.label}") + dd`,
+          )
+          .first(),
       ).toHaveText(data.tilleggsopplysningerTilSoknad);
     }
   }
