@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 import { VedleggFiltype } from "../../../../src/types/melosysSkjemaTypes";
 import {
@@ -38,7 +38,7 @@ test.describe("Vedlegg", () => {
       await vedleggStegPage.assertNavigatedToNextStep();
     });
 
-    test("laster opp vedlegg og viser filen", async ({ page }) => {
+    test("laster opp vedlegg og verifiserer POST-kall", async ({ page }) => {
       const skjemaId = testArbeidstakerSkjema.id;
       const vedleggResponse = {
         id: "vedlegg-123",
@@ -59,11 +59,28 @@ test.describe("Vedlegg", () => {
       await vedleggStegPage.goto();
       await vedleggStegPage.assertIsVisible();
 
+      const uploadRequestPromise = page.waitForRequest(
+        (req) =>
+          req.url().includes(`/api/skjema/${skjemaId}/vedlegg`) &&
+          req.method() === "POST",
+      );
+
       await vedleggStegPage.uploadFile(
         "testfil.pdf",
         "application/pdf",
         Buffer.from("fake-pdf-content"),
       );
+
+      const uploadRequest = await uploadRequestPromise;
+
+      expect(uploadRequest.method()).toBe("POST");
+      expect(uploadRequest.url()).toContain(`/api/skjema/${skjemaId}/vedlegg`);
+
+      const contentType = uploadRequest.headers()["content-type"];
+      expect(contentType).toContain("multipart/form-data");
+
+      const body = uploadRequest.postData();
+      expect(body).toContain("testfil.pdf");
 
       await vedleggStegPage.assertFileItemVisible("testfil.pdf");
 
