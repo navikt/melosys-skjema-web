@@ -7,8 +7,8 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { mockFetchSkjema } from "../../../fixtures/api-mocks";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { mockFetchSkjema } from "../../fixtures/api-mocks";
 
 // Hent felter fra statiske definisjoner
 const arbeidsstedIUtlandet =

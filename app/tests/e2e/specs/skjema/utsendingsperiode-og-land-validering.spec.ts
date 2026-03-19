@@ -6,7 +6,7 @@ import {
   testArbeidstakerSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/arbeidstaker/utsendingsperiode-og-land-steg.page";
+import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
 
 test.describe("Utsendingsperiode og land - validering", () => {
   let stegPage: UtsendingsperiodeOgLandStegPage;

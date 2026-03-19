@@ -7,8 +7,8 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
 
 // Hent felter fra statiske definisjoner
 const utenlandsoppdraget =

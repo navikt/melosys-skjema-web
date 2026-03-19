@@ -7,7 +7,7 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
 const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
 const felter = arbeidssituasjon.felter;

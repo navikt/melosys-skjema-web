@@ -15,7 +15,7 @@ import {
   testKombinertSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { InnsendtSkjemaPage } from "../../pages/skjema/innsendt/innsendt-skjema.page";
+import { InnsendtSkjemaPage } from "../../pages/skjema/innsendt-skjema.page";
 
 test.describe("Innsendt skjema", () => {
   test("Viser innsendt — arbeidstakers del", async ({ page }) => {

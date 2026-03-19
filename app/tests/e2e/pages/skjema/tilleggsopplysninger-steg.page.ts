@@ -7,11 +7,11 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
 // Hent felter fra statiske definisjoner
 const tilleggsopplysninger =
-  SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidstaker;
+  SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidsgiver;
 const felter = tilleggsopplysninger.felter;
 
 export class TilleggsopplysningerStegPage {
@@ -66,7 +66,7 @@ export class TilleggsopplysningerStegPage {
     const requestPromise = this.page.waitForRequest(
       `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/tilleggsopplysninger`,
     );
-    await this.lagreOgFortsettButton.click();
+    await this.lagreOgFortsett();
     return await requestPromise;
   }
 

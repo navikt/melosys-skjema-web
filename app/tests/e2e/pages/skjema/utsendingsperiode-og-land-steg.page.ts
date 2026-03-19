@@ -7,7 +7,7 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
+import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
 
 // Hent felter fra statiske definisjoner
 const utsendingsperiodeOgLand =

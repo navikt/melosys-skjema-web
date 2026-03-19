@@ -9,7 +9,7 @@ import {
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { ArbeidstakerensLonnStegPage } from "../../pages/skjema/arbeidsgiver/arbeidstakerens-lonn-steg.page";
+import { ArbeidstakerensLonnStegPage } from "../../pages/skjema/arbeidstakerens-lonn-steg.page";
 
 test.describe("Arbeidstakerens lønn", () => {
   test.beforeEach(async ({ page }) => {

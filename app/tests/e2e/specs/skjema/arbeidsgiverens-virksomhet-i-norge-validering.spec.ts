@@ -6,7 +6,7 @@ import {
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../../pages/skjema/arbeidsgiver/arbeidsgiverens-virksomhet-i-norge-steg.page";
+import { ArbeidsgiverensVirksomhetINorgeStegPage } from "../../pages/skjema/arbeidsgiverens-virksomhet-i-norge-steg.page";
 
 test.describe("Arbeidsgiverens virksomhet i Norge - validering", () => {
   let stegPage: ArbeidsgiverensVirksomhetINorgeStegPage;
