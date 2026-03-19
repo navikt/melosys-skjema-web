@@ -17,6 +17,14 @@ const felter = utsendingsperiodeOgLand.felter;
 // Tittel hentes fra i18n, ikke fra skjemadefinisjonen
 const stegTittel = nb.translation.utsendingsperiodeOgLandSteg.tittel;
 
+// Feilmeldinger
+const feilmeldinger = {
+  land: nb.translation.utsendingsperiodeOgLandSteg
+    .duMaVelgeHvilketLandDuSkalUtforeArbeid,
+  datoErPakrevd: nb.translation.periode.datoErPakrevd,
+  tilDatoForFraDato: nb.translation.periode.tilDatoMaVareEtterFraDato,
+};
+
 export class UtsendingsperiodeOgLandStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
@@ -50,6 +58,10 @@ export class UtsendingsperiodeOgLandStegPage {
     await expect(this.heading).toBeVisible();
   }
 
+  async velgLand(land: { label: string; value: string }) {
+    await this.utsendelseLandCombobox.selectOption(land);
+  }
+
   async lagreOgFortsett() {
     await this.lagreOgFortsettButton.click();
   }
@@ -76,11 +88,63 @@ export class UtsendingsperiodeOgLandStegPage {
     );
   }
 
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/utsendingsperiode-og-land`,
+    );
+  }
+
   async fillFraDato(date: string) {
     await selectDateFromCalendar(this.page, this.fraDatoInput, date);
   }
 
   async fillTilDato(date: string) {
     await selectDateFromCalendar(this.page, this.tilDatoInput, date);
+  }
+
+  async assertLandFeilmeldingIsVisible() {
+    await expect(this.page.getByText(feilmeldinger.land)).toBeVisible();
+  }
+
+  async assertLandFeilmeldingIsNotVisible() {
+    await expect(this.page.getByText(feilmeldinger.land)).not.toBeVisible();
+  }
+
+  private fraDatoFieldWrapper() {
+    return this.fraDatoInput.locator("..").locator("..");
+  }
+
+  private tilDatoFieldWrapper() {
+    return this.tilDatoInput.locator("..").locator("..");
+  }
+
+  async assertFraDatoErPakrevdIsVisible() {
+    await expect(
+      this.fraDatoFieldWrapper().getByText(feilmeldinger.datoErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertFraDatoErPakrevdIsNotVisible() {
+    await expect(
+      this.fraDatoFieldWrapper().getByText(feilmeldinger.datoErPakrevd),
+    ).not.toBeVisible();
+  }
+
+  async assertTilDatoErPakrevdIsVisible() {
+    await expect(
+      this.tilDatoFieldWrapper().getByText(feilmeldinger.datoErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertTilDatoErPakrevdIsNotVisible() {
+    await expect(
+      this.tilDatoFieldWrapper().getByText(feilmeldinger.datoErPakrevd),
+    ).not.toBeVisible();
+  }
+
+  async assertTilDatoForFraDatoFeilmeldingIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.tilDatoForFraDato),
+    ).toBeVisible();
   }
 }
