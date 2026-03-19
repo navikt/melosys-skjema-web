@@ -15,6 +15,19 @@ const virksomhetINorge =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsgiverensVirksomhetINorge;
 const felter = virksomhetINorge.felter;
 
+// Feilmeldinger
+const feilmeldinger = {
+  offentligVirksomhetErPakrevd:
+    nb.translation.arbeidsgiverensVirksomhetINorgeSteg
+      .duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet,
+  bemanningsEllerVikarbyraErPakrevd:
+    nb.translation.arbeidsgiverensVirksomhetINorgeSteg
+      .duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra,
+  vanligDriftErPakrevd:
+    nb.translation.arbeidsgiverensVirksomhetINorgeSteg
+      .duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge,
+};
+
 export class ArbeidsgiverensVirksomhetINorgeStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
@@ -118,5 +131,61 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/utenlandsoppdraget`,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
+    );
+  }
+
+  // --- Validation assertions ---
+
+  private offentligVirksomhetFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.erArbeidsgiverenOffentligVirksomhet.label,
+    });
+  }
+
+  private bemanningsEllerVikarbyraFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label,
+    });
+  }
+
+  private vanligDriftFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.opprettholderArbeidsgiverenVanligDrift.label,
+    });
+  }
+
+  async assertOffentligVirksomhetErPakrevdIsVisible() {
+    await expect(
+      this.offentligVirksomhetFieldset().getByText(
+        feilmeldinger.offentligVirksomhetErPakrevd,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertOffentligVirksomhetErPakrevdIsNotVisible() {
+    await expect(
+      this.offentligVirksomhetFieldset().getByText(
+        feilmeldinger.offentligVirksomhetErPakrevd,
+      ),
+    ).not.toBeVisible();
+  }
+
+  async assertBemanningsEllerVikarbyraErPakrevdIsVisible() {
+    await expect(
+      this.bemanningsEllerVikarbyraFieldset().getByText(
+        feilmeldinger.bemanningsEllerVikarbyraErPakrevd,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertVanligDriftErPakrevdIsVisible() {
+    await expect(
+      this.vanligDriftFieldset().getByText(feilmeldinger.vanligDriftErPakrevd),
+    ).toBeVisible();
   }
 }
