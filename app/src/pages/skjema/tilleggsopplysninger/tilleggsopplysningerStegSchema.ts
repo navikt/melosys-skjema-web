@@ -9,19 +9,14 @@ export const tilleggsopplysningerSchema = z
     tilleggsopplysningerTilSoknad: z.string().optional(),
   })
   .refine(
-    (data) => {
-      if (data.harFlereOpplysningerTilSoknaden) {
-        return (
-          data.tilleggsopplysningerTilSoknad &&
-          data.tilleggsopplysningerTilSoknad.trim().length > 0
-        );
-      }
-      return true;
-    },
+    (data) =>
+      !data.harFlereOpplysningerTilSoknaden ||
+      !!data.tilleggsopplysningerTilSoknad?.trim(),
     {
-      message:
+      error:
         "tilleggsopplysningerSteg.tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger",
       path: ["tilleggsopplysningerTilSoknad"],
+      when: () => true,
     },
   )
   .transform((data) => ({

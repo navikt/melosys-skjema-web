@@ -13,6 +13,16 @@ import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-typ
 const tilleggsopplysninger =
   SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidsgiver;
 const felter = tilleggsopplysninger.felter;
+const t = nb.translation;
+
+// Feilmeldinger
+const feilmeldinger = {
+  duMaSvarePaOmDuHarFlereOpplysninger:
+    t.tilleggsopplysningerSteg.duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden,
+  tilleggsopplysningerErPakrevd:
+    t.tilleggsopplysningerSteg
+      .tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger,
+};
 
 export class TilleggsopplysningerStegPage {
   readonly page: Page;
@@ -80,5 +90,33 @@ export class TilleggsopplysningerStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/vedlegg`);
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/tilleggsopplysninger`,
+    );
+  }
+
+  // --- Validation assertions ---
+
+  private harFlereOpplysningerFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.harFlereOpplysningerTilSoknaden.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDuHarFlereOpplysningerIsVisible() {
+    await expect(
+      this.harFlereOpplysningerFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuHarFlereOpplysninger,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertTilleggsopplysningerErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.tilleggsopplysningerErPakrevd),
+    ).toBeVisible();
   }
 }
