@@ -15,12 +15,15 @@ interface OrganisasjonSokerProps {
   label: string;
   /** Om feltet skal ha autofokus */
   autoFocus?: boolean;
+  /** Forhåndsutfylt organisasjonsnummer (for redigering) */
+  initialOrgnr?: string;
 }
 
 export function OrganisasjonSoker({
   formFieldName,
   label,
   autoFocus = false,
+  initialOrgnr = "",
 }: OrganisasjonSokerProps) {
   const { t } = useTranslation();
   const {
@@ -28,7 +31,7 @@ export function OrganisasjonSoker({
     setValue,
     formState: { errors },
   } = useFormContext();
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(initialOrgnr);
 
   const isValidOrgNr = /^\d{9}$/.test(searchValue);
 

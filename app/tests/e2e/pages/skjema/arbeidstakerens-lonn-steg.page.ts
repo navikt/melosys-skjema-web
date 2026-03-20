@@ -22,6 +22,15 @@ const feilmeldinger = {
   duMaLeggeTilMinstEnVirksomhet:
     t.arbeidstakerenslonnSteg
       .duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv,
+  // Norsk virksomhet modal
+  organisasjonsnummerErPakrevd:
+    t.generellValidering.organisasjonsnummerErPakrevd,
+  // Utenlandsk virksomhet modal
+  navnPaVirksomhetErPakrevd: t.generellValidering.navnPaVirksomhetErPakrevd,
+  vegnavnOgHusnummerErPakrevd: t.generellValidering.vegnavnOgHusnummerErPakrevd,
+  landErPakrevd: t.generellValidering.landErPakrevd,
+  duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
+    t.generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern,
 };
 
 export class ArbeidstakerensLonnStegPage {
@@ -77,7 +86,8 @@ export class ArbeidstakerensLonnStegPage {
   }
 
   /**
-   * Opens the "Legg til norsk virksomhet" modal, searches for the given orgnr,
+   * Opens the "Legg til norsk virksomhet" modal, types the given orgnr
+   * (OrganisasjonSoker auto-searches when 9 digits are entered),
    * waits for the org name to appear, and clicks Lagre.
    */
   async leggTilNorskVirksomhet(orgnr: string) {
@@ -89,11 +99,8 @@ export class ArbeidstakerensLonnStegPage {
     await dialog
       .getByLabel(t.norskeVirksomheterFormPart.organisasjonsnummer)
       .fill(orgnr);
-    await dialog
-      .getByRole("button", { name: t.oversiktFelles.arbeidstakerSokKnapp })
-      .click();
 
-    // Wait for the org lookup to resolve — ValgtOrganisasjon renders the org name
+    // OrganisasjonSoker auto-searches when 9 digits are typed — wait for result
     await dialog
       .getByText("Test Organisasjon AS")
       .waitFor({ state: "visible" });
@@ -200,5 +207,74 @@ export class ArbeidstakerensLonnStegPage {
     await expect(
       this.page.getByText(feilmeldinger.duMaLeggeTilMinstEnVirksomhet),
     ).toBeVisible();
+  }
+
+  // --- Norsk virksomhet modal validation ---
+
+  /**
+   * Opens the "Legg til norsk virksomhet" modal and clicks Lagre without
+   * filling anything, leaving the modal open for validation assertions.
+   */
+  async clickLagreInNorskVirksomhetModal() {
+    await this.leggTilNorskVirksomhetButton.click();
+    const dialog = this.page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: t.felles.lagre }).click();
+  }
+
+  async assertOrganisasjonsnummerErPakrevdIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(feilmeldinger.organisasjonsnummerErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertNorskVirksomhetModalIsOpen() {
+    await expect(this.page.getByRole("dialog")).toBeVisible();
+  }
+
+  // --- Utenlandsk virksomhet modal validation ---
+
+  /**
+   * Opens the "Legg til utenlandsk virksomhet" modal and clicks Lagre without
+   * filling anything, leaving the modal open for validation assertions.
+   */
+  async clickLagreInUtenlandskVirksomhetModal() {
+    await this.leggTilUtenlandskVirksomhetButton.click();
+    const dialog = this.page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: t.felles.lagre }).click();
+  }
+
+  async assertNavnPaVirksomhetErPakrevdIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(feilmeldinger.navnPaVirksomhetErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertVegnavnOgHusnummerErPakrevdIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(feilmeldinger.vegnavnOgHusnummerErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertLandErPakrevdIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(dialog.getByText(feilmeldinger.landErPakrevd)).toBeVisible();
+  }
+
+  async assertDuMaSvarePaOmVirksomhetenTilhorerSammeKonsernIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(
+        feilmeldinger.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertUtenlandskVirksomhetModalIsOpen() {
+    await expect(this.page.getByRole("dialog")).toBeVisible();
   }
 }

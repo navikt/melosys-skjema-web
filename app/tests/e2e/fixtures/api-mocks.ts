@@ -259,16 +259,28 @@ export async function mockGetEregOrganisasjon(
 
 export async function mockGetEregOrganisasjonMedJuridiskEnhet(
   page: Page,
-  response: OrganisasjonMedJuridiskEnhetDto,
+  response?: OrganisasjonMedJuridiskEnhetDto,
 ) {
   await page.route(
     "/api/ereg/organisasjon-med-juridisk-enhet/*",
     async (route) => {
       if (route.request().method() === "GET") {
+        const body =
+          response ??
+          (() => {
+            const url = route.request().url();
+            const orgnr = url.split(
+              "/api/ereg/organisasjon-med-juridisk-enhet/",
+            )[1];
+            return {
+              organisasjon: { orgnr, navn: "Test Organisasjon AS" },
+              juridiskEnhet: { orgnr, navn: "Test Organisasjon AS" },
+            };
+          })();
         await route.fulfill({
           status: 200,
           contentType: "application/json",
-          body: JSON.stringify(response),
+          body: JSON.stringify(body),
         });
       }
     },
@@ -286,6 +298,7 @@ export async function setupApiMocksForArbeidsgiver(
   await mockSkjemaMetadata(page, skjema.id, skjema.metadata);
   await mockFetchSkjema(page, skjema);
   await mockGetEregOrganisasjon(page);
+  await mockGetEregOrganisasjonMedJuridiskEnhet(page);
   await mockPostVirksomhetINorge(page, skjema.id);
   await mockPostUtenlandsoppdraget(page, skjema.id);
   await mockPostArbeidsstedIUtlandet(page, skjema.id);
@@ -306,6 +319,7 @@ export async function setupApiMocksForArbeidstaker(
   await mockPostArbeidssituasjon(page, skjema.id);
   await mockPostUtsendingsperiodeOgLand(page, skjema.id);
   await mockGetEregOrganisasjon(page);
+  await mockGetEregOrganisasjonMedJuridiskEnhet(page);
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
   await mockPostTilleggsopplysninger(page, skjema.id);
@@ -323,6 +337,7 @@ export async function setupApiMocksForKombinert(
   await mockSkjemaMetadata(page, skjema.id, skjema.metadata);
   await mockFetchSkjema(page, skjema);
   await mockGetEregOrganisasjon(page);
+  await mockGetEregOrganisasjonMedJuridiskEnhet(page);
   // Arbeidsgiver steps
   await mockPostVirksomhetINorge(page, skjema.id);
   await mockPostUtenlandsoppdraget(page, skjema.id);

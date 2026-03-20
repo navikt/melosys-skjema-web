@@ -80,7 +80,8 @@ export class ArbeidssituasjonStegPage {
   }
 
   /**
-   * Opens the "Legg til norsk virksomhet" modal, searches for the given orgnr,
+   * Opens the "Legg til norsk virksomhet" modal, types the given orgnr
+   * (OrganisasjonSoker auto-searches when 9 digits are entered),
    * waits for the org name to appear, and clicks Lagre.
    */
   async leggTilNorskVirksomhet(orgnr: string) {
@@ -92,11 +93,8 @@ export class ArbeidssituasjonStegPage {
     await dialog
       .getByLabel(t.norskeVirksomheterFormPart.organisasjonsnummer)
       .fill(orgnr);
-    await dialog
-      .getByRole("button", { name: t.oversiktFelles.arbeidstakerSokKnapp })
-      .click();
 
-    // Wait for org lookup to resolve — ValgtOrganisasjon renders the org name
+    // OrganisasjonSoker auto-searches when 9 digits are typed — wait for result
     await dialog
       .getByText("Test Organisasjon AS")
       .waitFor({ state: "visible" });

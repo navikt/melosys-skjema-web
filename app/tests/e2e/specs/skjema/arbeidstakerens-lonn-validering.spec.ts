@@ -38,4 +38,25 @@ test.describe("Arbeidstakerens lønn - validering", () => {
     await stegPage.assertDuMaLeggeTilMinstEnVirksomhetIsVisible();
     await stegPage.assertStillOnStep();
   });
+
+  test("viser feilmelding i norsk virksomhet-modal når organisasjonsnummer ikke er fylt ut", async () => {
+    await stegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await stegPage.clickLagreInNorskVirksomhetModal();
+
+    await stegPage.assertOrganisasjonsnummerErPakrevdIsVisible();
+    await stegPage.assertNorskVirksomhetModalIsOpen();
+  });
+
+  test("viser feilmeldinger i utenlandsk virksomhet-modal når påkrevde felter ikke er fylt ut", async () => {
+    await stegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await stegPage.clickLagreInUtenlandskVirksomhetModal();
+
+    await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
+    await stegPage.assertVegnavnOgHusnummerErPakrevdIsVisible();
+    await stegPage.assertLandErPakrevdIsVisible();
+    await stegPage.assertDuMaSvarePaOmVirksomhetenTilhorerSammeKonsernIsVisible();
+    await stegPage.assertUtenlandskVirksomhetModalIsOpen();
+  });
 });
