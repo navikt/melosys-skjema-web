@@ -7,8 +7,8 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { mockFetchSkjema } from "../../../fixtures/api-mocks";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { mockFetchSkjema } from "../../fixtures/api-mocks";
 
 // Hent felter fra statiske definisjoner
 const arbeidsstedIUtlandet =
@@ -19,6 +19,57 @@ const offshoreFelter =
 const paSkipFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaSkip.felter;
 const omBordPaFlyFelter =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOmBordPaFly.felter;
+
+// Feilmeldinger
+const feilmeldinger = {
+  // Arbeidssted type (discriminated union)
+  duMaVelgeArbeidsstedType:
+    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeArbeidsstedType,
+  // Felles
+  navnPaVirksomhetErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd,
+  // På land
+  duMaVelgeFastEllerVekslende:
+    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende,
+  duMaSvarePaOmDetErHjemmekontor:
+    nb.translation.arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor,
+  vegadresseErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.vegadresseErPakrevd,
+  nummerErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.nummerErPakrevd,
+  postkodeErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.postkodeErPakrevd,
+  byStedErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.byStedErPakrevd,
+  beskrivelseErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.beskrivelseErPakrevd,
+  // Offshore
+  navnPaInnretningErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd,
+  duMaVelgeTypeInnretning:
+    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeTypeInnretning,
+  sokkelLandErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.sokkelLandErPakrevd,
+  // På skip
+  navnPaSkipErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.navnPaSkipErPakrevd,
+  yrketTilArbeidstakerErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.yrketTilArbeidstakerErPakrevd,
+  duMaVelgeHvorSkipetSeiler:
+    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeHvorSkipetSeiler,
+  flagglandErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.flagglandErPakrevd,
+  territorialfarvannLandErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.territorialfarvannLandErPakrevd,
+  // Om bord på fly
+  hjemmebaseLandErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseLandErPakrevd,
+  hjemmebaseNavnErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseNavnErPakrevd,
+  duMaSvarePaOmDetErVanligHjemmebase:
+    nb.translation.arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErVanligHjemmebase,
+  vanligHjemmebaseLandErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseLandErPakrevd,
+  vanligHjemmebaseNavnErPakrevd:
+    nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseNavnErPakrevd,
+};
 
 export class ArbeidsstedIUtlandetStegPage {
   readonly page: Page;
@@ -237,5 +288,191 @@ export class ArbeidsstedIUtlandetStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidstakerens-lonn`,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/arbeidssted-i-utlandet`,
+    );
+  }
+
+  // --- Validation assertions: Arbeidssted type ---
+
+  async assertDuMaVelgeArbeidsstedTypeIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaVelgeArbeidsstedType),
+    ).toBeVisible();
+  }
+
+  // --- Validation assertions: PA_LAND ---
+
+  async assertNavnPaVirksomhetErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.navnPaVirksomhetErPakrevd),
+    ).toBeVisible();
+  }
+
+  private fastEllerVekslendeFieldset() {
+    return this.page.getByRole("group", {
+      name: paLandFelter.fastEllerVekslendeArbeidssted.label,
+    });
+  }
+
+  async assertDuMaVelgeFastEllerVekslendeIsVisible() {
+    await expect(
+      this.fastEllerVekslendeFieldset().getByText(
+        feilmeldinger.duMaVelgeFastEllerVekslende,
+      ),
+    ).toBeVisible();
+  }
+
+  private erHjemmekontorFieldset() {
+    return this.page.getByRole("group", {
+      name: paLandFelter.erHjemmekontor.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDetErHjemmekontorIsVisible() {
+    await expect(
+      this.erHjemmekontorFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDetErHjemmekontor,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertVegadresseErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.vegadresseErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertNummerErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.nummerErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertPostkodeErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.postkodeErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertByStedErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.byStedErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertBeskrivelseErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.beskrivelseErPakrevd),
+    ).toBeVisible();
+  }
+
+  // --- Validation assertions: OFFSHORE ---
+
+  async assertNavnPaInnretningErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.navnPaInnretningErPakrevd),
+    ).toBeVisible();
+  }
+
+  private typeInnretningFieldset() {
+    return this.page.getByRole("group", {
+      name: offshoreFelter.typeInnretning.label,
+    });
+  }
+
+  async assertDuMaVelgeTypeInnretningIsVisible() {
+    await expect(
+      this.typeInnretningFieldset().getByText(
+        feilmeldinger.duMaVelgeTypeInnretning,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertSokkelLandErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.sokkelLandErPakrevd),
+    ).toBeVisible();
+  }
+
+  // --- Validation assertions: PA_SKIP ---
+
+  async assertNavnPaSkipErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.navnPaSkipErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertYrketTilArbeidstakerErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.yrketTilArbeidstakerErPakrevd),
+    ).toBeVisible();
+  }
+
+  private seilerIFieldset() {
+    return this.page.getByRole("group", {
+      name: paSkipFelter.seilerI.label,
+    });
+  }
+
+  async assertDuMaVelgeHvorSkipetSeilerIsVisible() {
+    await expect(
+      this.seilerIFieldset().getByText(feilmeldinger.duMaVelgeHvorSkipetSeiler),
+    ).toBeVisible();
+  }
+
+  async assertFlagglandErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.flagglandErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertTerritorialfarvannLandErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.territorialfarvannLandErPakrevd),
+    ).toBeVisible();
+  }
+
+  // --- Validation assertions: OM_BORD_PA_FLY ---
+
+  async assertHjemmebaseLandErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.hjemmebaseLandErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertHjemmebaseNavnErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.hjemmebaseNavnErPakrevd),
+    ).toBeVisible();
+  }
+
+  private erVanligHjemmebaseFieldset() {
+    return this.page.getByRole("group", {
+      name: omBordPaFlyFelter.erVanligHjemmebase.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDetErVanligHjemmebaseIsVisible() {
+    await expect(
+      this.erVanligHjemmebaseFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDetErVanligHjemmebase,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertVanligHjemmebaseLandErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.vanligHjemmebaseLandErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertVanligHjemmebaseNavnErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.vanligHjemmebaseNavnErPakrevd),
+    ).toBeVisible();
   }
 }

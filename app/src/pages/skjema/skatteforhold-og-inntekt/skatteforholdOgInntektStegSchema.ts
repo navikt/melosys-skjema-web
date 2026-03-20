@@ -27,48 +27,35 @@ export const skatteforholdOgInntektSchema = z
     pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
   })
   .refine(
-    (data) => {
-      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-        return (
-          data.pengestotteSomMottasFraAndreLandBeskrivelse &&
-          data.pengestotteSomMottasFraAndreLandBeskrivelse.trim().length > 0
-        );
-      }
-      return true;
-    },
+    (data) =>
+      !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
+      !!data.pengestotteSomMottasFraAndreLandBeskrivelse?.trim(),
     {
-      message:
+      error:
         "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
       path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
+      when: () => true,
     },
   )
   .refine(
-    (data) => {
-      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-        return (
-          data.landSomUtbetalerPengestotte &&
-          data.landSomUtbetalerPengestotte.trim().length > 0
-        );
-      }
-      return true;
-    },
+    (data) =>
+      !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
+      !!data.landSomUtbetalerPengestotte?.trim(),
     {
-      message:
+      error:
         "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
       path: ["landSomUtbetalerPengestotte"],
+      when: () => true,
     },
   )
   .refine(
-    (data) => {
-      if (data.mottarPengestotteFraAnnetEosLandEllerSveits) {
-        return isValidBelop(data.pengestotteSomMottasFraAndreLandBelop);
-      }
-      return true;
-    },
+    (data) =>
+      !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
+      isValidBelop(data.pengestotteSomMottasFraAndreLandBelop),
     {
-      message:
-        "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
+      error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
       path: ["pengestotteSomMottasFraAndreLandBelop"],
+      when: () => true,
     },
   )
   .transform((data) => ({

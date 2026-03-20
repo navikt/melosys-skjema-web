@@ -28,8 +28,7 @@ import {
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { OppsummeringStegPage as ArbeidsgiverOppsummeringStegPage } from "../../pages/skjema/arbeidsgiver/oppsummering-steg.page";
-import { OppsummeringStegPage as ArbeidstakerOppsummeringStegPage } from "../../pages/skjema/arbeidstaker/oppsummering-steg.page";
+import { OppsummeringStegPage } from "../../pages/skjema/oppsummering-steg.page";
 
 test.describe("Oppsummering", () => {
   test.describe("Arbeidstaker", () => {
@@ -80,7 +79,7 @@ test.describe("Oppsummering", () => {
         } as UtsendtArbeidstakerSkjemaDto["data"],
       });
 
-      const oppsummeringPage = new ArbeidstakerOppsummeringStegPage(
+      const oppsummeringPage = new OppsummeringStegPage(
         page,
         testArbeidstakerSkjema,
       );
@@ -167,7 +166,7 @@ test.describe("Oppsummering", () => {
         } as UtsendtArbeidstakerSkjemaDto["data"],
       });
 
-      const oppsummeringStegPage = new ArbeidsgiverOppsummeringStegPage(
+      const oppsummeringStegPage = new OppsummeringStegPage(
         page,
         testArbeidsgiverSkjema,
       );
@@ -275,8 +274,7 @@ test.describe("Oppsummering", () => {
         } as UtsendtArbeidstakerSkjemaDto["data"],
       });
 
-      // Use arbeidsgiver page object since it has the arbeidsgiver assertion methods
-      const oppsummeringStegPage = new ArbeidsgiverOppsummeringStegPage(
+      const oppsummeringStegPage = new OppsummeringStegPage(
         page,
         testKombinertSkjema,
       );

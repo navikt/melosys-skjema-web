@@ -7,11 +7,26 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
 const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
 const felter = arbeidssituasjon.felter;
 const t = nb.translation;
+
+// Feilmeldinger
+const feilmeldinger = {
+  duMaSvarePaOmDuHarVertILonnetArbeid:
+    t.arbeidssituasjonSteg
+      .duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending,
+  duMaBeskriveAktiviteten:
+    t.arbeidssituasjonSteg.duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid,
+  duMaSvarePaOmDuSkalJobbeForFlereVirksomheter:
+    t.arbeidssituasjonSteg
+      .duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden,
+  duMaLeggeTilMinstEnVirksomhet:
+    t.arbeidssituasjonSteg
+      .duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter,
+};
 
 export class ArbeidssituasjonStegPage {
   readonly page: Page;
@@ -80,7 +95,8 @@ export class ArbeidssituasjonStegPage {
   }
 
   /**
-   * Opens the "Legg til norsk virksomhet" modal, searches for the given orgnr,
+   * Opens the "Legg til norsk virksomhet" modal, types the given orgnr
+   * (OrganisasjonSoker auto-searches when 9 digits are entered),
    * waits for the org name to appear, and clicks Lagre.
    */
   async leggTilNorskVirksomhet(orgnr: string) {
@@ -92,11 +108,8 @@ export class ArbeidssituasjonStegPage {
     await dialog
       .getByLabel(t.norskeVirksomheterFormPart.organisasjonsnummer)
       .fill(orgnr);
-    await dialog
-      .getByRole("button", { name: t.oversiktFelles.arbeidstakerSokKnapp })
-      .click();
 
-    // Wait for org lookup to resolve — ValgtOrganisasjon renders the org name
+    // OrganisasjonSoker auto-searches when 9 digits are typed — wait for result
     await dialog
       .getByText("Test Organisasjon AS")
       .waitFor({ state: "visible" });
@@ -178,5 +191,53 @@ export class ArbeidssituasjonStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/skatteforhold-og-inntekt`,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/arbeidssituasjon`,
+    );
+  }
+
+  // --- Validation assertions ---
+
+  private harVaertILonnetArbeidFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
+    });
+  }
+
+  private skalJobbeForFlereVirksomheterFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.skalJobbeForFlereVirksomheter.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDuHarVertILonnetArbeidIsVisible() {
+    await expect(
+      this.harVaertILonnetArbeidFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuHarVertILonnetArbeid,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaBeskriveAktivitetenIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaBeskriveAktiviteten),
+    ).toBeVisible();
+  }
+
+  async assertDuMaSvarePaOmDuSkalJobbeForFlereVirksomheterIsVisible() {
+    await expect(
+      this.skalJobbeForFlereVirksomheterFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuSkalJobbeForFlereVirksomheter,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaLeggeTilMinstEnVirksomhetIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaLeggeTilMinstEnVirksomhet),
+    ).toBeVisible();
   }
 }

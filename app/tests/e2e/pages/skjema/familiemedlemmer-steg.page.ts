@@ -7,12 +7,31 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
 // Hent felter fra statiske definisjoner
 const familiemedlemmerSeksjon = SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer;
 const felter = familiemedlemmerSeksjon.felter;
 const elementDef = felter.familiemedlemmer.elementDefinisjon;
+const t = nb.translation;
+
+// Feilmeldinger - hoveddelen
+const feilmeldinger = {
+  duMaSvarePaOmDuHarFamiliemedlemmer:
+    t.familiemedlemmerSteg.duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed,
+};
+
+// Feilmeldinger - modal (familiemedlem)
+const modalFeilmeldinger = {
+  fornavnErPakrevd: t.familiemedlemmerSteg.fornavnErPakrevd,
+  etternavnErPakrevd: t.familiemedlemmerSteg.etternavnErPakrevd,
+  duMaSvarePaOmHarNorskFnr:
+    t.familiemedlemmerSteg
+      .duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer,
+  fodselsnummerErPakrevd: t.familiemedlemmerSteg.fodselsnummerErPakrevd,
+  ugyldigFodselsnummer: t.felles.ugyldigFodselsnummerEllerDnummer,
+  fodselsdatoErPakrevd: t.familiemedlemmerSteg.fodselsdatoErPakrevd,
+};
 
 export class FamiliemedlemmerStegPage {
   readonly page: Page;
@@ -118,5 +137,79 @@ export class FamiliemedlemmerStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/tilleggsopplysninger`,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/familiemedlemmer`,
+    );
+  }
+
+  // --- Validation assertions: hoveddelen ---
+
+  private skalHaMedFamiliemedlemmerFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.skalHaMedFamiliemedlemmer.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDuHarFamiliemedlemmerIsVisible() {
+    await expect(
+      this.skalHaMedFamiliemedlemmerFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuHarFamiliemedlemmer,
+      ),
+    ).toBeVisible();
+  }
+
+  // --- Validation assertions: modal ---
+
+  /**
+   * Opens the "Legg til familiemedlem" modal and clicks Lagre without
+   * filling anything, leaving the modal open for validation assertions.
+   */
+  async clickLagreInFamiliemedlemModal() {
+    await this.leggTilFamiliemedlemButton.click();
+    await expect(this.modal).toBeVisible();
+    await this.modalLagreButton.click();
+  }
+
+  async assertModalFornavnErPakrevdIsVisible() {
+    await expect(
+      this.modal.getByText(modalFeilmeldinger.fornavnErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertModalEtternavnErPakrevdIsVisible() {
+    await expect(
+      this.modal.getByText(modalFeilmeldinger.etternavnErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertModalDuMaSvarePaOmHarNorskFnrIsVisible() {
+    await expect(
+      this.modal.getByText(modalFeilmeldinger.duMaSvarePaOmHarNorskFnr),
+    ).toBeVisible();
+  }
+
+  async assertModalFodselsnummerErPakrevdIsVisible() {
+    await expect(
+      this.modal.getByText(modalFeilmeldinger.fodselsnummerErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertModalUgyldigFodselsnummerIsVisible() {
+    await expect(
+      this.modal.getByText(modalFeilmeldinger.ugyldigFodselsnummer),
+    ).toBeVisible();
+  }
+
+  async assertModalFodselsdatoErPakrevdIsVisible() {
+    await expect(
+      this.modal.getByText(modalFeilmeldinger.fodselsdatoErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertFamiliemedlemModalIsOpen() {
+    await expect(this.modal).toBeVisible();
   }
 }

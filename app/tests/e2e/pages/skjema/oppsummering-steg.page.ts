@@ -4,11 +4,15 @@ import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import { nb } from "~/i18n/nb";
 import type {
   ArbeidsgiverensVirksomhetINorgeDto,
+  ArbeidssituasjonDto,
   ArbeidsstedIUtlandetDto,
   ArbeidstakerensLonnDto,
+  FamiliemedlemmerDto,
   NorskeOgUtenlandskeVirksomheter,
+  SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
+  UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
@@ -21,6 +25,12 @@ const arbeidsstedIUtlandet =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet;
 const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
 const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
+const utsendingsperiodeOgLand =
+  SKJEMA_DEFINISJON_A1.seksjoner.utsendingsperiodeOgLand;
+const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
+const skatteforholdOgInntekt =
+  SKJEMA_DEFINISJON_A1.seksjoner.skatteforholdOgInntekt;
+const familiemedlemmer = SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer;
 const tilleggsopplysninger =
   SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidsgiver;
 
@@ -48,6 +58,8 @@ export class OppsummeringStegPage {
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
   }
+
+  // --- Arbeidsgiver assertions ---
 
   async assertArbeidsgiverensVirksomhetINorgeData(
     data: ArbeidsgiverensVirksomhetINorgeDto,
@@ -238,6 +250,120 @@ export class OppsummeringStegPage {
       }
     }
   }
+
+  // --- Arbeidstaker assertions ---
+
+  async assertUtsendingsperiodeOgLandData(data: UtsendingsperiodeOgLandDto) {
+    await expect(
+      this.page.locator(
+        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelseLand.label}") + dd`,
+      ),
+    ).toHaveText(nb.translation.land[data.utsendelseLand]);
+
+    await expect(
+      this.page.locator(
+        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsePeriode.fraDatoLabel}") + dd`,
+      ),
+    ).toHaveText(data.utsendelsePeriode.fraDato);
+
+    await expect(
+      this.page.locator(
+        `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsePeriode.tilDatoLabel}") + dd`,
+      ),
+    ).toHaveText(data.utsendelsePeriode.tilDato);
+  }
+
+  async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {
+    await expect(
+      this.page.locator(
+        `dt:has-text("${arbeidssituasjon.felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label}") + dd`,
+      ),
+    ).toHaveText(
+      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
+        ? nb.translation.felles.ja
+        : nb.translation.felles.nei,
+    );
+
+    if (data.aktivitetIMaanedenFoerUtsendingen !== undefined) {
+      await expect(
+        this.page.getByText(data.aktivitetIMaanedenFoerUtsendingen),
+      ).toBeVisible();
+    }
+
+    await expect(
+      this.page.locator(
+        `dt:has-text("${arbeidssituasjon.felter.skalJobbeForFlereVirksomheter.label}") + dd`,
+      ),
+    ).toHaveText(
+      data.skalJobbeForFlereVirksomheter
+        ? nb.translation.felles.ja
+        : nb.translation.felles.nei,
+    );
+  }
+
+  async assertSkatteforholdOgInntektData(data: SkatteforholdOgInntektDto) {
+    await expect(
+      this.page.locator(
+        `dt:has-text("${skatteforholdOgInntekt.felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label}") + dd`,
+      ),
+    ).toHaveText(
+      data.erSkattepliktigTilNorgeIHeleutsendingsperioden
+        ? nb.translation.felles.ja
+        : nb.translation.felles.nei,
+    );
+
+    await expect(
+      this.page.locator(
+        `dt:has-text("${skatteforholdOgInntekt.felter.mottarPengestotteFraAnnetEosLandEllerSveits.label}") + dd`,
+      ),
+    ).toHaveText(
+      data.mottarPengestotteFraAnnetEosLandEllerSveits
+        ? nb.translation.felles.ja
+        : nb.translation.felles.nei,
+    );
+
+    if (data.landSomUtbetalerPengestotte !== undefined) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${skatteforholdOgInntekt.felter.landSomUtbetalerPengestotte.label}") + dd`,
+        ),
+      ).toHaveText(
+        nb.translation.land[
+          data.landSomUtbetalerPengestotte as keyof typeof nb.translation.land
+        ],
+      );
+    }
+
+    if (data.pengestotteSomMottasFraAndreLandBelop !== undefined) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${skatteforholdOgInntekt.felter.pengestotteSomMottasFraAndreLandBelop.label}") + dd`,
+        ),
+      ).toHaveText(data.pengestotteSomMottasFraAndreLandBelop);
+    }
+
+    if (data.pengestotteSomMottasFraAndreLandBeskrivelse !== undefined) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${skatteforholdOgInntekt.felter.pengestotteSomMottasFraAndreLandBeskrivelse.label}") + dd`,
+        ),
+      ).toHaveText(data.pengestotteSomMottasFraAndreLandBeskrivelse);
+    }
+  }
+
+  async assertFamiliemedlemmerData(data: FamiliemedlemmerDto) {
+    await expect(
+      this.page.locator(
+        `dt:has-text("${familiemedlemmer.felter.skalHaMedFamiliemedlemmer.label}") + dd`,
+      ),
+    ).toHaveText(
+      data.skalHaMedFamiliemedlemmer
+        ? nb.translation.felles.ja
+        : nb.translation.felles.nei,
+    );
+  }
+
+  // --- Delte assertions ---
 
   async assertTilleggsopplysningerData(data: TilleggsopplysningerDto) {
     // Use .first() because kombinert view shows tilleggsopplysninger in both

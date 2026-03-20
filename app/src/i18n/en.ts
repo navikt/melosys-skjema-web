@@ -523,11 +523,6 @@ export const en = {
       informasjon:
         "We need this information to send letters to the correct recipient in Altinn.",
       sokPaVirksomhet: "Search for company (org.no.)",
-      organisasjonIkkeFunnet: "No organization found with this number",
-      feilVedSok: "Something went wrong with the search. Try again later.",
-      ugyldigOrganisasjonsnummer: "The organization number is invalid",
-      rateLimitOverskredet:
-        "You have searched too many times. Wait a minute before trying again.",
       duMaSokeForstFeil:
         "You must search for and select an advisory firm before you can continue",
       valgtFirma: "Selected advisory firm",
@@ -557,6 +552,8 @@ export const en = {
     generellValidering: {
       erPakrevd: "is required",
       organisasjonsnummerErPakrevd: "Organization number is required",
+      organisasjonsnummerHarUgyldigFormat:
+        "The organization number has an invalid format",
       organisasjonsnummerMaVare9Siffer: "Organization number must be 9 digits",
       navnPaVirksomhetErPakrevd: "Company name is required",
       vegnavnOgHusnummerErPakrevd:
@@ -565,6 +562,11 @@ export const en = {
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "You must answer whether the company belongs to the same consortium",
       ansettelsesformErPakrevd: "You must select an employment form",
+      organisasjonIkkeFunnet: "No organization found with this number",
+      feilVedSok: "Something went wrong with the search. Try again later.",
+      ugyldigOrganisasjonsnummer: "The organization number is invalid",
+      rateLimitOverskredet:
+        "You have searched too many times. Wait a minute before trying again.",
     },
     innsendtSkjema: {
       tittel: "Submitted application",

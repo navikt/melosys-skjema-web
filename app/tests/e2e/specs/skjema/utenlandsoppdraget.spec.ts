@@ -9,7 +9,7 @@ import {
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { UtenlandsoppdragetStegPage } from "../../pages/skjema/arbeidsgiver/utenlandsoppdraget-steg.page";
+import { UtenlandsoppdragetStegPage } from "../../pages/skjema/utenlandsoppdraget-steg.page";
 
 test.describe("Utenlandsoppdraget", () => {
   test.beforeEach(async ({ page }) => {

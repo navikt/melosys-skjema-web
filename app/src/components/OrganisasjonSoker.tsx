@@ -15,12 +15,15 @@ interface OrganisasjonSokerProps {
   label: string;
   /** Om feltet skal ha autofokus */
   autoFocus?: boolean;
+  /** Forhåndsutfylt organisasjonsnummer (for redigering) */
+  initialOrgnr?: string;
 }
 
 export function OrganisasjonSoker({
   formFieldName,
   label,
   autoFocus = false,
+  initialOrgnr = "",
 }: OrganisasjonSokerProps) {
   const { t } = useTranslation();
   const {
@@ -28,7 +31,7 @@ export function OrganisasjonSoker({
     setValue,
     formState: { errors },
   } = useFormContext();
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(initialOrgnr);
 
   const isValidOrgNr = /^\d{9}$/.test(searchValue);
 
@@ -60,19 +63,19 @@ export function OrganisasjonSoker({
   const getErrorMessage = (): string | undefined => {
     if (query.isError) {
       if (query.error instanceof ValideringError) {
-        return t("velgRadgiverfirma.ugyldigOrganisasjonsnummer");
+        return t("generellValidering.ugyldigOrganisasjonsnummer");
       }
 
       const statusMatch = query.error.message.match(/status:\s*(\d+)/);
       const status = statusMatch ? statusMatch[1] : null;
 
       if (status === "429") {
-        return t("velgRadgiverfirma.rateLimitOverskredet");
+        return t("generellValidering.rateLimitOverskredet");
       }
       if (status === "404") {
-        return t("velgRadgiverfirma.organisasjonIkkeFunnet");
+        return t("generellValidering.organisasjonIkkeFunnet");
       }
-      return t("velgRadgiverfirma.feilVedSok");
+      return t("generellValidering.feilVedSok");
     }
 
     if (typeof formError === "string") {

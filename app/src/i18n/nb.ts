@@ -405,11 +405,6 @@ export const nb = {
       informasjon:
         "Vi trenger denne informasjonen for å sende brev til riktig mottaker i Altinn.",
       sokPaVirksomhet: "Søk på virksomhet (org.nr.)",
-      organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
-      feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",
-      ugyldigOrganisasjonsnummer: "Organisasjonsnummeret er ugyldig",
-      rateLimitOverskredet:
-        "Du har søkt for mange ganger. Vent et minutt før du prøver igjen.",
       duMaSokeForstFeil:
         "Du må søke etter og velge et rådgiverfirma før du kan fortsette",
       valgtFirma: "Valgt organisasjon",
@@ -423,6 +418,8 @@ export const nb = {
     generellValidering: {
       erPakrevd: "er påkrevd",
       organisasjonsnummerErPakrevd: "Organisasjonsnummer er påkrevd",
+      organisasjonsnummerHarUgyldigFormat:
+        "Organisasjonsnummeret har ugyldig format",
       organisasjonsnummerMaVare9Siffer: "Organisasjonsnummer må være 9 siffer",
       navnPaVirksomhetErPakrevd: "Navn på virksomhet er påkrevd",
       vegnavnOgHusnummerErPakrevd: "Vegnavn og husnummer er påkrevd",
@@ -430,6 +427,11 @@ export const nb = {
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "Du må svare på om virksomheten tilhører samme konsern",
       ansettelsesformErPakrevd: "Du må velge en ansettelsesform",
+      organisasjonIkkeFunnet: "Fant ingen organisasjon med dette nummeret",
+      feilVedSok: "Noe gikk galt ved søk. Prøv igjen senere.",
+      ugyldigOrganisasjonsnummer: "Organisasjonsnummeret er ugyldig",
+      rateLimitOverskredet:
+        "Du har søkt for mange ganger. Vent et minutt før du prøver igjen.",
     },
     innsendtSkjema: {
       tittel: "Innsendt søknad",

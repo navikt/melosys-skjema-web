@@ -9,4 +9,5 @@ import { paSkipSchema } from "./paSkipSchema.ts";
 export const arbeidsstedIUtlandetSchema = z.discriminatedUnion(
   "arbeidsstedType",
   [paLandSchema, offshoreSchema, paSkipSchema, omBordPaFlySchema],
+  { error: "arbeidsstedIUtlandetSteg.duMaVelgeArbeidsstedType" },
 );

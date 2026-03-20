@@ -7,12 +7,29 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
 // Hent felter fra statiske definisjoner
 const skatteforholdOgInntekt =
   SKJEMA_DEFINISJON_A1.seksjoner.skatteforholdOgInntekt;
 const felter = skatteforholdOgInntekt.felter;
+const t = nb.translation;
+
+// Feilmeldinger
+const feilmeldinger = {
+  duMaSvarePaOmDuErSkattepliktig:
+    t.skatteforholdOgInntektSteg
+      .duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden,
+  duMaSvarePaOmDuMottarPengestotte:
+    t.skatteforholdOgInntektSteg
+      .duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits,
+  duMaBeskriveHvaSlagsPengestotte:
+    t.skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar,
+  duMaVelgeHvilketLandSomUtbetalerPengestotten:
+    t.skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten,
+  duMaOppgiEtGyldigBelop:
+    t.skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0,
+};
 
 export class SkatteforholdOgInntektStegPage {
   readonly page: Page;
@@ -103,5 +120,61 @@ export class SkatteforholdOgInntektStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/familiemedlemmer`,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/skatteforhold-og-inntekt`,
+    );
+  }
+
+  // --- Validation assertions ---
+
+  private erSkattepliktigFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label,
+    });
+  }
+
+  private mottarPengestotteFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.mottarPengestotteFraAnnetEosLandEllerSveits.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDuErSkattepliktigIsVisible() {
+    await expect(
+      this.erSkattepliktigFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuErSkattepliktig,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaSvarePaOmDuMottarPengestotteIsVisible() {
+    await expect(
+      this.mottarPengestotteFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuMottarPengestotte,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaBeskriveHvaSlagsPengestotteIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaBeskriveHvaSlagsPengestotte),
+    ).toBeVisible();
+  }
+
+  async assertDuMaVelgeHvilketLandSomUtbetalerPengestottenIsVisible() {
+    await expect(
+      this.page.getByText(
+        feilmeldinger.duMaVelgeHvilketLandSomUtbetalerPengestotten,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaOppgiEtGyldigBelopIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaOppgiEtGyldigBelop),
+    ).toBeVisible();
   }
 }

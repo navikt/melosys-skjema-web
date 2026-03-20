@@ -38,6 +38,7 @@ export const paLandSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.vegadresseErPakrevd",
         path: ["fastArbeidssted", "vegadresse"],
+        when: () => true,
       },
     )
     .refine(
@@ -48,6 +49,7 @@ export const paLandSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.nummerErPakrevd",
         path: ["fastArbeidssted", "nummer"],
+        when: () => true,
       },
     )
     .refine(
@@ -58,6 +60,7 @@ export const paLandSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.postkodeErPakrevd",
         path: ["fastArbeidssted", "postkode"],
+        when: () => true,
       },
     )
     .refine(
@@ -68,6 +71,7 @@ export const paLandSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.byStedErPakrevd",
         path: ["fastArbeidssted", "bySted"],
+        when: () => true,
       },
     )
     .refine(
@@ -78,6 +82,7 @@ export const paLandSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
         path: ["erHjemmekontor"],
+        when: () => true,
       },
     )
     .refine(
@@ -88,6 +93,7 @@ export const paLandSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.beskrivelseErPakrevd",
         path: ["beskrivelseVekslende"],
+        when: () => true,
       },
     )
     .refine(
@@ -98,6 +104,7 @@ export const paLandSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
         path: ["erHjemmekontor"],
+        when: () => true,
       },
     )
     .transform((data) => ({

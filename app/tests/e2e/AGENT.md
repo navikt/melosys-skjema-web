@@ -13,10 +13,7 @@ app/tests/e2e/
 │   ├── representasjon/
 │   ├── oversikt/
 │   └── skjema/
-│       ├── arbeidsgiver/     # Page objects for arbeidsgiver flow steps
-│       ├── arbeidstaker/     # Page objects for arbeidstaker flow steps
-│       ├── kvittering/
-│       └── innsendt/
+│       ├── <step-name>-steg.page.ts  # All page objects flat in this directory
 ├── specs/                    # Test spec files
 │   ├── representasjon.spec.ts
 │   ├── oversikt.spec.ts
@@ -143,7 +140,7 @@ Use this type for all Ja/Nei radio groups. Access with `radioGroup.JA.click()` o
 import { test } from "@playwright/test";
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { testArbeidstakerSkjema, testUserInfo, formFieldValues } from "../../fixtures/test-data";
-import { StegNavnStegPage } from "../../pages/skjema/arbeidstaker/steg-navn-steg.page";
+import { StegNavnStegPage } from "../../pages/skjema/steg-navn-steg.page";
 
 test.describe("Steg Navn", () => {
   test.beforeEach(async ({ page }) => {

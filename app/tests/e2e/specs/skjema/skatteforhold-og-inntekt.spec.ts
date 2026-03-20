@@ -4,7 +4,7 @@ import { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
-import { SkatteforholdOgInntektStegPage } from "../../pages/skjema/arbeidstaker/skatteforhold-og-inntekt-steg.page";
+import { SkatteforholdOgInntektStegPage } from "../../pages/skjema/skatteforhold-og-inntekt-steg.page";
 
 test.describe("Skatteforhold og inntekt", () => {
   test.beforeEach(async ({ page }) => {

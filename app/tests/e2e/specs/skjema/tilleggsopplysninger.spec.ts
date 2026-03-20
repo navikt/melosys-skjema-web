@@ -12,8 +12,7 @@ import {
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { TilleggsopplysningerStegPage as ArbeidsgiverTilleggsopplysningerStegPage } from "../../pages/skjema/arbeidsgiver/tilleggsopplysninger-steg.page";
-import { TilleggsopplysningerStegPage as ArbeidstakerTilleggsopplysningerStegPage } from "../../pages/skjema/arbeidstaker/tilleggsopplysninger-steg.page";
+import { TilleggsopplysningerStegPage } from "../../pages/skjema/tilleggsopplysninger-steg.page";
 
 test.describe("Tilleggsopplysninger", () => {
   test.describe("Arbeidstaker", () => {
@@ -26,11 +25,10 @@ test.describe("Tilleggsopplysninger", () => {
     });
 
     test("happy case - ingen tilleggsopplysninger", async ({ page }) => {
-      const tilleggsopplysningerStegPage =
-        new ArbeidstakerTilleggsopplysningerStegPage(
-          page,
-          testArbeidstakerSkjema,
-        );
+      const tilleggsopplysningerStegPage = new TilleggsopplysningerStegPage(
+        page,
+        testArbeidstakerSkjema,
+      );
 
       await tilleggsopplysningerStegPage.goto();
       await tilleggsopplysningerStegPage.assertIsVisible();
@@ -48,11 +46,10 @@ test.describe("Tilleggsopplysninger", () => {
     });
 
     test("variant: med tilleggsopplysninger", async ({ page }) => {
-      const tilleggsopplysningerStegPage =
-        new ArbeidstakerTilleggsopplysningerStegPage(
-          page,
-          testArbeidstakerSkjema,
-        );
+      const tilleggsopplysningerStegPage = new TilleggsopplysningerStegPage(
+        page,
+        testArbeidstakerSkjema,
+      );
 
       await tilleggsopplysningerStegPage.goto();
       await tilleggsopplysningerStegPage.assertIsVisible();
@@ -86,11 +83,10 @@ test.describe("Tilleggsopplysninger", () => {
     });
 
     test("happy case - ingen tilleggsopplysninger", async ({ page }) => {
-      const tilleggsopplysningerStegPage =
-        new ArbeidsgiverTilleggsopplysningerStegPage(
-          page,
-          testArbeidsgiverSkjema,
-        );
+      const tilleggsopplysningerStegPage = new TilleggsopplysningerStegPage(
+        page,
+        testArbeidsgiverSkjema,
+      );
 
       await tilleggsopplysningerStegPage.goto();
       await tilleggsopplysningerStegPage.assertIsVisible();
@@ -108,11 +104,10 @@ test.describe("Tilleggsopplysninger", () => {
     });
 
     test("variant: med tilleggsopplysninger", async ({ page }) => {
-      const tilleggsopplysningerStegPage =
-        new ArbeidsgiverTilleggsopplysningerStegPage(
-          page,
-          testArbeidsgiverSkjema,
-        );
+      const tilleggsopplysningerStegPage = new TilleggsopplysningerStegPage(
+        page,
+        testArbeidsgiverSkjema,
+      );
 
       await tilleggsopplysningerStegPage.goto();
       await tilleggsopplysningerStegPage.assertIsVisible();

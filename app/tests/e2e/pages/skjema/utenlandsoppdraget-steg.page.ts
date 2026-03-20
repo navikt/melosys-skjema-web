@@ -7,13 +7,38 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
-import { selectDateFromCalendar } from "../../../utils/datepicker-helpers";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
 
 // Hent felter fra statiske definisjoner
 const utenlandsoppdraget =
   SKJEMA_DEFINISJON_A1.seksjoner.utenlandsoppdragetArbeidsgiver;
 const felter = utenlandsoppdraget.felter;
+
+// Feilmeldinger
+const feilmeldinger = {
+  harOppdragILandetErPakrevd:
+    nb.translation.utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet,
+  bleAnsattForUtenlandsoppdragetErPakrevd:
+    nb.translation.utenlandsoppdragetSteg
+      .duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget,
+  forblirAnsattIHelePeriodenErPakrevd:
+    nb.translation.utenlandsoppdragetSteg
+      .duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden,
+  erstatterAnnenPersonErPakrevd:
+    nb.translation.utenlandsoppdragetSteg
+      .duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson,
+  begrunnelseErPakrevdNarIkkeOppdrag:
+    nb.translation.utenlandsoppdragetSteg
+      .begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet,
+  vilJobbeEtterOppdragetErPakrevd:
+    nb.translation.utenlandsoppdragetSteg
+      .duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget,
+  ansettelsesforholdBeskrivelseErPakrevd:
+    nb.translation.utenlandsoppdragetSteg
+      .beskrivelseAvAnsettelsesforholdErPakrevd,
+  periodeErPakrevd: nb.translation.periode.datoErPakrevd,
+};
 
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
@@ -171,5 +196,103 @@ export class UtenlandsoppdragetStegPage {
       this.forrigeArbeidstakerTilDatoInput,
       date,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/utenlandsoppdraget`,
+    );
+  }
+
+  // --- Validation assertions: always-required boolean fields ---
+
+  private harOppdragILandetFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.arbeidsgiverHarOppdragILandet.label,
+    });
+  }
+
+  private bleAnsattForUtenlandsoppdragetFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.arbeidstakerBleAnsattForUtenlandsoppdraget.label,
+    });
+  }
+
+  private forblirAnsattIHelePeriodenFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.arbeidstakerForblirAnsattIHelePerioden.label,
+    });
+  }
+
+  private erstatterAnnenPersonFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.arbeidstakerErstatterAnnenPerson.label,
+    });
+  }
+
+  async assertHarOppdragILandetErPakrevdIsVisible() {
+    await expect(
+      this.harOppdragILandetFieldset().getByText(
+        feilmeldinger.harOppdragILandetErPakrevd,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertBleAnsattForUtenlandsoppdragetErPakrevdIsVisible() {
+    await expect(
+      this.bleAnsattForUtenlandsoppdragetFieldset().getByText(
+        feilmeldinger.bleAnsattForUtenlandsoppdragetErPakrevd,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertForblirAnsattIHelePeriodenErPakrevdIsVisible() {
+    await expect(
+      this.forblirAnsattIHelePeriodenFieldset().getByText(
+        feilmeldinger.forblirAnsattIHelePeriodenErPakrevd,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertErstatterAnnenPersonErPakrevdIsVisible() {
+    await expect(
+      this.erstatterAnnenPersonFieldset().getByText(
+        feilmeldinger.erstatterAnnenPersonErPakrevd,
+      ),
+    ).toBeVisible();
+  }
+
+  // --- Validation assertions: conditional fields ---
+
+  private vilJobbeEtterOppdragetFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget.label,
+    });
+  }
+
+  async assertBegrunnelseErPakrevdNarIkkeOppdragIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.begrunnelseErPakrevdNarIkkeOppdrag),
+    ).toBeVisible();
+  }
+
+  async assertVilJobbeEtterOppdragetErPakrevdIsVisible() {
+    await expect(
+      this.vilJobbeEtterOppdragetFieldset().getByText(
+        feilmeldinger.vilJobbeEtterOppdragetErPakrevd,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertAnsettelsesforholdBeskrivelseErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.ansettelsesforholdBeskrivelseErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertPeriodeErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.periodeErPakrevd).first(),
+    ).toBeVisible();
   }
 }

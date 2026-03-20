@@ -10,7 +10,7 @@ import {
   testArbeidstakerSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidstaker/arbeidssituasjon-steg.page";
+import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidssituasjon-steg.page";
 
 test.describe("Arbeidssituasjon", () => {
   test.beforeEach(async ({ page }) => {

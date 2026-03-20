@@ -7,12 +7,22 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import type { RadioButtonGroupJaNeiLocator } from "../../../../types/playwright-types";
+import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
 // Hent felter fra statiske definisjoner
 const tilleggsopplysninger =
-  SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidstaker;
+  SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidsgiver;
 const felter = tilleggsopplysninger.felter;
+const t = nb.translation;
+
+// Feilmeldinger
+const feilmeldinger = {
+  duMaSvarePaOmDuHarFlereOpplysninger:
+    t.tilleggsopplysningerSteg.duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden,
+  tilleggsopplysningerErPakrevd:
+    t.tilleggsopplysningerSteg
+      .tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger,
+};
 
 export class TilleggsopplysningerStegPage {
   readonly page: Page;
@@ -66,7 +76,7 @@ export class TilleggsopplysningerStegPage {
     const requestPromise = this.page.waitForRequest(
       `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/tilleggsopplysninger`,
     );
-    await this.lagreOgFortsettButton.click();
+    await this.lagreOgFortsett();
     return await requestPromise;
   }
 
@@ -80,5 +90,33 @@ export class TilleggsopplysningerStegPage {
 
   async assertNavigatedToNextStep() {
     await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/vedlegg`);
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/tilleggsopplysninger`,
+    );
+  }
+
+  // --- Validation assertions ---
+
+  private harFlereOpplysningerFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.harFlereOpplysningerTilSoknaden.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDuHarFlereOpplysningerIsVisible() {
+    await expect(
+      this.harFlereOpplysningerFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuHarFlereOpplysninger,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertTilleggsopplysningerErPakrevdIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.tilleggsopplysningerErPakrevd),
+    ).toBeVisible();
   }
 }

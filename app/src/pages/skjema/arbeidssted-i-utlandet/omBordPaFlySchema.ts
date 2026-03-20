@@ -26,6 +26,7 @@ export const omBordPaFlySchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.vanligHjemmebaseLandErPakrevd",
         path: ["vanligHjemmebaseLand"],
+        when: () => true,
       },
     )
     .refine(
@@ -33,6 +34,7 @@ export const omBordPaFlySchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.vanligHjemmebaseNavnErPakrevd",
         path: ["vanligHjemmebaseNavn"],
+        when: () => true,
       },
     )
     .transform((data) => ({

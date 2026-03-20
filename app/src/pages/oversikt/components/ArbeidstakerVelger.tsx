@@ -46,10 +46,10 @@ const arbeidstakerSchema = z.object({
   fnr: z
     .string()
     .refine((val) => val.length === FNR_LENGTH && /^\d+$/.test(val), {
-      message: "oversiktFelles.arbeidstakerFnrUgyldig",
+      error: "oversiktFelles.arbeidstakerFnrUgyldig",
     }),
   etternavn: z.string().refine((val) => val.trim().length > 0, {
-    message: "oversiktFelles.arbeidstakerFulltNavnTom",
+    error: "oversiktFelles.arbeidstakerFulltNavnTom",
   }),
 });
 
@@ -186,7 +186,7 @@ export function ArbeidstakerVelger({
       if (error instanceof Error && "status" in error) {
         const statusError = error as { status?: number };
         if (statusError.status === 429) {
-          setVerifiseringFeil(t("velgRadgiverfirma.rateLimitOverskredet"));
+          setVerifiseringFeil(t("generellValidering.rateLimitOverskredet"));
         } else {
           setVerifiseringFeil(
             t("oversiktFelles.arbeidstakerVerifiseringFeilet"),

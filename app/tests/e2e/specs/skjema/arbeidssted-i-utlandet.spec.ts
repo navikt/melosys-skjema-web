@@ -15,7 +15,7 @@ import {
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { ArbeidsstedIUtlandetStegPage } from "../../pages/skjema/arbeidsgiver/arbeidssted-i-utlandet-steg.page";
+import { ArbeidsstedIUtlandetStegPage } from "../../pages/skjema/arbeidssted-i-utlandet-steg.page";
 
 const arbeidsstedIUtlandetMedVerdiIAlleFelter: ArbeidsstedIUtlandetDto = {
   arbeidsstedType: ArbeidsstedType.PA_LAND,

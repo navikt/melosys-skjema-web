@@ -14,8 +14,7 @@ import {
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
-import { VedleggStegPage as ArbeidsgiverVedleggStegPage } from "../../pages/skjema/arbeidsgiver/vedlegg-steg.page";
-import { VedleggStegPage as ArbeidstakerVedleggStegPage } from "../../pages/skjema/arbeidstaker/vedlegg-steg.page";
+import { VedleggStegPage } from "../../pages/skjema/vedlegg-steg.page";
 
 test.describe("Vedlegg", () => {
   test.describe("Arbeidstaker", () => {
@@ -28,10 +27,7 @@ test.describe("Vedlegg", () => {
     });
 
     test("happy case - navigerer gjennom uten vedlegg", async ({ page }) => {
-      const vedleggStegPage = new ArbeidstakerVedleggStegPage(
-        page,
-        testArbeidstakerSkjema,
-      );
+      const vedleggStegPage = new VedleggStegPage(page, testArbeidstakerSkjema);
 
       await vedleggStegPage.goto();
       await vedleggStegPage.assertIsVisible();
@@ -52,10 +48,7 @@ test.describe("Vedlegg", () => {
       await mockHentVedlegg(page, skjemaId);
       await mockLastOppVedlegg(page, skjemaId, vedleggResponse);
 
-      const vedleggStegPage = new ArbeidstakerVedleggStegPage(
-        page,
-        testArbeidstakerSkjema,
-      );
+      const vedleggStegPage = new VedleggStegPage(page, testArbeidstakerSkjema);
 
       await vedleggStegPage.goto();
       await vedleggStegPage.assertIsVisible();
@@ -101,10 +94,7 @@ test.describe("Vedlegg", () => {
     });
 
     test("happy case - navigerer gjennom uten vedlegg", async ({ page }) => {
-      const vedleggStegPage = new ArbeidsgiverVedleggStegPage(
-        page,
-        testArbeidsgiverSkjema,
-      );
+      const vedleggStegPage = new VedleggStegPage(page, testArbeidsgiverSkjema);
 
       await vedleggStegPage.goto();
       await vedleggStegPage.assertIsVisible();

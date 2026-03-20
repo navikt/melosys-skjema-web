@@ -38,21 +38,15 @@ export const soknadStarterSchema = z
       .optional(),
     skalFylleUtForArbeidstaker: z.boolean().optional(),
   })
-  .superRefine((data, ctx) => {
-    if (!data.arbeidsgiver) {
-      ctx.addIssue({
-        code: "custom",
-        message: "oversiktFelles.valideringManglerArbeidsgiver",
-        path: ["arbeidsgiver"],
-      });
-    }
-    if (!data.arbeidstaker) {
-      ctx.addIssue({
-        code: "custom",
-        message: "oversiktFelles.valideringManglerArbeidstaker",
-        path: ["arbeidstaker"],
-      });
-    }
+  .refine((data) => !!data.arbeidsgiver, {
+    error: "oversiktFelles.valideringManglerArbeidsgiver",
+    path: ["arbeidsgiver"],
+    when: () => true,
+  })
+  .refine((data) => !!data.arbeidstaker, {
+    error: "oversiktFelles.valideringManglerArbeidstaker",
+    path: ["arbeidstaker"],
+    when: () => true,
   })
   .transform((data): OpprettUtsendtArbeidstakerSoknadRequest => {
     return {

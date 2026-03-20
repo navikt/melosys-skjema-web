@@ -16,7 +16,7 @@ import {
   mockUserInfo,
 } from "../../fixtures/api-mocks";
 import { testUserInfo } from "../../fixtures/test-data";
-import { KvitteringPage } from "../../pages/skjema/kvittering/kvittering-page";
+import { KvitteringPage } from "../../pages/skjema/kvittering-page";
 
 test.describe("Kvittering", () => {
   const skjemaId = "test-skjema-id";
