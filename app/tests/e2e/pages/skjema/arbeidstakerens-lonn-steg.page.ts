@@ -14,6 +14,16 @@ const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
 const felter = arbeidstakerensLonn.felter;
 const t = nb.translation;
 
+// Feilmeldinger
+const feilmeldinger = {
+  duMaSvarePaOmDuBetalerAllLonn:
+    t.arbeidstakerenslonnSteg
+      .duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden,
+  duMaLeggeTilMinstEnVirksomhet:
+    t.arbeidstakerenslonnSteg
+      .duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv,
+};
+
 export class ArbeidstakerensLonnStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
@@ -161,5 +171,34 @@ export class ArbeidstakerensLonnStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/tilleggsopplysninger`,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/arbeidstakerens-lonn`,
+    );
+  }
+
+  // --- Validation assertions ---
+
+  private betalerAllLonnFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
+        .label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDuBetalerAllLonnIsVisible() {
+    await expect(
+      this.betalerAllLonnFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuBetalerAllLonn,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaLeggeTilMinstEnVirksomhetIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaLeggeTilMinstEnVirksomhet),
+    ).toBeVisible();
   }
 }
