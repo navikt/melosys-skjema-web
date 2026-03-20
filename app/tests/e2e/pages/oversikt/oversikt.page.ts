@@ -5,6 +5,13 @@ import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 const translations = nb.translation;
 
+const feilmeldinger = {
+  valideringManglerArbeidsgiver:
+    translations.oversiktFelles.valideringManglerArbeidsgiver,
+  valideringManglerArbeidstaker:
+    translations.oversiktFelles.valideringManglerArbeidstaker,
+};
+
 export class OversiktPage {
   readonly page: Page;
   readonly representasjonstype: Representasjonstype;
@@ -164,5 +171,27 @@ export class OversiktPage {
   /** Wait for the verifiser-person response to show verified person */
   async waitForPersonVerified(personName: string) {
     await expect(this.page.getByText(personName)).toBeVisible();
+  }
+
+  // ============ Validation assertions ============
+
+  async assertStillOnPage() {
+    await expect(this.page).toHaveURL(/\/oversikt/);
+  }
+
+  async assertValideringManglerArbeidsgiverIsVisible() {
+    await expect(
+      this.page
+        .getByRole("listitem")
+        .filter({ hasText: feilmeldinger.valideringManglerArbeidsgiver }),
+    ).toBeVisible();
+  }
+
+  async assertValideringManglerArbeidstakerIsVisible() {
+    await expect(
+      this.page
+        .getByRole("listitem")
+        .filter({ hasText: feilmeldinger.valideringManglerArbeidstaker }),
+    ).toBeVisible();
   }
 }
