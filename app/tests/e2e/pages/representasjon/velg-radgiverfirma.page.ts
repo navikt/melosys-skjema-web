@@ -4,6 +4,10 @@ import { nb } from "~/i18n/nb";
 
 const translations = nb.translation.velgRadgiverfirma;
 
+const feilmeldinger = {
+  duMaSokeForst: translations.duMaSokeForstFeil,
+};
+
 export class VelgRadgiverfirmaPage {
   readonly page: Page;
   readonly heading: Locator;
@@ -51,5 +55,15 @@ export class VelgRadgiverfirmaPage {
     await expect(this.page).toHaveURL(
       /\/oversikt\?representasjonstype=RADGIVER/,
     );
+  }
+
+  async assertStillOnPage() {
+    await expect(this.page).toHaveURL(/\/representasjon\/velg-radgiverfirma/);
+  }
+
+  async assertDuMaSokeForstFeilmeldingIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaSokeForst),
+    ).toBeVisible();
   }
 }

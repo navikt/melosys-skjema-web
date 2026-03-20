@@ -9,7 +9,7 @@ export const radgiverfirmaSchema = z.object({
         .string()
         .min(1, "generellValidering.organisasjonsnummerErPakrevd")
         .refine(organisasjonsnummerHarGyldigFormat, {
-          message: "generellValidering.organisasjonsnummerHarUgyldigFormat",
+          error: "generellValidering.organisasjonsnummerHarUgyldigFormat",
         }),
       navn: z.string(),
     },
