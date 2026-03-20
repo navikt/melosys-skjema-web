@@ -32,6 +32,7 @@ export const paSkipSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.flagglandErPakrevd",
         path: ["flaggland"],
+        when: () => true,
       },
     )
     .refine(
@@ -41,6 +42,7 @@ export const paSkipSchema = z.object({
       {
         message: "arbeidsstedIUtlandetSteg.territorialfarvannLandErPakrevd",
         path: ["territorialfarvannLand"],
+        when: () => true,
       },
     )
     .transform((data) => ({
