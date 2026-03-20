@@ -5,7 +5,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
@@ -34,8 +33,6 @@ import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
-
-type UtenlandsoppdragFormData = z.infer<typeof utenlandsoppdragSchema>;
 
 function UtenlandsoppdragetStegContent({
   skjemaId,
@@ -125,7 +122,7 @@ function UtenlandsoppdragetStegContent({
   });
 
   const registerUtenlandsoppdragMutation = useMutation({
-    mutationFn: (data: UtenlandsoppdragFormData) => {
+    mutationFn: (data: UtenlandsoppdragetDto) => {
       return postUtenlandsoppdraget(skjemaId, data);
     },
     onSuccess: async () => {
@@ -143,7 +140,7 @@ function UtenlandsoppdragetStegContent({
     },
   });
 
-  const onSubmit = (data: UtenlandsoppdragFormData) => {
+  const onSubmit = (data: UtenlandsoppdragetDto) => {
     registerUtenlandsoppdragMutation.mutate(data);
   };
 

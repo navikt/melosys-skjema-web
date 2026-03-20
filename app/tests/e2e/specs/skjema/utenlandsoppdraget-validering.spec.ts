@@ -44,8 +44,7 @@ test.describe("Utenlandsoppdraget - validering", () => {
     await stegPage.arbeidstakerForblirAnsattIHelePeriodenRadioGroup.NEI.click();
 
     // Svar nei på erstatter annen person -> periodefeltet rendres IKKE.
-    // NB: Periodefeltet kan ikke inkluderes her pga Zod short-circuit:
-    // periodeSchema feiler på basenivå og blokkerer superRefine.
+    // Periodevalidering testes separat i neste test.
     await stegPage.arbeidstakerErstatterAnnenPersonRadioGroup.NEI.click();
 
     await stegPage.lagreOgFortsett();
