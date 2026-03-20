@@ -186,7 +186,7 @@ export function ArbeidstakerVelger({
       if (error instanceof Error && "status" in error) {
         const statusError = error as { status?: number };
         if (statusError.status === 429) {
-          setVerifiseringFeil(t("velgRadgiverfirma.rateLimitOverskredet"));
+          setVerifiseringFeil(t("generellValidering.rateLimitOverskredet"));
         } else {
           setVerifiseringFeil(
             t("oversiktFelles.arbeidstakerVerifiseringFeilet"),

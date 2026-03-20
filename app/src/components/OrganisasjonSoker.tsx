@@ -63,19 +63,19 @@ export function OrganisasjonSoker({
   const getErrorMessage = (): string | undefined => {
     if (query.isError) {
       if (query.error instanceof ValideringError) {
-        return t("velgRadgiverfirma.ugyldigOrganisasjonsnummer");
+        return t("generellValidering.ugyldigOrganisasjonsnummer");
       }
 
       const statusMatch = query.error.message.match(/status:\s*(\d+)/);
       const status = statusMatch ? statusMatch[1] : null;
 
       if (status === "429") {
-        return t("velgRadgiverfirma.rateLimitOverskredet");
+        return t("generellValidering.rateLimitOverskredet");
       }
       if (status === "404") {
-        return t("velgRadgiverfirma.organisasjonIkkeFunnet");
+        return t("generellValidering.organisasjonIkkeFunnet");
       }
-      return t("velgRadgiverfirma.feilVedSok");
+      return t("generellValidering.feilVedSok");
     }
 
     if (typeof formError === "string") {

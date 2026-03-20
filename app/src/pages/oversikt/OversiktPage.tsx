@@ -39,7 +39,7 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
     if (error instanceof ValideringError) {
       return <Navigate to="/representasjon/velg-radgiverfirma" />;
     }
-    return <Alert variant="error">{t("velgRadgiverfirma.feilVedSok")}</Alert>;
+    return <Alert variant="error">{t("generellValidering.feilVedSok")}</Alert>;
   }
 
   if (isRadgiver && isLoading) {
