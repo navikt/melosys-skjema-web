@@ -13,6 +13,21 @@ const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
 const felter = arbeidssituasjon.felter;
 const t = nb.translation;
 
+// Feilmeldinger
+const feilmeldinger = {
+  duMaSvarePaOmDuHarVertILonnetArbeid:
+    t.arbeidssituasjonSteg
+      .duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending,
+  duMaBeskriveAktiviteten:
+    t.arbeidssituasjonSteg.duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid,
+  duMaSvarePaOmDuSkalJobbeForFlereVirksomheter:
+    t.arbeidssituasjonSteg
+      .duMaSvarePaOmDuSkalJobbeForFlereVirksomheterIPerioden,
+  duMaLeggeTilMinstEnVirksomhet:
+    t.arbeidssituasjonSteg
+      .duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter,
+};
+
 export class ArbeidssituasjonStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
@@ -176,5 +191,53 @@ export class ArbeidssituasjonStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/skatteforhold-og-inntekt`,
     );
+  }
+
+  async assertStillOnStep() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/arbeidssituasjon`,
+    );
+  }
+
+  // --- Validation assertions ---
+
+  private harVaertILonnetArbeidFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
+    });
+  }
+
+  private skalJobbeForFlereVirksomheterFieldset() {
+    return this.page.getByRole("group", {
+      name: felter.skalJobbeForFlereVirksomheter.label,
+    });
+  }
+
+  async assertDuMaSvarePaOmDuHarVertILonnetArbeidIsVisible() {
+    await expect(
+      this.harVaertILonnetArbeidFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuHarVertILonnetArbeid,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaBeskriveAktivitetenIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaBeskriveAktiviteten),
+    ).toBeVisible();
+  }
+
+  async assertDuMaSvarePaOmDuSkalJobbeForFlereVirksomheterIsVisible() {
+    await expect(
+      this.skalJobbeForFlereVirksomheterFieldset().getByText(
+        feilmeldinger.duMaSvarePaOmDuSkalJobbeForFlereVirksomheter,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertDuMaLeggeTilMinstEnVirksomhetIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.duMaLeggeTilMinstEnVirksomhet),
+    ).toBeVisible();
   }
 }

@@ -16,35 +16,33 @@ export const arbeidssituasjonSchema = z
     virksomheterArbeidstakerJobberForIutsendelsesPeriode:
       norskeOgUtenlandskeVirksomheterMedAnsettelsesformSchema.optional(),
   })
-  .superRefine((data, ctx) => {
-    if (
-      !data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending &&
-      !data.aktivitetIMaanedenFoerUtsendingen?.trim()
-    ) {
-      ctx.addIssue({
-        code: "custom",
-        message:
-          "arbeidssituasjonSteg.duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid",
-        path: ["aktivitetIMaanedenFoerUtsendingen"],
-      });
-    }
-
-    if (data.skalJobbeForFlereVirksomheter) {
+  .refine(
+    (data) =>
+      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending ||
+      !!data.aktivitetIMaanedenFoerUtsendingen?.trim(),
+    {
+      error:
+        "arbeidssituasjonSteg.duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid",
+      path: ["aktivitetIMaanedenFoerUtsendingen"],
+      when: () => true,
+    },
+  )
+  .refine(
+    (data) => {
+      if (!data.skalJobbeForFlereVirksomheter) return true;
       const v = data.virksomheterArbeidstakerJobberForIutsendelsesPeriode;
-      const hasAny =
+      return (
         (v?.norskeVirksomheter?.length ?? 0) > 0 ||
-        (v?.utenlandskeVirksomheter?.length ?? 0) > 0;
-
-      if (!hasAny) {
-        ctx.addIssue({
-          code: "custom",
-          message:
-            "arbeidssituasjonSteg.duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter",
-          path: ["virksomheterArbeidstakerJobberForIutsendelsesPeriode"],
-        });
-      }
-    }
-  })
+        (v?.utenlandskeVirksomheter?.length ?? 0) > 0
+      );
+    },
+    {
+      error:
+        "arbeidssituasjonSteg.duMaLeggeTilMinstEnVirksomhetNarDuSkalJobbeForFlereVirksomheter",
+      path: ["virksomheterArbeidstakerJobberForIutsendelsesPeriode"],
+      when: () => true,
+    },
+  )
   .transform((data) => ({
     harVaertEllerSkalVaereILonnetArbeidFoerUtsending:
       data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending,
