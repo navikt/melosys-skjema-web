@@ -10,42 +10,46 @@ export const familiemedlemSchema = z
       .trim()
       .min(1, "familiemedlemmerSteg.etternavnErPakrevd"),
     harNorskFodselsnummerEllerDnummer: z.boolean({
-      message:
+      error:
         "familiemedlemmerSteg.duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer",
     }),
     fodselsnummer: z.string().optional(),
     fodselsdato: z.string().optional(),
   })
-  .superRefine((data, ctx) => {
-    if (data.harNorskFodselsnummerEllerDnummer) {
-      if (!data.fodselsnummer?.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          message: "familiemedlemmerSteg.fodselsnummerErPakrevd",
-          path: ["fodselsnummer"],
-        });
-      } else if (!erGyldigFnrEllerDnr(data.fodselsnummer)) {
-        ctx.addIssue({
-          code: "custom",
-          message: "felles.ugyldigFodselsnummerEllerDnummer",
-          path: ["fodselsnummer"],
-        });
-      }
-    } else {
-      if (!data.fodselsdato?.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          message: "familiemedlemmerSteg.fodselsdatoErPakrevd",
-          path: ["fodselsdato"],
-        });
-      }
-    }
-  });
+  .refine(
+    (data) =>
+      !data.harNorskFodselsnummerEllerDnummer || !!data.fodselsnummer?.trim(),
+    {
+      error: "familiemedlemmerSteg.fodselsnummerErPakrevd",
+      path: ["fodselsnummer"],
+      when: () => true,
+    },
+  )
+  .refine(
+    (data) =>
+      !data.harNorskFodselsnummerEllerDnummer ||
+      !data.fodselsnummer?.trim() ||
+      erGyldigFnrEllerDnr(data.fodselsnummer),
+    {
+      error: "felles.ugyldigFodselsnummerEllerDnummer",
+      path: ["fodselsnummer"],
+      when: () => true,
+    },
+  )
+  .refine(
+    (data) =>
+      data.harNorskFodselsnummerEllerDnummer || !!data.fodselsdato?.trim(),
+    {
+      error: "familiemedlemmerSteg.fodselsdatoErPakrevd",
+      path: ["fodselsdato"],
+      when: () => true,
+    },
+  );
 
 export const familiemedlemmerSchema = z
   .object({
     skalHaMedFamiliemedlemmer: z.boolean({
-      message:
+      error:
         "familiemedlemmerSteg.duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed",
     }),
     familiemedlemmer: z.array(familiemedlemSchema).default([]),
