@@ -315,7 +315,7 @@ export const nb = {
       infoBullet2: "se påbegynte og tidligere innsendte søknader.",
       personVelgerLabel: "Velg person du skal fylle ut søknad for",
       personVelgerBeskrivelse:
-        "Listen inneholder alle personer du har fått fullmakt på nav.no.",
+        "Listen inneholder alle personer du har fått fullmakt fra på nav.no.",
     },
     oversiktFelles: {
       utkastTittel: "UTKAST",
