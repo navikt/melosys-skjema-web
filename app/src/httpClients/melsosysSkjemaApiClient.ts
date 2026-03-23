@@ -360,6 +360,19 @@ export async function opprettSoknadMedKontekst(
 
 // ============ Utkast ============
 
+export async function slettUtkast(skjemaId: string): Promise<void> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}`,
+    {
+      method: "DELETE",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
 /**
  * Query for å hente utkast basert på representasjonskontekst.
  * Returnerer kun søknader med status UTKAST.

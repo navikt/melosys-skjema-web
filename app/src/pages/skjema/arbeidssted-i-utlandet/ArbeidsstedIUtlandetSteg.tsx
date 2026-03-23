@@ -101,6 +101,7 @@ function ArbeidsstedIUtlandetStegContent({
           config={{
             stepKey: StegKey.ARBEIDSSTED_I_UTLANDET,
             stegRekkefolge: stegRekkefolge,
+            skjemaId,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={registerArbeidsstedMutation.isPending} />

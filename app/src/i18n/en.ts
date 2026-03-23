@@ -25,6 +25,13 @@ export const en = {
       pakrevd: "required",
       forrigeSteg: "Previous step",
       nesteSteg: "Next step",
+      lagreUtkastOgFortsettSenere: "Save draft and continue later",
+      avbrytOgSlett: "Cancel and delete",
+      avbrytOgSlettUtkast: "Cancel and delete draft",
+      alleOpplysningerVilBliSlettet:
+        "All information you have filled in will be deleted",
+      neiFortsettUtfylling: "No, continue filling out",
+      jaAvbrytOgSlettUtkast: "Yes, cancel and delete draft",
       startSoknad: "Start application",
       valgtVirksomhet: "Selected company",
       valgtOrganisasjon: "Selected organization",

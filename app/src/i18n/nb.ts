@@ -25,6 +25,13 @@ export const nb = {
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
+      lagreUtkastOgFortsettSenere: "Lagre utkast og fortsett senere",
+      avbrytOgSlett: "Avbryt og slett",
+      avbrytOgSlettUtkast: "Avbryt og slett utkast",
+      alleOpplysningerVilBliSlettet:
+        "Alle opplysningene du har fylt ut vil bli slettet",
+      neiFortsettUtfylling: "Nei, fortsett utfylling",
+      jaAvbrytOgSlettUtkast: "Ja, avbryt og slett utkast",
       startSoknad: "Start søknad",
       valgtVirksomhet: "Valgt virksomhet",
       valgtOrganisasjon: "Valgt organisasjon",

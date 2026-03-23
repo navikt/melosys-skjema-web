@@ -125,6 +125,7 @@ function SkatteforholdOgInntektStegContent({
           config={{
             stepKey: StegKey.SKATTEFORHOLD_OG_INNTEKT,
             stegRekkefolge: stegRekkefolge,
+            skjemaId,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={postSkatteforholdMutation.isPending} />

@@ -124,6 +124,7 @@ function ArbeidstakerensLonnStegContent({
           config={{
             stepKey: StegKey.ARBEIDSTAKERENS_LONN,
             stegRekkefolge: stegRekkefolge,
+            skjemaId,
           }}
           nesteKnapp={
             <NesteStegKnapp

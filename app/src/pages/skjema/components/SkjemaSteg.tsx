@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, Heading } from "@navikt/ds-react";
+import { Button, Heading, HGrid, VStack } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,9 +11,13 @@ import {
 } from "~/pages/skjema/components/Fremgangsindikator";
 import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
 
+import { AvbrytOgSlettKnapp } from "./AvbrytOgSlettKnapp.tsx";
+import { LagreUtkastKnapp } from "./LagreUtkastKnapp.tsx";
+
 interface StegConfig {
   stepKey: StegKey;
   stegRekkefolge: StegRekkefolgeItem[];
+  skjemaId: string;
 }
 
 interface SkjemaStegProps {
@@ -51,19 +55,29 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         {title}
       </Heading>
       {children}
-      <div className="flex gap-4 justify-center mt-8">
-        {prevRoute && (
+      <HGrid
+        className="mx-auto mt-8"
+        columns={2}
+        gap="space-4"
+        maxWidth="fit-content"
+      >
+        <VStack gap="space-8">
           <Button
             as={Link}
             icon={<ArrowLeftIcon />}
-            to={prevRoute}
+            style={prevRoute ? undefined : { visibility: "hidden" }}
+            to={prevRoute ?? ""}
             variant="secondary"
           >
             {t("felles.forrigeSteg")}
           </Button>
-        )}
-        {nesteKnapp}
-      </div>
+          <LagreUtkastKnapp />
+        </VStack>
+        <VStack align="center" gap="space-8">
+          <div className="w-full [&>button]:w-full">{nesteKnapp}</div>
+          <AvbrytOgSlettKnapp skjemaId={config.skjemaId} />
+        </VStack>
+      </HGrid>
     </section>
   );
 }

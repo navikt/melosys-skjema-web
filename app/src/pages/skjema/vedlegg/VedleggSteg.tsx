@@ -160,6 +160,7 @@ function VedleggStegContent({
         config={{
           stepKey: StegKey.VEDLEGG,
           stegRekkefolge,
+          skjemaId,
         }}
         nesteKnapp={<NesteStegKnapp />}
       >

@@ -107,6 +107,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
           config={{
             stepKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
             stegRekkefolge: stegRekkefolge,
+            skjemaId,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />

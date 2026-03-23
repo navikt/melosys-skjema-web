@@ -99,10 +99,11 @@ function UtsendingsperiodeOgLandStegContent({
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <SkjemaSteg
+         <SkjemaSteg
           config={{
             stepKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
             stegRekkefolge,
+            skjemaId,
           }}
           nesteKnapp={
             <NesteStegKnapp
