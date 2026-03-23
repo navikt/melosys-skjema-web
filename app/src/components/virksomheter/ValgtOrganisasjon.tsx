@@ -15,7 +15,7 @@ export function ValgtOrganisasjon({
     <HStack align="center" className="mt-4" gap="space-8">
       <CheckmarkCircleFillIcon
         aria-hidden
-        className="text-icon-success"
+        className="text-ax-bg-success-strong"
         fontSize="1.5rem"
       />
       <BodyShort>{valgtOrganisasjon.navn}</BodyShort>
