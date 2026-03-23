@@ -235,16 +235,20 @@ export function ArbeidstakerVelger({
           {/* Med fullmakt */}
           {visMedFullmakt && (
             <div className="navds-form-field navds-form-field--medium">
-              <Label className="navds-form-field__label">
-                {erAnnenPerson
-                  ? t("oversiktAnnenPerson.personVelgerLabel")
-                  : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
-              </Label>
-              <BodyShort className="navds-form-field__description">
-                {erAnnenPerson
-                  ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
-                  : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
-              </BodyShort>
+              {personerMedFullmakt.length > 0 && (
+                <>
+                  <Label className="navds-form-field__label">
+                    {erAnnenPerson
+                      ? t("oversiktAnnenPerson.personVelgerLabel")
+                      : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+                  </Label>
+                  <BodyShort className="navds-form-field__description">
+                    {erAnnenPerson
+                      ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
+                      : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
+                  </BodyShort>
+                </>
+              )}
 
               <div className="max-w-lg w-full">
                 {harValgtMedFullmakt ? (

@@ -113,7 +113,10 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
 
   return (
     <VStack gap="space-24">
-      <GuidePanel className="w-full [&>.aksel-guide-panel\_\_content]:w-full" poster>
+      <GuidePanel
+        className="w-full [&>.aksel-guide-panel\_\_content]:w-full"
+        poster
+      >
         <Heading level="2" size="small" spacing>
           {getTittel()}
         </Heading>
