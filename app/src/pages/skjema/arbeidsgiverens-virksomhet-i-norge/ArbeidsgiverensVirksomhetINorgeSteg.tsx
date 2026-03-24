@@ -14,7 +14,6 @@ import {
   getSkjemaQuery,
   postArbeidsgiverensVirksomhetINorge,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
@@ -23,6 +22,7 @@ import {
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
   Skjemadel,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
@@ -35,14 +35,12 @@ type ArbeidsgiverensVirksomhetFormData = z.infer<
 >;
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: ArbeidsgiverensVirksomhetINorgeDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getArbeidsgiverensVirksomhetINorge(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
@@ -76,12 +74,12 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
       return postArbeidsgiverensVirksomhetINorge(
-        skjemaId,
+        skjema.id,
         data as ArbeidsgiverensVirksomhetINorgeDto,
       );
     },
     onSuccess: async () => {
-      await invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
         stegRekkefolge,
@@ -89,7 +87,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -153,16 +151,9 @@ export function ArbeidsgiverensVirksomhetINorgeSteg({ id }: { id: string }) {
       id={id}
       skjemaQuery={getSkjemaQuery}
     >
-      {(skjema) => {
-        const { skjemadel } = skjema.metadata;
-        return (
-          <ArbeidsgiverensVirksomhetINorgeStegContent
-            skjemaId={skjema.id}
-            stegData={getArbeidsgiverensVirksomhetINorge(skjema)}
-            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
-          />
-        );
-      }}
+      {(skjema) => (
+        <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />
+      )}
     </SkjemaStegLoader>
   );
 }

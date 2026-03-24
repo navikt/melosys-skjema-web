@@ -14,12 +14,12 @@ import {
   VedleggError,
   vedleggInnholdUrl,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
+import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
@@ -27,12 +27,7 @@ import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 export function VedleggSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <VedleggStegContent
-          skjemaId={skjema.id}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => <VedleggStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }
@@ -46,12 +41,11 @@ interface VedleggItem {
 }
 
 function VedleggStegContent({
-  skjemaId,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [vedleggItems, setVedleggItems] = useState<VedleggItem[]>([]);
@@ -60,10 +54,10 @@ function VedleggStegContent({
   );
 
   useEffect(() => {
-    hentVedlegg(skjemaId)
+    hentVedlegg(skjema.id)
       .then(setEksisterendeVedlegg)
       .catch(() => {});
-  }, [skjemaId]);
+  }, [skjema.id]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +65,7 @@ function VedleggStegContent({
     if (nextStep) {
       navigate({
         to: nextStep.route,
-        params: { id: skjemaId },
+        params: { id: skjema.id },
       });
     }
   };
@@ -114,7 +108,7 @@ function VedleggStegContent({
     setVedleggItems((prev) => [...prev, ...rejectedItems, ...acceptedItems]);
 
     for (const item of acceptedItems) {
-      lastOppVedlegg(skjemaId, item.fil)
+      lastOppVedlegg(skjema.id, item.fil)
         .then((response) => {
           setVedleggItems((prev) =>
             prev.map((v) =>
@@ -143,13 +137,13 @@ function VedleggStegContent({
   const handleSlettNyItem = (itemId: string) => {
     const item = vedleggItems.find((v) => v.id === itemId);
     if (item?.vedleggId) {
-      slettVedlegg(skjemaId, item.vedleggId).catch(() => {});
+      slettVedlegg(skjema.id, item.vedleggId).catch(() => {});
     }
     setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
   };
 
   const handleSlettEksisterende = (vedleggId: string) => {
-    slettVedlegg(skjemaId, vedleggId)
+    slettVedlegg(skjema.id, vedleggId)
       .then(() => {
         setEksisterendeVedlegg((prev) =>
           prev.filter((v) => v.id !== vedleggId),
@@ -192,7 +186,7 @@ function VedleggStegContent({
                   name: vedlegg.filnavn,
                   size: vedlegg.filstorrelse,
                 }}
-                href={vedleggInnholdUrl(skjemaId, vedlegg.id)}
+                href={vedleggInnholdUrl(skjema.id, vedlegg.id)}
                 key={vedlegg.id}
               />
             ))}
@@ -207,7 +201,7 @@ function VedleggStegContent({
                 file={item.fil}
                 href={
                   item.vedleggId
-                    ? vedleggInnholdUrl(skjemaId, item.vedleggId)
+                    ? vedleggInnholdUrl(skjema.id, item.vedleggId)
                     : undefined
                 }
                 key={item.id}

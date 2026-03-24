@@ -14,7 +14,6 @@ import {
   getSkjemaQuery,
   postArbeidsstedIUtlandet,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
@@ -24,6 +23,7 @@ import {
   type ArbeidsstedIUtlandetDto,
   ArbeidsstedType,
   Skjemadel,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -39,14 +39,12 @@ import { PaSkipForm } from "./PaSkipForm.tsx";
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 function ArbeidsstedIUtlandetStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: ArbeidsstedIUtlandetDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getArbeidsstedIUtlandet(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -72,10 +70,10 @@ function ArbeidsstedIUtlandetStegContent({
   const registerArbeidsstedMutation = useMutation({
     mutationFn: (data: ArbeidsstedIUtlandetFormData) => {
       const apiPayload = data as ArbeidsstedIUtlandetDto;
-      return postArbeidsstedIUtlandet(skjemaId, apiPayload);
+      return postArbeidsstedIUtlandet(skjema.id, apiPayload);
     },
     onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.ARBEIDSSTED_I_UTLANDET,
         stegRekkefolge,
@@ -83,7 +81,7 @@ function ArbeidsstedIUtlandetStegContent({
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -150,16 +148,7 @@ export function ArbeidsstedIUtlandetSteg({ id }: { id: string }) {
       id={id}
       skjemaQuery={getSkjemaQuery}
     >
-      {(skjema) => {
-        const { skjemadel } = skjema.metadata;
-        return (
-          <ArbeidsstedIUtlandetStegContent
-            skjemaId={skjema.id}
-            stegData={getArbeidsstedIUtlandet(skjema)}
-            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
-          />
-        );
-      }}
+      {(skjema) => <ArbeidsstedIUtlandetStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }

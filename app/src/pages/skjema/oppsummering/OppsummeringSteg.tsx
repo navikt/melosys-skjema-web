@@ -8,39 +8,32 @@ import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummeri
 import { StegKey } from "~/constants/stegKeys.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { SendInnSkjemaKnapp } from "~/pages/skjema/components/SendInnSkjemaKnapp.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { SkjemaDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  SkjemaDefinisjonDto,
+  UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import type { SkjemaData } from "../types.ts";
 import { isArbeidsgiverOgArbeidstakersDel } from "../types.ts";
 
 export function OppsummeringSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <OppsummeringStegContent
-          data={skjema.data}
-          skjemaId={skjema.id}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => <OppsummeringStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }
 
 function OppsummeringStegContent({
-  skjemaId,
-  data,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  data: SkjemaData;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const data = skjema.data;
   const { t } = useTranslation();
   const { definisjon } = useSkjemaDefinisjon();
 
@@ -54,11 +47,11 @@ function OppsummeringStegContent({
         stepKey: StegKey.OPPSUMMERING,
         stegRekkefolge: stegRekkefolge,
       }}
-      nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjemaId} />}
+      nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjema.id} />}
     >
       {seksjoner.map(({ seksjonNavn, seksjon, data, stegKey }) => {
         const steg = stegRekkefolge.find((s) => s.key === stegKey);
-        const editHref = steg?.route.replace("$id", skjemaId) ?? "";
+        const editHref = steg?.route.replace("$id", skjema.id) ?? "";
         return (
           <Fragment key={seksjonNavn}>
             {erKombinertSkjema && stegKey === StegKey.ARBEIDSSITUASJON && (
@@ -78,9 +71,9 @@ function OppsummeringStegContent({
         editHref={
           stegRekkefolge
             .find((s) => s.key === StegKey.VEDLEGG)
-            ?.route.replace("$id", skjemaId) ?? ""
+            ?.route.replace("$id", skjema.id) ?? ""
         }
-        skjemaId={skjemaId}
+        skjemaId={skjema.id}
       />
     </SkjemaSteg>
   );

@@ -16,14 +16,15 @@ import {
   getSkjemaQuery,
   postArbeidssituasjon,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes.ts";
-import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
+import {
+  Skjemadel,
+  type UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
@@ -34,16 +35,13 @@ import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
 type ArbeidssituasjonFormData = z.infer<typeof arbeidssituasjonSchema>;
 
 function ArbeidssituasjonStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
-  skjemadel,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: ArbeidssituasjonDto;
-  stegRekkefolge: StegRekkefolgeItem[];
-  skjemadel: Skjemadel;
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getArbeidssituasjon(skjema);
+  const skjemadel = skjema.metadata.skjemadel;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -90,15 +88,15 @@ function ArbeidssituasjonStegContent({
 
   const postArbeidssituasjonMutation = useMutation({
     mutationFn: (data: ArbeidssituasjonFormData) => {
-      return postArbeidssituasjon(skjemaId, data);
+      return postArbeidssituasjon(skjema.id, data);
     },
     onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjemaId);
+      invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(StegKey.ARBEIDSSITUASJON, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -182,17 +180,7 @@ export function ArbeidssituasjonSteg({ id }: { id: string }) {
       id={id}
       skjemaQuery={getSkjemaQuery}
     >
-      {(skjema) => {
-        const { skjemadel } = skjema.metadata;
-        return (
-          <ArbeidssituasjonStegContent
-            skjemaId={skjema.id}
-            skjemadel={skjemadel}
-            stegData={getArbeidssituasjon(skjema)}
-            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
-          />
-        );
-      }}
+      {(skjema) => <ArbeidssituasjonStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }

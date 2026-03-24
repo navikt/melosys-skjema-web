@@ -16,14 +16,16 @@ import {
   getSkjemaQuery,
   postSkatteforholdOgInntekt,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import type { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes.ts";
-import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
+import {
+  Skjemadel,
+  type UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -37,14 +39,12 @@ type SkatteforholdOgInntektFormData = z.infer<
 >;
 
 function SkatteforholdOgInntektStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: SkatteforholdOgInntektDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getSkatteforholdOgInntekt(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -92,12 +92,12 @@ function SkatteforholdOgInntektStegContent({
   const postSkatteforholdMutation = useMutation({
     mutationFn: (data: SkatteforholdOgInntektFormData) => {
       return postSkatteforholdOgInntekt(
-        skjemaId,
+        skjema.id,
         data as SkatteforholdOgInntektDto,
       );
     },
     onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjemaId);
+      invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.SKATTEFORHOLD_OG_INNTEKT,
         stegRekkefolge,
@@ -105,7 +105,7 @@ function SkatteforholdOgInntektStegContent({
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -194,16 +194,7 @@ export function SkatteforholdOgInntektSteg({ id }: { id: string }) {
       id={id}
       skjemaQuery={getSkjemaQuery}
     >
-      {(skjema) => {
-        const { skjemadel } = skjema.metadata;
-        return (
-          <SkatteforholdOgInntektStegContent
-            skjemaId={skjema.id}
-            stegData={getSkatteforholdOgInntekt(skjema)}
-            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
-          />
-        );
-      }}
+      {(skjema) => <SkatteforholdOgInntektStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }
