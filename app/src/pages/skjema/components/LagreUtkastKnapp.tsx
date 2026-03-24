@@ -23,7 +23,7 @@ export function LagreUtkastKnapp() {
 
       <Modal
         header={{
-          heading: t("felles.lagreUtkastOgFortsettSenere"),
+          heading: t("felles.lagreUtkastOgFortsettSenere") + "?",
         }}
         onClose={() => setIsModalOpen(false)}
         open={isModalOpen}
