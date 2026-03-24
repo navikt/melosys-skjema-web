@@ -32,6 +32,9 @@ export const en = {
         "All information you have filled in will be deleted",
       neiFortsettUtfylling: "No, continue filling out",
       jaAvbrytOgSlettUtkast: "Yes, cancel and delete draft",
+      lagreUtkastBeskrivelse:
+        "The form will be saved as a draft on My Page so you can complete it later.",
+      jaLagreOgFortsettSenere: "Yes, save and continue later",
       startSoknad: "Start application",
       valgtVirksomhet: "Selected company",
       valgtOrganisasjon: "Selected organization",

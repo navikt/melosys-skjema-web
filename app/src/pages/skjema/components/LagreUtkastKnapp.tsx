@@ -1,5 +1,6 @@
-import { Button } from "@navikt/ds-react";
+import { BodyLong, Button, Modal } from "@navikt/ds-react";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useKontekst } from "~/hooks/useKontekst.ts";
@@ -8,18 +9,49 @@ export function LagreUtkastKnapp() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const kontekst = useKontekst();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <Button
-      onClick={() => {
-        if (kontekst) {
-          void navigate({ to: "/oversikt", search: kontekst });
-        }
-      }}
-      type="button"
-      variant="tertiary"
-    >
-      {t("felles.lagreUtkastOgFortsettSenere")}
-    </Button>
+    <div>
+      <Button
+        onClick={() => setIsModalOpen(true)}
+        type="button"
+        variant="tertiary"
+      >
+        {t("felles.lagreUtkastOgFortsettSenere")}
+      </Button>
+
+      <Modal
+        header={{
+          heading: t("felles.lagreUtkastOgFortsettSenere"),
+        }}
+        onClose={() => setIsModalOpen(false)}
+        open={isModalOpen}
+        width="medium"
+      >
+        <Modal.Body>
+          <BodyLong>{t("felles.lagreUtkastBeskrivelse")}</BodyLong>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => {
+              if (kontekst) {
+                void navigate({ to: "/oversikt", search: kontekst });
+              }
+            }}
+            type="button"
+          >
+            {t("felles.jaLagreOgFortsettSenere")}
+          </Button>
+          <Button
+            onClick={() => setIsModalOpen(false)}
+            type="button"
+            variant="secondary"
+          >
+            {t("felles.neiFortsettUtfylling")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 }

@@ -32,6 +32,9 @@ export const nb = {
         "Alle opplysningene du har fylt ut vil bli slettet",
       neiFortsettUtfylling: "Nei, fortsett utfylling",
       jaAvbrytOgSlettUtkast: "Ja, avbryt og slett utkast",
+      lagreUtkastBeskrivelse:
+        "Skjemaet lagres som et utkast på Min Side slik at du kan fullføre senere.",
+      jaLagreOgFortsettSenere: "Ja, lagre og fortsett senere",
       startSoknad: "Start søknad",
       valgtVirksomhet: "Valgt virksomhet",
       valgtOrganisasjon: "Valgt organisasjon",
