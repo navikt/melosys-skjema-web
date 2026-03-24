@@ -112,8 +112,7 @@ function TilleggsopplysningerStegContent({
         <SkjemaSteg
           config={{
             stepKey: StegKey.TILLEGGSOPPLYSNINGER,
-            stegRekkefolge,
-            skjemaId,
+            skjema,
           }}
           nesteKnapp={
             <NesteStegKnapp

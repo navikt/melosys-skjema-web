@@ -19,13 +19,13 @@ import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import {
   getOrganisasjonMedJuridiskEnhetQuery,
   listAltinnTilganger,
-  opprettSoknadMedKontekst,
+  opprettSoknad,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   OrganisasjonDto,
   Representasjonstype,
 } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
@@ -37,7 +37,7 @@ import {
 } from "./soknadStarterSchema.ts";
 
 interface SoknadStarterProps {
-  kontekst: RepresentasjonsKontekst;
+  representasjonskontekst: Representasjonskontekst;
 }
 
 interface SoknadStarterContentProps {
@@ -52,12 +52,14 @@ interface SoknadStarterContentProps {
  * Wrapper-komponent som henter brukerinfo og forbereder defaultValues
  * før SoknadStarterContent rendres.
  */
-export function SoknadStarter({ kontekst }: SoknadStarterProps) {
+export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
   const { t } = useTranslation();
 
   const skalHenteArbeidsgivere =
-    kontekst.representasjonstype === Representasjonstype.RADGIVER ||
-    kontekst.representasjonstype === Representasjonstype.ARBEIDSGIVER;
+    representasjonskontekst.representasjonstype ===
+      Representasjonstype.RADGIVER ||
+    representasjonskontekst.representasjonstype ===
+      Representasjonstype.ARBEIDSGIVER;
 
   // Hent innlogget bruker for DEG_SELV-scenario
   const { data: userInfo, isLoading: isLoadingUserInfo } =
@@ -70,22 +72,27 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     retry: false,
   });
 
-  // Slå opp rådgiverfirma-navn for RADGIVER-kontekst
+  // Slå opp rådgiverfirma-navn for RADGIVER-representasjonskontekst
   const { data: radgiverOrganisasjon, isLoading: isLoadingRadgiver } = useQuery(
     {
-      ...getOrganisasjonMedJuridiskEnhetQuery(kontekst.radgiverOrgnr ?? ""),
+      ...getOrganisasjonMedJuridiskEnhetQuery(
+        representasjonskontekst.radgiverOrgnr ?? "",
+      ),
       enabled:
-        kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-        !!kontekst.radgiverOrgnr,
+        representasjonskontekst.representasjonstype ===
+          Representasjonstype.RADGIVER &&
+        !!representasjonskontekst.radgiverOrgnr,
     },
   );
 
   // Vent på nødvendig data før vi rendrer skjemaet
   if (
-    (kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
+    (representasjonskontekst.representasjonstype ===
+      Representasjonstype.DEG_SELV &&
       isLoadingUserInfo) ||
     (skalHenteArbeidsgivere && isLoadingArbeidsgivere) ||
-    (kontekst.representasjonstype === Representasjonstype.RADGIVER &&
+    (representasjonskontekst.representasjonstype ===
+      Representasjonstype.RADGIVER &&
       isLoadingRadgiver)
   ) {
     return <Loader size="medium" title={t("felles.laster")} />;
@@ -93,8 +100,9 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   // Bygg radgiverfirma-objekt fra API-oppslag
   const radgiverfirma =
-    kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-    kontekst.radgiverOrgnr &&
+    representasjonskontekst.representasjonstype ===
+      Representasjonstype.RADGIVER &&
+    representasjonskontekst.radgiverOrgnr &&
     radgiverOrganisasjon
       ? {
           orgnr: radgiverOrganisasjon.juridiskEnhet.orgnr,
@@ -104,13 +112,15 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
 
   // Bygg defaultData med representasjonstype og radgiverfirma
   const defaultData: SoknadStarterFormData = {
-    representasjonstype: kontekst.representasjonstype,
+    representasjonstype: representasjonskontekst.representasjonstype,
     radgiverfirma,
     // Setter default skalFylleUtForArbeidstaker:true for rådgiver, siden det er mest vanlig at de fyller ut på vegne av arbeidstaker.
-    ...(kontekst.representasjonstype === Representasjonstype.RADGIVER && {
+    ...(representasjonskontekst.representasjonstype ===
+      Representasjonstype.RADGIVER && {
       skalFylleUtForArbeidstaker: true,
     }),
-    ...(kontekst.representasjonstype === Representasjonstype.DEG_SELV &&
+    ...(representasjonskontekst.representasjonstype ===
+      Representasjonstype.DEG_SELV &&
       userInfo && {
         arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
       }),
@@ -120,7 +130,7 @@ export function SoknadStarter({ kontekst }: SoknadStarterProps) {
     <SoknadStarterContent
       altinnArbeidsgivere={arbeidsgivere ?? []}
       defaultData={defaultData}
-      key={`${kontekst.representasjonstype}-${kontekst.radgiverOrgnr ?? ""}`}
+      key={`${representasjonskontekst.representasjonstype}-${representasjonskontekst.radgiverOrgnr ?? ""}`}
     />
   );
 }
@@ -200,7 +210,7 @@ function SoknadStarterContent({
   }
 
   const opprettSoknadMutation = useMutation({
-    mutationFn: opprettSoknadMedKontekst,
+    mutationFn: opprettSoknad,
     onSuccess: (data) => {
       void navigate({
         to: "/skjema/$id",

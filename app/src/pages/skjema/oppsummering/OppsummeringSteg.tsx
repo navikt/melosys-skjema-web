@@ -45,8 +45,7 @@ function OppsummeringStegContent({
     <SkjemaSteg
       config={{
         stepKey: StegKey.OPPSUMMERING,
-        stegRekkefolge: stegRekkefolge,
-        skjemaId,
+        skjema,
       }}
       nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjema.id} />}
     >

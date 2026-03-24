@@ -21,7 +21,7 @@ import type {
   SkjemaInnsendtKvittering,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { toRepresentasjonsKontekst } from "~/types/representasjon.ts";
+import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 
 interface KvitteringPageProps {
   skjemaId: string;
@@ -68,12 +68,12 @@ function KvitteringPageContent({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const kontekst = toRepresentasjonsKontekst(skjema.metadata);
+  const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
 
   const handleTilOversikt = () => {
     void navigate({
       to: "/oversikt",
-      search: kontekst,
+      search: representasjonskontekst,
     });
   };
 

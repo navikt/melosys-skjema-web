@@ -5,25 +5,26 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
-import { useKontekst } from "~/hooks/useKontekst.ts";
 import { slettUtkast } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
 interface AvbrytOgSlettKnappProps {
+  representasjonskontekst: Representasjonskontekst;
   skjemaId: string;
 }
 
-export function AvbrytOgSlettKnapp({ skjemaId }: AvbrytOgSlettKnappProps) {
+export function AvbrytOgSlettKnapp({
+  representasjonskontekst,
+  skjemaId,
+}: AvbrytOgSlettKnappProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const kontekst = useKontekst();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const slettUtkastMutation = useMutation({
     mutationFn: () => slettUtkast(skjemaId),
     onSuccess: () => {
-      if (kontekst) {
-        void navigate({ to: "/oversikt", search: kontekst });
-      }
+      void navigate({ to: "/oversikt", search: representasjonskontekst });
     },
     onError: () => {
       toast.error(t("felles.feil"));

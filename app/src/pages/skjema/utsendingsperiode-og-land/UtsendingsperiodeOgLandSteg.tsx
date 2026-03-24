@@ -102,8 +102,7 @@ function UtsendingsperiodeOgLandStegContent({
         <SkjemaSteg
           config={{
             stepKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
-            stegRekkefolge,
-            skjemaId,
+            skjema,
           }}
           nesteKnapp={
             <NesteStegKnapp

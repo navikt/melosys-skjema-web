@@ -115,8 +115,7 @@ function FamiliemedlemmerStegContent({
         <SkjemaSteg
           config={{
             stepKey: StegKey.FAMILIEMEDLEMMER,
-            stegRekkefolge: stegRekkefolge,
-            skjemaId,
+            skjema,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={postFamiliemedlemmerMutation.isPending} />

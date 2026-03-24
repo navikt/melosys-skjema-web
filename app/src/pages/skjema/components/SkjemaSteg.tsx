@@ -10,14 +10,16 @@ import {
   StegRekkefolgeItem,
 } from "~/pages/skjema/components/Fremgangsindikator";
 import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
+import { STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
+import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
+import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 
 import { AvbrytOgSlettKnapp } from "./AvbrytOgSlettKnapp.tsx";
 import { LagreUtkastKnapp } from "./LagreUtkastKnapp.tsx";
 
 interface StegConfig {
   stepKey: StegKey;
-  stegRekkefolge: StegRekkefolgeItem[];
-  skjemaId: string;
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }
 
 interface SkjemaStegProps {
@@ -28,17 +30,15 @@ interface SkjemaStegProps {
 
 export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
   const { t } = useTranslation();
-  const stepNumber = getStepNumber(config.stepKey, config.stegRekkefolge);
-  const prevRoute = getRelativeRoute(
-    config.stepKey,
-    "prev",
-    config.stegRekkefolge,
-  );
+  const { skjema } = config;
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
+
+  const stepNumber = getStepNumber(config.stepKey, stegRekkefolge);
+  const prevStep = getPreviousStep(config.stepKey, stegRekkefolge);
 
   // Get step title from config
-  const stepInfo = config.stegRekkefolge.find(
-    (step) => step.key === config.stepKey,
-  );
+  const stepInfo = stegRekkefolge.find((step) => step.key === config.stepKey);
   const title = stepInfo?.title
     ? t(stepInfo.title)
     : `Unknown Step: ${config.stepKey}`;
@@ -49,7 +49,7 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
       <Fremgangsindikator
         aktivtSteg={stepNumber}
         className="mt-4"
-        stegRekkefolge={config.stegRekkefolge}
+        stegRekkefolge={stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">
         {title}
@@ -65,17 +65,20 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
           <Button
             as={Link}
             icon={<ArrowLeftIcon />}
-            style={prevRoute ? undefined : { visibility: "hidden" }}
-            to={prevRoute ?? ""}
+            style={prevStep ? undefined : { visibility: "hidden" }}
+            to={prevStep ? `../${prevStep.key}` : ""}
             variant="secondary"
           >
             {t("felles.forrigeSteg")}
           </Button>
-          <LagreUtkastKnapp />
+          <LagreUtkastKnapp representasjonskontekst={representasjonskontekst} />
         </VStack>
         <VStack align="center" gap="space-8">
           <div className="w-full [&>button]:w-full">{nesteKnapp}</div>
-          <AvbrytOgSlettKnapp skjemaId={config.skjemaId} />
+          <AvbrytOgSlettKnapp
+            representasjonskontekst={representasjonskontekst}
+            skjemaId={skjema.id}
+          />
         </VStack>
       </HGrid>
     </section>
@@ -106,21 +109,6 @@ export function getNextStep(
   return currentIndex !== -1 && currentIndex < stegRekkefolge.length - 1
     ? stegRekkefolge[currentIndex + 1]
     : undefined;
-}
-
-function getRelativeRoute(
-  key: StegKey,
-  direction: "prev" | "next",
-  stegRekkefolge: StegRekkefolgeItem[],
-): string | undefined {
-  const targetStep =
-    direction === "prev"
-      ? getPreviousStep(key, stegRekkefolge)
-      : getNextStep(key, stegRekkefolge);
-  if (!targetStep) return undefined;
-
-  // Convert absolute route to relative route (remove /skjema/ prefix and add ../)
-  return `../${targetStep.key}`;
 }
 
 export type { StegConfig };

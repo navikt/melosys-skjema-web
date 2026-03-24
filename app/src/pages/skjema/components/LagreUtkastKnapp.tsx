@@ -3,12 +3,17 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useKontekst } from "~/hooks/useKontekst.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
-export function LagreUtkastKnapp() {
+interface LagreUtkastKnappProps {
+  representasjonskontekst: Representasjonskontekst;
+}
+
+export function LagreUtkastKnapp({
+  representasjonskontekst,
+}: LagreUtkastKnappProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const kontekst = useKontekst();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -35,9 +40,10 @@ export function LagreUtkastKnapp() {
         <Modal.Footer>
           <Button
             onClick={() => {
-              if (kontekst) {
-                void navigate({ to: "/oversikt", search: kontekst });
-              }
+              void navigate({
+                to: "/oversikt",
+                search: representasjonskontekst,
+              });
             }}
             type="button"
           >

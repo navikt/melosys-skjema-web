@@ -17,22 +17,25 @@ import {
   UtkastListe,
 } from "~/pages/oversikt/components";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { ValideringError } from "~/utils/valideringUtils.ts";
 
 interface OversiktPageProps {
-  kontekst: RepresentasjonsKontekst;
+  representasjonskontekst: Representasjonskontekst;
 }
 
-export function OversiktPage({ kontekst }: OversiktPageProps) {
+export function OversiktPage({ representasjonskontekst }: OversiktPageProps) {
   const { t } = useTranslation();
 
   const isRadgiver =
-    kontekst.representasjonstype === Representasjonstype.RADGIVER;
+    representasjonskontekst.representasjonstype ===
+    Representasjonstype.RADGIVER;
 
   const { isLoading, isError, error } = useQuery({
-    ...getOrganisasjonMedJuridiskEnhetQuery(kontekst.radgiverOrgnr ?? ""),
-    enabled: isRadgiver && !!kontekst.radgiverOrgnr,
+    ...getOrganisasjonMedJuridiskEnhetQuery(
+      representasjonskontekst.radgiverOrgnr ?? "",
+    ),
+    enabled: isRadgiver && !!representasjonskontekst.radgiverOrgnr,
   });
 
   if (isRadgiver && isError) {
@@ -47,7 +50,7 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
   }
 
   const getTittel = () => {
-    switch (kontekst.representasjonstype) {
+    switch (representasjonskontekst.representasjonstype) {
       case Representasjonstype.DEG_SELV: {
         return t("oversiktDegSelv.tittel");
       }
@@ -64,7 +67,7 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
   };
 
   const getHerKanDu = () => {
-    switch (kontekst.representasjonstype) {
+    switch (representasjonskontekst.representasjonstype) {
       case Representasjonstype.DEG_SELV: {
         return t("oversiktDegSelv.herKanDu");
       }
@@ -81,7 +84,7 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
   };
 
   const getInfoBullets = (): string[] => {
-    switch (kontekst.representasjonstype) {
+    switch (representasjonskontekst.representasjonstype) {
       case Representasjonstype.DEG_SELV: {
         return [
           t("oversiktDegSelv.infoBullet1"),
@@ -131,9 +134,11 @@ export function OversiktPage({ kontekst }: OversiktPageProps) {
           ))}
         </ul>
       </GuidePanel>
-      <UtkastListe kontekst={kontekst} />
-      <SoknadStarter kontekst={kontekst} />
-      <InnsendteSoknaderTabell kontekst={kontekst} />
+      <UtkastListe representasjonskontekst={representasjonskontekst} />
+      <SoknadStarter representasjonskontekst={representasjonskontekst} />
+      <InnsendteSoknaderTabell
+        representasjonskontekst={representasjonskontekst}
+      />
     </VStack>
   );
 }

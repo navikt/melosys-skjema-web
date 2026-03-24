@@ -28,7 +28,7 @@ import {
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import {
   organisasjonsnummerHarGyldigFormat,
   ValideringError,
@@ -335,8 +335,8 @@ export async function verifiserPerson(
   return response.json();
 }
 
-export async function opprettSoknadMedKontekst(
-  kontekst: OpprettUtsendtArbeidstakerSoknadRequest,
+export async function opprettSoknad(
+  request: OpprettUtsendtArbeidstakerSoknadRequest,
 ): Promise<OpprettUtsendtArbeidstakerSoknadResponse> {
   const response = await fetch(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/opprett-med-kontekst`,
@@ -345,7 +345,7 @@ export async function opprettSoknadMedKontekst(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(kontekst),
+      body: JSON.stringify(request),
     },
   );
 
@@ -383,32 +383,44 @@ export async function slettUtkast(skjemaId: string): Promise<void> {
  * - RADGIVER: Kun utkast for det spesifikke rådgiverfirmaet (krever radgiverfirmaOrgnr)
  * - ANNEN_PERSON: Alle utkast for personer brukeren har fullmakt for
  */
-export const getUtkastQuery = (kontekst: RepresentasjonsKontekst) =>
+export const getUtkastQuery = (
+  representasjonskontekst: Representasjonskontekst,
+) =>
   queryOptions<UtkastListeResponse>({
-    queryKey: ["utkast", kontekst.representasjonstype, kontekst.radgiverOrgnr],
-    queryFn: () => fetchUtkast(kontekst),
+    queryKey: [
+      "utkast",
+      representasjonskontekst.representasjonstype,
+      representasjonskontekst.radgiverOrgnr,
+    ],
+    queryFn: () => fetchUtkast(representasjonskontekst),
     staleTime: 2 * 60 * 1000, // 2 minutter - utkast kan endres ofte
     gcTime: 5 * 60 * 1000, // 5 minutter
     retry: 1,
   });
 
 async function fetchUtkast(
-  kontekst: RepresentasjonsKontekst,
+  representasjonskontekst: Representasjonskontekst,
 ): Promise<UtkastListeResponse> {
   const params = new URLSearchParams();
-  params.append("representasjonstype", kontekst.representasjonstype);
+  params.append(
+    "representasjonstype",
+    representasjonskontekst.representasjonstype,
+  );
 
   // For RADGIVER må vi sende med rådgiverfirmaets orgnr
   if (
-    kontekst.representasjonstype === Representasjonstype.RADGIVER &&
-    kontekst.radgiverOrgnr
+    representasjonskontekst.representasjonstype ===
+      Representasjonstype.RADGIVER &&
+    representasjonskontekst.radgiverOrgnr
   ) {
-    if (!organisasjonsnummerHarGyldigFormat(kontekst.radgiverOrgnr)) {
+    if (
+      !organisasjonsnummerHarGyldigFormat(representasjonskontekst.radgiverOrgnr)
+    ) {
       throw new ValideringError(
-        `Ugyldig organisasjonsnummer: ${kontekst.radgiverOrgnr}`,
+        `Ugyldig organisasjonsnummer: ${representasjonskontekst.radgiverOrgnr}`,
       );
     }
-    params.append("radgiverfirmaOrgnr", kontekst.radgiverOrgnr);
+    params.append("radgiverfirmaOrgnr", representasjonskontekst.radgiverOrgnr);
   }
 
   const response = await fetch(

@@ -150,8 +150,7 @@ function UtenlandsoppdragetStegContent({
         <SkjemaSteg
           config={{
             stepKey: StegKey.UTENLANDSOPPDRAGET,
-            stegRekkefolge: stegRekkefolge,
-            skjemaId,
+            skjema,
           }}
           nesteKnapp={
             <NesteStegKnapp

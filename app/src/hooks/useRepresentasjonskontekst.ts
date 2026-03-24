@@ -1,8 +1,8 @@
 import { useSearch } from "@tanstack/react-router";
 
 import {
-  type RepresentasjonsKontekst,
-  representasjonsKontekstSchema,
+  type Representasjonskontekst,
+  representasjonskontekstSchema,
 } from "~/types/representasjon.ts";
 
 /**
@@ -10,9 +10,11 @@ import {
  * Brukes av AppHeader og KontekstVelger som rendres i root og
  * ikke har tilgang til child-rutens validateSearch.
  */
-export function useKontekst(): RepresentasjonsKontekst | undefined {
+export function useRepresentasjonskontekst():
+  | Representasjonskontekst
+  | undefined {
   const search = useSearch({ strict: false });
-  const result = representasjonsKontekstSchema.safeParse(search);
+  const result = representasjonskontekstSchema.safeParse(search);
 
   return result.success ? result.data : undefined;
 }

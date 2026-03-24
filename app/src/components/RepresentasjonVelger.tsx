@@ -11,10 +11,10 @@ import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
 interface RepresentationOption {
-  type: RepresentasjonsKontekst["representasjonstype"];
+  type: Representasjonskontekst["representasjonstype"];
   icon: ComponentType<{
     "aria-hidden"?: boolean;
     fontSize?: string;
@@ -26,7 +26,7 @@ interface RepresentationOption {
 
 interface RepresentationCardProps {
   option: RepresentationOption;
-  onSelect: (type: RepresentasjonsKontekst["representasjonstype"]) => void;
+  onSelect: (type: Representasjonskontekst["representasjonstype"]) => void;
 }
 
 function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
@@ -98,7 +98,7 @@ export function RepresentasjonVelger({
   const navigate = useNavigate();
 
   const handleVelgRepresentasjon = (
-    representasjonstype: RepresentasjonsKontekst["representasjonstype"],
+    representasjonstype: Representasjonskontekst["representasjonstype"],
   ) => {
     onVelg?.();
 
