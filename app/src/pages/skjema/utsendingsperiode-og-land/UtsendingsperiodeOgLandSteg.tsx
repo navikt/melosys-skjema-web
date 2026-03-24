@@ -14,13 +14,15 @@ import {
   getSkjemaQuery,
   postUtsendingsperiodeOgLand,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { UtsendingsperiodeOgLandDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  UtsendingsperiodeOgLandDto,
+  UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtsendingsperiodeOgLand } from "../stegDataGetters.ts";
@@ -31,14 +33,12 @@ import { utsendingsperiodeOgLandSchema } from "./utsendingsperiodeOgLandStegSche
 const YEARS_FORWARD_FROM_CURRENT = 100;
 
 function UtsendingsperiodeOgLandStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: UtsendingsperiodeOgLandDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getUtsendingsperiodeOgLand(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateSkjemaQuery = useInvalidateSkjemaQuery();
@@ -72,10 +72,10 @@ function UtsendingsperiodeOgLandStegContent({
 
   const registerUtsendingsperiodeOgLandMutation = useMutation({
     mutationFn: (data: UtsendingsperiodeOgLandDto) => {
-      return postUtsendingsperiodeOgLand(skjemaId, data);
+      return postUtsendingsperiodeOgLand(skjema.id, data);
     },
     onSuccess: async () => {
-      await invalidateSkjemaQuery(skjemaId);
+      await invalidateSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.UTSENDINGSPERIODE_OG_LAND,
         stegRekkefolge,
@@ -83,7 +83,7 @@ function UtsendingsperiodeOgLandStegContent({
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -142,13 +142,7 @@ function UtsendingsperiodeOgLandStegContent({
 export function UtsendingsperiodeOgLandSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <UtsendingsperiodeOgLandStegContent
-          skjemaId={skjema.id}
-          stegData={getUtsendingsperiodeOgLand(skjema)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => <UtsendingsperiodeOgLandStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }

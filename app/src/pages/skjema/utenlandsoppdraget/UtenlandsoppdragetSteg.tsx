@@ -15,13 +15,15 @@ import {
   getSkjemaQuery,
   postUtenlandsoppdraget,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  UtenlandsoppdragetDto,
+  UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 import { getFieldError } from "~/utils/formErrors.ts";
 import { useTranslateError } from "~/utils/translation.ts";
@@ -35,14 +37,12 @@ import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 const YEARS_FORWARD_FROM_CURRENT = 100;
 
 function UtenlandsoppdragetStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: UtenlandsoppdragetDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getUtenlandsoppdraget(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -123,15 +123,15 @@ function UtenlandsoppdragetStegContent({
 
   const registerUtenlandsoppdragMutation = useMutation({
     mutationFn: (data: UtenlandsoppdragetDto) => {
-      return postUtenlandsoppdraget(skjemaId, data);
+      return postUtenlandsoppdraget(skjema.id, data);
     },
     onSuccess: async () => {
-      await invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(StegKey.UTENLANDSOPPDRAGET, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -250,16 +250,7 @@ export function UtenlandsoppdragetSteg({ id }: { id: string }) {
       id={id}
       skjemaQuery={getSkjemaQuery}
     >
-      {(skjema) => {
-        const { skjemadel } = skjema.metadata;
-        return (
-          <UtenlandsoppdragetStegContent
-            skjemaId={skjema.id}
-            stegData={getUtenlandsoppdraget(skjema)}
-            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
-          />
-        );
-      }}
+      {(skjema) => <UtenlandsoppdragetStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }

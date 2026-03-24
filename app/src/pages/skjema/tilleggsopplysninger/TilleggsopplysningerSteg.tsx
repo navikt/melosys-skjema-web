@@ -13,13 +13,15 @@ import {
   getSkjemaQuery,
   postTilleggsopplysninger,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  TilleggsopplysningerDto,
+  UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
@@ -33,26 +35,18 @@ import {
 export function TilleggsopplysningerSteg({ id }: { id: string }) {
   return (
     <SkjemaStegLoader id={id} skjemaQuery={getSkjemaQuery}>
-      {(skjema) => (
-        <TilleggsopplysningerStegContent
-          skjemaId={skjema.id}
-          stegData={getTilleggsopplysninger(skjema)}
-          stegRekkefolge={STEG_REKKEFOLGE[skjema.metadata.skjemadel]}
-        />
-      )}
+      {(skjema) => <TilleggsopplysningerStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }
 
 function TilleggsopplysningerStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: TilleggsopplysningerDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getTilleggsopplysninger(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -87,7 +81,7 @@ function TilleggsopplysningerStegContent({
   const postTilleggsopplysningerMutation = useMutation({
     mutationFn: (data: TilleggsopplysningerFormData) => {
       return postTilleggsopplysninger(
-        skjemaId,
+        skjema.id,
         data as TilleggsopplysningerDto,
       );
     },
@@ -99,7 +93,7 @@ function TilleggsopplysningerStegContent({
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },

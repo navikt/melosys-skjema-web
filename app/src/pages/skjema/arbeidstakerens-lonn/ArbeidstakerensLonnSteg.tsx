@@ -15,14 +15,16 @@ import {
   getSkjemaQuery,
   postArbeidstakerensLonn,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import type { ArbeidstakerensLonnDto } from "~/types/melosysSkjemaTypes.ts";
-import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
+import {
+  Skjemadel,
+  type UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidstakerensLonn } from "../stegDataGetters.ts";
@@ -32,14 +34,12 @@ import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
 
 function ArbeidstakerensLonnStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: ArbeidstakerensLonnDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getArbeidstakerensLonn(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
@@ -70,10 +70,10 @@ function ArbeidstakerensLonnStegContent({
 
   const registerArbeidstakerLonnMutation = useMutation({
     mutationFn: (data: ArbeidstakerensLonnFormData) => {
-      return postArbeidstakerensLonn(skjemaId, data as ArbeidstakerensLonnDto);
+      return postArbeidstakerensLonn(skjema.id, data as ArbeidstakerensLonnDto);
     },
     onSuccess: async () => {
-      await invalidateArbeidsgiverSkjemaQuery(skjemaId);
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.ARBEIDSTAKERENS_LONN,
         stegRekkefolge,
@@ -81,7 +81,7 @@ function ArbeidstakerensLonnStegContent({
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -161,16 +161,7 @@ export function ArbeidstakerensLonnSteg({ id }: { id: string }) {
       id={id}
       skjemaQuery={getSkjemaQuery}
     >
-      {(skjema) => {
-        const { skjemadel } = skjema.metadata;
-        return (
-          <ArbeidstakerensLonnStegContent
-            skjemaId={skjema.id}
-            stegData={getArbeidstakerensLonn(skjema)}
-            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
-          />
-        );
-      }}
+      {(skjema) => <ArbeidstakerensLonnStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }

@@ -34,7 +34,6 @@ import {
   getSkjemaQuery,
   postFamiliemedlemmer,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import type { StegRekkefolgeItem } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
@@ -44,6 +43,7 @@ import {
   Familiemedlem,
   FamiliemedlemmerDto,
   Skjemadel,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
@@ -60,14 +60,12 @@ type FamiliemedlemField = Familiemedlem & { id: string };
 type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
 
 function FamiliemedlemmerStegContent({
-  skjemaId,
-  stegData,
-  stegRekkefolge,
+  skjema,
 }: {
-  skjemaId: string;
-  stegData?: FamiliemedlemmerDto;
-  stegRekkefolge: StegRekkefolgeItem[];
+  skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
+  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegData = getFamiliemedlemmer(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery = useInvalidateSkjemaQuery();
@@ -90,15 +88,15 @@ function FamiliemedlemmerStegContent({
 
   const postFamiliemedlemmerMutation = useMutation({
     mutationFn: (data: FamiliemedlemmerFormData) => {
-      return postFamiliemedlemmer(skjemaId, data as FamiliemedlemmerDto);
+      return postFamiliemedlemmer(skjema.id, data as FamiliemedlemmerDto);
     },
     onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjemaId);
+      invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(StegKey.FAMILIEMEDLEMMER, stegRekkefolge);
       if (nextStep) {
         navigate({
           to: nextStep.route,
-          params: { id: skjemaId },
+          params: { id: skjema.id },
         });
       }
     },
@@ -424,16 +422,7 @@ export function FamiliemedlemmerSteg({ id }: { id: string }) {
       id={id}
       skjemaQuery={getSkjemaQuery}
     >
-      {(skjema) => {
-        const { skjemadel } = skjema.metadata;
-        return (
-          <FamiliemedlemmerStegContent
-            skjemaId={skjema.id}
-            stegData={getFamiliemedlemmer(skjema)}
-            stegRekkefolge={STEG_REKKEFOLGE[skjemadel]}
-          />
-        );
-      }}
+      {(skjema) => <FamiliemedlemmerStegContent skjema={skjema} />}
     </SkjemaStegLoader>
   );
 }
