@@ -12,6 +12,11 @@
     "lint:fix": "pnpm -r lint:fix",
     "check-types": "pnpm -r check-types"
   },
-  "packageManager": "pnpm@10.30.1"
+  "packageManager": "pnpm@10.30.1",
+  "pnpm": {
+    "overrides": {
+      "undici": "^7.24.5"
+    }
+  }
 }
   
