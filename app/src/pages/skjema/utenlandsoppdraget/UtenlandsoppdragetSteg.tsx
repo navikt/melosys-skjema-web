@@ -36,6 +36,16 @@ import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
 
+const DATE_LIMITS = {
+  // Dato Norge ble EØS-medlem
+  fromDate: new Date(1995, 0, 1),
+  toDate: new Date(
+    new Date().getFullYear() + YEARS_FORWARD_FROM_CURRENT,
+    11,
+    31,
+  ),
+};
+
 function UtenlandsoppdragetStegContent({
   skjema,
 }: {
@@ -93,16 +103,6 @@ function UtenlandsoppdragetStegContent({
     formState: { errors },
     control,
   } = formMethods;
-
-  const dateLimits = {
-    // Dato norge ble EØS medlem
-    fromDate: new Date(1995, 0, 1),
-    toDate: new Date(
-      new Date().getFullYear() + YEARS_FORWARD_FROM_CURRENT,
-      11,
-      31,
-    ),
-  };
 
   const arbeidstakerErstatterAnnenPerson = useWatch({
     control,
@@ -231,7 +231,7 @@ function UtenlandsoppdragetStegContent({
               }
               formFieldName="forrigeArbeidstakerUtsendelsePeriode"
               label={forrigePeriodeFelt.label}
-              {...dateLimits}
+              {...DATE_LIMITS}
             />
           )}
         </SkjemaSteg>
