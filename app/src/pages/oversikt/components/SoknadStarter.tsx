@@ -9,7 +9,7 @@ import {
   Loader,
   VStack,
 } from "@navikt/ds-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -145,6 +145,7 @@ function SoknadStarterContent({
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const formMethods = useForm({
     resolver: zodResolver(soknadStarterSchema),
@@ -212,6 +213,7 @@ function SoknadStarterContent({
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknad,
     onSuccess: (data) => {
+      void queryClient.invalidateQueries({ queryKey: ["utkast"] });
       void navigate({
         to: "/skjema/$id",
         params: { id: data.id },

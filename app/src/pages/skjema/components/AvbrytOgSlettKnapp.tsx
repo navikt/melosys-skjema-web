@@ -1,5 +1,5 @@
 import { BodyLong, Button, Modal } from "@navikt/ds-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -19,11 +19,13 @@ export function AvbrytOgSlettKnapp({
 }: AvbrytOgSlettKnappProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const slettUtkastMutation = useMutation({
     mutationFn: () => slettUtkast(skjemaId),
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["utkast"] });
       void navigate({ to: "/oversikt", search: representasjonskontekst });
     },
     onError: () => {

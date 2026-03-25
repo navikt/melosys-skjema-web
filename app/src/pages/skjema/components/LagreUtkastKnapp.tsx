@@ -1,4 +1,5 @@
 import { BodyLong, Button, Modal } from "@navikt/ds-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,6 +15,7 @@ export function LagreUtkastKnapp({
 }: LagreUtkastKnappProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -40,6 +42,7 @@ export function LagreUtkastKnapp({
         <Modal.Footer>
           <Button
             onClick={() => {
+              void queryClient.invalidateQueries({ queryKey: ["utkast"] });
               void navigate({
                 to: "/oversikt",
                 search: representasjonskontekst,
