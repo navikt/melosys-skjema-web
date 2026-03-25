@@ -72,7 +72,9 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         </HGrid>
         <hr className="mt-4" />
         <BodyShort className="ml-2 mt-2" size="small">
-          {t("felles.sistOppdatert", { tidspunkt: formatDatotid(skjema.endretDato, i18n.language) })}
+          {t("felles.sistOppdatert", {
+            tidspunkt: formatDatotid(skjema.endretDato, i18n.language),
+          })}
         </BodyShort>
         <HGrid columns={2} gap="space-12">
           <div className="flex justify-center">
