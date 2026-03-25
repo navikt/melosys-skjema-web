@@ -22,10 +22,10 @@ import {
   SorteringsFelt,
   Sorteringsretning,
 } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
 interface InnsendteSoknaderTabellProps {
-  kontekst: RepresentasjonsKontekst;
+  representasjonskontekst: Representasjonskontekst;
 }
 
 const ANTALL_PER_SIDE = 5;
@@ -43,7 +43,7 @@ const formatDato = (dato: string) => {
  * Tabell over innsendte søknader med søk, sortering og paginering.
  */
 export function InnsendteSoknaderTabell({
-  kontekst,
+  representasjonskontekst,
 }: InnsendteSoknaderTabellProps) {
   const { t } = useTranslation();
 
@@ -78,8 +78,8 @@ export function InnsendteSoknaderTabell({
     sok: aktivtSok || undefined,
     sortering: sort?.orderBy,
     retning: sort?.direction ?? undefined,
-    representasjonstype: kontekst.representasjonstype,
-    radgiverfirmaOrgnr: kontekst.radgiverOrgnr,
+    representasjonstype: representasjonskontekst.representasjonstype,
+    radgiverfirmaOrgnr: representasjonskontekst.radgiverOrgnr,
   };
 
   // Hent data
@@ -160,9 +160,11 @@ export function InnsendteSoknaderTabell({
   const totaltAntallSider = Math.ceil(data.totaltAntall / data.antallPerSide);
 
   const isDegSelv =
-    kontekst.representasjonstype === Representasjonstype.DEG_SELV;
+    representasjonskontekst.representasjonstype ===
+    Representasjonstype.DEG_SELV;
   const isAnnenPerson =
-    kontekst.representasjonstype === Representasjonstype.ANNEN_PERSON;
+    representasjonskontekst.representasjonstype ===
+    Representasjonstype.ANNEN_PERSON;
   // DEG_SELV=4, ANNEN_PERSON=5, ARBEIDSGIVER/RADGIVER=6
   const antallKolonner = isDegSelv ? 4 : isAnnenPerson ? 5 : 6;
 

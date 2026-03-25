@@ -33,6 +33,8 @@ test.describe("Kvittering", () => {
     orgnr: "",
     status: SkjemaStatus.UTKAST,
     type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+    opprettetDato: "2026-01-15T10:00:00Z",
+    endretDato: "2026-01-16T14:30:00Z",
     metadata,
     data: { type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL" },
   };

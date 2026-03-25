@@ -14,7 +14,7 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RepresentasjonVelger } from "~/components/RepresentasjonVelger.tsx";
-import { useKontekst } from "~/hooks/useKontekst.ts";
+import { useRepresentasjonskontekst } from "~/hooks/useRepresentasjonskontekst.ts";
 import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
@@ -77,22 +77,25 @@ export function KontekstVelger() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const kontekst = useKontekst();
+  const representasjonskontekst = useRepresentasjonskontekst();
 
-  // Slå opp firmanavn for RADGIVER-kontekst
+  // Slå opp firmanavn for RADGIVER-representasjonskontekst
   const { data: organisasjonData } = useQuery({
-    ...getOrganisasjonMedJuridiskEnhetQuery(kontekst?.radgiverOrgnr ?? ""),
+    ...getOrganisasjonMedJuridiskEnhetQuery(
+      representasjonskontekst?.radgiverOrgnr ?? "",
+    ),
     enabled:
-      kontekst?.representasjonstype === Representasjonstype.RADGIVER &&
-      !!kontekst.radgiverOrgnr,
+      representasjonskontekst?.representasjonstype ===
+        Representasjonstype.RADGIVER && !!representasjonskontekst.radgiverOrgnr,
   });
 
-  if (!kontekst) {
+  if (!representasjonskontekst) {
     return null;
   }
 
   const isDegSelv =
-    kontekst.representasjonstype === Representasjonstype.DEG_SELV;
+    representasjonskontekst.representasjonstype ===
+    Representasjonstype.DEG_SELV;
 
   const getDisplayText = () => {
     if (isDegSelv) {
@@ -100,7 +103,7 @@ export function KontekstVelger() {
     }
     const config =
       KONTEKST_CONFIG[
-        kontekst.representasjonstype as Exclude<
+        representasjonskontekst.representasjonstype as Exclude<
           Representasjonstype,
           | Representasjonstype.DEG_SELV
           | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT
@@ -108,11 +111,14 @@ export function KontekstVelger() {
         >
       ];
     if (
-      kontekst.representasjonstype === Representasjonstype.RADGIVER &&
+      representasjonskontekst.representasjonstype ===
+        Representasjonstype.RADGIVER &&
       organisasjonData
     ) {
       return truncateText(
-        organisasjonData.juridiskEnhet.navn ?? kontekst.radgiverOrgnr ?? "",
+        organisasjonData.juridiskEnhet.navn ??
+          representasjonskontekst.radgiverOrgnr ??
+          "",
         23,
       );
     }
@@ -124,7 +130,7 @@ export function KontekstVelger() {
       return PersonCircleIcon;
     }
     return KONTEKST_CONFIG[
-      kontekst.representasjonstype as Exclude<
+      representasjonskontekst.representasjonstype as Exclude<
         Representasjonstype,
         | Representasjonstype.DEG_SELV
         | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT

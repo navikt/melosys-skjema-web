@@ -45,6 +45,8 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
   fnr: "",
   status: SkjemaStatus.UTKAST,
   type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+  opprettetDato: "2026-01-15T10:00:00Z",
+  endretDato: "2026-01-16T14:30:00Z",
   metadata: {
     metadatatype: "ArbeidsgiverMetadata",
     representasjonstype: Representasjonstype.ARBEIDSGIVER,
@@ -63,6 +65,8 @@ export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
   orgnr: "",
   status: SkjemaStatus.UTKAST,
   type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+  opprettetDato: "2026-01-15T10:00:00Z",
+  endretDato: "2026-01-16T14:30:00Z",
   metadata: {
     metadatatype: "DegSelvMetadata",
     representasjonstype: Representasjonstype.DEG_SELV,
@@ -241,6 +245,8 @@ export const testKombinertSkjema: UtsendtArbeidstakerSkjemaDto = {
   fnr: "",
   status: SkjemaStatus.UTKAST,
   type: SkjemaType.UTSENDT_ARBEIDSTAKER,
+  opprettetDato: "2026-01-15T10:00:00Z",
+  endretDato: "2026-01-16T14:30:00Z",
   metadata: {
     metadatatype: "ArbeidsgiverMedFullmaktMetadata",
     representasjonstype: Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT,

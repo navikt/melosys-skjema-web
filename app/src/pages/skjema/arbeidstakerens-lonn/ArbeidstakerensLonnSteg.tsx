@@ -123,7 +123,7 @@ function ArbeidstakerensLonnStegContent({
         <SkjemaSteg
           config={{
             stepKey: StegKey.ARBEIDSTAKERENS_LONN,
-            stegRekkefolge: stegRekkefolge,
+            skjema,
           }}
           nesteKnapp={
             <NesteStegKnapp

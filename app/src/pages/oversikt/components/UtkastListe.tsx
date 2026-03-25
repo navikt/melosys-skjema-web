@@ -14,10 +14,10 @@ import { useTranslation } from "react-i18next";
 
 import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
-import type { RepresentasjonsKontekst } from "~/types/representasjon.ts";
+import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
 interface UtkastListeProps {
-  kontekst: RepresentasjonsKontekst;
+  representasjonskontekst: Representasjonskontekst;
 }
 
 const formatDato = (dato: string) => {
@@ -30,14 +30,16 @@ const formatDato = (dato: string) => {
 
 /**
  * Utkast/påbegynte søknader komponent.
- * Viser liste over påbegynte søknader basert på kontekst.
+ * Viser liste over påbegynte søknader basert på representasjonskontekst.
  * Skjules hvis det ikke finnes noen utkast.
  */
-export function UtkastListe({ kontekst }: UtkastListeProps) {
+export function UtkastListe({ representasjonskontekst }: UtkastListeProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery(getUtkastQuery(kontekst));
+  const { data, isLoading, isError } = useQuery(
+    getUtkastQuery(representasjonskontekst),
+  );
 
   // Skjul komponenten hvis det er 0 utkast (etter at data er lastet)
   if (!isLoading && (!data || data.antall === 0)) {
@@ -139,7 +141,7 @@ export function UtkastListe({ kontekst }: UtkastListeProps) {
                 >
                   <HStack align="center" gap="space-16" justify="space-between">
                     <VStack className="flex-1" gap="space-8">
-                      {kontekst.representasjonstype !==
+                      {representasjonskontekst.representasjonstype !==
                         Representasjonstype.DEG_SELV && (
                         <div>
                           <BodyShort className="text-text-subtle" size="small">

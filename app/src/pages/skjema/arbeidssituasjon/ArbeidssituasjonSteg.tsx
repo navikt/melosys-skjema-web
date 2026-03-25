@@ -115,7 +115,7 @@ function ArbeidssituasjonStegContent({
         <SkjemaSteg
           config={{
             stepKey: StegKey.ARBEIDSSITUASJON,
-            stegRekkefolge: stegRekkefolge,
+            skjema,
           }}
           nesteKnapp={
             <NesteStegKnapp loading={postArbeidssituasjonMutation.isPending} />

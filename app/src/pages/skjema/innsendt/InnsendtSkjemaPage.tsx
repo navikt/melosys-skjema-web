@@ -26,7 +26,7 @@ import type {
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { toRepresentasjonsKontekst } from "~/types/representasjon.ts";
+import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 
 import { resolveSeksjoner } from "../../../components/oppsummering/dataMapping.ts";
 
@@ -128,12 +128,12 @@ function InnsendtSkjemaPageContent({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const kontekst = toRepresentasjonsKontekst(skjema.metadata);
+  const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
 
   const handleTilOversikt = () => {
     void navigate({
       to: "/oversikt",
-      search: kontekst,
+      search: representasjonskontekst,
     });
   };
 

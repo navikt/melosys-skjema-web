@@ -25,6 +25,17 @@ export const nb = {
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
+      sistOppdatert: "Sist oppdatert: {{tidspunkt}}",
+      lagreUtkastOgFortsettSenere: "Lagre utkast og fortsett senere",
+      avbrytOgSlett: "Avbryt og slett",
+      avbrytOgSlettUtkast: "Avbryt og slett utkast?",
+      alleOpplysningerVilBliSlettet:
+        "Alle opplysningene du har fylt ut vil bli slettet",
+      neiFortsettUtfylling: "Nei, fortsett utfylling",
+      jaAvbrytOgSlettUtkast: "Ja, avbryt og slett utkast",
+      lagreUtkastBeskrivelse:
+        "Skjemaet lagres som et utkast på Min Side slik at du kan fullføre senere.",
+      jaLagreOgFortsettSenere: "Ja, lagre og fortsett senere",
       startSoknad: "Start søknad",
       valgtVirksomhet: "Valgt virksomhet",
       valgtOrganisasjon: "Valgt organisasjon",
