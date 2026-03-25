@@ -47,6 +47,7 @@ export enum SkjemaType {
 export enum SkjemaStatus {
   UTKAST = "UTKAST",
   SENDT = "SENDT",
+  SLETTET = "SLETTET",
 }
 
 export enum Representasjonstype {
@@ -127,9 +128,9 @@ export enum VedleggFiltype {
 }
 
 export interface FeltDefinisjonDto {
-  label: string;
   hjelpetekst?: string;
   pakrevd: boolean;
+  label: string;
   type: string;
 }
 
@@ -159,9 +160,9 @@ export interface UtsendingsperiodeOgLandDto {
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
+  | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
@@ -170,9 +171,9 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
+  | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
@@ -181,9 +182,9 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
+  | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "skjemadel"
   | "metadatatype"
 >;
 
@@ -229,9 +230,9 @@ export interface ArbeidstakersData {
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
+  | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "skjemadel"
   | "metadatatype"
 >;
 
@@ -307,9 +308,9 @@ export interface PaSkipDto {
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
+  | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
@@ -319,9 +320,9 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
+  | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "skjemadel"
   | "metadatatype"
 > & {
   radgiverfirma: RadgiverfirmaInfo;
@@ -407,14 +408,14 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
 };
 
 export interface UtsendtArbeidstakerMetadata {
+  representasjonstype: Representasjonstype;
   /** @format uuid */
   erstatterSkjemaId?: string;
-  representasjonstype: Representasjonstype;
+  skjemadel: Skjemadel;
   juridiskEnhetOrgnr: string;
   arbeidsgiverNavn: string;
   /** @format uuid */
   kobletSkjemaId?: string;
-  skjemadel: Skjemadel;
   metadatatype: string;
 }
 
@@ -431,6 +432,10 @@ export interface UtsendtArbeidstakerSkjemaDto {
   type: SkjemaType;
   fnr: string;
   orgnr: string;
+  /** @format date-time */
+  opprettetDato: string;
+  /** @format date-time */
+  endretDato: string;
   metadata:
     | AnnenPersonMetadata
     | ArbeidsgiverMedFullmaktMetadata
@@ -554,7 +559,7 @@ export interface AlternativDefinisjonDto {
 
 export type BooleanFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 > & {
   jaLabel: string;
   neiLabel: string;
@@ -562,12 +567,12 @@ export type BooleanFeltDefinisjon = UtilRequiredKeys<
 
 export type CountrySelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 >;
 
 export type DateFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 >;
 
 /** Innsendt søknad med skjemadefinisjon for korrekt visning */
@@ -610,7 +615,7 @@ export interface InnsendtSkjemaResponse {
 
 export type ListeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 > & {
   leggTilLabel: string;
   fjernLabel: string;
@@ -630,7 +635,7 @@ export type ListeFeltDefinisjon = UtilRequiredKeys<
 
 export type PeriodeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 > & {
   fraDatoLabel: string;
   tilDatoLabel: string;
@@ -654,7 +659,7 @@ export interface SeksjonDefinisjonDto {
 
 export type SelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 > & {
   alternativer: AlternativDefinisjonDto[];
 };
@@ -667,12 +672,12 @@ export interface SkjemaDefinisjonDto {
 
 export type TextFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 >;
 
 export type TextareaFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "label" | "pakrevd"
+  "pakrevd" | "label"
 > & {
   /** @format int32 */
   maxLength?: number;

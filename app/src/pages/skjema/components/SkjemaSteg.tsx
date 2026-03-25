@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, Heading, HGrid, VStack } from "@navikt/ds-react";
+import { BodyShort, Button, Heading, HGrid, VStack } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,6 +13,7 @@ import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
 import { STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
+import { formatDatotid } from "~/utils/datoformat.ts";
 
 import { AvbrytOgSlettKnapp } from "./AvbrytOgSlettKnapp.tsx";
 import { LagreUtkastKnapp } from "./LagreUtkastKnapp.tsx";
@@ -29,7 +30,7 @@ interface SkjemaStegProps {
 }
 
 export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const { skjema } = config;
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
@@ -55,15 +56,11 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         {title}
       </Heading>
       {children}
-      <HGrid
-        className="mx-auto mt-8"
-        columns={2}
-        gap="space-4"
-        maxWidth="fit-content"
-      >
-        <VStack gap="space-8">
+      <VStack className="mt-8" gap="space-4">
+        <HGrid columns={2} gap="space-12">
           <Button
             as={Link}
+            className="w-full"
             icon={<ArrowLeftIcon />}
             style={prevStep ? undefined : { visibility: "hidden" }}
             to={prevStep ? `../${prevStep.key}` : ""}
@@ -71,16 +68,26 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
           >
             {t("felles.forrigeSteg")}
           </Button>
-          <LagreUtkastKnapp representasjonskontekst={representasjonskontekst} />
-        </VStack>
-        <VStack align="center" gap="space-8">
-          <div className="w-full [&>button]:w-full">{nesteKnapp}</div>
-          <AvbrytOgSlettKnapp
-            representasjonskontekst={representasjonskontekst}
-            skjemaId={skjema.id}
-          />
-        </VStack>
-      </HGrid>
+          <div className="[&>button]:w-full">{nesteKnapp}</div>
+        </HGrid>
+        <hr className="mt-4" />
+        <BodyShort className="ml-2 mt-2" size="small">
+          {t("felles.sistOppdatert", { tidspunkt: formatDatotid(skjema.endretDato, i18n.language) })}
+        </BodyShort>
+        <HGrid columns={2} gap="space-12">
+          <div className="flex justify-center">
+            <LagreUtkastKnapp
+              representasjonskontekst={representasjonskontekst}
+            />
+          </div>
+          <div className="flex justify-center">
+            <AvbrytOgSlettKnapp
+              representasjonskontekst={representasjonskontekst}
+              skjemaId={skjema.id}
+            />
+          </div>
+        </HGrid>
+      </VStack>
     </section>
   );
 }

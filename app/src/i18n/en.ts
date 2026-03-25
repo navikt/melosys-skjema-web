@@ -25,6 +25,7 @@ export const en = {
       pakrevd: "required",
       forrigeSteg: "Previous step",
       nesteSteg: "Next step",
+      sistOppdatert: "Last updated: {{tidspunkt}}",
       lagreUtkastOgFortsettSenere: "Save draft and continue later",
       avbrytOgSlett: "Cancel and delete",
       avbrytOgSlettUtkast: "Cancel and delete draft?",
