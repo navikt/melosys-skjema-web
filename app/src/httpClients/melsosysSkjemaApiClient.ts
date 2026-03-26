@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { StegKey } from "~/constants/stegKeys.ts";
 import {
@@ -465,6 +465,7 @@ export const getInnsendteSoknaderQuery = (
       request.radgiverfirmaOrgnr,
     ],
     queryFn: () => fetchInnsendteSoknader(request),
+    placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000, // 5 minutter - innsendte søknader endres sjelden
     gcTime: 5 * 60 * 1000, // 5 minutter
     retry: 1,

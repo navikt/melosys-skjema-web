@@ -159,6 +159,36 @@ export const testInnsendteSoknader: InnsendteSoknaderResponse = {
   antallPerSide: 5,
 };
 
+export const testInnsendteSoknaderToTreff: InnsendteSoknaderResponse = {
+  soknader: [
+    {
+      id: "innsendt-1",
+      referanseId: "REF001",
+      arbeidsgiverNavn: "Test Bedrift AS",
+      arbeidsgiverOrgnr: "123456789",
+      arbeidstakerNavn: "Test Bruker",
+      arbeidstakerFnrMaskert: "123456*****",
+      arbeidstakerFodselsdato: "1990-01-01",
+      innsendtDato: "2026-01-10T12:00:00Z",
+      status: SkjemaStatus.SENDT,
+    },
+    {
+      id: "innsendt-2",
+      referanseId: "REF002",
+      arbeidsgiverNavn: "Annen Bedrift AS",
+      arbeidsgiverOrgnr: "987654321",
+      arbeidstakerNavn: "Annen Bruker",
+      arbeidstakerFnrMaskert: "654321*****",
+      arbeidstakerFodselsdato: "1985-05-15",
+      innsendtDato: "2026-02-20T08:00:00Z",
+      status: SkjemaStatus.SENDT,
+    },
+  ],
+  totaltAntall: 2,
+  side: 1,
+  antallPerSide: 5,
+};
+
 // ============ Innsendt skjema test data ============
 
 export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {

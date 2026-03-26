@@ -417,6 +417,48 @@ export async function mockInnsendteSoknader(
   );
 }
 
+/**
+ * Mock som returnerer ulike svar basert på søkeordet i POST-body.
+ * Brukes for å teste søkefunksjonaliteten i innsendte søknader-tabellen.
+ */
+export async function mockInnsendteSoknaderMedSok(
+  page: Page,
+  responseMap: Record<string, InnsendteSoknaderResponse>,
+  defaultResponse: InnsendteSoknaderResponse,
+) {
+  await page.route(
+    "/api/skjema/utsendt-arbeidstaker/innsendte",
+    async (route) => {
+      const body = route.request().postDataJSON();
+      const sok = body?.sok as string | undefined;
+      const response =
+        sok && sok in responseMap ? responseMap[sok] : defaultResponse;
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(response),
+      });
+    },
+  );
+}
+
+/**
+ * Mock som returnerer HTTP 500 for innsendte søknader.
+ * Brukes for å teste feilhåndtering i innsendte søknader-tabellen.
+ */
+export async function mockInnsendteSoknaderFeil(page: Page) {
+  await page.route(
+    "/api/skjema/utsendt-arbeidstaker/innsendte",
+    async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Internal Server Error" }),
+      });
+    },
+  );
+}
+
 export async function mockOpprettSoknad(page: Page, responseId: string) {
   await page.route(
     "/api/skjema/utsendt-arbeidstaker/opprett-med-kontekst",

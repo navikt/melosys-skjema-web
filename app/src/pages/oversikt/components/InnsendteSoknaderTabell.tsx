@@ -6,7 +6,6 @@ import {
   HStack,
   Pagination,
   Search,
-  Skeleton,
   Table,
   VStack,
 } from "@navikt/ds-react";
@@ -61,6 +60,13 @@ export function InnsendteSoknaderTabell({
     setCurrentPage(1); // Reset til side 1 når søk utføres
   }, [sokQuery]);
 
+  // Håndter nullstilling av søk
+  const handleClear = useCallback(() => {
+    setSokQuery("");
+    setAktivtSok("");
+    setCurrentPage(1);
+  }, []);
+
   // Håndter Enter-tast
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -109,28 +115,10 @@ export function InnsendteSoknaderTabell({
     setCurrentPage(newPage);
   }, []);
 
-  // Skjul hvis 0 resultater (etter loading)
-  if (!isLoading && (!data || data.totaltAntall === 0)) {
+  // Ikke vis noe ved initial lasting — unngår "blink" av skeleton
+  // som forsvinner igjen hvis brukeren ikke har innsendte søknader
+  if (isLoading && !data) {
     return null;
-  }
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <Box
-        background="neutral-soft"
-        borderRadius="2"
-        borderWidth="1"
-        padding="space-24"
-      >
-        <VStack gap="space-24">
-          <Heading level="2" size="medium">
-            {t("oversiktFelles.historikkTittel")}
-          </Heading>
-          <Skeleton height={300} variant="rectangle" width="100%" />
-        </VStack>
-      </Box>
-    );
   }
 
   // Error state
@@ -152,8 +140,9 @@ export function InnsendteSoknaderTabell({
     );
   }
 
-  // Sikre at data finnes
-  if (!data) {
+  // Skjul kun hvis ingen søknader finnes og det ikke er et aktivt søk
+  // Når det er et aktivt søk, vis tabellen med "ingen resultater"-melding
+  if (!data || (data.totaltAntall === 0 && !aktivtSok)) {
     return null;
   }
 
@@ -186,6 +175,7 @@ export function InnsendteSoknaderTabell({
               hideLabel
               label={t("oversiktFelles.historikkSokPlaceholder")}
               onChange={setSokQuery}
+              onClear={handleClear}
               onKeyDown={handleKeyDown}
               onSearchClick={handleSearch}
               placeholder={t("oversiktFelles.historikkSokPlaceholder")}
