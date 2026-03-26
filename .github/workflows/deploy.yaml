@@ -9,7 +9,6 @@ on:
       - 'app/**'
       - 'server/**'
       - '.nais/**'
-      - 'Dockerfile'
   workflow_dispatch:
 
 permissions:
@@ -41,13 +40,27 @@ jobs:
 
       - uses: pnpm/action-setup@v5
 
-      - name: Install dependencies
+      - name: Install app dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: app
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-      - name: Build
+      - name: Build app
+        run: pnpm build
+        working-directory: app
+
+      - name: Install server dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: server
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+      - name: Build server deploy artifact
         run: pnpm build:ci
+        working-directory: server
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Build and push Docker image
         uses: nais/docker-build-push@v0
@@ -57,7 +70,7 @@ jobs:
           team: teammelosys
           image_suffix: melosys-skjema-web
           docker_context: .
-          dockerfile: Dockerfile
+          dockerfile: server/Dockerfile
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
     outputs:
@@ -78,6 +91,7 @@ jobs:
   # TODO: Skal skilles ut i releases, men det gjøres i MELOSYS-7933. I førsteomgang deployer vi automatisk til prod ved merge.
   deploy-prod:
     name: Deploy prod-gcp
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     steps:

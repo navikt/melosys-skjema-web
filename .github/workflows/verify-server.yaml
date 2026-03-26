@@ -26,11 +26,14 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: server
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Run ESLint
-        run: pnpm --filter server lint
+        run: pnpm lint
+        working-directory: server
 
       - name: Check for typescript errors
-        run: pnpm --filter server check-types
+        run: pnpm check-types
+        working-directory: server
