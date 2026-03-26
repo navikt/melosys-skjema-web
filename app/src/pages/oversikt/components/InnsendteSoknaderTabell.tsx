@@ -109,13 +109,8 @@ export function InnsendteSoknaderTabell({
     setCurrentPage(newPage);
   }, []);
 
-  // Skjul hvis 0 resultater (etter loading)
-  if (!isLoading && (!data || data.totaltAntall === 0)) {
-    return null;
-  }
-
-  // Loading state
-  if (isLoading) {
+  // Loading state (kun ved første lasting, ikke ved søk med placeholderData)
+  if (isLoading && !data) {
     return (
       <Box
         background="neutral-soft"
@@ -152,8 +147,9 @@ export function InnsendteSoknaderTabell({
     );
   }
 
-  // Sikre at data finnes
-  if (!data) {
+  // Skjul kun hvis ingen søknader finnes og det ikke er et aktivt søk
+  // Når det er et aktivt søk, vis tabellen med "ingen resultater"-melding
+  if (!data || (data.totaltAntall === 0 && !aktivtSok)) {
     return null;
   }
 

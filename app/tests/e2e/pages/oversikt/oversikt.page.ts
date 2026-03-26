@@ -19,6 +19,8 @@ export class OversiktPage {
   readonly startSoknadButton: Locator;
   readonly utkastExpansionCard: Locator;
   readonly historikkHeading: Locator;
+  readonly historikkSearchInput: Locator;
+  readonly historikkSearchButton: Locator;
 
   // SoknadStarter form elements
   readonly arbeidsgiverOrgnrInput: Locator;
@@ -48,6 +50,15 @@ export class OversiktPage {
 
     this.historikkHeading = page.getByRole("heading", {
       name: translations.oversiktFelles.historikkTittel,
+    });
+
+    this.historikkSearchInput = page.getByRole("searchbox", {
+      name: translations.oversiktFelles.historikkSokPlaceholder,
+    });
+
+    this.historikkSearchButton = page.getByRole("button", {
+      name: "Søk",
+      exact: true,
     });
 
     // DEG_SELV: OrganisasjonSoker text input for org number
@@ -193,5 +204,40 @@ export class OversiktPage {
         .getByRole("listitem")
         .filter({ hasText: feilmeldinger.valideringManglerArbeidstaker }),
     ).toBeVisible();
+  }
+
+  // ============ Historikk søk interactions ============
+
+  async searchHistorikk(searchTerm: string) {
+    await this.historikkSearchInput.fill(searchTerm);
+    await this.historikkSearchButton.click();
+  }
+
+  async assertHistorikkSearchInputVisible() {
+    await expect(this.historikkSearchInput).toBeVisible();
+  }
+
+  async assertHistorikkIngenResultater() {
+    await expect(
+      this.page.getByText(translations.oversiktFelles.historikkIngenResultater),
+    ).toBeVisible();
+  }
+
+  async assertHistorikkFeilmelding() {
+    await expect(
+      this.page.getByText(translations.oversiktFelles.historikkFeilmelding),
+    ).toBeVisible();
+  }
+
+  async assertHistorikkAntallTreff(antall: number) {
+    await expect(this.page.getByText(`${antall} treff`)).toBeVisible();
+  }
+
+  async assertHistorikkRowVisible(text: string) {
+    await expect(this.page.getByRole("cell", { name: text })).toBeVisible();
+  }
+
+  async assertHistorikkRowNotVisible(text: string) {
+    await expect(this.page.getByRole("cell", { name: text })).not.toBeVisible();
   }
 }
