@@ -26,20 +26,26 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: app
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Run ESLint
-        run: pnpm --filter app lint
+        run: pnpm lint
+        working-directory: app
 
       - name: Check for typescript errors
-        run: pnpm --filter app check-types
+        run: pnpm check-types
+        working-directory: app
 
       - name: Run unit tests
-        run: pnpm --filter app test
+        run: pnpm test
+        working-directory: app
 
       - name: Install Playwright Browsers
-        run: pnpm --filter app exec playwright install chromium
+        run: pnpm exec playwright install chromium
+        working-directory: app
 
       - name: Run tests
-        run: pnpm --filter app test:e2e
+        run: pnpm test:e2e
+        working-directory: app

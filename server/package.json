@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:ci": "tsc && rm -rf build && mkdir -p build && cp -r dist build/dist && cp package.json build/package.json && cp pnpm-lock.yaml build/pnpm-lock.yaml && cp .npmrc build/.npmrc && cd build && pnpm install --prod --frozen-lockfile && cp -r ../../app/dist public",
     "dev": "tsc && node dist/index.js",
     "start": "node dist/index.js",
     "check-types": "tsc --noemit",
@@ -36,5 +37,11 @@
     "prettier": "3.8.1",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.1"
+  },
+  "packageManager": "pnpm@10.30.1",
+  "pnpm": {
+    "overrides": {
+      "undici": "^7.24.5"
+    }
   }
 }

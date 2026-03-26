@@ -2,21 +2,11 @@
   "name": "melosys-skjema-web",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter app dev",
-    "dev:server": "pnpm --filter server dev",
-    "build": "pnpm -r build",
-    "build:app": "pnpm --filter app build",
-    "build:server": "pnpm --filter server build",
-    "build:ci": "pnpm -r build && rm -rf build && pnpm --filter server deploy --prod build && cp -r app/dist build/public",
-    "lint": "pnpm -r lint",
-    "lint:fix": "pnpm -r lint:fix",
-    "check-types": "pnpm -r check-types"
+    "dev": "cd app && pnpm dev",
+    "dev:server": "cd server && pnpm dev",
+    "build": "cd app && pnpm build && cd ../server && pnpm build",
+    "lint": "cd app && pnpm lint && cd ../server && pnpm lint",
+    "check-types": "cd app && pnpm check-types && cd ../server && pnpm check-types"
   },
-  "packageManager": "pnpm@10.30.1",
-  "pnpm": {
-    "overrides": {
-      "undici": "^7.24.5"
-    }
-  }
+  "packageManager": "pnpm@10.30.1"
 }
-  
