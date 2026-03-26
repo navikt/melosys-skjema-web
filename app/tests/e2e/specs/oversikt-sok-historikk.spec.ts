@@ -105,4 +105,33 @@ test.describe("Oversikt — Søk i innsendte søknader", () => {
     // Feilmelding skal vises, ikke tom side
     await oversiktPage.assertHistorikkFeilmelding();
   });
+
+  test("Nullstilling av søk med X-knapp viser alle resultater igjen", async ({
+    page,
+  }) => {
+    await mockUserInfo(page, testUserInfo);
+    await mockHentTilganger(page, []);
+    await mockGetEregOrganisasjon(page);
+    await mockUtkastListe(page, emptyUtkastListe);
+    await mockInnsendteSoknaderMedSok(
+      page,
+      { REF001: testInnsendteSoknader },
+      testInnsendteSoknaderToTreff,
+    );
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.assertHistorikkVisible();
+    await oversiktPage.assertHistorikkAntallTreff(2);
+
+    // Søk på REF001 — kun 1 treff
+    await oversiktPage.searchHistorikk("REF001");
+    await oversiktPage.assertHistorikkAntallTreff(1);
+
+    // Klikk X for å tømme søket — alle resultater skal vises igjen
+    await oversiktPage.clearHistorikkSearch();
+    await oversiktPage.assertHistorikkAntallTreff(2);
+    await oversiktPage.assertHistorikkRowVisible("REF001");
+    await oversiktPage.assertHistorikkRowVisible("REF002");
+  });
 });

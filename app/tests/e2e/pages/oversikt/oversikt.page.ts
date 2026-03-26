@@ -213,6 +213,12 @@ export class OversiktPage {
     await this.historikkSearchButton.click();
   }
 
+  async clearHistorikkSearch() {
+    await this.page
+      .getByRole("button", { name: "Tøm feltet", exact: true })
+      .click();
+  }
+
   async assertHistorikkSearchInputVisible() {
     await expect(this.historikkSearchInput).toBeVisible();
   }

@@ -61,6 +61,13 @@ export function InnsendteSoknaderTabell({
     setCurrentPage(1); // Reset til side 1 når søk utføres
   }, [sokQuery]);
 
+  // Håndter nullstilling av søk
+  const handleClear = useCallback(() => {
+    setSokQuery("");
+    setAktivtSok("");
+    setCurrentPage(1);
+  }, []);
+
   // Håndter Enter-tast
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -182,6 +189,7 @@ export function InnsendteSoknaderTabell({
               hideLabel
               label={t("oversiktFelles.historikkSokPlaceholder")}
               onChange={setSokQuery}
+              onClear={handleClear}
               onKeyDown={handleKeyDown}
               onSearchClick={handleSearch}
               placeholder={t("oversiktFelles.historikkSokPlaceholder")}
