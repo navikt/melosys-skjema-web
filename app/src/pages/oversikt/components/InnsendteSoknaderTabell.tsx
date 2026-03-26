@@ -6,7 +6,6 @@ import {
   HStack,
   Pagination,
   Search,
-  Skeleton,
   Table,
   VStack,
 } from "@navikt/ds-react";
@@ -116,23 +115,10 @@ export function InnsendteSoknaderTabell({
     setCurrentPage(newPage);
   }, []);
 
-  // Loading state (kun ved første lasting, ikke ved søk med placeholderData)
+  // Ikke vis noe ved initial lasting — unngår "blink" av skeleton
+  // som forsvinner igjen hvis brukeren ikke har innsendte søknader
   if (isLoading && !data) {
-    return (
-      <Box
-        background="neutral-soft"
-        borderRadius="2"
-        borderWidth="1"
-        padding="space-24"
-      >
-        <VStack gap="space-24">
-          <Heading level="2" size="medium">
-            {t("oversiktFelles.historikkTittel")}
-          </Heading>
-          <Skeleton height={300} variant="rectangle" width="100%" />
-        </VStack>
-      </Box>
-    );
+    return null;
   }
 
   // Error state
