@@ -1,4 +1,6 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+
+import { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import {
@@ -65,5 +67,29 @@ test.describe("Utenlandsoppdraget - validering", () => {
 
     await stegPage.assertPeriodeErPakrevdIsVisible();
     await stegPage.assertStillOnStep();
+  });
+
+  test("kan submitte når erstatter annen person endres fra ja til nei", async () => {
+    await stegPage.arbeidsgiverHarOppdragILandetRadioGroup.JA.click();
+    await stegPage.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup.NEI.click();
+    await stegPage.arbeidstakerForblirAnsattIHelePeriodenRadioGroup.JA.click();
+
+    // Velg Ja først slik at datofelter rendres
+    await stegPage.arbeidstakerErstatterAnnenPersonRadioGroup.JA.click();
+    await expect(stegPage.forrigeArbeidstakerFraDatoInput).toBeVisible();
+
+    // Endre til Nei - datofelter skal forsvinne og validering skal ikke trigges
+    await stegPage.arbeidstakerErstatterAnnenPersonRadioGroup.NEI.click();
+    await expect(stegPage.forrigeArbeidstakerFraDatoInput).not.toBeVisible();
+
+    const expectedPayload: UtenlandsoppdragetDto = {
+      arbeidsgiverHarOppdragILandet: true,
+      arbeidstakerBleAnsattForUtenlandsoppdraget: false,
+      arbeidstakerForblirAnsattIHelePerioden: true,
+      arbeidstakerErstatterAnnenPerson: false,
+    };
+
+    await stegPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await stegPage.assertNavigatedToNextStep();
   });
 });
