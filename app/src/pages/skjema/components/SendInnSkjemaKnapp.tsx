@@ -33,6 +33,14 @@ export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
         queryKey: getSkjemaQuery(response.skjemaId).queryKey,
       });
 
+      void queryClient.invalidateQueries({
+        queryKey: ["innsendte-soknader"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["utkast"],
+      });
+
       navigate({
         to: "/skjema/$id/kvittering",
         params: { id: response.skjemaId },
