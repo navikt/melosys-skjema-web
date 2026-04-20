@@ -9,8 +9,87 @@ import { requireEnvironment } from "./utils.js";
 
 const useLocalToken = process.env.USE_LOCAL_TOKEN === "true";
 
-function getLocalToken(): string | null {
-  return process.env.LOCAL_TOKEN || null;
+const REFRESH_SLACK_MS = 60_000;
+
+type UserClaims = { pid: string; name?: string };
+type CachedToken = { token: string; expiresAt: number };
+
+const tokenCachePerPid = new Map<string, CachedToken>();
+
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  const parts = token.split(".");
+  if (parts.length < 2) return null;
+  try {
+    const json = Buffer.from(parts[1], "base64url").toString("utf8");
+    return JSON.parse(json) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+function readUserClaims(userToken: string): UserClaims | null {
+  const payload = decodeJwtPayload(userToken);
+  if (!payload) return null;
+  const pid =
+    typeof payload.pid === "string"
+      ? payload.pid
+      : typeof payload.sub === "string"
+        ? payload.sub
+        : null;
+  if (!pid) return null;
+  const name = typeof payload.name === "string" ? payload.name : undefined;
+  return { pid, name };
+}
+
+async function exchangeLocalToken(pid: string): Promise<string | null> {
+  const now = Date.now();
+  const cached = tokenCachePerPid.get(pid);
+  if (cached && cached.expiresAt > now + REFRESH_SLACK_MS) {
+    return cached.token;
+  }
+
+  const endpoint = requireEnvironment("LOCAL_TOKEN_ENDPOINT");
+  const body = new URLSearchParams({
+    grant_type: "client_credentials",
+    client_id: process.env.LOCAL_TOKEN_CLIENT_ID ?? "some-consumer",
+    client_secret: process.env.LOCAL_TOKEN_CLIENT_SECRET ?? "secret",
+    audience: process.env.LOCAL_TOKEN_AUDIENCE ?? "melosys-skjema-api",
+    pid,
+    expiry: process.env.LOCAL_TOKEN_EXPIRY ?? "3600",
+  });
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+    });
+    if (!response.ok) {
+      logger.error(
+        `Kunne ikke veksle lokal token for pid=${pid} (HTTP ${response.status})`,
+        new Error(await response.text()),
+      );
+      return null;
+    }
+    const data = (await response.json()) as {
+      access_token: string;
+      expires_in: number;
+    };
+    tokenCachePerPid.set(pid, {
+      token: data.access_token,
+      expiresAt: now + data.expires_in * 1000,
+    });
+    logger.debug(
+      `Vekslet lokal token for pid=${pid} (utløper om ${data.expires_in}s)`,
+    );
+    return data.access_token;
+  } catch (error) {
+    logger.error(
+      `Feil ved veksling av lokal token for pid=${pid}`,
+      error instanceof Error ? error : new Error(String(error)),
+    );
+    return null;
+  }
 }
 
 type ProxyOptions = {
@@ -41,12 +120,20 @@ export const setupApiProxy = (router: Router) => {
 
 export const setupDekoratorenApiProxy = (router: Router) => {
   if (useLocalToken) {
-    // Mock auth endpoint for local development
-    router.get("/nav-dekoratoren-api/auth", (_req, res) => {
-      res.json({
+    router.get("/nav-dekoratoren-api/auth", (request, response) => {
+      const token = getToken(request);
+      const claims = token ? readUserClaims(token) : null;
+      if (!claims) {
+        response.json({ authenticated: false });
+        return;
+      }
+      const name = claims.name ?? `Bruker ${claims.pid}`;
+      response.json({
         authenticated: true,
-        name: "Lokal Bruker",
-        ident: "12345678901",
+        name,
+        securityLevel: "4",
+        userId: claims.pid,
+        ident: claims.pid,
       });
     });
   } else {
@@ -141,19 +228,38 @@ function addProxyWithLocalToken(
 ) {
   router.use(
     ingoingUrl,
+    async (request: Request, response: Response, next: NextFunction) => {
+      const userToken = getToken(request);
+      if (!userToken) {
+        response.status(401).send({ error: "Ikke innlogget" });
+        return;
+      }
+      const claims = readUserClaims(userToken);
+      if (!claims) {
+        response.status(401).send({ error: "Kunne ikke lese brukerclaims" });
+        return;
+      }
+      const apiToken = await exchangeLocalToken(claims.pid);
+      if (!apiToken) {
+        response
+          .status(500)
+          .send({ error: "Kunne ikke veksle token mot mock-oauth2" });
+        return;
+      }
+      request.headers["x-local-token"] = apiToken;
+      next();
+    },
     createProxyMiddleware({
       target: outgoingUrl,
       changeOrigin: true,
       logger: logger,
       on: {
-        proxyReq: (proxyRequest) => {
-          const token = getLocalToken();
-          if (token) {
+        proxyReq: (proxyRequest, request) => {
+          const token = request.headers["x-local-token"];
+          if (typeof token === "string" && token.length > 0) {
             proxyRequest.removeHeader("cookie");
+            proxyRequest.removeHeader("x-local-token");
             proxyRequest.setHeader("Authorization", `Bearer ${token}`);
-            logger.debug("Local token added to proxy request");
-          } else {
-            logger.warning("No local token available");
           }
         },
       },

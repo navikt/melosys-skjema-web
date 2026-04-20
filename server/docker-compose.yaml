@@ -10,14 +10,13 @@ services:
       - "8081:8081"
     extra_hosts:
       - "localhost:${DC_HOST_IP:-0.0.0.0}"
-    volumes:
-      - ./.local-token:/app/.local-token:ro
     environment:
       NODE_ENV: "development"
       EXPRESS_PORT: "8081"
       EXPRESS_HOST: "::"
       USE_LOCAL_TOKEN: "true"
-      LOCAL_TOKEN_FILE: /app/.local-token
+      LOCAL_TOKEN_ENDPOINT: http://host.docker.internal:8082/tokenx/token
+      LOCAL_TOKEN_AUDIENCE: melosys-skjema-api
       API_URL: http://host.docker.internal:8090/api
       DEKORATOREN_API_URL: https://www.ekstern.dev.nav.no/person/nav-dekoratoren-api
       ENV: dev
