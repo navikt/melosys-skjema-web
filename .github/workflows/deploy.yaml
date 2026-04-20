@@ -32,7 +32,7 @@ jobs:
         uses: nais/what-changed@main # https://github.com/nais/what-changed
         with:
           files: .nais/apps/**
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6.3.0
         with:
           node-version: '22'
           registry-url: https://npm.pkg.github.com/
