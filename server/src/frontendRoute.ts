@@ -81,9 +81,7 @@ export function setupStaticRoutes(router: Router) {
     // I lokal dev finnes ikke public/index.html — send brukeren til /vite-on
     // slik at cookien settes og vite-mode aktiveres automatisk.
     if (config.app.env === "dev" && request.accepts("html")) {
-      const suffix = request.originalUrl.endsWith("/")
-        ? "vite-on"
-        : "/vite-on";
+      const suffix = request.originalUrl.endsWith("/") ? "vite-on" : "/vite-on";
       return response.redirect(request.originalUrl + suffix);
     }
 
