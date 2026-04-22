@@ -17,6 +17,7 @@ local:
 	@echo ""
 	@printf "\033[36m⚡ Starting melosys-skjema-web (Wonderwall mode)\033[0m\n"
 	@echo ""
+	@cd server && docker compose -f docker-compose.local-q2.yaml down -t 2 >/dev/null 2>&1 || true
 	@printf "  \033[33m◐\033[0m Starting mock-oauth...  \r" && \
 		docker start $(MOCK_OAUTH_CONTAINER) 2>/dev/null && \
 		printf "  \033[32m✓\033[0m Mock-oauth running     \n" || \
@@ -53,6 +54,7 @@ endif
 	@echo ""
 	@printf "\033[36m⚡ Starting melosys-skjema-web (Q2 mode)\033[0m\n"
 	@echo ""
+	@cd server && docker compose down -t 2 >/dev/null 2>&1 || true
 	@if docker images -q melosys-skjema-web-local-q2-express-server 2>/dev/null | grep -q .; then \
 		printf "  \033[32m✓\033[0m Server image exists (skipping build)\n"; \
 	else \

@@ -78,6 +78,13 @@ export function setupStaticRoutes(router: Router) {
       return response.send(await injectViteModeHtml(viteModeHtml));
     }
 
+    // I lokal dev finnes ikke public/index.html — send brukeren til /vite-on
+    // slik at cookien settes og vite-mode aktiveres automatisk.
+    if (config.app.env === "dev" && request.accepts("html")) {
+      const suffix = request.originalUrl.endsWith("/") ? "vite-on" : "/vite-on";
+      return response.redirect(request.originalUrl + suffix);
+    }
+
     logger.info("Henter dekorator");
 
     const html = await injectDecoratorServerSide({
