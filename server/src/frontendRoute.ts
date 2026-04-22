@@ -78,9 +78,11 @@ export function setupStaticRoutes(router: Router) {
       return response.send(await injectViteModeHtml(viteModeHtml));
     }
 
-    // I lokal dev finnes ikke public/index.html — send brukeren til /vite-on
-    // slik at cookien settes og vite-mode aktiveres automatisk.
-    if (config.app.env === "dev" && request.accepts("html")) {
+    // Kun ved lokal kjøring (NAIS_CLUSTER_NAME er ikke satt) finnes ikke
+    // public/index.html — send brukeren til /vite-on slik at cookien settes
+    // og vite-mode aktiveres automatisk. I deployet dev-miljø finnes
+    // public/index.html og vanlig SSR-flyt skal brukes.
+    if (!process.env.NAIS_CLUSTER_NAME && request.accepts("html")) {
       const suffix = request.originalUrl.endsWith("/") ? "vite-on" : "/vite-on";
       return response.redirect(request.originalUrl + suffix);
     }
