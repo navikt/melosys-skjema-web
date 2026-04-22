@@ -9,6 +9,12 @@ import { requireEnvironment } from "./utils.js";
 
 const useLocalToken = process.env.USE_LOCAL_TOKEN === "true";
 
+// Hvis satt, brukes tokenet direkte (Q2-modus med ekte miljø-token).
+// Ellers vekslet token per innlogget bruker via mock-oauth2-server.
+function getStaticLocalToken(): string | null {
+  return process.env.LOCAL_TOKEN ?? null;
+}
+
 const REFRESH_SLACK_MS = 60_000;
 
 type UserClaims = { pid: string; name?: string };
@@ -121,7 +127,7 @@ export const setupApiProxy = (router: Router) => {
 export const setupDekoratorenApiProxy = (router: Router) => {
   if (useLocalToken) {
     router.get("/nav-dekoratoren-api/auth", (request, response) => {
-      const token = getToken(request);
+      const token = getStaticLocalToken() ?? getToken(request);
       const claims = token ? readUserClaims(token) : null;
       if (!claims) {
         response.json({ authenticated: false });
@@ -229,6 +235,11 @@ function addProxyWithLocalToken(
   router.use(
     ingoingUrl,
     async (request: Request, response: Response, next: NextFunction) => {
+      const staticToken = getStaticLocalToken();
+      if (staticToken) {
+        request.headers["x-local-token"] = staticToken;
+        return next();
+      }
       const userToken = getToken(request);
       if (!userToken) {
         response.status(401).send({ error: "Ikke innlogget" });
