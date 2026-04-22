@@ -148,8 +148,8 @@ export function KontekstVelger() {
         {displayText && (
           <Label
             as="span"
-            aria-label={organisasjonData?.juridiskEnhet.navn ?? ""}
-            title={organisasjonData?.juridiskEnhet.navn ?? ""}
+            aria-label={organisasjonData?.juridiskEnhet.navn}
+            title={organisasjonData?.juridiskEnhet.navn}
             style={{ color: "var(--ax-text-accent-subtle)" }}
           >
             {displayText}
