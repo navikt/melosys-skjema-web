@@ -144,9 +144,14 @@ export function KontekstVelger() {
 
   return (
     <>
-      <HStack align="center" gap="space-8">
+      <HStack align="center" gap="space-8" paddingBlock="space-8">
         {displayText && (
-          <Label as="span" style={{ color: "var(--ax-border-accent)" }}>
+          <Label
+            as="span"
+            aria-label={organisasjonData?.juridiskEnhet.navn ?? ""}
+            title={organisasjonData?.juridiskEnhet.navn ?? ""}
+            style={{ color: "var(--ax-text-accent-subtle)" }}
+          >
             {displayText}
           </Label>
         )}
@@ -155,6 +160,7 @@ export function KontekstVelger() {
           onClick={() => setIsOpen(!isOpen)}
           ref={buttonRef}
           variant="secondary"
+          size="small"
         >
           <HStack align="center" gap="space-8">
             {Icon && <Icon aria-hidden fontSize="2rem" />}
