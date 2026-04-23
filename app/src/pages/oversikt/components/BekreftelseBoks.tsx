@@ -27,7 +27,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
 
   const bekreftelseBoksBulletpointTextIds =
     getBekreftelseBoksBulletpointTextIds(representasjonstype);
-  const bekreftelseCheckboxText =
+  const bekreftelseCheckboxTextId =
     getBekreftelseCheckboxTextId(representasjonstype);
 
   return (
@@ -75,7 +75,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
               onBlur={field.onBlur}
               onChange={(event) => field.onChange(event.target.checked)}
             >
-              <BodyShort size="small">{bekreftelseCheckboxText}</BodyShort>
+              <BodyShort size="small">{t(bekreftelseCheckboxTextId)}</BodyShort>
             </Checkbox>
           )}
         />

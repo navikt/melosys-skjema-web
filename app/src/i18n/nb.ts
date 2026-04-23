@@ -402,6 +402,8 @@ export const nb = {
       valideringFeilTittel: "Du må fylle ut disse feltene:",
       valideringManglerArbeidsgiver: "Arbeidsgiver må velges",
       valideringManglerArbeidstaker: "Arbeidstaker må velges",
+      valideringManglerBekreftelse:
+        "Du må bekrefte at du har lest og forstått innholdet",
       historikkTittel: "Tidligere innsendte søknader",
       historikkSokPlaceholder: "Søk...",
       historikkKolonneVirksomhet: "Virksomhet",
