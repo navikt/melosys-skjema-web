@@ -37,6 +37,7 @@ export const soknadStarterSchema = z
       })
       .optional(),
     skalFylleUtForArbeidstaker: z.boolean().optional(),
+    bekreftelse: z.boolean(),
   })
   .refine((data) => !!data.arbeidsgiver, {
     error: "oversiktFelles.valideringManglerArbeidsgiver",
@@ -46,6 +47,11 @@ export const soknadStarterSchema = z
   .refine((data) => !!data.arbeidstaker, {
     error: "oversiktFelles.valideringManglerArbeidstaker",
     path: ["arbeidstaker"],
+    when: () => true,
+  })
+  .refine((data) => data.bekreftelse, {
+    error: "oversiktFelles.valideringManglerBekreftelse",
+    path: ["bekreftelse"],
     when: () => true,
   })
   .transform((data): OpprettUtsendtArbeidstakerSoknadRequest => {
