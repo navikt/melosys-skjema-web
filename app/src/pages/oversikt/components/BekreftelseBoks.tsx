@@ -88,8 +88,7 @@ function getBekreftelseBoksBulletpointTextIds(
   representasjonstype: Representasjonstype,
 ): string[] {
   switch (representasjonstype) {
-    case Representasjonstype.DEG_SELV:
-    case Representasjonstype.ARBEIDSGIVER: {
+    case Representasjonstype.DEG_SELV: {
       return [];
     }
     case Representasjonstype.ANNEN_PERSON: {
@@ -99,6 +98,7 @@ function getBekreftelseBoksBulletpointTextIds(
       ];
     }
 
+    case Representasjonstype.ARBEIDSGIVER:
     case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
       return [
         "oversiktBekreftelse.bekreftAtVilSvareRiktig",
@@ -106,15 +106,8 @@ function getBekreftelseBoksBulletpointTextIds(
       ];
     }
 
+    case Representasjonstype.RADGIVER:
     case Representasjonstype.RADGIVER_MED_FULLMAKT: {
-      return [
-        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
-        "oversiktBekreftelse.radgiverInfoBullet2",
-      ];
-    }
-
-    // TODO Case ikke spesifisert i oppgavetekst 7982
-    case Representasjonstype.RADGIVER: {
       return [
         "oversiktBekreftelse.bekreftAtVilSvareRiktig",
         "oversiktBekreftelse.radgiverInfoBullet2",
@@ -127,8 +120,7 @@ function getBekreftelseCheckboxTextId(
   representasjonstype: Representasjonstype,
 ): string {
   switch (representasjonstype) {
-    case Representasjonstype.DEG_SELV:
-    case Representasjonstype.ARBEIDSGIVER: {
+    case Representasjonstype.DEG_SELV: {
       return "oversiktBekreftelse.bekreftAtVilSvareRiktig";
     }
     default: {
