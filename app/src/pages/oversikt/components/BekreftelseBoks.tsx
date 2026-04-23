@@ -4,6 +4,7 @@ import {
   Box,
   Checkbox,
   Link,
+  List,
   VStack,
 } from "@navikt/ds-react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -24,7 +25,10 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
     formState: { errors },
   } = useFormContext<SoknadStarterFormData>();
 
-  const bekreftelseTekst = getBekreftelseBoksContentText(representasjonstype);
+  const bekreftelseBoksBulletpointTextIds =
+    getBekreftelseBoksBulletpointTextIds(representasjonstype);
+  const bekreftelseCheckboxText =
+    getBekreftelseCheckboxTextId(representasjonstype);
 
   return (
     <Box
@@ -38,7 +42,6 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
       }}
     >
       <VStack gap="space-24">
-        {/* Infotekst-seksjon */}
         <div>
           <BodyLong spacing>
             {t(
@@ -54,6 +57,14 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
           </Link>
         </div>
 
+        {bekreftelseBoksBulletpointTextIds.length > 0 && (
+          <List>
+            {bekreftelseBoksBulletpointTextIds.map((key) => (
+              <List.Item key={key}>{t(key)}</List.Item>
+            ))}
+          </List>
+        )}
+
         <Controller
           name="bekreftelse"
           control={control}
@@ -64,7 +75,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
               onBlur={field.onBlur}
               onChange={(event) => field.onChange(event.target.checked)}
             >
-              <BodyShort size="small">{bekreftelseTekst}</BodyShort>
+              <BodyShort size="small">{bekreftelseCheckboxText}</BodyShort>
             </Checkbox>
           )}
         />
@@ -73,29 +84,55 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
   );
 }
 
-function getBekreftelseBoksContentText(
+function getBekreftelseBoksBulletpointTextIds(
+  representasjonstype: Representasjonstype,
+): string[] {
+  switch (representasjonstype) {
+    case Representasjonstype.DEG_SELV:
+    case Representasjonstype.ARBEIDSGIVER: {
+      return [];
+    }
+    case Representasjonstype.ANNEN_PERSON: {
+      return [
+        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
+        "oversiktBekreftelse.annenPersonInfoBullet2",
+      ];
+    }
+
+    case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
+      return [
+        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
+        "oversiktBekreftelse.arbeidsgiverInfoBullet2",
+      ];
+    }
+
+    case Representasjonstype.RADGIVER_MED_FULLMAKT: {
+      return [
+        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
+        "oversiktBekreftelse.radgiverInfoBullet2",
+      ];
+    }
+
+    // TODO Case ikke spesifisert i oppgavetekst 7982
+    case Representasjonstype.RADGIVER: {
+      return [
+        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
+        "oversiktBekreftelse.radgiverInfoBullet2",
+      ];
+    }
+  }
+}
+
+function getBekreftelseCheckboxTextId(
   representasjonstype: Representasjonstype,
 ): string {
   switch (representasjonstype) {
     case Representasjonstype.DEG_SELV:
     case Representasjonstype.ARBEIDSGIVER: {
-      return "Jeg bekrefter at jeg vil svare så riktig som jeg kan";
+      return "oversiktBekreftelse.bekreftAtVilSvareRiktig";
     }
-
-    case Representasjonstype.ANNEN_PERSON: {
-      return "Jeg bekrefter at jeg vil svare så riktig som jeg kan";
-    }
-
-    case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
-      return "Jeg bekrefter at jeg vil svare så riktig som jeg kan";
-    }
-
-    case Representasjonstype.RADGIVER: {
-      return "Jeg bekrefter at jeg vil svare så riktig som jeg kan";
-    }
-
     default: {
-      return "Jeg bekrefter at jeg vil svare så riktig som jeg kan";
+      return "oversiktBekreftelse.bekreftAtLestOgForstatt";
     }
   }
 }
