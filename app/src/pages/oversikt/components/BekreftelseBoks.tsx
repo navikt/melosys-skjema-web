@@ -1,6 +1,5 @@
 import {
   BodyLong,
-  BodyShort,
   Box,
   Checkbox,
   Link,
@@ -32,30 +31,19 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
 
   return (
     <Box
-      background="neutral-soft"
-      borderRadius="2"
+      background="default"
+      borderRadius="12"
       borderWidth="1"
-      borderColor="info"
-      padding="space-24"
-      style={{
-        borderLeft: "4px solid var(--a-blue-500)",
-      }}
+      borderColor="neutral-subtle"
+      padding="space-32"
     >
-      <VStack gap="space-24">
-        <div>
-          <BodyLong spacing>
-            {t(
-              "oversiktFelles.bekreftelserInfo",
-              "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken din.",
-            )}
-          </BodyLong>
+      <VStack gap="space-16">
+        <VStack gap="space-8">
+          <BodyLong>{t("oversiktBekreftelse.intro")}</BodyLong>
           <Link href="#" target="_blank" rel="noopener noreferrer">
-            {t(
-              "oversiktFelles.bekreftelserLenke",
-              "Les mer om viktigheten av å gi riktige opplysninger.",
-            )}
+            {t("oversiktBekreftelse.linkText")}
           </Link>
-        </div>
+        </VStack>
 
         {bekreftelseBoksBulletpointTextIds.length > 0 && (
           <List>
@@ -70,12 +58,13 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
           control={control}
           render={({ field }) => (
             <Checkbox
+              size="small"
               checked={field.value ?? false}
               error={!!errors.bekreftelse?.message}
               onBlur={field.onBlur}
               onChange={(event) => field.onChange(event.target.checked)}
             >
-              <BodyShort size="small">{t(bekreftelseCheckboxTextId)}</BodyShort>
+              {t(bekreftelseCheckboxTextId)}
             </Checkbox>
           )}
         />
