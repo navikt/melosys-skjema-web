@@ -72,7 +72,11 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
       <VStack gap="space-16">
         <VStack>
           <BodyLong>{t("oversiktBekreftelse.intro")}</BodyLong>
-          <Link href="#" target="_blank" rel="noopener noreferrer">
+          <Link
+            href={t("oversiktBekreftelse.linkUrl")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {t("oversiktBekreftelse.linkText")}
           </Link>
         </VStack>

@@ -455,6 +455,7 @@ export const en = {
         "It is important that you give us correct information so we can process your case.",
       linkText:
         "Read more about why it is important to provide correct information.",
+      linkUrl: "https://www.nav.no/endringer/en",
       bekreftAtVilSvareRiktig:
         "I confirm that I will answer as accurately as I can",
       bekreftAtLestOgForstatt: "I confirm that I have read and understood",

@@ -332,6 +332,7 @@ export const nb = {
       intro:
         "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken din.",
       linkText: "Les mer om viktigheten av å gi riktige opplysninger.",
+      linkUrl: "https://www.nav.no/endringer",
       bekreftAtVilSvareRiktig:
         "Jeg bekrefter at jeg vil svare så riktig som jeg kan",
       bekreftAtLestOgForstatt: "Jeg bekrefter at jeg har lest og forstått",
