@@ -117,10 +117,10 @@ export class OversiktPage {
     });
 
     this.bekreftelseCheckboxDegSelv = page.getByRole("checkbox", {
-      name: translations.oversiktBekreftelse.bekreftAtVilSvareRiktig,
+      name: bekreftelseTekster.bekreftAtVilSvareRiktig,
     });
     this.bekreftelseCheckboxAndre = page.getByRole("checkbox", {
-      name: translations.oversiktBekreftelse.bekreftAtLestOgForstatt,
+      name: bekreftelseTekster.bekreftAtLestOgForstatt,
     });
     this.bekreftelseIntro = page.getByText(bekreftelseTekster.intro);
     this.bekreftelseLink = page.getByRole("link", {
@@ -262,6 +262,10 @@ export class OversiktPage {
   async assertBekreftelseBoksContentForRepresentasjonstype() {
     await expect(this.bekreftelseIntro).toBeVisible();
     await expect(this.bekreftelseLink).toBeVisible();
+    await expect(this.bekreftelseLink).toHaveAttribute(
+      "href",
+      "https://www.nav.no/endringer",
+    );
 
     switch (this.representasjonstype) {
       case Representasjonstype.DEG_SELV: {

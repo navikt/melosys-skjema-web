@@ -157,6 +157,7 @@ test.describe("Oversikt - validering", () => {
     await oversiktPage.assertIsVisible();
 
     await oversiktPage.assertBekreftelseBoksContentForRepresentasjonstype();
+    await oversiktPage.assertBekreftelseCheckboxForRepresentasjonstypeIsVisible();
   });
 
   test("RADGIVER: viser korrekt tekstinnhold i bekreftelsesboksen", async ({
@@ -181,5 +182,6 @@ test.describe("Oversikt - validering", () => {
     await oversiktPage.assertIsVisible();
 
     await oversiktPage.assertBekreftelseBoksContentForRepresentasjonstype();
+    await oversiktPage.assertBekreftelseCheckboxForRepresentasjonstypeIsVisible();
   });
 });
