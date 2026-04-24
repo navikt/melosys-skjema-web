@@ -49,10 +49,19 @@ export const soknadStarterSchema = z
     path: ["arbeidstaker"],
     when: () => true,
   })
-  .refine((data) => data.bekreftelse, {
-    error: "oversiktFelles.valideringManglerBekreftelse",
-    path: ["bekreftelse"],
-    when: () => true,
+  .superRefine((data, ctx) => {
+    if (data.bekreftelse) {
+      return;
+    }
+
+    ctx.addIssue({
+      code: "custom",
+      message:
+        data.representasjonstype === Representasjonstype.DEG_SELV
+          ? "oversiktFelles.valideringManglerBekreftelseDegSelv"
+          : "oversiktFelles.valideringManglerBekreftelse",
+      path: ["bekreftelse"],
+    });
   })
   .transform((data): OpprettUtsendtArbeidstakerSoknadRequest => {
     return {

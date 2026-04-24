@@ -79,8 +79,8 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
 
         {bekreftelseBoksBulletpointTexts.length > 0 && (
           <ul className="list-disc pl-6 space-y-1">
-            {bekreftelseBoksBulletpointTexts.map((text, i) => (
-              <li key={i}>{text}</li>
+            {bekreftelseBoksBulletpointTexts.map((text) => (
+              <li key={text}>{text}</li>
             ))}
           </ul>
         )}
