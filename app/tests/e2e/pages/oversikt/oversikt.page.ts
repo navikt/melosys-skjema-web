@@ -10,6 +10,24 @@ const feilmeldinger = {
     translations.oversiktFelles.valideringManglerArbeidsgiver,
   valideringManglerArbeidstaker:
     translations.oversiktFelles.valideringManglerArbeidstaker,
+  valideringManglerBekreftelseDegSelv:
+    translations.oversiktFelles.valideringManglerBekreftelseDegSelv,
+  valideringManglerBekreftelse:
+    translations.oversiktFelles.valideringManglerBekreftelse,
+};
+
+const bekreftelseTekster = {
+  intro: translations.oversiktBekreftelse.intro,
+  linkText: translations.oversiktBekreftelse.linkText,
+  bekreftAtVilSvareRiktig:
+    translations.oversiktBekreftelse.bekreftAtVilSvareRiktig,
+  bekreftAtLestOgForstatt:
+    translations.oversiktBekreftelse.bekreftAtLestOgForstatt,
+  annenPersonInfoBullet2:
+    translations.oversiktBekreftelse.annenPersonInfoBullet2,
+  arbeidsgiverInfoBullet2:
+    translations.oversiktBekreftelse.arbeidsgiverInfoBullet2,
+  radgiverInfoBullet2: translations.oversiktBekreftelse.radgiverInfoBullet2,
 };
 
 export class OversiktPage {
@@ -30,6 +48,13 @@ export class OversiktPage {
   readonly arbeidstakerFnrInput: Locator;
   readonly arbeidstakerEtternavnInput: Locator;
   readonly arbeidstakerSokButton: Locator;
+  readonly bekreftelseCheckboxDegSelv: Locator;
+  readonly bekreftelseCheckboxAndre: Locator;
+  readonly bekreftelseIntro: Locator;
+  readonly bekreftelseLink: Locator;
+  readonly annenPersonInfoBullet: Locator;
+  readonly arbeidsgiverInfoBullet: Locator;
+  readonly radgiverInfoBullet: Locator;
 
   constructor(page: Page, representasjonstype: Representasjonstype) {
     this.page = page;
@@ -90,6 +115,26 @@ export class OversiktPage {
       name: translations.oversiktFelles.arbeidstakerSokKnapp,
       exact: true,
     });
+
+    this.bekreftelseCheckboxDegSelv = page.getByRole("checkbox", {
+      name: translations.oversiktBekreftelse.bekreftAtVilSvareRiktig,
+    });
+    this.bekreftelseCheckboxAndre = page.getByRole("checkbox", {
+      name: translations.oversiktBekreftelse.bekreftAtLestOgForstatt,
+    });
+    this.bekreftelseIntro = page.getByText(bekreftelseTekster.intro);
+    this.bekreftelseLink = page.getByRole("link", {
+      name: bekreftelseTekster.linkText,
+    });
+    this.annenPersonInfoBullet = page.getByText(
+      bekreftelseTekster.annenPersonInfoBullet2,
+    );
+    this.arbeidsgiverInfoBullet = page.getByText(
+      bekreftelseTekster.arbeidsgiverInfoBullet2,
+    );
+    this.radgiverInfoBullet = page.getByText(
+      bekreftelseTekster.radgiverInfoBullet2,
+    );
   }
 
   async goto() {
@@ -203,6 +248,77 @@ export class OversiktPage {
       this.page
         .getByRole("listitem")
         .filter({ hasText: feilmeldinger.valideringManglerArbeidstaker }),
+    ).toBeVisible();
+  }
+
+  async assertBekreftelseCheckboxForRepresentasjonstypeIsVisible() {
+    await expect(
+      this.representasjonstype === Representasjonstype.DEG_SELV
+        ? this.bekreftelseCheckboxDegSelv
+        : this.bekreftelseCheckboxAndre,
+    ).toBeVisible();
+  }
+
+  async assertBekreftelseBoksContentForRepresentasjonstype() {
+    await expect(this.bekreftelseIntro).toBeVisible();
+    await expect(this.bekreftelseLink).toBeVisible();
+
+    switch (this.representasjonstype) {
+      case Representasjonstype.DEG_SELV: {
+        await expect(this.bekreftelseCheckboxDegSelv).toBeVisible();
+        await expect(this.bekreftelseCheckboxAndre).not.toBeVisible();
+        await expect(this.annenPersonInfoBullet).not.toBeVisible();
+        await expect(this.arbeidsgiverInfoBullet).not.toBeVisible();
+        await expect(this.radgiverInfoBullet).not.toBeVisible();
+        break;
+      }
+      case Representasjonstype.ANNEN_PERSON: {
+        await expect(this.bekreftelseCheckboxAndre).toBeVisible();
+        await expect(this.annenPersonInfoBullet).toBeVisible();
+        await expect(this.arbeidsgiverInfoBullet).not.toBeVisible();
+        await expect(this.radgiverInfoBullet).not.toBeVisible();
+        break;
+      }
+      case Representasjonstype.ARBEIDSGIVER:
+      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
+        await expect(this.bekreftelseCheckboxAndre).toBeVisible();
+        await expect(this.arbeidsgiverInfoBullet).toBeVisible();
+        await expect(this.annenPersonInfoBullet).not.toBeVisible();
+        await expect(this.radgiverInfoBullet).not.toBeVisible();
+        break;
+      }
+      case Representasjonstype.RADGIVER:
+      case Representasjonstype.RADGIVER_MED_FULLMAKT: {
+        await expect(this.bekreftelseCheckboxAndre).toBeVisible();
+        await expect(this.radgiverInfoBullet).toBeVisible();
+        await expect(this.annenPersonInfoBullet).not.toBeVisible();
+        await expect(this.arbeidsgiverInfoBullet).not.toBeVisible();
+        break;
+      }
+    }
+  }
+
+  async checkBekreftelseCheckbox() {
+    await (
+      this.representasjonstype === Representasjonstype.DEG_SELV
+        ? this.bekreftelseCheckboxDegSelv
+        : this.bekreftelseCheckboxAndre
+    ).check();
+  }
+
+  async assertValideringManglerBekreftelseDegSelvIsVisible() {
+    await expect(
+      this.page
+        .getByRole("listitem")
+        .filter({ hasText: feilmeldinger.valideringManglerBekreftelseDegSelv }),
+    ).toBeVisible();
+  }
+
+  async assertValideringManglerBekreftelseIsVisible() {
+    await expect(
+      this.page
+        .getByRole("listitem")
+        .filter({ hasText: feilmeldinger.valideringManglerBekreftelse }),
     ).toBeVisible();
   }
 
