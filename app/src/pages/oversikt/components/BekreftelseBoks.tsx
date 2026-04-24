@@ -1,4 +1,4 @@
-import { BodyLong, Box, Checkbox, Link, List, VStack } from "@navikt/ds-react";
+import { BodyLong, Box, Checkbox, Link, VStack } from "@navikt/ds-react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -70,7 +70,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
       padding="space-32"
     >
       <VStack gap="space-16">
-        <VStack gap="space-8">
+        <VStack>
           <BodyLong>{t("oversiktBekreftelse.intro")}</BodyLong>
           <Link href="#" target="_blank" rel="noopener noreferrer">
             {t("oversiktBekreftelse.linkText")}
@@ -78,11 +78,11 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
         </VStack>
 
         {bekreftelseBoksBulletpointTexts.length > 0 && (
-          <List>
-            {bekreftelseBoksBulletpointTexts.map((text) => (
-              <List.Item key={text}>{text}</List.Item>
+          <ul className="list-disc pl-6 space-y-1">
+            {bekreftelseBoksBulletpointTexts.map((text, i) => (
+              <li key={i}>{text}</li>
             ))}
-          </List>
+          </ul>
         )}
 
         <Controller
@@ -104,4 +104,3 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
     </Box>
   );
 }
-
