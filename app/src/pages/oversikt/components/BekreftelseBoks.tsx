@@ -1,11 +1,4 @@
-import {
-  BodyLong,
-  Box,
-  Checkbox,
-  Link,
-  List,
-  VStack,
-} from "@navikt/ds-react";
+import { BodyLong, Box, Checkbox, Link, List, VStack } from "@navikt/ds-react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -24,10 +17,49 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
     formState: { errors },
   } = useFormContext<SoknadStarterFormData>();
 
-  const bekreftelseBoksBulletpointTextIds =
-    getBekreftelseBoksBulletpointTextIds(representasjonstype);
-  const bekreftelseCheckboxTextId =
-    getBekreftelseCheckboxTextId(representasjonstype);
+  const getBekreftelseBoksBulletpointTexts = (): string[] => {
+    switch (representasjonstype) {
+      case Representasjonstype.DEG_SELV: {
+        return [];
+      }
+      case Representasjonstype.ANNEN_PERSON: {
+        return [
+          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
+          t("oversiktBekreftelse.annenPersonInfoBullet2"),
+        ];
+      }
+
+      case Representasjonstype.ARBEIDSGIVER:
+      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
+        return [
+          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
+          t("oversiktBekreftelse.arbeidsgiverInfoBullet2"),
+        ];
+      }
+
+      case Representasjonstype.RADGIVER:
+      case Representasjonstype.RADGIVER_MED_FULLMAKT: {
+        return [
+          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
+          t("oversiktBekreftelse.radgiverInfoBullet2"),
+        ];
+      }
+    }
+  };
+
+  const getBekreftelseCheckboxText = (): string => {
+    switch (representasjonstype) {
+      case Representasjonstype.DEG_SELV: {
+        return t("oversiktBekreftelse.bekreftAtVilSvareRiktig");
+      }
+      default: {
+        return t("oversiktBekreftelse.bekreftAtLestOgForstatt");
+      }
+    }
+  };
+
+  const bekreftelseBoksBulletpointTexts = getBekreftelseBoksBulletpointTexts();
+  const bekreftelseCheckboxText = getBekreftelseCheckboxText();
 
   return (
     <Box
@@ -45,10 +77,10 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
           </Link>
         </VStack>
 
-        {bekreftelseBoksBulletpointTextIds.length > 0 && (
+        {bekreftelseBoksBulletpointTexts.length > 0 && (
           <List>
-            {bekreftelseBoksBulletpointTextIds.map((key) => (
-              <List.Item key={key}>{t(key)}</List.Item>
+            {bekreftelseBoksBulletpointTexts.map((text) => (
+              <List.Item key={text}>{text}</List.Item>
             ))}
           </List>
         )}
@@ -64,7 +96,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
               onBlur={field.onBlur}
               onChange={(event) => field.onChange(event.target.checked)}
             >
-              {t(bekreftelseCheckboxTextId)}
+              {bekreftelseCheckboxText}
             </Checkbox>
           )}
         />
@@ -73,47 +105,3 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
   );
 }
 
-function getBekreftelseBoksBulletpointTextIds(
-  representasjonstype: Representasjonstype,
-): string[] {
-  switch (representasjonstype) {
-    case Representasjonstype.DEG_SELV: {
-      return [];
-    }
-    case Representasjonstype.ANNEN_PERSON: {
-      return [
-        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
-        "oversiktBekreftelse.annenPersonInfoBullet2",
-      ];
-    }
-
-    case Representasjonstype.ARBEIDSGIVER:
-    case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
-      return [
-        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
-        "oversiktBekreftelse.arbeidsgiverInfoBullet2",
-      ];
-    }
-
-    case Representasjonstype.RADGIVER:
-    case Representasjonstype.RADGIVER_MED_FULLMAKT: {
-      return [
-        "oversiktBekreftelse.bekreftAtVilSvareRiktig",
-        "oversiktBekreftelse.radgiverInfoBullet2",
-      ];
-    }
-  }
-}
-
-function getBekreftelseCheckboxTextId(
-  representasjonstype: Representasjonstype,
-): string {
-  switch (representasjonstype) {
-    case Representasjonstype.DEG_SELV: {
-      return "oversiktBekreftelse.bekreftAtVilSvareRiktig";
-    }
-    default: {
-      return "oversiktBekreftelse.bekreftAtLestOgForstatt";
-    }
-  }
-}
