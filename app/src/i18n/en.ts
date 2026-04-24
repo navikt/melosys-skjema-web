@@ -251,7 +251,6 @@ export const en = {
       nummer: "Number",
       postkode: "Postal code",
       bySted: "City/place/region",
-      beskriv: "Describe where the employee will work",
       erHjemmekontor: "Is the employee posted to work from home office?",
       navnPaInnretning: "Name of installation",
       hvilkenTypeInnretning: "What type of installation is this?",
@@ -289,7 +288,6 @@ export const en = {
       nummerErPakrevd: "Number is required",
       postkodeErPakrevd: "Postal code is required",
       byStedErPakrevd: "City/place/region is required",
-      beskrivelseErPakrevd: "Description is required",
       navnPaInnretningErPakrevd: "Name of installation is required",
       duMaVelgeTypeInnretning:
         "You must select what type of installation this is",

@@ -285,7 +285,6 @@ export interface PaLandDto {
   navnPaVirksomhet: string;
   fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted;
   fastArbeidssted?: PaLandFastArbeidsstedDto;
-  beskrivelseVekslende?: string;
   erHjemmekontor: boolean;
 }
 
@@ -818,9 +817,7 @@ export interface OmBordPaFlyTranslation {
 
 export interface PaLandTranslation {
   maaOppgiFastArbeidssted: string;
-  beskrivelseVekslendeSkalIkkeOppgis: string;
   fastArbeidsstedSkalIkkeOppgis: string;
-  maaOppgiBeskrivelseVekslende: string;
 }
 
 export interface PaSkipTranslation {
