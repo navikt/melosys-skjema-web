@@ -135,6 +135,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.waitForOrgLookup(
       testEregOrganisasjon.juridiskEnhet.navn,
     );
+    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
@@ -191,6 +192,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
       testArbeidstakerUtenFullmakt.etternavn,
     );
     await oversiktPage.waitForPersonVerified(testVerifiserPersonResponse.navn);
+    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
@@ -243,6 +245,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.selectArbeidstakerMedFullmakt(
       testPersonMedFullmakt.navn,
     );
+    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
@@ -302,6 +305,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
       testArbeidstakerUtenFullmakt.etternavn,
     );
     await oversiktPage.waitForPersonVerified(testVerifiserPersonResponse.navn);
+    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
@@ -360,6 +364,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.selectArbeidstakerMedFullmakt(
       testPersonMedFullmakt.navn,
     );
+    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();

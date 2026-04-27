@@ -448,6 +448,22 @@ export const en = {
       personVelgerBeskrivelse:
         "The list contains all people who have granted you a mandate on nav.no.",
     },
+    oversiktBekreftelse: {
+      intro:
+        "It is important that you give us correct information so we can process your case.",
+      linkText:
+        "Read more about why it is important to provide correct information.",
+      linkUrl: "https://www.nav.no/endringer/en",
+      bekreftAtVilSvareRiktig:
+        "I confirm that I will answer as accurately as I can",
+      bekreftAtLestOgForstatt: "I confirm that I have read and understood",
+      annenPersonInfoBullet2:
+        "I understand that, as a private individual, I will receive letters about case processing as long as the power of attorney is valid",
+      arbeidsgiverInfoBullet2:
+        "You will receive all letters about case processing in Altinn",
+      radgiverInfoBullet2:
+        "I understand that, as an adviser, I will receive all letters about case processing in Altinn as long as the access and power of attorney are valid",
+    },
     oversiktFelles: {
       utkastTittel: "DRAFTS",
       utkastBeskrivelse: "Applications you have started but not yet submitted",
@@ -506,6 +522,10 @@ export const en = {
       valideringFeilTittel: "You must fill in these fields:",
       valideringManglerArbeidsgiver: "Employer must be selected",
       valideringManglerArbeidstaker: "Employee must be selected",
+      valideringManglerBekreftelseDegSelv:
+        "You must confirm that you will answer as accurately as you can",
+      valideringManglerBekreftelse:
+        "You must confirm that you have read and understood",
       historikkTittel: "Previously submitted applications",
       historikkSokPlaceholder: "Search...",
       historikkKolonneVirksomhet: "Company",

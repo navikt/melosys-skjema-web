@@ -30,6 +30,7 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
 import { ArbeidstakerVelger } from "./ArbeidstakerVelger.tsx";
+import { BekreftelseBoks } from "./BekreftelseBoks.tsx";
 import {
   SoknadStarterFormData,
   SoknadStarterOutput,
@@ -110,10 +111,10 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
         }
       : undefined;
 
-  // Bygg defaultData med representasjonstype og radgiverfirma
   const defaultData: SoknadStarterFormData = {
     representasjonstype: representasjonskontekst.representasjonstype,
     radgiverfirma,
+    bekreftelse: false,
     // Setter default skalFylleUtForArbeidstaker:true for rådgiver, siden det er mest vanlig at de fyller ut på vegne av arbeidstaker.
     ...(representasjonskontekst.representasjonstype ===
       Representasjonstype.RADGIVER && {
@@ -237,6 +238,11 @@ function SoknadStarterContent({
       translateError(errors.arbeidstaker.message as string) ?? "",
     );
   }
+  if (errors.bekreftelse?.message) {
+    valideringsfeil.push(
+      translateError(errors.bekreftelse.message as string) ?? "",
+    );
+  }
 
   return (
     <FormProvider {...formMethods}>
@@ -294,6 +300,8 @@ function SoknadStarterContent({
                 <ArbeidstakerVelger />
               </div>
             )}
+
+            <BekreftelseBoks representasjonstype={representasjonstype} />
 
             {valideringsfeil.length > 0 && (
               <Alert variant="error">
