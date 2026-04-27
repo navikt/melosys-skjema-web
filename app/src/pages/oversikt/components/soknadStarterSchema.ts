@@ -37,6 +37,7 @@ export const soknadStarterSchema = z
       })
       .optional(),
     skalFylleUtForArbeidstaker: z.boolean().optional(),
+    bekreftelse: z.boolean(),
   })
   .refine((data) => !!data.arbeidsgiver, {
     error: "oversiktFelles.valideringManglerArbeidsgiver",
@@ -47,6 +48,20 @@ export const soknadStarterSchema = z
     error: "oversiktFelles.valideringManglerArbeidstaker",
     path: ["arbeidstaker"],
     when: () => true,
+  })
+  .superRefine((data, ctx) => {
+    if (data.bekreftelse) {
+      return;
+    }
+
+    ctx.addIssue({
+      code: "custom",
+      message:
+        data.representasjonstype === Representasjonstype.DEG_SELV
+          ? "oversiktFelles.valideringManglerBekreftelseDegSelv"
+          : "oversiktFelles.valideringManglerBekreftelse",
+      path: ["bekreftelse"],
+    });
   })
   .transform((data): OpprettUtsendtArbeidstakerSoknadRequest => {
     return {
