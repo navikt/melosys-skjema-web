@@ -148,10 +148,3 @@ vite.config.ts.timestamp-*
 
 # Build output copied during CI
 /build/
-
-# nav-pilot collection files
-.github/.nav-pilot-state.json
-.github/agents/
-.github/instructions/
-.github/prompts/
-.github/skills/
