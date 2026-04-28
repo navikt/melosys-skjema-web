@@ -1,9 +1,17 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { BodyShort, Button, Heading, HGrid, VStack } from "@navikt/ds-react";
+import {
+  BodyShort,
+  Button,
+  Heading,
+  HGrid,
+  HStack,
+  VStack,
+} from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
+import { StegRolleIkon } from "~/components/StegRolleIkon.tsx";
 import type { StegKey } from "~/constants/stegKeys.ts";
 import {
   Fremgangsindikator,
@@ -53,7 +61,12 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         stegRekkefolge={stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">
-        {title}
+        <HStack align="center" as="span" gap="space-0">
+          <span>{title}</span>
+          <span style={{ marginInlineStart: "1rem" }}>
+            <StegRolleIkon size="2rem" stegKey={config.stepKey} />
+          </span>
+        </HStack>
       </Heading>
       {children}
       <VStack className="mt-8" gap="space-4">
