@@ -34,7 +34,7 @@ export function SeksjonOppsummering({
         <FormSummary.Heading level="3">
           <span className="inline-flex items-center gap-2">
             <span>{seksjon.tittel}</span>
-            {stepKey ? <StegRolleIkon stegKey={stepKey} /> : null}
+            {stepKey ? <StegRolleIkon size="1.5rem" stegKey={stepKey} /> : null}
           </span>
         </FormSummary.Heading>
       </FormSummary.Header>
