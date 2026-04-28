@@ -61,11 +61,9 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         stegRekkefolge={stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">
-        <HStack align="center" as="span" gap="space-0">
+        <HStack align="center" as="span" gap="space-4">
           <span>{title}</span>
-          <span style={{ marginInlineStart: "1rem" }}>
-            <StegRolleIkon size="2rem" stegKey={config.stepKey} />
-          </span>
+          <StegRolleIkon size="2rem" stegKey={config.stepKey} />
         </HStack>
       </Heading>
       {children}
