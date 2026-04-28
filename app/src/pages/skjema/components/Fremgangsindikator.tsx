@@ -1,7 +1,7 @@
 import { FormProgress } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-import { StegRolleIkon } from "~/components/StegRolleIkon.tsx";
+import { getStegRolle, StegRolleIkon } from "~/components/StegRolleIkon.tsx";
 import type { StegKey } from "~/constants/stegKeys.ts";
 
 export type { StegKey } from "~/constants/stegKeys.ts";
@@ -33,16 +33,20 @@ export const Fremgangsindikator = ({
     >
       {stegRekkefolge.map((step) => {
         // ds-react typer children som string, selv om Step støtter React-noder i runtime.
-        const stepTitle = (
-          <span className="inline-flex items-center gap-2">
-            <span>{t(step.title)}</span>
-            <StegRolleIkon size="1.5rem" stegKey={step.key} />
-          </span>
+        const stepTitleWithRolleIkon = (
+          <>
+            {t(step.title)}
+            {getStegRolle(step.key) ? (
+              <span className="ml-2 inline-block align-middle">
+                <StegRolleIkon size="1.5rem" stegKey={step.key} />
+              </span>
+            ) : null}
+          </>
         ) as unknown as string;
 
         return (
           <FormProgress.Step href={step.key} key={step.key}>
-            {stepTitle}
+            {stepTitleWithRolleIkon}
           </FormProgress.Step>
         );
       })}
