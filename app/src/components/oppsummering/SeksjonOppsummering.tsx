@@ -1,6 +1,8 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import { StegRolleIkon } from "~/components/StegRolleIkon.tsx";
+import type { StegKey } from "~/constants/stegKeys.ts";
 import type { SeksjonDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { FeltOppsummering } from "./FeltOppsummering.tsx";
@@ -9,12 +11,14 @@ interface SeksjonOppsummeringProps {
   seksjon: SeksjonDefinisjonDto;
   data: Record<string, unknown>;
   editHref?: string;
+  stepKey?: StegKey;
 }
 
 export function SeksjonOppsummering({
   data,
   editHref,
   seksjon,
+  stepKey,
 }: SeksjonOppsummeringProps) {
   const { t } = useTranslation();
 
@@ -27,7 +31,12 @@ export function SeksjonOppsummering({
   return (
     <FormSummary className="mt-8">
       <FormSummary.Header>
-        <FormSummary.Heading level="3">{seksjon.tittel}</FormSummary.Heading>
+        <FormSummary.Heading level="3">
+          <span className="inline-flex items-center gap-2">
+            <span>{seksjon.tittel}</span>
+            {stepKey ? <StegRolleIkon stegKey={stepKey} /> : null}
+          </span>
+        </FormSummary.Heading>
       </FormSummary.Header>
       <FormSummary.Answers>
         {felterMedData.map(([feltNavn, felt]) => (
