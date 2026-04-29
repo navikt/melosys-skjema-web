@@ -22,9 +22,10 @@ services:
       ENV: dev
   wonderwall:
     image: ghcr.io/nais/wonderwall:latest
-    platform: linux/amd64
     ports:
       - "4000:4000"
+    environment:
+      WONDERWALL_ENCRYPTION_KEY: "YWJjZGVmZ2hpajEyMzQ1Njc4OTBhYmNkZWZnaGlqMTI="
     command: >
       --auto-login=true
       --openid.well-known-url=http://host.docker.internal:8082/isso/.well-known/openid-configuration
@@ -33,6 +34,7 @@ services:
       --ingress=http://localhost:4000
       --bind-address=0.0.0.0:4000
       --upstream-host=localhost:8081
+      --cookie.secure=false
       --log-level=info
       --log-format=text
     restart: on-failure

@@ -62,7 +62,7 @@ test.describe("Arbeidssted i utlandet - validering", () => {
       await stegPage.assertStillOnStep();
     });
 
-    test("viser feilmelding på beskrivelse samtidig med basisfelt-feil når VEKSLENDE er valgt", async () => {
+    test("viser feilmelding på basisfelt når VEKSLENDE er valgt", async () => {
       await stegPage.arbeidsstedTypeSelect.selectOption(
         ArbeidsstedType.PA_LAND,
       );
@@ -72,7 +72,6 @@ test.describe("Arbeidssted i utlandet - validering", () => {
       await stegPage.lagreOgFortsett();
 
       await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
-      await stegPage.assertBeskrivelseErPakrevdIsVisible();
       await stegPage.assertStillOnStep();
     });
   });

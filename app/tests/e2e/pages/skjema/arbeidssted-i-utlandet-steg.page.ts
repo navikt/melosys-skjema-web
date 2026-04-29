@@ -38,8 +38,6 @@ const feilmeldinger = {
   nummerErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.nummerErPakrevd,
   postkodeErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.postkodeErPakrevd,
   byStedErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.byStedErPakrevd,
-  beskrivelseErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.beskrivelseErPakrevd,
   // Offshore
   navnPaInnretningErPakrevd:
     nb.translation.arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd,
@@ -90,7 +88,6 @@ export class ArbeidsstedIUtlandetStegPage {
   readonly nummerInput: Locator;
   readonly postkodeInput: Locator;
   readonly byStedInput: Locator;
-  readonly beskrivelseVekslendeTextarea: Locator;
   readonly erHjemmekontorRadioGroup: RadioButtonGroupJaNeiLocator;
 
   // Offshore felter
@@ -150,9 +147,6 @@ export class ArbeidsstedIUtlandetStegPage {
     this.nummerInput = page.getByLabel(paLandFelter.nummer.label);
     this.postkodeInput = page.getByLabel(paLandFelter.postkode.label);
     this.byStedInput = page.getByLabel(paLandFelter.bySted.label);
-    this.beskrivelseVekslendeTextarea = page.getByLabel(
-      paLandFelter.beskrivelseVekslende.label,
-    );
 
     const erHjemmekontorGroup = page.getByRole("group", {
       name: paLandFelter.erHjemmekontor.label,
@@ -361,12 +355,6 @@ export class ArbeidsstedIUtlandetStegPage {
   async assertByStedErPakrevdIsVisible() {
     await expect(
       this.page.getByText(feilmeldinger.byStedErPakrevd),
-    ).toBeVisible();
-  }
-
-  async assertBeskrivelseErPakrevdIsVisible() {
-    await expect(
-      this.page.getByText(feilmeldinger.beskrivelseErPakrevd),
     ).toBeVisible();
   }
 

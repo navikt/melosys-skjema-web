@@ -28,7 +28,6 @@ const arbeidsstedIUtlandetMedVerdiIAlleFelter: ArbeidsstedIUtlandetDto = {
       postkode: "0123",
       bySted: "Test City",
     },
-    beskrivelseVekslende: "Dette feltet skal fjernes ved transform",
     erHjemmekontor: false,
   },
   offshore: {
@@ -201,13 +200,9 @@ test.describe("Arbeidssted i utlandet", () => {
     await arbeidsstedPage.navnPaVirksomhetInput.fill("Vekslende Corp AS");
     await arbeidsstedPage.fastEllerVekslendeRadioGroup.VEKSLENDE.click();
 
-    // Verify vekslende-specific fields appear and fast-fields disappear
-    await expect(arbeidsstedPage.beskrivelseVekslendeTextarea).toBeVisible();
+    // Verify fast-fields disappear when workplace varies
     await expect(arbeidsstedPage.vegadresseInput).not.toBeVisible();
 
-    await arbeidsstedPage.beskrivelseVekslendeTextarea.fill(
-      "Arbeidstaker veksler mellom flere lokasjoner i Sverige",
-    );
     await arbeidsstedPage.erHjemmekontorRadioGroup.JA.click();
 
     const expectedPayload: ArbeidsstedIUtlandetDto = {
@@ -215,8 +210,6 @@ test.describe("Arbeidssted i utlandet", () => {
       paLand: {
         navnPaVirksomhet: "Vekslende Corp AS",
         fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.VEKSLENDE,
-        beskrivelseVekslende:
-          "Arbeidstaker veksler mellom flere lokasjoner i Sverige",
         erHjemmekontor: true,
       },
     };
@@ -408,9 +401,6 @@ test.describe("Arbeidssted i utlandet", () => {
       );
       await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
       await arbeidsstedPage.fastEllerVekslendeRadioGroup.VEKSLENDE.click();
-      await arbeidsstedPage.beskrivelseVekslendeTextarea.fill(
-        "Arbeidstaker veksler mellom flere lokasjoner",
-      );
       await arbeidsstedPage.erHjemmekontorRadioGroup.JA.click();
 
       const expectedTransformedData: ArbeidsstedIUtlandetDto = {
@@ -419,7 +409,6 @@ test.describe("Arbeidssted i utlandet", () => {
           navnPaVirksomhet: "Test Virksomhet AS",
           fastEllerVekslendeArbeidssted:
             FastEllerVekslendeArbeidssted.VEKSLENDE,
-          beskrivelseVekslende: "Arbeidstaker veksler mellom flere lokasjoner",
           erHjemmekontor: true,
         },
       };

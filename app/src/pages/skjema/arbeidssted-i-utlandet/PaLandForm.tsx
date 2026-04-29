@@ -1,4 +1,4 @@
-import { Radio, RadioGroup, Textarea, TextField } from "@navikt/ds-react";
+import { Radio, RadioGroup, TextField } from "@navikt/ds-react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { z } from "zod";
 
@@ -104,23 +104,6 @@ export function PaLandForm() {
             )}
           />
         </div>
-      )}
-
-      {fastEllerVekslendeArbeidssted ===
-        FastEllerVekslendeArbeidssted.VEKSLENDE && (
-        <Controller
-          control={control}
-          name="paLand.beskrivelseVekslende"
-          render={({ field, fieldState }) => (
-            <Textarea
-              {...field}
-              className="mt-4"
-              error={translateError(fieldState.error?.message)}
-              label={felter.beskrivelseVekslende.label}
-              value={field.value ?? ""}
-            />
-          )}
-        />
       )}
 
       <RadioGroupJaNeiFormPart
