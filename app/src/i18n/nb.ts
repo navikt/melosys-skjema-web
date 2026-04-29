@@ -208,7 +208,6 @@ export const nb = {
       nummerErPakrevd: "Nummer er påkrevd",
       postkodeErPakrevd: "Postkode er påkrevd",
       byStedErPakrevd: "By/sted/region er påkrevd",
-      beskrivelseErPakrevd: "Beskrivelse er påkrevd",
       navnPaInnretningErPakrevd: "Navn på innretning er påkrevd",
       duMaVelgeTypeInnretning: "Du må velge hvilken type innretning dette er",
       sokkelLandErPakrevd: "Du må velge hvilket lands sokkel dette er",

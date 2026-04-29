@@ -27,8 +27,6 @@ export const paLandSchema = z.object({
       erHjemmekontor: z.boolean({
         error: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
       }),
-      // VEKSLENDE fields
-      beskrivelseVekslende: z.string().optional(),
     })
     .refine(
       (data) =>
@@ -89,17 +87,6 @@ export const paLandSchema = z.object({
       (data) =>
         data.fastEllerVekslendeArbeidssted !==
           FastEllerVekslendeArbeidssted.VEKSLENDE ||
-        !!data.beskrivelseVekslende?.trim(),
-      {
-        message: "arbeidsstedIUtlandetSteg.beskrivelseErPakrevd",
-        path: ["beskrivelseVekslende"],
-        when: () => true,
-      },
-    )
-    .refine(
-      (data) =>
-        data.fastEllerVekslendeArbeidssted !==
-          FastEllerVekslendeArbeidssted.VEKSLENDE ||
         data.erHjemmekontor !== undefined,
       {
         message: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
@@ -114,12 +101,6 @@ export const paLandSchema = z.object({
         data.fastEllerVekslendeArbeidssted ===
         FastEllerVekslendeArbeidssted.FAST
           ? data.fastArbeidssted
-          : undefined,
-      // Clear VEKSLENDE fields when FAST
-      beskrivelseVekslende:
-        data.fastEllerVekslendeArbeidssted ===
-        FastEllerVekslendeArbeidssted.VEKSLENDE
-          ? data.beskrivelseVekslende
           : undefined,
     }))
     .optional(),

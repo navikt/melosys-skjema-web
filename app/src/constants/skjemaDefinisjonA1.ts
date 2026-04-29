@@ -381,11 +381,6 @@ const SKJEMA_DEFINISJON_A1_NB = {
           label: "By/sted/region",
           pakrevd: false,
         },
-        beskrivelseVekslende: {
-          type: "TEXTAREA",
-          label: "Beskriv hvor arbeidstakeren skal jobbe",
-          pakrevd: false,
-        },
         erHjemmekontor: {
           type: "BOOLEAN",
           label: "Er arbeidstakeren utsendt for å jobbe på hjemmekontor?",
@@ -952,11 +947,6 @@ const SKJEMA_DEFINISJON_A1_EN = {
         bySted: {
           type: "TEXT",
           label: "City/place/region",
-          pakrevd: false,
-        },
-        beskrivelseVekslende: {
-          type: "TEXTAREA",
-          label: "Describe where the employee will work",
           pakrevd: false,
         },
         erHjemmekontor: {

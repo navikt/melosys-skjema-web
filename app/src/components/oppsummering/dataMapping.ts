@@ -34,7 +34,6 @@ function flattenPaLand(
     nummer: paLand.fastArbeidssted?.nummer,
     postkode: paLand.fastArbeidssted?.postkode,
     bySted: paLand.fastArbeidssted?.bySted,
-    beskrivelseVekslende: paLand.beskrivelseVekslende,
     erHjemmekontor: paLand.erHjemmekontor,
   };
 }

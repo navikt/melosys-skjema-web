@@ -27,13 +27,38 @@ local:
 	@if docker images -q melosys-skjema-web-express-server 2>/dev/null | grep -q .; then \
 		printf "  \033[32m✓\033[0m Server image exists (skipping build)\n"; \
 	else \
-		printf "  \033[33m◐\033[0m Building server...      \r" && \
-		cd server && docker compose build >/dev/null 2>&1 && \
-		printf "  \033[32m✓\033[0m Server built           \n"; \
+		BUILD_LOG=$$(mktemp -t melosys-local-build.XXXXXX); \
+		printf "  \033[33m◐\033[0m Building server...      \r"; \
+		if (cd server && docker compose build >"$$BUILD_LOG" 2>&1); then \
+			printf "  \033[32m✓\033[0m Server built           \n"; \
+		else \
+			printf "  \033[31m✗\033[0m Server build feilet    \n"; \
+			echo ""; \
+			echo "    Docker build feilet. Siste linjer fra build-logg:"; \
+			tail -n 60 "$$BUILD_LOG"; \
+			echo ""; \
+			echo "    Tips: Sjekk at Docker Desktop kjører og at ~/.npmrc finnes."; \
+			rm -f "$$BUILD_LOG"; \
+			exit 1; \
+		fi; \
+		rm -f "$$BUILD_LOG"; \
 	fi
-	@printf "  \033[33m◐\033[0m Starting server...      \r" && \
-		cd server && docker compose up -d >/dev/null 2>&1 && \
-		printf "  \033[32m✓\033[0m Server running         \n"
+	@UP_LOG=$$(mktemp -t melosys-local-up.XXXXXX); \
+	printf "  \033[33m◐\033[0m Starting server...      \r"; \
+	if (cd server && docker compose up -d >"$$UP_LOG" 2>&1); then \
+		printf "  \033[32m✓\033[0m Server running         \n"; \
+	else \
+		printf "  \033[31m✗\033[0m Server oppstart feilet \n"; \
+		echo ""; \
+		echo "    Docker compose up feilet. Siste linjer fra output:"; \
+		tail -n 60 "$$UP_LOG"; \
+		echo ""; \
+		echo "    Container-status:"; \
+		cd server && docker compose ps || true; \
+		rm -f "$$UP_LOG"; \
+		exit 1; \
+	fi; \
+	rm -f "$$UP_LOG"
 	@echo ""
 	@printf "  \033[1m→\033[0m Open \033[4mhttp://localhost:4000/vite-on\033[0m\n"
 	@printf "  \033[2mPress CTRL+C to stop\033[0m\n"
@@ -58,13 +83,38 @@ endif
 	@if docker images -q melosys-skjema-web-local-q2-express-server 2>/dev/null | grep -q .; then \
 		printf "  \033[32m✓\033[0m Server image exists (skipping build)\n"; \
 	else \
-		printf "  \033[33m◐\033[0m Building server...  \r" && \
-		cd server && docker compose -f docker-compose.local-q2.yaml build >/dev/null 2>&1 && \
-		printf "  \033[32m✓\033[0m Server built       \n"; \
+		BUILD_LOG=$$(mktemp -t melosys-local-q2-build.XXXXXX); \
+		printf "  \033[33m◐\033[0m Building server...  \r"; \
+		if (cd server && docker compose -f docker-compose.local-q2.yaml build >"$$BUILD_LOG" 2>&1); then \
+			printf "  \033[32m✓\033[0m Server built       \n"; \
+		else \
+			printf "  \033[31m✗\033[0m Server build feilet\n"; \
+			echo ""; \
+			echo "    Docker build feilet. Siste linjer fra build-logg:"; \
+			tail -n 60 "$$BUILD_LOG"; \
+			echo ""; \
+			echo "    Tips: Sjekk at Docker Desktop kjører og at ~/.npmrc finnes."; \
+			rm -f "$$BUILD_LOG"; \
+			exit 1; \
+		fi; \
+		rm -f "$$BUILD_LOG"; \
 	fi
-	@printf "  \033[33m◐\033[0m Starting server...  \r" && \
-		cd server && docker compose -f docker-compose.local-q2.yaml up -d >/dev/null 2>&1 && \
-		printf "  \033[32m✓\033[0m Server running     \n"
+	@UP_LOG=$$(mktemp -t melosys-local-q2-up.XXXXXX); \
+	printf "  \033[33m◐\033[0m Starting server...  \r"; \
+	if (cd server && docker compose -f docker-compose.local-q2.yaml up -d >"$$UP_LOG" 2>&1); then \
+		printf "  \033[32m✓\033[0m Server running     \n"; \
+	else \
+		printf "  \033[31m✗\033[0m Server oppstart feilet\n"; \
+		echo ""; \
+		echo "    Docker compose up feilet. Siste linjer fra output:"; \
+		tail -n 60 "$$UP_LOG"; \
+		echo ""; \
+		echo "    Container-status:"; \
+		cd server && docker compose -f docker-compose.local-q2.yaml ps || true; \
+		rm -f "$$UP_LOG"; \
+		exit 1; \
+	fi; \
+	rm -f "$$UP_LOG"
 	@echo ""
 	@printf "  \033[1m→\033[0m Open \033[4mhttp://localhost:4000/vite-on\033[0m\n"
 	@printf "  \033[2mPress CTRL+C to stop\033[0m\n"
