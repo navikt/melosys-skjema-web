@@ -61,7 +61,7 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
       />
       <Heading className="mt-8" level="1" size="large">
         {stepInfo?.icon ? (
-          <HStack align="center" gap="space-16">
+          <HStack as="span" align="center" gap="space-16">
             {title}
             <stepInfo.icon aria-hidden fontSize="2rem" />
           </HStack>

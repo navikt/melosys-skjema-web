@@ -34,7 +34,7 @@ export function SeksjonOppsummering({
       <FormSummary.Header>
         <FormSummary.Heading level="3">
           {Icon ? (
-            <HStack align="center" gap="space-8">
+            <HStack as="span" align="center" gap="space-8">
               {seksjon.tittel}
               <Icon aria-hidden fontSize="1.5rem" />
             </HStack>

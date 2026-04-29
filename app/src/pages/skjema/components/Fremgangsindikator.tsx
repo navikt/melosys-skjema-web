@@ -35,7 +35,7 @@ export const Fremgangsindikator = ({
       {stegRekkefolge.map((step) => (
         <FremgangsindikatorSteg href={step.key} key={step.key}>
           {step.icon ? (
-            <HStack align="center" gap="space-2">
+            <HStack as="span" align="center" gap="space-2">
               {t(step.title)}
               <step.icon aria-hidden fontSize="1.5rem" />
             </HStack>
