@@ -13,12 +13,14 @@ interface SeksjonOppsummeringProps {
   editHref?: string;
   stepKey?: StegKey;
   icon?: ComponentType<SVGProps<SVGSVGElement>>;
+  iconLabel?: string;
 }
 
 export function SeksjonOppsummering({
   data,
   editHref,
   icon: Icon,
+  iconLabel,
   seksjon,
 }: SeksjonOppsummeringProps) {
   const { t } = useTranslation();
@@ -36,7 +38,12 @@ export function SeksjonOppsummering({
           {Icon ? (
             <HStack as="span" align="center" gap="space-8">
               {seksjon.tittel}
-              <Icon aria-hidden fontSize="1.5rem" />
+              <Icon
+                aria-label={iconLabel ? t(iconLabel) : undefined}
+                aria-hidden={iconLabel ? undefined : true}
+                role={iconLabel ? "img" : undefined}
+                fontSize="1.5rem"
+              />
             </HStack>
           ) : (
             seksjon.tittel

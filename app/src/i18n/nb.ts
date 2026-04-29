@@ -41,6 +41,8 @@ export const nb = {
       valgtOrganisasjon: "Valgt organisasjon",
       navn: "Navn",
       ugyldigFodselsnummerEllerDnummer: "Ugyldig fødselsnummer eller D-nummer",
+      stegGjelderArbeidsgiver: "Dette steget gjelder arbeidsgiver",
+      stegGjelderArbeidstaker: "Dette steget gjelder arbeidstaker",
     },
     periode: {
       fraDato: "Fra dato",

@@ -11,6 +11,7 @@ export interface StegRekkefolgeItem {
   title: string;
   route: string;
   icon?: ComponentType<SVGProps<SVGSVGElement>>;
+  iconLabel?: string;
 }
 
 type FremgangsindikatorProps = {
@@ -35,9 +36,14 @@ export const Fremgangsindikator = ({
       {stegRekkefolge.map((step) => (
         <FremgangsindikatorSteg href={step.key} key={step.key}>
           {step.icon ? (
-            <HStack as="span" align="center" gap="space-2">
+            <HStack as="span" align="center" gap="space-4">
               {t(step.title)}
-              <step.icon aria-hidden fontSize="1.5rem" />
+              <step.icon
+                aria-label={step.iconLabel ? t(step.iconLabel) : undefined}
+                aria-hidden={step.iconLabel ? undefined : true}
+                role={step.iconLabel ? "img" : undefined}
+                fontSize="1.5rem"
+              />
             </HStack>
           ) : (
             t(step.title)

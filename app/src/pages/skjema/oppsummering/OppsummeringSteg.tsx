@@ -65,6 +65,7 @@ function OppsummeringStegContent({
               seksjon={seksjon}
               stepKey={steg?.key}
               icon={steg?.icon}
+              iconLabel={steg?.iconLabel}
             />
           </Fragment>
         );

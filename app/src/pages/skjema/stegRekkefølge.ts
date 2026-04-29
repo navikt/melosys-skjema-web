@@ -9,6 +9,7 @@ const ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE_STEG: StegRekkefolgeItem = {
   title: "arbeidsgiverensVirksomhetINorgeSteg.tittel",
   route: "/skjema/$id/arbeidsgiverens-virksomhet-i-norge",
   icon: BriefcaseIcon,
+  iconLabel: "felles.stegGjelderArbeidsgiver",
 };
 
 const UTENLANDSOPPDRAGET_STEG: StegRekkefolgeItem = {
@@ -16,6 +17,7 @@ const UTENLANDSOPPDRAGET_STEG: StegRekkefolgeItem = {
   title: "utenlandsoppdragetSteg.tittel",
   route: "/skjema/$id/utenlandsoppdraget",
   icon: BriefcaseIcon,
+  iconLabel: "felles.stegGjelderArbeidsgiver",
 };
 
 const ARBEIDSSTED_I_UTLANDET_STEG: StegRekkefolgeItem = {
@@ -23,6 +25,7 @@ const ARBEIDSSTED_I_UTLANDET_STEG: StegRekkefolgeItem = {
   title: "arbeidsstedIUtlandetSteg.tittel",
   route: "/skjema/$id/arbeidssted-i-utlandet",
   icon: BriefcaseIcon,
+  iconLabel: "felles.stegGjelderArbeidsgiver",
 };
 
 const ARBEIDSTAKERENS_LONN_STEG: StegRekkefolgeItem = {
@@ -30,6 +33,7 @@ const ARBEIDSTAKERENS_LONN_STEG: StegRekkefolgeItem = {
   title: "arbeidstakerenslonnSteg.tittel",
   route: "/skjema/$id/arbeidstakerens-lonn",
   icon: BriefcaseIcon,
+  iconLabel: "felles.stegGjelderArbeidsgiver",
 };
 
 const UTSENDINGSPERIODE_OG_LAND_STEG: StegRekkefolgeItem = {
@@ -43,6 +47,7 @@ const ARBEIDSSITUASJON_STEG: StegRekkefolgeItem = {
   title: "arbeidssituasjonSteg.tittel",
   route: "/skjema/$id/arbeidssituasjon",
   icon: PersonRectangleIcon,
+  iconLabel: "felles.stegGjelderArbeidstaker",
 };
 
 const SKATTEFORHOLD_OG_INNTEKT_STEG: StegRekkefolgeItem = {
@@ -50,6 +55,7 @@ const SKATTEFORHOLD_OG_INNTEKT_STEG: StegRekkefolgeItem = {
   title: "skatteforholdOgInntektSteg.tittel",
   route: "/skjema/$id/skatteforhold-og-inntekt",
   icon: PersonRectangleIcon,
+  iconLabel: "felles.stegGjelderArbeidstaker",
 };
 
 const FAMILIEMEDLEMMER_STEG: StegRekkefolgeItem = {
@@ -57,6 +63,7 @@ const FAMILIEMEDLEMMER_STEG: StegRekkefolgeItem = {
   title: "familiemedlemmerSteg.tittel",
   route: "/skjema/$id/familiemedlemmer",
   icon: PersonRectangleIcon,
+  iconLabel: "felles.stegGjelderArbeidstaker",
 };
 
 const TILLEGGSOPPLYSNINGER_STEG: StegRekkefolgeItem = {
