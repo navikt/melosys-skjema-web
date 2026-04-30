@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "../../fixtures/test";
 
 import { mockUserInfo } from "../../fixtures/api-mocks";
 import { testUserInfo } from "../../fixtures/test-data";

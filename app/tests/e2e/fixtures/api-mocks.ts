@@ -15,6 +15,19 @@ import type {
 
 import { skjemaInnsendtKvittering } from "./test-data";
 
+// Catch-all for backend-kall i e2e: returner 404 raskt slik at ingenting når
+// vite-proxyen (som ellers spammer ECONNREFUSED i CI). Spec-spesifikke
+// page.route()-kall registreres etterpå og overstyrer pga LIFO-prioritering.
+export async function mockApiCatchAll(page: Page) {
+  await page.route(/\/(api|nav-dekoratoren-api)\//, async (route) => {
+    await route.fulfill({
+      status: 404,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "Not mocked in e2e" }),
+    });
+  });
+}
+
 export async function mockHentTilganger(
   page: Page,
   organisasjoner: OrganisasjonDto[],

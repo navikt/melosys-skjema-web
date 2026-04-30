@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "../../fixtures/test";
 
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../../fixtures/test";
 
 import { nb } from "~/i18n/nb";
 import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes";
