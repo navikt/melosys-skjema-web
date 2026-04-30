@@ -1,5 +1,3 @@
-import { expect, test } from "../fixtures/test";
-
 import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
@@ -10,6 +8,7 @@ import {
   mockVerifiserPerson,
   setupApiMocksForOversikt,
 } from "../fixtures/api-mocks";
+import { expect, test } from "../fixtures/test";
 import {
   emptyInnsendteSoknader,
   emptyUtkastListe,

@@ -1,6 +1,5 @@
-import { test } from "../../fixtures/test";
-
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import {
   formFieldValues,
   testArbeidstakerSkjema,

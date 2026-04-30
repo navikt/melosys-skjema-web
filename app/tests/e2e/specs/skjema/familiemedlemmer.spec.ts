@@ -1,8 +1,7 @@
-import { expect, test } from "../../fixtures/test";
-
 import { FamiliemedlemmerDto } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
+import { expect, test } from "../../fixtures/test";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
 import { FamiliemedlemmerStegPage } from "../../pages/skjema/familiemedlemmer-steg.page";
 

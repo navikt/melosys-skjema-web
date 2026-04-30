@@ -1,11 +1,10 @@
-import { test } from "../../fixtures/test";
-
 import { TilleggsopplysningerDto } from "~/types/melosysSkjemaTypes";
 
 import {
   setupApiMocksForArbeidsgiver,
   setupApiMocksForArbeidstaker,
 } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testArbeidstakerSkjema,

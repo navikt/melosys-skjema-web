@@ -1,5 +1,3 @@
-import { test } from "../../fixtures/test";
-
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidssituasjonDto,
@@ -20,6 +18,7 @@ import {
   setupApiMocksForArbeidstaker,
   setupApiMocksForKombinert,
 } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import {
   formFieldValues,
   testArbeidsgiverSkjema,

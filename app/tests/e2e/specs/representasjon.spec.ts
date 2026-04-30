@@ -1,10 +1,9 @@
-import { test } from "../fixtures/test";
-
 import {
   mockGetEregOrganisasjon,
   mockGetEregOrganisasjonMedJuridiskEnhet,
   mockUserInfo,
 } from "../fixtures/api-mocks";
+import { test } from "../fixtures/test";
 import { korrektFormatertOrgnr, testUserInfo } from "../fixtures/test-data";
 import { RepresentasjonPage } from "../pages/representasjon/representasjon.page";
 import { VelgRadgiverfirmaPage } from "../pages/representasjon/velg-radgiverfirma.page";

@@ -1,6 +1,5 @@
-import { test } from "../../fixtures/test";
-
 import { mockUserInfo } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import { testUserInfo } from "../../fixtures/test-data";
 import { VelgRadgiverfirmaPage } from "../../pages/representasjon/velg-radgiverfirma.page";
 

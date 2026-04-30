@@ -1,6 +1,5 @@
-import { test } from "../../fixtures/test";
-
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
 import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidssituasjon-steg.page";
 

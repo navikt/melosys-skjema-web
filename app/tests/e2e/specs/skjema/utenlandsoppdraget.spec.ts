@@ -1,8 +1,7 @@
-import { expect, test } from "../../fixtures/test";
-
 import { UtenlandsoppdragetDto } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
+import { expect, test } from "../../fixtures/test";
 import {
   formFieldValues,
   testArbeidsgiverSkjema,
