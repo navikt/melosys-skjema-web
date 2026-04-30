@@ -57,9 +57,12 @@ export class FamiliemedlemmerStegPage {
       name: familiemedlemmerSeksjon.tittel,
     });
 
-    const harDuFamiliemedlemmerSomSkalVaereMedGroup = page.getByRole("group", {
-      name: felter.skalHaMedFamiliemedlemmer.label,
-    });
+    const harDuFamiliemedlemmerSomSkalVaereMedGroup = page.getByRole(
+      "radiogroup",
+      {
+        name: felter.skalHaMedFamiliemedlemmer.label,
+      },
+    );
     this.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup = {
       JA: harDuFamiliemedlemmerSomSkalVaereMedGroup.getByRole("radio", {
         name: nb.translation.felles.ja,
@@ -80,7 +83,7 @@ export class FamiliemedlemmerStegPage {
       elementDef.etternavn.label,
     );
 
-    const modalHarNorskFnrGroup = this.modal.getByRole("group", {
+    const modalHarNorskFnrGroup = this.modal.getByRole("radiogroup", {
       name: elementDef.harNorskFodselsnummerEllerDnummer.label,
     });
     this.modalHarNorskFnrRadioGroup = {
@@ -148,7 +151,7 @@ export class FamiliemedlemmerStegPage {
   // --- Validation assertions: hoveddelen ---
 
   private skalHaMedFamiliemedlemmerFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.skalHaMedFamiliemedlemmer.label,
     });
   }

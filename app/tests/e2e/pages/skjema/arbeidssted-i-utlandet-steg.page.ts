@@ -131,7 +131,7 @@ export class ArbeidsstedIUtlandetStegPage {
     );
 
     // På land
-    const fastEllerVekslendeGroup = page.getByRole("group", {
+    const fastEllerVekslendeGroup = page.getByRole("radiogroup", {
       name: paLandFelter.fastEllerVekslendeArbeidssted.label,
     });
     this.fastEllerVekslendeRadioGroup = {
@@ -148,7 +148,7 @@ export class ArbeidsstedIUtlandetStegPage {
     this.postkodeInput = page.getByLabel(paLandFelter.postkode.label);
     this.byStedInput = page.getByLabel(paLandFelter.bySted.label);
 
-    const erHjemmekontorGroup = page.getByRole("group", {
+    const erHjemmekontorGroup = page.getByRole("radiogroup", {
       name: paLandFelter.erHjemmekontor.label,
     });
     this.erHjemmekontorRadioGroup = {
@@ -165,7 +165,7 @@ export class ArbeidsstedIUtlandetStegPage {
       offshoreFelter.navnPaInnretning.label,
     );
 
-    const typeInnretningGroup = page.getByRole("group", {
+    const typeInnretningGroup = page.getByRole("radiogroup", {
       name: offshoreFelter.typeInnretning.label,
     });
     this.typeInnretningRadioGroup = {
@@ -187,7 +187,7 @@ export class ArbeidsstedIUtlandetStegPage {
       paSkipFelter.yrketTilArbeidstaker.label,
     );
 
-    const seilerIGroup = page.getByRole("group", {
+    const seilerIGroup = page.getByRole("radiogroup", {
       name: paSkipFelter.seilerI.label,
     });
     this.seilerIRadioGroup = {
@@ -214,7 +214,7 @@ export class ArbeidsstedIUtlandetStegPage {
       omBordPaFlyFelter.hjemmebaseNavn.label,
     );
 
-    const erVanligHjemmebaseGroup = page.getByRole("group", {
+    const erVanligHjemmebaseGroup = page.getByRole("radiogroup", {
       name: omBordPaFlyFelter.erVanligHjemmebase.label,
     });
     this.erVanligHjemmebaseRadioGroup = {
@@ -307,7 +307,7 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   private fastEllerVekslendeFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: paLandFelter.fastEllerVekslendeArbeidssted.label,
     });
   }
@@ -321,7 +321,7 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   private erHjemmekontorFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: paLandFelter.erHjemmekontor.label,
     });
   }
@@ -367,7 +367,7 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   private typeInnretningFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: offshoreFelter.typeInnretning.label,
     });
   }
@@ -401,7 +401,7 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   private seilerIFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: paSkipFelter.seilerI.label,
     });
   }
@@ -439,7 +439,7 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   private erVanligHjemmebaseFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: omBordPaFlyFelter.erVanligHjemmebase.label,
     });
   }
