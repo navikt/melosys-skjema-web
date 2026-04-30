@@ -9,6 +9,9 @@ import {
   ARBEIDSTAKERS_DEL,
 } from "~/pages/skjema/types.ts";
 import {
+  ArbeidsstedType,
+  FastEllerVekslendeArbeidssted,
+  LandKode,
   type SkjemaDefinisjonDto,
   Skjemadel,
   type UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
@@ -21,7 +24,7 @@ import { resolveSeksjoner } from "./dataMapping.ts";
 const definisjon = SKJEMA_DEFINISJON_A1 as unknown as SkjemaDefinisjonDto;
 
 const utsendingsperiodeOgLand = {
-  utsendelseLand: "SE",
+  utsendelseLand: LandKode.SE,
   utsendelsePeriode: { fraDato: "2026-01-01", tilDato: "2026-12-31" },
 };
 
@@ -53,10 +56,10 @@ const arbeidsgiversDelDto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
     arbeidstakerErstatterAnnenPerson: false,
   },
   arbeidsstedIUtlandet: {
-    arbeidsstedType: "PA_LAND",
+    arbeidsstedType: ArbeidsstedType.PA_LAND,
     paLand: {
       navnPaVirksomhet: "Test AS",
-      fastEllerVekslendeArbeidssted: "FAST",
+      fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
       erHjemmekontor: false,
     },
   },
