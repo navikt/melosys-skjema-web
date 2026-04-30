@@ -450,7 +450,7 @@ export const en = {
     },
     oversiktBekreftelse: {
       intro:
-        "It is important that you give us correct information so we can process your case.",
+        "It is important that you give us correct information so we can process the case.",
       linkText:
         "Read more about why it is important to provide correct information.",
       linkUrl: "https://www.nav.no/endringer/en",

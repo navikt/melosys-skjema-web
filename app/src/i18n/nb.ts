@@ -329,7 +329,7 @@ export const nb = {
     },
     oversiktBekreftelse: {
       intro:
-        "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken din.",
+        "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken.",
       linkText: "Les mer om viktigheten av å gi riktige opplysninger.",
       linkUrl: "https://www.nav.no/endringer",
       bekreftAtVilSvareRiktig:
