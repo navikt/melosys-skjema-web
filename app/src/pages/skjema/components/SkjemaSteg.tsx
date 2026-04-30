@@ -63,12 +63,9 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         {stepInfo?.icon ? (
           <HStack as="span" align="center" gap="space-16">
             {title}
-            <stepInfo.icon
-              aria-label={
-                stepInfo.iconLabel ? t(stepInfo.iconLabel) : undefined
-              }
-              aria-hidden={stepInfo.iconLabel ? undefined : true}
-              role={stepInfo.iconLabel ? "img" : undefined}
+            <stepInfo.icon.icon
+              aria-label={t(stepInfo.icon.ariaLabel)}
+              role="img"
               fontSize="2rem"
             />
           </HStack>

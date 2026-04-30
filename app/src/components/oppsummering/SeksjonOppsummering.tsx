@@ -1,8 +1,7 @@
 import { FormSummary, HStack } from "@navikt/ds-react";
-import { ComponentType, SVGProps } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { StegKey } from "~/constants/stegKeys.ts";
+import type { StegIkon } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import type { SeksjonDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { FeltOppsummering } from "./FeltOppsummering.tsx";
@@ -11,16 +10,13 @@ interface SeksjonOppsummeringProps {
   seksjon: SeksjonDefinisjonDto;
   data: Record<string, unknown>;
   editHref?: string;
-  stepKey?: StegKey;
-  icon?: ComponentType<SVGProps<SVGSVGElement>>;
-  iconLabel?: string;
+  icon?: StegIkon;
 }
 
 export function SeksjonOppsummering({
   data,
   editHref,
-  icon: Icon,
-  iconLabel,
+  icon,
   seksjon,
 }: SeksjonOppsummeringProps) {
   const { t } = useTranslation();
@@ -35,13 +31,12 @@ export function SeksjonOppsummering({
     <FormSummary className="mt-8">
       <FormSummary.Header>
         <FormSummary.Heading level="3">
-          {Icon ? (
+          {icon ? (
             <HStack as="span" align="center" gap="space-8">
               {seksjon.tittel}
-              <Icon
-                aria-label={iconLabel ? t(iconLabel) : undefined}
-                aria-hidden={iconLabel ? undefined : true}
-                role={iconLabel ? "img" : undefined}
+              <icon.icon
+                aria-label={t(icon.ariaLabel)}
+                role="img"
                 fontSize="1.5rem"
               />
             </HStack>
