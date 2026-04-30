@@ -1,8 +1,7 @@
-import { test } from "@playwright/test";
-
 import { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
 import { SkatteforholdOgInntektStegPage } from "../../pages/skjema/skatteforhold-og-inntekt-steg.page";
 

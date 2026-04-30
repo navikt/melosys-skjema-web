@@ -1,5 +1,3 @@
-import { expect, test } from "@playwright/test";
-
 import { VedleggFiltype } from "~/types/melosysSkjemaTypes";
 
 import {
@@ -8,6 +6,7 @@ import {
   setupApiMocksForArbeidsgiver,
   setupApiMocksForArbeidstaker,
 } from "../../fixtures/api-mocks";
+import { expect, test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testArbeidstakerSkjema,

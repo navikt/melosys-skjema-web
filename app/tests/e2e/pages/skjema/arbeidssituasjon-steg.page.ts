@@ -46,7 +46,7 @@ export class ArbeidssituasjonStegPage {
       name: arbeidssituasjon.tittel,
     });
 
-    const harVaertGroup = page.getByRole("group", {
+    const harVaertGroup = page.getByRole("radiogroup", {
       name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
     });
     this.harVaertILonnetArbeidRadioGroup = {
@@ -62,7 +62,7 @@ export class ArbeidssituasjonStegPage {
       felter.aktivitetIMaanedenFoerUtsendingen.label,
     );
 
-    const skalJobbeGroup = page.getByRole("group", {
+    const skalJobbeGroup = page.getByRole("radiogroup", {
       name: felter.skalJobbeForFlereVirksomheter.label,
     });
     this.skalJobbeForFlereVirksomheterRadioGroup = {
@@ -149,7 +149,7 @@ export class ArbeidssituasjonStegPage {
       })
       .selectOption(opts.land);
 
-    const konsernGroup = dialog.getByRole("group", {
+    const konsernGroup = dialog.getByRole("radiogroup", {
       name: t.utenlandskeVirksomheterFormPart
         .tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren,
     });
@@ -158,7 +158,7 @@ export class ArbeidssituasjonStegPage {
       : konsernGroup.getByRole("radio", { name: t.felles.nei }).click());
 
     // Ansettelsesform radio group (only in arbeidssituasjon context)
-    const ansettelsesformGroup = dialog.getByRole("group", {
+    const ansettelsesformGroup = dialog.getByRole("radiogroup", {
       name: t.utenlandskeVirksomheterFormPart.ansettelsesform,
     });
     await ansettelsesformGroup
@@ -202,13 +202,13 @@ export class ArbeidssituasjonStegPage {
   // --- Validation assertions ---
 
   private harVaertILonnetArbeidFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
     });
   }
 
   private skalJobbeForFlereVirksomheterFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.skalJobbeForFlereVirksomheter.label,
     });
   }

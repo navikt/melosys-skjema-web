@@ -1,6 +1,5 @@
-import { test } from "@playwright/test";
-
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testOrganization,

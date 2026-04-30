@@ -1,5 +1,3 @@
-import { test } from "@playwright/test";
-
 import {
   type DegSelvMetadata,
   Representasjonstype,
@@ -15,6 +13,7 @@ import {
   mockSkjemaMetadata,
   mockUserInfo,
 } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import { testUserInfo } from "../../fixtures/test-data";
 import { KvitteringPage } from "../../pages/skjema/kvittering-page";
 

@@ -102,7 +102,7 @@ page.getByRole("heading", { name: stegTittel });
 page.getByRole("button", { name: nb.translation.felles.lagreOgFortsett });
 
 // Radio button groups (use RadioButtonGroupJaNeiLocator type)
-const group = page.getByRole("group", { name: felter.fieldName.label });
+const group = page.getByRole("radiogroup", { name: felter.fieldName.label });
 const radioGroup: RadioButtonGroupJaNeiLocator = {
   JA: group.getByRole("radio", { name: nb.translation.felles.ja }),
   NEI: group.getByRole("radio", { name: nb.translation.felles.nei }),

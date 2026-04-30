@@ -39,7 +39,7 @@ export class TilleggsopplysningerStegPage {
       name: tilleggsopplysninger.tittel,
     });
 
-    const harFlereOpplysningerGroup = page.getByRole("group", {
+    const harFlereOpplysningerGroup = page.getByRole("radiogroup", {
       name: felter.harFlereOpplysningerTilSoknaden.label,
     });
     this.harFlereOpplysningerRadioGroup = {
@@ -101,7 +101,7 @@ export class TilleggsopplysningerStegPage {
   // --- Validation assertions ---
 
   private harFlereOpplysningerFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.harFlereOpplysningerTilSoknaden.label,
     });
   }

@@ -1,11 +1,10 @@
-import { test } from "@playwright/test";
-
 import {
   mockFetchSkjema,
   mockInnsendtSkjema,
   mockSkjemaMetadata,
   mockUserInfo,
 } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testArbeidstakerSkjema,

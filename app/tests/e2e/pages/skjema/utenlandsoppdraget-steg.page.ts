@@ -62,7 +62,7 @@ export class UtenlandsoppdragetStegPage {
       name: utenlandsoppdraget.tittel,
     });
 
-    const arbeidsgiverHarOppdragILandetGroup = page.getByRole("group", {
+    const arbeidsgiverHarOppdragILandetGroup = page.getByRole("radiogroup", {
       name: felter.arbeidsgiverHarOppdragILandet.label,
     });
     this.arbeidsgiverHarOppdragILandetRadioGroup = {
@@ -75,7 +75,7 @@ export class UtenlandsoppdragetStegPage {
     };
 
     const arbeidstakerBleAnsattForUtenlandsoppdragetGroup = page.getByRole(
-      "group",
+      "radiogroup",
       {
         name: felter.arbeidstakerBleAnsattForUtenlandsoppdraget.label,
       },
@@ -90,7 +90,7 @@ export class UtenlandsoppdragetStegPage {
     };
 
     const arbeidstakerForblirAnsattIHelePeriodenGroup = page.getByRole(
-      "group",
+      "radiogroup",
       {
         name: felter.arbeidstakerForblirAnsattIHelePerioden.label,
       },
@@ -104,7 +104,7 @@ export class UtenlandsoppdragetStegPage {
       }),
     };
 
-    const arbeidstakerErstatterAnnenPersonGroup = page.getByRole("group", {
+    const arbeidstakerErstatterAnnenPersonGroup = page.getByRole("radiogroup", {
       name: felter.arbeidstakerErstatterAnnenPerson.label,
     });
     this.arbeidstakerErstatterAnnenPersonRadioGroup = {
@@ -117,9 +117,13 @@ export class UtenlandsoppdragetStegPage {
     };
 
     // Conditional fields
-    const arbeidstakerVilJobbeEtterOppdragetGroup = page.getByRole("group", {
-      name: felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget.label,
-    });
+    const arbeidstakerVilJobbeEtterOppdragetGroup = page.getByRole(
+      "radiogroup",
+      {
+        name: felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget
+          .label,
+      },
+    );
     this.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdragetRadioGroup = {
       JA: arbeidstakerVilJobbeEtterOppdragetGroup.getByRole("radio", {
         name: nb.translation.felles.ja,
@@ -207,25 +211,25 @@ export class UtenlandsoppdragetStegPage {
   // --- Validation assertions: always-required boolean fields ---
 
   private harOppdragILandetFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.arbeidsgiverHarOppdragILandet.label,
     });
   }
 
   private bleAnsattForUtenlandsoppdragetFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.arbeidstakerBleAnsattForUtenlandsoppdraget.label,
     });
   }
 
   private forblirAnsattIHelePeriodenFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.arbeidstakerForblirAnsattIHelePerioden.label,
     });
   }
 
   private erstatterAnnenPersonFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.arbeidstakerErstatterAnnenPerson.label,
     });
   }
@@ -265,7 +269,7 @@ export class UtenlandsoppdragetStegPage {
   // --- Validation assertions: conditional fields ---
 
   private vilJobbeEtterOppdragetFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget.label,
     });
   }

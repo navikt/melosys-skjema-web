@@ -50,7 +50,7 @@ export class ArbeidstakerensLonnStegPage {
     });
 
     const arbeidsgiverBetalerAllLonnOgNaturaytelserGroup = page.getByRole(
-      "group",
+      "radiogroup",
       {
         name: felter
           .arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden.label,
@@ -140,7 +140,7 @@ export class ArbeidstakerensLonnStegPage {
       })
       .selectOption(opts.land);
 
-    const konsernGroup = dialog.getByRole("group", {
+    const konsernGroup = dialog.getByRole("radiogroup", {
       name: t.utenlandskeVirksomheterFormPart
         .tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren,
     });
@@ -189,7 +189,7 @@ export class ArbeidstakerensLonnStegPage {
   // --- Validation assertions ---
 
   private betalerAllLonnFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
         .label,
     });

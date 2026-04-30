@@ -1,5 +1,3 @@
-import { expect, test } from "@playwright/test";
-
 import {
   ArbeidsstedIUtlandetDto,
   ArbeidsstedType,
@@ -10,6 +8,7 @@ import {
 } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
+import { expect, test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testOrganization,

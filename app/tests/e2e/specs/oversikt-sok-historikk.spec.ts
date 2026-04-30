@@ -1,5 +1,3 @@
-import { test } from "@playwright/test";
-
 import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
@@ -10,6 +8,7 @@ import {
   mockUserInfo,
   mockUtkastListe,
 } from "../fixtures/api-mocks";
+import { test } from "../fixtures/test";
 import {
   emptyInnsendteSoknader,
   emptyUtkastListe,

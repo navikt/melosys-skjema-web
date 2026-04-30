@@ -44,7 +44,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
       name: virksomhetINorge.tittel,
     });
 
-    const offentligVirksomhetGroup = page.getByRole("group", {
+    const offentligVirksomhetGroup = page.getByRole("radiogroup", {
       name: felter.erArbeidsgiverenOffentligVirksomhet.label,
     });
     this.offentligVirksomhetRadioGroup = {
@@ -56,7 +56,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
       }),
     };
 
-    const bemanningsEllerVikarbyraGroup = page.getByRole("group", {
+    const bemanningsEllerVikarbyraGroup = page.getByRole("radiogroup", {
       name: felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label,
     });
     this.bemanningsEllerVikarbyraRadioGroup = {
@@ -68,7 +68,7 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
       }),
     };
 
-    const vanligDriftGroup = page.getByRole("group", {
+    const vanligDriftGroup = page.getByRole("radiogroup", {
       name: felter.opprettholderArbeidsgiverenVanligDrift.label,
     });
     this.vanligDriftRadioGroup = {
@@ -142,19 +142,19 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
   // --- Validation assertions ---
 
   private offentligVirksomhetFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.erArbeidsgiverenOffentligVirksomhet.label,
     });
   }
 
   private bemanningsEllerVikarbyraFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label,
     });
   }
 
   private vanligDriftFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.opprettholderArbeidsgiverenVanligDrift.label,
     });
   }

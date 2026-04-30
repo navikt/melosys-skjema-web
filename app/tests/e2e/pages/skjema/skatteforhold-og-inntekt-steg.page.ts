@@ -49,7 +49,7 @@ export class SkatteforholdOgInntektStegPage {
       name: skatteforholdOgInntekt.tittel,
     });
 
-    const erSkattepliktigTilNorgeGroup = page.getByRole("group", {
+    const erSkattepliktigTilNorgeGroup = page.getByRole("radiogroup", {
       name: felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label,
     });
     this.erSkattepliktigTilNorgeRadioGroup = {
@@ -61,7 +61,7 @@ export class SkatteforholdOgInntektStegPage {
       }),
     };
 
-    const mottarPengestotteFraAnnetEosLandGroup = page.getByRole("group", {
+    const mottarPengestotteFraAnnetEosLandGroup = page.getByRole("radiogroup", {
       name: felter.mottarPengestotteFraAnnetEosLandEllerSveits.label,
     });
     this.mottarPengestotteFraAnnetEosLandRadioGroup = {
@@ -131,13 +131,13 @@ export class SkatteforholdOgInntektStegPage {
   // --- Validation assertions ---
 
   private erSkattepliktigFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label,
     });
   }
 
   private mottarPengestotteFieldset() {
-    return this.page.getByRole("group", {
+    return this.page.getByRole("radiogroup", {
       name: felter.mottarPengestotteFraAnnetEosLandEllerSveits.label,
     });
   }

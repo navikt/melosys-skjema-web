@@ -1,8 +1,7 @@
-import { test } from "@playwright/test";
-
 import { ArbeidsstedType } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
+import { test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testOrganization,

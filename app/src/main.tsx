@@ -72,7 +72,7 @@ createRoot(document.querySelector("#root")!).render(
   </StrictMode>,
 );
 
-// Valider at statisk skjemadefinisjon matcher backend (kun i utvikling)
-if (import.meta.env.DEV) {
+// Valider at statisk skjemadefinisjon matcher backend (kun i utvikling, og ikke under Playwright der backend ikke kjører)
+if (import.meta.env.DEV && !navigator.webdriver) {
   logSkjemaDefinisjonValidation();
 }
