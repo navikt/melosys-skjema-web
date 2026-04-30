@@ -1,4 +1,5 @@
-import { FormProgress } from "@navikt/ds-react";
+import { FormProgress, HStack } from "@navikt/ds-react";
+import { ComponentType, ReactNode, SVGProps } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { StegKey } from "~/constants/stegKeys.ts";
@@ -9,6 +10,12 @@ export interface StegRekkefolgeItem {
   key: StegKey;
   title: string;
   route: string;
+  icon?: StegIkon;
+}
+
+export interface StegIkon {
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  ariaLabel: string;
 }
 
 type FremgangsindikatorProps = {
@@ -31,10 +38,39 @@ export const Fremgangsindikator = ({
       totalSteps={stegRekkefolge.length}
     >
       {stegRekkefolge.map((step) => (
-        <FormProgress.Step href={step.key} key={step.key}>
-          {t(step.title)}
-        </FormProgress.Step>
+        <FremgangsindikatorSteg href={step.key} key={step.key}>
+          {step.icon ? (
+            <HStack as="span" align="center" gap="space-4">
+              {t(step.title)}
+              <step.icon.icon
+                aria-label={t(step.icon.ariaLabel)}
+                role="img"
+                fontSize="1.5rem"
+              />
+            </HStack>
+          ) : (
+            t(step.title)
+          )}
+        </FremgangsindikatorSteg>
       ))}
     </FormProgress>
   );
 };
+
+type FremgangsindikatorStegProps = Omit<
+  React.ComponentProps<typeof FormProgress.Step>,
+  "children"
+> & { children: ReactNode };
+
+/**
+ * Wrapper rundt FormProgress.Step som aksepterer ReactNode som children.
+ *
+ * FormProgress.Step krever children: string, men vi trenger å kunne
+ * rendre ikoner i tillegg til tekst.
+ */
+function FremgangsindikatorSteg({
+  children,
+  ...rest
+}: FremgangsindikatorStegProps) {
+  return <FormProgress.Step {...rest}>{children as string}</FormProgress.Step>;
+}

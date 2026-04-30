@@ -63,6 +63,7 @@ function OppsummeringStegContent({
               data={data}
               editHref={editHref}
               seksjon={seksjon}
+              icon={steg?.icon}
             />
           </Fragment>
         );
