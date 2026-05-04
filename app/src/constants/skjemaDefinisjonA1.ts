@@ -131,6 +131,51 @@ const SKJEMA_DEFINISJON_A1_NB = {
           label: "Hva slags pengestøtte mottar du",
           pakrevd: false,
         },
+        arbeidsinntektFraNorskEllerUtenlandskVirksomhet: {
+          type: "CHECKBOX_GROUP",
+          label:
+            "Får du arbeidsinntekten din fra en norsk eller utenlandsk virksomhet?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: undefined,
+              label: "Norsk virksomhet",
+            },
+            {
+              verdi: undefined,
+              label: "Utenlandsk virksomhet",
+            },
+          ],
+        },
+        hvilkenInntektHarDu: {
+          type: "CHECKBOX_GROUP",
+          label: "Hvilken inntekt har du?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: undefined,
+              label: "Lønn",
+            },
+            {
+              verdi: undefined,
+              label: "Inntekt fra egen virksomhet",
+            },
+          ],
+        },
+        inntekterFraNorskVirksomhet: {
+          type: "TEXTAREA",
+          label: "Inntekt",
+          pakrevd: false,
+          hjelpetekst:
+            "Du skal føre opp samlet månedlig inntekt, inkludert eventuelle utenlandstillegg og verdi av naturalytelser dekt av virksomheten. Hvis inntekten din varierer fra måned til måned, oppgi gjennomsnittlig inntekt i brutto per måned.",
+        },
+        inntekterFraEgenVirksomhet: {
+          type: "TEXTAREA",
+          label: "Inntekter fra egen virksomhet",
+          pakrevd: false,
+          hjelpetekst:
+            "Hvis inntekten din varierer, oppgi gjennomsnitlig inntekt i brutto per måned.",
+        },
       },
     },
     familiemedlemmer: {
@@ -695,6 +740,50 @@ const SKJEMA_DEFINISJON_A1_EN = {
           type: "TEXTAREA",
           label: "What kind of financial support do you receive",
           pakrevd: false,
+        },
+        arbeidsinntektFraNorskEllerUtenlandskVirksomhet: {
+          type: "CHECKBOX_GROUP",
+          label: "Is your work income from a Norwegian or foreign company?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: undefined,
+              label: "Norwegian company",
+            },
+            {
+              verdi: undefined,
+              label: "Foreign company",
+            },
+          ],
+        },
+        hvilkenInntektHarDu: {
+          type: "CHECKBOX_GROUP",
+          label: "What kind of income do you have?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: undefined,
+              label: "Salary",
+            },
+            {
+              verdi: undefined,
+              label: "Income from your own business",
+            },
+          ],
+        },
+        inntekterFraNorskVirksomhet: {
+          type: "TEXTAREA",
+          label: "Income",
+          pakrevd: false,
+          hjelpetekst:
+            "You should report your total monthly income, including any foreign allowances and the value of benefits in kind covered by the company. If your income varies from month to month, please state the average gross income per month.",
+        },
+        inntekterFraEgenVirksomhet: {
+          type: "TEXTAREA",
+          label: "Income from your own business",
+          pakrevd: false,
+          hjelpetekst:
+            "If your income varies from month to month, please state the average gross income per month.",
         },
       },
     },
