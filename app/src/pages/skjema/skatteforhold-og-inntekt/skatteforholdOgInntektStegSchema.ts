@@ -1,11 +1,13 @@
 import { z } from "zod";
 
+import { stripBelopFormatering } from "~/utils/belopFormat.ts";
+
 /** Gyldig beløp: positive kroner med øre (2 desimal plasser), eksempel: 1000,00 */
 const BELOP_REGEX = /^\d+,\d{2}$/;
 
 function erGyldigBelop(belop?: string): boolean {
   if (!belop) return false;
-  return BELOP_REGEX.test(belop.trim().replaceAll(/\s/g, ""));
+  return BELOP_REGEX.test(stripBelopFormatering(belop.trim()));
 }
 
 const checkboxGroupSchema = z.record(z.string(), z.boolean()).optional();
@@ -74,9 +76,9 @@ export const skatteforholdOgInntektSchema = z
   .refine(
     (data) => {
       if (!data.inntektFraNorskEllerUtenlandskVirksomhet) return true;
-      return Object.values(
-        data.inntektFraNorskEllerUtenlandskVirksomhet,
-      ).some(Boolean);
+      return Object.values(data.inntektFraNorskEllerUtenlandskVirksomhet).some(
+        Boolean,
+      );
     },
     {
       error: "skatteforholdOgInntektSteg.duMaVelgeMinsteEnInntektKilde",
@@ -99,11 +101,11 @@ export const skatteforholdOgInntektSchema = z
     (data) => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return true;
       const harNorskVirksomhet =
-        data.inntektFraNorskEllerUtenlandskVirksomhet
-          ?.NORSK_VIRKSOMHET === true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.NORSK_VIRKSOMHET ===
+        true;
       const harUtenlandskVirksomhet =
-        data.inntektFraNorskEllerUtenlandskVirksomhet
-          ?.UTENLANDSK_VIRKSOMHET === true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.UTENLANDSK_VIRKSOMHET ===
+        true;
       if (
         data.erSkattepliktigTilNorgeIHeleutsendingsperioden &&
         harNorskVirksomhet &&
@@ -114,8 +116,7 @@ export const skatteforholdOgInntektSchema = z
       return !!data.inntekt?.trim();
     },
     {
-      error:
-        "skatteforholdOgInntektSteg.duMaOppgiInntekt",
+      error: "skatteforholdOgInntektSteg.duMaOppgiInntekt",
       path: ["inntekt"],
       when: () => true,
     },
@@ -175,9 +176,9 @@ export const skatteforholdOgInntektSchema = z
     pengestotteSomMottasFraAndreLandBelop:
       data.mottarPengestotteFraAnnetEosLandEllerSveits &&
       data.pengestotteSomMottasFraAndreLandBelop
-        ? data.pengestotteSomMottasFraAndreLandBelop
-            .trim()
-            .replaceAll(/\s/g, "")
+        ? stripBelopFormatering(
+            data.pengestotteSomMottasFraAndreLandBelop.trim(),
+          )
         : undefined,
     inntektFraNorskEllerUtenlandskVirksomhet:
       data.inntektFraNorskEllerUtenlandskVirksomhet,
@@ -186,11 +187,11 @@ export const skatteforholdOgInntektSchema = z
     inntekt: (() => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return;
       const harNorsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet
-          ?.NORSK_VIRKSOMHET === true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.NORSK_VIRKSOMHET ===
+        true;
       const harUtenlandsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet
-          ?.UTENLANDSK_VIRKSOMHET === true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.UTENLANDSK_VIRKSOMHET ===
+        true;
       if (
         data.erSkattepliktigTilNorgeIHeleutsendingsperioden &&
         harNorsk &&
@@ -199,11 +200,13 @@ export const skatteforholdOgInntektSchema = z
         return;
       }
       return data.inntekt
-        ?.trim()
-        .replaceAll(/\s/g, "");
+        ? stripBelopFormatering(data.inntekt.trim())
+        : undefined;
     })(),
     inntektFraEgenVirksomhet: data.hvilkeTyperInntektHarDu
       ?.INNTEKT_FRA_EGEN_VIRKSOMHET
-      ? data.inntektFraEgenVirksomhet?.trim().replaceAll(/\s/g, "")
+      ? data.inntektFraEgenVirksomhet
+        ? stripBelopFormatering(data.inntektFraEgenVirksomhet.trim())
+        : undefined
       : undefined,
   }));

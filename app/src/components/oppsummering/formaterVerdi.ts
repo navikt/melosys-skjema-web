@@ -11,6 +11,7 @@ import type {
   TextareaFeltDefinisjon,
   TextFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
+import { formaterBelopForVisning } from "~/utils/belopFormat.ts";
 
 export type FeltUnion =
   | BooleanFeltDefinisjon
@@ -37,15 +38,6 @@ const BELOP_FELTER = new Set([
   "inntekt",
   "inntektFraEgenVirksomhet",
 ]);
-
-function formaterBelop(verdi: string): string {
-  const trimmed = verdi.trim();
-  const parts = trimmed.split(",");
-  const helTall = parts[0] ?? "0";
-  const desimaler = parts[1] ?? "00";
-  const medTusenSkille = helTall.replaceAll(/\B(?=(\d{3})+(?!\d))/g, " ");
-  return `${medTusenSkille},${desimaler} kr`;
-}
 
 export function formaterVerdi(
   felt: FeltUnion,
@@ -97,7 +89,8 @@ export function formaterVerdi(
     default: {
       const strVerdi = String(verdi);
       if (feltNavn && BELOP_FELTER.has(feltNavn)) {
-        return formaterBelop(strVerdi);
+        const formatert = formaterBelopForVisning(strVerdi);
+        return formatert ? `${formatert} kr` : strVerdi;
       }
       return strVerdi;
     }
