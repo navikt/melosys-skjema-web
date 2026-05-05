@@ -196,6 +196,14 @@ export const nb = {
         "Du må velge hvilket land som utbetaler pengestøtten",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
+      ugyldigBelopFormat: "Beløpet må være et gyldig beløp i kroner",
+      duMaVelgeMinsteEnArbeidsinntektKilde:
+        "Du må velge minst én arbeidsinntektkilde",
+      duMaVelgeMinsteEnInntektType: "Du må velge minst én inntekttype",
+      duMaOppgiInntekterFraUtenlandskVirksomhet:
+        "Du må oppgi inntekter fra utenlandsk virksomhet",
+      duMaOppgiInntekterFraEgenVirksomhet:
+        "Du må oppgi inntekter fra egen virksomhet",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Arbeidssted i utlandet",

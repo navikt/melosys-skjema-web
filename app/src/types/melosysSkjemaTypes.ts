@@ -338,6 +338,10 @@ export interface SkatteforholdOgInntektDto {
   landSomUtbetalerPengestotte?: string;
   pengestotteSomMottasFraAndreLandBelop?: string;
   pengestotteSomMottasFraAndreLandBeskrivelse?: string;
+  arbeidsinntektFraNorskEllerUtenlandskVirksomhet?: Record<string, boolean>;
+  hvilkeTyperInntektHarDu?: Record<string, boolean>;
+  inntekterFraUtenlandskVirksomhet?: string;
+  inntekterFraEgenVirksomhet?: string;
 }
 
 export interface TilleggsopplysningerDto {
@@ -663,6 +667,13 @@ export type SelectFeltDefinisjon = UtilRequiredKeys<
   alternativer: AlternativDefinisjonDto[];
 };
 
+export type CheckboxGroupFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+> & {
+  alternativer: AlternativDefinisjonDto[];
+};
+
 export interface SkjemaDefinisjonDto {
   type: string;
   versjon: string;
@@ -835,6 +846,14 @@ export interface SkatteforholdOgInntektTranslation {
   maaOppgiLandSomUtbetalerPengestotte: string;
   maaOppgiBelopPengestotte: string;
   maaOppgiBeskrivelsePengestotte: string;
+  ugyldigBelopFormat: string;
+  maaVelgeMinsteEnArbeidsinntektKilde: string;
+  maaVelgeMinsteEnInntektType: string;
+  maaOppgiInntekterFraUtenlandskVirksomhet: string;
+  maaOppgiInntekterFraEgenVirksomhet: string;
+  inntekterFraUtenlandskVirksomhetSkalIkkeOppgis: string;
+  inntekterFraEgenVirksomhetSkalIkkeOppgis: string;
+  kannIkkeHaLonnNarKunNorskVirksomhet: string;
 }
 
 export interface TilleggsopplysningerTranslation {

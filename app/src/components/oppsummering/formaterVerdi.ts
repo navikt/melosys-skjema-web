@@ -61,6 +61,16 @@ export function formaterVerdi(
       );
     }
 
+    case "CHECKBOX_GROUP": {
+      const checkboxFelt = felt as unknown as SelectFeltDefinisjon;
+      const selections = verdi as Record<string, boolean> | undefined;
+      if (!selections) return "\u2013";
+      const selectedLabels = checkboxFelt.alternativer
+        .filter((a) => selections[a.verdi])
+        .map((a) => a.label);
+      return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u2013";
+    }
+
     case "COUNTRY_SELECT": {
       return t(`land.${String(verdi)}`);
     }

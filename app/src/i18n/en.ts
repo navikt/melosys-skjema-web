@@ -236,6 +236,15 @@ export const en = {
         "You must select which country pays the financial support",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
+      ugyldigBelopFormat:
+        "The amount must be a valid amount in kroner",
+      duMaVelgeMinsteEnArbeidsinntektKilde:
+        "You must select at least one work income source",
+      duMaVelgeMinsteEnInntektType: "You must select at least one income type",
+      duMaOppgiInntekterFraUtenlandskVirksomhet:
+        "You must specify income from foreign company",
+      duMaOppgiInntekterFraEgenVirksomhet:
+        "You must specify income from own business",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Place of work abroad",

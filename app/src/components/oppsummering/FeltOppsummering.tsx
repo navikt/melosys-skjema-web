@@ -54,6 +54,17 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
     );
   }
 
+  if (felt.type === "CHECKBOX_GROUP") {
+    const formatted = formaterVerdi(felt, verdi, t);
+    if (formatted === "\u2013") return null;
+    return (
+      <FormSummary.Answer>
+        <FormSummary.Label>{felt.label}</FormSummary.Label>
+        <FormSummary.Value>{formatted}</FormSummary.Value>
+      </FormSummary.Answer>
+    );
+  }
+
   return (
     <FormSummary.Answer>
       <FormSummary.Label>{felt.label}</FormSummary.Label>
