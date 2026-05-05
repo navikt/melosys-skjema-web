@@ -163,6 +163,11 @@ function SkatteforholdOgInntektStegContent({
     name: "mottarPengestotteFraAnnetEosLandEllerSveits",
   });
 
+  const erSkattepliktig = useWatch({
+    control,
+    name: "erSkattepliktigTilNorgeIHeleutsendingsperioden",
+  });
+
   const arbeidsinntektKilde = useWatch({
     control,
     name: "arbeidsinntektFraNorskEllerUtenlandskVirksomhet",
@@ -174,15 +179,20 @@ function SkatteforholdOgInntektStegContent({
   });
 
   const harLoenn = hvilkeTyperInntektHarDu?.LOENN === true;
+  const harNorskVirksomhet = arbeidsinntektKilde?.NORSK_VIRKSOMHET === true;
   const harUtenlandskVirksomhet =
     arbeidsinntektKilde?.UTENLANDSK_VIRKSOMHET === true;
+  const harNoenVirksomhet = harNorskVirksomhet || harUtenlandskVirksomhet;
 
-  // Vis lønnsinntektsfelt kun når lønn er huket av OG utenlandsk virksomhet er valgt
+  // Vis lønnsinntektsfelt når lønn er huket av OG minst én virksomhet er valgt OG (utenlandsk virksomhet er valgt ELLER ikke skattepliktig)
   const visInntekterFraUtenlandskVirksomhet =
-    harLoenn && harUtenlandskVirksomhet;
+    harLoenn &&
+    harNoenVirksomhet &&
+    (harUtenlandskVirksomhet || !erSkattepliktig);
 
   const visInntekterFraEgenVirksomhet =
-    hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET === true;
+    hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET === true &&
+    harNoenVirksomhet;
 
   // Nullstill feltverdier når de skjules fra visningen
   useEffect(() => {
