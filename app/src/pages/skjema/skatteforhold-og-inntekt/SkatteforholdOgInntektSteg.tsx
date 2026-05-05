@@ -162,11 +162,6 @@ function SkatteforholdOgInntektStegContent({
     name: "mottarPengestotteFraAnnetEosLandEllerSveits",
   });
 
-  const erSkattepliktig = useWatch({
-    control,
-    name: "erSkattepliktigTilNorgeIHeleutsendingsperioden",
-  });
-
   const arbeidsinntektKilde = useWatch({
     control,
     name: "arbeidsinntektFraNorskEllerUtenlandskVirksomhet",
@@ -178,17 +173,12 @@ function SkatteforholdOgInntektStegContent({
   });
 
   const harLoenn = hvilkeTyperInntektHarDu?.LOENN === true;
-  const harNorskVirksomhet = arbeidsinntektKilde?.NORSK_VIRKSOMHET === true;
   const harUtenlandskVirksomhet =
     arbeidsinntektKilde?.UTENLANDSK_VIRKSOMHET === true;
 
-  // Ugyldig kombinasjon: skattepliktig=JA + kun norsk virksomhet + lønn
-  const ugyldigLonnKombinasjon =
-    erSkattepliktig && harNorskVirksomhet && !harUtenlandskVirksomhet;
-
-  // Vis lønnsinntektsfelt kun når lønn er huket av OG kombinasjonen er gyldig
+  // Vis lønnsinntektsfelt kun når lønn er huket av OG utenlandsk virksomhet er valgt
   const visInntekterFraUtenlandskVirksomhet =
-    harLoenn && !ugyldigLonnKombinasjon;
+    harLoenn && harUtenlandskVirksomhet;
 
   const postSkatteforholdMutation = useMutation({
     mutationFn: (data: SkatteforholdOgInntektFormData) => {
