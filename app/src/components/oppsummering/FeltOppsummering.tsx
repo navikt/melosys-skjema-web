@@ -12,10 +12,15 @@ import { ListeFeltOppsummering } from "./ListeFeltOppsummering.tsx";
 
 interface FeltOppsummeringProps {
   felt: FeltUnion;
+  feltNavn?: string;
   verdi: unknown;
 }
 
-export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
+export function FeltOppsummering({
+  felt,
+  feltNavn,
+  verdi,
+}: FeltOppsummeringProps) {
   const { t } = useTranslation();
   if (felt.type === "LIST") {
     return (
@@ -48,14 +53,14 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
       <FormSummary.Answer>
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
-          {formaterVerdi(felt, verdi, t)}
+          {formaterVerdi(felt, verdi, t, feltNavn)}
         </FormSummary.Value>
       </FormSummary.Answer>
     );
   }
 
   if (felt.type === "CHECKBOX_GROUP") {
-    const formatted = formaterVerdi(felt, verdi, t);
+    const formatted = formaterVerdi(felt, verdi, t, feltNavn);
     if (formatted === "\u2013") return null;
     return (
       <FormSummary.Answer>
@@ -68,7 +73,9 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
   return (
     <FormSummary.Answer>
       <FormSummary.Label>{felt.label}</FormSummary.Label>
-      <FormSummary.Value>{formaterVerdi(felt, verdi, t)}</FormSummary.Value>
+      <FormSummary.Value>
+        {formaterVerdi(felt, verdi, t, feltNavn)}
+      </FormSummary.Value>
     </FormSummary.Answer>
   );
 }

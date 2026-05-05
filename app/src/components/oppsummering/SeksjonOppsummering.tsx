@@ -47,7 +47,12 @@ export function SeksjonOppsummering({
       </FormSummary.Header>
       <FormSummary.Answers>
         {felterMedData.map(([feltNavn, felt]) => (
-          <FeltOppsummering felt={felt} key={feltNavn} verdi={data[feltNavn]} />
+          <FeltOppsummering
+            felt={felt}
+            feltNavn={feltNavn}
+            key={feltNavn}
+            verdi={data[feltNavn]}
+          />
         ))}
       </FormSummary.Answers>
       {editHref && (

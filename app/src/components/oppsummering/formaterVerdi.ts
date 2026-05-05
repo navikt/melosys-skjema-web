@@ -29,10 +29,27 @@ function formatDate(dateStr: string): string {
   });
 }
 
+/** Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks */
+const BELOP_FELTER = new Set([
+  "pengestotteSomMottasFraAndreLandBelop",
+  "inntekterFraUtenlandskVirksomhet",
+  "inntekterFraEgenVirksomhet",
+]);
+
+function formaterBelop(verdi: string): string {
+  const trimmed = verdi.trim();
+  const parts = trimmed.split(",");
+  const helTall = parts[0] ?? "0";
+  const desimaler = parts[1] ?? "00";
+  const medTusenSkille = helTall.replaceAll(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return `${medTusenSkille},${desimaler} kr`;
+}
+
 export function formaterVerdi(
   felt: FeltUnion,
   verdi: unknown,
   t: TFunction,
+  feltNavn?: string,
 ): string {
   if (verdi === null || verdi === undefined) return "\u2013";
 
@@ -76,7 +93,11 @@ export function formaterVerdi(
     }
 
     default: {
-      return String(verdi);
+      const strVerdi = String(verdi);
+      if (feltNavn && BELOP_FELTER.has(feltNavn)) {
+        return formaterBelop(strVerdi);
+      }
+      return strVerdi;
     }
   }
 }
