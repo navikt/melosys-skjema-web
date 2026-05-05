@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox, CheckboxGroup, Textarea, TextField } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -180,6 +181,38 @@ function SkatteforholdOgInntektStegContent({
   const visInntekterFraUtenlandskVirksomhet =
     harLoenn && harUtenlandskVirksomhet;
 
+  const visInntekterFraEgenVirksomhet =
+    hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET === true;
+
+  // Nullstill feltverdier når de skjules fra visningen
+  useEffect(() => {
+    if (!visInntekterFraUtenlandskVirksomhet) {
+      formMethods.setValue("inntekterFraUtenlandskVirksomhet", undefined);
+      formMethods.clearErrors("inntekterFraUtenlandskVirksomhet");
+    }
+  }, [visInntekterFraUtenlandskVirksomhet, formMethods]);
+
+  useEffect(() => {
+    if (!visInntekterFraEgenVirksomhet) {
+      formMethods.setValue("inntekterFraEgenVirksomhet", undefined);
+      formMethods.clearErrors("inntekterFraEgenVirksomhet");
+    }
+  }, [visInntekterFraEgenVirksomhet, formMethods]);
+
+  useEffect(() => {
+    if (!mottarPengestotteFraAnnetEosLandEllerSveits) {
+      formMethods.setValue("pengestotteSomMottasFraAndreLandBelop", undefined);
+      formMethods.setValue("landSomUtbetalerPengestotte", undefined);
+      formMethods.setValue(
+        "pengestotteSomMottasFraAndreLandBeskrivelse",
+        undefined,
+      );
+      formMethods.clearErrors("pengestotteSomMottasFraAndreLandBelop");
+      formMethods.clearErrors("landSomUtbetalerPengestotte");
+      formMethods.clearErrors("pengestotteSomMottasFraAndreLandBeskrivelse");
+    }
+  }, [mottarPengestotteFraAnnetEosLandEllerSveits, formMethods]);
+
   const postSkatteforholdMutation = useMutation({
     mutationFn: (data: SkatteforholdOgInntektFormData) => {
       return postSkatteforholdOgInntekt(
@@ -241,6 +274,7 @@ function SkatteforholdOgInntektStegContent({
           formMethods.setValue(fieldName, formatted);
         }
       }
+      formMethods.clearErrors(fieldName);
     };
   };
 
@@ -340,7 +374,7 @@ function SkatteforholdOgInntektStegContent({
             />
           )}
 
-          {hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET && (
+          {visInntekterFraEgenVirksomhet && (
             <TextField
               className="mt-4"
               description={inntekterFraEgenVirksomhetFelt.hjelpetekst}
