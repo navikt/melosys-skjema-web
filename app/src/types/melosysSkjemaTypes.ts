@@ -650,6 +650,7 @@ export interface SeksjonDefinisjonDto {
   felter: Record<
     string,
     | BooleanFeltDefinisjon
+    | CheckboxGroupFeltDefinisjon
     | CountrySelectFeltDefinisjon
     | DateFeltDefinisjon
     | ListeFeltDefinisjon

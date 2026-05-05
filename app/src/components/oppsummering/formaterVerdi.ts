@@ -2,6 +2,7 @@ import type { TFunction } from "i18next";
 
 import type {
   BooleanFeltDefinisjon,
+  CheckboxGroupFeltDefinisjon,
   CountrySelectFeltDefinisjon,
   DateFeltDefinisjon,
   ListeFeltDefinisjon,
@@ -13,6 +14,7 @@ import type {
 
 export type FeltUnion =
   | BooleanFeltDefinisjon
+  | CheckboxGroupFeltDefinisjon
   | CountrySelectFeltDefinisjon
   | DateFeltDefinisjon
   | ListeFeltDefinisjon
@@ -79,7 +81,7 @@ export function formaterVerdi(
     }
 
     case "CHECKBOX_GROUP": {
-      const checkboxFelt = felt as unknown as SelectFeltDefinisjon;
+      const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
       const selections = verdi as Record<string, boolean> | undefined;
       if (!selections) return "\u2013";
       const selectedLabels = checkboxFelt.alternativer
