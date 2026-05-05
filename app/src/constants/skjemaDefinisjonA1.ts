@@ -131,7 +131,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
           label: "Hva slags pengestøtte mottar du",
           pakrevd: false,
         },
-        arbeidsinntektFraNorskEllerUtenlandskVirksomhet: {
+        inntektFraNorskEllerUtenlandskVirksomhet: {
           type: "CHECKBOX_GROUP",
           label:
             "Får du arbeidsinntekten din fra en norsk eller utenlandsk virksomhet?",
@@ -162,14 +162,14 @@ const SKJEMA_DEFINISJON_A1_NB = {
             },
           ],
         },
-        inntekterFraUtenlandskVirksomhet: {
+        inntekt: {
           type: "TEXTAREA",
           label: "Inntekt",
           pakrevd: false,
           hjelpetekst:
             "Du skal føre opp samlet månedlig inntekt, inkludert eventuelle utenlandstillegg og verdi av naturalytelser dekt av virksomheten. Hvis inntekten din varierer fra måned til måned, oppgi gjennomsnittlig inntekt i brutto per måned.",
         },
-        inntekterFraEgenVirksomhet: {
+        inntektFraEgenVirksomhet: {
           type: "TEXTAREA",
           label: "Inntekter fra egen virksomhet",
           pakrevd: false,
@@ -741,7 +741,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
           label: "What kind of financial support do you receive",
           pakrevd: false,
         },
-        arbeidsinntektFraNorskEllerUtenlandskVirksomhet: {
+        inntektFraNorskEllerUtenlandskVirksomhet: {
           type: "CHECKBOX_GROUP",
           label: "Is your work income from a Norwegian or foreign company?",
           pakrevd: false,
@@ -771,14 +771,14 @@ const SKJEMA_DEFINISJON_A1_EN = {
             },
           ],
         },
-        inntekterFraUtenlandskVirksomhet: {
+        inntekt: {
           type: "TEXTAREA",
           label: "Income",
           pakrevd: false,
           hjelpetekst:
             "You should report your total monthly income, including any foreign allowances and the value of benefits in kind covered by the company. If your income varies from month to month, please state the average gross income per month.",
         },
-        inntekterFraEgenVirksomhet: {
+        inntektFraEgenVirksomhet: {
           type: "TEXTAREA",
           label: "Income from your own business",
           pakrevd: false,

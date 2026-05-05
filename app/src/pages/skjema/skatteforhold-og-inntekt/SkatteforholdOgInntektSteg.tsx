@@ -117,25 +117,22 @@ function SkatteforholdOgInntektStegContent({
     "skatteforholdOgInntekt",
     "pengestotteSomMottasFraAndreLandBeskrivelse",
   );
-  const arbeidsinntektKildeFelt = getFelt(
+  const inntektKildeFelt = getFelt(
     "skatteforholdOgInntekt",
-    "arbeidsinntektFraNorskEllerUtenlandskVirksomhet",
+    "inntektFraNorskEllerUtenlandskVirksomhet",
   );
   const hvilkenInntektFelt = getFelt(
     "skatteforholdOgInntekt",
     "hvilkeTyperInntektHarDu",
   );
-  const inntekterFraUtenlandskVirksomhetFelt = getFelt(
+  const inntektFelt = getFelt("skatteforholdOgInntekt", "inntekt");
+  const inntektFraEgenVirksomhetFelt = getFelt(
     "skatteforholdOgInntekt",
-    "inntekterFraUtenlandskVirksomhet",
-  );
-  const inntekterFraEgenVirksomhetFelt = getFelt(
-    "skatteforholdOgInntekt",
-    "inntekterFraEgenVirksomhet",
+    "inntektFraEgenVirksomhet",
   );
 
-  const arbeidsinntektAlternativer = (
-    arbeidsinntektKildeFelt as unknown as {
+  const inntektKildeAlternativer = (
+    inntektKildeFelt as unknown as {
       alternativer: CheckboxAlternativ[];
     }
   ).alternativer;
@@ -168,9 +165,9 @@ function SkatteforholdOgInntektStegContent({
     name: "erSkattepliktigTilNorgeIHeleutsendingsperioden",
   });
 
-  const arbeidsinntektKilde = useWatch({
+  const inntektKilde = useWatch({
     control,
-    name: "arbeidsinntektFraNorskEllerUtenlandskVirksomhet",
+    name: "inntektFraNorskEllerUtenlandskVirksomhet",
   });
 
   const hvilkeTyperInntektHarDu = useWatch({
@@ -179,35 +176,34 @@ function SkatteforholdOgInntektStegContent({
   });
 
   const harLoenn = hvilkeTyperInntektHarDu?.LOENN === true;
-  const harNorskVirksomhet = arbeidsinntektKilde?.NORSK_VIRKSOMHET === true;
-  const harUtenlandskVirksomhet =
-    arbeidsinntektKilde?.UTENLANDSK_VIRKSOMHET === true;
+  const harNorskVirksomhet = inntektKilde?.NORSK_VIRKSOMHET === true;
+  const harUtenlandskVirksomhet = inntektKilde?.UTENLANDSK_VIRKSOMHET === true;
   const harNoenVirksomhet = harNorskVirksomhet || harUtenlandskVirksomhet;
 
   // Vis lønnsinntektsfelt når lønn er huket av OG minst én virksomhet er valgt OG (utenlandsk virksomhet er valgt ELLER ikke skattepliktig)
-  const visInntekterFraUtenlandskVirksomhet =
+  const visInntektFelt =
     harLoenn &&
     harNoenVirksomhet &&
     (harUtenlandskVirksomhet || !erSkattepliktig);
 
-  const visInntekterFraEgenVirksomhet =
+  const visInntektFraEgenVirksomhetFelt =
     hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET === true &&
     harNoenVirksomhet;
 
   // Nullstill feltverdier når de skjules fra visningen
   useEffect(() => {
-    if (!visInntekterFraUtenlandskVirksomhet) {
-      formMethods.setValue("inntekterFraUtenlandskVirksomhet", undefined);
-      formMethods.clearErrors("inntekterFraUtenlandskVirksomhet");
+    if (!visInntektFelt) {
+      formMethods.setValue("inntekt", undefined);
+      formMethods.clearErrors("inntekt");
     }
-  }, [visInntekterFraUtenlandskVirksomhet, formMethods]);
+  }, [visInntektFelt, formMethods]);
 
   useEffect(() => {
-    if (!visInntekterFraEgenVirksomhet) {
-      formMethods.setValue("inntekterFraEgenVirksomhet", undefined);
-      formMethods.clearErrors("inntekterFraEgenVirksomhet");
+    if (!visInntektFraEgenVirksomhetFelt) {
+      formMethods.setValue("inntektFraEgenVirksomhet", undefined);
+      formMethods.clearErrors("inntektFraEgenVirksomhet");
     }
-  }, [visInntekterFraEgenVirksomhet, formMethods]);
+  }, [visInntektFraEgenVirksomhetFelt, formMethods]);
 
   useEffect(() => {
     if (!mottarPengestotteFraAnnetEosLandEllerSveits) {
@@ -256,12 +252,12 @@ function SkatteforholdOgInntektStegContent({
         data.pengestotteSomMottasFraAndreLandBelop
           ? stripBelopFormatering(data.pengestotteSomMottasFraAndreLandBelop)
           : data.pengestotteSomMottasFraAndreLandBelop,
-      inntekterFraUtenlandskVirksomhet: data.inntekterFraUtenlandskVirksomhet
-        ? stripBelopFormatering(data.inntekterFraUtenlandskVirksomhet)
-        : data.inntekterFraUtenlandskVirksomhet,
-      inntekterFraEgenVirksomhet: data.inntekterFraEgenVirksomhet
-        ? stripBelopFormatering(data.inntekterFraEgenVirksomhet)
-        : data.inntekterFraEgenVirksomhet,
+      inntekt: data.inntekt
+        ? stripBelopFormatering(data.inntekt)
+        : data.inntekt,
+      inntektFraEgenVirksomhet: data.inntektFraEgenVirksomhet
+        ? stripBelopFormatering(data.inntektFraEgenVirksomhet)
+        : data.inntektFraEgenVirksomhet,
     };
     postSkatteforholdMutation.mutate(
       cleaned as unknown as SkatteforholdOgInntektFormData,
@@ -272,8 +268,8 @@ function SkatteforholdOgInntektStegContent({
   const handleBelopBlur = (
     fieldName:
       | "pengestotteSomMottasFraAndreLandBelop"
-      | "inntekterFraUtenlandskVirksomhet"
-      | "inntekterFraEgenVirksomhet",
+      | "inntekt"
+      | "inntektFraEgenVirksomhet",
   ) => {
     return () => {
       const raw = formMethods.getValues(fieldName);
@@ -308,7 +304,7 @@ function SkatteforholdOgInntektStegContent({
 
           <Controller
             control={control}
-            name="arbeidsinntektFraNorskEllerUtenlandskVirksomhet"
+            name="inntektFraNorskEllerUtenlandskVirksomhet"
             render={({ field, fieldState }) => {
               const value = field.value ?? {};
               const selectedValues = Object.entries(value)
@@ -317,18 +313,18 @@ function SkatteforholdOgInntektStegContent({
               return (
                 <CheckboxGroup
                   className="mt-4"
-                  legend={arbeidsinntektKildeFelt.label}
+                  legend={inntektKildeFelt.label}
                   error={translateError(fieldState.error?.message)}
                   value={selectedValues}
                   onChange={(newValues: string[]) => {
                     const newMap: Record<string, boolean> = {};
-                    for (const alt of arbeidsinntektAlternativer) {
+                    for (const alt of inntektKildeAlternativer) {
                       newMap[alt.verdi] = newValues.includes(alt.verdi);
                     }
                     field.onChange(newMap);
                   }}
                 >
-                  {arbeidsinntektAlternativer.map((alt) => (
+                  {inntektKildeAlternativer.map((alt) => (
                     <Checkbox key={alt.verdi} value={alt.verdi}>
                       {alt.label}
                     </Checkbox>
@@ -370,31 +366,29 @@ function SkatteforholdOgInntektStegContent({
             }}
           />
 
-          {visInntekterFraUtenlandskVirksomhet && (
+          {visInntektFelt && (
             <TextField
               className="mt-4"
-              description={inntekterFraUtenlandskVirksomhetFelt.hjelpetekst}
-              error={translateError(
-                getFieldError(errors, "inntekterFraUtenlandskVirksomhet"),
-              )}
-              label={inntekterFraUtenlandskVirksomhetFelt.label}
+              description={inntektFelt.hjelpetekst}
+              error={translateError(getFieldError(errors, "inntekt"))}
+              label={inntektFelt.label}
               inputMode="decimal"
-              {...register("inntekterFraUtenlandskVirksomhet")}
-              onBlur={handleBelopBlur("inntekterFraUtenlandskVirksomhet")}
+              {...register("inntekt")}
+              onBlur={handleBelopBlur("inntekt")}
             />
           )}
 
-          {visInntekterFraEgenVirksomhet && (
+          {visInntektFraEgenVirksomhetFelt && (
             <TextField
               className="mt-4"
-              description={inntekterFraEgenVirksomhetFelt.hjelpetekst}
+              description={inntektFraEgenVirksomhetFelt.hjelpetekst}
               error={translateError(
-                getFieldError(errors, "inntekterFraEgenVirksomhet"),
+                getFieldError(errors, "inntektFraEgenVirksomhet"),
               )}
-              label={inntekterFraEgenVirksomhetFelt.label}
+              label={inntektFraEgenVirksomhetFelt.label}
               inputMode="decimal"
-              {...register("inntekterFraEgenVirksomhet")}
-              onBlur={handleBelopBlur("inntekterFraEgenVirksomhet")}
+              {...register("inntektFraEgenVirksomhet")}
+              onBlur={handleBelopBlur("inntektFraEgenVirksomhet")}
             />
           )}
 

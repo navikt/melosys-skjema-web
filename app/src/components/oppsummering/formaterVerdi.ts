@@ -34,8 +34,8 @@ function formatDate(dateStr: string): string {
 /** Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks */
 const BELOP_FELTER = new Set([
   "pengestotteSomMottasFraAndreLandBelop",
-  "inntekterFraUtenlandskVirksomhet",
-  "inntekterFraEgenVirksomhet",
+  "inntekt",
+  "inntektFraEgenVirksomhet",
 ]);
 
 function formaterBelop(verdi: string): string {

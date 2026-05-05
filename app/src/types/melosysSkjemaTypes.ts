@@ -338,10 +338,10 @@ export interface SkatteforholdOgInntektDto {
   landSomUtbetalerPengestotte?: string;
   pengestotteSomMottasFraAndreLandBelop?: string;
   pengestotteSomMottasFraAndreLandBeskrivelse?: string;
-  arbeidsinntektFraNorskEllerUtenlandskVirksomhet?: Record<string, boolean>;
+  inntektFraNorskEllerUtenlandskVirksomhet?: Record<string, boolean>;
   hvilkeTyperInntektHarDu?: Record<string, boolean>;
-  inntekterFraUtenlandskVirksomhet?: string;
-  inntekterFraEgenVirksomhet?: string;
+  inntekt?: string;
+  inntektFraEgenVirksomhet?: string;
 }
 
 export interface TilleggsopplysningerDto {
@@ -848,12 +848,12 @@ export interface SkatteforholdOgInntektTranslation {
   maaOppgiBelopPengestotte: string;
   maaOppgiBeskrivelsePengestotte: string;
   ugyldigBelopFormat: string;
-  maaVelgeMinsteEnArbeidsinntektKilde: string;
+  maaVelgeMinsteEnInntektKilde: string;
   maaVelgeMinsteEnInntektType: string;
-  maaOppgiInntekterFraUtenlandskVirksomhet: string;
-  maaOppgiInntekterFraEgenVirksomhet: string;
-  inntekterFraUtenlandskVirksomhetSkalIkkeOppgis: string;
-  inntekterFraEgenVirksomhetSkalIkkeOppgis: string;
+  maaOppgiInntekt: string;
+  maaOppgiInntektFraEgenVirksomhet: string;
+  inntektSkalIkkeOppgis: string;
+  inntektFraEgenVirksomhetSkalIkkeOppgis: string;
   kannIkkeHaLonnNarKunNorskVirksomhet: string;
 }
 

@@ -23,10 +23,10 @@ export const skatteforholdOgInntektSchema = z
     pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
     landSomUtbetalerPengestotte: z.string().optional(),
     pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
-    arbeidsinntektFraNorskEllerUtenlandskVirksomhet: checkboxGroupSchema,
+    inntektFraNorskEllerUtenlandskVirksomhet: checkboxGroupSchema,
     hvilkeTyperInntektHarDu: checkboxGroupSchema,
-    inntekterFraUtenlandskVirksomhet: z.string().optional(),
-    inntekterFraEgenVirksomhet: z.string().optional(),
+    inntekt: z.string().optional(),
+    inntektFraEgenVirksomhet: z.string().optional(),
   })
   .refine(
     (data) =>
@@ -73,14 +73,14 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.arbeidsinntektFraNorskEllerUtenlandskVirksomhet) return true;
+      if (!data.inntektFraNorskEllerUtenlandskVirksomhet) return true;
       return Object.values(
-        data.arbeidsinntektFraNorskEllerUtenlandskVirksomhet,
+        data.inntektFraNorskEllerUtenlandskVirksomhet,
       ).some(Boolean);
     },
     {
-      error: "skatteforholdOgInntektSteg.duMaVelgeMinsteEnArbeidsinntektKilde",
-      path: ["arbeidsinntektFraNorskEllerUtenlandskVirksomhet"],
+      error: "skatteforholdOgInntektSteg.duMaVelgeMinsteEnInntektKilde",
+      path: ["inntektFraNorskEllerUtenlandskVirksomhet"],
       when: () => true,
     },
   )
@@ -99,10 +99,10 @@ export const skatteforholdOgInntektSchema = z
     (data) => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return true;
       const harNorskVirksomhet =
-        data.arbeidsinntektFraNorskEllerUtenlandskVirksomhet
+        data.inntektFraNorskEllerUtenlandskVirksomhet
           ?.NORSK_VIRKSOMHET === true;
       const harUtenlandskVirksomhet =
-        data.arbeidsinntektFraNorskEllerUtenlandskVirksomhet
+        data.inntektFraNorskEllerUtenlandskVirksomhet
           ?.UTENLANDSK_VIRKSOMHET === true;
       if (
         data.erSkattepliktigTilNorgeIHeleutsendingsperioden &&
@@ -111,24 +111,24 @@ export const skatteforholdOgInntektSchema = z
       ) {
         return true;
       }
-      return !!data.inntekterFraUtenlandskVirksomhet?.trim();
+      return !!data.inntekt?.trim();
     },
     {
       error:
-        "skatteforholdOgInntektSteg.duMaOppgiInntekterFraUtenlandskVirksomhet",
-      path: ["inntekterFraUtenlandskVirksomhet"],
+        "skatteforholdOgInntektSteg.duMaOppgiInntekt",
+      path: ["inntekt"],
       when: () => true,
     },
   )
   .refine(
     (data) => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return true;
-      if (!data.inntekterFraUtenlandskVirksomhet?.trim()) return true;
-      return erGyldigBelop(data.inntekterFraUtenlandskVirksomhet);
+      if (!data.inntekt?.trim()) return true;
+      return erGyldigBelop(data.inntekt);
     },
     {
       error: "skatteforholdOgInntektSteg.ugyldigBelopFormat",
-      path: ["inntekterFraUtenlandskVirksomhet"],
+      path: ["inntekt"],
       when: () => true,
     },
   )
@@ -136,11 +136,11 @@ export const skatteforholdOgInntektSchema = z
     (data) => {
       if (!data.hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET)
         return true;
-      return !!data.inntekterFraEgenVirksomhet?.trim();
+      return !!data.inntektFraEgenVirksomhet?.trim();
     },
     {
-      error: "skatteforholdOgInntektSteg.duMaOppgiInntekterFraEgenVirksomhet",
-      path: ["inntekterFraEgenVirksomhet"],
+      error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",
+      path: ["inntektFraEgenVirksomhet"],
       when: () => true,
     },
   )
@@ -148,12 +148,12 @@ export const skatteforholdOgInntektSchema = z
     (data) => {
       if (!data.hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET)
         return true;
-      if (!data.inntekterFraEgenVirksomhet?.trim()) return true;
-      return erGyldigBelop(data.inntekterFraEgenVirksomhet);
+      if (!data.inntektFraEgenVirksomhet?.trim()) return true;
+      return erGyldigBelop(data.inntektFraEgenVirksomhet);
     },
     {
       error: "skatteforholdOgInntektSteg.ugyldigBelopFormat",
-      path: ["inntekterFraEgenVirksomhet"],
+      path: ["inntektFraEgenVirksomhet"],
       when: () => true,
     },
   )
@@ -179,17 +179,17 @@ export const skatteforholdOgInntektSchema = z
             .trim()
             .replaceAll(/\s/g, "")
         : undefined,
-    arbeidsinntektFraNorskEllerUtenlandskVirksomhet:
-      data.arbeidsinntektFraNorskEllerUtenlandskVirksomhet,
+    inntektFraNorskEllerUtenlandskVirksomhet:
+      data.inntektFraNorskEllerUtenlandskVirksomhet,
     hvilkeTyperInntektHarDu: data.hvilkeTyperInntektHarDu,
     // Clear income fields based on hvilkeTyperInntektHarDu selections and valid combinations
-    inntekterFraUtenlandskVirksomhet: (() => {
+    inntekt: (() => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return;
       const harNorsk =
-        data.arbeidsinntektFraNorskEllerUtenlandskVirksomhet
+        data.inntektFraNorskEllerUtenlandskVirksomhet
           ?.NORSK_VIRKSOMHET === true;
       const harUtenlandsk =
-        data.arbeidsinntektFraNorskEllerUtenlandskVirksomhet
+        data.inntektFraNorskEllerUtenlandskVirksomhet
           ?.UTENLANDSK_VIRKSOMHET === true;
       if (
         data.erSkattepliktigTilNorgeIHeleutsendingsperioden &&
@@ -198,12 +198,12 @@ export const skatteforholdOgInntektSchema = z
       ) {
         return;
       }
-      return data.inntekterFraUtenlandskVirksomhet
+      return data.inntekt
         ?.trim()
         .replaceAll(/\s/g, "");
     })(),
-    inntekterFraEgenVirksomhet: data.hvilkeTyperInntektHarDu
+    inntektFraEgenVirksomhet: data.hvilkeTyperInntektHarDu
       ?.INNTEKT_FRA_EGEN_VIRKSOMHET
-      ? data.inntekterFraEgenVirksomhet?.trim().replaceAll(/\s/g, "")
+      ? data.inntektFraEgenVirksomhet?.trim().replaceAll(/\s/g, "")
       : undefined,
   }));

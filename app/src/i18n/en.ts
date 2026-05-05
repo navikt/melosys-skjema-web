@@ -238,12 +238,12 @@ export const en = {
         "You must enter a valid amount greater than 0",
       ugyldigBelopFormat:
         "The amount must be a valid amount in kroner",
-      duMaVelgeMinsteEnArbeidsinntektKilde:
+      duMaVelgeMinsteEnInntektKilde:
         "You must select at least one work income source",
       duMaVelgeMinsteEnInntektType: "You must select at least one income type",
-      duMaOppgiInntekterFraUtenlandskVirksomhet:
+      duMaOppgiInntekt:
         "You must specify income from foreign company",
-      duMaOppgiInntekterFraEgenVirksomhet:
+      duMaOppgiInntektFraEgenVirksomhet:
         "You must specify income from own business",
     },
     arbeidsstedIUtlandetSteg: {
