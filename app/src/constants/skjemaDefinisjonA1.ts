@@ -138,31 +138,31 @@ const SKJEMA_DEFINISJON_A1_NB = {
           pakrevd: false,
           alternativer: [
             {
-              verdi: undefined,
+              verdi: "NORSK_VIRKSOMHET",
               label: "Norsk virksomhet",
             },
             {
-              verdi: undefined,
+              verdi: "UTENLANDSK_VIRKSOMHET",
               label: "Utenlandsk virksomhet",
             },
           ],
         },
-        hvilkenInntektHarDu: {
+        hvilkeTyperInntektHarDu: {
           type: "CHECKBOX_GROUP",
           label: "Hvilken inntekt har du?",
           pakrevd: false,
           alternativer: [
             {
-              verdi: undefined,
+              verdi: "LOENN",
               label: "Lønn",
             },
             {
-              verdi: undefined,
+              verdi: "INNTEKT_FRA_EGEN_VIRKSOMHET",
               label: "Inntekt fra egen virksomhet",
             },
           ],
         },
-        inntekterFraNorskVirksomhet: {
+        inntekterFraUtenlandskVirksomhet: {
           type: "TEXTAREA",
           label: "Inntekt",
           pakrevd: false,
@@ -747,31 +747,31 @@ const SKJEMA_DEFINISJON_A1_EN = {
           pakrevd: false,
           alternativer: [
             {
-              verdi: undefined,
+              verdi: "NORSK_VIRKSOMHET",
               label: "Norwegian company",
             },
             {
-              verdi: undefined,
+              verdi: "UTENLANDSK_VIRKSOMHET",
               label: "Foreign company",
             },
           ],
         },
-        hvilkenInntektHarDu: {
+        hvilkeTyperInntektHarDu: {
           type: "CHECKBOX_GROUP",
           label: "What kind of income do you have?",
           pakrevd: false,
           alternativer: [
             {
-              verdi: undefined,
+              verdi: "LOENN",
               label: "Salary",
             },
             {
-              verdi: undefined,
+              verdi: "INNTEKT_FRA_EGEN_VIRKSOMHET",
               label: "Income from your own business",
             },
           ],
         },
-        inntekterFraNorskVirksomhet: {
+        inntekterFraUtenlandskVirksomhet: {
           type: "TEXTAREA",
           label: "Income",
           pakrevd: false,
