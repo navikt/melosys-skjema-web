@@ -854,7 +854,7 @@ export interface SkatteforholdOgInntektTranslation {
   maaOppgiInntektFraEgenVirksomhet: string;
   inntektSkalIkkeOppgis: string;
   inntektFraEgenVirksomhetSkalIkkeOppgis: string;
-  kannIkkeHaLonnNarKunNorskVirksomhet: string;
+  kanIkkeHaLonnNarKunNorskVirksomhet: string;
 }
 
 export interface TilleggsopplysningerTranslation {
