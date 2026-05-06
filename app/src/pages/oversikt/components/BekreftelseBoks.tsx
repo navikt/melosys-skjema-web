@@ -47,19 +47,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
     }
   };
 
-  const getBekreftelseCheckboxText = (): string => {
-    switch (representasjonstype) {
-      case Representasjonstype.DEG_SELV: {
-        return t("oversiktBekreftelse.bekreftAtVilSvareRiktig");
-      }
-      default: {
-        return t("oversiktBekreftelse.bekreftAtLestOgForstatt");
-      }
-    }
-  };
-
   const bekreftelseBoksBulletpointTexts = getBekreftelseBoksBulletpointTexts();
-  const bekreftelseCheckboxText = getBekreftelseCheckboxText();
 
   return (
     <Box
@@ -100,7 +88,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
               onBlur={field.onBlur}
               onChange={(event) => field.onChange(event.target.checked)}
             >
-              {bekreftelseCheckboxText}
+              {t("oversiktBekreftelse.bekreftAtVilSvareRiktig")}
             </Checkbox>
           )}
         />

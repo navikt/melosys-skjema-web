@@ -456,7 +456,6 @@ export const en = {
       linkUrl: "https://www.nav.no/endringer/en",
       bekreftAtVilSvareRiktig:
         "I confirm that I will answer as accurately as I can",
-      bekreftAtLestOgForstatt: "I confirm that I have read and understood",
       annenPersonInfoBullet2:
         "I understand that, as a private individual, I will receive letters about case processing as long as the power of attorney is valid",
       arbeidsgiverInfoBullet2:
@@ -524,8 +523,6 @@ export const en = {
       valideringManglerArbeidstaker: "Employee must be selected",
       valideringManglerBekreftelseDegSelv:
         "You must confirm that you will answer as accurately as you can",
-      valideringManglerBekreftelse:
-        "You must confirm that you have read and understood",
       historikkTittel: "Previously submitted applications",
       historikkSokPlaceholder: "Search...",
       historikkKolonneVirksomhet: "Company",

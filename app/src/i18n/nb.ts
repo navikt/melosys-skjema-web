@@ -334,7 +334,6 @@ export const nb = {
       linkUrl: "https://www.nav.no/endringer",
       bekreftAtVilSvareRiktig:
         "Jeg bekrefter at jeg vil svare så riktig som jeg kan",
-      bekreftAtLestOgForstatt: "Jeg bekrefter at jeg har lest og forstått",
       annenPersonInfoBullet2:
         "Jeg forstår at jeg som privatperson vil motta brev om saksbehandlingen så lenge fullmakten gjelder",
       arbeidsgiverInfoBullet2:
@@ -404,7 +403,6 @@ export const nb = {
       valideringManglerArbeidstaker: "Arbeidstaker må velges",
       valideringManglerBekreftelseDegSelv:
         "Du må bekrefte at du vil svare så riktig som du kan",
-      valideringManglerBekreftelse: "Du må bekrefte at du har lest og forstått",
       historikkTittel: "Tidligere innsendte søknader",
       historikkSokPlaceholder: "Søk...",
       historikkKolonneVirksomhet: "Virksomhet",

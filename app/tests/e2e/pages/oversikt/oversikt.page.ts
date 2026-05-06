@@ -12,8 +12,6 @@ const feilmeldinger = {
     translations.oversiktFelles.valideringManglerArbeidstaker,
   valideringManglerBekreftelseDegSelv:
     translations.oversiktFelles.valideringManglerBekreftelseDegSelv,
-  valideringManglerBekreftelse:
-    translations.oversiktFelles.valideringManglerBekreftelse,
 };
 
 const bekreftelseTekster = {
@@ -21,8 +19,6 @@ const bekreftelseTekster = {
   linkText: translations.oversiktBekreftelse.linkText,
   bekreftAtVilSvareRiktig:
     translations.oversiktBekreftelse.bekreftAtVilSvareRiktig,
-  bekreftAtLestOgForstatt:
-    translations.oversiktBekreftelse.bekreftAtLestOgForstatt,
   annenPersonInfoBullet2:
     translations.oversiktBekreftelse.annenPersonInfoBullet2,
   arbeidsgiverInfoBullet2:
@@ -48,8 +44,7 @@ export class OversiktPage {
   readonly arbeidstakerFnrInput: Locator;
   readonly arbeidstakerEtternavnInput: Locator;
   readonly arbeidstakerSokButton: Locator;
-  readonly bekreftelseCheckboxDegSelv: Locator;
-  readonly bekreftelseCheckboxAndre: Locator;
+  readonly bekreftelseCheckbox: Locator;
   readonly bekreftelseIntro: Locator;
   readonly bekreftelseLink: Locator;
   readonly annenPersonInfoBullet: Locator;
@@ -116,11 +111,8 @@ export class OversiktPage {
       exact: true,
     });
 
-    this.bekreftelseCheckboxDegSelv = page.getByRole("checkbox", {
+    this.bekreftelseCheckbox = page.getByRole("checkbox", {
       name: bekreftelseTekster.bekreftAtVilSvareRiktig,
-    });
-    this.bekreftelseCheckboxAndre = page.getByRole("checkbox", {
-      name: bekreftelseTekster.bekreftAtLestOgForstatt,
     });
     this.bekreftelseIntro = page.getByText(bekreftelseTekster.intro);
     this.bekreftelseLink = page.getByRole("link", {
@@ -252,11 +244,7 @@ export class OversiktPage {
   }
 
   async assertBekreftelseCheckboxForRepresentasjonstypeIsVisible() {
-    await expect(
-      this.representasjonstype === Representasjonstype.DEG_SELV
-        ? this.bekreftelseCheckboxDegSelv
-        : this.bekreftelseCheckboxAndre,
-    ).toBeVisible();
+    await expect(this.bekreftelseCheckbox).toBeVisible();
   }
 
   async assertBekreftelseBoksContentForRepresentasjonstype() {
@@ -266,18 +254,16 @@ export class OversiktPage {
       "href",
       "https://www.nav.no/endringer",
     );
+    await expect(this.bekreftelseCheckbox).toBeVisible();
 
     switch (this.representasjonstype) {
       case Representasjonstype.DEG_SELV: {
-        await expect(this.bekreftelseCheckboxDegSelv).toBeVisible();
-        await expect(this.bekreftelseCheckboxAndre).not.toBeVisible();
         await expect(this.annenPersonInfoBullet).not.toBeVisible();
         await expect(this.arbeidsgiverInfoBullet).not.toBeVisible();
         await expect(this.radgiverInfoBullet).not.toBeVisible();
         break;
       }
       case Representasjonstype.ANNEN_PERSON: {
-        await expect(this.bekreftelseCheckboxAndre).toBeVisible();
         await expect(this.annenPersonInfoBullet).toBeVisible();
         await expect(this.arbeidsgiverInfoBullet).not.toBeVisible();
         await expect(this.radgiverInfoBullet).not.toBeVisible();
@@ -285,7 +271,6 @@ export class OversiktPage {
       }
       case Representasjonstype.ARBEIDSGIVER:
       case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
-        await expect(this.bekreftelseCheckboxAndre).toBeVisible();
         await expect(this.arbeidsgiverInfoBullet).toBeVisible();
         await expect(this.annenPersonInfoBullet).not.toBeVisible();
         await expect(this.radgiverInfoBullet).not.toBeVisible();
@@ -293,7 +278,6 @@ export class OversiktPage {
       }
       case Representasjonstype.RADGIVER:
       case Representasjonstype.RADGIVER_MED_FULLMAKT: {
-        await expect(this.bekreftelseCheckboxAndre).toBeVisible();
         await expect(this.radgiverInfoBullet).toBeVisible();
         await expect(this.annenPersonInfoBullet).not.toBeVisible();
         await expect(this.arbeidsgiverInfoBullet).not.toBeVisible();
@@ -303,26 +287,14 @@ export class OversiktPage {
   }
 
   async checkBekreftelseCheckbox() {
-    await (
-      this.representasjonstype === Representasjonstype.DEG_SELV
-        ? this.bekreftelseCheckboxDegSelv
-        : this.bekreftelseCheckboxAndre
-    ).check();
-  }
-
-  async assertValideringManglerBekreftelseDegSelvIsVisible() {
-    await expect(
-      this.page
-        .getByRole("listitem")
-        .filter({ hasText: feilmeldinger.valideringManglerBekreftelseDegSelv }),
-    ).toBeVisible();
+    await this.bekreftelseCheckbox.check();
   }
 
   async assertValideringManglerBekreftelseIsVisible() {
     await expect(
       this.page
         .getByRole("listitem")
-        .filter({ hasText: feilmeldinger.valideringManglerBekreftelse }),
+        .filter({ hasText: feilmeldinger.valideringManglerBekreftelseDegSelv }),
     ).toBeVisible();
   }
 

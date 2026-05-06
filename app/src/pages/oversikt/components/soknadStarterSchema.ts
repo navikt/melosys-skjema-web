@@ -56,10 +56,7 @@ export const soknadStarterSchema = z
 
     ctx.addIssue({
       code: "custom",
-      message:
-        data.representasjonstype === Representasjonstype.DEG_SELV
-          ? "oversiktFelles.valideringManglerBekreftelseDegSelv"
-          : "oversiktFelles.valideringManglerBekreftelse",
+      message: "oversiktFelles.valideringManglerBekreftelseDegSelv",
       path: ["bekreftelse"],
     });
   })

@@ -100,7 +100,7 @@ test.describe("Oversikt - validering", () => {
 
     await oversiktPage.clickStartSoknad();
 
-    await oversiktPage.assertValideringManglerBekreftelseDegSelvIsVisible();
+    await oversiktPage.assertValideringManglerBekreftelseIsVisible();
     await oversiktPage.assertStillOnPage();
   });
 
