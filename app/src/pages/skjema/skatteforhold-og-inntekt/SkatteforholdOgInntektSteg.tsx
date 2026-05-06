@@ -1,5 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox, CheckboxGroup, Textarea, TextField } from "@navikt/ds-react";
+import {
+  BodyLong,
+  Box,
+  Checkbox,
+  CheckboxGroup,
+  Heading,
+  Textarea,
+  TextField,
+  VStack,
+} from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -334,30 +343,52 @@ function SkatteforholdOgInntektStegContent({
             }}
           />
 
-          {visInntektFelt && (
-            <TextField
+          {(visInntektFelt || visInntektFraEgenVirksomhetFelt) && (
+            <Box
               className="mt-4"
-              description={inntektFelt.hjelpetekst}
-              error={translateError(getFieldError(errors, "inntekt"))}
-              label={inntektFelt.label}
-              inputMode="decimal"
-              {...register("inntekt")}
-              onBlur={handleBelopBlur("inntekt")}
-            />
-          )}
+              background="info-moderateA"
+              borderColor="info-subtleA"
+              borderWidth="1"
+              borderRadius="12"
+              padding="space-24"
+            >
+              <VStack gap="space-16">
+                <div>
+                  <Heading size="xsmall" level="2">
+                    {inntektFelt.label}
+                  </Heading>
+                  {inntektFelt.hjelpetekst && (
+                    <BodyLong className="mt-1">
+                      {inntektFelt.hjelpetekst}
+                    </BodyLong>
+                  )}
+                </div>
 
-          {visInntektFraEgenVirksomhetFelt && (
-            <TextField
-              className="mt-4"
-              description={inntektFraEgenVirksomhetFelt.hjelpetekst}
-              error={translateError(
-                getFieldError(errors, "inntektFraEgenVirksomhet"),
-              )}
-              label={inntektFraEgenVirksomhetFelt.label}
-              inputMode="decimal"
-              {...register("inntektFraEgenVirksomhet")}
-              onBlur={handleBelopBlur("inntektFraEgenVirksomhet")}
-            />
+                {visInntektFelt && (
+                  <TextField
+                    className="max-w-xs"
+                    error={translateError(getFieldError(errors, "inntekt"))}
+                    label={inntektFelt.label}
+                    inputMode="decimal"
+                    {...register("inntekt")}
+                    onBlur={handleBelopBlur("inntekt")}
+                  />
+                )}
+
+                {visInntektFraEgenVirksomhetFelt && (
+                  <TextField
+                    className="max-w-xs"
+                    error={translateError(
+                      getFieldError(errors, "inntektFraEgenVirksomhet"),
+                    )}
+                    label={inntektFraEgenVirksomhetFelt.label}
+                    inputMode="decimal"
+                    {...register("inntektFraEgenVirksomhet")}
+                    onBlur={handleBelopBlur("inntektFraEgenVirksomhet")}
+                  />
+                )}
+              </VStack>
+            </Box>
           )}
 
           <RadioGroupJaNeiFormPart
@@ -370,13 +401,13 @@ function SkatteforholdOgInntektStegContent({
           {mottarPengestotteFraAnnetEosLandEllerSveits && (
             <>
               <LandVelgerFormPart
-                className="mt-4"
+                className="mt-4 max-w-md"
                 formFieldName="landSomUtbetalerPengestotte"
                 label={landSomUtbetalerFelt.label}
               />
 
               <TextField
-                className="mt-4"
+                className="mt-4 max-w-md"
                 description={belopFelt.hjelpetekst}
                 error={translateError(
                   getFieldError(

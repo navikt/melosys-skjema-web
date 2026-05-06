@@ -81,7 +81,7 @@ export const skatteforholdOgInntektSchema = z
       );
     },
     {
-      error: "skatteforholdOgInntektSteg.duMaVelgeMinsteEnInntektKilde",
+      error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektKilde",
       path: ["inntektFraNorskEllerUtenlandskVirksomhet"],
       when: () => true,
     },
@@ -92,7 +92,7 @@ export const skatteforholdOgInntektSchema = z
       return Object.values(data.hvilkeTyperInntektHarDu).some(Boolean);
     },
     {
-      error: "skatteforholdOgInntektSteg.duMaVelgeMinsteEnInntektType",
+      error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektType",
       path: ["hvilkeTyperInntektHarDu"],
       when: () => true,
     },
@@ -116,7 +116,7 @@ export const skatteforholdOgInntektSchema = z
       return !!data.inntekt?.trim();
     },
     {
-      error: "skatteforholdOgInntektSteg.duMaOppgiInntekt",
+      error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
       path: ["inntekt"],
       when: () => true,
     },

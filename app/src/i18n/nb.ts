@@ -197,13 +197,11 @@ export const nb = {
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
       ugyldigBelopFormat: "Beløpet må være et gyldig beløp i kroner",
-      duMaVelgeMinsteEnInntektKilde:
-        "Du må velge minst én arbeidsinntektkilde",
-      duMaVelgeMinsteEnInntektType: "Du må velge minst én inntekttype",
-      duMaOppgiInntekt:
-        "Du må oppgi inntekter fra utenlandsk virksomhet",
+      duMaVelgeMinstEnInntektKilde: "Du må velge minst én arbeidsinntektkilde",
+      duMaVelgeMinstEnInntektType: "Du må velge minst én inntekttype",
+      duMaOppgiLonnsinntekt: "Du må oppgi lønnsinntekt",
       duMaOppgiInntektFraEgenVirksomhet:
-        "Du må oppgi inntekter fra egen virksomhet",
+        "Du må oppgi inntekt fra egen virksomhet",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Arbeidssted i utlandet",
