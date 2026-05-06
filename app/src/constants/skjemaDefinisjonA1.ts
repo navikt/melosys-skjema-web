@@ -154,7 +154,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
           alternativer: [
             {
               verdi: "LOENN",
-              label: "Lønn",
+              label: "Lønnsinntekt",
             },
             {
               verdi: "INNTEKT_FRA_EGEN_VIRKSOMHET",

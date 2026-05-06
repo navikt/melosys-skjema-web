@@ -2,6 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import type {
+  CheckboxGroupFeltDefinisjon,
   ListeFeltDefinisjon,
   PeriodeFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -60,12 +61,24 @@ export function FeltOppsummering({
   }
 
   if (felt.type === "CHECKBOX_GROUP") {
-    const formatted = formaterVerdi(felt, verdi, t, feltNavn);
-    if (formatted === "\u2013") return null;
+    const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
+    const selections = verdi as Record<string, boolean> | undefined;
+    const selectedLabels = checkboxFelt.alternativer
+      .filter((a) => selections?.[a.verdi])
+      .map((a) => a.label);
+    if (selectedLabels.length === 0) return null;
     return (
       <FormSummary.Answer>
         <FormSummary.Label>{felt.label}</FormSummary.Label>
-        <FormSummary.Value>{formatted}</FormSummary.Value>
+        <FormSummary.Value>
+          <ul
+            style={{ margin: 0, paddingLeft: "1.5rem", listStyleType: "disc" }}
+          >
+            {selectedLabels.map((label) => (
+              <li key={label}>{label}</li>
+            ))}
+          </ul>
+        </FormSummary.Value>
       </FormSummary.Answer>
     );
   }
