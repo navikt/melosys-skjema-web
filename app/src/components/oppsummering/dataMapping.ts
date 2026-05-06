@@ -11,6 +11,7 @@ import type {
   PaLandDto,
   SeksjonDefinisjonDto,
   SkjemaDefinisjonDto,
+  UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
@@ -67,20 +68,26 @@ interface SeksjonMappingEntry {
   data: Record<string, unknown> | undefined;
 }
 
+function utsendingsperiodeOgLandEntry(
+  utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto,
+): SeksjonMappingEntry {
+  return {
+    seksjonNavn: "utsendingsperiodeOgLand",
+    stegKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
+    data: utsendingsperiodeOgLand
+      ? {
+          utsendelseLand: utsendingsperiodeOgLand.utsendelseLand,
+          utsendelsePeriode: utsendingsperiodeOgLand.utsendelsePeriode,
+        }
+      : undefined,
+  };
+}
+
 function mapArbeidstakerSeksjoner(
   dto: UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 ): SeksjonMappingEntry[] {
   return [
-    {
-      seksjonNavn: "utsendingsperiodeOgLand",
-      stegKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
-      data: dto.utsendingsperiodeOgLand
-        ? {
-            utsendelseLand: dto.utsendingsperiodeOgLand.utsendelseLand,
-            utsendelsePeriode: dto.utsendingsperiodeOgLand.utsendelsePeriode,
-          }
-        : undefined,
-    },
+    utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
     {
       seksjonNavn: "arbeidssituasjon",
       stegKey: StegKey.ARBEIDSSITUASJON,
@@ -117,6 +124,7 @@ function mapArbeidsgiverSeksjoner(
   dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
 ): SeksjonMappingEntry[] {
   return [
+    utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
     {
       seksjonNavn: "arbeidsgiverensVirksomhetINorge",
       stegKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
@@ -185,13 +193,13 @@ function mapCombinedSeksjoner(
   dto: UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
 ): SeksjonMappingEntry[] {
   return [
+    utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
     ...mapArbeidsgiverSeksjoner({
       ...dto.arbeidsgiversData,
       tilleggsopplysninger: dto.tilleggsopplysninger,
     } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto),
     ...mapArbeidstakerSeksjoner({
       ...dto.arbeidstakersData,
-      utsendingsperiodeOgLand: dto.utsendingsperiodeOgLand,
       tilleggsopplysninger: dto.tilleggsopplysninger,
     } as UtsendtArbeidstakerArbeidstakersSkjemaDataDto),
   ];
