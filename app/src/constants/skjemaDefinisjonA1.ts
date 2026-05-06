@@ -164,7 +164,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         inntekt: {
           type: "TEXTAREA",
-          label: "Inntekt",
+          label: "Lønnsinntekt",
           pakrevd: false,
           hjelpetekst:
             "Du skal føre opp samlet månedlig inntekt, inkludert eventuelle utenlandstillegg og verdi av naturalytelser dekt av virksomheten. Hvis inntekten din varierer fra måned til måned, oppgi gjennomsnittlig inntekt i brutto per måned.",
@@ -173,8 +173,6 @@ const SKJEMA_DEFINISJON_A1_NB = {
           type: "TEXTAREA",
           label: "Inntekter fra egen virksomhet",
           pakrevd: false,
-          hjelpetekst:
-            "Hvis inntekten din varierer, oppgi gjennomsnitlig inntekt i brutto per måned.",
         },
       },
     },
@@ -773,7 +771,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         inntekt: {
           type: "TEXTAREA",
-          label: "Income",
+          label: "Salary",
           pakrevd: false,
           hjelpetekst:
             "You should report your total monthly income, including any foreign allowances and the value of benefits in kind covered by the company. If your income varies from month to month, please state the average gross income per month.",
@@ -782,8 +780,6 @@ const SKJEMA_DEFINISJON_A1_EN = {
           type: "TEXTAREA",
           label: "Income from your own business",
           pakrevd: false,
-          hjelpetekst:
-            "If your income varies from month to month, please state the average gross income per month.",
         },
       },
     },

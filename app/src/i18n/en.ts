@@ -213,6 +213,7 @@ export const en = {
     },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",
+      inntektHeading: "Income",
       erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Are you liable to pay tax to Norway for the entire posting period?",
       mottarDuPengestotteFraEtAnnetEosLandEllerSveits:

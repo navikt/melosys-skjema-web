@@ -186,6 +186,7 @@ export const nb = {
     },
     skatteforholdOgInntektSteg: {
       tittel: "Skatteforhold og inntekt",
+      inntektHeading: "Inntekt",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:

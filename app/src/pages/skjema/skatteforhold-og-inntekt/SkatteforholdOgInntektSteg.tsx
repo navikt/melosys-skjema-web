@@ -355,7 +355,7 @@ function SkatteforholdOgInntektStegContent({
               <VStack gap="space-16">
                 <div>
                   <Heading size="xsmall" level="2">
-                    {inntektFelt.label}
+                    {t("skatteforholdOgInntektSteg.inntektHeading")}
                   </Heading>
                   {inntektFelt.hjelpetekst && (
                     <BodyLong className="mt-1">
