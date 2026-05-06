@@ -17,37 +17,22 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
     formState: { errors },
   } = useFormContext<SoknadStarterFormData>();
 
-  const getBekreftelseBoksBulletpointTexts = (): string[] => {
+  const getInfoTekst = (): string | null => {
     switch (representasjonstype) {
-      case Representasjonstype.DEG_SELV: {
-        return [];
-      }
-      case Representasjonstype.ANNEN_PERSON: {
-        return [
-          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
-          t("oversiktBekreftelse.annenPersonInfoBullet2"),
-        ];
-      }
-
+      case Representasjonstype.DEG_SELV:
+        return null;
+      case Representasjonstype.ANNEN_PERSON:
+        return t("oversiktBekreftelse.annenPersonInfo");
       case Representasjonstype.ARBEIDSGIVER:
-      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
-        return [
-          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
-          t("oversiktBekreftelse.arbeidsgiverInfoBullet2"),
-        ];
-      }
-
+      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT:
+        return t("oversiktBekreftelse.arbeidsgiverInfo");
       case Representasjonstype.RADGIVER:
-      case Representasjonstype.RADGIVER_MED_FULLMAKT: {
-        return [
-          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
-          t("oversiktBekreftelse.radgiverInfoBullet2"),
-        ];
-      }
+      case Representasjonstype.RADGIVER_MED_FULLMAKT:
+        return t("oversiktBekreftelse.radgiverInfo");
     }
   };
 
-  const bekreftelseBoksBulletpointTexts = getBekreftelseBoksBulletpointTexts();
+  const infoTekst = getInfoTekst();
 
   return (
     <Box
@@ -69,13 +54,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
           </Link>
         </VStack>
 
-        {bekreftelseBoksBulletpointTexts.length > 0 && (
-          <ul className="list-disc pl-6 space-y-1">
-            {bekreftelseBoksBulletpointTexts.map((text) => (
-              <li key={text}>{text}</li>
-            ))}
-          </ul>
-        )}
+        {infoTekst && <BodyLong>{infoTekst}</BodyLong>}
 
         <Controller
           name="bekreftelse"

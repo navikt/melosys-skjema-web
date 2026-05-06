@@ -456,12 +456,12 @@ export const en = {
       linkUrl: "https://www.nav.no/endringer/en",
       bekreftAtVilSvareRiktig:
         "I confirm that I will answer as accurately as I can",
-      annenPersonInfoBullet2:
-        "I understand that, as a private individual, I will receive letters about case processing as long as the power of attorney is valid",
-      arbeidsgiverInfoBullet2:
-        "You will receive all letters about case processing in Altinn",
-      radgiverInfoBullet2:
-        "I understand that, as an adviser, I will receive all letters about case processing in Altinn as long as the access and power of attorney are valid",
+      arbeidsgiverInfo:
+        "As the employer, you will receive all letters about case processing in Altinn.",
+      radgiverInfo:
+        "The company you work for will receive all letters about case processing in Altinn as long as the access and power of attorney are valid.",
+      annenPersonInfo:
+        "As the authorised representative, you will receive letters about case processing as long as the power of attorney is valid.",
     },
     oversiktFelles: {
       utkastTittel: "DRAFTS",

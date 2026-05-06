@@ -334,12 +334,12 @@ export const nb = {
       linkUrl: "https://www.nav.no/endringer",
       bekreftAtVilSvareRiktig:
         "Jeg bekrefter at jeg vil svare så riktig som jeg kan",
-      annenPersonInfoBullet2:
-        "Jeg forstår at jeg som privatperson vil motta brev om saksbehandlingen så lenge fullmakten gjelder",
-      arbeidsgiverInfoBullet2:
-        "Du vil motta alle brev om saksbehandlingen i Altinn",
-      radgiverInfoBullet2:
-        "Jeg forstår at jeg som rådgiver vil motta alle brev om saksbehandlingen i Altinn så lenge tilgangen og fullmakten gjelder",
+      arbeidsgiverInfo:
+        "Du som arbeidsgiver vil motta alle brev om saksbehandlingen i Altinn.",
+      radgiverInfo:
+        "Virksomheten du jobber for vil motta alle brev om saksbehandlingen i Altinn så lenge tilgangen og fullmakten gjelder.",
+      annenPersonInfo:
+        "Du som fullmektig vil motta brev om saksbehandlingen så lenge fullmakten gjelder.",
     },
     oversiktFelles: {
       utkastTittel: "UTKAST",
