@@ -122,13 +122,13 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         pengestotteSomMottasFraAndreLandBelop: {
           type: "TEXT",
-          label: "Hvor mye penger mottar du brutto per måned",
+          label: "Hvor mye penger mottar du brutto per måned?",
           pakrevd: false,
           hjelpetekst: "Oppgi beløpet i norske kroner",
         },
         pengestotteSomMottasFraAndreLandBeskrivelse: {
           type: "TEXTAREA",
-          label: "Hva slags pengestøtte mottar du",
+          label: "Hva slags pengestøtte mottar du?",
           pakrevd: false,
         },
         inntektFraNorskEllerUtenlandskVirksomhet: {
@@ -732,13 +732,13 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         pengestotteSomMottasFraAndreLandBelop: {
           type: "TEXT",
-          label: "How much money do you receive gross per month",
+          label: "How much money do you receive gross per month?",
           pakrevd: false,
           hjelpetekst: "Enter the amount in Norwegian kroner",
         },
         pengestotteSomMottasFraAndreLandBeskrivelse: {
           type: "TEXTAREA",
-          label: "What kind of financial support do you receive",
+          label: "What kind of financial support do you receive?",
           pakrevd: false,
         },
         inntektFraNorskEllerUtenlandskVirksomhet: {
