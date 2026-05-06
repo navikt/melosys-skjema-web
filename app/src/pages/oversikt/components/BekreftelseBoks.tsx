@@ -19,16 +19,20 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
 
   const getInfoTekst = (): string | null => {
     switch (representasjonstype) {
-      case Representasjonstype.DEG_SELV:
+      case Representasjonstype.DEG_SELV: {
         return null;
-      case Representasjonstype.ANNEN_PERSON:
+      }
+      case Representasjonstype.ANNEN_PERSON: {
         return t("oversiktBekreftelse.annenPersonInfo");
+      }
       case Representasjonstype.ARBEIDSGIVER:
-      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT:
+      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
         return t("oversiktBekreftelse.arbeidsgiverInfo");
+      }
       case Representasjonstype.RADGIVER:
-      case Representasjonstype.RADGIVER_MED_FULLMAKT:
+      case Representasjonstype.RADGIVER_MED_FULLMAKT: {
         return t("oversiktBekreftelse.radgiverInfo");
+      }
     }
   };
 

@@ -116,15 +116,9 @@ export class OversiktPage {
     this.bekreftelseLink = page.getByRole("link", {
       name: bekreftelseTekster.linkText,
     });
-    this.annenPersonInfo = page.getByText(
-      bekreftelseTekster.annenPersonInfo,
-    );
-    this.arbeidsgiverInfo = page.getByText(
-      bekreftelseTekster.arbeidsgiverInfo,
-    );
-    this.radgiverInfo = page.getByText(
-      bekreftelseTekster.radgiverInfo,
-    );
+    this.annenPersonInfo = page.getByText(bekreftelseTekster.annenPersonInfo);
+    this.arbeidsgiverInfo = page.getByText(bekreftelseTekster.arbeidsgiverInfo);
+    this.radgiverInfo = page.getByText(bekreftelseTekster.radgiverInfo);
   }
 
   async goto() {
