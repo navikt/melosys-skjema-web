@@ -366,6 +366,7 @@ function SkatteforholdOgInntektStegContent({
 
                 {visInntektFelt && (
                   <TextField
+                    description={belopFelt.hjelpetekst}
                     className="max-w-xs"
                     error={translateError(getFieldError(errors, "inntekt"))}
                     label={inntektFelt.label}
@@ -377,6 +378,7 @@ function SkatteforholdOgInntektStegContent({
 
                 {visInntektFraEgenVirksomhetFelt && (
                   <TextField
+                    description={belopFelt.hjelpetekst}
                     className="max-w-xs"
                     error={translateError(
                       getFieldError(errors, "inntektFraEgenVirksomhet"),
