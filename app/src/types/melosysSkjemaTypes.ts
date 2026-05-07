@@ -848,8 +848,8 @@ export interface SkatteforholdOgInntektTranslation {
   maaOppgiBelopPengestotte: string;
   maaOppgiBeskrivelsePengestotte: string;
   ugyldigBelopFormat: string;
-  maaVelgeMinsteEnInntektKilde: string;
-  maaVelgeMinsteEnInntektType: string;
+  maaVelgeMinstEnInntektKilde: string;
+  maaVelgeMinstEnInntektType: string;
   maaOppgiInntekt: string;
   maaOppgiInntektFraEgenVirksomhet: string;
   inntektSkalIkkeOppgis: string;
