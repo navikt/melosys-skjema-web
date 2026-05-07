@@ -2,6 +2,7 @@ import type { TFunction } from "i18next";
 
 import type {
   BooleanFeltDefinisjon,
+  CheckboxGroupFeltDefinisjon,
   CountrySelectFeltDefinisjon,
   DateFeltDefinisjon,
   ListeFeltDefinisjon,
@@ -10,9 +11,11 @@ import type {
   TextareaFeltDefinisjon,
   TextFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
+import { formaterBelopForVisning } from "~/utils/belopFormat.ts";
 
 export type FeltUnion =
   | BooleanFeltDefinisjon
+  | CheckboxGroupFeltDefinisjon
   | CountrySelectFeltDefinisjon
   | DateFeltDefinisjon
   | ListeFeltDefinisjon
@@ -29,10 +32,18 @@ function formatDate(dateStr: string): string {
   });
 }
 
+/** Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks */
+const BELOP_FELTER = new Set([
+  "pengestotteSomMottasFraAndreLandBelop",
+  "inntekt",
+  "inntektFraEgenVirksomhet",
+]);
+
 export function formaterVerdi(
   felt: FeltUnion,
   verdi: unknown,
   t: TFunction,
+  feltNavn?: string,
 ): string {
   if (verdi === null || verdi === undefined) return "\u2013";
 
@@ -61,12 +72,27 @@ export function formaterVerdi(
       );
     }
 
+    case "CHECKBOX_GROUP": {
+      const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
+      const selections = verdi as Record<string, boolean> | undefined;
+      if (!selections) return "\u2013";
+      const selectedLabels = checkboxFelt.alternativer
+        .filter((a) => selections[a.verdi])
+        .map((a) => a.label);
+      return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u2013";
+    }
+
     case "COUNTRY_SELECT": {
       return t(`land.${String(verdi)}`);
     }
 
     default: {
-      return String(verdi);
+      const strVerdi = String(verdi);
+      if (feltNavn && BELOP_FELTER.has(feltNavn)) {
+        const formatert = formaterBelopForVisning(strVerdi);
+        return formatert ? `${formatert} kr` : strVerdi;
+      }
+      return strVerdi;
     }
   }
 }

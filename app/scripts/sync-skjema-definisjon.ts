@@ -157,7 +157,7 @@ function transformFelt(felt: FlersprakligFelt, språk: string): EnkeltsprakligFe
 
   if (felt.alternativer) {
     result.alternativer = felt.alternativer.map((alt) => ({
-      verdi: alt.verdi,
+      verdi: alt.verdi ?? (alt as Record<string, unknown>).key as string ?? (alt as Record<string, unknown>).value as string,
       label: extractText(alt.label, språk)!,
       ...(alt.beskrivelse && { beskrivelse: extractText(alt.beskrivelse, språk) }),
     }));

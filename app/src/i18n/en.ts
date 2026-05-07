@@ -213,6 +213,7 @@ export const en = {
     },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",
+      inntektHeading: "Income",
       erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Are you liable to pay tax to Norway for the entire posting period?",
       mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
@@ -236,6 +237,13 @@ export const en = {
         "You must select which country pays the financial support",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
+      ugyldigBelopFormat: "The amount must be a valid amount in kroner",
+      duMaVelgeMinstEnInntektKilde:
+        "You must select at least one work income source",
+      duMaVelgeMinstEnInntektType: "You must select at least one income type",
+      duMaOppgiLonnsinntekt: "You must specify salary income",
+      duMaOppgiInntektFraEgenVirksomhet:
+        "You must specify income from own business",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Place of work abroad",

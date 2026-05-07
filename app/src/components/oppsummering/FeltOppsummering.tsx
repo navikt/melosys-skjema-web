@@ -2,6 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import type {
+  CheckboxGroupFeltDefinisjon,
   ListeFeltDefinisjon,
   PeriodeFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -12,10 +13,15 @@ import { ListeFeltOppsummering } from "./ListeFeltOppsummering.tsx";
 
 interface FeltOppsummeringProps {
   felt: FeltUnion;
+  feltNavn?: string;
   verdi: unknown;
 }
 
-export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
+export function FeltOppsummering({
+  felt,
+  feltNavn,
+  verdi,
+}: FeltOppsummeringProps) {
   const { t } = useTranslation();
   if (felt.type === "LIST") {
     return (
@@ -48,7 +54,30 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
       <FormSummary.Answer>
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
-          {formaterVerdi(felt, verdi, t)}
+          {formaterVerdi(felt, verdi, t, feltNavn)}
+        </FormSummary.Value>
+      </FormSummary.Answer>
+    );
+  }
+
+  if (felt.type === "CHECKBOX_GROUP") {
+    const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
+    const selections = verdi as Record<string, boolean> | undefined;
+    const selectedLabels = checkboxFelt.alternativer
+      .filter((a) => selections?.[a.verdi])
+      .map((a) => a.label);
+    if (selectedLabels.length === 0) return null;
+    return (
+      <FormSummary.Answer>
+        <FormSummary.Label>{felt.label}</FormSummary.Label>
+        <FormSummary.Value>
+          <ul
+            style={{ margin: 0, paddingLeft: "1.5rem", listStyleType: "disc" }}
+          >
+            {selectedLabels.map((label) => (
+              <li key={label}>{label}</li>
+            ))}
+          </ul>
         </FormSummary.Value>
       </FormSummary.Answer>
     );
@@ -57,7 +86,9 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
   return (
     <FormSummary.Answer>
       <FormSummary.Label>{felt.label}</FormSummary.Label>
-      <FormSummary.Value>{formaterVerdi(felt, verdi, t)}</FormSummary.Value>
+      <FormSummary.Value>
+        {formaterVerdi(felt, verdi, t, feltNavn)}
+      </FormSummary.Value>
     </FormSummary.Answer>
   );
 }
