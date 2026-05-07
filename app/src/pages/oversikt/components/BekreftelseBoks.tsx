@@ -19,9 +19,6 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
 
   const getInfoTekst = (): string | null => {
     switch (representasjonstype) {
-      case Representasjonstype.DEG_SELV: {
-        return null;
-      }
       case Representasjonstype.ANNEN_PERSON: {
         return t("oversiktBekreftelse.annenPersonInfo");
       }
@@ -32,6 +29,9 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
       case Representasjonstype.RADGIVER:
       case Representasjonstype.RADGIVER_MED_FULLMAKT: {
         return t("oversiktBekreftelse.radgiverInfo");
+      }
+      default: {
+        return null;
       }
     }
   };
