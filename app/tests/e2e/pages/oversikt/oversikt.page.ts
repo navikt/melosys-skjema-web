@@ -10,8 +10,8 @@ const feilmeldinger = {
     translations.oversiktFelles.valideringManglerArbeidsgiver,
   valideringManglerArbeidstaker:
     translations.oversiktFelles.valideringManglerArbeidstaker,
-  valideringManglerBekreftelseDegSelv:
-    translations.oversiktFelles.valideringManglerBekreftelseDegSelv,
+  valideringManglerBekreftelseAtVilSvareRiktig:
+    translations.oversiktFelles.valideringManglerBekreftelseAtVilSvareRiktig,
 };
 
 const bekreftelseTekster = {
@@ -286,7 +286,7 @@ export class OversiktPage {
     await expect(
       this.page
         .getByRole("listitem")
-        .filter({ hasText: feilmeldinger.valideringManglerBekreftelseDegSelv }),
+        .filter({ hasText: feilmeldinger.valideringManglerBekreftelseAtVilSvareRiktig }),
     ).toBeVisible();
   }
 

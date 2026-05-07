@@ -56,7 +56,7 @@ export const soknadStarterSchema = z
 
     ctx.addIssue({
       code: "custom",
-      message: "oversiktFelles.valideringManglerBekreftelseDegSelv",
+      message: "oversiktFelles.valideringManglerBekreftelseAtVilSvareRiktig",
       path: ["bekreftelse"],
     });
   })

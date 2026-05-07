@@ -521,7 +521,7 @@ export const en = {
       valideringFeilTittel: "You must fill in these fields:",
       valideringManglerArbeidsgiver: "Employer must be selected",
       valideringManglerArbeidstaker: "Employee must be selected",
-      valideringManglerBekreftelseDegSelv:
+      valideringManglerBekreftelseAtVilSvareRiktig:
         "You must confirm that you will answer as accurately as you can",
       historikkTittel: "Previously submitted applications",
       historikkSokPlaceholder: "Search...",
