@@ -284,9 +284,9 @@ export class OversiktPage {
 
   async assertValideringManglerBekreftelseIsVisible() {
     await expect(
-      this.page
-        .getByRole("listitem")
-        .filter({ hasText: feilmeldinger.valideringManglerBekreftelseAtVilSvareRiktig }),
+      this.page.getByRole("listitem").filter({
+        hasText: feilmeldinger.valideringManglerBekreftelseAtVilSvareRiktig,
+      }),
     ).toBeVisible();
   }
 
