@@ -331,18 +331,17 @@ export const nb = {
     },
     oversiktBekreftelse: {
       intro:
-        "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken din.",
+        "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken.",
       linkText: "Les mer om viktigheten av å gi riktige opplysninger.",
       linkUrl: "https://www.nav.no/endringer",
       bekreftAtVilSvareRiktig:
         "Jeg bekrefter at jeg vil svare så riktig som jeg kan",
-      bekreftAtLestOgForstatt: "Jeg bekrefter at jeg har lest og forstått",
-      annenPersonInfoBullet2:
-        "Jeg forstår at jeg som privatperson vil motta brev om saksbehandlingen så lenge fullmakten gjelder",
-      arbeidsgiverInfoBullet2:
-        "Du vil motta alle brev om saksbehandlingen i Altinn",
-      radgiverInfoBullet2:
-        "Jeg forstår at jeg som rådgiver vil motta alle brev om saksbehandlingen i Altinn så lenge tilgangen og fullmakten gjelder",
+      arbeidsgiverInfo:
+        "Du som arbeidsgiver vil motta alle brev om saksbehandlingen i Altinn.",
+      radgiverInfo:
+        "Virksomheten du jobber for vil motta alle brev om saksbehandlingen i Altinn så lenge tilgangen og fullmakten gjelder.",
+      annenPersonInfo:
+        "Du som fullmektig vil motta brev om saksbehandlingen så lenge fullmakten gjelder.",
     },
     oversiktFelles: {
       utkastTittel: "UTKAST",
@@ -404,9 +403,8 @@ export const nb = {
       valideringFeilTittel: "Du må fylle ut disse feltene:",
       valideringManglerArbeidsgiver: "Arbeidsgiver må velges",
       valideringManglerArbeidstaker: "Arbeidstaker må velges",
-      valideringManglerBekreftelseDegSelv:
+      valideringManglerBekreftelseAtVilSvareRiktig:
         "Du må bekrefte at du vil svare så riktig som du kan",
-      valideringManglerBekreftelse: "Du må bekrefte at du har lest og forstått",
       historikkTittel: "Tidligere innsendte søknader",
       historikkSokPlaceholder: "Søk...",
       historikkKolonneVirksomhet: "Virksomhet",

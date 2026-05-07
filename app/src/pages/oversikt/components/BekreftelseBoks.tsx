@@ -17,49 +17,26 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
     formState: { errors },
   } = useFormContext<SoknadStarterFormData>();
 
-  const getBekreftelseBoksBulletpointTexts = (): string[] => {
+  const getInfoTekst = (): string | null => {
     switch (representasjonstype) {
-      case Representasjonstype.DEG_SELV: {
-        return [];
-      }
       case Representasjonstype.ANNEN_PERSON: {
-        return [
-          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
-          t("oversiktBekreftelse.annenPersonInfoBullet2"),
-        ];
+        return t("oversiktBekreftelse.annenPersonInfo");
       }
-
       case Representasjonstype.ARBEIDSGIVER:
       case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
-        return [
-          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
-          t("oversiktBekreftelse.arbeidsgiverInfoBullet2"),
-        ];
+        return t("oversiktBekreftelse.arbeidsgiverInfo");
       }
-
       case Representasjonstype.RADGIVER:
       case Representasjonstype.RADGIVER_MED_FULLMAKT: {
-        return [
-          t("oversiktBekreftelse.bekreftAtVilSvareRiktig"),
-          t("oversiktBekreftelse.radgiverInfoBullet2"),
-        ];
-      }
-    }
-  };
-
-  const getBekreftelseCheckboxText = (): string => {
-    switch (representasjonstype) {
-      case Representasjonstype.DEG_SELV: {
-        return t("oversiktBekreftelse.bekreftAtVilSvareRiktig");
+        return t("oversiktBekreftelse.radgiverInfo");
       }
       default: {
-        return t("oversiktBekreftelse.bekreftAtLestOgForstatt");
+        return null;
       }
     }
   };
 
-  const bekreftelseBoksBulletpointTexts = getBekreftelseBoksBulletpointTexts();
-  const bekreftelseCheckboxText = getBekreftelseCheckboxText();
+  const infoTekst = getInfoTekst();
 
   return (
     <Box
@@ -81,13 +58,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
           </Link>
         </VStack>
 
-        {bekreftelseBoksBulletpointTexts.length > 0 && (
-          <ul className="list-disc pl-6 space-y-1">
-            {bekreftelseBoksBulletpointTexts.map((text) => (
-              <li key={text}>{text}</li>
-            ))}
-          </ul>
-        )}
+        {infoTekst && <BodyLong>{infoTekst}</BodyLong>}
 
         <Controller
           name="bekreftelse"
@@ -100,7 +71,7 @@ export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
               onBlur={field.onBlur}
               onChange={(event) => field.onChange(event.target.checked)}
             >
-              {bekreftelseCheckboxText}
+              {t("oversiktBekreftelse.bekreftAtVilSvareRiktig")}
             </Checkbox>
           )}
         />
