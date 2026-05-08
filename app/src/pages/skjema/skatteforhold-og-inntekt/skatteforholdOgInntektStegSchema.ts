@@ -37,7 +37,6 @@ export const skatteforholdOgInntektSchema = z
       error:
         "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
       path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
-      when: () => true,
     },
   )
   .refine(
@@ -48,7 +47,6 @@ export const skatteforholdOgInntektSchema = z
       error:
         "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
       path: ["landSomUtbetalerPengestotte"],
-      when: () => true,
     },
   )
   .refine(
@@ -58,7 +56,6 @@ export const skatteforholdOgInntektSchema = z
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
       path: ["pengestotteSomMottasFraAndreLandBelop"],
-      when: () => true,
     },
   )
   .refine(
@@ -71,7 +68,6 @@ export const skatteforholdOgInntektSchema = z
     {
       error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektKilde",
       path: ["inntektFraNorskEllerUtenlandskVirksomhet"],
-      when: () => true,
     },
   )
   .refine(
@@ -82,7 +78,6 @@ export const skatteforholdOgInntektSchema = z
     {
       error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektType",
       path: ["hvilkeTyperInntektHarDu"],
-      when: () => true,
     },
   )
   .refine(
@@ -106,7 +101,6 @@ export const skatteforholdOgInntektSchema = z
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
       path: ["inntekt"],
-      when: () => true,
     },
   )
   .refine(
@@ -118,7 +112,6 @@ export const skatteforholdOgInntektSchema = z
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
       path: ["inntekt"],
-      when: () => true,
     },
   )
   .refine(
@@ -130,7 +123,6 @@ export const skatteforholdOgInntektSchema = z
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",
       path: ["inntektFraEgenVirksomhet"],
-      when: () => true,
     },
   )
   .refine(
@@ -143,7 +135,6 @@ export const skatteforholdOgInntektSchema = z
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
       path: ["inntektFraEgenVirksomhet"],
-      when: () => true,
     },
   )
   .transform((data) => ({

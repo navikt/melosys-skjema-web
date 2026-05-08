@@ -31,7 +31,10 @@ import {
   getNextStep,
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes.ts";
+import type {
+  CheckboxGroupFeltDefinisjon,
+  SkatteforholdOgInntektDto,
+} from "~/types/melosysSkjemaTypes.ts";
 import {
   Skjemadel,
   type UtsendtArbeidstakerSkjemaDto,
@@ -56,11 +59,6 @@ type SkatteforholdOgInntektFormInput = z.input<
 type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
 >;
-
-interface CheckboxAlternativ {
-  verdi: string;
-  label: string;
-}
 
 function SkatteforholdOgInntektStegContent({
   skjema,
@@ -110,15 +108,11 @@ function SkatteforholdOgInntektStegContent({
   );
 
   const inntektKildeAlternativer = (
-    inntektKildeFelt as unknown as {
-      alternativer: CheckboxAlternativ[];
-    }
+    inntektKildeFelt as CheckboxGroupFeltDefinisjon
   ).alternativer;
 
   const hvilkenInntektAlternativer = (
-    hvilkenInntektFelt as unknown as {
-      alternativer: CheckboxAlternativ[];
-    }
+    hvilkenInntektFelt as CheckboxGroupFeltDefinisjon
   ).alternativer;
 
   const formMethods = useForm<SkatteforholdOgInntektFormInput>({
@@ -223,22 +217,8 @@ function SkatteforholdOgInntektStegContent({
   });
 
   const onSubmit = (data: SkatteforholdOgInntektFormInput) => {
-    // Fjern beløpsformatering før innsending
-    const cleaned = {
-      ...data,
-      pengestotteSomMottasFraAndreLandBelop:
-        data.pengestotteSomMottasFraAndreLandBelop
-          ? stripBelopFormatering(data.pengestotteSomMottasFraAndreLandBelop)
-          : data.pengestotteSomMottasFraAndreLandBelop,
-      inntekt: data.inntekt
-        ? stripBelopFormatering(data.inntekt)
-        : data.inntekt,
-      inntektFraEgenVirksomhet: data.inntektFraEgenVirksomhet
-        ? stripBelopFormatering(data.inntektFraEgenVirksomhet)
-        : data.inntektFraEgenVirksomhet,
-    };
     postSkatteforholdMutation.mutate(
-      cleaned as unknown as SkatteforholdOgInntektFormData,
+      data as unknown as SkatteforholdOgInntektFormData,
     );
   };
 
