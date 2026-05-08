@@ -160,6 +160,7 @@ function FamiliemedlemmerStegContent({
 
 // --- Kode under er midlertidig deaktivert, men beholdt for mulig fremtidig bruk ---
 
+// @ts-expect-error: Midlertidig deaktivert, beholdt for fremtidig bruk
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function FamiliemedlemmerListe() {
   const { control } = useFormContext();
