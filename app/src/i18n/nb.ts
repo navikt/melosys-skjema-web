@@ -144,7 +144,13 @@ export const nb = {
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
       informasjonOmEgenSoknad:
-        "Familiemedlemmer må sende egen søknad. Du kan sende søknad for barn under 18 år ved å starte en ny søknad på vegne av barnet.",
+        "Hvis familiemedlemmer trenger avklaring av sin trygdetilhørighet, må de sende inn egen søknad. Medfølgende familiemedlemmer kan søke i skjemaet:",
+      soknadsskjemaLenke: "https://www.nav.no/fyllut/nav020807",
+      soknadsskjemaNavn:
+        "søknad om avklaring av trygdetilhørighet under opphold i EØS eller Sveits",
+      somLiggerPaNavNo: " som ligger på nav.no.",
+      sendeSoknadForBarn:
+        "Du kan sende søknad for barn under 18 år på nevnte skjema.",
       endreFamiliemedlem: "Endre familiemedlem",
       duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer:
         "Du må svare på om personen har norsk fødselsnummer eller D-nummer",

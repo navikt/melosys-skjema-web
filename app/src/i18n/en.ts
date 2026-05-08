@@ -172,7 +172,13 @@ export const en = {
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "You must answer whether you have a spouse, partner, cohabitant or children who will accompany you",
       informasjonOmEgenSoknad:
-        "Family members must submit their own application. You can submit an application for children under 18 by starting a new application on behalf of the child.",
+        "If family members need clarification of their social security affiliation, they must submit their own application. Accompanying family members can apply using the form:",
+      soknadsskjemaLenke: "https://www.nav.no/fyllut/nav020807?lang=en",
+      soknadsskjemaNavn:
+        "application for determination of applicable social security legislation during a stay in the EEA or Switzerland",
+      somLiggerPaNavNo: " available at nav.no.",
+      sendeSoknadForBarn:
+        "You can submit an application for children under 18 using this form.",
       familiemedlemmer: "Family members",
       leggTilFamiliemedlem: "Add family member",
       endreFamiliemedlem: "Edit family member",

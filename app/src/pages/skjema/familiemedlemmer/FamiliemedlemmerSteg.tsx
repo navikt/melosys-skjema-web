@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Alert,
+  BodyLong,
   Button,
   FormSummary,
-  InlineMessage,
   Label,
+  Link,
   Modal,
   Table,
   TextField,
@@ -123,25 +125,42 @@ function FamiliemedlemmerStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            description={skalHaMedFelt.hjelpetekst}
+            // Midlertidig deaktivert hjelpetekst
+            // description={skalHaMedFelt.hjelpetekst}
             formFieldName="skalHaMedFamiliemedlemmer"
             legend={skalHaMedFelt.label}
           />
 
           {skalHaMedFamiliemedlemmer && (
-            <>
-              <InlineMessage className="mt-4" status="info">
-                {t("familiemedlemmerSteg.informasjonOmEgenSoknad")}
-              </InlineMessage>
-              <FamiliemedlemmerListe />
-            </>
+            <Alert className="mt-4" variant="info">
+              <BodyLong>
+                {t("familiemedlemmerSteg.informasjonOmEgenSoknad")}{" "}
+                <Link
+                  href={t("familiemedlemmerSteg.soknadsskjemaLenke")}
+                  target="_blank"
+                >
+                  {t("familiemedlemmerSteg.soknadsskjemaNavn")}
+                </Link>
+                {t("familiemedlemmerSteg.somLiggerPaNavNo")}
+              </BodyLong>
+              <BodyLong className="mt-2">
+                {t("familiemedlemmerSteg.sendeSoknadForBarn")}
+              </BodyLong>
+            </Alert>
           )}
+
+          {/* Midlertidig deaktivert – registrering av familiemedlemmers personalia. Kan bli aktuelt igjen senere
+          {skalHaMedFamiliemedlemmer && <FamiliemedlemmerListe />}
+          */}
         </SkjemaSteg>
       </form>
     </FormProvider>
   );
 }
 
+// --- Kode under er midlertidig deaktivert, men beholdt for mulig fremtidig bruk ---
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function FamiliemedlemmerListe() {
   const { control } = useFormContext();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
