@@ -1,34 +1,31 @@
+/** Maks lengde for et formatert beløpsfelt (f.eks. "999 999 999 999" = 16 tegn) */
+export const BELOP_MAX_LENGTH = 16;
+
+const belopFormatter = new Intl.NumberFormat("nb-NO", {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
 /**
- * Formaterer en rå inputverdi som et norsk kronebeløp for visning.
- * - Erstatter punktum med komma
- * - Avrunder til 2 desimaler
- * - Legger til tusenskilletegn (mellomrom)
- * Eksempler: "1234.456" → "1 234,46", "1000000" → "1 000 000,00"
+ * Formaterer en rå inputverdi som et norsk kronebeløp (hele kroner) for visning.
+ * - Avrunder til nærmeste hele krone
+ * - Legger til tusenskilletegn (non-breaking space via Intl.NumberFormat)
+ * Eksempler: "1234" → "1 234", "1000000" → "1 000 000"
  */
 export function formaterBelopForVisning(value: string): string {
   const trimmed = value.trim();
   if (!trimmed) return "";
 
-  // Normaliser: erstatt komma med punktum for parsing
-  const normalized = trimmed.replaceAll(/\s/g, "").replace(",", ".");
-  const parsed = Number.parseFloat(normalized);
+  const normalized = trimmed.replaceAll(/\s/g, "");
+  const parsed = Number.parseInt(normalized, 10);
   if (Number.isNaN(parsed) || parsed < 0) return value;
 
-  // Avrund til 2 desimaler
-  const rounded = parsed.toFixed(2);
-  const parts = rounded.split(".");
-  const helTall = parts[0] ?? "0";
-  const desimaler = parts[1] ?? "00";
-
-  // Legg til tusenskilletegn
-  const medTusenSkille = helTall.replaceAll(/\B(?=(\d{3})+(?!\d))/g, " ");
-
-  return `${medTusenSkille},${desimaler}`;
+  return belopFormatter.format(parsed);
 }
 
 /**
  * Fjerner formatering (mellomrom) fra et visningsformatert beløp,
- * beholder komma og siffer — formatet melosys-skjema-api forventer: "1234,46"
+ * beholder kun siffer — formatet melosys-skjema-api forventer: "1234"
  */
 export function stripBelopFormatering(value: string): string {
   return value.replaceAll(/\s/g, "");

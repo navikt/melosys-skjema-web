@@ -2,12 +2,11 @@ import { z } from "zod";
 
 import { stripBelopFormatering } from "~/utils/belopFormat.ts";
 
-/** Gyldig beløp: positive kroner med øre (2 desimal plasser), eksempel: 1000,00 */
-const BELOP_REGEX = /^\d+,\d{2}$/;
-
-function erGyldigBelop(belop?: string): boolean {
+function erPositivtBelop(belop?: string): boolean {
   if (!belop) return false;
-  return BELOP_REGEX.test(stripBelopFormatering(belop.trim()));
+  const stripped = stripBelopFormatering(belop.trim());
+  const parsed = Number.parseInt(stripped, 10);
+  return !Number.isNaN(parsed) && parsed > 0;
 }
 
 const checkboxGroupSchema = z.record(z.string(), z.boolean()).optional();
@@ -55,20 +54,9 @@ export const skatteforholdOgInntektSchema = z
   .refine(
     (data) =>
       !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
-      !!data.pengestotteSomMottasFraAndreLandBelop?.trim(),
+      erPositivtBelop(data.pengestotteSomMottasFraAndreLandBelop),
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
-      path: ["pengestotteSomMottasFraAndreLandBelop"],
-      when: () => true,
-    },
-  )
-  .refine(
-    (data) =>
-      !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
-      !data.pengestotteSomMottasFraAndreLandBelop?.trim() ||
-      erGyldigBelop(data.pengestotteSomMottasFraAndreLandBelop),
-    {
-      error: "skatteforholdOgInntektSteg.ugyldigBelopFormat",
       path: ["pengestotteSomMottasFraAndreLandBelop"],
       when: () => true,
     },
@@ -125,10 +113,10 @@ export const skatteforholdOgInntektSchema = z
     (data) => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return true;
       if (!data.inntekt?.trim()) return true;
-      return erGyldigBelop(data.inntekt);
+      return erPositivtBelop(data.inntekt);
     },
     {
-      error: "skatteforholdOgInntektSteg.ugyldigBelopFormat",
+      error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
       path: ["inntekt"],
       when: () => true,
     },
@@ -150,10 +138,10 @@ export const skatteforholdOgInntektSchema = z
       if (!data.hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET)
         return true;
       if (!data.inntektFraEgenVirksomhet?.trim()) return true;
-      return erGyldigBelop(data.inntektFraEgenVirksomhet);
+      return erPositivtBelop(data.inntektFraEgenVirksomhet);
     },
     {
-      error: "skatteforholdOgInntektSteg.ugyldigBelopFormat",
+      error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
       path: ["inntektFraEgenVirksomhet"],
       when: () => true,
     },
@@ -163,7 +151,6 @@ export const skatteforholdOgInntektSchema = z
       data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
     mottarPengestotteFraAnnetEosLandEllerSveits:
       data.mottarPengestotteFraAnnetEosLandEllerSveits,
-    // Clear conditional fields when mottarPengestotteFraAnnetEosLandEllerSveits is false
     pengestotteSomMottasFraAndreLandBeskrivelse:
       data.mottarPengestotteFraAnnetEosLandEllerSveits
         ? data.pengestotteSomMottasFraAndreLandBeskrivelse
@@ -172,7 +159,6 @@ export const skatteforholdOgInntektSchema = z
       data.mottarPengestotteFraAnnetEosLandEllerSveits
         ? data.landSomUtbetalerPengestotte
         : undefined,
-    // Trim beløp and strip thousand separators
     pengestotteSomMottasFraAndreLandBelop:
       data.mottarPengestotteFraAnnetEosLandEllerSveits &&
       data.pengestotteSomMottasFraAndreLandBelop
@@ -183,7 +169,6 @@ export const skatteforholdOgInntektSchema = z
     inntektFraNorskEllerUtenlandskVirksomhet:
       data.inntektFraNorskEllerUtenlandskVirksomhet,
     hvilkeTyperInntektHarDu: data.hvilkeTyperInntektHarDu,
-    // Clear income fields based on hvilkeTyperInntektHarDu selections and valid combinations
     inntekt: (() => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return;
       const harNorsk =

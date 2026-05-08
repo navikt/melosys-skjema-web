@@ -237,7 +237,6 @@ export const en = {
         "You must select which country pays the financial support",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
-      ugyldigBelopFormat: "The amount must be a valid amount in kroner",
       duMaVelgeMinstEnInntektKilde:
         "You must select at least one work income source",
       duMaVelgeMinstEnInntektType: "You must select at least one income type",

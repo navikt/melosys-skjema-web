@@ -197,7 +197,6 @@ export const nb = {
         "Du må velge hvilket land som utbetaler pengestøtten",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
-      ugyldigBelopFormat: "Beløpet må være et gyldig beløp i kroner",
       duMaVelgeMinstEnInntektKilde: "Du må velge minst én arbeidsinntektkilde",
       duMaVelgeMinstEnInntektType: "Du må velge minst én inntekttype",
       duMaOppgiLonnsinntekt: "Du må oppgi lønnsinntekt",

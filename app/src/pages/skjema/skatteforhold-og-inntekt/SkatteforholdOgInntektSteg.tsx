@@ -37,6 +37,7 @@ import {
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import {
+  BELOP_MAX_LENGTH,
   formaterBelopForVisning,
   stripBelopFormatering,
 } from "~/utils/belopFormat.ts";
@@ -370,7 +371,8 @@ function SkatteforholdOgInntektStegContent({
                     className="max-w-xs"
                     error={translateError(getFieldError(errors, "inntekt"))}
                     label={inntektFelt.label}
-                    inputMode="decimal"
+                    inputMode="numeric"
+                    maxLength={BELOP_MAX_LENGTH}
                     {...register("inntekt")}
                     onBlur={handleBelopBlur("inntekt")}
                   />
@@ -384,7 +386,8 @@ function SkatteforholdOgInntektStegContent({
                       getFieldError(errors, "inntektFraEgenVirksomhet"),
                     )}
                     label={inntektFraEgenVirksomhetFelt.label}
-                    inputMode="decimal"
+                    inputMode="numeric"
+                    maxLength={BELOP_MAX_LENGTH}
                     {...register("inntektFraEgenVirksomhet")}
                     onBlur={handleBelopBlur("inntektFraEgenVirksomhet")}
                   />
@@ -417,8 +420,9 @@ function SkatteforholdOgInntektStegContent({
                     "pengestotteSomMottasFraAndreLandBelop",
                   ),
                 )}
-                inputMode="decimal"
+                inputMode="numeric"
                 label={belopFelt.label}
+                maxLength={BELOP_MAX_LENGTH}
                 {...register("pengestotteSomMottasFraAndreLandBelop")}
                 onBlur={handleBelopBlur(
                   "pengestotteSomMottasFraAndreLandBelop",
