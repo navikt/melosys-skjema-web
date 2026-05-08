@@ -40,8 +40,9 @@ export class FamiliemedlemmerStegPage {
   readonly harDuFamiliemedlemmerSomSkalVaereMedRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly leggTilFamiliemedlemButton: Locator;
   readonly lagreOgFortsettButton: Locator;
+  readonly infoboks: Locator;
 
-  // Modal locators
+  // Modal locators (beholdt for fremtidig bruk)
   readonly modal: Locator;
   readonly modalFornavnInput: Locator;
   readonly modalEtternavnInput: Locator;
@@ -74,6 +75,10 @@ export class FamiliemedlemmerStegPage {
 
     this.leggTilFamiliemedlemButton = page.getByRole("button", {
       name: felter.familiemedlemmer.leggTilLabel,
+    });
+
+    this.infoboks = page.getByRole("region").filter({
+      hasText: t.familiemedlemmerSteg.informasjonOmEgenSoknad,
     });
 
     // Modal locators (scoped to the dialog)
@@ -146,6 +151,20 @@ export class FamiliemedlemmerStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/familiemedlemmer`,
     );
+  }
+
+  // --- Infoboks assertions ---
+
+  async assertInfoboksIsVisible() {
+    await expect(
+      this.page.getByText(t.familiemedlemmerSteg.informasjonOmEgenSoknad),
+    ).toBeVisible();
+  }
+
+  async assertInfoboksIsNotVisible() {
+    await expect(
+      this.page.getByText(t.familiemedlemmerSteg.informasjonOmEgenSoknad),
+    ).not.toBeVisible();
   }
 
   // --- Validation assertions: hoveddelen ---

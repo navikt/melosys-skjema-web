@@ -1,7 +1,7 @@
 import { FamiliemedlemmerDto } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
-import { expect, test } from "../../fixtures/test";
+import { test } from "../../fixtures/test";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
 import { FamiliemedlemmerStegPage } from "../../pages/skjema/familiemedlemmer-steg.page";
 
@@ -36,6 +36,49 @@ test.describe("Familiemedlemmer", () => {
     await familiemedlemmerStegPage.assertNavigatedToNextStep();
   });
 
+  test("happy case - har familiemedlemmer, viser infoboks", async ({
+    page,
+  }) => {
+    const familiemedlemmerStegPage = new FamiliemedlemmerStegPage(
+      page,
+      testArbeidstakerSkjema,
+    );
+
+    await familiemedlemmerStegPage.goto();
+    await familiemedlemmerStegPage.assertIsVisible();
+
+    await familiemedlemmerStegPage.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup.JA.click();
+
+    // Infoboks med lenke til eget skjema skal vises
+    await familiemedlemmerStegPage.assertInfoboksIsVisible();
+
+    const expectedPayload: FamiliemedlemmerDto = {
+      skalHaMedFamiliemedlemmer: true,
+      familiemedlemmer: [],
+    };
+
+    await familiemedlemmerStegPage.lagreOgFortsettAndExpectPayload(
+      expectedPayload,
+    );
+    await familiemedlemmerStegPage.assertNavigatedToNextStep();
+  });
+
+  test("viser ikke infoboks når NEI er valgt", async ({ page }) => {
+    const familiemedlemmerStegPage = new FamiliemedlemmerStegPage(
+      page,
+      testArbeidstakerSkjema,
+    );
+
+    await familiemedlemmerStegPage.goto();
+    await familiemedlemmerStegPage.assertIsVisible();
+
+    await familiemedlemmerStegPage.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup.NEI.click();
+
+    await familiemedlemmerStegPage.assertInfoboksIsNotVisible();
+  });
+
+  // Midlertidig deaktivert – registrering av familiemedlemmers personalia er deaktivert
+  /*
   test("variant: med familiemedlem med norsk fødselsnummer", async ({
     page,
   }) => {
@@ -123,4 +166,5 @@ test.describe("Familiemedlemmer", () => {
     );
     await familiemedlemmerStegPage.assertNavigatedToNextStep();
   });
+  */
 });

@@ -24,6 +24,8 @@ test.describe("Familiemedlemmer - validering", () => {
     await stegPage.assertStillOnStep();
   });
 
+  // Midlertidig deaktivert – modal for familiemedlemmer er deaktivert
+  /*
   test("viser feilmeldinger i modal når ingen felter er fylt ut", async () => {
     await stegPage.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup.JA.click();
     await stegPage.clickLagreInFamiliemedlemModal();
@@ -76,4 +78,5 @@ test.describe("Familiemedlemmer - validering", () => {
     await stegPage.assertModalFodselsdatoErPakrevdIsVisible();
     await stegPage.assertFamiliemedlemModalIsOpen();
   });
+  */
 });
