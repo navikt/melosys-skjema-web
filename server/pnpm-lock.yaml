@@ -18,8 +18,8 @@ importers:
         specifier: 4.1.4
         version: 4.1.4
       '@navikt/vite-mode':
-        specifier: 0.13.7
-        version: 0.13.7(express@5.2.1)
+        specifier: 0.14.0
+        version: 0.14.0(express@5.2.1)
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -157,8 +157,8 @@ packages:
     resolution: {integrity: sha512-WS+agfWCqHyCtIpn/iQHNBRwn1gzCQDe0NY9Tz5ErrBsWHNxtqIV7W2eAmRUa3DLrZGHczoQhup+PYT6UX/SpQ==, tarball: https://npm.pkg.github.com/download/@navikt/texas/4.1.4/1725aca0fa0b803e0048212c3e202d24c10f3c3b}
     engines: {node: ^20.19.0 || >= 22.12.0 || 24.x || 25.x}
 
-  '@navikt/vite-mode@0.13.7':
-    resolution: {integrity: sha512-aOFuOn8Np6noVZmj4XYorDMW8efnnRHfwh0HJx4ON78Zk0EImL4OaVeW20BD44Rtjyai/c9+2EOBCYtKY206CA==, tarball: https://npm.pkg.github.com/download/@navikt/vite-mode/0.13.7/2c0088852983e61e5eb2b6a2259fa70d9c98d9b1}
+  '@navikt/vite-mode@0.14.0':
+    resolution: {integrity: sha512-RRb370k7udPuCFGqFMdt8yDlWmTHqQRcS968G9lzxffO4GFSUy4PDp1NF+51d8VlRKjXtgJ0NQFBzM+FjCyIqg==, tarball: https://npm.pkg.github.com/download/@navikt/vite-mode/0.14.0/2f74c6b648b3a5b6f94760910f6d2bb62ce0beac}
     peerDependencies:
       express: 5.x
 
@@ -1249,7 +1249,7 @@ snapshots:
 
   '@navikt/texas@4.1.4': {}
 
-  '@navikt/vite-mode@0.13.7(express@5.2.1)':
+  '@navikt/vite-mode@0.14.0(express@5.2.1)':
     dependencies:
       cookie-parser: 1.4.7
       express: 5.2.1
