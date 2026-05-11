@@ -130,6 +130,10 @@ const SKJEMA_DEFINISJON_A1_NB = {
               neiLabel: "Nei",
             },
           },
+          itemTypeLabels: {
+            norsk: "Norsk virksomhet",
+            utenlandsk: "Utenlandsk virksomhet",
+          },
         },
       },
     },
@@ -629,6 +633,10 @@ const SKJEMA_DEFINISJON_A1_NB = {
               neiLabel: "Nei",
             },
           },
+          itemTypeLabels: {
+            norsk: "Norsk virksomhet",
+            utenlandsk: "Utenlandsk virksomhet",
+          },
         },
       },
     },
@@ -776,6 +784,10 @@ const SKJEMA_DEFINISJON_A1_EN = {
               jaLabel: "Yes",
               neiLabel: "No",
             },
+          },
+          itemTypeLabels: {
+            norsk: "Norwegian company",
+            utenlandsk: "Foreign company",
           },
         },
       },
@@ -1278,6 +1290,10 @@ const SKJEMA_DEFINISJON_A1_EN = {
               jaLabel: "Yes",
               neiLabel: "No",
             },
+          },
+          itemTypeLabels: {
+            norsk: "Norwegian company",
+            utenlandsk: "Foreign company",
           },
         },
       },

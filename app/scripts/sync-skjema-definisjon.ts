@@ -67,6 +67,7 @@ interface FlersprakligFelt {
     beskrivelse?: FlersprakligTekst;
   }>;
   elementDefinisjon?: Record<string, FlersprakligFelt>;
+  itemTypeLabels?: Record<string, FlersprakligTekst>;
 }
 
 interface FlersprakligSeksjon {
@@ -101,6 +102,7 @@ interface EnkeltsprakligFelt {
     beskrivelse?: string;
   }>;
   elementDefinisjon?: Record<string, EnkeltsprakligFelt>;
+  itemTypeLabels?: Record<string, string>;
 }
 
 interface EnkeltsprakligSeksjon {
@@ -170,6 +172,14 @@ function transformFelt(felt: FlersprakligFelt, språk: string): EnkeltsprakligFe
     result.elementDefinisjon = {};
     for (const [key, value] of Object.entries(felt.elementDefinisjon)) {
       result.elementDefinisjon[key] = transformFelt(value, språk);
+    }
+  }
+
+  if (felt.itemTypeLabels) {
+    result.itemTypeLabels = {};
+    for (const [key, tekst] of Object.entries(felt.itemTypeLabels)) {
+      const value = extractText(tekst, språk);
+      if (value !== undefined) result.itemTypeLabels[key] = value;
     }
   }
 

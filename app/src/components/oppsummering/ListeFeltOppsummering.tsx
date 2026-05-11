@@ -5,15 +5,14 @@ import type { ListeFeltDefinisjon } from "~/types/melosysSkjemaTypes.ts";
 
 import { formaterVerdi } from "./formaterVerdi.ts";
 
+type ListeFeltDefinisjonMedTypeLabels = ListeFeltDefinisjon & {
+  itemTypeLabels?: Record<string, string>;
+};
+
 interface ListeFeltOppsummeringProps {
-  felt: ListeFeltDefinisjon;
+  felt: ListeFeltDefinisjonMedTypeLabels;
   verdi: unknown[];
 }
-
-const itemTypeI18nKey: Record<string, string> = {
-  norsk: "norskeVirksomheterFormPart.norskVirksomhet",
-  utenlandsk: "utenlandskeVirksomheterFormPart.utenlandskVirksomhet",
-};
 
 export function ListeFeltOppsummering({
   felt,
@@ -23,6 +22,7 @@ export function ListeFeltOppsummering({
   if (!verdi || verdi.length === 0) return null;
 
   const elementFelter = Object.entries(felt.elementDefinisjon);
+  const itemTypeLabels = felt.itemTypeLabels;
 
   return (
     <FormSummary.Answer>
@@ -39,10 +39,11 @@ export function ListeFeltOppsummering({
           const rowKey = elementFelter
             .map(([id]) => String(record[id] ?? ""))
             .join("-");
-          const itemType = record.__type;
-          const typeKey =
-            typeof itemType === "string" ? itemTypeI18nKey[itemType] : undefined;
-          const itemTittel = `${index + 1}.${typeKey ? ` ${t(typeKey)}` : ""}`;
+          const itemType =
+            typeof record.__type === "string" ? record.__type : undefined;
+          const typeLabel =
+            itemType && itemTypeLabels ? itemTypeLabels[itemType] : undefined;
+          const itemTittel = `${index + 1}.${typeLabel ? ` ${typeLabel}` : ""}`;
           return (
             <div key={rowKey}>
               <BodyShort weight="semibold" spacing>
