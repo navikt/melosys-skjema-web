@@ -53,10 +53,16 @@ function flattenVirksomheter(
   const result: Record<string, unknown>[] = [];
 
   for (const v of virksomheter.norskeVirksomheter ?? []) {
-    result.push({ organisasjonsnummer: v.organisasjonsnummer });
+    result.push({
+      __type: "norsk",
+      organisasjonsnummer: v.organisasjonsnummer,
+    });
   }
   for (const v of virksomheter.utenlandskeVirksomheter ?? []) {
-    result.push(v as unknown as Record<string, unknown>);
+    result.push({
+      __type: "utenlandsk",
+      ...(v as unknown as Record<string, unknown>),
+    });
   }
 
   return result.length > 0 ? result : undefined;
