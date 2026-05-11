@@ -86,6 +86,23 @@ export async function mockFetchSkjema(
   );
 }
 
+export async function mockFetchSkjemaDynamic<
+  T extends UtsendtArbeidstakerSkjemaDto,
+>(page: Page, skjemaId: string, state: { current: T }) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}`,
+    async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(state.current),
+        });
+      }
+    },
+  );
+}
+
 export async function mockPostVirksomhetINorge(page: Page, skjemaId: string) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidsgiverens-virksomhet-i-norge`,

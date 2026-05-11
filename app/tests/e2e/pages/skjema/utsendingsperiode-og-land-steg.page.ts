@@ -66,6 +66,10 @@ export class UtsendingsperiodeOgLandStegPage {
     await this.lagreOgFortsettButton.click();
   }
 
+  async forrigeSteg() {
+    await this.page.getByText(nb.translation.felles.forrigeSteg).click();
+  }
+
   async lagreOgFortsettAndWaitForApiRequest() {
     const requestPromise = this.page.waitForRequest(
       `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/utsendingsperiode-og-land`,
