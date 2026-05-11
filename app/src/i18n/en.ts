@@ -44,6 +44,8 @@ export const en = {
         "Invalid national identity number or D-number",
       stegGjelderArbeidsgiver: "This step applies to the employer",
       stegGjelderArbeidstaker: "This step applies to the employee",
+      virksomhetsnavn: "Company name",
+      organisasjonsnummer: "Organisation number",
     },
     skjemaVeiledning: {
       hei: "Hello",
