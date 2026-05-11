@@ -9,6 +9,22 @@ function erPositivtBelop(belop?: string): boolean {
   return !Number.isNaN(parsed) && parsed > 0;
 }
 
+/**
+ * Avgjør om lønnsinntektsfelt kreves/vises.
+ * Regelen: feltet er påkrevd med mindre bruker er skattepliktig til Norge
+ * og har KUN norsk virksomhet (ikke utenlandsk).
+ */
+export function kreverLoennsinntektFelt(
+  erSkattepliktig: boolean | undefined,
+  harNorskVirksomhet: boolean,
+  harUtenlandskVirksomhet: boolean,
+): boolean {
+  if (erSkattepliktig && harNorskVirksomhet && !harUtenlandskVirksomhet) {
+    return false;
+  }
+  return true;
+}
+
 const checkboxGroupSchema = z.record(z.string(), z.boolean()).optional();
 
 export const skatteforholdOgInntektSchema = z
@@ -83,16 +99,18 @@ export const skatteforholdOgInntektSchema = z
   .refine(
     (data) => {
       if (!data.hvilkeTyperInntektHarDu?.LOENN) return true;
-      const harNorskVirksomhet =
+      const harNorsk =
         data.inntektFraNorskEllerUtenlandskVirksomhet?.NORSK_VIRKSOMHET ===
         true;
-      const harUtenlandskVirksomhet =
+      const harUtenlandsk =
         data.inntektFraNorskEllerUtenlandskVirksomhet?.UTENLANDSK_VIRKSOMHET ===
         true;
       if (
-        data.erSkattepliktigTilNorgeIHeleutsendingsperioden &&
-        harNorskVirksomhet &&
-        !harUtenlandskVirksomhet
+        !kreverLoennsinntektFelt(
+          data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
+          harNorsk,
+          harUtenlandsk,
+        )
       ) {
         return true;
       }
@@ -169,9 +187,11 @@ export const skatteforholdOgInntektSchema = z
         data.inntektFraNorskEllerUtenlandskVirksomhet?.UTENLANDSK_VIRKSOMHET ===
         true;
       if (
-        data.erSkattepliktigTilNorgeIHeleutsendingsperioden &&
-        harNorsk &&
-        !harUtenlandsk
+        !kreverLoennsinntektFelt(
+          data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
+          harNorsk,
+          harUtenlandsk,
+        )
       ) {
         return;
       }

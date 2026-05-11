@@ -11,7 +11,6 @@ import {
 } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -50,7 +49,10 @@ import { useTranslateError } from "~/utils/translation.ts";
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getSkatteforholdOgInntekt } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { skatteforholdOgInntektSchema } from "./skatteforholdOgInntektStegSchema.ts";
+import {
+  kreverLoennsinntektFelt,
+  skatteforholdOgInntektSchema,
+} from "./skatteforholdOgInntektStegSchema.ts";
 
 type SkatteforholdOgInntektFormInput = z.input<
   typeof skatteforholdOgInntektSchema
@@ -152,44 +154,18 @@ function SkatteforholdOgInntektStegContent({
   const harUtenlandskVirksomhet = inntektKilde?.UTENLANDSK_VIRKSOMHET === true;
   const harNoenVirksomhet = harNorskVirksomhet || harUtenlandskVirksomhet;
 
-  // Vis lønnsinntektsfelt når lønn er huket av OG minst én virksomhet er valgt OG (utenlandsk virksomhet er valgt ELLER ikke skattepliktig)
   const visInntektFelt =
     harLoenn &&
     harNoenVirksomhet &&
-    (harUtenlandskVirksomhet || !erSkattepliktig);
+    kreverLoennsinntektFelt(
+      erSkattepliktig,
+      harNorskVirksomhet,
+      harUtenlandskVirksomhet,
+    );
 
   const visInntektFraEgenVirksomhetFelt =
     hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET === true &&
     harNoenVirksomhet;
-
-  // Nullstill feltverdier når de skjules fra visningen
-  useEffect(() => {
-    if (!visInntektFelt) {
-      formMethods.setValue("inntekt", undefined);
-      formMethods.clearErrors("inntekt");
-    }
-  }, [visInntektFelt, formMethods]);
-
-  useEffect(() => {
-    if (!visInntektFraEgenVirksomhetFelt) {
-      formMethods.setValue("inntektFraEgenVirksomhet", undefined);
-      formMethods.clearErrors("inntektFraEgenVirksomhet");
-    }
-  }, [visInntektFraEgenVirksomhetFelt, formMethods]);
-
-  useEffect(() => {
-    if (!mottarPengestotteFraAnnetEosLandEllerSveits) {
-      formMethods.setValue("pengestotteSomMottasFraAndreLandBelop", undefined);
-      formMethods.setValue("landSomUtbetalerPengestotte", undefined);
-      formMethods.setValue(
-        "pengestotteSomMottasFraAndreLandBeskrivelse",
-        undefined,
-      );
-      formMethods.clearErrors("pengestotteSomMottasFraAndreLandBelop");
-      formMethods.clearErrors("landSomUtbetalerPengestotte");
-      formMethods.clearErrors("pengestotteSomMottasFraAndreLandBeskrivelse");
-    }
-  }, [mottarPengestotteFraAnnetEosLandEllerSveits, formMethods]);
 
   const postSkatteforholdMutation = useMutation({
     mutationFn: (data: SkatteforholdOgInntektFormData) => {
