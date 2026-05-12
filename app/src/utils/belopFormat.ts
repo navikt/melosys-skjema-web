@@ -16,7 +16,7 @@ export function formaterBelopForVisning(value: string): string {
   const trimmed = value.trim();
   if (!trimmed) return "";
 
-  const normalized = trimmed.replaceAll(/\s/g, "");
+  const normalized = trimmed.replaceAll(/\s/g, "").replace(/[.,]\d*$/, "");
   if (!/^\d+$/.test(normalized)) return value;
   const parsed = Number.parseInt(normalized, 10);
 
