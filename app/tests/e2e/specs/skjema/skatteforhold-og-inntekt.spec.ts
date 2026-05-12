@@ -26,11 +26,15 @@ test.describe("Skatteforhold og inntekt", () => {
     await skatteforholdOgInntektStegPage.assertIsVisible();
 
     await skatteforholdOgInntektStegPage.erSkattepliktigTilNorgeRadioGroup.JA.click();
+    await skatteforholdOgInntektStegPage.inntektFraNorskVirksomhetCheckbox.check();
+    await skatteforholdOgInntektStegPage.loennsinntektCheckbox.check();
     await skatteforholdOgInntektStegPage.mottarPengestotteFraAnnetEosLandRadioGroup.NEI.click();
 
     const expectedPayload: SkatteforholdOgInntektDto = {
       erSkattepliktigTilNorgeIHeleutsendingsperioden: true,
       mottarPengestotteFraAnnetEosLandEllerSveits: false,
+      inntektFraNorskEllerUtenlandskVirksomhet: ["NORSK_VIRKSOMHET"],
+      hvilkeTyperInntektHarDu: ["LOENN"],
     };
 
     await skatteforholdOgInntektStegPage.lagreOgFortsettAndExpectPayload(
@@ -49,6 +53,9 @@ test.describe("Skatteforhold og inntekt", () => {
     await skatteforholdOgInntektStegPage.assertIsVisible();
 
     await skatteforholdOgInntektStegPage.erSkattepliktigTilNorgeRadioGroup.NEI.click();
+    await skatteforholdOgInntektStegPage.inntektFraNorskVirksomhetCheckbox.check();
+    await skatteforholdOgInntektStegPage.loennsinntektCheckbox.check();
+    await skatteforholdOgInntektStegPage.inntektInput.fill("50000");
     await skatteforholdOgInntektStegPage.mottarPengestotteFraAnnetEosLandRadioGroup.JA.click();
 
     // Conditional fields should now be visible
@@ -66,6 +73,9 @@ test.describe("Skatteforhold og inntekt", () => {
       landSomUtbetalerPengestotte: "SE",
       pengestotteSomMottasFraAndreLandBelop: "15000",
       pengestotteSomMottasFraAndreLandBeskrivelse: "Barnebidrag fra Sverige",
+      inntektFraNorskEllerUtenlandskVirksomhet: ["NORSK_VIRKSOMHET"],
+      hvilkeTyperInntektHarDu: ["LOENN"],
+      inntekt: "50000",
     };
 
     await skatteforholdOgInntektStegPage.lagreOgFortsettAndExpectPayload(

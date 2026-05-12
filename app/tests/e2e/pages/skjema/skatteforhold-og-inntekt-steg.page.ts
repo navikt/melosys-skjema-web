@@ -41,6 +41,12 @@ export class SkatteforholdOgInntektStegPage {
   readonly pengestotteBelopInput: Locator;
   readonly pengestotteBeskrivelseInput: Locator;
   readonly lagreOgFortsettButton: Locator;
+  readonly inntektFraNorskVirksomhetCheckbox: Locator;
+  readonly inntektFraUtenlandskVirksomhetCheckbox: Locator;
+  readonly loennsinntektCheckbox: Locator;
+  readonly inntektFraEgenVirksomhetCheckbox: Locator;
+  readonly inntektInput: Locator;
+  readonly inntektFraEgenVirksomhetInput: Locator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
@@ -85,6 +91,37 @@ export class SkatteforholdOgInntektStegPage {
 
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
+    });
+
+    // Nye inntektsfelter
+    const inntektKildeGroup = page.getByRole("group", {
+      name: felter.inntektFraNorskEllerUtenlandskVirksomhet.label,
+    });
+    this.inntektFraNorskVirksomhetCheckbox = inntektKildeGroup.getByRole(
+      "checkbox",
+      { name: "Norsk virksomhet" },
+    );
+    this.inntektFraUtenlandskVirksomhetCheckbox = inntektKildeGroup.getByRole(
+      "checkbox",
+      { name: "Utenlandsk virksomhet" },
+    );
+
+    const hvilkenInntektGroup = page.getByRole("group", {
+      name: felter.hvilkeTyperInntektHarDu.label,
+    });
+    this.loennsinntektCheckbox = hvilkenInntektGroup.getByRole("checkbox", {
+      name: "Lønnsinntekt",
+    });
+    this.inntektFraEgenVirksomhetCheckbox = hvilkenInntektGroup.getByRole(
+      "checkbox",
+      { name: "Inntekt fra egen virksomhet" },
+    );
+
+    this.inntektInput = page.getByRole("textbox", {
+      name: felter.inntekt.label,
+    });
+    this.inntektFraEgenVirksomhetInput = page.getByRole("textbox", {
+      name: felter.inntektFraEgenVirksomhet.label,
     });
   }
 
