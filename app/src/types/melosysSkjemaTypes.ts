@@ -684,7 +684,9 @@ export interface SkjemaDefinisjonDto {
 export type TextFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
->;
+> & {
+  format?: string;
+};
 
 export type TextareaFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,

@@ -17,8 +17,8 @@ export function formaterBelopForVisning(value: string): string {
   if (!trimmed) return "";
 
   const normalized = trimmed.replaceAll(/\s/g, "");
+  if (!/^\d+$/.test(normalized)) return value;
   const parsed = Number.parseInt(normalized, 10);
-  if (Number.isNaN(parsed) || parsed < 0) return value;
 
   return belopFormatter.format(parsed);
 }

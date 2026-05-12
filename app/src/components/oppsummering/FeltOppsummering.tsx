@@ -8,20 +8,15 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import type { FeltUnion } from "./formaterVerdi.ts";
-import { formaterVerdi } from "./formaterVerdi.ts";
+import { formaterVerdi, hentValgteCheckboxLabels } from "./formaterVerdi.ts";
 import { ListeFeltOppsummering } from "./ListeFeltOppsummering.tsx";
 
 interface FeltOppsummeringProps {
   felt: FeltUnion;
-  feltNavn?: string;
   verdi: unknown;
 }
 
-export function FeltOppsummering({
-  felt,
-  feltNavn,
-  verdi,
-}: FeltOppsummeringProps) {
+export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
   const { t } = useTranslation();
   if (felt.type === "LIST") {
     return (
@@ -54,7 +49,7 @@ export function FeltOppsummering({
       <FormSummary.Answer>
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
-          {formaterVerdi(felt, verdi, t, feltNavn)}
+          {formaterVerdi(felt, verdi, t)}
         </FormSummary.Value>
       </FormSummary.Answer>
     );
@@ -63,19 +58,29 @@ export function FeltOppsummering({
   if (felt.type === "CHECKBOX_GROUP") {
     const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
     const selected = verdi as string[] | undefined;
-    const selectedLabels = checkboxFelt.alternativer
-      .filter((a) => selected?.includes(a.verdi))
-      .map((a) => a.label);
-    if (selectedLabels.length === 0) return null;
+    const selectedLabels = hentValgteCheckboxLabels(checkboxFelt, selected);
+    if (selectedLabels.length === 0) {
+      return (
+        <FormSummary.Answer>
+          <FormSummary.Label>{felt.label}</FormSummary.Label>
+          <FormSummary.Value>{"\u2013"}</FormSummary.Value>
+        </FormSummary.Answer>
+      );
+    }
     return (
       <FormSummary.Answer>
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value>
-          <ul
-            style={{ margin: 0, paddingLeft: "1.5rem", listStyleType: "disc" }}
-          >
-            {selectedLabels.map((label) => (
-              <li key={label}>{label}</li>
+          <ul className="m-0 pl-6 list-disc">
+            {selectedLabels.map((label, index) => (
+              <li
+                key={
+                  checkboxFelt.alternativer.find((a) => a.label === label)
+                    ?.verdi ?? index
+                }
+              >
+                {label}
+              </li>
             ))}
           </ul>
         </FormSummary.Value>
@@ -86,9 +91,7 @@ export function FeltOppsummering({
   return (
     <FormSummary.Answer>
       <FormSummary.Label>{felt.label}</FormSummary.Label>
-      <FormSummary.Value>
-        {formaterVerdi(felt, verdi, t, feltNavn)}
-      </FormSummary.Value>
+      <FormSummary.Value>{formaterVerdi(felt, verdi, t)}</FormSummary.Value>
     </FormSummary.Answer>
   );
 }

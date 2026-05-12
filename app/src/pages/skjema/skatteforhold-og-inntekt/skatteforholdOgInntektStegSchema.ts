@@ -5,24 +5,21 @@ import { stripBelopFormatering } from "~/utils/belopFormat.ts";
 function erPositivtBelop(belop?: string): boolean {
   if (!belop) return false;
   const stripped = stripBelopFormatering(belop.trim());
-  const parsed = Number.parseInt(stripped, 10);
-  return !Number.isNaN(parsed) && parsed > 0;
+  if (!/^\d+$/.test(stripped)) return false;
+  return Number.parseInt(stripped, 10) > 0;
 }
 
 /**
- * Avgjør om lønnsinntektsfelt kreves/vises.
- * Regelen: feltet er påkrevd med mindre bruker er skattepliktig til Norge
+ * Avgjør om lønnsinntektsfelt skal inkluderes (vises og valideres).
+ * Regelen: feltet inkluderes med mindre bruker er skattepliktig til Norge
  * og har KUN norsk virksomhet (ikke utenlandsk).
  */
-export function kreverLoennsinntektFelt(
+export function skalInkludereLoennsinntekt(
   erSkattepliktig: boolean | undefined,
   harNorskVirksomhet: boolean,
   harUtenlandskVirksomhet: boolean,
 ): boolean {
-  if (erSkattepliktig && harNorskVirksomhet && !harUtenlandskVirksomhet) {
-    return false;
-  }
-  return true;
+  return !(erSkattepliktig && harNorskVirksomhet && !harUtenlandskVirksomhet);
 }
 
 const checkboxGroupSchema = z.array(z.string()).optional();
@@ -76,8 +73,10 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.inntektFraNorskEllerUtenlandskVirksomhet) return true;
-      return data.inntektFraNorskEllerUtenlandskVirksomhet.length > 0;
+      return (
+        !!data.inntektFraNorskEllerUtenlandskVirksomhet &&
+        data.inntektFraNorskEllerUtenlandskVirksomhet.length > 0
+      );
     },
     {
       error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektKilde",
@@ -86,8 +85,10 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu) return true;
-      return data.hvilkeTyperInntektHarDu.length > 0;
+      return (
+        !!data.hvilkeTyperInntektHarDu &&
+        data.hvilkeTyperInntektHarDu.length > 0
+      );
     },
     {
       error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektType",
@@ -105,8 +106,9 @@ export const skatteforholdOgInntektSchema = z
         data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
           "UTENLANDSK_VIRKSOMHET",
         ) ?? false;
+      if (!harNorsk && !harUtenlandsk) return true;
       if (
-        !kreverLoennsinntektFelt(
+        !skalInkludereLoennsinntekt(
           data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
           harNorsk,
           harUtenlandsk,
@@ -138,6 +140,11 @@ export const skatteforholdOgInntektSchema = z
         !data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
       )
         return true;
+      const harNoenVirksomhet =
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.some((v) =>
+          ["NORSK_VIRKSOMHET", "UTENLANDSK_VIRKSOMHET"].includes(v),
+        ) ?? false;
+      if (!harNoenVirksomhet) return true;
       return !!data.inntektFraEgenVirksomhet?.trim();
     },
     {
@@ -192,8 +199,9 @@ export const skatteforholdOgInntektSchema = z
         data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
           "UTENLANDSK_VIRKSOMHET",
         ) ?? false;
+      if (!harNorsk && !harUtenlandsk) return;
       if (
-        !kreverLoennsinntektFelt(
+        !skalInkludereLoennsinntekt(
           data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
           harNorsk,
           harUtenlandsk,
@@ -205,11 +213,18 @@ export const skatteforholdOgInntektSchema = z
         ? stripBelopFormatering(data.inntekt.trim())
         : undefined;
     })(),
-    inntektFraEgenVirksomhet: data.hvilkeTyperInntektHarDu?.includes(
-      "INNTEKT_FRA_EGEN_VIRKSOMHET",
-    )
-      ? data.inntektFraEgenVirksomhet
+    inntektFraEgenVirksomhet: (() => {
+      if (
+        !data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
+      )
+        return;
+      const harNoenVirksomhet =
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.some((v) =>
+          ["NORSK_VIRKSOMHET", "UTENLANDSK_VIRKSOMHET"].includes(v),
+        ) ?? false;
+      if (!harNoenVirksomhet) return;
+      return data.inntektFraEgenVirksomhet
         ? stripBelopFormatering(data.inntektFraEgenVirksomhet.trim())
-        : undefined
-      : undefined,
+        : undefined;
+    })(),
   }));

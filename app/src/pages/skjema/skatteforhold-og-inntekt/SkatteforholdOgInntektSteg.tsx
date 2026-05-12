@@ -2,8 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BodyLong,
   Box,
-  Checkbox,
-  CheckboxGroup,
   Heading,
   Textarea,
   TextField,
@@ -11,11 +9,13 @@ import {
 } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
+import { useEffect } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { CheckboxGruppeFormPart } from "~/components/CheckboxGruppeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
@@ -50,7 +50,7 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getSkatteforholdOgInntekt } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import {
-  kreverLoennsinntektFelt,
+  skalInkludereLoennsinntekt,
   skatteforholdOgInntektSchema,
 } from "./skatteforholdOgInntektStegSchema.ts";
 
@@ -117,7 +117,11 @@ function SkatteforholdOgInntektStegContent({
     hvilkenInntektFelt as CheckboxGroupFeltDefinisjon
   ).alternativer;
 
-  const formMethods = useForm<SkatteforholdOgInntektFormInput>({
+  const formMethods = useForm<
+    SkatteforholdOgInntektFormInput,
+    unknown,
+    SkatteforholdOgInntektFormData
+  >({
     resolver: zodResolver(skatteforholdOgInntektSchema),
     ...(stegData && { defaultValues: stegData }),
   });
@@ -159,7 +163,7 @@ function SkatteforholdOgInntektStegContent({
   const visInntektFelt =
     harLoenn &&
     harNoenVirksomhet &&
-    kreverLoennsinntektFelt(
+    skalInkludereLoennsinntekt(
       erSkattepliktig,
       harNorskVirksomhet,
       harUtenlandskVirksomhet,
@@ -168,6 +172,20 @@ function SkatteforholdOgInntektStegContent({
   const visInntektFraEgenVirksomhetFelt =
     hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET") &&
     harNoenVirksomhet;
+
+  useEffect(() => {
+    if (!visInntektFelt) {
+      formMethods.setValue("inntekt", undefined);
+      formMethods.clearErrors("inntekt");
+    }
+  }, [visInntektFelt, formMethods]);
+
+  useEffect(() => {
+    if (!visInntektFraEgenVirksomhetFelt) {
+      formMethods.setValue("inntektFraEgenVirksomhet", undefined);
+      formMethods.clearErrors("inntektFraEgenVirksomhet");
+    }
+  }, [visInntektFraEgenVirksomhetFelt, formMethods]);
 
   const postSkatteforholdMutation = useMutation({
     mutationFn: (data: SkatteforholdOgInntektFormData) => {
@@ -194,8 +212,8 @@ function SkatteforholdOgInntektStegContent({
     },
   });
 
-  const onSubmit = (data: SkatteforholdOgInntektFormInput) => {
-    postSkatteforholdMutation.mutate(data as SkatteforholdOgInntektFormData);
+  const onSubmit = (data: SkatteforholdOgInntektFormData) => {
+    postSkatteforholdMutation.mutate(data);
   };
 
   /** onBlur-handler som autoformaterer et beløpsfelt for visning */
@@ -214,7 +232,7 @@ function SkatteforholdOgInntektStegContent({
           formMethods.setValue(fieldName, formatted);
         }
       }
-      formMethods.clearErrors(fieldName);
+      formMethods.trigger(fieldName);
     };
   };
 
@@ -236,44 +254,18 @@ function SkatteforholdOgInntektStegContent({
             legend={erSkattepliktigFelt.label}
           />
 
-          <Controller
-            control={control}
-            name="inntektFraNorskEllerUtenlandskVirksomhet"
-            render={({ field, fieldState }) => (
-              <CheckboxGroup
-                className="mt-4"
-                legend={inntektKildeFelt.label}
-                error={translateError(fieldState.error?.message)}
-                value={field.value ?? []}
-                onChange={field.onChange}
-              >
-                {inntektKildeAlternativer.map((alt) => (
-                  <Checkbox key={alt.verdi} value={alt.verdi}>
-                    {alt.label}
-                  </Checkbox>
-                ))}
-              </CheckboxGroup>
-            )}
+          <CheckboxGruppeFormPart
+            className="mt-4"
+            formFieldName="inntektFraNorskEllerUtenlandskVirksomhet"
+            legend={inntektKildeFelt.label}
+            alternativer={inntektKildeAlternativer}
           />
 
-          <Controller
-            control={control}
-            name="hvilkeTyperInntektHarDu"
-            render={({ field, fieldState }) => (
-              <CheckboxGroup
-                className="mt-4"
-                legend={hvilkenInntektFelt.label}
-                error={translateError(fieldState.error?.message)}
-                value={field.value ?? []}
-                onChange={field.onChange}
-              >
-                {hvilkenInntektAlternativer.map((alt) => (
-                  <Checkbox key={alt.verdi} value={alt.verdi}>
-                    {alt.label}
-                  </Checkbox>
-                ))}
-              </CheckboxGroup>
-            )}
+          <CheckboxGruppeFormPart
+            className="mt-4"
+            formFieldName="hvilkeTyperInntektHarDu"
+            legend={hvilkenInntektFelt.label}
+            alternativer={hvilkenInntektAlternativer}
           />
 
           {(visInntektFelt || visInntektFraEgenVirksomhetFelt) && (
