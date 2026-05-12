@@ -70,21 +70,21 @@ export class InnsendtSkjemaPage {
     skjema: UtsendtArbeidstakerSkjemaDto,
   ) {
     await expect(
-      this.page.locator(`dt:has-text("${nb.translation.felles.navn}") + dd`),
+      this.page.locator(`dt:text-is("${nb.translation.felles.navn}") + dd`),
     ).toHaveText(skjema.metadata.arbeidstakerNavn);
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
+        `dt:text-is("${nb.translation.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
       ),
     ).toHaveText(skjema.fnr);
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.felles.virksomhetsnavn}") + dd`,
+        `dt:text-is("${nb.translation.felles.virksomhetsnavn}") + dd`,
       ),
     ).toHaveText(skjema.metadata.arbeidsgiverNavn);
     await expect(
       this.page.locator(
-        `dt:has-text("${nb.translation.felles.organisasjonsnummer}") + dd`,
+        `dt:text-is("${nb.translation.felles.organisasjonsnummer}") + dd`,
       ),
     ).toHaveText(skjema.orgnr);
   }

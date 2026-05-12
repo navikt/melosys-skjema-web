@@ -284,6 +284,7 @@ export const testKombinertSkjema: UtsendtArbeidstakerSkjemaDto = {
     representasjonstype: Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT,
     juridiskEnhetOrgnr: "123456789",
     arbeidsgiverNavn: "Test Bedrift AS",
+    arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
     fullmektigFnr: "01019000083",
   } as ArbeidsgiverMedFullmaktMetadata,
