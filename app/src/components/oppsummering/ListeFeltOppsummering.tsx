@@ -39,13 +39,14 @@ export function ListeFeltOppsummering({
           const rowKey = elementFelter
             .map(([id]) => String(record[id] ?? ""))
             .join("-");
+          const itemKey = `${rowKey}-${index}`;
           const itemType =
             typeof record.__type === "string" ? record.__type : undefined;
           const typeLabel =
             itemType && itemTypeLabels ? itemTypeLabels[itemType] : undefined;
           const itemTittel = `${index + 1}.${typeLabel ? ` ${typeLabel}` : ""}`;
           return (
-            <div key={rowKey}>
+            <div key={itemKey}>
               <BodyShort weight="semibold" spacing>
                 {itemTittel}
               </BodyShort>
