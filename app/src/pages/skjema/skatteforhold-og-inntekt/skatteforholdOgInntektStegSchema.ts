@@ -134,7 +134,9 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET"))
+      if (
+        !data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
+      )
         return true;
       return !!data.inntektFraEgenVirksomhet?.trim();
     },
@@ -145,7 +147,9 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET"))
+      if (
+        !data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
+      )
         return true;
       if (!data.inntektFraEgenVirksomhet?.trim()) return true;
       return erPositivtBelop(data.inntektFraEgenVirksomhet);

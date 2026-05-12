@@ -195,9 +195,7 @@ function SkatteforholdOgInntektStegContent({
   });
 
   const onSubmit = (data: SkatteforholdOgInntektFormInput) => {
-    postSkatteforholdMutation.mutate(
-      data as SkatteforholdOgInntektFormData,
-    );
+    postSkatteforholdMutation.mutate(data as SkatteforholdOgInntektFormData);
   };
 
   /** onBlur-handler som autoformaterer et beløpsfelt for visning */
