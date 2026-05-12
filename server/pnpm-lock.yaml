@@ -18,14 +18,14 @@ importers:
         specifier: 4.1.4
         version: 4.1.4
       '@navikt/vite-mode':
-        specifier: 0.14.0
-        version: 0.14.0(express@5.2.1)
+        specifier: 0.15.0
+        version: 0.15.0(express@5.2.1)
       express:
         specifier: 5.2.1
         version: 5.2.1
       express-rate-limit:
-        specifier: 8.4.1
-        version: 8.4.1(express@5.2.1)
+        specifier: 8.5.0
+        version: 8.5.0(express@5.2.1)
       http-proxy-middleware:
         specifier: 3.0.5
         version: 3.0.5
@@ -157,8 +157,8 @@ packages:
     resolution: {integrity: sha512-WS+agfWCqHyCtIpn/iQHNBRwn1gzCQDe0NY9Tz5ErrBsWHNxtqIV7W2eAmRUa3DLrZGHczoQhup+PYT6UX/SpQ==, tarball: https://npm.pkg.github.com/download/@navikt/texas/4.1.4/1725aca0fa0b803e0048212c3e202d24c10f3c3b}
     engines: {node: ^20.19.0 || >= 22.12.0 || 24.x || 25.x}
 
-  '@navikt/vite-mode@0.14.0':
-    resolution: {integrity: sha512-RRb370k7udPuCFGqFMdt8yDlWmTHqQRcS968G9lzxffO4GFSUy4PDp1NF+51d8VlRKjXtgJ0NQFBzM+FjCyIqg==, tarball: https://npm.pkg.github.com/download/@navikt/vite-mode/0.14.0/2f74c6b648b3a5b6f94760910f6d2bb62ce0beac}
+  '@navikt/vite-mode@0.15.0':
+    resolution: {integrity: sha512-j5ITT1iFNcqx72F84LtBCngjifhsyzB7Q9K4GFq/54akBoNipdFGWraHcgzMP7wYjanpuYAqz9U50xpM8iPICg==, tarball: https://npm.pkg.github.com/download/@navikt/vite-mode/0.15.0/e871d2deaaea6ebba4026207017bc57ff7a668c1}
     peerDependencies:
       express: 5.x
 
@@ -582,8 +582,8 @@ packages:
   eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
 
-  express-rate-limit@8.4.1:
-    resolution: {integrity: sha512-NGVYwQSAyEQgzxX1iCM978PP9AdO/hW93gMcF6ZwQCm+rFvLsBH6w4xcXWTcliS8La5EPRN3p9wzItqBwJrfNw==}
+  express-rate-limit@8.5.0:
+    resolution: {integrity: sha512-XKhFohWaSBdVJNTi5TaHziqnPkv04I9UQV6q1Wy7Ui6GGQZVW12ojDFwqer14EvCXxjvPG0CyWXx7cAXpALB4Q==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: '>= 4.11'
@@ -1249,7 +1249,7 @@ snapshots:
 
   '@navikt/texas@4.1.4': {}
 
-  '@navikt/vite-mode@0.14.0(express@5.2.1)':
+  '@navikt/vite-mode@0.15.0(express@5.2.1)':
     dependencies:
       cookie-parser: 1.4.7
       express: 5.2.1
@@ -1706,7 +1706,7 @@ snapshots:
 
   eventemitter3@4.0.7: {}
 
-  express-rate-limit@8.4.1(express@5.2.1):
+  express-rate-limit@8.5.0(express@5.2.1):
     dependencies:
       express: 5.2.1
       ip-address: 10.1.0
