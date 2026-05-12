@@ -43,7 +43,7 @@
     "@eslint/js": "10.0.1",
     "@navikt/aksel-stylelint": "8.10.4",
     "@playwright/test": "1.59.1",
-    "@tanstack/router-vite-plugin": "1.166.48",
+    "@tanstack/router-vite-plugin": "1.166.49",
     "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
