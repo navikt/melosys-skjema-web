@@ -25,7 +25,7 @@ export function kreverLoennsinntektFelt(
   return true;
 }
 
-const checkboxGroupSchema = z.record(z.string(), z.boolean()).optional();
+const checkboxGroupSchema = z.array(z.string()).optional();
 
 export const skatteforholdOgInntektSchema = z
   .object({
@@ -77,9 +77,7 @@ export const skatteforholdOgInntektSchema = z
   .refine(
     (data) => {
       if (!data.inntektFraNorskEllerUtenlandskVirksomhet) return true;
-      return Object.values(data.inntektFraNorskEllerUtenlandskVirksomhet).some(
-        Boolean,
-      );
+      return data.inntektFraNorskEllerUtenlandskVirksomhet.length > 0;
     },
     {
       error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektKilde",
@@ -89,7 +87,7 @@ export const skatteforholdOgInntektSchema = z
   .refine(
     (data) => {
       if (!data.hvilkeTyperInntektHarDu) return true;
-      return Object.values(data.hvilkeTyperInntektHarDu).some(Boolean);
+      return data.hvilkeTyperInntektHarDu.length > 0;
     },
     {
       error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektType",
@@ -98,13 +96,15 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.LOENN) return true;
+      if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return true;
       const harNorsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.NORSK_VIRKSOMHET ===
-        true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
+          "NORSK_VIRKSOMHET",
+        ) ?? false;
       const harUtenlandsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.UTENLANDSK_VIRKSOMHET ===
-        true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
+          "UTENLANDSK_VIRKSOMHET",
+        ) ?? false;
       if (
         !kreverLoennsinntektFelt(
           data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
@@ -123,7 +123,7 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.LOENN) return true;
+      if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return true;
       if (!data.inntekt?.trim()) return true;
       return erPositivtBelop(data.inntekt);
     },
@@ -134,7 +134,7 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET)
+      if (!data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET"))
         return true;
       return !!data.inntektFraEgenVirksomhet?.trim();
     },
@@ -145,7 +145,7 @@ export const skatteforholdOgInntektSchema = z
   )
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET)
+      if (!data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET"))
         return true;
       if (!data.inntektFraEgenVirksomhet?.trim()) return true;
       return erPositivtBelop(data.inntektFraEgenVirksomhet);
@@ -179,13 +179,15 @@ export const skatteforholdOgInntektSchema = z
       data.inntektFraNorskEllerUtenlandskVirksomhet,
     hvilkeTyperInntektHarDu: data.hvilkeTyperInntektHarDu,
     inntekt: (() => {
-      if (!data.hvilkeTyperInntektHarDu?.LOENN) return;
+      if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return;
       const harNorsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.NORSK_VIRKSOMHET ===
-        true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
+          "NORSK_VIRKSOMHET",
+        ) ?? false;
       const harUtenlandsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.UTENLANDSK_VIRKSOMHET ===
-        true;
+        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
+          "UTENLANDSK_VIRKSOMHET",
+        ) ?? false;
       if (
         !kreverLoennsinntektFelt(
           data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
@@ -199,8 +201,9 @@ export const skatteforholdOgInntektSchema = z
         ? stripBelopFormatering(data.inntekt.trim())
         : undefined;
     })(),
-    inntektFraEgenVirksomhet: data.hvilkeTyperInntektHarDu
-      ?.INNTEKT_FRA_EGEN_VIRKSOMHET
+    inntektFraEgenVirksomhet: data.hvilkeTyperInntektHarDu?.includes(
+      "INNTEKT_FRA_EGEN_VIRKSOMHET",
+    )
       ? data.inntektFraEgenVirksomhet
         ? stripBelopFormatering(data.inntektFraEgenVirksomhet.trim())
         : undefined

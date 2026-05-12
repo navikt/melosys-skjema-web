@@ -149,9 +149,11 @@ function SkatteforholdOgInntektStegContent({
     name: "hvilkeTyperInntektHarDu",
   });
 
-  const harLoenn = hvilkeTyperInntektHarDu?.LOENN === true;
-  const harNorskVirksomhet = inntektKilde?.NORSK_VIRKSOMHET === true;
-  const harUtenlandskVirksomhet = inntektKilde?.UTENLANDSK_VIRKSOMHET === true;
+  const harLoenn = hvilkeTyperInntektHarDu?.includes("LOENN") ?? false;
+  const harNorskVirksomhet =
+    inntektKilde?.includes("NORSK_VIRKSOMHET") ?? false;
+  const harUtenlandskVirksomhet =
+    inntektKilde?.includes("UTENLANDSK_VIRKSOMHET") ?? false;
   const harNoenVirksomhet = harNorskVirksomhet || harUtenlandskVirksomhet;
 
   const visInntektFelt =
@@ -164,7 +166,7 @@ function SkatteforholdOgInntektStegContent({
     );
 
   const visInntektFraEgenVirksomhetFelt =
-    hvilkeTyperInntektHarDu?.INNTEKT_FRA_EGEN_VIRKSOMHET === true &&
+    hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET") &&
     harNoenVirksomhet;
 
   const postSkatteforholdMutation = useMutation({
@@ -239,65 +241,41 @@ function SkatteforholdOgInntektStegContent({
           <Controller
             control={control}
             name="inntektFraNorskEllerUtenlandskVirksomhet"
-            render={({ field, fieldState }) => {
-              const value = field.value ?? {};
-              const selectedValues = Object.entries(value)
-                .filter(([, v]) => v)
-                .map(([k]) => k);
-              return (
-                <CheckboxGroup
-                  className="mt-4"
-                  legend={inntektKildeFelt.label}
-                  error={translateError(fieldState.error?.message)}
-                  value={selectedValues}
-                  onChange={(newValues: string[]) => {
-                    const newMap: Record<string, boolean> = {};
-                    for (const alt of inntektKildeAlternativer) {
-                      newMap[alt.verdi] = newValues.includes(alt.verdi);
-                    }
-                    field.onChange(newMap);
-                  }}
-                >
-                  {inntektKildeAlternativer.map((alt) => (
-                    <Checkbox key={alt.verdi} value={alt.verdi}>
-                      {alt.label}
-                    </Checkbox>
-                  ))}
-                </CheckboxGroup>
-              );
-            }}
+            render={({ field, fieldState }) => (
+              <CheckboxGroup
+                className="mt-4"
+                legend={inntektKildeFelt.label}
+                error={translateError(fieldState.error?.message)}
+                value={field.value ?? []}
+                onChange={field.onChange}
+              >
+                {inntektKildeAlternativer.map((alt) => (
+                  <Checkbox key={alt.verdi} value={alt.verdi}>
+                    {alt.label}
+                  </Checkbox>
+                ))}
+              </CheckboxGroup>
+            )}
           />
 
           <Controller
             control={control}
             name="hvilkeTyperInntektHarDu"
-            render={({ field, fieldState }) => {
-              const value = field.value ?? {};
-              const selectedValues = Object.entries(value)
-                .filter(([, v]) => v)
-                .map(([k]) => k);
-              return (
-                <CheckboxGroup
-                  className="mt-4"
-                  legend={hvilkenInntektFelt.label}
-                  error={translateError(fieldState.error?.message)}
-                  value={selectedValues}
-                  onChange={(newValues: string[]) => {
-                    const newMap: Record<string, boolean> = {};
-                    for (const alt of hvilkenInntektAlternativer) {
-                      newMap[alt.verdi] = newValues.includes(alt.verdi);
-                    }
-                    field.onChange(newMap);
-                  }}
-                >
-                  {hvilkenInntektAlternativer.map((alt) => (
-                    <Checkbox key={alt.verdi} value={alt.verdi}>
-                      {alt.label}
-                    </Checkbox>
-                  ))}
-                </CheckboxGroup>
-              );
-            }}
+            render={({ field, fieldState }) => (
+              <CheckboxGroup
+                className="mt-4"
+                legend={hvilkenInntektFelt.label}
+                error={translateError(fieldState.error?.message)}
+                value={field.value ?? []}
+                onChange={field.onChange}
+              >
+                {hvilkenInntektAlternativer.map((alt) => (
+                  <Checkbox key={alt.verdi} value={alt.verdi}>
+                    {alt.label}
+                  </Checkbox>
+                ))}
+              </CheckboxGroup>
+            )}
           />
 
           {(visInntektFelt || visInntektFraEgenVirksomhetFelt) && (

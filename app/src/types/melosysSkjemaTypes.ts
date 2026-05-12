@@ -338,8 +338,8 @@ export interface SkatteforholdOgInntektDto {
   landSomUtbetalerPengestotte?: string;
   pengestotteSomMottasFraAndreLandBelop?: string;
   pengestotteSomMottasFraAndreLandBeskrivelse?: string;
-  inntektFraNorskEllerUtenlandskVirksomhet?: Record<string, boolean>;
-  hvilkeTyperInntektHarDu?: Record<string, boolean>;
+  inntektFraNorskEllerUtenlandskVirksomhet?: string[];
+  hvilkeTyperInntektHarDu?: string[];
   inntekt?: string;
   inntektFraEgenVirksomhet?: string;
 }
