@@ -62,9 +62,9 @@ export function FeltOppsummering({
 
   if (felt.type === "CHECKBOX_GROUP") {
     const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
-    const selections = verdi as Record<string, boolean> | undefined;
+    const selected = verdi as string[] | undefined;
     const selectedLabels = checkboxFelt.alternativer
-      .filter((a) => selections?.[a.verdi])
+      .filter((a) => selected?.includes(a.verdi))
       .map((a) => a.label);
     if (selectedLabels.length === 0) return null;
     return (

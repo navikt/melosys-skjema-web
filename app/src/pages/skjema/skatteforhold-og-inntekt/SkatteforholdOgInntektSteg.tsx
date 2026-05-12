@@ -196,7 +196,7 @@ function SkatteforholdOgInntektStegContent({
 
   const onSubmit = (data: SkatteforholdOgInntektFormInput) => {
     postSkatteforholdMutation.mutate(
-      data as unknown as SkatteforholdOgInntektFormData,
+      data as SkatteforholdOgInntektFormData,
     );
   };
 
