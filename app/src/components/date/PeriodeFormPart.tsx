@@ -1,6 +1,4 @@
 import { UseDatepickerOptions } from "@navikt/ds-react";
-import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { DatePickerFormPart } from "./DatePickerFormPart.tsx";
@@ -81,16 +79,6 @@ export function PeriodeFormPart({
   ...datePickerOptions
 }: PeriodeFormPartProps) {
   const { t } = useTranslation();
-  const { unregister } = useFormContext();
-
-  // Når PeriodeFormPart unmountes (f.eks. ved å endre "Erstatter arbeidstaker" fra Ja til Nei),
-  // må vi fjerne registrerte felt fra react-hook-form. Ellers blir tomme verdier
-  // (fraDato: "", tilDato: "") liggende igjen og blokkerer validering.
-  useEffect(() => {
-    return () => {
-      unregister(formFieldName);
-    };
-  }, [unregister, formFieldName]);
 
   return (
     <div className={className}>

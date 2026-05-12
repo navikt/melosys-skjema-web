@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -102,12 +103,19 @@ function UtenlandsoppdragetStegContent({
     handleSubmit,
     formState: { errors },
     control,
+    unregister,
   } = formMethods;
 
   const arbeidstakerErstatterAnnenPerson = useWatch({
     control,
     name: "arbeidstakerErstatterAnnenPerson",
   });
+
+  useEffect(() => {
+    if (arbeidstakerErstatterAnnenPerson === false) {
+      unregister("forrigeArbeidstakerUtsendelsePeriode");
+    }
+  }, [arbeidstakerErstatterAnnenPerson, unregister]);
   const arbeidsgiverHarOppdragILandet = useWatch({
     control,
     name: "arbeidsgiverHarOppdragILandet",
