@@ -86,7 +86,7 @@ export function OrganisasjonSoker({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const digitsOnly = e.target.value.replaceAll(/\D/g, "");
+    const digitsOnly = e.target.value.replaceAll(/\D/g, "").slice(0, 9);
     setSearchValue(digitsOnly);
     if (valgtOrganisasjon) {
       setValue(formFieldName, null);
@@ -100,7 +100,6 @@ export function OrganisasjonSoker({
         error={getErrorMessage()}
         inputMode="numeric"
         label={label}
-        maxLength={9}
         onChange={handleChange}
         size="medium"
         value={searchValue}
