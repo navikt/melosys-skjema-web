@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { nb } from "~/i18n/nb";
+import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes";
 
 const translations = nb.translation.innsendtSkjema;
 
@@ -63,5 +64,28 @@ export class InnsendtSkjemaPage {
 
   async assertReferanseIdVisible(referanseId: string) {
     await expect(this.page.getByText(referanseId)).toBeVisible();
+  }
+
+  async assertArbeidstakerOgArbeidsgiverInfo(
+    skjema: UtsendtArbeidstakerSkjemaDto,
+  ) {
+    await expect(
+      this.page.locator(`dt:has-text("${nb.translation.felles.navn}") + dd`),
+    ).toHaveText(skjema.metadata.arbeidstakerNavn);
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
+      ),
+    ).toHaveText(skjema.fnr);
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.felles.virksomhetsnavn}") + dd`,
+      ),
+    ).toHaveText(skjema.metadata.arbeidsgiverNavn);
+    await expect(
+      this.page.locator(
+        `dt:has-text("${nb.translation.felles.organisasjonsnummer}") + dd`,
+      ),
+    ).toHaveText(skjema.orgnr);
   }
 }

@@ -158,7 +158,10 @@ function InnsendtSkjemaPageContent({
         <BodyShort>{formatDato(response.innsendtDato)}</BodyShort>
       </HStack>
 
-      <ArbeidstakerOgArbeidsgiverOppsummering skjema={skjema} />
+      <ArbeidstakerOgArbeidsgiverOppsummering
+        skjema={skjema}
+        headingLevel="2"
+      />
 
       {arbeidstakerSeksjoner.length > 0 && (
         <VStack gap="space-16">

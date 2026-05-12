@@ -45,7 +45,7 @@ export const en = {
       stegGjelderArbeidsgiver: "This step applies to the employer",
       stegGjelderArbeidstaker: "This step applies to the employee",
       virksomhetsnavn: "Company name",
-      organisasjonsnummer: "Organisation number",
+      organisasjonsnummer: "Organization number",
     },
     skjemaVeiledning: {
       hei: "Hello",
