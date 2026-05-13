@@ -93,28 +93,43 @@ export class SkatteforholdOgInntektStegPage {
       name: nb.translation.felles.lagreOgFortsett,
     });
 
-    // Nye inntektsfelter
+    const inntektKildeAlternativer =
+      felter.inntektFraNorskEllerUtenlandskVirksomhet.alternativer;
     const inntektKildeGroup = page.getByRole("group", {
       name: felter.inntektFraNorskEllerUtenlandskVirksomhet.label,
     });
     this.inntektFraNorskVirksomhetCheckbox = inntektKildeGroup.getByRole(
       "checkbox",
-      { name: "Norsk virksomhet" },
+      {
+        name: inntektKildeAlternativer.find(
+          (a) => a.verdi === "NORSK_VIRKSOMHET",
+        )!.label,
+      },
     );
     this.inntektFraUtenlandskVirksomhetCheckbox = inntektKildeGroup.getByRole(
       "checkbox",
-      { name: "Utenlandsk virksomhet" },
+      {
+        name: inntektKildeAlternativer.find(
+          (a) => a.verdi === "UTENLANDSK_VIRKSOMHET",
+        )!.label,
+      },
     );
 
+    const hvilkenInntektAlternativer =
+      felter.hvilkeTyperInntektHarDu.alternativer;
     const hvilkenInntektGroup = page.getByRole("group", {
       name: felter.hvilkeTyperInntektHarDu.label,
     });
     this.loennsinntektCheckbox = hvilkenInntektGroup.getByRole("checkbox", {
-      name: "Lønnsinntekt",
+      name: hvilkenInntektAlternativer.find((a) => a.verdi === "LOENN")!.label,
     });
     this.inntektFraEgenVirksomhetCheckbox = hvilkenInntektGroup.getByRole(
       "checkbox",
-      { name: "Inntekt fra egen virksomhet" },
+      {
+        name: hvilkenInntektAlternativer.find(
+          (a) => a.verdi === "INNTEKT_FRA_EGEN_VIRKSOMHET",
+        )!.label,
+      },
     );
 
     this.inntektInput = page.getByRole("textbox", {

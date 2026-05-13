@@ -216,7 +216,6 @@ function SkatteforholdOgInntektStegContent({
     postSkatteforholdMutation.mutate(data);
   };
 
-  // [AGENT] Beløpsformatering via register({ onBlur }) — RHF kjører sin egen onBlur først, deretter vår formatter
   /** onBlur-handler som autoformaterer et beløpsfelt for visning */
   const belopOnBlur = (
     fieldName:

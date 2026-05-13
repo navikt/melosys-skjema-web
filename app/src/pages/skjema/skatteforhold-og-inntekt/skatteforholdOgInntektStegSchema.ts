@@ -4,7 +4,7 @@ import { stripBelopFormatering } from "~/utils/belopFormat.ts";
 
 function erPositivtBelop(belop?: string): boolean {
   if (!belop) return false;
-  const stripped = stripBelopFormatering(belop.trim());
+  const stripped = stripBelopFormatering(belop.trim()).replace(/[.,]\d*$/, "");
   if (!/^\d+$/.test(stripped)) return false;
   return Number.parseInt(stripped, 10) > 0;
 }

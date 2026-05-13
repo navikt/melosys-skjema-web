@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  formaterBelopForVisning,
-  stripBelopFormatering,
-} from "./belopFormat.ts";
+import { formaterBelopForVisning, stripBelopFormatering } from "./belopFormat";
 
 describe("formaterBelopForVisning", () => {
   it("should format numbers with Norwegian thousand separators", () => {

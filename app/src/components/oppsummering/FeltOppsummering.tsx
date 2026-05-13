@@ -8,7 +8,7 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import type { FeltUnion } from "./formaterVerdi.ts";
-import { formaterVerdi, hentValgteCheckboxLabels } from "./formaterVerdi.ts";
+import { formaterVerdi } from "./formaterVerdi.ts";
 import { ListeFeltOppsummering } from "./ListeFeltOppsummering.tsx";
 
 interface FeltOppsummeringProps {
@@ -58,8 +58,10 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
   if (felt.type === "CHECKBOX_GROUP") {
     const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
     const selected = verdi as string[] | undefined;
-    const selectedLabels = hentValgteCheckboxLabels(checkboxFelt, selected);
-    if (selectedLabels.length === 0) {
+    const valgteAlternativer = checkboxFelt.alternativer.filter((a) =>
+      selected?.includes(a.verdi),
+    );
+    if (valgteAlternativer.length === 0) {
       return (
         <FormSummary.Answer>
           <FormSummary.Label>{felt.label}</FormSummary.Label>
@@ -72,15 +74,8 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value>
           <ul className="m-0 pl-6 list-disc">
-            {selectedLabels.map((label, index) => (
-              <li
-                key={
-                  checkboxFelt.alternativer.find((a) => a.label === label)
-                    ?.verdi ?? index
-                }
-              >
-                {label}
-              </li>
+            {valgteAlternativer.map((alt) => (
+              <li key={alt.verdi}>{alt.label}</li>
             ))}
           </ul>
         </FormSummary.Value>
