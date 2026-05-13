@@ -38,6 +38,9 @@ test.describe("Innsendt skjema", () => {
     await innsendtPage.goto();
     await innsendtPage.assertIsVisible();
     await innsendtPage.assertReferanseIdVisible("REF-AT-001");
+    await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
+      testArbeidstakerSkjema,
+    );
   });
 
   test("Viser innsendt — arbeidsgivers del", async ({ page }) => {
@@ -61,6 +64,9 @@ test.describe("Innsendt skjema", () => {
     await innsendtPage.goto();
     await innsendtPage.assertIsVisible();
     await innsendtPage.assertReferanseIdVisible("REF-AG-001");
+    await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
+      testArbeidsgiverSkjema,
+    );
   });
 
   test("Viser innsendt — kombinert (arbeidsgiver og arbeidstakers del)", async ({
@@ -83,5 +89,8 @@ test.describe("Innsendt skjema", () => {
     await innsendtPage.goto();
     await innsendtPage.assertIsVisible();
     await innsendtPage.assertReferanseIdVisible("REF-KO-001");
+    await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
+      testKombinertSkjema,
+    );
   });
 });

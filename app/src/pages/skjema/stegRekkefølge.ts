@@ -7,12 +7,12 @@ import {
 } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
-const ARBEIDSGIVER_IKON: StegIkon = {
+export const ARBEIDSGIVER_IKON: StegIkon = {
   icon: BriefcaseIcon,
   ariaLabel: "felles.stegGjelderArbeidsgiver",
 };
 
-const ARBEIDSTAKER_IKON: StegIkon = {
+export const ARBEIDSTAKER_IKON: StegIkon = {
   icon: PersonRectangleIcon,
   ariaLabel: "felles.stegGjelderArbeidstaker",
 };

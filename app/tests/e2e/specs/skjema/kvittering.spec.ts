@@ -23,6 +23,7 @@ test.describe("Kvittering", () => {
     representasjonstype: Representasjonstype.DEG_SELV,
     juridiskEnhetOrgnr: "123456789",
     arbeidsgiverNavn: "Test Bedrift AS",
+    arbeidstakerNavn: "Test Arbeidstaker",
     skjemadel: Skjemadel.ARBEIDSTAKERS_DEL,
     metadatatype: "DegSelvMetadata",
   };

@@ -52,6 +52,7 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
     representasjonstype: Representasjonstype.ARBEIDSGIVER,
     juridiskEnhetOrgnr: "123456789",
     arbeidsgiverNavn: "Test Bedrift AS",
+    arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVERS_DEL,
   } as ArbeidsgiverMetadata,
   data: {
@@ -72,6 +73,7 @@ export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
     representasjonstype: Representasjonstype.DEG_SELV,
     juridiskEnhetOrgnr: "123456789",
     arbeidsgiverNavn: "Test Bedrift AS",
+    arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSTAKERS_DEL,
   } as DegSelvMetadata,
   data: {
@@ -282,6 +284,7 @@ export const testKombinertSkjema: UtsendtArbeidstakerSkjemaDto = {
     representasjonstype: Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT,
     juridiskEnhetOrgnr: "123456789",
     arbeidsgiverNavn: "Test Bedrift AS",
+    arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
     fullmektigFnr: "01019000083",
   } as ArbeidsgiverMedFullmaktMetadata,
