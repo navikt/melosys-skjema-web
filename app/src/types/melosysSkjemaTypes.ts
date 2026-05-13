@@ -134,6 +134,14 @@ export interface FeltDefinisjonDto {
   type: string;
 }
 
+export interface RegistrerSaksnummerRequest {
+  /**
+   * @minLength 0
+   * @maxLength 99
+   */
+  saksnummer: string;
+}
+
 export interface VedleggDto {
   /** @format uuid */
   id: string;
@@ -159,34 +167,50 @@ export interface UtsendingsperiodeOgLandDto {
 
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
+  | "representasjonstype"
+  | "arbeidstakerNavn"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
+  /** @format uuid */
+  kobletSkjemaId?: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
 };
 
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
+  | "representasjonstype"
+  | "arbeidstakerNavn"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
+  /** @format uuid */
+  kobletSkjemaId?: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
 };
 
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
+  | "representasjonstype"
+  | "arbeidstakerNavn"
   | "metadatatype"
->;
+> & {
+  /** @format uuid */
+  kobletSkjemaId?: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
+};
 
 export interface ArbeidsgiverensVirksomhetINorgeDto {
   erArbeidsgiverenOffentligVirksomhet: boolean;
@@ -229,12 +253,18 @@ export interface ArbeidstakersData {
 
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
+  | "representasjonstype"
+  | "arbeidstakerNavn"
   | "metadatatype"
->;
+> & {
+  /** @format uuid */
+  kobletSkjemaId?: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
+};
 
 export interface Familiemedlem {
   fornavn: string;
@@ -306,24 +336,34 @@ export interface PaSkipDto {
 
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
+  | "representasjonstype"
+  | "arbeidstakerNavn"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
+  /** @format uuid */
+  kobletSkjemaId?: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
   radgiverfirma: RadgiverfirmaInfo;
 };
 
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
+  | "representasjonstype"
+  | "arbeidstakerNavn"
   | "metadatatype"
 > & {
+  /** @format uuid */
+  kobletSkjemaId?: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
   radgiverfirma: RadgiverfirmaInfo;
 };
 
@@ -389,6 +429,8 @@ export type UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto =
   UtilRequiredKeys<UtsendtArbeidstakerSkjemaData, "type"> & {
     arbeidsgiversData: ArbeidsgiversData;
     arbeidstakersData: ArbeidstakersData;
+    utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
+    tilleggsopplysninger?: TilleggsopplysningerDto;
   };
 
 export type UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = UtilRequiredKeys<
@@ -399,32 +441,37 @@ export type UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = UtilRequiredKeys<
   utenlandsoppdraget?: UtenlandsoppdragetDto;
   arbeidstakerensLonn?: ArbeidstakerensLonnDto;
   arbeidsstedIUtlandet?: ArbeidsstedIUtlandetDto;
+  utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
 };
 
 export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
   UtsendtArbeidstakerSkjemaData,
   "type"
 > & {
+  utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   arbeidssituasjon?: ArbeidssituasjonDto;
   skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
   familiemedlemmer?: FamiliemedlemmerDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
 };
 
 export interface UtsendtArbeidstakerMetadata {
-  representasjonstype: Representasjonstype;
-  /** @format uuid */
-  erstatterSkjemaId?: string;
   skjemadel: Skjemadel;
   juridiskEnhetOrgnr: string;
   arbeidsgiverNavn: string;
+  representasjonstype: Representasjonstype;
   /** @format uuid */
   kobletSkjemaId?: string;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
+  arbeidstakerNavn: string;
   metadatatype: string;
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
-  utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
+  utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   type: string;
 }
 
@@ -510,7 +557,7 @@ export interface InnsendtSoknadOversiktDto {
   referanseId?: string;
   arbeidsgiverNavn?: string;
   arbeidsgiverOrgnr: string;
-  arbeidstakerNavn?: string;
+  arbeidstakerNavn: string;
   arbeidstakerFnrMaskert?: string;
   /** @format date */
   arbeidstakerFodselsdato: string;
@@ -564,6 +611,7 @@ export type BooleanFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
 > & {
+  hjelpetekst?: string;
   jaLabel: string;
   neiLabel: string;
 };
@@ -571,12 +619,16 @@ export type BooleanFeltDefinisjon = UtilRequiredKeys<
 export type CountrySelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
->;
+> & {
+  hjelpetekst?: string;
+};
 
 export type DateFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
->;
+> & {
+  hjelpetekst?: string;
+};
 
 /** Innsendt søknad med skjemadefinisjon for korrekt visning */
 export interface InnsendtSkjemaResponse {
@@ -620,6 +672,7 @@ export type ListeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
 > & {
+  hjelpetekst?: string;
   leggTilLabel: string;
   fjernLabel: string;
   tomListeMelding?: string;
@@ -640,6 +693,7 @@ export type PeriodeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
 > & {
+  hjelpetekst?: string;
   fraDatoLabel: string;
   tilDatoLabel: string;
 };
@@ -665,6 +719,7 @@ export type SelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
 > & {
+  hjelpetekst?: string;
   alternativer: AlternativDefinisjonDto[];
 };
 
@@ -686,12 +741,14 @@ export type TextFeltDefinisjon = UtilRequiredKeys<
   "pakrevd" | "label"
 > & {
   format?: string;
+  hjelpetekst?: string;
 };
 
 export type TextareaFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
 > & {
+  hjelpetekst?: string;
   /** @format int32 */
   maxLength?: number;
 };
@@ -707,7 +764,7 @@ export interface UtkastOversiktDto {
   id: string;
   arbeidsgiverNavn?: string;
   arbeidsgiverOrgnr?: string;
-  arbeidstakerNavn?: string;
+  arbeidstakerNavn: string;
   arbeidstakerFnrMaskert?: string;
   /** @format date-time */
   opprettetDato: string;

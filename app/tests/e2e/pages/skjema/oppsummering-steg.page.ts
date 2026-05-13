@@ -59,6 +59,27 @@ export class OppsummeringStegPage {
     await expect(this.heading).toBeVisible();
   }
 
+  async assertArbeidstakerOgArbeidsgiverInfo() {
+    await expect(
+      this.page.locator(`dt:text-is("${nb.translation.felles.navn}") + dd`),
+    ).toHaveText(this.skjema.metadata.arbeidstakerNavn);
+    await expect(
+      this.page.locator(
+        `dt:text-is("${nb.translation.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
+      ),
+    ).toHaveText(this.skjema.fnr);
+    await expect(
+      this.page.locator(
+        `dt:text-is("${nb.translation.felles.virksomhetsnavn}") + dd`,
+      ),
+    ).toHaveText(this.skjema.metadata.arbeidsgiverNavn);
+    await expect(
+      this.page.locator(
+        `dt:text-is("${nb.translation.felles.organisasjonsnummer}") + dd`,
+      ),
+    ).toHaveText(this.skjema.orgnr);
+  }
+
   // --- Arbeidsgiver assertions ---
 
   async assertArbeidsgiverensVirksomhetINorgeData(

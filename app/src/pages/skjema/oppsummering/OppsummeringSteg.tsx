@@ -2,6 +2,7 @@ import { Alert } from "@navikt/ds-react";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ArbeidstakerOgArbeidsgiverOppsummering } from "~/components/oppsummering/ArbeidstakerOgArbeidsgiverOppsummering.tsx";
 import { resolveSeksjoner } from "~/components/oppsummering/dataMapping.ts";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
@@ -49,6 +50,7 @@ function OppsummeringStegContent({
       }}
       nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjema.id} />}
     >
+      <ArbeidstakerOgArbeidsgiverOppsummering skjema={skjema} />
       {seksjoner.map(({ seksjonNavn, seksjon, data, stegKey }) => {
         const steg = stegRekkefolge.find((s) => s.key === stegKey);
         const editHref = steg?.route.replace("$id", skjema.id) ?? "";

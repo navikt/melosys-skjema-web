@@ -86,6 +86,7 @@ test.describe("Oppsummering", () => {
       await oppsummeringPage.goto();
       await oppsummeringPage.assertIsVisible();
 
+      await oppsummeringPage.assertArbeidstakerOgArbeidsgiverInfo();
       await oppsummeringPage.assertArbeidssituasjonData(arbeidssituasjonData);
       await oppsummeringPage.assertUtsendingsperiodeOgLandData(
         utsendingsperiodeOgLandData,

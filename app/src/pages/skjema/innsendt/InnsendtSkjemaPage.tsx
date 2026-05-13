@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { ArbeidstakerOgArbeidsgiverOppsummering } from "~/components/oppsummering/ArbeidstakerOgArbeidsgiverOppsummering.tsx";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
 import {
@@ -156,6 +157,11 @@ function InnsendtSkjemaPageContent({
         <Tag variant="info">{response.referanseId}</Tag>
         <BodyShort>{formatDato(response.innsendtDato)}</BodyShort>
       </HStack>
+
+      <ArbeidstakerOgArbeidsgiverOppsummering
+        skjema={skjema}
+        headingLevel="2"
+      />
 
       {arbeidstakerSeksjoner.length > 0 && (
         <VStack gap="space-16">
