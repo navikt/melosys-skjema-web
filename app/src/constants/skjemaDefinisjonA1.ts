@@ -363,7 +363,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         vegadresse: {
           type: "TEXT",
-          label: "Vegadresse",
+          label: "Gate/vei",
           pakrevd: false,
         },
         nummer: {
