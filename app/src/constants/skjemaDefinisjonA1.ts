@@ -192,42 +192,6 @@ const SKJEMA_DEFINISJON_A1_NB = {
           jaLabel: "Ja",
           neiLabel: "Nei",
         },
-        familiemedlemmer: {
-          type: "LIST",
-          label: "Familiemedlemmer",
-          pakrevd: false,
-          leggTilLabel: "Legg til familiemedlem",
-          fjernLabel: "Fjern",
-          elementDefinisjon: {
-            fornavn: {
-              type: "TEXT",
-              label: "Fornavn",
-              pakrevd: true,
-            },
-            etternavn: {
-              type: "TEXT",
-              label: "Etternavn",
-              pakrevd: true,
-            },
-            harNorskFodselsnummerEllerDnummer: {
-              type: "BOOLEAN",
-              label: "Har personen norsk fødselsnummer eller D-nummer?",
-              pakrevd: true,
-              jaLabel: "Ja",
-              neiLabel: "Nei",
-            },
-            fodselsnummer: {
-              type: "TEXT",
-              label: "Fødselsnummer / D-nummer",
-              pakrevd: false,
-            },
-            fodselsdato: {
-              type: "DATE",
-              label: "Fødselsdato",
-              pakrevd: false,
-            },
-          },
-        },
       },
     },
     tilleggsopplysningerArbeidstaker: {
@@ -801,43 +765,6 @@ const SKJEMA_DEFINISJON_A1_EN = {
             "We ask this because we want to process applications from multiple family members simultaneously",
           jaLabel: "Yes",
           neiLabel: "No",
-        },
-        familiemedlemmer: {
-          type: "LIST",
-          label: "Family members",
-          pakrevd: false,
-          leggTilLabel: "Add family member",
-          fjernLabel: "Remove",
-          elementDefinisjon: {
-            fornavn: {
-              type: "TEXT",
-              label: "First name",
-              pakrevd: true,
-            },
-            etternavn: {
-              type: "TEXT",
-              label: "Last name",
-              pakrevd: true,
-            },
-            harNorskFodselsnummerEllerDnummer: {
-              type: "BOOLEAN",
-              label:
-                "Does the person have a Norwegian national identity number or D-number?",
-              pakrevd: true,
-              jaLabel: "Yes",
-              neiLabel: "No",
-            },
-            fodselsnummer: {
-              type: "TEXT",
-              label: "National identity number / D-number",
-              pakrevd: false,
-            },
-            fodselsdato: {
-              type: "DATE",
-              label: "Date of birth",
-              pakrevd: false,
-            },
-          },
         },
       },
     },
