@@ -8,9 +8,9 @@ const belopFormatter = new Intl.NumberFormat("nb-NO", {
 
 /**
  * Formaterer en rå inputverdi som et norsk kronebeløp (hele kroner) for visning.
- * - Avrunder til nærmeste hele krone
+ * - Fjerner eventuelle desimaler (trunkerer, avrunder ikke)
  * - Legger til tusenskilletegn (non-breaking space via Intl.NumberFormat)
- * Eksempler: "1234" → "1 234", "1000000" → "1 000 000"
+ * Eksempler: "1234" → "1 234", "1000000" → "1 000 000", "12.5" → "12"
  */
 export function formaterBelopForVisning(value: string): string {
   const trimmed = value.trim();

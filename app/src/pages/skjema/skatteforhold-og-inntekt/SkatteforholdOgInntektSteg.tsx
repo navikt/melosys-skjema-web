@@ -216,8 +216,9 @@ function SkatteforholdOgInntektStegContent({
     postSkatteforholdMutation.mutate(data);
   };
 
+  // [AGENT] Beløpsformatering via register({ onBlur }) — RHF kjører sin egen onBlur først, deretter vår formatter
   /** onBlur-handler som autoformaterer et beløpsfelt for visning */
-  const handleBelopBlur = (
+  const belopOnBlur = (
     fieldName:
       | "pengestotteSomMottasFraAndreLandBelop"
       | "inntekt"
@@ -297,8 +298,7 @@ function SkatteforholdOgInntektStegContent({
                     label={inntektFelt.label}
                     inputMode="numeric"
                     maxLength={BELOP_MAX_LENGTH}
-                    {...register("inntekt")}
-                    onBlur={handleBelopBlur("inntekt")}
+                    {...register("inntekt", { onBlur: belopOnBlur("inntekt") })}
                   />
                 )}
 
@@ -312,8 +312,9 @@ function SkatteforholdOgInntektStegContent({
                     label={inntektFraEgenVirksomhetFelt.label}
                     inputMode="numeric"
                     maxLength={BELOP_MAX_LENGTH}
-                    {...register("inntektFraEgenVirksomhet")}
-                    onBlur={handleBelopBlur("inntektFraEgenVirksomhet")}
+                    {...register("inntektFraEgenVirksomhet", {
+                      onBlur: belopOnBlur("inntektFraEgenVirksomhet"),
+                    })}
                   />
                 )}
               </VStack>
@@ -347,10 +348,9 @@ function SkatteforholdOgInntektStegContent({
                 inputMode="numeric"
                 label={belopFelt.label}
                 maxLength={BELOP_MAX_LENGTH}
-                {...register("pengestotteSomMottasFraAndreLandBelop")}
-                onBlur={handleBelopBlur(
-                  "pengestotteSomMottasFraAndreLandBelop",
-                )}
+                {...register("pengestotteSomMottasFraAndreLandBelop", {
+                  onBlur: belopOnBlur("pengestotteSomMottasFraAndreLandBelop"),
+                })}
               />
 
               <Textarea

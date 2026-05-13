@@ -125,6 +125,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
           label: "Hvor mye penger mottar du brutto per måned?",
           pakrevd: false,
           hjelpetekst: "Oppgi beløpet i norske kroner",
+          format: "BELOP",
         },
         pengestotteSomMottasFraAndreLandBeskrivelse: {
           type: "TEXTAREA",
@@ -166,6 +167,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
           type: "TEXT",
           label: "Lønnsinntekt",
           pakrevd: false,
+          format: "BELOP",
           hjelpetekst:
             "Du skal føre opp samlet månedlig inntekt, inkludert eventuelle utenlandstillegg og verdi av naturalytelser dekt av virksomheten. Hvis inntekten din varierer fra måned til måned, oppgi gjennomsnittlig inntekt i brutto per måned.",
         },
@@ -173,6 +175,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
           type: "TEXT",
           label: "Inntekter fra egen virksomhet",
           pakrevd: false,
+          format: "BELOP",
         },
       },
     },
@@ -733,6 +736,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
           label: "How much money do you receive gross per month?",
           pakrevd: false,
           hjelpetekst: "Enter the amount in Norwegian kroner",
+          format: "BELOP",
         },
         pengestotteSomMottasFraAndreLandBeskrivelse: {
           type: "TEXTAREA",
@@ -773,6 +777,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
           type: "TEXT",
           label: "Salary",
           pakrevd: false,
+          format: "BELOP",
           hjelpetekst:
             "You should report your total monthly income, including any foreign allowances and the value of benefits in kind covered by the company. If your income varies from month to month, please state the average gross income per month.",
         },
@@ -780,6 +785,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
           type: "TEXT",
           label: "Income from your own business",
           pakrevd: false,
+          format: "BELOP",
         },
       },
     },
