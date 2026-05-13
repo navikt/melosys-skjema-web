@@ -1,12 +1,13 @@
 import { z } from "zod";
 
-import { stripBelopFormatering } from "~/utils/belopFormat.ts";
+import { normaliserBelopForApi } from "~/utils/belopFormat.ts";
 
 function erPositivtBelop(belop?: string): boolean {
   if (!belop) return false;
-  const stripped = stripBelopFormatering(belop.trim()).replace(/[.,]\d*$/, "");
-  if (!/^\d+$/.test(stripped)) return false;
-  return Number.parseInt(stripped, 10) > 0;
+  // [AGENT] Normaliserer til samme format som backend (^[1-9]\d*$) før validering
+  const normalized = normaliserBelopForApi(belop);
+  if (!/^[1-9]\d*$/.test(normalized)) return false;
+  return true;
 }
 
 /**
@@ -22,26 +23,62 @@ export function skalInkludereLoennsinntekt(
   return !(erSkattepliktig && harNorskVirksomhet && !harUtenlandskVirksomhet);
 }
 
+// [AGENT] Delte helpers som brukes av både refine og transform — fjerner duplisert logikk
+type SchemaData = z.input<typeof baseSchema>;
+
+function harNorsk(data: SchemaData): boolean {
+  return (
+    data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
+      "NORSK_VIRKSOMHET",
+    ) ?? false
+  );
+}
+
+function harUtenlandsk(data: SchemaData): boolean {
+  return (
+    data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
+      "UTENLANDSK_VIRKSOMHET",
+    ) ?? false
+  );
+}
+
+function skalValidereLoennsinntekt(data: SchemaData): boolean {
+  if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return false;
+  if (!harNorsk(data) && !harUtenlandsk(data)) return false;
+  return skalInkludereLoennsinntekt(
+    data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
+    harNorsk(data),
+    harUtenlandsk(data),
+  );
+}
+
+function skalValidereEgenVirksomhetInntekt(data: SchemaData): boolean {
+  if (!data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET"))
+    return false;
+  return harNorsk(data) || harUtenlandsk(data);
+}
+
 const checkboxGroupSchema = z.array(z.string()).optional();
 
-export const skatteforholdOgInntektSchema = z
-  .object({
-    erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean({
-      error:
-        "skatteforholdOgInntektSteg.duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden",
-    }),
-    mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean({
-      error:
-        "skatteforholdOgInntektSteg.duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits",
-    }),
-    pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
-    landSomUtbetalerPengestotte: z.string().optional(),
-    pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
-    inntektFraNorskEllerUtenlandskVirksomhet: checkboxGroupSchema,
-    hvilkeTyperInntektHarDu: checkboxGroupSchema,
-    inntekt: z.string().optional(),
-    inntektFraEgenVirksomhet: z.string().optional(),
-  })
+const baseSchema = z.object({
+  erSkattepliktigTilNorgeIHeleutsendingsperioden: z.boolean({
+    error:
+      "skatteforholdOgInntektSteg.duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden",
+  }),
+  mottarPengestotteFraAnnetEosLandEllerSveits: z.boolean({
+    error:
+      "skatteforholdOgInntektSteg.duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits",
+  }),
+  pengestotteSomMottasFraAndreLandBeskrivelse: z.string().optional(),
+  landSomUtbetalerPengestotte: z.string().optional(),
+  pengestotteSomMottasFraAndreLandBelop: z.string().optional(),
+  inntektFraNorskEllerUtenlandskVirksomhet: checkboxGroupSchema,
+  hvilkeTyperInntektHarDu: checkboxGroupSchema,
+  inntekt: z.string().optional(),
+  inntektFraEgenVirksomhet: z.string().optional(),
+});
+
+export const skatteforholdOgInntektSchema = baseSchema
   .refine(
     (data) =>
       !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
@@ -95,77 +132,31 @@ export const skatteforholdOgInntektSchema = z
       path: ["hvilkeTyperInntektHarDu"],
     },
   )
+  // [AGENT] Kollapset to separate refines (påkrevd + gyldig beløp) til én via delt helper
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return true;
-      const harNorsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
-          "NORSK_VIRKSOMHET",
-        ) ?? false;
-      const harUtenlandsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
-          "UTENLANDSK_VIRKSOMHET",
-        ) ?? false;
-      if (!harNorsk && !harUtenlandsk) return true;
-      if (
-        !skalInkludereLoennsinntekt(
-          data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
-          harNorsk,
-          harUtenlandsk,
-        )
-      ) {
-        return true;
-      }
-      return !!data.inntekt?.trim();
+      if (!skalValidereLoennsinntekt(data)) return true;
+      if (!data.inntekt?.trim()) return false;
+      return erPositivtBelop(data.inntekt);
     },
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
       path: ["inntekt"],
     },
   )
+  // [AGENT] Kollapset to separate refines (påkrevd + gyldig beløp) til én via delt helper
   .refine(
     (data) => {
-      if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return true;
-      if (!data.inntekt?.trim()) return true;
-      return erPositivtBelop(data.inntekt);
-    },
-    {
-      error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
-      path: ["inntekt"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (
-        !data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
-      )
-        return true;
-      const harNoenVirksomhet =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.some((v) =>
-          ["NORSK_VIRKSOMHET", "UTENLANDSK_VIRKSOMHET"].includes(v),
-        ) ?? false;
-      if (!harNoenVirksomhet) return true;
-      return !!data.inntektFraEgenVirksomhet?.trim();
+      if (!skalValidereEgenVirksomhetInntekt(data)) return true;
+      if (!data.inntektFraEgenVirksomhet?.trim()) return false;
+      return erPositivtBelop(data.inntektFraEgenVirksomhet);
     },
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",
       path: ["inntektFraEgenVirksomhet"],
     },
   )
-  .refine(
-    (data) => {
-      if (
-        !data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
-      )
-        return true;
-      if (!data.inntektFraEgenVirksomhet?.trim()) return true;
-      return erPositivtBelop(data.inntektFraEgenVirksomhet);
-    },
-    {
-      error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
-      path: ["inntektFraEgenVirksomhet"],
-    },
-  )
+  // [AGENT] Transform bruker normaliserBelopForApi i stedet for stripBelopFormatering — matcher backend ^[1-9]\d*$
   .transform((data) => ({
     erSkattepliktigTilNorgeIHeleutsendingsperioden:
       data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
@@ -182,49 +173,17 @@ export const skatteforholdOgInntektSchema = z
     pengestotteSomMottasFraAndreLandBelop:
       data.mottarPengestotteFraAnnetEosLandEllerSveits &&
       data.pengestotteSomMottasFraAndreLandBelop
-        ? stripBelopFormatering(
-            data.pengestotteSomMottasFraAndreLandBelop.trim(),
-          )
+        ? normaliserBelopForApi(data.pengestotteSomMottasFraAndreLandBelop)
         : undefined,
     inntektFraNorskEllerUtenlandskVirksomhet:
       data.inntektFraNorskEllerUtenlandskVirksomhet,
     hvilkeTyperInntektHarDu: data.hvilkeTyperInntektHarDu,
-    inntekt: (() => {
-      if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return;
-      const harNorsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
-          "NORSK_VIRKSOMHET",
-        ) ?? false;
-      const harUtenlandsk =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.includes(
-          "UTENLANDSK_VIRKSOMHET",
-        ) ?? false;
-      if (!harNorsk && !harUtenlandsk) return;
-      if (
-        !skalInkludereLoennsinntekt(
-          data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
-          harNorsk,
-          harUtenlandsk,
-        )
-      ) {
-        return;
-      }
-      return data.inntekt
-        ? stripBelopFormatering(data.inntekt.trim())
-        : undefined;
-    })(),
-    inntektFraEgenVirksomhet: (() => {
-      if (
-        !data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
-      )
-        return;
-      const harNoenVirksomhet =
-        data.inntektFraNorskEllerUtenlandskVirksomhet?.some((v) =>
-          ["NORSK_VIRKSOMHET", "UTENLANDSK_VIRKSOMHET"].includes(v),
-        ) ?? false;
-      if (!harNoenVirksomhet) return;
-      return data.inntektFraEgenVirksomhet
-        ? stripBelopFormatering(data.inntektFraEgenVirksomhet.trim())
-        : undefined;
-    })(),
+    inntekt:
+      skalValidereLoennsinntekt(data) && data.inntekt
+        ? normaliserBelopForApi(data.inntekt)
+        : undefined,
+    inntektFraEgenVirksomhet:
+      skalValidereEgenVirksomhetInntekt(data) && data.inntektFraEgenVirksomhet
+        ? normaliserBelopForApi(data.inntektFraEgenVirksomhet)
+        : undefined,
   }));

@@ -9,7 +9,6 @@ import {
 } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -61,6 +60,11 @@ type SkatteforholdOgInntektFormInput = z.input<
 type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
 >;
+
+// [AGENT] Sjekker format-feltet fra skjemadefinisjonen — den som er sannhetskilden for om et felt trenger beløpsformatering
+function erBelopFelt(felt: { format?: string }): boolean {
+  return felt.format === "BELOP";
+}
 
 function SkatteforholdOgInntektStegContent({
   skjema,
@@ -154,6 +158,9 @@ function SkatteforholdOgInntektStegContent({
   });
 
   const harLoenn = hvilkeTyperInntektHarDu?.includes("LOENN") ?? false;
+  // [AGENT] Ekstrahert til egen variabel i stedet for inline includes-sjekk
+  const harEgenVirksomhet =
+    hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET") ?? false;
   const harNorskVirksomhet =
     inntektKilde?.includes("NORSK_VIRKSOMHET") ?? false;
   const harUtenlandskVirksomhet =
@@ -170,22 +177,7 @@ function SkatteforholdOgInntektStegContent({
     );
 
   const visInntektFraEgenVirksomhetFelt =
-    hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET") &&
-    harNoenVirksomhet;
-
-  useEffect(() => {
-    if (!visInntektFelt) {
-      formMethods.setValue("inntekt", undefined);
-      formMethods.clearErrors("inntekt");
-    }
-  }, [visInntektFelt, formMethods]);
-
-  useEffect(() => {
-    if (!visInntektFraEgenVirksomhetFelt) {
-      formMethods.setValue("inntektFraEgenVirksomhet", undefined);
-      formMethods.clearErrors("inntektFraEgenVirksomhet");
-    }
-  }, [visInntektFraEgenVirksomhetFelt, formMethods]);
+    harEgenVirksomhet && harNoenVirksomhet;
 
   const postSkatteforholdMutation = useMutation({
     mutationFn: (data: SkatteforholdOgInntektFormData) => {
@@ -216,15 +208,12 @@ function SkatteforholdOgInntektStegContent({
     postSkatteforholdMutation.mutate(data);
   };
 
-  /** onBlur-handler som autoformaterer et beløpsfelt for visning */
+  // [AGENT] Lager onBlur-handler for beløpsformatering basert på feltdefinisjonens format-felt
   const belopOnBlur = (
-    fieldName:
-      | "pengestotteSomMottasFraAndreLandBelop"
-      | "inntekt"
-      | "inntektFraEgenVirksomhet",
+    fieldName: keyof SkatteforholdOgInntektFormInput & string,
   ) => {
     return () => {
-      const raw = formMethods.getValues(fieldName);
+      const raw = formMethods.getValues(fieldName) as string | undefined;
       if (raw) {
         const stripped = stripBelopFormatering(raw);
         const formatted = formaterBelopForVisning(stripped);
@@ -297,7 +286,11 @@ function SkatteforholdOgInntektStegContent({
                     label={inntektFelt.label}
                     inputMode="numeric"
                     maxLength={BELOP_MAX_LENGTH}
-                    {...register("inntekt", { onBlur: belopOnBlur("inntekt") })}
+                    {...register("inntekt", {
+                      ...(erBelopFelt(inntektFelt) && {
+                        onBlur: belopOnBlur("inntekt"),
+                      }),
+                    })}
                   />
                 )}
 
@@ -312,7 +305,9 @@ function SkatteforholdOgInntektStegContent({
                     inputMode="numeric"
                     maxLength={BELOP_MAX_LENGTH}
                     {...register("inntektFraEgenVirksomhet", {
-                      onBlur: belopOnBlur("inntektFraEgenVirksomhet"),
+                      ...(erBelopFelt(inntektFraEgenVirksomhetFelt) && {
+                        onBlur: belopOnBlur("inntektFraEgenVirksomhet"),
+                      }),
                     })}
                   />
                 )}
@@ -348,7 +343,11 @@ function SkatteforholdOgInntektStegContent({
                 label={belopFelt.label}
                 maxLength={BELOP_MAX_LENGTH}
                 {...register("pengestotteSomMottasFraAndreLandBelop", {
-                  onBlur: belopOnBlur("pengestotteSomMottasFraAndreLandBelop"),
+                  ...(erBelopFelt(belopFelt) && {
+                    onBlur: belopOnBlur(
+                      "pengestotteSomMottasFraAndreLandBelop",
+                    ),
+                  }),
                 })}
               />
 

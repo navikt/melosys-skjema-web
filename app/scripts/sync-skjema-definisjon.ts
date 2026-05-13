@@ -281,6 +281,7 @@ interface BaseFeltType {
   type: string;
   pakrevd: boolean;
   hjelpetekst?: string;
+  format?: string;
 }
 
 `;

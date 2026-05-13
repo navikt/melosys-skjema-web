@@ -40,7 +40,7 @@ function erBelopFelt(felt: FeltUnion): boolean {
 }
 
 /** Henter labels for valgte alternativer i en checkbox-gruppe */
-export function hentValgteCheckboxLabels(
+function hentValgteCheckboxLabels(
   felt: CheckboxGroupFeltDefinisjon,
   selected: string[] | undefined,
 ): string[] {
