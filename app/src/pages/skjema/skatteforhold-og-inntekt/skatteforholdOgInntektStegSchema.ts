@@ -4,7 +4,6 @@ import { normaliserBelopForApi } from "~/utils/belopFormat.ts";
 
 function erPositivtBelop(belop?: string): boolean {
   if (!belop) return false;
-  // [AGENT] Normaliserer til samme format som backend (^[1-9]\d*$) før validering
   const normalized = normaliserBelopForApi(belop);
   if (!/^[1-9]\d*$/.test(normalized)) return false;
   return true;
@@ -23,7 +22,6 @@ export function skalInkludereLoennsinntekt(
   return !(erSkattepliktig && harNorskVirksomhet && !harUtenlandskVirksomhet);
 }
 
-// [AGENT] Delte helpers som brukes av både refine og transform — fjerner duplisert logikk
 type SchemaData = z.input<typeof baseSchema>;
 
 function harNorsk(data: SchemaData): boolean {
@@ -132,7 +130,6 @@ export const skatteforholdOgInntektSchema = baseSchema
       path: ["hvilkeTyperInntektHarDu"],
     },
   )
-  // [AGENT] Kollapset to separate refines (påkrevd + gyldig beløp) til én via delt helper
   .refine(
     (data) => {
       if (!skalValidereLoennsinntekt(data)) return true;
@@ -144,7 +141,6 @@ export const skatteforholdOgInntektSchema = baseSchema
       path: ["inntekt"],
     },
   )
-  // [AGENT] Kollapset to separate refines (påkrevd + gyldig beløp) til én via delt helper
   .refine(
     (data) => {
       if (!skalValidereEgenVirksomhetInntekt(data)) return true;
@@ -156,7 +152,6 @@ export const skatteforholdOgInntektSchema = baseSchema
       path: ["inntektFraEgenVirksomhet"],
     },
   )
-  // [AGENT] Transform bruker normaliserBelopForApi i stedet for stripBelopFormatering — matcher backend ^[1-9]\d*$
   .transform((data) => ({
     erSkattepliktigTilNorgeIHeleutsendingsperioden:
       data.erSkattepliktigTilNorgeIHeleutsendingsperioden,

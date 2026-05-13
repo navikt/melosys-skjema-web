@@ -61,7 +61,6 @@ type SkatteforholdOgInntektFormData = z.infer<
   typeof skatteforholdOgInntektSchema
 >;
 
-// [AGENT] Sjekker format-feltet fra skjemadefinisjonen — den som er sannhetskilden for om et felt trenger beløpsformatering
 function erBelopFelt(felt: { format?: string }): boolean {
   return felt.format === "BELOP";
 }
@@ -158,7 +157,6 @@ function SkatteforholdOgInntektStegContent({
   });
 
   const harLoenn = hvilkeTyperInntektHarDu?.includes("LOENN") ?? false;
-  // [AGENT] Ekstrahert til egen variabel i stedet for inline includes-sjekk
   const harEgenVirksomhet =
     hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET") ?? false;
   const harNorskVirksomhet =
@@ -208,7 +206,6 @@ function SkatteforholdOgInntektStegContent({
     postSkatteforholdMutation.mutate(data);
   };
 
-  // [AGENT] Lager onBlur-handler for beløpsformatering basert på feltdefinisjonens format-felt
   const belopOnBlur = (
     fieldName: keyof SkatteforholdOgInntektFormInput & string,
   ) => {

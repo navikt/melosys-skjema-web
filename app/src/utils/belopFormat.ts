@@ -31,7 +31,6 @@ export function stripBelopFormatering(value: string): string {
   return value.replaceAll(/\s/g, "");
 }
 
-// [AGENT] Normaliserer beløp til backend-formatet ^[1-9]\d*$ — fjerner whitespace, desimaler og ledende nuller
 /**
  * Normaliserer et beløp til formatet backend forventer (regex: ^[1-9]\d*$).
  * Fjerner whitespace, desimaldel og ledende nuller.
