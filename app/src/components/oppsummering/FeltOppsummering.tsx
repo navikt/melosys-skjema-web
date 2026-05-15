@@ -2,6 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import type {
+  CheckboxGroupFeltDefinisjon,
   ListeFeltDefinisjon,
   PeriodeFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -49,6 +50,34 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
           {formaterVerdi(felt, verdi, t)}
+        </FormSummary.Value>
+      </FormSummary.Answer>
+    );
+  }
+
+  if (felt.type === "CHECKBOX_GROUP") {
+    const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
+    const selected = verdi as string[] | undefined;
+    const valgteAlternativer = checkboxFelt.alternativer.filter((a) =>
+      selected?.includes(a.verdi),
+    );
+    if (valgteAlternativer.length === 0) {
+      return (
+        <FormSummary.Answer>
+          <FormSummary.Label>{felt.label}</FormSummary.Label>
+          <FormSummary.Value>{"\u2013"}</FormSummary.Value>
+        </FormSummary.Answer>
+      );
+    }
+    return (
+      <FormSummary.Answer>
+        <FormSummary.Label>{felt.label}</FormSummary.Label>
+        <FormSummary.Value>
+          <ul className="m-0 pl-6 list-disc">
+            {valgteAlternativer.map((alt) => (
+              <li key={alt.verdi}>{alt.label}</li>
+            ))}
+          </ul>
         </FormSummary.Value>
       </FormSummary.Answer>
     );

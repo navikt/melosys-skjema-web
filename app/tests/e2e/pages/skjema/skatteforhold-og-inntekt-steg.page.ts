@@ -41,6 +41,12 @@ export class SkatteforholdOgInntektStegPage {
   readonly pengestotteBelopInput: Locator;
   readonly pengestotteBeskrivelseInput: Locator;
   readonly lagreOgFortsettButton: Locator;
+  readonly inntektFraNorskVirksomhetCheckbox: Locator;
+  readonly inntektFraUtenlandskVirksomhetCheckbox: Locator;
+  readonly loennsinntektCheckbox: Locator;
+  readonly inntektFraEgenVirksomhetCheckbox: Locator;
+  readonly inntektInput: Locator;
+  readonly inntektFraEgenVirksomhetInput: Locator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
@@ -85,6 +91,52 @@ export class SkatteforholdOgInntektStegPage {
 
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
+    });
+
+    const inntektKildeAlternativer =
+      felter.inntektFraNorskEllerUtenlandskVirksomhet.alternativer;
+    const inntektKildeGroup = page.getByRole("group", {
+      name: felter.inntektFraNorskEllerUtenlandskVirksomhet.label,
+    });
+    this.inntektFraNorskVirksomhetCheckbox = inntektKildeGroup.getByRole(
+      "checkbox",
+      {
+        name: inntektKildeAlternativer.find(
+          (a) => a.verdi === "NORSK_VIRKSOMHET",
+        )!.label,
+      },
+    );
+    this.inntektFraUtenlandskVirksomhetCheckbox = inntektKildeGroup.getByRole(
+      "checkbox",
+      {
+        name: inntektKildeAlternativer.find(
+          (a) => a.verdi === "UTENLANDSK_VIRKSOMHET",
+        )!.label,
+      },
+    );
+
+    const hvilkenInntektAlternativer =
+      felter.hvilkeTyperInntektHarDu.alternativer;
+    const hvilkenInntektGroup = page.getByRole("group", {
+      name: felter.hvilkeTyperInntektHarDu.label,
+    });
+    this.loennsinntektCheckbox = hvilkenInntektGroup.getByRole("checkbox", {
+      name: hvilkenInntektAlternativer.find((a) => a.verdi === "LOENN")!.label,
+    });
+    this.inntektFraEgenVirksomhetCheckbox = hvilkenInntektGroup.getByRole(
+      "checkbox",
+      {
+        name: hvilkenInntektAlternativer.find(
+          (a) => a.verdi === "INNTEKT_FRA_EGEN_VIRKSOMHET",
+        )!.label,
+      },
+    );
+
+    this.inntektInput = page.getByRole("textbox", {
+      name: felter.inntekt.label,
+    });
+    this.inntektFraEgenVirksomhetInput = page.getByRole("textbox", {
+      name: felter.inntektFraEgenVirksomhet.label,
     });
   }
 

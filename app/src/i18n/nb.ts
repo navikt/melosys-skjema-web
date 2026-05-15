@@ -188,6 +188,7 @@ export const nb = {
     },
     skatteforholdOgInntektSteg: {
       tittel: "Skatteforhold og inntekt",
+      inntektHeading: "Inntekt",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
@@ -198,6 +199,11 @@ export const nb = {
         "Du må velge hvilket land som utbetaler pengestøtten",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi et gyldig beløp som er større enn 0",
+      duMaVelgeMinstEnInntektKilde: "Du må velge minst én arbeidsinntektskilde",
+      duMaVelgeMinstEnInntektType: "Du må velge minst én inntekttype",
+      duMaOppgiLonnsinntekt: "Du må oppgi lønnsinntekt",
+      duMaOppgiInntektFraEgenVirksomhet:
+        "Du må oppgi inntekt fra egen virksomhet",
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Arbeidssted i utlandet",

@@ -2,6 +2,7 @@ import type { TFunction } from "i18next";
 
 import type {
   BooleanFeltDefinisjon,
+  CheckboxGroupFeltDefinisjon,
   CountrySelectFeltDefinisjon,
   DateFeltDefinisjon,
   ListeFeltDefinisjon,
@@ -10,9 +11,11 @@ import type {
   TextareaFeltDefinisjon,
   TextFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
+import { formaterBelopForVisning } from "~/utils/belopFormat.ts";
 
 export type FeltUnion =
   | BooleanFeltDefinisjon
+  | CheckboxGroupFeltDefinisjon
   | CountrySelectFeltDefinisjon
   | DateFeltDefinisjon
   | ListeFeltDefinisjon
@@ -27,6 +30,24 @@ function formatDate(dateStr: string): string {
     month: "2-digit",
     year: "numeric",
   });
+}
+
+/** Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks */
+function erBelopFelt(felt: FeltUnion): boolean {
+  return (
+    felt.type === "TEXT" && (felt as TextFeltDefinisjon).format === "BELOP"
+  );
+}
+
+/** Henter labels for valgte alternativer i en checkbox-gruppe */
+function hentValgteCheckboxLabels(
+  felt: CheckboxGroupFeltDefinisjon,
+  selected: string[] | undefined,
+): string[] {
+  if (!selected || selected.length === 0) return [];
+  return felt.alternativer
+    .filter((a) => selected.includes(a.verdi))
+    .map((a) => a.label);
 }
 
 export function formaterVerdi(
@@ -61,12 +82,24 @@ export function formaterVerdi(
       );
     }
 
+    case "CHECKBOX_GROUP": {
+      const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
+      const selected = verdi as string[] | undefined;
+      const selectedLabels = hentValgteCheckboxLabels(checkboxFelt, selected);
+      return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u2013";
+    }
+
     case "COUNTRY_SELECT": {
       return t(`land.${String(verdi)}`);
     }
 
     default: {
-      return String(verdi);
+      const strVerdi = String(verdi);
+      if (erBelopFelt(felt)) {
+        const formatert = formaterBelopForVisning(strVerdi);
+        return formatert ? `${formatert} kr` : strVerdi;
+      }
+      return strVerdi;
     }
   }
 }

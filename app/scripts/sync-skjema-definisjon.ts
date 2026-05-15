@@ -52,6 +52,7 @@ interface FlersprakligFelt {
   label: FlersprakligTekst;
   hjelpetekst?: FlersprakligTekst;
   pakrevd: boolean;
+  format?: string;
   jaLabel?: FlersprakligTekst;
   neiLabel?: FlersprakligTekst;
   fraDatoLabel?: FlersprakligTekst;
@@ -85,6 +86,7 @@ interface EnkeltsprakligFelt {
   label: string;
   hjelpetekst?: string;
   pakrevd: boolean;
+  format?: string;
   jaLabel?: string;
   neiLabel?: string;
   fraDatoLabel?: string;
@@ -146,6 +148,7 @@ function transformFelt(felt: FlersprakligFelt, språk: string): EnkeltsprakligFe
   };
 
   if (felt.hjelpetekst) result.hjelpetekst = extractText(felt.hjelpetekst, språk);
+  if (felt.format) result.format = felt.format;
   if (felt.jaLabel) result.jaLabel = extractText(felt.jaLabel, språk);
   if (felt.neiLabel) result.neiLabel = extractText(felt.neiLabel, språk);
   if (felt.fraDatoLabel) result.fraDatoLabel = extractText(felt.fraDatoLabel, språk);
@@ -278,6 +281,7 @@ interface BaseFeltType {
   type: string;
   pakrevd: boolean;
   hjelpetekst?: string;
+  format?: string;
 }
 
 `;

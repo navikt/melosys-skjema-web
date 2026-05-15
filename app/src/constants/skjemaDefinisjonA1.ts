@@ -122,14 +122,60 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         pengestotteSomMottasFraAndreLandBelop: {
           type: "TEXT",
-          label: "Hvor mye penger mottar du brutto per måned",
+          label: "Hvor mye penger mottar du brutto per måned?",
           pakrevd: false,
           hjelpetekst: "Oppgi beløpet i norske kroner",
+          format: "BELOP",
         },
         pengestotteSomMottasFraAndreLandBeskrivelse: {
           type: "TEXTAREA",
-          label: "Hva slags pengestøtte mottar du",
+          label: "Hva slags pengestøtte mottar du?",
           pakrevd: false,
+        },
+        inntektFraNorskEllerUtenlandskVirksomhet: {
+          type: "CHECKBOX_GROUP",
+          label:
+            "Får du arbeidsinntekten din fra en norsk eller utenlandsk virksomhet?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: "NORSK_VIRKSOMHET",
+              label: "Norsk virksomhet",
+            },
+            {
+              verdi: "UTENLANDSK_VIRKSOMHET",
+              label: "Utenlandsk virksomhet",
+            },
+          ],
+        },
+        hvilkeTyperInntektHarDu: {
+          type: "CHECKBOX_GROUP",
+          label: "Hvilken inntekt har du?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: "LOENN",
+              label: "Lønnsinntekt",
+            },
+            {
+              verdi: "INNTEKT_FRA_EGEN_VIRKSOMHET",
+              label: "Inntekt fra egen virksomhet",
+            },
+          ],
+        },
+        inntekt: {
+          type: "TEXT",
+          label: "Lønnsinntekt",
+          pakrevd: false,
+          hjelpetekst:
+            "Du skal føre opp samlet månedlig inntekt, inkludert eventuelle utenlandstillegg og verdi av naturalytelser dekt av virksomheten. Hvis inntekten din varierer fra måned til måned, oppgi gjennomsnittlig inntekt i brutto per måned.",
+          format: "BELOP",
+        },
+        inntektFraEgenVirksomhet: {
+          type: "TEXT",
+          label: "Inntekter fra egen virksomhet",
+          pakrevd: false,
+          format: "BELOP",
         },
       },
     },
@@ -687,14 +733,59 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         pengestotteSomMottasFraAndreLandBelop: {
           type: "TEXT",
-          label: "How much money do you receive gross per month",
+          label: "How much money do you receive gross per month?",
           pakrevd: false,
           hjelpetekst: "Enter the amount in Norwegian kroner",
+          format: "BELOP",
         },
         pengestotteSomMottasFraAndreLandBeskrivelse: {
           type: "TEXTAREA",
-          label: "What kind of financial support do you receive",
+          label: "What kind of financial support do you receive?",
           pakrevd: false,
+        },
+        inntektFraNorskEllerUtenlandskVirksomhet: {
+          type: "CHECKBOX_GROUP",
+          label: "Is your work income from a Norwegian or foreign company?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: "NORSK_VIRKSOMHET",
+              label: "Norwegian company",
+            },
+            {
+              verdi: "UTENLANDSK_VIRKSOMHET",
+              label: "Foreign company",
+            },
+          ],
+        },
+        hvilkeTyperInntektHarDu: {
+          type: "CHECKBOX_GROUP",
+          label: "What kind of income do you have?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: "LOENN",
+              label: "Salary",
+            },
+            {
+              verdi: "INNTEKT_FRA_EGEN_VIRKSOMHET",
+              label: "Income from your own business",
+            },
+          ],
+        },
+        inntekt: {
+          type: "TEXT",
+          label: "Salary",
+          pakrevd: false,
+          hjelpetekst:
+            "You should report your total monthly income, including any foreign allowances and the value of benefits in kind covered by the company. If your income varies from month to month, please state the average gross income per month.",
+          format: "BELOP",
+        },
+        inntektFraEgenVirksomhet: {
+          type: "TEXT",
+          label: "Income from your own business",
+          pakrevd: false,
+          format: "BELOP",
         },
       },
     },
@@ -1160,6 +1251,7 @@ interface BaseFeltType {
   type: string;
   pakrevd: boolean;
   hjelpetekst?: string;
+  format?: string;
 }
 
 /**
