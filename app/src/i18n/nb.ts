@@ -104,7 +104,7 @@ export const nb = {
     },
     soknadHeader: {
       soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
-        "Søknad for utsendt arbeidstaker innen EU/EØS og sveits",
+        "Søknad for utsendt arbeidstaker innen EU/EØS og Sveits",
     },
     landVelgerFormPart: {
       velgLand: "Velg land",
@@ -176,7 +176,7 @@ export const nb = {
       tittel: "Arbeidssituasjon",
       fullmaktFraArbeidstakerTittel: "Du har fullmakt fra arbeidstaker",
       fullmaktFraArbeidstakerBeskrivelse:
-        "De neste spørsmålene svarer du på vegne av arbeidstaker.",
+        "De neste spørsmålene besvarer du på vegne av arbeidstaker.",
       duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
         "Du må svare på om du har vært eller skal være i lønnet arbeid i Norge før utsending",
       duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid:
@@ -214,7 +214,7 @@ export const nb = {
         "Du må velge om arbeidstakeren har fast arbeidssted eller om det veksler ofte",
       duMaSvarePaOmDetErHjemmekontor:
         "Du må svare på om arbeidstakeren er utsendt for å jobbe på hjemmekontor",
-      vegadresseErPakrevd: "Vegadresse er påkrevd",
+      vegadresseErPakrevd: "Gate/vei er påkrevd",
       nummerErPakrevd: "Nummer er påkrevd",
       postkodeErPakrevd: "Postkode er påkrevd",
       byStedErPakrevd: "By/sted/region er påkrevd",
