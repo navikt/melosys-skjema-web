@@ -30,7 +30,9 @@ export function VedleggOppsummering({
   );
 
   useEffect(() => {
-    if (harAnnenDokumentasjon !== true) return;
+    // Eksplisitt Nei skjuler vedlegg. Ja eller udefinert (legacy-skjemaer fra
+    // før vedlegg-spørsmålet) henter og viser eventuelle filer.
+    if (harAnnenDokumentasjon === false) return;
     let cancelled = false;
     hentVedlegg(skjemaId)
       .then((v) => {
@@ -70,7 +72,7 @@ export function VedleggOppsummering({
             <BodyShort>{t("vedleggSteg.ingenVedleggLastetOpp")}</BodyShort>
           </FormSummary.Answer>
         )}
-        {harAnnenDokumentasjon === true &&
+        {harAnnenDokumentasjon !== false &&
           vedlegg.map((v) => (
             <FormSummary.Answer key={v.id}>
               <FormSummary.Label>

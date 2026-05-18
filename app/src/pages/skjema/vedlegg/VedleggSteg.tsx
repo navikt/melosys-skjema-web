@@ -123,9 +123,12 @@ function VedleggStegContent({
   });
 
   const totalAntall = vedleggItems.length + eksisterendeVedlegg.length;
+  const antallVellykket =
+    eksisterendeVedlegg.length +
+    vedleggItems.filter((v) => v.vedleggId !== undefined).length;
 
   const onSubmit = (data: VedleggStegFormData) => {
-    if (data.harAnnenDokumentasjon && totalAntall === 0) {
+    if (data.harAnnenDokumentasjon && antallVellykket === 0) {
       setManglerVedleggFeil(true);
       return;
     }
