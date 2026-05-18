@@ -154,6 +154,10 @@ describe("resolveSeksjoner", () => {
     );
 
     expect(arbeidsstedPaLand?.data.land).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.vegadresse).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.nummer).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.postkode).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.bySted).toBeUndefined();
   });
 
   it("kombinert flyt har utsendingsperiodeOgLand øverst og ingen duplikater", () => {

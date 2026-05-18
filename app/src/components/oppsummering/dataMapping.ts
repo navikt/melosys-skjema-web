@@ -36,12 +36,13 @@ function flattenPaLand(
   return {
     navnPaVirksomhet: paLand.navnPaVirksomhet,
     fastEllerVekslendeArbeidssted: paLand.fastEllerVekslendeArbeidssted,
-    vegadresse: paLand.fastArbeidssted?.vegadresse,
-    nummer: paLand.fastArbeidssted?.nummer,
-    postkode: paLand.fastArbeidssted?.postkode,
-    bySted: paLand.fastArbeidssted?.bySted,
-    land:
-      erFastArbeidssted && paLand.fastArbeidssted ? utsendelseLand : undefined,
+    vegadresse: erFastArbeidssted
+      ? paLand.fastArbeidssted?.vegadresse
+      : undefined,
+    nummer: erFastArbeidssted ? paLand.fastArbeidssted?.nummer : undefined,
+    postkode: erFastArbeidssted ? paLand.fastArbeidssted?.postkode : undefined,
+    bySted: erFastArbeidssted ? paLand.fastArbeidssted?.bySted : undefined,
+    land: erFastArbeidssted ? utsendelseLand : undefined,
     erHjemmekontor: paLand.erHjemmekontor,
   };
 }
