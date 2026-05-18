@@ -24,6 +24,7 @@ test.describe("Familiemedlemmer", () => {
     await familiemedlemmerStegPage.assertIsVisible();
 
     await familiemedlemmerStegPage.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup.NEI.click();
+    await familiemedlemmerStegPage.assertInfoboksIsNotVisible();
 
     const expectedPayload: FamiliemedlemmerDto = {
       skalHaMedFamiliemedlemmer: false,
@@ -59,19 +60,5 @@ test.describe("Familiemedlemmer", () => {
       expectedPayload,
     );
     await familiemedlemmerStegPage.assertNavigatedToNextStep();
-  });
-
-  test("viser ikke infoboks når NEI er valgt", async ({ page }) => {
-    const familiemedlemmerStegPage = new FamiliemedlemmerStegPage(
-      page,
-      testArbeidstakerSkjema,
-    );
-
-    await familiemedlemmerStegPage.goto();
-    await familiemedlemmerStegPage.assertIsVisible();
-
-    await familiemedlemmerStegPage.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup.NEI.click();
-
-    await familiemedlemmerStegPage.assertInfoboksIsNotVisible();
   });
 });

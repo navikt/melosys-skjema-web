@@ -9,16 +9,9 @@ import type {
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 
-// Hent felter fra statiske definisjoner
 const familiemedlemmerSeksjon = SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer;
 const felter = familiemedlemmerSeksjon.felter;
 const t = nb.translation;
-
-// Feilmeldinger
-const feilmeldinger = {
-  duMaSvarePaOmDuHarFamiliemedlemmer:
-    t.familiemedlemmerSteg.duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed,
-};
 
 export class FamiliemedlemmerStegPage {
   readonly page: Page;
@@ -118,7 +111,8 @@ export class FamiliemedlemmerStegPage {
   async assertDuMaSvarePaOmDuHarFamiliemedlemmerIsVisible() {
     await expect(
       this.skalHaMedFamiliemedlemmerFieldset().getByText(
-        feilmeldinger.duMaSvarePaOmDuHarFamiliemedlemmer,
+        t.familiemedlemmerSteg
+          .duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed,
       ),
     ).toBeVisible();
   }

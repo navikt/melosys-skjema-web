@@ -5,7 +5,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
@@ -30,7 +29,6 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getFamiliemedlemmer } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { familiemedlemmerSchema } from "./familiemedlemmerStegSchema.ts";
-type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
 
 function FamiliemedlemmerStegContent({
   skjema,
@@ -60,8 +58,8 @@ function FamiliemedlemmerStegContent({
   });
 
   const postFamiliemedlemmerMutation = useMutation({
-    mutationFn: (data: FamiliemedlemmerFormData) => {
-      return postFamiliemedlemmer(skjema.id, data as FamiliemedlemmerDto);
+    mutationFn: (data: FamiliemedlemmerDto) => {
+      return postFamiliemedlemmer(skjema.id, data);
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);
@@ -78,7 +76,7 @@ function FamiliemedlemmerStegContent({
     },
   });
 
-  const onSubmit = (data: FamiliemedlemmerFormData) => {
+  const onSubmit = (data: FamiliemedlemmerDto) => {
     postFamiliemedlemmerMutation.mutate(data);
   };
 
