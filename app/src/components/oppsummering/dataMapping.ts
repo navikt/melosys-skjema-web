@@ -132,6 +132,11 @@ function mapArbeidstakerSeksjoner(
       stegKey: StegKey.TILLEGGSOPPLYSNINGER,
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
+    {
+      seksjonNavn: "vedleggArbeidstaker",
+      stegKey: StegKey.VEDLEGG,
+      data: dto.vedlegg as Record<string, unknown> | undefined,
+    },
   ];
 }
 
@@ -201,6 +206,11 @@ function mapArbeidsgiverSeksjoner(
       stegKey: StegKey.TILLEGGSOPPLYSNINGER,
       data: dto.tilleggsopplysninger as Record<string, unknown> | undefined,
     },
+    {
+      seksjonNavn: "vedleggArbeidsgiver",
+      stegKey: StegKey.VEDLEGG,
+      data: dto.vedlegg as Record<string, unknown> | undefined,
+    },
   ];
 }
 
@@ -216,6 +226,7 @@ function mapCombinedSeksjoner(
     ...mapArbeidstakerSeksjoner({
       ...dto.arbeidstakersData,
       tilleggsopplysninger: dto.tilleggsopplysninger,
+      vedlegg: dto.vedlegg,
     } as UtsendtArbeidstakerArbeidstakersSkjemaDataDto),
   ];
 }

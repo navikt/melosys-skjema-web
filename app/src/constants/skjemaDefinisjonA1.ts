@@ -253,6 +253,18 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
       },
     },
+    vedleggArbeidstaker: {
+      tittel: "Vedlegg",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Har du noen annen dokumentasjon du ønsker å legge ved?",
+          pakrevd: true,
+          jaLabel: "Ja, jeg legger de ved denne søknaden",
+          neiLabel: "Nei, jeg har ingen ekstra dokumentasjon jeg vil legge ved",
+        },
+      },
+    },
     arbeidsgiverensVirksomhetINorge: {
       tittel: "Arbeidsgiverens virksomhet i Norge",
       felter: {
@@ -658,6 +670,18 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
       },
     },
+    vedleggArbeidsgiver: {
+      tittel: "Vedlegg",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Har du noen annen dokumentasjon du ønsker å legge ved?",
+          pakrevd: true,
+          jaLabel: "Ja, jeg legger de ved denne søknaden",
+          neiLabel: "Nei, jeg har ingen ekstra dokumentasjon jeg vil legge ved",
+        },
+      },
+    },
   },
 } as const;
 
@@ -907,6 +931,18 @@ const SKJEMA_DEFINISJON_A1_EN = {
             "Describe the additional information you have for the application",
           pakrevd: false,
           maxLength: 2000,
+        },
+      },
+    },
+    vedleggArbeidstaker: {
+      tittel: "Attachments",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Do you have any other documentation you wish to attach?",
+          pakrevd: true,
+          jaLabel: "Yes, I am attaching them with this application",
+          neiLabel: "No, I have no extra documentation I want to attach",
         },
       },
     },
@@ -1317,6 +1353,18 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
       },
     },
+    vedleggArbeidsgiver: {
+      tittel: "Attachments",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Do you have any other documentation you wish to attach?",
+          pakrevd: true,
+          jaLabel: "Yes, I am attaching them with this application",
+          neiLabel: "No, I have no extra documentation I want to attach",
+        },
+      },
+    },
   },
 } as const;
 
@@ -1343,6 +1391,8 @@ interface BaseFeltType {
   pakrevd: boolean;
   hjelpetekst?: string;
   format?: string;
+  jaLabel?: string;
+  neiLabel?: string;
 }
 
 /**

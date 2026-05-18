@@ -292,6 +292,8 @@ interface BaseFeltType {
   pakrevd: boolean;
   hjelpetekst?: string;
   format?: string;
+  jaLabel?: string;
+  neiLabel?: string;
 }
 
 `;

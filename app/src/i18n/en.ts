@@ -199,6 +199,8 @@ export const en = {
       feilVirusFunnet:
         "The file was rejected because it may contain harmful content.",
       feilUkjent: "Could not upload the file. Please try again later.",
+      duMaSvarePaOmDuHarAnnenDokumentasjon:
+        "You must answer whether you have other documentation you wish to attach",
     },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",

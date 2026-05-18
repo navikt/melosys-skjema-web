@@ -12,6 +12,7 @@ import type {
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
   UtsendtArbeidstakerSkjemaDto,
+  VedleggValgDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
@@ -149,4 +150,10 @@ export function getUtsendingsperiodeOgLand(
   skjema: UtsendtArbeidstakerSkjemaDto,
 ): UtsendingsperiodeOgLandDto | undefined {
   return skjema.data.utsendingsperiodeOgLand;
+}
+
+export function getVedleggValg(
+  skjema: UtsendtArbeidstakerSkjemaDto,
+): VedleggValgDto | undefined {
+  return skjema.data.vedlegg;
 }

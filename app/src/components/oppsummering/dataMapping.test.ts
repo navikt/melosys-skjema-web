@@ -41,6 +41,7 @@ const arbeidstakersDelDto: UtsendtArbeidstakerArbeidstakersSkjemaDataDto = {
   },
   familiemedlemmer: { skalHaMedFamiliemedlemmer: false },
   tilleggsopplysninger: { harFlereOpplysningerTilSoknaden: false },
+  vedlegg: { harAnnenDokumentasjon: false },
 };
 
 const arbeidsgiversDelDto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
@@ -67,6 +68,7 @@ const arbeidsgiversDelDto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
     arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
   },
   tilleggsopplysninger: { harFlereOpplysningerTilSoknaden: false },
+  vedlegg: { harAnnenDokumentasjon: false },
 };
 
 const kombinertDto: UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto =
@@ -74,6 +76,7 @@ const kombinertDto: UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto =
     type: ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
     utsendingsperiodeOgLand,
     tilleggsopplysninger: { harFlereOpplysningerTilSoknaden: false },
+    vedlegg: { harAnnenDokumentasjon: false },
     arbeidsgiversData: {
       arbeidsgiverensVirksomhetINorge:
         arbeidsgiversDelDto.arbeidsgiverensVirksomhetINorge,
@@ -97,6 +100,7 @@ describe("resolveSeksjoner", () => {
       "skatteforholdOgInntekt",
       "familiemedlemmer",
       "tilleggsopplysningerArbeidstaker",
+      "vedleggArbeidstaker",
     ]);
   });
 
@@ -110,6 +114,7 @@ describe("resolveSeksjoner", () => {
       "arbeidsstedPaLand",
       "arbeidstakerensLonn",
       "tilleggsopplysningerArbeidsgiver",
+      "vedleggArbeidsgiver",
     ]);
   });
 

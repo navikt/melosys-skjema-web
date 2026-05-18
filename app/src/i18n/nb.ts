@@ -170,6 +170,8 @@ export const nb = {
       feilVirusFunnet:
         "Filen ble avvist fordi den kan inneholde skadelig innhold.",
       feilUkjent: "Kunne ikke laste opp filen. Prøv igjen senere.",
+      duMaSvarePaOmDuHarAnnenDokumentasjon:
+        "Du må svare på om du har annen dokumentasjon du ønsker å legge ved",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
