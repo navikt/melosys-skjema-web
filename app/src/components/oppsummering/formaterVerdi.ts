@@ -2,7 +2,7 @@ import type { TFunction } from "i18next";
 
 import type {
   BooleanFeltDefinisjon,
-  CheckboxGroupFeltDefinisjon,
+  CheckboxGruppeFeltDefinisjon,
   CountrySelectFeltDefinisjon,
   DateFeltDefinisjon,
   ListeFeltDefinisjon,
@@ -15,7 +15,7 @@ import { formaterBelopForVisning } from "~/utils/belopFormat.ts";
 
 export type FeltUnion =
   | BooleanFeltDefinisjon
-  | CheckboxGroupFeltDefinisjon
+  | CheckboxGruppeFeltDefinisjon
   | CountrySelectFeltDefinisjon
   | DateFeltDefinisjon
   | ListeFeltDefinisjon
@@ -41,7 +41,7 @@ function erBelopFelt(felt: FeltUnion): boolean {
 
 /** Henter labels for valgte alternativer i en checkbox-gruppe */
 function hentValgteCheckboxLabels(
-  felt: CheckboxGroupFeltDefinisjon,
+  felt: CheckboxGruppeFeltDefinisjon,
   selected: string[] | undefined,
 ): string[] {
   if (!selected || selected.length === 0) return [];
@@ -83,7 +83,7 @@ export function formaterVerdi(
     }
 
     case "CHECKBOX_GROUP": {
-      const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
+      const checkboxFelt = felt as CheckboxGruppeFeltDefinisjon;
       const selected = verdi as string[] | undefined;
       const selectedLabels = hentValgteCheckboxLabels(checkboxFelt, selected);
       return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u2013";

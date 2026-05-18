@@ -27,7 +27,6 @@ test.describe("Familiemedlemmer", () => {
 
     const expectedPayload: FamiliemedlemmerDto = {
       skalHaMedFamiliemedlemmer: false,
-      familiemedlemmer: [],
     };
 
     await familiemedlemmerStegPage.lagreOgFortsettAndExpectPayload(
@@ -54,7 +53,6 @@ test.describe("Familiemedlemmer", () => {
 
     const expectedPayload: FamiliemedlemmerDto = {
       skalHaMedFamiliemedlemmer: true,
-      familiemedlemmer: [],
     };
 
     await familiemedlemmerStegPage.lagreOgFortsettAndExpectPayload(

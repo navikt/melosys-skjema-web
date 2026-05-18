@@ -43,7 +43,6 @@ test.describe("Oppsummering", () => {
 
     const familiemedlemmerData: FamiliemedlemmerDto = {
       skalHaMedFamiliemedlemmer: false,
-      familiemedlemmer: [],
     };
 
     const skatteforholdOgInntektData: SkatteforholdOgInntektDto = {
@@ -238,7 +237,6 @@ test.describe("Oppsummering", () => {
       } as SkatteforholdOgInntektDto,
       familiemedlemmer: {
         skalHaMedFamiliemedlemmer: false,
-        familiemedlemmer: [],
       } as FamiliemedlemmerDto,
     };
 
