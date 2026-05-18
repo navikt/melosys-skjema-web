@@ -45,11 +45,11 @@ export function VedleggOppsummering({
   }, [skjemaId, harAnnenDokumentasjon]);
 
   const svarLabel =
-    harAnnenDokumentasjon === true
-      ? harAnnenDokumentasjonFelt.jaLabel
-      : harAnnenDokumentasjon === false
-        ? harAnnenDokumentasjonFelt.neiLabel
-        : undefined;
+    harAnnenDokumentasjon === undefined
+      ? undefined
+      : harAnnenDokumentasjon
+        ? harAnnenDokumentasjonFelt.jaLabel
+        : harAnnenDokumentasjonFelt.neiLabel;
 
   return (
     <FormSummary className="mt-8">
