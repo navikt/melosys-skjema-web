@@ -1,4 +1,4 @@
-import { FormSummary, Table } from "@navikt/ds-react";
+import { BodyShort, FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import type { ListeFeltDefinisjon } from "~/types/melosysSkjemaTypes.ts";
@@ -18,37 +18,51 @@ export function ListeFeltOppsummering({
   if (!verdi || verdi.length === 0) return null;
 
   const elementFelter = Object.entries(felt.elementDefinisjon);
+  const itemTypeLabels = felt.itemTypeLabels;
 
   return (
     <FormSummary.Answer>
       <FormSummary.Label>{felt.label}</FormSummary.Label>
-      <FormSummary.Value>
-        <Table size="small">
-          <Table.Header>
-            <Table.Row>
-              {elementFelter.map(([id, subfelt]) => (
-                <Table.HeaderCell key={id}>{subfelt.label}</Table.HeaderCell>
-              ))}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {verdi.map((item) => {
-              const record = item as Record<string, unknown>;
-              const rowKey = elementFelter
-                .map(([id]) => String(record[id] ?? ""))
-                .join("-");
-              return (
-                <Table.Row key={rowKey}>
-                  {elementFelter.map(([id, subfelt]) => (
-                    <Table.DataCell key={id}>
-                      {formaterVerdi(subfelt, record[id], t)}
-                    </Table.DataCell>
-                  ))}
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+      <FormSummary.Value
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--a-spacing-4)",
+        }}
+      >
+        {verdi.map((item, index) => {
+          const record = item as Record<string, unknown>;
+          const rowKey = elementFelter
+            .map(([id]) => String(record[id] ?? ""))
+            .join("-");
+          const itemKey = `${rowKey}-${index}`;
+          const itemType =
+            typeof record.__type === "string" ? record.__type : undefined;
+          const typeLabel =
+            itemType && itemTypeLabels ? itemTypeLabels[itemType] : undefined;
+          const itemTittel = `${index + 1}.${typeLabel ? ` ${typeLabel}` : ""}`;
+          return (
+            <div key={itemKey}>
+              <BodyShort weight="semibold" spacing>
+                {itemTittel}
+              </BodyShort>
+              <FormSummary.Answers>
+                {elementFelter.map(([id, subfelt]) => {
+                  const subVerdi = record[id];
+                  if (subVerdi === undefined || subVerdi === null) return null;
+                  return (
+                    <FormSummary.Answer key={id}>
+                      <FormSummary.Label>{subfelt.label}</FormSummary.Label>
+                      <FormSummary.Value>
+                        {formaterVerdi(subfelt, subVerdi, t)}
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                  );
+                })}
+              </FormSummary.Answers>
+            </div>
+          );
+        })}
       </FormSummary.Value>
     </FormSummary.Answer>
   );

@@ -24,6 +24,15 @@ interface ResolvedSeksjon {
   stegKey?: string;
 }
 
+/**
+ * Diskriminator-verdier for blandede norsk/utenlandsk-virksomhetslister.
+ * Må matche nøklene i `itemTypeLabels` i skjemadefinisjonen (backend `VirksomhetTypeKey`).
+ */
+export const VirksomhetTypeKey = {
+  NORSK: "norsk",
+  UTENLANDSK: "utenlandsk",
+} as const;
+
 function flattenPaLand(
   paLand?: PaLandDto,
 ): Record<string, unknown> | undefined {
@@ -53,10 +62,16 @@ function flattenVirksomheter(
   const result: Record<string, unknown>[] = [];
 
   for (const v of virksomheter.norskeVirksomheter ?? []) {
-    result.push({ organisasjonsnummer: v.organisasjonsnummer });
+    result.push({
+      __type: VirksomhetTypeKey.NORSK,
+      organisasjonsnummer: v.organisasjonsnummer,
+    });
   }
   for (const v of virksomheter.utenlandskeVirksomheter ?? []) {
-    result.push(v as unknown as Record<string, unknown>);
+    result.push({
+      __type: VirksomhetTypeKey.UTENLANDSK,
+      ...(v as unknown as Record<string, unknown>),
+    });
   }
 
   return result.length > 0 ? result : undefined;
