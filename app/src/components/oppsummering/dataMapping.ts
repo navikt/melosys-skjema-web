@@ -129,6 +129,8 @@ function mapArbeidstakerSeksjoner(
 
 function mapArbeidsgiverSeksjoner(
   dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+  utsendelseLand: LandKode | undefined = dto.utsendingsperiodeOgLand
+    ?.utsendelseLand,
 ): SeksjonMappingEntry[] {
   return [
     utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
@@ -152,10 +154,7 @@ function mapArbeidsgiverSeksjoner(
     {
       seksjonNavn: "arbeidsstedPaLand",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
-      data: flattenPaLand(
-        dto.arbeidsstedIUtlandet?.paLand,
-        dto.utsendingsperiodeOgLand?.utsendelseLand,
-      ),
+      data: flattenPaLand(dto.arbeidsstedIUtlandet?.paLand, utsendelseLand),
     },
     {
       seksjonNavn: "arbeidsstedOffshore",
@@ -204,10 +203,13 @@ function mapCombinedSeksjoner(
 ): SeksjonMappingEntry[] {
   return [
     utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
-    ...mapArbeidsgiverSeksjoner({
-      ...dto.arbeidsgiversData,
-      tilleggsopplysninger: dto.tilleggsopplysninger,
-    } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto),
+    ...mapArbeidsgiverSeksjoner(
+      {
+        ...dto.arbeidsgiversData,
+        tilleggsopplysninger: dto.tilleggsopplysninger,
+      } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+      dto.utsendingsperiodeOgLand?.utsendelseLand,
+    ),
     ...mapArbeidstakerSeksjoner({
       ...dto.arbeidstakersData,
       tilleggsopplysninger: dto.tilleggsopplysninger,

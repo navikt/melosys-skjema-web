@@ -164,6 +164,15 @@ describe("resolveSeksjoner", () => {
     expect(new Set(navn).size).toBe(navn.length);
   });
 
+  it("legger utsendelseslandet på fast arbeidssted i oppsummeringen for kombinert flyt", () => {
+    const seksjoner = resolveSeksjoner(kombinertDto, definisjon);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(arbeidsstedPaLand?.data.land).toBe(LandKode.SE);
+  });
+
   // Dekningstest: fanger nye steg som blir lagt til uten oppdatering av dataMapping.
   // Hvis noen legger til et nytt content-steg i STEG_REKKEFOLGE med en tilhørende
   // seksjonsdefinisjon, må det også få minst én entry i resolveSeksjoner-output.
