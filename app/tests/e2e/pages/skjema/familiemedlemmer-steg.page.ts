@@ -43,9 +43,9 @@ export class FamiliemedlemmerStegPage {
       }),
     };
 
-    this.infoboks = page.getByRole("region").filter({
-      hasText: t.familiemedlemmerSteg.informasjonOmEgenSoknad,
-    });
+    this.infoboks = page.getByText(
+      t.familiemedlemmerSteg.informasjonOmEgenSoknad,
+    );
 
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: nb.translation.felles.lagreOgFortsett,
