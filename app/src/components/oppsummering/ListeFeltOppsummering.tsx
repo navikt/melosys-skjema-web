@@ -5,12 +5,8 @@ import type { ListeFeltDefinisjon } from "~/types/melosysSkjemaTypes.ts";
 
 import { formaterVerdi } from "./formaterVerdi.ts";
 
-type ListeFeltDefinisjonMedTypeLabels = ListeFeltDefinisjon & {
-  itemTypeLabels?: Record<string, string>;
-};
-
 interface ListeFeltOppsummeringProps {
-  felt: ListeFeltDefinisjonMedTypeLabels;
+  felt: ListeFeltDefinisjon;
   verdi: unknown[];
 }
 

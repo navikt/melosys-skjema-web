@@ -142,8 +142,8 @@ export enum VedleggFiltype {
 }
 
 export interface FeltDefinisjonDto {
-  pakrevd: boolean;
   hjelpetekst?: string;
+  pakrevd: boolean;
   label: string;
   type: string;
 }
@@ -702,6 +702,7 @@ export type ListeFeltDefinisjon = UtilRequiredKeys<
     | TextFeltDefinisjon
     | TextareaFeltDefinisjon
   >;
+  itemTypeLabels?: Record<string, string>;
 };
 
 export type PeriodeFeltDefinisjon = UtilRequiredKeys<
