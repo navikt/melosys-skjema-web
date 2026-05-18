@@ -100,15 +100,11 @@ export class FamiliemedlemmerStegPage {
   // --- Infoboks assertions ---
 
   async assertInfoboksIsVisible() {
-    await expect(
-      this.page.getByText(t.familiemedlemmerSteg.informasjonOmEgenSoknad),
-    ).toBeVisible();
+    await expect(this.infoboks).toBeVisible();
   }
 
   async assertInfoboksIsNotVisible() {
-    await expect(
-      this.page.getByText(t.familiemedlemmerSteg.informasjonOmEgenSoknad),
-    ).not.toBeVisible();
+    await expect(this.infoboks).toBeHidden();
   }
 
   // --- Validation assertions ---

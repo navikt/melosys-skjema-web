@@ -96,8 +96,6 @@ function FamiliemedlemmerStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            // Midlertidig deaktivert hjelpetekst
-            // description={skalHaMedFelt.hjelpetekst}
             formFieldName="skalHaMedFamiliemedlemmer"
             legend={skalHaMedFelt.label}
           />
@@ -109,6 +107,7 @@ function FamiliemedlemmerStegContent({
                 <Link
                   href={t("familiemedlemmerSteg.soknadsskjemaLenke")}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {t("familiemedlemmerSteg.soknadsskjemaNavn")}
                 </Link>

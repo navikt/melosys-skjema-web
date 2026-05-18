@@ -151,13 +151,6 @@ export const nb = {
       somLiggerPaNavNo: " som ligger på nav.no.",
       sendeSoknadForBarn:
         "Du kan sende søknad for barn under 18 år på nevnte skjema.",
-      endreFamiliemedlem: "Endre familiemedlem",
-      duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer:
-        "Du må svare på om personen har norsk fødselsnummer eller D-nummer",
-      fornavnErPakrevd: "Fornavn er påkrevd",
-      etternavnErPakrevd: "Etternavn er påkrevd",
-      fodselsnummerErPakrevd: "Fødselsnummer / D-nummer er påkrevd",
-      fodselsdatoErPakrevd: "Fødselsdato er påkrevd",
     },
     tilleggsopplysningerSteg: {
       tittel: "Tilleggsopplysninger",

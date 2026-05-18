@@ -165,10 +165,6 @@ export const en = {
     },
     familiemedlemmerSteg: {
       tittel: "Family Members",
-      harDuFamiliemedlemmerSomSkalVaereMed:
-        "Do you have a spouse, partner, cohabitant or children who will accompany you?",
-      harDuFamiliemedlemmerSomSkalVaereMedBeskrivelse:
-        "We ask this because we want to process applications from multiple family members simultaneously",
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "You must answer whether you have a spouse, partner, cohabitant or children who will accompany you",
       informasjonOmEgenSoknad:
@@ -179,21 +175,6 @@ export const en = {
       somLiggerPaNavNo: " available at nav.no.",
       sendeSoknadForBarn:
         "You can submit an application for children under 18 using this form.",
-      familiemedlemmer: "Family members",
-      leggTilFamiliemedlem: "Add family member",
-      endreFamiliemedlem: "Edit family member",
-      fornavn: "First name",
-      etternavn: "Last name",
-      harNorskFodselsnummerEllerDnummer:
-        "Does the person have a Norwegian national identity number or D-number?",
-      duMaSvarePaOmFamiliemedlemmetHarNorskFodselsnummerEllerDnummer:
-        "You must answer whether the person has a Norwegian national identity number or D-number",
-      fodselsnummer: "National identity number / D-number",
-      fodselsdato: "Date of birth",
-      fornavnErPakrevd: "First name is required",
-      etternavnErPakrevd: "Last name is required",
-      fodselsnummerErPakrevd: "National identity number / D-number is required",
-      fodselsdatoErPakrevd: "Date of birth is required",
     },
     tilleggsopplysningerSteg: {
       tittel: "Additional Information",
