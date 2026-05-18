@@ -1,31 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Button,
-  FormSummary,
-  InlineMessage,
-  Label,
-  Modal,
-  Table,
-  TextField,
-} from "@navikt/ds-react";
+import { Alert, BodyLong, Link } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import {
-  FormProvider,
-  useFieldArray,
-  useForm,
-  useFormContext,
-  useWatch,
-} from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
-import { DatePickerFormPart } from "~/components/date/DatePickerFormPart.tsx";
-import { EndreKnapp } from "~/components/EndreKnapp.tsx";
-import { FjernKnapp } from "~/components/FjernKnapp.tsx";
-import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
@@ -40,24 +20,15 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import {
-  Familiemedlem,
   FamiliemedlemmerDto,
   Skjemadel,
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getFamiliemedlemmer } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import {
-  familiemedlemmerSchema,
-  familiemedlemSchema,
-} from "./familiemedlemmerStegSchema.ts";
-
-type FamiliemedlemFormData = z.infer<typeof familiemedlemSchema>;
-type FamiliemedlemField = Familiemedlem & { id: string };
-type FamiliemedlemmerFormData = z.infer<typeof familiemedlemmerSchema>;
+import { familiemedlemmerSchema } from "./familiemedlemmerStegSchema.ts";
 
 function FamiliemedlemmerStegContent({
   skjema,
@@ -87,8 +58,8 @@ function FamiliemedlemmerStegContent({
   });
 
   const postFamiliemedlemmerMutation = useMutation({
-    mutationFn: (data: FamiliemedlemmerFormData) => {
-      return postFamiliemedlemmer(skjema.id, data as FamiliemedlemmerDto);
+    mutationFn: (data: FamiliemedlemmerDto) => {
+      return postFamiliemedlemmer(skjema.id, data);
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);
@@ -105,7 +76,7 @@ function FamiliemedlemmerStegContent({
     },
   });
 
-  const onSubmit = (data: FamiliemedlemmerFormData) => {
+  const onSubmit = (data: FamiliemedlemmerDto) => {
     postFamiliemedlemmerMutation.mutate(data);
   };
 
@@ -123,292 +94,31 @@ function FamiliemedlemmerStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            description={skalHaMedFelt.hjelpetekst}
             formFieldName="skalHaMedFamiliemedlemmer"
             legend={skalHaMedFelt.label}
           />
 
           {skalHaMedFamiliemedlemmer && (
-            <>
-              <InlineMessage className="mt-4" status="info">
-                {t("familiemedlemmerSteg.informasjonOmEgenSoknad")}
-              </InlineMessage>
-              <FamiliemedlemmerListe />
-            </>
+            <Alert className="mt-4" variant="info">
+              <BodyLong>
+                {t("familiemedlemmerSteg.informasjonOmEgenSoknad")}{" "}
+                <Link
+                  href={t("familiemedlemmerSteg.soknadsskjemaLenke")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t("familiemedlemmerSteg.soknadsskjemaNavn")}
+                </Link>
+                {t("familiemedlemmerSteg.somLiggerPaNavNo")}
+              </BodyLong>
+              <BodyLong className="mt-2">
+                {t("familiemedlemmerSteg.sendeSoknadForBarn")}
+              </BodyLong>
+            </Alert>
           )}
         </SkjemaSteg>
       </form>
     </FormProvider>
-  );
-}
-
-function FamiliemedlemmerListe() {
-  const { control } = useFormContext();
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { getSeksjon } = useSkjemaDefinisjon();
-  const familiemedlemmerListeFelt =
-    getSeksjon("familiemedlemmer").felter.familiemedlemmer;
-
-  const { fields, append, remove, update } = useFieldArray({
-    control,
-    name: "familiemedlemmer",
-  });
-
-  const apneAddModal = () => {
-    setIsAddModalOpen(true);
-  };
-
-  const lukkAddModal = () => {
-    setIsAddModalOpen(false);
-  };
-
-  return (
-    <div className="mt-4">
-      <ValgteFamiliemedlemmer
-        familiemedlemmer={fields as Array<FamiliemedlemField>}
-        remove={remove}
-        update={update}
-      />
-      <LeggTilKnapp className="mt-2" onClick={apneAddModal}>
-        {familiemedlemmerListeFelt.leggTilLabel}
-      </LeggTilKnapp>
-
-      <Modal
-        header={{
-          heading: familiemedlemmerListeFelt.leggTilLabel,
-        }}
-        onClose={lukkAddModal}
-        open={isAddModalOpen}
-        width="medium"
-      >
-        {isAddModalOpen && (
-          <LeggTilEllerEndreFamiliemedlemModalContent
-            onCancel={lukkAddModal}
-            onSubmit={(data) => {
-              append(data);
-              lukkAddModal();
-            }}
-          />
-        )}
-      </Modal>
-    </div>
-  );
-}
-
-interface ValgteFamiliemedlemmerProps {
-  familiemedlemmer: Array<FamiliemedlemField>;
-  update: (index: number, data: Familiemedlem) => void;
-  remove: (index: number) => void;
-}
-
-function ValgteFamiliemedlemmer({
-  familiemedlemmer,
-  update,
-  remove,
-}: ValgteFamiliemedlemmerProps) {
-  const { t } = useTranslation();
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const { getSeksjon } = useSkjemaDefinisjon();
-  const familiemedlemmerListeFelt =
-    getSeksjon("familiemedlemmer").felter.familiemedlemmer;
-
-  const lukkEditModal = () => {
-    setEditingIndex(null);
-  };
-
-  const openEditModal = (index: number) => {
-    setEditingIndex(index);
-  };
-
-  if (familiemedlemmer.length === 0) {
-    return null;
-  }
-
-  return (
-    <>
-      <Label>{familiemedlemmerListeFelt.label}</Label>
-      <Table className="max-w-md" size="small">
-        <Table.Body>
-          {familiemedlemmer.map((familiemedlem, index) => (
-            <FamiliemedlemRow
-              familiemedlem={familiemedlem}
-              key={familiemedlem.id}
-              onEdit={() => openEditModal(index)}
-              onRemove={() => remove(index)}
-            />
-          ))}
-        </Table.Body>
-      </Table>
-      <Modal
-        header={{
-          heading: t("familiemedlemmerSteg.endreFamiliemedlem"),
-        }}
-        onClose={lukkEditModal}
-        open={editingIndex !== null}
-        width="medium"
-      >
-        {editingIndex !== null && (
-          <LeggTilEllerEndreFamiliemedlemModalContent
-            familiemedlem={familiemedlemmer[editingIndex]}
-            onCancel={lukkEditModal}
-            onSubmit={(data) => {
-              update(editingIndex, data);
-              lukkEditModal();
-            }}
-          />
-        )}
-      </Modal>
-    </>
-  );
-}
-
-interface LeggTilEllerEndreFamiliemedlemModalContentProps {
-  onSubmit: (data: Familiemedlem) => void;
-  onCancel: () => void;
-  familiemedlem?: Familiemedlem;
-}
-
-function LeggTilEllerEndreFamiliemedlemModalContent({
-  onSubmit,
-  onCancel,
-  familiemedlem,
-}: LeggTilEllerEndreFamiliemedlemModalContentProps) {
-  const { t } = useTranslation();
-  const translateError = useTranslateError();
-  const { getSeksjon } = useSkjemaDefinisjon();
-  const elementDef =
-    getSeksjon("familiemedlemmer").felter.familiemedlemmer.elementDefinisjon;
-
-  const modalForm = useForm<FamiliemedlemFormData>({
-    resolver: zodResolver(familiemedlemSchema),
-    ...(familiemedlem && { defaultValues: familiemedlem }),
-  });
-
-  const harNorskFodselsnummerEllerDnummer = useWatch({
-    control: modalForm.control,
-    name: "harNorskFodselsnummerEllerDnummer",
-  });
-
-  const handleSubmit = modalForm.handleSubmit((data) => {
-    onSubmit(data);
-  });
-
-  return (
-    <FormProvider {...modalForm}>
-      <Modal.Body>
-        <div className="flex flex-col gap-4">
-          <TextField
-            {...modalForm.register("fornavn")}
-            error={translateError(modalForm.formState.errors.fornavn?.message)}
-            label={elementDef.fornavn.label}
-          />
-          <TextField
-            {...modalForm.register("etternavn")}
-            error={translateError(
-              modalForm.formState.errors.etternavn?.message,
-            )}
-            label={elementDef.etternavn.label}
-          />
-          <RadioGroupJaNeiFormPart
-            formFieldName="harNorskFodselsnummerEllerDnummer"
-            legend={elementDef.harNorskFodselsnummerEllerDnummer.label}
-          />
-          {harNorskFodselsnummerEllerDnummer === false && (
-            <DatePickerFormPart
-              formFieldName="fodselsdato"
-              label={elementDef.fodselsdato.label}
-            />
-          )}
-          {harNorskFodselsnummerEllerDnummer && (
-            <TextField
-              {...modalForm.register("fodselsnummer")}
-              error={translateError(
-                modalForm.formState.errors.fodselsnummer?.message,
-              )}
-              label={elementDef.fodselsnummer.label}
-            />
-          )}
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleSubmit} type="button">
-          {t("felles.lagre")}
-        </Button>
-        <Button onClick={onCancel} type="button" variant="secondary">
-          {t("felles.avbryt")}
-        </Button>
-      </Modal.Footer>
-    </FormProvider>
-  );
-}
-
-interface FamiliemedlemRowProps {
-  familiemedlem: FamiliemedlemField;
-  onRemove: () => void;
-  onEdit: () => void;
-}
-
-function FamiliemedlemOppsummering({
-  familiemedlem,
-}: {
-  familiemedlem: FamiliemedlemField;
-}) {
-  const { getSeksjon } = useSkjemaDefinisjon();
-  const elementDef =
-    getSeksjon("familiemedlemmer").felter.familiemedlemmer.elementDefinisjon;
-
-  const fields = [
-    {
-      label: elementDef.fornavn.label,
-      value: familiemedlem.fornavn,
-    },
-    {
-      label: elementDef.etternavn.label,
-      value: familiemedlem.etternavn,
-    },
-    {
-      label: familiemedlem.harNorskFodselsnummerEllerDnummer
-        ? elementDef.fodselsnummer.label
-        : elementDef.fodselsdato.label,
-      value: familiemedlem.harNorskFodselsnummerEllerDnummer
-        ? familiemedlem.fodselsnummer
-        : familiemedlem.fodselsdato,
-    },
-  ];
-
-  return (
-    <FormSummary.Answers>
-      {fields.map((field) => (
-        <FormSummary.Answer key={field.label}>
-          <FormSummary.Label>{field.label}</FormSummary.Label>
-          <FormSummary.Value>{field.value}</FormSummary.Value>
-        </FormSummary.Answer>
-      ))}
-    </FormSummary.Answers>
-  );
-}
-
-function FamiliemedlemRow({
-  familiemedlem,
-  onRemove,
-  onEdit,
-}: FamiliemedlemRowProps) {
-  return (
-    <Table.ExpandableRow
-      content={
-        <div className="-my-4">
-          <FamiliemedlemOppsummering familiemedlem={familiemedlem} />
-        </div>
-      }
-    >
-      <Table.HeaderCell>
-        {familiemedlem.fornavn} {familiemedlem.etternavn}
-      </Table.HeaderCell>
-      <Table.DataCell style={{ width: "1px", whiteSpace: "nowrap" }}>
-        <EndreKnapp onClick={onEdit} size="small" />
-        <FjernKnapp onClick={onRemove} size="small" />
-      </Table.DataCell>
-    </Table.ExpandableRow>
   );
 }
 

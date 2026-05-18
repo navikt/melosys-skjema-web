@@ -39,7 +39,7 @@ const arbeidstakersDelDto: UtsendtArbeidstakerArbeidstakersSkjemaDataDto = {
     erSkattepliktigTilNorgeIHeleutsendingsperioden: true,
     mottarPengestotteFraAnnetEosLandEllerSveits: false,
   },
-  familiemedlemmer: { skalHaMedFamiliemedlemmer: false, familiemedlemmer: [] },
+  familiemedlemmer: { skalHaMedFamiliemedlemmer: false },
   tilleggsopplysninger: { harFlereOpplysningerTilSoknaden: false },
 };
 

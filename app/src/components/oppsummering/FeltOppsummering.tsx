@@ -2,7 +2,7 @@ import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
 import type {
-  CheckboxGroupFeltDefinisjon,
+  CheckboxGruppeFeltDefinisjon,
   ListeFeltDefinisjon,
   PeriodeFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -56,7 +56,7 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
   }
 
   if (felt.type === "CHECKBOX_GROUP") {
-    const checkboxFelt = felt as CheckboxGroupFeltDefinisjon;
+    const checkboxFelt = felt as CheckboxGruppeFeltDefinisjon;
     const selected = verdi as string[] | undefined;
     const valgteAlternativer = checkboxFelt.alternativer.filter((a) =>
       selected?.includes(a.verdi),

@@ -30,7 +30,7 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import type {
-  CheckboxGroupFeltDefinisjon,
+  CheckboxGruppeFeltDefinisjon,
   SkatteforholdOgInntektDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import {
@@ -113,11 +113,11 @@ function SkatteforholdOgInntektStegContent({
   );
 
   const inntektKildeAlternativer = (
-    inntektKildeFelt as CheckboxGroupFeltDefinisjon
+    inntektKildeFelt as CheckboxGruppeFeltDefinisjon
   ).alternativer;
 
   const hvilkenInntektAlternativer = (
-    hvilkenInntektFelt as CheckboxGroupFeltDefinisjon
+    hvilkenInntektFelt as CheckboxGruppeFeltDefinisjon
   ).alternativer;
 
   const formMethods = useForm<

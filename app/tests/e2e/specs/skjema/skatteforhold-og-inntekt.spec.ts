@@ -1,4 +1,8 @@
-import { SkatteforholdOgInntektDto } from "~/types/melosysSkjemaTypes";
+import {
+  ArbeidsinntektKilde,
+  InntektType,
+  SkatteforholdOgInntektDto,
+} from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
@@ -33,8 +37,10 @@ test.describe("Skatteforhold og inntekt", () => {
     const expectedPayload: SkatteforholdOgInntektDto = {
       erSkattepliktigTilNorgeIHeleutsendingsperioden: true,
       mottarPengestotteFraAnnetEosLandEllerSveits: false,
-      inntektFraNorskEllerUtenlandskVirksomhet: ["NORSK_VIRKSOMHET"],
-      hvilkeTyperInntektHarDu: ["LOENN"],
+      inntektFraNorskEllerUtenlandskVirksomhet: [
+        ArbeidsinntektKilde.NORSK_VIRKSOMHET,
+      ],
+      hvilkeTyperInntektHarDu: [InntektType.LOENN],
     };
 
     await skatteforholdOgInntektStegPage.lagreOgFortsettAndExpectPayload(
@@ -73,8 +79,10 @@ test.describe("Skatteforhold og inntekt", () => {
       landSomUtbetalerPengestotte: "SE",
       pengestotteSomMottasFraAndreLandBelop: "15000",
       pengestotteSomMottasFraAndreLandBeskrivelse: "Barnebidrag fra Sverige",
-      inntektFraNorskEllerUtenlandskVirksomhet: ["NORSK_VIRKSOMHET"],
-      hvilkeTyperInntektHarDu: ["LOENN"],
+      inntektFraNorskEllerUtenlandskVirksomhet: [
+        ArbeidsinntektKilde.NORSK_VIRKSOMHET,
+      ],
+      hvilkeTyperInntektHarDu: [InntektType.LOENN],
       inntekt: "50000",
     };
 
