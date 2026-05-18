@@ -172,6 +172,7 @@ export const nb = {
       feilUkjent: "Kunne ikke laste opp filen. Prøv igjen senere.",
       duMaSvarePaOmDuHarAnnenDokumentasjon:
         "Du må svare på om du har annen dokumentasjon du ønsker å legge ved",
+      duMaLasteOppMinstEttVedlegg: "Du må laste opp minst ett vedlegg",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",

@@ -2,6 +2,7 @@ import { BodyShort, FormSummary, Link as DsLink } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
   hentVedlegg,
   VedleggDto,
@@ -10,21 +11,43 @@ import {
 
 interface VedleggOppsummeringProps {
   skjemaId: string;
+  harAnnenDokumentasjon?: boolean;
   editHref?: string;
 }
 
 export function VedleggOppsummering({
   skjemaId,
+  harAnnenDokumentasjon,
   editHref,
 }: VedleggOppsummeringProps) {
   const { t } = useTranslation();
+  const { getFelt } = useSkjemaDefinisjon();
   const [vedlegg, setVedlegg] = useState<VedleggDto[]>([]);
 
+  const harAnnenDokumentasjonFelt = getFelt(
+    "vedleggArbeidstaker",
+    "harAnnenDokumentasjon",
+  );
+
   useEffect(() => {
+    if (harAnnenDokumentasjon !== true) return;
+    let cancelled = false;
     hentVedlegg(skjemaId)
-      .then(setVedlegg)
+      .then((v) => {
+        if (!cancelled) setVedlegg(v);
+      })
       .catch(() => {});
-  }, [skjemaId]);
+    return () => {
+      cancelled = true;
+    };
+  }, [skjemaId, harAnnenDokumentasjon]);
+
+  const svarLabel =
+    harAnnenDokumentasjon === true
+      ? harAnnenDokumentasjonFelt.jaLabel
+      : harAnnenDokumentasjon === false
+        ? harAnnenDokumentasjonFelt.neiLabel
+        : undefined;
 
   return (
     <FormSummary className="mt-8">
@@ -34,11 +57,20 @@ export function VedleggOppsummering({
         </FormSummary.Heading>
       </FormSummary.Header>
       <FormSummary.Answers>
-        {vedlegg.length === 0 ? (
+        {svarLabel !== undefined && (
+          <FormSummary.Answer>
+            <FormSummary.Label>
+              {harAnnenDokumentasjonFelt.label}
+            </FormSummary.Label>
+            <FormSummary.Value>{svarLabel}</FormSummary.Value>
+          </FormSummary.Answer>
+        )}
+        {harAnnenDokumentasjon === true && vedlegg.length === 0 && (
           <FormSummary.Answer>
             <BodyShort>{t("vedleggSteg.ingenVedleggLastetOpp")}</BodyShort>
           </FormSummary.Answer>
-        ) : (
+        )}
+        {harAnnenDokumentasjon === true &&
           vedlegg.map((v) => (
             <FormSummary.Answer key={v.id}>
               <FormSummary.Label>
@@ -53,8 +85,7 @@ export function VedleggOppsummering({
                 {v.filtype} — {formatFilstorrelse(v.filstorrelse)}
               </FormSummary.Value>
             </FormSummary.Answer>
-          ))
-        )}
+          ))}
       </FormSummary.Answers>
       {editHref && (
         <FormSummary.Footer>

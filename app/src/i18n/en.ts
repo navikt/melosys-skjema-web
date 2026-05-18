@@ -201,6 +201,7 @@ export const en = {
       feilUkjent: "Could not upload the file. Please try again later.",
       duMaSvarePaOmDuHarAnnenDokumentasjon:
         "You must answer whether you have other documentation you wish to attach",
+      duMaLasteOppMinstEttVedlegg: "You must upload at least one attachment",
     },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",

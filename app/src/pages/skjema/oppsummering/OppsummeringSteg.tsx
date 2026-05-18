@@ -76,6 +76,7 @@ function OppsummeringStegContent({
             .find((s) => s.key === StegKey.VEDLEGG)
             ?.route.replace("$id", skjema.id) ?? ""
         }
+        harAnnenDokumentasjon={skjema.data.vedlegg?.harAnnenDokumentasjon}
         skjemaId={skjema.id}
       />
     </SkjemaSteg>

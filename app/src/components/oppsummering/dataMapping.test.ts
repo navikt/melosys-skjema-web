@@ -100,7 +100,6 @@ describe("resolveSeksjoner", () => {
       "skatteforholdOgInntekt",
       "familiemedlemmer",
       "tilleggsopplysningerArbeidstaker",
-      "vedleggArbeidstaker",
     ]);
   });
 
@@ -114,7 +113,6 @@ describe("resolveSeksjoner", () => {
       "arbeidsstedPaLand",
       "arbeidstakerensLonn",
       "tilleggsopplysningerArbeidsgiver",
-      "vedleggArbeidsgiver",
     ]);
   });
 

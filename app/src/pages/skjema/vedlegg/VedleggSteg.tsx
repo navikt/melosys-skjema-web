@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FilesPartitioned } from "@navikt/ds-react";
-import { FileUpload, VStack } from "@navikt/ds-react";
+import { ErrorMessage, FileUpload, VStack } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -84,6 +84,7 @@ function VedleggStegContent({
   });
 
   const { handleSubmit, control } = formMethods;
+  const [manglerVedleggFeil, setManglerVedleggFeil] = useState(false);
 
   const harAnnenDokumentasjon = useWatch({
     control,
@@ -121,7 +122,14 @@ function VedleggStegContent({
     },
   });
 
+  const totalAntall = vedleggItems.length + eksisterendeVedlegg.length;
+
   const onSubmit = (data: VedleggStegFormData) => {
+    if (data.harAnnenDokumentasjon && totalAntall === 0) {
+      setManglerVedleggFeil(true);
+      return;
+    }
+    setManglerVedleggFeil(false);
     postVedleggValgMutation.mutate(data);
   };
 
@@ -160,6 +168,7 @@ function VedleggStegContent({
       status: "uploading" as const,
     }));
 
+    if (acceptedItems.length > 0) setManglerVedleggFeil(false);
     setVedleggItems((prev) => [...prev, ...rejectedItems, ...acceptedItems]);
 
     for (const item of acceptedItems) {
@@ -207,8 +216,6 @@ function VedleggStegContent({
       .catch(() => {});
   };
 
-  const totalAntall = vedleggItems.length + eksisterendeVedlegg.length;
-
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -241,6 +248,12 @@ function VedleggStegContent({
                 multiple
                 onSelect={handleSelect}
               />
+
+              {manglerVedleggFeil && (
+                <ErrorMessage className="mt-2">
+                  {t("vedleggSteg.duMaLasteOppMinstEttVedlegg")}
+                </ErrorMessage>
+              )}
 
               {(eksisterendeVedlegg.length > 0 || vedleggItems.length > 0) && (
                 <VStack className="mt-4" gap="space-2">
