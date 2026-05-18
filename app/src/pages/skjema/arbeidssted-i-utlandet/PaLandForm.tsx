@@ -1,10 +1,14 @@
 import { Radio, RadioGroup, TextField } from "@navikt/ds-react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
-import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
+import {
+  FastEllerVekslendeArbeidssted,
+  type LandKode,
+} from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
@@ -12,7 +16,12 @@ import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
-export function PaLandForm() {
+interface PaLandFormProps {
+  utsendelseLand?: LandKode;
+}
+
+export function PaLandForm({ utsendelseLand }: PaLandFormProps) {
+  const { t } = useTranslation();
   const translateError = useTranslateError();
   const { getSeksjon } = useSkjemaDefinisjon();
   const felter = getSeksjon("arbeidsstedPaLand").felter;
@@ -103,6 +112,14 @@ export function PaLandForm() {
               />
             )}
           />
+          {utsendelseLand && (
+            <TextField
+              className="mt-4"
+              label={felter.land.label}
+              readOnly
+              value={t(`land.${utsendelseLand}`)}
+            />
+          )}
         </div>
       )}
 

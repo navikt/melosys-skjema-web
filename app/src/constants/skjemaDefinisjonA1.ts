@@ -391,6 +391,11 @@ const SKJEMA_DEFINISJON_A1_NB = {
           label: "By/sted/region",
           pakrevd: false,
         },
+        land: {
+          type: "COUNTRY_SELECT",
+          label: "Land",
+          pakrevd: false,
+        },
         erHjemmekontor: {
           type: "BOOLEAN",
           label: "Er arbeidstakeren utsendt for å jobbe på hjemmekontor?",
@@ -965,6 +970,11 @@ const SKJEMA_DEFINISJON_A1_EN = {
         bySted: {
           type: "TEXT",
           label: "City/place/region",
+          pakrevd: false,
+        },
+        land: {
+          type: "COUNTRY_SELECT",
+          label: "Country",
           pakrevd: false,
         },
         erHjemmekontor: {

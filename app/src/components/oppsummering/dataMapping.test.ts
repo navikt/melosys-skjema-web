@@ -60,6 +60,12 @@ const arbeidsgiversDelDto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
     paLand: {
       navnPaVirksomhet: "Test AS",
       fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
+      fastArbeidssted: {
+        vegadresse: "Testveien",
+        nummer: "1",
+        postkode: "1234",
+        bySted: "Stockholm",
+      },
       erHjemmekontor: false,
     },
   },
@@ -111,6 +117,43 @@ describe("resolveSeksjoner", () => {
       "arbeidstakerensLonn",
       "tilleggsopplysningerArbeidsgiver",
     ]);
+  });
+
+  it("legger utsendelseslandet på fast arbeidssted i oppsummeringen", () => {
+    const seksjoner = resolveSeksjoner(arbeidsgiversDelDto, definisjon);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(arbeidsstedPaLand?.data.land).toBe(LandKode.SE);
+  });
+
+  it("legger ikke land på vekslende arbeidssted i oppsummeringen", () => {
+    const dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
+      ...arbeidsgiversDelDto,
+      arbeidsstedIUtlandet: {
+        arbeidsstedType: ArbeidsstedType.PA_LAND,
+        paLand: {
+          navnPaVirksomhet: "Test AS",
+          fastEllerVekslendeArbeidssted:
+            FastEllerVekslendeArbeidssted.VEKSLENDE,
+          fastArbeidssted: {
+            vegadresse: "Testveien",
+            nummer: "1",
+            postkode: "1234",
+            bySted: "Stockholm",
+          },
+          erHjemmekontor: false,
+        },
+      },
+    };
+
+    const seksjoner = resolveSeksjoner(dto, definisjon);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(arbeidsstedPaLand?.data.land).toBeUndefined();
   });
 
   it("kombinert flyt har utsendingsperiodeOgLand øverst og ingen duplikater", () => {

@@ -6,6 +6,7 @@ import {
   type SkjemaData,
 } from "~/pages/skjema/types.ts";
 import type {
+  LandKode,
   NorskeOgUtenlandskeVirksomheter,
   NorskeOgUtenlandskeVirksomheterMedAnsettelsesform,
   PaLandDto,
@@ -16,6 +17,7 @@ import type {
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
 
 interface ResolvedSeksjon {
   seksjonNavn: string;
@@ -26,8 +28,11 @@ interface ResolvedSeksjon {
 
 function flattenPaLand(
   paLand?: PaLandDto,
+  utsendelseLand?: LandKode,
 ): Record<string, unknown> | undefined {
   if (!paLand) return undefined;
+  const erFastArbeidssted =
+    paLand.fastEllerVekslendeArbeidssted === FastEllerVekslendeArbeidssted.FAST;
   return {
     navnPaVirksomhet: paLand.navnPaVirksomhet,
     fastEllerVekslendeArbeidssted: paLand.fastEllerVekslendeArbeidssted,
@@ -35,6 +40,8 @@ function flattenPaLand(
     nummer: paLand.fastArbeidssted?.nummer,
     postkode: paLand.fastArbeidssted?.postkode,
     bySted: paLand.fastArbeidssted?.bySted,
+    land:
+      erFastArbeidssted && paLand.fastArbeidssted ? utsendelseLand : undefined,
     erHjemmekontor: paLand.erHjemmekontor,
   };
 }
@@ -145,7 +152,10 @@ function mapArbeidsgiverSeksjoner(
     {
       seksjonNavn: "arbeidsstedPaLand",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
-      data: flattenPaLand(dto.arbeidsstedIUtlandet?.paLand),
+      data: flattenPaLand(
+        dto.arbeidsstedIUtlandet?.paLand,
+        dto.utsendingsperiodeOgLand?.utsendelseLand,
+      ),
     },
     {
       seksjonNavn: "arbeidsstedOffshore",

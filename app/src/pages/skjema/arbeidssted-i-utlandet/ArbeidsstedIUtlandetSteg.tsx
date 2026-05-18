@@ -28,7 +28,10 @@ import {
 import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
-import { getArbeidsstedIUtlandet } from "../stegDataGetters.ts";
+import {
+  getArbeidsstedIUtlandet,
+  getUtsendingsperiodeOgLand,
+} from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { OffshoreForm } from "./OffshoreForm.tsx";
@@ -45,6 +48,7 @@ function ArbeidsstedIUtlandetStegContent({
 }) {
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const stegData = getArbeidsstedIUtlandet(skjema);
+  const utsendelseLand = getUtsendingsperiodeOgLand(skjema)?.utsendelseLand;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -123,7 +127,9 @@ function ArbeidsstedIUtlandetStegContent({
             ))}
           </Select>
 
-          {arbeidsstedType === ArbeidsstedType.PA_LAND && <PaLandForm />}
+          {arbeidsstedType === ArbeidsstedType.PA_LAND && (
+            <PaLandForm utsendelseLand={utsendelseLand} />
+          )}
 
           {arbeidsstedType === ArbeidsstedType.OFFSHORE && <OffshoreForm />}
 
