@@ -17,6 +17,10 @@ export enum Sprak {
   En = "en",
 }
 
+export enum FeltFormat {
+  BELOP = "BELOP",
+}
+
 export enum Sorteringsretning {
   ASC = "ASC",
   DESC = "DESC",
@@ -59,6 +63,11 @@ export enum Representasjonstype {
   ANNEN_PERSON = "ANNEN_PERSON",
 }
 
+export enum InntektType {
+  LOENN = "LOENN",
+  INNTEKT_FRA_EGEN_VIRKSOMHET = "INNTEKT_FRA_EGEN_VIRKSOMHET",
+}
+
 export enum FastEllerVekslendeArbeidssted {
   FAST = "FAST",
   VEKSLENDE = "VEKSLENDE",
@@ -74,6 +83,11 @@ export enum ArbeidsstedType {
   OFFSHORE = "OFFSHORE",
   PA_SKIP = "PA_SKIP",
   OM_BORD_PA_FLY = "OM_BORD_PA_FLY",
+}
+
+export enum ArbeidsinntektKilde {
+  NORSK_VIRKSOMHET = "NORSK_VIRKSOMHET",
+  UTENLANDSK_VIRKSOMHET = "UTENLANDSK_VIRKSOMHET",
 }
 
 export enum Ansettelsesform {
@@ -128,8 +142,8 @@ export enum VedleggFiltype {
 }
 
 export interface FeltDefinisjonDto {
-  hjelpetekst?: string;
   pakrevd: boolean;
+  hjelpetekst?: string;
   label: string;
   type: string;
 }
@@ -167,10 +181,10 @@ export interface UtsendingsperiodeOgLandDto {
 
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "representasjonstype"
   | "arbeidstakerNavn"
   | "metadatatype"
 > & {
@@ -183,10 +197,10 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "representasjonstype"
   | "arbeidstakerNavn"
   | "metadatatype"
 > & {
@@ -199,10 +213,10 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "representasjonstype"
   | "arbeidstakerNavn"
   | "metadatatype"
 > & {
@@ -253,10 +267,10 @@ export interface ArbeidstakersData {
 
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "representasjonstype"
   | "arbeidstakerNavn"
   | "metadatatype"
 > & {
@@ -266,18 +280,8 @@ export type DegSelvMetadata = UtilRequiredKeys<
   erstatterSkjemaId?: string;
 };
 
-export interface Familiemedlem {
-  fornavn: string;
-  etternavn: string;
-  harNorskFodselsnummerEllerDnummer: boolean;
-  fodselsnummer?: string;
-  /** @format date */
-  fodselsdato?: string;
-}
-
 export interface FamiliemedlemmerDto {
   skalHaMedFamiliemedlemmer: boolean;
-  familiemedlemmer: Familiemedlem[];
 }
 
 export interface NorskVirksomhet {
@@ -336,10 +340,10 @@ export interface PaSkipDto {
 
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "representasjonstype"
   | "arbeidstakerNavn"
   | "metadatatype"
 > & {
@@ -353,10 +357,10 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
+  | "representasjonstype"
   | "skjemadel"
   | "juridiskEnhetOrgnr"
   | "arbeidsgiverNavn"
-  | "representasjonstype"
   | "arbeidstakerNavn"
   | "metadatatype"
 > & {
@@ -378,8 +382,10 @@ export interface SkatteforholdOgInntektDto {
   landSomUtbetalerPengestotte?: string;
   pengestotteSomMottasFraAndreLandBelop?: string;
   pengestotteSomMottasFraAndreLandBeskrivelse?: string;
-  inntektFraNorskEllerUtenlandskVirksomhet?: string[];
-  hvilkeTyperInntektHarDu?: string[];
+  /** @uniqueItems true */
+  inntektFraNorskEllerUtenlandskVirksomhet?: ArbeidsinntektKilde[];
+  /** @uniqueItems true */
+  hvilkeTyperInntektHarDu?: InntektType[];
   inntekt?: string;
   inntektFraEgenVirksomhet?: string;
 }
@@ -457,10 +463,10 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
 };
 
 export interface UtsendtArbeidstakerMetadata {
+  representasjonstype: Representasjonstype;
   skjemadel: Skjemadel;
   juridiskEnhetOrgnr: string;
   arbeidsgiverNavn: string;
-  representasjonstype: Representasjonstype;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -470,8 +476,8 @@ export interface UtsendtArbeidstakerMetadata {
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
-  tilleggsopplysninger?: TilleggsopplysningerDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
+  tilleggsopplysninger?: TilleggsopplysningerDto;
   type: string;
 }
 
@@ -616,6 +622,14 @@ export type BooleanFeltDefinisjon = UtilRequiredKeys<
   neiLabel: string;
 };
 
+export type CheckboxGruppeFeltDefinisjon = UtilRequiredKeys<
+  FeltDefinisjonDto,
+  "pakrevd" | "label"
+> & {
+  hjelpetekst?: string;
+  alternativer: AlternativDefinisjonDto[];
+};
+
 export type CountrySelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
@@ -679,6 +693,7 @@ export type ListeFeltDefinisjon = UtilRequiredKeys<
   elementDefinisjon: Record<
     string,
     | BooleanFeltDefinisjon
+    | CheckboxGruppeFeltDefinisjon
     | CountrySelectFeltDefinisjon
     | DateFeltDefinisjon
     | ListeFeltDefinisjon
@@ -704,7 +719,7 @@ export interface SeksjonDefinisjonDto {
   felter: Record<
     string,
     | BooleanFeltDefinisjon
-    | CheckboxGroupFeltDefinisjon
+    | CheckboxGruppeFeltDefinisjon
     | CountrySelectFeltDefinisjon
     | DateFeltDefinisjon
     | ListeFeltDefinisjon
@@ -723,13 +738,6 @@ export type SelectFeltDefinisjon = UtilRequiredKeys<
   alternativer: AlternativDefinisjonDto[];
 };
 
-export type CheckboxGroupFeltDefinisjon = UtilRequiredKeys<
-  FeltDefinisjonDto,
-  "pakrevd" | "label"
-> & {
-  alternativer: AlternativDefinisjonDto[];
-};
-
 export interface SkjemaDefinisjonDto {
   type: string;
   versjon: string;
@@ -740,8 +748,8 @@ export type TextFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
   "pakrevd" | "label"
 > & {
-  format?: string;
   hjelpetekst?: string;
+  format?: FeltFormat;
 };
 
 export type TextareaFeltDefinisjon = UtilRequiredKeys<
@@ -855,21 +863,12 @@ export interface ErrorMessageTranslation {
   utsendingsperiodeOgLandTranslation: UtsendingsperiodeOgLandTranslation;
   utenlandsoppdragetTranslation: UtenlandsoppdragetTranslation;
   utenlandsoppdragetArbeidstakerTranslation: UtenlandsoppdragetArbeidstakerTranslation;
-  familiemedlemmerTranslation: FamiliemedlemmerTranslation;
   fellesTranslation: FellesTranslation;
 }
 
 export interface ErrorMessageTranslations {
   no: ErrorMessageTranslation;
   en: ErrorMessageTranslation;
-}
-
-export interface FamiliemedlemmerTranslation {
-  familiemedlemmerMaaVaereTomNarSkalHaMedFamiliemedlemmerErFalse: string;
-  fornavnMaaOppgis: string;
-  etternavnMaaOppgis: string;
-  fodselsnummerMaaOppgis: string;
-  fodselsdatoMaaOppgis: string;
 }
 
 export interface FellesTranslation {
@@ -906,13 +905,13 @@ export interface SkatteforholdOgInntektTranslation {
   maaOppgiLandSomUtbetalerPengestotte: string;
   maaOppgiBelopPengestotte: string;
   maaOppgiBeskrivelsePengestotte: string;
+  duMaOppgiEtGyldigBelopSomErStorreEnn0: string;
   maaVelgeMinstEnInntektKilde: string;
   maaVelgeMinstEnInntektType: string;
   maaOppgiInntekt: string;
   maaOppgiInntektFraEgenVirksomhet: string;
   inntektSkalIkkeOppgis: string;
   inntektFraEgenVirksomhetSkalIkkeOppgis: string;
-  kanIkkeHaLonnNarKunNorskVirksomhet: string;
 }
 
 export interface TilleggsopplysningerTranslation {
