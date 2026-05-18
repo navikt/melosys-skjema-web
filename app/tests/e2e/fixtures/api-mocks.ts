@@ -170,6 +170,21 @@ export async function mockPostTilleggsopplysninger(
   );
 }
 
+export async function mockPostVedleggValg(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/vedlegg`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      }
+    },
+  );
+}
+
 export async function mockPostArbeidssituasjon(page: Page, skjemaId: string) {
   await page.route(
     `/api/skjema/utsendt-arbeidstaker/${skjemaId}/arbeidssituasjon`,
@@ -317,6 +332,7 @@ export async function setupApiMocksForArbeidsgiver(
   await mockPostArbeidsstedIUtlandet(page, skjema.id);
   await mockPostArbeidstakerensLonn(page, skjema.id);
   await mockPostTilleggsopplysninger(page, skjema.id);
+  await mockPostVedleggValg(page, skjema.id);
   await mockSendInnSkjema(page, skjema.id);
 }
 
@@ -336,6 +352,7 @@ export async function setupApiMocksForArbeidstaker(
   await mockPostFamiliemedlemmer(page, skjema.id);
   await mockPostSkatteforholdOgInntekt(page, skjema.id);
   await mockPostTilleggsopplysninger(page, skjema.id);
+  await mockPostVedleggValg(page, skjema.id);
   await mockSendInnSkjema(page, skjema.id);
 }
 
@@ -363,6 +380,7 @@ export async function setupApiMocksForKombinert(
   await mockPostUtsendingsperiodeOgLand(page, skjema.id);
   // Shared steps
   await mockPostTilleggsopplysninger(page, skjema.id);
+  await mockPostVedleggValg(page, skjema.id);
   await mockSendInnSkjema(page, skjema.id);
 }
 
