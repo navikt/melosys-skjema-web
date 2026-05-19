@@ -19,7 +19,7 @@ import {
   type UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-import { resolveSeksjoner } from "./dataMapping.ts";
+import { resolveSeksjoner, VirksomhetTypeKey } from "./dataMapping.ts";
 
 const definisjon = SKJEMA_DEFINISJON_A1 as unknown as SkjemaDefinisjonDto;
 
@@ -222,6 +222,71 @@ describe("resolveSeksjoner", () => {
         manglende,
         `Steg uten seksjon i oppsummeringen: ${manglende.join(", ")}`,
       ).toEqual([]);
+    });
+  });
+
+  describe("flatning av virksomhetslister", () => {
+    const utenlandskVirksomhet = {
+      navn: "Foreign Co",
+      organisasjonsnummer: "ABC123",
+      vegnavnOgHusnummer: "Main Street 1",
+      bygning: "Building A",
+      postkode: "12345",
+      byStedsnavn: "Stockholm",
+      region: "Stockholm County",
+      land: LandKode.SE,
+      tilhorerSammeKonsern: false,
+    };
+
+    it("merker norske og utenlandske virksomheter med __type og inkluderer adressefelter for utenlandske", () => {
+      const dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
+        ...arbeidsgiversDelDto,
+        arbeidstakerensLonn: {
+          arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: false,
+          virksomheterSomUtbetalerLonnOgNaturalytelser: {
+            norskeVirksomheter: [{ organisasjonsnummer: "987654321" }],
+            utenlandskeVirksomheter: [utenlandskVirksomhet],
+          },
+        },
+      };
+
+      const lønnSeksjon = resolveSeksjoner(dto, definisjon).find(
+        (s) => s.seksjonNavn === "arbeidstakerensLonn",
+      );
+      const virksomheter = lønnSeksjon?.data
+        .virksomheterSomUtbetalerLonnOgNaturalytelser as Array<
+        Record<string, unknown>
+      >;
+
+      expect(virksomheter).toHaveLength(2);
+      expect(virksomheter[0]).toEqual({
+        __type: VirksomhetTypeKey.NORSK,
+        organisasjonsnummer: "987654321",
+      });
+      expect(virksomheter[1]).toMatchObject({
+        __type: VirksomhetTypeKey.UTENLANDSK,
+        navn: "Foreign Co",
+        vegnavnOgHusnummer: "Main Street 1",
+        bygning: "Building A",
+        postkode: "12345",
+        byStedsnavn: "Stockholm",
+        region: "Stockholm County",
+        land: LandKode.SE,
+        tilhorerSammeKonsern: false,
+      });
+    });
+
+    it("itemTypeLabels i definisjonen har samme nøkler som VirksomhetTypeKey", () => {
+      const liste =
+        definisjon.seksjoner.arbeidstakerensLonn?.felter
+          .virksomheterSomUtbetalerLonnOgNaturalytelser;
+      const labels = (liste as { itemTypeLabels?: Record<string, string> })
+        ?.itemTypeLabels;
+
+      expect(labels).toBeDefined();
+      expect(Object.keys(labels ?? {}).toSorted()).toEqual(
+        [VirksomhetTypeKey.NORSK, VirksomhetTypeKey.UTENLANDSK].toSorted(),
+      );
     });
   });
 });
