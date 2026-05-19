@@ -247,7 +247,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label: "Beskriv de flere opplysningene du har til søknaden",
+          label: "Beskriv disse her",
           pakrevd: false,
           maxLength: 2000,
         },
@@ -652,7 +652,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label: "Beskriv de flere opplysningene du har til søknaden",
+          label: "Beskriv disse her",
           pakrevd: false,
           maxLength: 2000,
         },
@@ -903,8 +903,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label:
-            "Describe the additional information you have for the application",
+          label: "Describe them here",
           pakrevd: false,
           maxLength: 2000,
         },
@@ -1310,8 +1309,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label:
-            "Describe the additional information you have for the application",
+          label: "Describe them here",
           pakrevd: false,
           maxLength: 2000,
         },
