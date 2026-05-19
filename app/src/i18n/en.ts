@@ -190,7 +190,7 @@ export const en = {
     vedleggSteg: {
       tittel: "Attachments",
       ingenVedleggLastetOpp: "No attachments uploaded",
-      lastOppVedlegg: "Upload attachments (optional)",
+      lastOppVedlegg: "Upload attachments",
       lastOppVedleggBeskrivelse:
         "You can upload PDF or images (JPG, PNG). Maximum file size 10 MB per file.",
       feilForStor: "The file is too large. Maximum file size is 10 MB.",
