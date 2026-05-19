@@ -53,7 +53,7 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
 
   return (
     <section>
-      <SkjemaHeader />
+      <SkjemaHeader skjemadel={skjema.metadata.skjemadel} />
       <Fremgangsindikator
         aktivtSteg={stepNumber}
         className="mt-4"

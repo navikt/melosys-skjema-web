@@ -105,6 +105,8 @@ export const nb = {
     soknadHeader: {
       soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
         "Søknad for utsendt arbeidstaker innen EU/EØS og Sveits",
+      bekreftelseFraArbeidsgiver:
+        "Bekreftelse fra arbeidsgiver på utsending til annet EØS-land eller Sveits",
     },
     landVelgerFormPart: {
       velgLand: "Velg land",
