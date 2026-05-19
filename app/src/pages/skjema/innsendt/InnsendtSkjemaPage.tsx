@@ -111,6 +111,7 @@ function getArbeidsgiverData(
       skjemaData as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto;
     return {
       ...combined.arbeidsgiversData,
+      utsendingsperiodeOgLand: combined.utsendingsperiodeOgLand,
       tilleggsopplysninger: combined.tilleggsopplysninger,
       type: ARBEIDSGIVERS_DEL,
     } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto;
