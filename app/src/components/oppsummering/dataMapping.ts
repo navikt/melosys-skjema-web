@@ -91,6 +91,10 @@ interface SeksjonMappingEntry {
   data: Record<string, unknown> | undefined;
 }
 
+interface ResolveSeksjonerOptions {
+  skjulUtsendingsperiodeOgLand?: boolean;
+}
+
 function utsendingsperiodeOgLandEntry(
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto,
 ): SeksjonMappingEntry {
@@ -253,8 +257,14 @@ function getSeksjonMappinger(dto: SkjemaData): SeksjonMappingEntry[] {
 export function resolveSeksjoner(
   dto: SkjemaData,
   definisjon: SkjemaDefinisjonDto,
+  options: ResolveSeksjonerOptions = {},
 ): ResolvedSeksjon[] {
   return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {
+    if (
+      options.skjulUtsendingsperiodeOgLand &&
+      seksjonNavn === "utsendingsperiodeOgLand"
+    )
+      return [];
     const seksjon = definisjon.seksjoner[seksjonNavn];
     if (!seksjon || !data) return [];
     return [{ seksjonNavn, seksjon, data, stegKey }];

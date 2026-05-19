@@ -14,6 +14,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { ArbeidstakerOgArbeidsgiverOppsummering } from "~/components/oppsummering/ArbeidstakerOgArbeidsgiverOppsummering.tsx";
+import { resolveSeksjoner } from "~/components/oppsummering/dataMapping.ts";
 import { SeksjonOppsummering } from "~/components/oppsummering/SeksjonOppsummering.tsx";
 import { VedleggOppsummering } from "~/components/oppsummering/VedleggOppsummering.tsx";
 import {
@@ -28,8 +29,6 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
-
-import { resolveSeksjoner } from "../../../components/oppsummering/dataMapping.ts";
 
 interface InnsendtSkjemaPageProps {
   skjemaId: string;
@@ -145,7 +144,12 @@ function InnsendtSkjemaPageContent({
 
   const arbeidsgiverSeksjoner = (() => {
     const data = getArbeidsgiverData(response.skjemaData);
-    return data ? resolveSeksjoner(data, response.definisjon) : [];
+    if (!data) return [];
+
+    return resolveSeksjoner(data, response.definisjon, {
+      skjulUtsendingsperiodeOgLand:
+        response.skjemaData.type === ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
+    });
   })();
 
   return (

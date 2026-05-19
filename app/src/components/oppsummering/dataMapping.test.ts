@@ -177,6 +177,19 @@ describe("resolveSeksjoner", () => {
     expect(arbeidsstedPaLand?.data.land).toBe(LandKode.SE);
   });
 
+  it("kan skjule delt utsendingsperiodeOgLand uten å miste land på fast arbeidssted", () => {
+    const seksjoner = resolveSeksjoner(arbeidsgiversDelDto, definisjon, {
+      skjulUtsendingsperiodeOgLand: true,
+    });
+    const navn = seksjoner.map((s) => s.seksjonNavn);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(navn).not.toContain("utsendingsperiodeOgLand");
+    expect(arbeidsstedPaLand?.data.land).toBe(LandKode.SE);
+  });
+
   // Dekningstest: fanger nye steg som blir lagt til uten oppdatering av dataMapping.
   // Hvis noen legger til et nytt content-steg i STEG_REKKEFOLGE med en tilhørende
   // seksjonsdefinisjon, må det også få minst én entry i resolveSeksjoner-output.
