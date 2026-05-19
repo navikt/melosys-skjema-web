@@ -15,7 +15,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
       felter: {
         utsendelseLand: {
           type: "COUNTRY_SELECT",
-          label: "I hvilket land skal du utføre arbeid?",
+          label: "I hvilket land skal arbeidet utføres?",
           pakrevd: true,
         },
         utsendelsePeriode: {
@@ -670,7 +670,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
       felter: {
         utsendelseLand: {
           type: "COUNTRY_SELECT",
-          label: "In which country will you be working?",
+          label: "In which country will the work be performed?",
           pakrevd: true,
         },
         utsendelsePeriode: {
