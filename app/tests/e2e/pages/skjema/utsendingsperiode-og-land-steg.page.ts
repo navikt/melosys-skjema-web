@@ -20,7 +20,7 @@ const stegTittel = nb.translation.utsendingsperiodeOgLandSteg.tittel;
 // Feilmeldinger
 const feilmeldinger = {
   land: nb.translation.utsendingsperiodeOgLandSteg
-    .duMaVelgeHvilketLandDuSkalUtforeArbeid,
+    .duMaVelgeHvilketLandArbeidetSkalUtforesI,
   datoErPakrevd: nb.translation.periode.datoErPakrevd,
   tilDatoForFraDato: nb.translation.periode.tilDatoMaVareEtterFraDato,
 };

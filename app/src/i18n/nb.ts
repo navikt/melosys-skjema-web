@@ -272,8 +272,8 @@ export const nb = {
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utsendingsperiode og land",
-      duMaVelgeHvilketLandDuSkalUtforeArbeid:
-        "Du må velge hvilket land du skal utføre arbeid",
+      duMaVelgeHvilketLandArbeidetSkalUtforesI:
+        "Du må velge hvilket land arbeidet skal utføres i",
     },
     arbeidstakerenslonnSteg: {
       tittel: "Arbeidstakerens lønn",
