@@ -333,8 +333,8 @@ export const en = {
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",
-      duMaVelgeHvilketLandDuSkalUtforeArbeid:
-        "You must select which country you will perform work in",
+      duMaVelgeHvilketLandArbeidetSkalUtforesI:
+        "You must select which country the work will be performed in",
     },
     utenlandsoppdragetSteg: {
       tittel: "The Foreign Assignment",
