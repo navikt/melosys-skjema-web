@@ -10,11 +10,15 @@ type RadioGroupJaNeiProps = Omit<
 > & {
   formFieldName: string;
   lockedValue?: boolean;
+  jaLabel?: string;
+  neiLabel?: string;
 };
 
 export function RadioGroupJaNeiFormPart({
   formFieldName,
   lockedValue,
+  jaLabel,
+  neiLabel,
   ...props
 }: RadioGroupJaNeiProps) {
   const { control } = useFormContext();
@@ -48,10 +52,10 @@ export function RadioGroupJaNeiFormPart({
             }
           >
             <Radio size="small" value="true">
-              {t("felles.ja")}
+              {jaLabel ?? t("felles.ja")}
             </Radio>
             <Radio size="small" value="false">
-              {t("felles.nei")}
+              {neiLabel ?? t("felles.nei")}
             </Radio>
           </RadioGroup>
         );

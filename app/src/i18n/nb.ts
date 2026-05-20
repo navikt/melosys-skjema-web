@@ -162,7 +162,7 @@ export const nb = {
     vedleggSteg: {
       tittel: "Vedlegg",
       ingenVedleggLastetOpp: "Ingen vedlegg lastet opp",
-      lastOppVedlegg: "Last opp vedlegg (valgfritt)",
+      lastOppVedlegg: "Last opp vedlegg",
       lastOppVedleggBeskrivelse:
         "Du kan laste opp PDF eller bilder (JPG, PNG). Maks filstørrelse 10 MB per fil.",
       feilForStor: "Filen er for stor. Maks filstørrelse er 10 MB.",
@@ -170,6 +170,9 @@ export const nb = {
       feilVirusFunnet:
         "Filen ble avvist fordi den kan inneholde skadelig innhold.",
       feilUkjent: "Kunne ikke laste opp filen. Prøv igjen senere.",
+      duMaSvarePaOmDuHarAnnenDokumentasjon:
+        "Du må svare på om du har annen dokumentasjon du ønsker å legge ved",
+      duMaLasteOppMinstEttVedlegg: "Du må laste opp minst ett vedlegg",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",

@@ -30,6 +30,7 @@ test.describe("Vedlegg", () => {
 
       await vedleggStegPage.goto();
       await vedleggStegPage.assertIsVisible();
+      await vedleggStegPage.velgHarAnnenDokumentasjonNei();
       await vedleggStegPage.lagreOgFortsett();
       await vedleggStegPage.assertNavigatedToNextStep();
     });
@@ -51,6 +52,7 @@ test.describe("Vedlegg", () => {
 
       await vedleggStegPage.goto();
       await vedleggStegPage.assertIsVisible();
+      await vedleggStegPage.velgHarAnnenDokumentasjonJa();
 
       const uploadRequestPromise = page.waitForRequest(
         (req) =>
@@ -97,6 +99,7 @@ test.describe("Vedlegg", () => {
 
       await vedleggStegPage.goto();
       await vedleggStegPage.assertIsVisible();
+      await vedleggStegPage.velgHarAnnenDokumentasjonNei();
       await vedleggStegPage.lagreOgFortsett();
       await vedleggStegPage.assertNavigatedToNextStep();
     });

@@ -193,7 +193,12 @@ function InnsendtSkjemaPageContent({
         </VStack>
       )}
 
-      <VedleggOppsummering skjemaId={response.skjemaId} />
+      <VedleggOppsummering
+        harAnnenDokumentasjon={
+          response.skjemaData.vedlegg?.harAnnenDokumentasjon
+        }
+        skjemaId={response.skjemaId}
+      />
 
       <Button
         onClick={handleTilOversikt}

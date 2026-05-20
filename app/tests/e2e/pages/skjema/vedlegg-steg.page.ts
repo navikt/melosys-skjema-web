@@ -1,7 +1,12 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import { nb } from "~/i18n/nb";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes";
+
+const harAnnenDokumentasjonFelt =
+  SKJEMA_DEFINISJON_A1.seksjoner.vedleggArbeidstaker.felter
+    .harAnnenDokumentasjon;
 
 export class VedleggStegPage {
   readonly page: Page;
@@ -9,6 +14,8 @@ export class VedleggStegPage {
   readonly heading: Locator;
   readonly lagreOgFortsettButton: Locator;
   readonly fileInput: Locator;
+  readonly jaRadio: Locator;
+  readonly neiRadio: Locator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
@@ -22,6 +29,13 @@ export class VedleggStegPage {
     });
 
     this.fileInput = page.locator("input[type='file']");
+
+    this.jaRadio = page.getByRole("radio", {
+      name: harAnnenDokumentasjonFelt.jaLabel,
+    });
+    this.neiRadio = page.getByRole("radio", {
+      name: harAnnenDokumentasjonFelt.neiLabel,
+    });
   }
 
   async goto() {
@@ -30,6 +44,14 @@ export class VedleggStegPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
+  }
+
+  async velgHarAnnenDokumentasjonJa() {
+    await this.jaRadio.check();
+  }
+
+  async velgHarAnnenDokumentasjonNei() {
+    await this.neiRadio.check();
   }
 
   async uploadFile(fileName: string, mimeType: string, content: Buffer) {
