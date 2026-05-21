@@ -2,7 +2,6 @@ import { PaperplaneIcon } from "@navikt/aksel-icons";
 import { Button } from "@navikt/ds-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -13,9 +12,15 @@ import {
 
 interface SendInnSkjemaKnappProps {
   skjemaId: string;
+  onBeforeSubmit: () => boolean;
+  onSubmitError: () => void;
 }
 
-export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
+export function SendInnSkjemaKnapp({
+  skjemaId,
+  onBeforeSubmit,
+  onSubmitError,
+}: SendInnSkjemaKnappProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -47,11 +52,15 @@ export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
       });
     },
     onError: () => {
-      toast.error(t("felles.feil"));
+      onSubmitError();
     },
   });
 
   const handleClick = () => {
+    if (!onBeforeSubmit()) {
+      return;
+    }
+
     sendInnSkjemaMutation.mutate();
   };
 

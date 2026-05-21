@@ -46,6 +46,10 @@ export const en = {
       stegGjelderArbeidstaker: "This step applies to the employee",
       virksomhetsnavn: "Company name",
       organisasjonsnummer: "Organization number",
+      stegManglerUtfylling:
+        "You must complete the following steps before submitting the application",
+      feilVedInnsending:
+        "An error occurred while submitting the application. Please try again later.",
     },
     skjemaVeiledning: {
       hei: "Hello",

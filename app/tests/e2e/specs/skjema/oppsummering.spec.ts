@@ -1,3 +1,4 @@
+import { nb } from "~/i18n/nb";
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidssituasjonDto,
@@ -74,6 +75,7 @@ test.describe("Oppsummering", () => {
           familiemedlemmer: familiemedlemmerData,
           skatteforholdOgInntekt: skatteforholdOgInntektData,
           tilleggsopplysninger: tilleggsopplysningerData,
+          vedlegg: { harAnnenDokumentasjon: false },
         } as UtsendtArbeidstakerSkjemaDto["data"],
       });
 
@@ -137,6 +139,11 @@ test.describe("Oppsummering", () => {
       arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
     };
 
+    const utsendingsperiodeOgLandData = {
+      utsendelseLand: formFieldValues.utsendelseLand.value,
+      utsendelsePeriode: formFieldValues.periode,
+    };
+
     const tilleggsopplysningerData: TilleggsopplysningerDto = {
       harFlereOpplysningerTilSoknaden: false,
     };
@@ -161,7 +168,9 @@ test.describe("Oppsummering", () => {
           utenlandsoppdraget: utenlandsoppdragetData,
           arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
           arbeidstakerensLonn: arbeidstakerensLonnData,
+          utsendingsperiodeOgLand: utsendingsperiodeOgLandData,
           tilleggsopplysninger: tilleggsopplysningerData,
+          vedlegg: { harAnnenDokumentasjon: false },
         } as UtsendtArbeidstakerSkjemaDto["data"],
       });
 
@@ -191,6 +200,41 @@ test.describe("Oppsummering", () => {
 
       await oppsummeringStegPage.sendInnAndExpectPost();
       await oppsummeringStegPage.assertNavigatedToKvittering();
+    });
+
+    test("viser feillenke og sender ikke inn når et steg mangler utfylling", async ({
+      page,
+    }) => {
+      await mockFetchSkjema(page, {
+        ...testArbeidsgiverSkjema,
+        data: {
+          type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
+          utenlandsoppdraget: utenlandsoppdragetData,
+          arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
+          arbeidstakerensLonn: arbeidstakerensLonnData,
+          tilleggsopplysninger: tilleggsopplysningerData,
+        } as UtsendtArbeidstakerSkjemaDto["data"],
+      });
+
+      const oppsummeringStegPage = new OppsummeringStegPage(
+        page,
+        testArbeidsgiverSkjema,
+      );
+
+      await oppsummeringStegPage.goto();
+      await oppsummeringStegPage.assertIsVisible();
+
+      await oppsummeringStegPage.sendInnAndExpectNoPost();
+      await oppsummeringStegPage.assertManglendeStegVises([
+        {
+          navn: nb.translation.arbeidsgiverensVirksomhetINorgeSteg.tittel,
+          href: `/skjema/${testArbeidsgiverSkjema.id}/arbeidsgiverens-virksomhet-i-norge`,
+        },
+        {
+          navn: nb.translation.vedleggSteg.tittel,
+          href: `/skjema/${testArbeidsgiverSkjema.id}/vedlegg`,
+        },
+      ]);
     });
   });
 
@@ -269,6 +313,7 @@ test.describe("Oppsummering", () => {
           arbeidstakersData,
           utsendingsperiodeOgLand: utsendingsperiodeOgLandData,
           tilleggsopplysninger: tilleggsopplysningerData,
+          vedlegg: { harAnnenDokumentasjon: false },
         } as UtsendtArbeidstakerSkjemaDto["data"],
       });
 

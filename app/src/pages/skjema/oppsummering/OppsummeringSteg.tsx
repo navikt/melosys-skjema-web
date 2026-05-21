@@ -1,5 +1,5 @@
-import { Alert } from "@navikt/ds-react";
-import { Fragment } from "react";
+import { Alert, ErrorSummary } from "@navikt/ds-react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ArbeidstakerOgArbeidsgiverOppsummering } from "~/components/oppsummering/ArbeidstakerOgArbeidsgiverOppsummering.tsx";
@@ -17,6 +17,8 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import type { StegMedFeil } from "../stegDataGetters.ts";
+import { finnManglendeSteg } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { isArbeidsgiverOgArbeidstakersDel } from "../types.ts";
 
@@ -37,10 +39,30 @@ function OppsummeringStegContent({
   const data = skjema.data;
   const { t } = useTranslation();
   const { definisjon } = useSkjemaDefinisjon();
+  const [valideringsfeil, setValideringsfeil] = useState<StegMedFeil[]>([]);
+  const [harInnsendingFeil, setHarInnsendingFeil] = useState(false);
+  const errorRef = useRef<HTMLDivElement>(null);
 
   const seksjoner = resolveSeksjoner(data, definisjon as SkjemaDefinisjonDto);
 
   const erKombinertSkjema = isArbeidsgiverOgArbeidstakersDel(data);
+  const harFeil = valideringsfeil.length > 0 || harInnsendingFeil;
+
+  useEffect(() => {
+    if (harFeil) {
+      errorRef.current?.scrollIntoView({ behavior: "smooth" });
+      errorRef.current?.focus();
+    }
+  }, [harFeil]);
+
+  const kanSendeInn = () => {
+    const stegMedFeil = finnManglendeSteg(skjema, stegRekkefolge, skjema.id);
+
+    setValideringsfeil(stegMedFeil);
+    setHarInnsendingFeil(false);
+
+    return stegMedFeil.length === 0;
+  };
 
   return (
     <SkjemaSteg
@@ -48,8 +70,29 @@ function OppsummeringStegContent({
         stepKey: StegKey.OPPSUMMERING,
         skjema,
       }}
-      nesteKnapp={<SendInnSkjemaKnapp skjemaId={skjema.id} />}
+      nesteKnapp={
+        <SendInnSkjemaKnapp
+          skjemaId={skjema.id}
+          onBeforeSubmit={kanSendeInn}
+          onSubmitError={() => setHarInnsendingFeil(true)}
+        />
+      }
     >
+      {harFeil && (
+        <div ref={errorRef} className="mt-4" tabIndex={-1}>
+          {valideringsfeil.length > 0 ? (
+            <ErrorSummary heading={t("felles.stegManglerUtfylling")}>
+              {valideringsfeil.map((steg) => (
+                <ErrorSummary.Item key={steg.href} href={steg.href}>
+                  {t(steg.title)}
+                </ErrorSummary.Item>
+              ))}
+            </ErrorSummary>
+          ) : (
+            <Alert variant="error">{t("felles.feilVedInnsending")}</Alert>
+          )}
+        </div>
+      )}
       <ArbeidstakerOgArbeidsgiverOppsummering skjema={skjema} />
       {seksjoner.map(({ seksjonNavn, seksjon, data, stegKey }) => {
         const steg = stegRekkefolge.find((s) => s.key === stegKey);
