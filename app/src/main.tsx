@@ -28,6 +28,9 @@ const getDecoratorLangFromCookie = () => {
   );
 };
 
+const i18nLangToHtmlLang = (lng: string): string =>
+  lng === "en" ? "en" : "no";
+
 i18n.use(initReactI18next).init({
   lng: getDecoratorLangFromCookie(),
   fallbackLng: "nb",
@@ -35,6 +38,12 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
+});
+
+// Sett riktig lang-attributt på <html> ved oppstart og ved språkbytte
+document.documentElement.lang = i18nLangToHtmlLang(i18n.language);
+i18n.on("languageChanged", (lng) => {
+  document.documentElement.lang = i18nLangToHtmlLang(lng);
 });
 
 export const queryClient = new QueryClient();
