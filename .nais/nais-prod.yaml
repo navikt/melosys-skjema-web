@@ -11,6 +11,7 @@ spec:
   port: 8080
   ingresses:
     - https://melosys-skjema-web.intern.nav.no
+    - https://www.nav.no/medlemskap-lovvalg/soknad
   replicas:
     min: 2
     max: 4
