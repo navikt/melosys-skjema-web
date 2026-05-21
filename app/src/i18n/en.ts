@@ -12,7 +12,7 @@ export const en = {
       lagre: "Save",
       lagreOgFortsett: "Save and continue",
       sendSoknad: "Submit application",
-      skjemaSendtInn: "Application submitted",
+      skjemaSendtInn: "Form submitted",
       avbryt: "Cancel",
       ja: "Yes",
       nei: "No",
@@ -50,7 +50,7 @@ export const en = {
     skjemaVeiledning: {
       hei: "Hello",
       guidePanelTekst1:
-        "The GuidePanel section is used for brief, high-level guidance to the applicant. The section retrieves the applicant's name and provides a condensed explanation of the financial support, measure, or aid. This text is taken from the introduction to the product page on nav.no.",
+        "The GuidePanel section is used for brief, high-level guidance to the applicant. The section retrieves the applicant's name and provides a condensed explanation of the cash benefits, measure, or aid. This text is taken from the introduction to the product page on nav.no.",
       guidePanelTekst2:
         "End the text in the section with a link to the product page on nav.no that opens in a new tab.",
       forDuSoker: "Before you apply",
@@ -128,13 +128,13 @@ export const en = {
       regionValgfritt: "Region (optional)",
       land: "Country",
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
-        "Does the company belong to the same consortium as the Norwegian employer?",
+        "Does the company belong to the same group as the Norwegian employer?",
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
       ansettelsesform: "What do you work as in this company?",
       arbeidstakerEllerFrilanser: "Employee or freelancer",
       selvstendigNaeringsdrivende: "Self-employed",
-      statsansatt: "Government employee",
+      statsansatt: "Civil servant",
     },
     arbeidssituasjonSteg: {
       tittel: "Work situation",
@@ -142,18 +142,6 @@ export const en = {
         "You have power of attorney from the employee",
       fullmaktFraArbeidstakerBeskrivelse:
         "The following questions are answered on behalf of the employee.",
-      harDuVaertEllerSkalVaereILonnetArbeidINorgeIMinst1ManedRettForUtsendingen:
-        "Have you been or will you be in paid employment in Norway for at least one month right before the posting?",
-      beskriveAktivitetFoerUtsending:
-        "Describe your activity in the month before the posting",
-      beskriveAktivitetFoerUtsendingBeskrivelse:
-        "For example studies, vacation or self-employment",
-      skalDuOgsaDriveSelvstendigVirksomhetEllerJobbeForEnAnnenArbeidsgiver:
-        "Will you also work for another employer or run a self-employed business during the posting period?",
-      leggTilVirksomheterDuSkalJobbeForBeskrivelse:
-        "Add Norwegian and/or foreign companies you will work for during the posting period.",
-      hvemSkalDuJobbeForIUtsendelsesPerioden:
-        "Who will you work for during the posting period?",
       duMaSvarePaOmDuHarVertEllerSkalVareILonnetArbeidINorgeForUtsending:
         "You must answer whether you have been or will be in paid employment in Norway before posting",
       duMaBeskriveAktivitetenNarDuIkkeHarVertILonnetArbeid:
@@ -164,26 +152,22 @@ export const en = {
         "You must add at least one company when you will work for multiple companies",
     },
     familiemedlemmerSteg: {
-      tittel: "Family Members",
+      tittel: "Family members",
       duMaSvarePaOmDuHarFamiliemedlemmerSomSkalVaereMed:
         "You must answer whether you have a spouse, partner, cohabitant or children who will accompany you",
       informasjonOmEgenSoknad:
         "If family members need clarification of their social security affiliation, they must submit their own application. Accompanying family members can apply using the form:",
       soknadsskjemaLenke: "https://www.nav.no/fyllut/nav020807?lang=en",
       soknadsskjemaNavn:
-        "application for determination of applicable social security legislation during a stay in the EEA or Switzerland",
+        "application for determination of social security affiliation during a stay in the EEA or Switzerland",
       somLiggerPaNavNo: " available at nav.no.",
       sendeSoknadForBarn:
-        "You can submit an application for children under 18 using this form.",
+        "You can submit an application for children under 18 using the aforementioned form.",
     },
     tilleggsopplysningerSteg: {
-      tittel: "Additional Information",
-      harDuNoenFlereOpplysningerTilSoknaden:
-        "Do you have any additional information for the application?",
+      tittel: "Additional information",
       duMaSvarePaOmDuHarFlereOpplysningerTilSoknaden:
         "You must answer whether you have additional information for the application",
-      beskriveFlereOpplysningerTilSoknaden:
-        "Describe the additional information you have for the application",
       tilleggsopplysningerErPakrevdNarDuHarFlereOpplysninger:
         "Additional information is required when you have additional information",
     },
@@ -206,27 +190,14 @@ export const en = {
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",
       inntektHeading: "Income",
-      erDuSkattepliktigTilNorgeIHeleUtsendingsperioden:
-        "Are you liable to pay tax to Norway for the entire posting period?",
-      mottarDuPengestotteFraEtAnnetEosLandEllerSveits:
-        "Do you receive financial support from another EEA country or Switzerland?",
-      mottarDuPengestotteBeskrivelse:
-        "By «financial support» we mean money you receive as compensation for lost income from work. Sickness benefits, parental benefits, unemployment benefits and work assessment allowance are examples of such financial support in Norway.",
-      fraHvilketLandMottarDuPengestotte:
-        "From which country do you receive financial support?",
-      hvorMyePengerMottarDuBruttoPerManed:
-        "How much money do you receive gross per month",
-      oppgiBelopetINorskeKroner: "Enter the amount in Norwegian kroner",
-      hvaSlagsPengestotteMottarDu:
-        "What kind of financial support do you receive",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "You must answer whether you are liable to pay tax to Norway for the entire posting period",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
-        "You must answer whether you receive financial support from another EEA country or Switzerland",
+        "You must answer whether you receive cash benefits from another EEA country or Switzerland",
       duMaBeskriveHvaSlagsPengestotteDuMottar:
-        "You must describe what kind of financial support you receive",
+        "You must describe what type of cash benefits you receive",
       duMaVelgeHvilketLandSomUtbetalerPengestotten:
-        "You must select which country pays the financial support",
+        "You must select which country pays the cash benefits",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "You must enter a valid amount greater than 0",
       duMaVelgeMinstEnInntektKilde:
@@ -238,46 +209,7 @@ export const en = {
     },
     arbeidsstedIUtlandetSteg: {
       tittel: "Place of work abroad",
-      hvorSkalArbeidetUtfores: "Where will the work be performed?",
       velgArbeidssted: "Select workplace",
-      paLand: "On land",
-      offshore: "Offshore",
-      paSkip: "On ship",
-      omBordPaFly: "On board an aircraft",
-      harFastArbeidsstedEllerVeksler:
-        "Does the employee have a fixed place of work in this country or does it vary frequently?",
-      fastArbeidssted: "Fixed place of work",
-      vekslerOfte: "Varies frequently",
-      vegadresse: "Street address",
-      nummer: "Number",
-      postkode: "Postal code",
-      bySted: "City/place/region",
-      erHjemmekontor: "Is the employee posted to work from home office?",
-      navnPaInnretning: "Name of installation",
-      hvilkenTypeInnretning: "What type of installation is this?",
-      plattformEllerFast: "Platform or other fixed installation",
-      boreskipEllerFlyttbar: "Drilling ship or other mobile installation",
-      hvilketLandsSokkel: "Which country's continental shelf is this?",
-      navnPaSkip: "What is the name of the ship the employee will work on?",
-      yrketTilArbeidstaker: "What is the employee's occupation?",
-      yrketTilArbeidstakerBeskrivelse:
-        "We need information about what kind of work the employee performs on board the ship",
-      hvorSkalSkipetSeile: "Where will the ship sail?",
-      internasjonaltFarvann: "International waters",
-      territorialfarvann: "Within territorial waters",
-      flaggland: "What is the flag country of the ship?",
-      hvilketLandsTerritorialfarvann: "Which country's territorial waters?",
-      hjemmebaseLand:
-        "In which country does the employee have their home base during the application period?",
-      hjemmebaseLandBeskrivelse:
-        "By home base we mean the airport where the employee starts and ends their flights",
-      hjemmebaseNavn: "What is the name of the home base?",
-      erVanligHjemmebase:
-        "Is this the home base the employee usually works from?",
-      vanligHjemmebaseLand:
-        "In which country is the home base the employee usually works from located?",
-      vanligHjemmebaseNavn:
-        "What is the name of the home base the employee usually works from?",
       // Error messages
       duMaVelgeArbeidsstedType:
         "You must select where the work will be performed",
@@ -297,7 +229,7 @@ export const en = {
       navnPaSkipErPakrevd: "Name of the ship is required",
       yrketTilArbeidstakerErPakrevd: "Employee's occupation is required",
       duMaVelgeHvorSkipetSeiler: "You must select where the ship will sail",
-      flagglandErPakrevd: "Flag country is required",
+      flagglandErPakrevd: "Flag state is required",
       territorialfarvannLandErPakrevd:
         "You must select which country's territorial waters the ship sails in",
       hjemmebaseLandErPakrevd:
@@ -309,21 +241,10 @@ export const en = {
         "You must select which country the usual home base is located in",
       vanligHjemmebaseNavnErPakrevd:
         "The name of the usual home base is required",
-      navnPaVirksomhet: "Name of the business",
       navnPaVirksomhetErPakrevd: "Name of the business is required",
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Employer's business in Norway",
-      erArbeidsgiverenEnOffentligVirksomhet:
-        "Is the employer a public enterprise?",
-      offentligeVirksomheterErStatsorganerOgUnderliggendeVirksomheter:
-        "Public enterprises are state bodies and subordinate enterprises, for example ministries and universities.",
-      erArbeidsgiverenEtBemanningsEllerVikarbyra:
-        "Is the employer a staffing or temporary work agency?",
-      opprettholderArbeidsgiverenVanligDriftINorge:
-        "Does the employer maintain normal operations in Norway?",
-      medDetteMenerViAtArbeidsgivereFortsattHarAktivitetOgAnsatteSomJobberINorgeIPerioden:
-        "By this we mean that the employer still has activity and employees working in Norway during the period.",
       duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
         "You must answer whether the employer is a public enterprise",
       duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
@@ -337,24 +258,7 @@ export const en = {
         "You must select which country the work will be performed in",
     },
     utenlandsoppdragetSteg: {
-      tittel: "The Foreign Assignment",
-      hvilketLandSendesArbeidstakerenTil:
-        "To which country is the employee being sent?",
-      utsendingsperiode: "Assignment period",
-      harDuSomArbeidsgiverOppdragILandetArbeidstakerSkalSendesUtTil:
-        "Do you as an employer have assignments in the country where the employee will be sent?",
-      hvorforSkalArbeidstakerenArbeideIUtlandet:
-        "Why should the employee work abroad?",
-      bleArbeidstakerAnsattPaGrunnAvDetteUtenlandsoppdraget:
-        "Was the employee hired because of this foreign assignment?",
-      vilArbeidstakerenArbeideForVirksomhetenINorgeEtterUtenlandsoppdraget:
-        "Will the employee work for the company in Norway after the foreign assignment?",
-      vilArbeidstakerFortsattVareAnsattHostDereIHeleUtsendingsperioden:
-        "Will the employee still be employed by you during the entire assignment period?",
-      beskrivArbeidstakerensAnsettelsesforholdIUtsendingsperioden:
-        "Describe the employee's employment relationship during the assignment period",
-      erstatterArbeidstakerEnAnnenPersonSomVarSendtUtForAGjoreDetSammeArbeidet:
-        "Is the employee replacing another person who was sent out to do the same work?",
+      tittel: "Foreign assignment",
       duMaVelgeHvilketLandArbeidstakerenSendesTil:
         "You must select which country the employee is being sent to",
       duMaSvarePaOmDereHarOppdragILandet:
@@ -362,27 +266,23 @@ export const en = {
       duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget:
         "You must answer whether the employee was hired because of this foreign assignment",
       duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden:
-        "You must answer whether the employee will still be employed during the entire assignment period",
+        "You must answer whether the employee will still be employed during the entire posting period",
       duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson:
         "You must answer whether the employee is replacing another person",
+      tilDatoKanIkkeVareForFraDato: "To date cannot be before from date",
       begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet:
-        "Justification is required when employer does not have assignments in the country",
+        "Justification is required when the employer does not have assignments in the country",
       beskrivelseAvAnsettelsesforholdErPakrevd:
         "Description of employment relationship is required",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "You must answer whether the employee will work for the company in Norway after the assignment",
-      oppgiOmtrentligDatoHvisDuIkkeVetNoyaktigDato:
-        "Enter approximate date if you don't know the exact date.",
-      forrigeArbeidstakersUtsendelse: "Previous employee's assignment",
+      fraDatoForForrigeArbeidstakerErPakrevd:
+        "From date for previous employee is required",
+      tilDatoForForrigeArbeidstakerErPakrevd:
+        "To date for previous employee is required",
     },
     arbeidstakerenslonnSteg: {
       tittel: "Employee's salary",
-      utbetalerDuSomArbeidsgiverAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
-        "Do you as an employer pay all salary and any benefits in kind during the posting period?",
-      hvemUtbetalerLonnenOgEventuelleNaturalytelser:
-        "Who pays the salary and any benefits in kind?",
-      leggTilNorskeOgEllerUtenlandskeVirksomheterSomUtbetalerLonnenOgEventuelleNaturalytelser:
-        "Add Norwegian and/or foreign companies that pay the salary and any benefits in kind",
       duMaSvarePaOmDuBetalerAllLonnOgEventuelleNaturalyttelserIUtsendingsperioden:
         "You must answer whether you pay all salary and any benefits in kind during the posting period",
       duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
@@ -501,6 +401,8 @@ export const en = {
         "Select the employee you want to fill out an application for",
       arbeidstakerMedFullmaktBeskrivelse:
         "The list contains all employees who have granted you a mandate",
+      arbeidstakerIngenFullmakter:
+        "You have not been granted a mandate from any employees. The employee can grant you a mandate on",
       arbeidstakerSelvUtfyllingCheckbox:
         "The employee will fill out their part of the application themselves",
       arbeidstakerMedFullmaktPlaceholder: "Birth/d-number or name",
@@ -509,11 +411,11 @@ export const en = {
       arbeidstakerUtenFullmaktBeskrivelse:
         "The employee must complete their part of the application themselves.",
       arbeidstakerFnrLabel: "Birth/d-number",
-      arbeidstakerFulltNavnLabel: "Full name",
+      arbeidstakerFulltNavnLabel: "Last name",
       arbeidstakerSokKnapp: "Search",
       arbeidstakerFnrTom: "Enter birth number",
       arbeidstakerFnrUgyldig: "Invalid birth number",
-      arbeidstakerFulltNavnTom: "Enter full name",
+      arbeidstakerFulltNavnTom: "Enter last name",
       arbeidstakerVerifiseringFeilet:
         "Person not found with the specified birth number and last name",
       arbeidstakerVerifisertLabel: "Person verified",
@@ -533,7 +435,7 @@ export const en = {
       historikkKolonneRefnr: "Ref.no.",
       historikkKolonneFodselsdato: "Date of birth",
       historikkKolonneArbeidsgiver: "Employer",
-      historikkSeSkjema: "View application",
+      historikkSeSkjema: "View form",
       historikkKolonneStatus: "Status",
       historikkAntallTreff: "{{antall}} results",
       historikkFeilmelding:
@@ -542,6 +444,8 @@ export const en = {
       historikkStatusSendt: "Submitted",
       historikkStatusMottatt: "Received",
       orgnrLabel: "Org. no:",
+      feilVedOpprettelse:
+        "An error occurred while creating the application. Please try again later.",
       paginationForrige: "Previous",
       paginationNeste: "Next",
     },
@@ -552,23 +456,8 @@ export const en = {
       sokPaVirksomhet: "Search for company (org.no.)",
       duMaSokeForstFeil:
         "You must search for and select an advisory firm before you can continue",
-      valgtFirma: "Selected advisory firm",
+      valgtFirma: "Selected organization",
       ok: "Ok",
-    },
-    startSoknad: {
-      tittel: "Start application",
-      beskrivelse:
-        "Check that the information below is correct before starting the application.",
-      organisasjonsnavn: "Organization name",
-      organisasjonsnummer: "Organization number",
-      radgiverfirmaTittel: "Advisory firm",
-      navn: "Name",
-      fodselsnummer: "Birth number / D-number",
-      duHarFullmakt:
-        "You have mandate to complete the application on behalf of the employee",
-      startSoknadKnapp: "Start application",
-      feilVedOpprettelse:
-        "An error occurred while creating the application. Please try again later.",
     },
     periode: {
       fraDato: "From date",
@@ -584,10 +473,10 @@ export const en = {
       organisasjonsnummerMaVare9Siffer: "Organization number must be 9 digits",
       navnPaVirksomhetErPakrevd: "Company name is required",
       vegnavnOgHusnummerErPakrevd:
-        "Street address and house number is required",
+        "Street address and house number are required",
       landErPakrevd: "Country is required",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
-        "You must answer whether the company belongs to the same consortium",
+        "You must answer whether the company belongs to the same group",
       ansettelsesformErPakrevd: "You must select an employment form",
       organisasjonIkkeFunnet: "No organization found with this number",
       feilVedSok: "Something went wrong with the search. Try again later.",
