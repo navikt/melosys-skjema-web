@@ -35,7 +35,7 @@ import {
   ValideringError,
 } from "~/utils/valideringUtils.ts";
 
-const API_PROXY_URL = "/api";
+const API_PROXY_URL = `${import.meta.env.BASE_URL}api`;
 
 type StegData =
   | ArbeidsgiverensVirksomhetINorgeDto
