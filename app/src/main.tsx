@@ -53,6 +53,9 @@ export interface RouterContext {
 }
 
 const router = createRouter({
+  // Basepath må matche Vite sin `base` slik at client-side routing
+  // jobber relativt til /medlemskap-lovvalg/soknad/ i prod og "/" lokalt
+  basepath: import.meta.env.BASE_URL,
   scrollRestoration: true,
   routeTree,
   context: {
