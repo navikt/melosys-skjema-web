@@ -12,7 +12,7 @@ import {
   type SupportedLanguage,
 } from "~/constants/skjemaDefinisjonA1";
 
-const API_PROXY_URL = "/api";
+const API_PROXY_URL = `${import.meta.env.BASE_URL}api`;
 
 interface ValidationResult {
   isValid: boolean;
