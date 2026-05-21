@@ -2,6 +2,7 @@ import express from "express";
 
 import { setupActuators } from "./actuators.js";
 import { setupApiProxy, setupDekoratorenApiProxy } from "./apiProxy.js";
+import config from "./config.js";
 import { errorHandling } from "./errorHandler.js";
 import { setupStaticRoutes } from "./frontendRoute.js";
 import logger from "./logger.js";
@@ -23,7 +24,7 @@ setupDekoratorenApiProxy(protectedRouter);
 // Catch all route, må være sist
 setupStaticRoutes(protectedRouter);
 
-app.use(protectedRouter);
+app.use(config.app.basePath, protectedRouter);
 
 app.use(errorHandling);
 
