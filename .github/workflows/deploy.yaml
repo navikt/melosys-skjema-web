@@ -49,6 +49,8 @@ jobs:
       - name: Build app
         run: pnpm build
         working-directory: app
+        env:
+          BASE_PATH: /medlemskap-lovvalg/soknad/
 
       - name: Install server dependencies
         run: pnpm install --frozen-lockfile
