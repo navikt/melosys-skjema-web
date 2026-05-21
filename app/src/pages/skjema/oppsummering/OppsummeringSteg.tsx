@@ -78,21 +78,6 @@ function OppsummeringStegContent({
         />
       }
     >
-      {harFeil && (
-        <div ref={errorRef} className="mt-4" tabIndex={-1}>
-          {valideringsfeil.length > 0 ? (
-            <ErrorSummary heading={t("felles.stegManglerUtfylling")}>
-              {valideringsfeil.map((steg) => (
-                <ErrorSummary.Item key={steg.href} href={steg.href}>
-                  {t(steg.title)}
-                </ErrorSummary.Item>
-              ))}
-            </ErrorSummary>
-          ) : (
-            <Alert variant="error">{t("felles.feilVedInnsending")}</Alert>
-          )}
-        </div>
-      )}
       <ArbeidstakerOgArbeidsgiverOppsummering skjema={skjema} />
       {seksjoner.map(({ seksjonNavn, seksjon, data, stegKey }) => {
         const steg = stegRekkefolge.find((s) => s.key === stegKey);
@@ -122,6 +107,21 @@ function OppsummeringStegContent({
         harAnnenDokumentasjon={skjema.data.vedlegg?.harAnnenDokumentasjon}
         skjemaId={skjema.id}
       />
+      {harFeil && (
+        <div ref={errorRef} className="mt-4" tabIndex={-1}>
+          {valideringsfeil.length > 0 ? (
+            <ErrorSummary heading={t("felles.stegManglerUtfylling")}>
+              {valideringsfeil.map((steg) => (
+                <ErrorSummary.Item key={steg.href} href={steg.href}>
+                  {t(steg.title)}
+                </ErrorSummary.Item>
+              ))}
+            </ErrorSummary>
+          ) : (
+            <Alert variant="error">{t("felles.feilVedInnsending")}</Alert>
+          )}
+        </div>
+      )}
     </SkjemaSteg>
   );
 }
