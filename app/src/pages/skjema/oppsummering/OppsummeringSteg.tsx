@@ -50,7 +50,7 @@ function OppsummeringStegContent({
 
   useEffect(() => {
     if (harFeil) {
-      errorRef.current?.scrollIntoView({ behavior: "smooth" });
+      errorRef.current?.scrollIntoView({ behavior: "auto" });
       errorRef.current?.focus();
     }
   }, [harFeil]);
