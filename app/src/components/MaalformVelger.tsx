@@ -17,6 +17,11 @@ export function MaalformVelger() {
     await i18n.changeLanguage(code);
   };
 
+  // Fjern i MELOSYS-8094
+  if (SUPPORTED_LANGUAGES.length <= 1) {
+    return null;
+  }
+
   return (
     <Dropdown>
       <Button as={Dropdown.Toggle} variant="tertiary-neutral">

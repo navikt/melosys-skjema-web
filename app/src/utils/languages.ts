@@ -7,5 +7,7 @@ export interface Language {
 
 export const SUPPORTED_LANGUAGES: Language[] = [
   { code: "nb", label: "Norsk" },
-  { code: "en", label: "English" },
+  // Aktiver naar oversettelsene er offisielt godkjent (MELOSYS-8094)
+  // { code: "en", label: "English" },
+  // { code: "nn", label: "Nynorsk" },
 ];
