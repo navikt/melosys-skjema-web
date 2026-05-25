@@ -1,5 +1,5 @@
 import { Heading, HStack } from "@navikt/ds-react";
-import { useParams } from "@tanstack/react-router";
+import { useMatchRoute, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { KontekstVelger } from "~/components/KontekstVelger.tsx";
@@ -11,8 +11,10 @@ export function AppHeader() {
   const { t } = useTranslation();
   const representasjonskontekst = useRepresentasjonskontekst();
   const { id: skjemaId } = useParams({ strict: false });
+  const matchRoute = useMatchRoute();
+  const erInnsendt = !!matchRoute({ to: "/skjema/$id/innsendt" });
 
-  if (skjemaId) {
+  if (skjemaId && !erInnsendt) {
     return <SkjemaParterHeader skjemaId={skjemaId} />;
   }
 
