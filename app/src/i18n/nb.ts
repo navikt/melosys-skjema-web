@@ -302,6 +302,10 @@ export const nb = {
     appHeader: {
       tittel: "Medlemskap og lovvalg",
     },
+    skjemaParterHeader: {
+      arbeidsgiver: "Arbeidsgiver",
+      arbeidstaker: "Arbeidstaker",
+    },
     kontekstVelger: {
       arbeidsgiver: "Arbeidsgiver",
       radgiver: "Rådgiver",
