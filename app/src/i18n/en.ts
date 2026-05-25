@@ -192,7 +192,7 @@ export const en = {
     vedleggSteg: {
       tittel: "Attachments",
       ingenVedleggLastetOpp: "No attachments uploaded",
-      lastOppVedlegg: "Upload attachments (optional)",
+      lastOppVedlegg: "Upload attachments",
       lastOppVedleggBeskrivelse:
         "You can upload PDF or images (JPG, PNG). Maximum file size 10 MB per file.",
       feilForStor: "The file is too large. Maximum file size is 10 MB.",
@@ -201,6 +201,9 @@ export const en = {
       feilVirusFunnet:
         "The file was rejected because it may contain harmful content.",
       feilUkjent: "Could not upload the file. Please try again later.",
+      duMaSvarePaOmDuHarAnnenDokumentasjon:
+        "You must answer whether you have other documentation you wish to attach",
+      duMaLasteOppMinstEttVedlegg: "You must upload at least one attachment",
     },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",
@@ -332,8 +335,8 @@ export const en = {
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",
-      duMaVelgeHvilketLandDuSkalUtforeArbeid:
-        "You must select which country you will perform work in",
+      duMaVelgeHvilketLandArbeidetSkalUtforesI:
+        "You must select which country the work will be performed in",
     },
     utenlandsoppdragetSteg: {
       tittel: "The Foreign Assignment",
@@ -408,6 +411,10 @@ export const en = {
     },
     appHeader: {
       tittel: "Membership and applicable legislation",
+    },
+    skjemaParterHeader: {
+      arbeidsgiver: "Employer",
+      arbeidstaker: "Employee",
     },
     kontekstVelger: {
       arbeidsgiver: "Employer",

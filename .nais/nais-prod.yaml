@@ -10,7 +10,8 @@ metadata:
 spec:
   port: 8080
   ingresses:
-    - https://melosys-skjema-web.intern.nav.no
+    - https://melosys-skjema-web.intern.nav.no/medlemskap-lovvalg/soknad
+    - https://www.nav.no/medlemskap-lovvalg/soknad
   replicas:
     min: 2
     max: 4
@@ -60,6 +61,8 @@ spec:
         - id: loki
         - id: elastic
   env:
+    - name: BASE_PATH
+      value: /medlemskap-lovvalg/soknad/
     - name: API_URL
       value: http://melosys-skjema-api/api
     - name: API_SCOPE

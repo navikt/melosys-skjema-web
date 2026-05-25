@@ -395,6 +395,10 @@ export interface TilleggsopplysningerDto {
   tilleggsopplysningerTilSoknad?: string;
 }
 
+export interface VedleggValgDto {
+  harAnnenDokumentasjon: boolean;
+}
+
 export interface UtenlandskVirksomhet {
   navn: string;
   organisasjonsnummer?: string;
@@ -478,6 +482,7 @@ export interface UtsendtArbeidstakerMetadata {
 export interface UtsendtArbeidstakerSkjemaData {
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
+  vedlegg?: VedleggValgDto;
   type: string;
 }
 

@@ -19,7 +19,9 @@ export function getUserInfo() {
 }
 
 async function fetchUserInfo(): Promise<UserInfo> {
-  const response = await fetch("/nav-dekoratoren-api/auth");
+  const response = await fetch(
+    `${import.meta.env.BASE_URL}nav-dekoratoren-api/auth`,
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

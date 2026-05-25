@@ -28,6 +28,9 @@ const getDecoratorLangFromCookie = () => {
   );
 };
 
+const i18nLangToHtmlLang = (lng: string): string =>
+  lng === "en" ? "en" : "no";
+
 i18n.use(initReactI18next).init({
   lng: getDecoratorLangFromCookie(),
   fallbackLng: "nb",
@@ -37,6 +40,12 @@ i18n.use(initReactI18next).init({
   },
 });
 
+// Sett riktig lang-attributt på <html> ved oppstart og ved språkbytte
+document.documentElement.lang = i18nLangToHtmlLang(i18n.language);
+i18n.on("languageChanged", (lng) => {
+  document.documentElement.lang = i18nLangToHtmlLang(lng);
+});
+
 export const queryClient = new QueryClient();
 
 export interface RouterContext {
@@ -44,6 +53,9 @@ export interface RouterContext {
 }
 
 const router = createRouter({
+  // Basepath må matche Vite sin `base` slik at client-side routing
+  // jobber relativt til /medlemskap-lovvalg/soknad/ i prod og "/" lokalt
+  basepath: import.meta.env.BASE_URL,
   scrollRestoration: true,
   routeTree,
   context: {

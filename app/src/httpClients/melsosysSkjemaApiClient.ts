@@ -25,6 +25,7 @@ import {
   UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
   VedleggDto,
+  VedleggValgDto,
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -34,7 +35,7 @@ import {
   ValideringError,
 } from "~/utils/valideringUtils.ts";
 
-const API_PROXY_URL = "/api";
+const API_PROXY_URL = `${import.meta.env.BASE_URL}api`;
 
 type StegData =
   | ArbeidsgiverensVirksomhetINorgeDto
@@ -45,7 +46,8 @@ type StegData =
   | ArbeidssituasjonDto
   | UtsendingsperiodeOgLandDto
   | SkatteforholdOgInntektDto
-  | FamiliemedlemmerDto;
+  | FamiliemedlemmerDto
+  | VedleggValgDto;
 
 async function postStegData(
   skjemaId: string,
@@ -167,6 +169,13 @@ export async function postTilleggsopplysninger(
   request: TilleggsopplysningerDto,
 ): Promise<void> {
   return postStegData(skjemaId, StegKey.TILLEGGSOPPLYSNINGER, request);
+}
+
+export async function postVedleggValg(
+  skjemaId: string,
+  request: VedleggValgDto,
+): Promise<void> {
+  return postStegData(skjemaId, StegKey.VEDLEGG, request);
 }
 
 export async function sendInnSkjema(

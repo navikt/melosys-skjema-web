@@ -15,7 +15,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
       felter: {
         utsendelseLand: {
           type: "COUNTRY_SELECT",
-          label: "I hvilket land skal du utføre arbeid?",
+          label: "I hvilket land skal arbeidet utføres?",
           pakrevd: true,
         },
         utsendelsePeriode: {
@@ -247,9 +247,21 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label: "Beskriv de flere opplysningene du har til søknaden",
+          label: "Beskriv disse her",
           pakrevd: false,
           maxLength: 2000,
+        },
+      },
+    },
+    vedleggArbeidstaker: {
+      tittel: "Vedlegg",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Har du noen annen dokumentasjon du ønsker å legge ved?",
+          pakrevd: true,
+          jaLabel: "Ja, jeg legger dem ved denne søknaden",
+          neiLabel: "Nei, jeg har ingen ekstra dokumentasjon jeg vil legge ved",
         },
       },
     },
@@ -652,9 +664,21 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label: "Beskriv de flere opplysningene du har til søknaden",
+          label: "Beskriv disse her",
           pakrevd: false,
           maxLength: 2000,
+        },
+      },
+    },
+    vedleggArbeidsgiver: {
+      tittel: "Vedlegg",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Har du noen annen dokumentasjon du ønsker å legge ved?",
+          pakrevd: true,
+          jaLabel: "Ja, jeg legger dem ved denne søknaden",
+          neiLabel: "Nei, jeg har ingen ekstra dokumentasjon jeg vil legge ved",
         },
       },
     },
@@ -670,7 +694,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
       felter: {
         utsendelseLand: {
           type: "COUNTRY_SELECT",
-          label: "In which country will you be working?",
+          label: "In which country will the work be performed?",
           pakrevd: true,
         },
         utsendelsePeriode: {
@@ -903,10 +927,21 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label:
-            "Describe the additional information you have for the application",
+          label: "Describe them here",
           pakrevd: false,
           maxLength: 2000,
+        },
+      },
+    },
+    vedleggArbeidstaker: {
+      tittel: "Attachments",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Do you have any other documentation you wish to attach?",
+          pakrevd: true,
+          jaLabel: "Yes, I am attaching them with this application",
+          neiLabel: "No, I have no extra documentation I want to attach",
         },
       },
     },
@@ -1310,10 +1345,21 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label:
-            "Describe the additional information you have for the application",
+          label: "Describe them here",
           pakrevd: false,
           maxLength: 2000,
+        },
+      },
+    },
+    vedleggArbeidsgiver: {
+      tittel: "Attachments",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Do you have any other documentation you wish to attach?",
+          pakrevd: true,
+          jaLabel: "Yes, I am attaching them with this application",
+          neiLabel: "No, I have no extra documentation I want to attach",
         },
       },
     },
@@ -1343,6 +1389,8 @@ interface BaseFeltType {
   pakrevd: boolean;
   hjelpetekst?: string;
   format?: string;
+  jaLabel?: string;
+  neiLabel?: string;
 }
 
 /**
