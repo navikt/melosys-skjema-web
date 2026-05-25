@@ -410,6 +410,10 @@ export const en = {
     appHeader: {
       tittel: "Membership and applicable legislation",
     },
+    skjemaParterHeader: {
+      arbeidsgiver: "Employer",
+      arbeidstaker: "Employee",
+    },
     kontekstVelger: {
       arbeidsgiver: "Employer",
       radgiver: "Advisor",
