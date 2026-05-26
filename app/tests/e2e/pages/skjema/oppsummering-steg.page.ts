@@ -51,8 +51,11 @@ export class OppsummeringStegPage {
     });
   }
 
-  async goto() {
-    await this.page.goto(`/skjema/${this.skjema.id}/oppsummering`);
+  async goto(basePath = "") {
+    const normalisertBasePath = basePath.replace(/\/$/, "");
+    await this.page.goto(
+      `${normalisertBasePath}/skjema/${this.skjema.id}/oppsummering`,
+    );
   }
 
   async assertIsVisible() {
@@ -455,6 +458,16 @@ export class OppsummeringStegPage {
         "href",
         href,
       );
+    }
+  }
+
+  async assertEndreSvarLenkerHarHref(hrefs: string[]) {
+    for (const href of hrefs) {
+      await expect(
+        this.page
+          .locator(`a[href="${href}"]`)
+          .filter({ hasText: nb.translation.felles.endreSvar }),
+      ).toHaveCount(1);
     }
   }
 
