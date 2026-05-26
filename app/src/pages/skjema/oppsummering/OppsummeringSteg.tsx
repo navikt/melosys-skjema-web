@@ -17,10 +17,11 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
-import type { StegMedFeil } from "../stegDataGetters.ts";
 import { finnManglendeSteg } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { isArbeidsgiverOgArbeidstakersDel } from "../types.ts";
+
+type ManglendeSteg = ReturnType<typeof finnManglendeSteg>;
 
 export function OppsummeringSteg({ id }: { id: string }) {
   return (
@@ -39,14 +40,14 @@ function OppsummeringStegContent({
   const data = skjema.data;
   const { t } = useTranslation();
   const { definisjon } = useSkjemaDefinisjon();
-  const [valideringsfeil, setValideringsfeil] = useState<StegMedFeil[]>([]);
+  const [manglendeSteg, setManglendeSteg] = useState<ManglendeSteg>([]);
   const [harInnsendingFeil, setHarInnsendingFeil] = useState(false);
   const errorRef = useRef<HTMLDivElement>(null);
 
   const seksjoner = resolveSeksjoner(data, definisjon as SkjemaDefinisjonDto);
 
   const erKombinertSkjema = isArbeidsgiverOgArbeidstakersDel(data);
-  const harFeil = valideringsfeil.length > 0 || harInnsendingFeil;
+  const harFeil = manglendeSteg.length > 0 || harInnsendingFeil;
 
   useEffect(() => {
     if (harFeil) {
@@ -56,12 +57,12 @@ function OppsummeringStegContent({
   }, [harFeil]);
 
   const kanSendeInn = () => {
-    const stegMedFeil = finnManglendeSteg(skjema, stegRekkefolge, skjema.id);
+    const manglendeSteg = finnManglendeSteg(skjema, stegRekkefolge, skjema.id);
 
-    setValideringsfeil(stegMedFeil);
+    setManglendeSteg(manglendeSteg);
     setHarInnsendingFeil(false);
 
-    return stegMedFeil.length === 0;
+    return manglendeSteg.length === 0;
   };
 
   return (
@@ -109,9 +110,9 @@ function OppsummeringStegContent({
       />
       {harFeil && (
         <div ref={errorRef} className="mt-4" tabIndex={-1}>
-          {valideringsfeil.length > 0 ? (
+          {manglendeSteg.length > 0 ? (
             <ErrorSummary heading={t("felles.stegManglerUtfylling")}>
-              {valideringsfeil.map((steg) => (
+              {manglendeSteg.map((steg) => (
                 <ErrorSummary.Item key={steg.href} href={steg.href}>
                   {t(steg.title)}
                 </ErrorSummary.Item>

@@ -18,7 +18,7 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
-export interface StegMedFeil {
+export interface ManglendeSteg {
   title: string;
   href: string;
 }
@@ -214,7 +214,7 @@ export function finnManglendeSteg(
   skjema: UtsendtArbeidstakerSkjemaDto,
   stegRekkefolge: StegRekkefolgeItem[],
   skjemaId: string,
-): StegMedFeil[] {
+): ManglendeSteg[] {
   return stegRekkefolge
     .filter((steg) => !harUtfyltSteg(skjema, steg.key))
     .map((steg) => ({
