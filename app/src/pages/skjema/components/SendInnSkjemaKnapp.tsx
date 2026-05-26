@@ -12,9 +12,15 @@ import {
 
 interface SendInnSkjemaKnappProps {
   skjemaId: string;
+  onBeforeSubmit: () => boolean;
+  onSubmitError: () => void;
 }
 
-export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
+export function SendInnSkjemaKnapp({
+  skjemaId,
+  onBeforeSubmit,
+  onSubmitError,
+}: SendInnSkjemaKnappProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -45,9 +51,16 @@ export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
         params: { id: response.skjemaId },
       });
     },
+    onError: () => {
+      onSubmitError();
+    },
   });
 
   const handleClick = () => {
+    if (!onBeforeSubmit()) {
+      return;
+    }
+
     sendInnSkjemaMutation.mutate();
   };
 

@@ -426,6 +426,38 @@ export class OppsummeringStegPage {
     await responsePromise;
   }
 
+  async sendInnAndExpectNoPost() {
+    const requestPromise = this.page
+      .waitForRequest(
+        (request) =>
+          request
+            .url()
+            .includes(
+              `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/send-inn`,
+            ) && request.method() === "POST",
+        { timeout: 500 },
+      )
+      .then(() => true)
+      .catch(() => false);
+
+    await this.sendSoknadButton.click();
+
+    await expect(await requestPromise).toBe(false);
+  }
+
+  async assertManglendeStegVises(steg: Array<{ navn: string; href: string }>) {
+    await expect(
+      this.page.getByText(nb.translation.felles.stegManglerUtfylling),
+    ).toBeVisible();
+
+    for (const { navn, href } of steg) {
+      await expect(this.page.getByRole("link", { name: navn })).toHaveAttribute(
+        "href",
+        href,
+      );
+    }
+  }
+
   async assertNavigatedToKvittering() {
     await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/kvittering`);
   }
