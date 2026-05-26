@@ -204,11 +204,16 @@ function VedleggStegContent({
   const handleSlettNyItem = (itemId: string) => {
     const item = vedleggItems.find((v) => v.id === itemId);
     if (item?.vedleggId) {
-      slettVedlegg(skjema.id, item.vedleggId).catch(() => {
-        setSlettVedleggFeil(true);
-      });
+      slettVedlegg(skjema.id, item.vedleggId)
+        .then(() => {
+          setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
+        })
+        .catch(() => {
+          setSlettVedleggFeil(true);
+        });
+    } else {
+      setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
     }
-    setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
   };
 
   const handleSlettEksisterende = (vedleggId: string) => {

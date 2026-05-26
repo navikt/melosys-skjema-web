@@ -567,6 +567,32 @@ export async function mockLastOppVedlegg(
   );
 }
 
+export async function mockSlettVedlegg(page: Page, skjemaId: string) {
+  await page.route(
+    new RegExp(`/api/skjema/${skjemaId}/vedlegg/`),
+    async (route) => {
+      await (route.request().method() === "DELETE"
+        ? route.fulfill({ status: 204 })
+        : route.fallback());
+    },
+  );
+}
+
+export async function mockSlettVedleggFeil(page: Page, skjemaId: string) {
+  await page.route(
+    new RegExp(`/api/skjema/${skjemaId}/vedlegg/`),
+    async (route) => {
+      await (route.request().method() === "DELETE"
+        ? route.fulfill({
+            status: 500,
+            contentType: "application/json",
+            body: JSON.stringify({ message: "Internal Server Error" }),
+          })
+        : route.fallback());
+    },
+  );
+}
+
 // ============ Innsendt skjema mocks ============
 
 export async function mockInnsendtSkjema(

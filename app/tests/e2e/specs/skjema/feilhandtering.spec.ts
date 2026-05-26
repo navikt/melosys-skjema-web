@@ -1,12 +1,15 @@
 import { nb } from "~/i18n/nb";
+import { VedleggFiltype } from "~/types/melosysSkjemaTypes";
 
 import {
   mockFetchSkjema,
   mockHentVedlegg,
   mockHentVedleggFeil,
+  mockLastOppVedlegg,
   mockPostFamiliemedlemmerFeil,
   mockSendInnSkjemaFeil,
   mockSlettUtkastFeil,
+  mockSlettVedleggFeil,
   setupApiMocksForArbeidstaker,
 } from "../../fixtures/api-mocks";
 import { expect, test } from "../../fixtures/test";
@@ -74,6 +77,55 @@ test.describe("Feilhåndtering", () => {
           .getByRole("alert")
           .filter({ hasText: t.vedleggSteg.feilVedHentingAvVedlegg }),
       ).toBeVisible();
+    });
+  });
+
+  test.describe("VedleggSteg - slettVedlegg-feil", () => {
+    test("vedlegg forblir synlig når sletting feiler", async ({ page }) => {
+      const skjemaId = testArbeidstakerSkjema.id;
+      const vedleggResponse = {
+        id: "vedlegg-456",
+        filnavn: "dokument.pdf",
+        filtype: VedleggFiltype.PDF,
+        filstorrelse: 5000,
+        opprettetDato: "2026-01-15T10:00:00Z",
+      };
+
+      await setupApiMocksForArbeidstaker(
+        page,
+        testArbeidstakerSkjema,
+        testUserInfo,
+      );
+      await mockHentVedlegg(page, skjemaId);
+      await mockLastOppVedlegg(page, skjemaId, vedleggResponse);
+      await mockSlettVedleggFeil(page, skjemaId);
+
+      const vedleggStegPage = new VedleggStegPage(page, testArbeidstakerSkjema);
+
+      await vedleggStegPage.goto();
+      await vedleggStegPage.assertIsVisible();
+      await vedleggStegPage.velgHarAnnenDokumentasjonJa();
+
+      // Last opp en fil
+      await vedleggStegPage.uploadFile(
+        "dokument.pdf",
+        "application/pdf",
+        Buffer.from("fake-pdf-content"),
+      );
+      await vedleggStegPage.assertFileItemVisible("dokument.pdf");
+
+      // Prøv å slette — skal feile
+      await vedleggStegPage.deleteFileItem();
+
+      // Feilmelding for sletting skal vises
+      await expect(
+        page
+          .getByRole("alert")
+          .filter({ hasText: t.vedleggSteg.feilVedSlettingAvVedlegg }),
+      ).toBeVisible();
+
+      // Vedlegget skal fortsatt være synlig (ikke fjernet fra UI)
+      await vedleggStegPage.assertFileItemVisible("dokument.pdf");
     });
   });
 
