@@ -80,12 +80,12 @@ export function SkjemaSteg({
           title
         )}
       </Heading>
+      {children}
       {isSubmitError && (
         <Alert className="mt-4" role="alert" size="small" variant="error">
           {t("felles.feilVedInnsending")}
         </Alert>
       )}
-      {children}
       <VStack className="mt-8" gap="space-4">
         <HGrid columns={2} gap="space-12">
           <Button
