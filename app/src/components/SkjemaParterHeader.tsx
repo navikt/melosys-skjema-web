@@ -35,7 +35,7 @@ export function SkjemaParterHeader({ skjemaId }: { skjemaId: string }) {
     metadata.representasjonstype !== Representasjonstype.DEG_SELV;
 
   return (
-    <HStack gap="space-128" paddingBlock="space-16" wrap>
+    <HStack gap="space-24 space-128" paddingBlock="space-16" wrap>
       <Part
         tittel={t("skjemaParterHeader.arbeidsgiver")}
         navn={metadata.arbeidsgiverNavn}
