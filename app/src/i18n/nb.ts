@@ -173,6 +173,8 @@ export const nb = {
       duMaSvarePaOmDuHarAnnenDokumentasjon:
         "Du må svare på om du har annen dokumentasjon du ønsker å legge ved",
       duMaLasteOppMinstEttVedlegg: "Du må laste opp minst ett vedlegg",
+      feilVedHentingAvVedlegg: "Kunne ikke hente vedlegg. Prøv igjen senere.",
+      feilVedSlettingAvVedlegg: "Kunne ikke slette vedlegget. Prøv igjen.",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",

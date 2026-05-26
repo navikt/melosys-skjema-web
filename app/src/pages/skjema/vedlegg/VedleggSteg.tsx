@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FilesPartitioned } from "@navikt/ds-react";
-import { ErrorMessage, FileUpload, VStack } from "@navikt/ds-react";
+import { Alert, ErrorMessage, FileUpload, VStack } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -70,6 +69,8 @@ function VedleggStegContent({
   const [eksisterendeVedlegg, setEksisterendeVedlegg] = useState<VedleggDto[]>(
     [],
   );
+  const [hentVedleggFeil, setHentVedleggFeil] = useState(false);
+  const [slettVedleggFeil, setSlettVedleggFeil] = useState(false);
 
   const harAnnenDokumentasjonFelt = getFelt(
     "vedleggArbeidstaker",
@@ -97,7 +98,9 @@ function VedleggStegContent({
       .then((vedlegg) => {
         if (!cancelled) setEksisterendeVedlegg(vedlegg);
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setHentVedleggFeil(true);
+      });
     return () => {
       cancelled = true;
     };
@@ -116,9 +119,6 @@ function VedleggStegContent({
           params: { id: skjema.id },
         });
       }
-    },
-    onError: () => {
-      toast.error(t("felles.feil"));
     },
   });
 
@@ -204,7 +204,9 @@ function VedleggStegContent({
   const handleSlettNyItem = (itemId: string) => {
     const item = vedleggItems.find((v) => v.id === itemId);
     if (item?.vedleggId) {
-      slettVedlegg(skjema.id, item.vedleggId).catch(() => {});
+      slettVedlegg(skjema.id, item.vedleggId).catch(() => {
+        setSlettVedleggFeil(true);
+      });
     }
     setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
   };
@@ -216,7 +218,9 @@ function VedleggStegContent({
           prev.filter((v) => v.id !== vedleggId),
         );
       })
-      .catch(() => {});
+      .catch(() => {
+        setSlettVedleggFeil(true);
+      });
   };
 
   return (
@@ -227,10 +231,23 @@ function VedleggStegContent({
             stepKey: StegKey.VEDLEGG,
             skjema,
           }}
+          isSubmitError={postVedleggValgMutation.isError}
           nesteKnapp={
             <NesteStegKnapp loading={postVedleggValgMutation.isPending} />
           }
         >
+          {hentVedleggFeil && (
+            <Alert className="mt-4" size="small" variant="error">
+              {t("vedleggSteg.feilVedHentingAvVedlegg")}
+            </Alert>
+          )}
+
+          {slettVedleggFeil && (
+            <Alert className="mt-4" size="small" variant="error">
+              {t("vedleggSteg.feilVedSlettingAvVedlegg")}
+            </Alert>
+          )}
+
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harAnnenDokumentasjon"

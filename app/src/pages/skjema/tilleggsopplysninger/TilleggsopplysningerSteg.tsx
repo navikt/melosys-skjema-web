@@ -3,8 +3,6 @@ import { Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { useTranslation } from "react-i18next";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
@@ -48,7 +46,6 @@ function TilleggsopplysningerStegContent({
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const stegData = getTilleggsopplysninger(skjema);
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const translateError = useTranslateError();
   const { getFelt } = useSkjemaDefinisjon();
 
@@ -97,9 +94,6 @@ function TilleggsopplysningerStegContent({
         });
       }
     },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
   });
 
   const onSubmit = (data: TilleggsopplysningerFormData) => {
@@ -114,6 +108,7 @@ function TilleggsopplysningerStegContent({
             stepKey: StegKey.TILLEGGSOPPLYSNINGER,
             skjema,
           }}
+          isSubmitError={postTilleggsopplysningerMutation.isError}
           nesteKnapp={
             <NesteStegKnapp
               loading={postTilleggsopplysningerMutation.isPending}

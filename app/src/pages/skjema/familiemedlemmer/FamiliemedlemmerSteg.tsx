@@ -3,7 +3,6 @@ import { Alert, BodyLong, Link } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
@@ -71,9 +70,6 @@ function FamiliemedlemmerStegContent({
         });
       }
     },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
   });
 
   const onSubmit = (data: FamiliemedlemmerDto) => {
@@ -88,6 +84,7 @@ function FamiliemedlemmerStegContent({
             stepKey: StegKey.FAMILIEMEDLEMMER,
             skjema,
           }}
+          isSubmitError={postFamiliemedlemmerMutation.isError}
           nesteKnapp={
             <NesteStegKnapp loading={postFamiliemedlemmerMutation.isPending} />
           }

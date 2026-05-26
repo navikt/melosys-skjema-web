@@ -202,6 +202,10 @@ export const en = {
       duMaSvarePaOmDuHarAnnenDokumentasjon:
         "You must answer whether you have other documentation you wish to attach",
       duMaLasteOppMinstEttVedlegg: "You must upload at least one attachment",
+      feilVedHentingAvVedlegg:
+        "Could not load attachments. Please try again later.",
+      feilVedSlettingAvVedlegg:
+        "Could not delete the attachment. Please try again.",
     },
     skatteforholdOgInntektSteg: {
       tittel: "Tax conditions and income",

@@ -1,8 +1,7 @@
-import { BodyLong, Button, Modal } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Modal } from "@navikt/ds-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { slettUtkast } from "~/httpClients/melsosysSkjemaApiClient.ts";
@@ -28,9 +27,6 @@ export function AvbrytOgSlettKnapp({
       void queryClient.invalidateQueries({ queryKey: ["utkast"] });
       void navigate({ to: "/oversikt", search: representasjonskontekst });
     },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
   });
 
   return (
@@ -53,6 +49,11 @@ export function AvbrytOgSlettKnapp({
       >
         <Modal.Body>
           <BodyLong>{t("felles.alleOpplysningerVilBliSlettet")}</BodyLong>
+          {slettUtkastMutation.isError && (
+            <Alert className="mt-4" size="small" variant="error">
+              {t("felles.feil")}
+            </Alert>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button

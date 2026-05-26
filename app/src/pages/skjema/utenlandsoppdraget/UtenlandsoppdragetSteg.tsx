@@ -4,8 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { useTranslation } from "react-i18next";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
@@ -55,7 +53,6 @@ function UtenlandsoppdragetStegContent({
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const stegData = getUtenlandsoppdraget(skjema);
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
@@ -143,9 +140,6 @@ function UtenlandsoppdragetStegContent({
         });
       }
     },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
   });
 
   const onSubmit = (data: UtenlandsoppdragetDto) => {
@@ -160,6 +154,7 @@ function UtenlandsoppdragetStegContent({
             stepKey: StegKey.UTENLANDSOPPDRAGET,
             skjema,
           }}
+          isSubmitError={registerUtenlandsoppdragMutation.isError}
           nesteKnapp={
             <NesteStegKnapp
               loading={registerUtenlandsoppdragMutation.isPending}

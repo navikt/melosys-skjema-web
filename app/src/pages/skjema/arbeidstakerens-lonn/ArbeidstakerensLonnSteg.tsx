@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -85,9 +84,6 @@ function ArbeidstakerensLonnStegContent({
         });
       }
     },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
   });
 
   const onSubmit = (data: ArbeidstakerensLonnFormData) => {
@@ -125,6 +121,7 @@ function ArbeidstakerensLonnStegContent({
             stepKey: StegKey.ARBEIDSTAKERENS_LONN,
             skjema,
           }}
+          isSubmitError={registerArbeidstakerLonnMutation.isError}
           nesteKnapp={
             <NesteStegKnapp
               loading={registerArbeidstakerLonnMutation.isPending}
