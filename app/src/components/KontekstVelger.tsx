@@ -33,6 +33,11 @@ function MaalformValg() {
     await i18n.changeLanguage(code);
   };
 
+  // Fjern i MELOSYS-8094
+  if (SUPPORTED_LANGUAGES.length <= 1) {
+    return null;
+  }
+
   return (
     <HStack align="center" gap="space-8">
       <GlobeIcon aria-hidden fontSize="1.5rem" />
@@ -179,8 +184,12 @@ export function KontekstVelger() {
             onVelg={() => setIsOpen(false)}
             visOverskrift={false}
           />
-          <hr className="my-4 border-border-subtle" />
-          <MaalformValg />
+          {SUPPORTED_LANGUAGES.length > 1 && (
+            <>
+              <hr className="my-4 border-border-subtle" />
+              <MaalformValg />
+            </>
+          )}
         </Popover.Content>
       </Popover>
     </>

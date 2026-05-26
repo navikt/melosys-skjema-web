@@ -18,8 +18,9 @@ export function AppHeader() {
     return <SkjemaParterHeader skjemaId={skjemaId} />;
   }
 
+  // Fjern paddingBlock i MELOSYS-8094
   return (
-    <HStack align="center" justify="space-between">
+    <HStack align="center" justify="space-between" paddingBlock="space-8">
       <Heading level="1" size="medium">
         {t("appHeader.tittel")}
       </Heading>
