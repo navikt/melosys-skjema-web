@@ -45,6 +45,10 @@ export const nb = {
       stegGjelderArbeidstaker: "Dette steget gjelder arbeidstaker",
       virksomhetsnavn: "Virksomhetsnavn",
       organisasjonsnummer: "Organisasjonsnummer",
+      stegManglerUtfylling:
+        "Du må fylle ut følgende steg før du kan sende inn søknaden",
+      feilVedInnsending:
+        "Det oppstod en feil ved innsending av søknaden. Prøv igjen på et senere tidspunkt.",
     },
     periode: {
       fraDato: "Fra dato",
