@@ -61,6 +61,12 @@ const arbeidsgiversDelDto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
     paLand: {
       navnPaVirksomhet: "Test AS",
       fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
+      fastArbeidssted: {
+        vegadresse: "Testveien",
+        nummer: "1",
+        postkode: "1234",
+        bySted: "Stockholm",
+      },
       erHjemmekontor: false,
     },
   },
@@ -116,12 +122,75 @@ describe("resolveSeksjoner", () => {
     ]);
   });
 
+  it("legger utsendelseslandet på fast arbeidssted i oppsummeringen", () => {
+    const seksjoner = resolveSeksjoner(arbeidsgiversDelDto, definisjon);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(arbeidsstedPaLand?.data.land).toBe(LandKode.SE);
+  });
+
+  it("legger ikke land på vekslende arbeidssted i oppsummeringen", () => {
+    const dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
+      ...arbeidsgiversDelDto,
+      arbeidsstedIUtlandet: {
+        arbeidsstedType: ArbeidsstedType.PA_LAND,
+        paLand: {
+          navnPaVirksomhet: "Test AS",
+          fastEllerVekslendeArbeidssted:
+            FastEllerVekslendeArbeidssted.VEKSLENDE,
+          fastArbeidssted: {
+            vegadresse: "Testveien",
+            nummer: "1",
+            postkode: "1234",
+            bySted: "Stockholm",
+          },
+          erHjemmekontor: false,
+        },
+      },
+    };
+
+    const seksjoner = resolveSeksjoner(dto, definisjon);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(arbeidsstedPaLand?.data.land).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.vegadresse).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.nummer).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.postkode).toBeUndefined();
+    expect(arbeidsstedPaLand?.data.bySted).toBeUndefined();
+  });
+
   it("kombinert flyt har utsendingsperiodeOgLand øverst og ingen duplikater", () => {
     const seksjoner = resolveSeksjoner(kombinertDto, definisjon);
     const navn = seksjoner.map((s) => s.seksjonNavn);
 
     expect(navn[0]).toBe("utsendingsperiodeOgLand");
     expect(new Set(navn).size).toBe(navn.length);
+  });
+
+  it("legger utsendelseslandet på fast arbeidssted i oppsummeringen for kombinert flyt", () => {
+    const seksjoner = resolveSeksjoner(kombinertDto, definisjon);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(arbeidsstedPaLand?.data.land).toBe(LandKode.SE);
+  });
+
+  it("kan skjule delt utsendingsperiodeOgLand uten å miste land på fast arbeidssted", () => {
+    const seksjoner = resolveSeksjoner(arbeidsgiversDelDto, definisjon, {
+      skjulUtsendingsperiodeOgLand: true,
+    });
+    const navn = seksjoner.map((s) => s.seksjonNavn);
+    const arbeidsstedPaLand = seksjoner.find(
+      (s) => s.seksjonNavn === "arbeidsstedPaLand",
+    );
+
+    expect(navn).not.toContain("utsendingsperiodeOgLand");
+    expect(arbeidsstedPaLand?.data.land).toBe(LandKode.SE);
   });
 
   // Dekningstest: fanger nye steg som blir lagt til uten oppdatering av dataMapping.

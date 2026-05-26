@@ -6,6 +6,7 @@ import {
   type SkjemaData,
 } from "~/pages/skjema/types.ts";
 import type {
+  LandKode,
   NorskeOgUtenlandskeVirksomheter,
   NorskeOgUtenlandskeVirksomheterMedAnsettelsesform,
   PaLandDto,
@@ -16,6 +17,7 @@ import type {
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
 
 interface ResolvedSeksjon {
   seksjonNavn: string;
@@ -35,15 +37,21 @@ export const VirksomhetTypeKey = {
 
 function flattenPaLand(
   paLand?: PaLandDto,
+  utsendelseLand?: LandKode,
 ): Record<string, unknown> | undefined {
   if (!paLand) return undefined;
+  const erFastArbeidssted =
+    paLand.fastEllerVekslendeArbeidssted === FastEllerVekslendeArbeidssted.FAST;
   return {
     navnPaVirksomhet: paLand.navnPaVirksomhet,
     fastEllerVekslendeArbeidssted: paLand.fastEllerVekslendeArbeidssted,
-    vegadresse: paLand.fastArbeidssted?.vegadresse,
-    nummer: paLand.fastArbeidssted?.nummer,
-    postkode: paLand.fastArbeidssted?.postkode,
-    bySted: paLand.fastArbeidssted?.bySted,
+    vegadresse: erFastArbeidssted
+      ? paLand.fastArbeidssted?.vegadresse
+      : undefined,
+    nummer: erFastArbeidssted ? paLand.fastArbeidssted?.nummer : undefined,
+    postkode: erFastArbeidssted ? paLand.fastArbeidssted?.postkode : undefined,
+    bySted: erFastArbeidssted ? paLand.fastArbeidssted?.bySted : undefined,
+    land: erFastArbeidssted ? utsendelseLand : undefined,
     erHjemmekontor: paLand.erHjemmekontor,
   };
 }
@@ -81,6 +89,10 @@ interface SeksjonMappingEntry {
   seksjonNavn: string;
   stegKey: string;
   data: Record<string, unknown> | undefined;
+}
+
+interface ResolveSeksjonerOptions {
+  skjulUtsendingsperiodeOgLand?: boolean;
 }
 
 function utsendingsperiodeOgLandEntry(
@@ -137,6 +149,8 @@ function mapArbeidstakerSeksjoner(
 
 function mapArbeidsgiverSeksjoner(
   dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+  utsendelseLand: LandKode | undefined = dto.utsendingsperiodeOgLand
+    ?.utsendelseLand,
 ): SeksjonMappingEntry[] {
   return [
     utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
@@ -160,7 +174,7 @@ function mapArbeidsgiverSeksjoner(
     {
       seksjonNavn: "arbeidsstedPaLand",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
-      data: flattenPaLand(dto.arbeidsstedIUtlandet?.paLand),
+      data: flattenPaLand(dto.arbeidsstedIUtlandet?.paLand, utsendelseLand),
     },
     {
       seksjonNavn: "arbeidsstedOffshore",
@@ -209,10 +223,13 @@ function mapCombinedSeksjoner(
 ): SeksjonMappingEntry[] {
   return [
     utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
-    ...mapArbeidsgiverSeksjoner({
-      ...dto.arbeidsgiversData,
-      tilleggsopplysninger: dto.tilleggsopplysninger,
-    } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto),
+    ...mapArbeidsgiverSeksjoner(
+      {
+        ...dto.arbeidsgiversData,
+        tilleggsopplysninger: dto.tilleggsopplysninger,
+      } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+      dto.utsendingsperiodeOgLand?.utsendelseLand,
+    ),
     ...mapArbeidstakerSeksjoner({
       ...dto.arbeidstakersData,
       tilleggsopplysninger: dto.tilleggsopplysninger,
@@ -240,8 +257,14 @@ function getSeksjonMappinger(dto: SkjemaData): SeksjonMappingEntry[] {
 export function resolveSeksjoner(
   dto: SkjemaData,
   definisjon: SkjemaDefinisjonDto,
+  options: ResolveSeksjonerOptions = {},
 ): ResolvedSeksjon[] {
   return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {
+    if (
+      options.skjulUtsendingsperiodeOgLand &&
+      seksjonNavn === "utsendingsperiodeOgLand"
+    )
+      return [];
     const seksjon = definisjon.seksjoner[seksjonNavn];
     if (!seksjon || !data) return [];
     return [{ seksjonNavn, seksjon, data, stegKey }];
