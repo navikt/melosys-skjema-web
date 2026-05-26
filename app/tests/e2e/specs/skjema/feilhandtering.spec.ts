@@ -36,7 +36,7 @@ test.describe("Feilhåndtering", () => {
       await familiemedlemmerStegPage.assertIsVisible();
 
       // Feilmelding skal ikke vises før submit
-      await expect(page.getByText(t.felles.feil)).toBeHidden();
+      await expect(page.getByText(t.felles.feilVedInnsending)).toBeHidden();
 
       // Fyll ut og submit
       await familiemedlemmerStegPage.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup.NEI.click();
@@ -44,7 +44,7 @@ test.describe("Feilhåndtering", () => {
 
       // Feilmelding skal nå være synlig
       await expect(
-        page.getByRole("alert").filter({ hasText: t.felles.feil }),
+        page.getByRole("alert").filter({ hasText: t.felles.feilVedInnsending }),
       ).toBeVisible();
 
       // Bruker skal fortsatt være på samme steg
@@ -125,7 +125,7 @@ test.describe("Feilhåndtering", () => {
 
       // Feilmelding skal vises
       await expect(
-        page.getByRole("alert").filter({ hasText: t.felles.feil }),
+        page.getByRole("alert").filter({ hasText: t.felles.feilVedInnsending }),
       ).toBeVisible();
 
       // Skal fortsatt være på oppsummeringssiden

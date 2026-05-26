@@ -1,5 +1,5 @@
 import { PaperplaneIcon } from "@navikt/aksel-icons";
-import { Alert, Button } from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -65,22 +65,15 @@ export function SendInnSkjemaKnapp({
   };
 
   return (
-    <>
-      {sendInnSkjemaMutation.isError && (
-        <Alert className="mb-4" role="alert" size="small" variant="error">
-          {t("felles.feil")}
-        </Alert>
-      )}
-      <Button
-        icon={<PaperplaneIcon />}
-        iconPosition="right"
-        loading={sendInnSkjemaMutation.isPending}
-        onClick={handleClick}
-        type="button"
-        variant="primary"
-      >
-        {t("felles.sendSoknad")}
-      </Button>
-    </>
+    <Button
+      icon={<PaperplaneIcon />}
+      iconPosition="right"
+      loading={sendInnSkjemaMutation.isPending}
+      onClick={handleClick}
+      type="button"
+      variant="primary"
+    >
+      {t("felles.sendSoknad")}
+    </Button>
   );
 }

@@ -82,7 +82,7 @@ export function SkjemaSteg({
       </Heading>
       {isSubmitError && (
         <Alert className="mt-4" role="alert" size="small" variant="error">
-          {t("felles.feil")}
+          {t("felles.feilVedInnsending")}
         </Alert>
       )}
       {children}
