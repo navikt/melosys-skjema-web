@@ -54,7 +54,7 @@ export function SendInnSkjemaKnapp({ skjemaId }: SendInnSkjemaKnappProps) {
   return (
     <>
       {sendInnSkjemaMutation.isError && (
-        <Alert className="mb-4" size="small" variant="error">
+        <Alert className="mb-4" role="alert" size="small" variant="error">
           {t("felles.feil")}
         </Alert>
       )}

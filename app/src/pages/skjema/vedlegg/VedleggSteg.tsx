@@ -237,13 +237,13 @@ function VedleggStegContent({
           }
         >
           {hentVedleggFeil && (
-            <Alert className="mt-4" size="small" variant="error">
+            <Alert className="mt-4" role="alert" size="small" variant="error">
               {t("vedleggSteg.feilVedHentingAvVedlegg")}
             </Alert>
           )}
 
           {slettVedleggFeil && (
-            <Alert className="mt-4" size="small" variant="error">
+            <Alert className="mt-4" role="alert" size="small" variant="error">
               {t("vedleggSteg.feilVedSlettingAvVedlegg")}
             </Alert>
           )}

@@ -69,7 +69,7 @@ export function VedleggOppsummering({
       <FormSummary.Answers>
         {hentVedleggFeil && (
           <FormSummary.Answer>
-            <Alert size="small" variant="error">
+            <Alert role="alert" size="small" variant="error">
               {t("vedleggSteg.feilVedHentingAvVedlegg")}
             </Alert>
           </FormSummary.Answer>

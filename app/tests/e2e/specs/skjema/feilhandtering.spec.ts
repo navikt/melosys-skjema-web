@@ -43,8 +43,9 @@ test.describe("Feilhåndtering", () => {
       await familiemedlemmerStegPage.lagreOgFortsett();
 
       // Feilmelding skal nå være synlig
-      const alert = page.getByRole("alert").filter({ hasText: t.felles.feil });
-      await expect(alert).toBeVisible();
+      await expect(
+        page.getByRole("alert").filter({ hasText: t.felles.feil }),
+      ).toBeVisible();
 
       // Bruker skal fortsatt være på samme steg
       await familiemedlemmerStegPage.assertStillOnStep();
@@ -68,10 +69,11 @@ test.describe("Feilhåndtering", () => {
       await vedleggStegPage.assertIsVisible();
 
       // Feilmelding for henting av vedlegg skal vises
-      const alert = page
-        .getByRole("alert")
-        .filter({ hasText: t.vedleggSteg.feilVedHentingAvVedlegg });
-      await expect(alert).toBeVisible();
+      await expect(
+        page
+          .getByRole("alert")
+          .filter({ hasText: t.vedleggSteg.feilVedHentingAvVedlegg }),
+      ).toBeVisible();
     });
   });
 
@@ -121,8 +123,9 @@ test.describe("Feilhåndtering", () => {
       await sendKnapp.click();
 
       // Feilmelding skal vises
-      const alert = page.getByRole("alert").filter({ hasText: t.felles.feil });
-      await expect(alert).toBeVisible();
+      await expect(
+        page.getByRole("alert").filter({ hasText: t.felles.feil }),
+      ).toBeVisible();
 
       // Skal fortsatt være på oppsummeringssiden
       await expect(page).toHaveURL(
@@ -158,8 +161,9 @@ test.describe("Feilhåndtering", () => {
 
       // Feilmelding skal vises inne i modalen
       const modal = page.getByRole("dialog");
-      const alert = modal.getByRole("alert").filter({ hasText: t.felles.feil });
-      await expect(alert).toBeVisible();
+      await expect(
+        modal.getByRole("alert").filter({ hasText: t.felles.feil }),
+      ).toBeVisible();
     });
   });
 });

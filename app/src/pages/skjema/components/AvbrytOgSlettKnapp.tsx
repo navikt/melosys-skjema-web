@@ -50,7 +50,7 @@ export function AvbrytOgSlettKnapp({
         <Modal.Body>
           <BodyLong>{t("felles.alleOpplysningerVilBliSlettet")}</BodyLong>
           {slettUtkastMutation.isError && (
-            <Alert className="mt-4" size="small" variant="error">
+            <Alert className="mt-4" role="alert" size="small" variant="error">
               {t("felles.feil")}
             </Alert>
           )}

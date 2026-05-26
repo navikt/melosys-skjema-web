@@ -10,7 +10,6 @@ import {
 import i18n from "i18next";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Toaster } from "react-hot-toast";
 import { initReactI18next } from "react-i18next";
 
 import { logSkjemaDefinisjonValidation } from "~/utils/validateSkjemaDefinisjon";
@@ -78,7 +77,6 @@ declare module "@tanstack/react-router" {
 createRoot(document.querySelector("#root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Toaster />
       <RouterProvider router={router} />
     </QueryClientProvider>
   </StrictMode>,
