@@ -111,6 +111,7 @@ test.describe("Feilhåndtering", () => {
               tilDato: "2026-12-31",
             },
           },
+          vedlegg: { harAnnenDokumentasjon: false },
         } as typeof testArbeidstakerSkjema.data,
       });
 
