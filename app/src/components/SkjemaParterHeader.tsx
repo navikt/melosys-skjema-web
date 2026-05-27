@@ -13,7 +13,7 @@ interface PartProps {
 
 function Part({ tittel, navn, id }: PartProps) {
   return (
-    <VStack gap="space-4">
+    <VStack gap="space-4" style={{ flex: "1 1 200px", minWidth: 0 }}>
       <Label as="span" size="small">
         {tittel}
       </Label>
@@ -35,7 +35,7 @@ export function SkjemaParterHeader({ skjemaId }: { skjemaId: string }) {
     metadata.representasjonstype !== Representasjonstype.DEG_SELV;
 
   return (
-    <HStack gap="space-24 space-128" paddingBlock="space-16" wrap>
+    <HStack gap="space-24" paddingBlock="space-16" wrap>
       <Part
         tittel={t("skjemaParterHeader.arbeidsgiver")}
         navn={metadata.arbeidsgiverNavn}
