@@ -24,8 +24,8 @@ importers:
         specifier: 5.2.1
         version: 5.2.1
       express-rate-limit:
-        specifier: 8.5.1
-        version: 8.5.1(express@5.2.1)
+        specifier: 8.5.2
+        version: 8.5.2(express@5.2.1)
       http-proxy-middleware:
         specifier: 3.0.5
         version: 3.0.5
@@ -582,8 +582,8 @@ packages:
   eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
 
-  express-rate-limit@8.5.1:
-    resolution: {integrity: sha512-5O6KYmyJEpuPJV5hNTXKbAHWRqrzyu+OI3vUnSd2kXFubIVpG7ezpgxQy76Zo5GQZtrQBg86hF+CM/NX+cioiQ==}
+  express-rate-limit@8.5.2:
+    resolution: {integrity: sha512-5Kb34ipNX694DH48vN9irak1Qx30nb0PLYHXfJgw4YEjiC3ZEmZJhwOp+VfiCYwFzvFTdB9QkArYS5kXa2cx2A==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: '>= 4.11'
@@ -1711,7 +1711,7 @@ snapshots:
 
   eventemitter3@4.0.7: {}
 
-  express-rate-limit@8.5.1(express@5.2.1):
+  express-rate-limit@8.5.2(express@5.2.1):
     dependencies:
       express: 5.2.1
       ip-address: 10.2.0
