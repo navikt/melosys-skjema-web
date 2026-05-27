@@ -2,8 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { useTranslation } from "react-i18next";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
@@ -40,7 +38,6 @@ function UtsendingsperiodeOgLandStegContent({
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const stegData = getUtsendingsperiodeOgLand(skjema);
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const invalidateSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
 
@@ -87,9 +84,6 @@ function UtsendingsperiodeOgLandStegContent({
         });
       }
     },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
   });
 
   const onSubmit = (data: UtsendingsperiodeOgLandDto) => {
@@ -104,6 +98,7 @@ function UtsendingsperiodeOgLandStegContent({
             stepKey: StegKey.UTSENDINGSPERIODE_OG_LAND,
             skjema,
           }}
+          isSubmitError={registerUtsendingsperiodeOgLandMutation.isError}
           nesteKnapp={
             <NesteStegKnapp
               loading={registerUtsendingsperiodeOgLandMutation.isPending}

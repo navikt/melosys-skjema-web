@@ -1,4 +1,9 @@
-import { BodyShort, FormSummary, Link as DsLink } from "@navikt/ds-react";
+import {
+  Alert,
+  BodyShort,
+  FormSummary,
+  Link as DsLink,
+} from "@navikt/ds-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -23,6 +28,7 @@ export function VedleggOppsummering({
   const { t } = useTranslation();
   const { getFelt } = useSkjemaDefinisjon();
   const [vedlegg, setVedlegg] = useState<VedleggDto[]>([]);
+  const [hentVedleggFeil, setHentVedleggFeil] = useState(false);
 
   const harAnnenDokumentasjonFelt = getFelt(
     "vedleggArbeidstaker",
@@ -36,9 +42,14 @@ export function VedleggOppsummering({
     let cancelled = false;
     hentVedlegg(skjemaId)
       .then((v) => {
-        if (!cancelled) setVedlegg(v);
+        if (!cancelled) {
+          setVedlegg(v);
+          setHentVedleggFeil(false);
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setHentVedleggFeil(true);
+      });
     return () => {
       cancelled = true;
     };
@@ -59,6 +70,13 @@ export function VedleggOppsummering({
         </FormSummary.Heading>
       </FormSummary.Header>
       <FormSummary.Answers>
+        {hentVedleggFeil && (
+          <FormSummary.Answer>
+            <Alert role="alert" size="small" variant="error">
+              {t("vedleggSteg.feilVedHentingAvVedlegg")}
+            </Alert>
+          </FormSummary.Answer>
+        )}
         {svarLabel !== undefined && (
           <FormSummary.Answer>
             <FormSummary.Label>

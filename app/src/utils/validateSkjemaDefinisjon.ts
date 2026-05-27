@@ -5,8 +5,6 @@
  * the static TypeScript file and the backend definition.
  */
 
-import { toast } from "react-hot-toast";
-
 import {
   SKJEMA_DEFINISJONER_A1,
   type SupportedLanguage,
@@ -197,12 +195,6 @@ export async function logSkjemaDefinisjonValidation(): Promise<void> {
     // eslint-disable-next-line no-console
     console.error(
       "\n   Kjør 'npm run sync-skjema-definisjon' for å oppdatere.",
-    );
-
-    // Vis toast i UI så utvikler ser det
-    toast.error(
-      "Skjemadefinisjon ut av sync! Kjør: npm run sync-skjema-definisjon",
-      { duration: 10_000 },
     );
   }
 }

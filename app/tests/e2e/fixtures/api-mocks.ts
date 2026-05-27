@@ -567,6 +567,32 @@ export async function mockLastOppVedlegg(
   );
 }
 
+export async function mockSlettVedlegg(page: Page, skjemaId: string) {
+  await page.route(
+    new RegExp(`/api/skjema/${skjemaId}/vedlegg/`),
+    async (route) => {
+      await (route.request().method() === "DELETE"
+        ? route.fulfill({ status: 204 })
+        : route.fallback());
+    },
+  );
+}
+
+export async function mockSlettVedleggFeil(page: Page, skjemaId: string) {
+  await page.route(
+    new RegExp(`/api/skjema/${skjemaId}/vedlegg/`),
+    async (route) => {
+      await (route.request().method() === "DELETE"
+        ? route.fulfill({
+            status: 500,
+            contentType: "application/json",
+            body: JSON.stringify({ message: "Internal Server Error" }),
+          })
+        : route.fallback());
+    },
+  );
+}
+
 // ============ Innsendt skjema mocks ============
 
 export async function mockInnsendtSkjema(
@@ -584,6 +610,69 @@ export async function mockInnsendtSkjema(
           body: JSON.stringify(response),
         });
       }
+    },
+  );
+}
+
+// ============ Feilhåndtering mocks ============
+
+export async function mockPostFamiliemedlemmerFeil(
+  page: Page,
+  skjemaId: string,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/familiemedlemmer`,
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 500,
+          contentType: "application/json",
+          body: JSON.stringify({ message: "Internal Server Error" }),
+        });
+      }
+    },
+  );
+}
+
+export async function mockSendInnSkjemaFeil(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`,
+    async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Internal Server Error" }),
+      });
+    },
+  );
+}
+
+export async function mockSlettUtkastFeil(page: Page, skjemaId: string) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}`,
+    async (route) => {
+      await (route.request().method() === "DELETE"
+        ? route.fulfill({
+            status: 500,
+            contentType: "application/json",
+            body: JSON.stringify({ message: "Internal Server Error" }),
+          })
+        : route.fallback());
+    },
+  );
+}
+
+export async function mockHentVedleggFeil(page: Page, skjemaId: string) {
+  await page.route(
+    new RegExp(`/api/skjema/${skjemaId}/vedlegg$`),
+    async (route) => {
+      await (route.request().method() === "GET"
+        ? route.fulfill({
+            status: 500,
+            contentType: "application/json",
+            body: JSON.stringify({ message: "Internal Server Error" }),
+          })
+        : route.fallback());
     },
   );
 }

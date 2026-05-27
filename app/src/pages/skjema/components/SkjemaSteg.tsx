@@ -1,5 +1,6 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import {
+  Alert,
   BodyShort,
   Button,
   Heading,
@@ -34,9 +35,15 @@ interface SkjemaStegProps {
   config: StegConfig;
   nesteKnapp: ReactNode;
   children?: ReactNode;
+  isSubmitError?: boolean;
 }
 
-export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
+export function SkjemaSteg({
+  config,
+  nesteKnapp,
+  children,
+  isSubmitError,
+}: SkjemaStegProps) {
   const { i18n, t } = useTranslation();
   const { skjema } = config;
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
@@ -74,6 +81,11 @@ export function SkjemaSteg({ config, nesteKnapp, children }: SkjemaStegProps) {
         )}
       </Heading>
       {children}
+      {isSubmitError && (
+        <Alert className="mt-4" role="alert" size="small" variant="error">
+          {t("felles.feilVedInnsending")}
+        </Alert>
+      )}
       <VStack className="mt-8" gap="space-4">
         <HGrid columns={2} gap="space-12">
           <Button

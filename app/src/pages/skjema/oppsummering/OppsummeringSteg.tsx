@@ -126,7 +126,9 @@ function OppsummeringStegContent({
               ))}
             </ErrorSummary>
           ) : (
-            <Alert variant="error">{t("felles.feilVedInnsending")}</Alert>
+            <Alert role="alert" variant="error">
+              {t("felles.feilVedInnsending")}
+            </Alert>
           )}
         </div>
       )}

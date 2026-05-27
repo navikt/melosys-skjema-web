@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FilesPartitioned } from "@navikt/ds-react";
-import { ErrorMessage, FileUpload, VStack } from "@navikt/ds-react";
+import { Alert, ErrorMessage, FileUpload, VStack } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -70,6 +69,8 @@ function VedleggStegContent({
   const [eksisterendeVedlegg, setEksisterendeVedlegg] = useState<VedleggDto[]>(
     [],
   );
+  const [hentVedleggFeil, setHentVedleggFeil] = useState(false);
+  const [slettVedleggFeil, setSlettVedleggFeil] = useState(false);
 
   const harAnnenDokumentasjonFelt = getFelt(
     "vedleggArbeidstaker",
@@ -95,9 +96,14 @@ function VedleggStegContent({
     let cancelled = false;
     hentVedlegg(skjema.id)
       .then((vedlegg) => {
-        if (!cancelled) setEksisterendeVedlegg(vedlegg);
+        if (!cancelled) {
+          setEksisterendeVedlegg(vedlegg);
+          setHentVedleggFeil(false);
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setHentVedleggFeil(true);
+      });
     return () => {
       cancelled = true;
     };
@@ -116,9 +122,6 @@ function VedleggStegContent({
           params: { id: skjema.id },
         });
       }
-    },
-    onError: () => {
-      toast.error(t("felles.feil"));
     },
   });
 
@@ -201,22 +204,33 @@ function VedleggStegContent({
     }
   };
 
-  const handleSlettNyItem = (itemId: string) => {
-    const item = vedleggItems.find((v) => v.id === itemId);
-    if (item?.vedleggId) {
-      slettVedlegg(skjema.id, item.vedleggId).catch(() => {});
+  const handleSlettNyVedleggItem = (vedleggItemId: string) => {
+    const vedleggItem = vedleggItems.find((v) => v.id === vedleggItemId);
+    setSlettVedleggFeil(false);
+    if (vedleggItem?.vedleggId) {
+      slettVedlegg(skjema.id, vedleggItem.vedleggId)
+        .then(() => {
+          setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
+        })
+        .catch(() => {
+          setSlettVedleggFeil(true);
+        });
+    } else {
+      setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
     }
-    setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
   };
 
   const handleSlettEksisterende = (vedleggId: string) => {
+    setSlettVedleggFeil(false);
     slettVedlegg(skjema.id, vedleggId)
       .then(() => {
         setEksisterendeVedlegg((prev) =>
           prev.filter((v) => v.id !== vedleggId),
         );
       })
-      .catch(() => {});
+      .catch(() => {
+        setSlettVedleggFeil(true);
+      });
   };
 
   return (
@@ -227,10 +241,23 @@ function VedleggStegContent({
             stepKey: StegKey.VEDLEGG,
             skjema,
           }}
+          isSubmitError={postVedleggValgMutation.isError}
           nesteKnapp={
             <NesteStegKnapp loading={postVedleggValgMutation.isPending} />
           }
         >
+          {hentVedleggFeil && (
+            <Alert className="mt-4" role="alert" size="small" variant="error">
+              {t("vedleggSteg.feilVedHentingAvVedlegg")}
+            </Alert>
+          )}
+
+          {slettVedleggFeil && (
+            <Alert className="mt-4" role="alert" size="small" variant="error">
+              {t("vedleggSteg.feilVedSlettingAvVedlegg")}
+            </Alert>
+          )}
+
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="harAnnenDokumentasjon"
@@ -279,7 +306,7 @@ function VedleggStegContent({
                     <FileUpload.Item
                       button={{
                         action: "delete",
-                        onClick: () => handleSlettNyItem(item.id),
+                        onClick: () => handleSlettNyVedleggItem(item.id),
                       }}
                       error={
                         item.status === "error" ? item.errorMessage : undefined

@@ -3,7 +3,6 @@ import { Alert, BodyLong, Heading, Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -100,9 +99,6 @@ function ArbeidssituasjonStegContent({
         });
       }
     },
-    onError: () => {
-      toast.error(t("felles.feil"));
-    },
   });
 
   const onSubmit = (data: ArbeidssituasjonFormData) => {
@@ -117,6 +113,7 @@ function ArbeidssituasjonStegContent({
             stepKey: StegKey.ARBEIDSSITUASJON,
             skjema,
           }}
+          isSubmitError={postArbeidssituasjonMutation.isError}
           nesteKnapp={
             <NesteStegKnapp loading={postArbeidssituasjonMutation.isPending} />
           }

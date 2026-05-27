@@ -66,6 +66,10 @@ export class VedleggStegPage {
     await expect(this.page.getByText(fileName)).toBeVisible();
   }
 
+  async deleteFileItem() {
+    await this.page.getByRole("button", { name: "Slett filen" }).click();
+  }
+
   async lagreOgFortsett() {
     await this.lagreOgFortsettButton.click();
   }
