@@ -96,7 +96,10 @@ function VedleggStegContent({
     let cancelled = false;
     hentVedlegg(skjema.id)
       .then((vedlegg) => {
-        if (!cancelled) setEksisterendeVedlegg(vedlegg);
+        if (!cancelled) {
+          setEksisterendeVedlegg(vedlegg);
+          setHentVedleggFeil(false);
+        }
       })
       .catch(() => {
         if (!cancelled) setHentVedleggFeil(true);
@@ -201,22 +204,24 @@ function VedleggStegContent({
     }
   };
 
-  const handleSlettNyItem = (itemId: string) => {
-    const item = vedleggItems.find((v) => v.id === itemId);
-    if (item?.vedleggId) {
-      slettVedlegg(skjema.id, item.vedleggId)
+  const handleSlettNyVedleggItem = (vedleggItemId: string) => {
+    const vedleggItem = vedleggItems.find((v) => v.id === vedleggItemId);
+    setSlettVedleggFeil(false);
+    if (vedleggItem?.vedleggId) {
+      slettVedlegg(skjema.id, vedleggItem.vedleggId)
         .then(() => {
-          setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
+          setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
         })
         .catch(() => {
           setSlettVedleggFeil(true);
         });
     } else {
-      setVedleggItems((prev) => prev.filter((v) => v.id !== itemId));
+      setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
     }
   };
 
   const handleSlettEksisterende = (vedleggId: string) => {
+    setSlettVedleggFeil(false);
     slettVedlegg(skjema.id, vedleggId)
       .then(() => {
         setEksisterendeVedlegg((prev) =>
@@ -301,7 +306,7 @@ function VedleggStegContent({
                     <FileUpload.Item
                       button={{
                         action: "delete",
-                        onClick: () => handleSlettNyItem(item.id),
+                        onClick: () => handleSlettNyVedleggItem(item.id),
                       }}
                       error={
                         item.status === "error" ? item.errorMessage : undefined

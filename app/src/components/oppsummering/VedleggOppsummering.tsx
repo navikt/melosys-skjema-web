@@ -42,7 +42,10 @@ export function VedleggOppsummering({
     let cancelled = false;
     hentVedlegg(skjemaId)
       .then((v) => {
-        if (!cancelled) setVedlegg(v);
+        if (!cancelled) {
+          setVedlegg(v);
+          setHentVedleggFeil(false);
+        }
       })
       .catch(() => {
         if (!cancelled) setHentVedleggFeil(true);
