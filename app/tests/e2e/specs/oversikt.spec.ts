@@ -105,6 +105,86 @@ test.describe("Oversikt", () => {
   });
 });
 
+test.describe("Oversikt — Ettersendelse-tekst i GuidePanel", () => {
+  test("DEG_SELV: viser ettersendelsestekst med lenke til nav.no", async ({
+    page,
+  }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.assertEttersendelseTekstForRepresentasjonstype();
+  });
+
+  test("ARBEIDSGIVER: viser ettersendelsestekst uten lenke", async ({
+    page,
+  }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [testOrganization],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    await mockHentTilganger(page, [testOrganization]);
+
+    const oversiktPage = new OversiktPage(
+      page,
+      Representasjonstype.ARBEIDSGIVER,
+    );
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.assertEttersendelseTekstForRepresentasjonstype();
+  });
+
+  test("RÅDGIVER: viser ettersendelsestekst uten lenke", async ({ page }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [testArbeidsgiverOrganization],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    await mockHentTilganger(page, [testArbeidsgiverOrganization]);
+    await mockGetEregOrganisasjonMedJuridiskEnhet(
+      page,
+      testRadgiverfirmaOrganisasjon,
+    );
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.RADGIVER);
+    await oversiktPage.gotoWithRadgiver(testRadgiverfirmaOrgnr);
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.assertEttersendelseTekstForRepresentasjonstype();
+  });
+
+  test("ANNEN_PERSON: viser ettersendelsestekst uten lenke", async ({
+    page,
+  }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+
+    const oversiktPage = new OversiktPage(
+      page,
+      Representasjonstype.ANNEN_PERSON,
+    );
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.assertEttersendelseTekstForRepresentasjonstype();
+  });
+});
+
 test.describe("Oversikt — Start søknad POST-payload", () => {
   test("DEG_SELV: sender korrekt payload med arbeidstaker fra innlogget bruker", async ({
     page,
