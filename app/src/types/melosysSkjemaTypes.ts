@@ -672,6 +672,11 @@ export interface InnsendtSkjemaResponse {
    */
   innsendtSprak: Sprak;
   /**
+   * Dokumenttittel for visning
+   * @example "Bekreftelse fra arbeidsgiver på utsending til annet EØS-land eller Sveits"
+   */
+  dokumentTittel: string;
+  /**
    * Versjon av skjemadefinisjon som ble brukt
    * @example "1"
    */

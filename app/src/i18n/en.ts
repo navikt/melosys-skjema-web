@@ -104,7 +104,9 @@ export const en = {
     },
     soknadHeader: {
       soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
-        "Application for posted worker within EU/EEA and Switzerland",
+        "Application for A1 for workers posted in the EEA or Switzerland",
+      bekreftelseFraArbeidsgiver:
+        "Employer's confirmation of posting to another EU/EEA country or Switzerland",
     },
     landVelgerFormPart: {
       velgLand: "Select country",

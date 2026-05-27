@@ -155,7 +155,7 @@ function InnsendtSkjemaPageContent({
   return (
     <VStack gap="space-24">
       <Heading level="1" size="large">
-        {t("innsendtSkjema.tittel")}
+        {response.dokumentTittel}
       </Heading>
 
       <HStack gap="space-16">
