@@ -37,6 +37,9 @@ test.describe("Innsendt skjema", () => {
     );
     await innsendtPage.goto();
     await innsendtPage.assertIsVisible();
+    await innsendtPage.assertTittelVisible(
+      testInnsendtSkjemaArbeidstakersDel.dokumentTittel,
+    );
     await innsendtPage.assertReferanseIdVisible("REF-AT-001");
     await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
       testArbeidstakerSkjema,
@@ -63,6 +66,9 @@ test.describe("Innsendt skjema", () => {
     );
     await innsendtPage.goto();
     await innsendtPage.assertIsVisible();
+    await innsendtPage.assertTittelVisible(
+      testInnsendtSkjemaArbeidsgiverDel.dokumentTittel,
+    );
     await innsendtPage.assertReferanseIdVisible("REF-AG-001");
     await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
       testArbeidsgiverSkjema,
@@ -88,6 +94,9 @@ test.describe("Innsendt skjema", () => {
     const innsendtPage = new InnsendtSkjemaPage(page, testKombinertSkjema.id);
     await innsendtPage.goto();
     await innsendtPage.assertIsVisible();
+    await innsendtPage.assertTittelVisible(
+      testInnsendtSkjemaKombinertDel.dokumentTittel,
+    );
     await innsendtPage.assertReferanseIdVisible("REF-KO-001");
     await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
       testKombinertSkjema,

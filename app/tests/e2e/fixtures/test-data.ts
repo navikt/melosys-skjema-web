@@ -198,6 +198,7 @@ export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
   referanseId: "REF-AT-001",
   innsendtDato: "2026-01-10T12:00:00Z",
   innsendtSprak: Sprak.Nb,
+  dokumentTittel: "Søknad om A1 for utsendte arbeidstakere i EØS eller Sveits",
   skjemaDefinisjonVersjon: "1",
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
@@ -212,6 +213,8 @@ export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
   referanseId: "REF-AG-001",
   innsendtDato: "2026-01-10T12:00:00Z",
   innsendtSprak: Sprak.Nb,
+  dokumentTittel:
+    "Bekreftelse fra arbeidsgiver på utsending til annet EØS-land eller Sveits",
   skjemaDefinisjonVersjon: "1",
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
@@ -300,6 +303,7 @@ export const testInnsendtSkjemaKombinertDel: InnsendtSkjemaResponse = {
   referanseId: "REF-KO-001",
   innsendtDato: "2026-01-10T12:00:00Z",
   innsendtSprak: Sprak.Nb,
+  dokumentTittel: "Søknad om A1 for utsendte arbeidstakere i EØS eller Sveits",
   skjemaDefinisjonVersjon: "1",
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL",

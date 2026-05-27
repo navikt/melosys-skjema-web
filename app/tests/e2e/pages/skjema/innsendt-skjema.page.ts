@@ -16,9 +16,7 @@ export class InnsendtSkjemaPage {
   constructor(page: Page, skjemaId: string) {
     this.page = page;
     this.skjemaId = skjemaId;
-    this.heading = page.getByRole("heading", {
-      name: translations.tittel,
-    });
+    this.heading = page.locator("main").getByRole("heading", { level: 1 });
     this.arbeidstakersDelHeading = page.getByRole("heading", {
       name: translations.arbeidstakersDel,
     });
@@ -36,6 +34,14 @@ export class InnsendtSkjemaPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
+  }
+
+  async assertTittelVisible(tittel: string) {
+    await expect(
+      this.page
+        .locator("main")
+        .getByRole("heading", { level: 1, name: tittel }),
+    ).toBeVisible();
   }
 
   async assertArbeidstakersDelVisible() {
