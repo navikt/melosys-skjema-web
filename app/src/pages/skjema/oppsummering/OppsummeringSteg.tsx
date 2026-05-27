@@ -17,6 +17,7 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
+import { byggHrefMedBasePath, byggSkjemaStegHref } from "../skjemaHref.ts";
 import { finnManglendeSteg } from "../stegDataGetters.ts";
 import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
 import { isArbeidsgiverOgArbeidstakersDel } from "../types.ts";
@@ -48,6 +49,7 @@ function OppsummeringStegContent({
 
   const erKombinertSkjema = isArbeidsgiverOgArbeidstakersDel(data);
   const harFeil = manglendeSteg.length > 0 || harInnsendingFeil;
+  const vedleggSteg = stegRekkefolge.find((s) => s.key === StegKey.VEDLEGG);
 
   useEffect(() => {
     if (harFeil) {
@@ -57,7 +59,14 @@ function OppsummeringStegContent({
   }, [harFeil]);
 
   const kanSendeInn = () => {
-    const manglendeSteg = finnManglendeSteg(skjema, stegRekkefolge, skjema.id);
+    const manglendeSteg = finnManglendeSteg(
+      skjema,
+      stegRekkefolge,
+      skjema.id,
+    ).map((steg) => ({
+      ...steg,
+      href: byggHrefMedBasePath(steg.href),
+    }));
 
     setManglendeSteg(manglendeSteg);
     setHarInnsendingFeil(false);
@@ -82,7 +91,7 @@ function OppsummeringStegContent({
       <ArbeidstakerOgArbeidsgiverOppsummering skjema={skjema} />
       {seksjoner.map(({ seksjonNavn, seksjon, data, stegKey }) => {
         const steg = stegRekkefolge.find((s) => s.key === stegKey);
-        const editHref = steg?.route.replace("$id", skjema.id) ?? "";
+        const editHref = steg ? byggSkjemaStegHref(steg.route, skjema.id) : "";
         return (
           <Fragment key={seksjonNavn}>
             {erKombinertSkjema && stegKey === StegKey.ARBEIDSSITUASJON && (
@@ -101,9 +110,7 @@ function OppsummeringStegContent({
       })}
       <VedleggOppsummering
         editHref={
-          stegRekkefolge
-            .find((s) => s.key === StegKey.VEDLEGG)
-            ?.route.replace("$id", skjema.id) ?? ""
+          vedleggSteg ? byggSkjemaStegHref(vedleggSteg.route, skjema.id) : ""
         }
         harAnnenDokumentasjon={skjema.data.vedlegg?.harAnnenDokumentasjon}
         skjemaId={skjema.id}
