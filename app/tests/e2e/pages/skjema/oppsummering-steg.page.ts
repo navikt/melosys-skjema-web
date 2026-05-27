@@ -52,7 +52,7 @@ export class OppsummeringStegPage {
   }
 
   async goto(basePath = "") {
-    const normalisertBasePath = basePath.replace(/\/$/, "");
+    const normalisertBasePath = basePath.replace(/\/+$/, "");
     await this.page.goto(
       `${normalisertBasePath}/skjema/${this.skjema.id}/oppsummering`,
     );
