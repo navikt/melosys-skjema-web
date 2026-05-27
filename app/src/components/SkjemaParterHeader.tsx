@@ -13,7 +13,7 @@ interface PartProps {
 
 function Part({ tittel, navn, id }: PartProps) {
   return (
-    <VStack gap="space-4" style={{ flex: "1 1 200px", minWidth: 0 }}>
+    <VStack gap="space-4" className="flex-1 basis-50 min-w-0">
       <Label as="span" size="small">
         {tittel}
       </Label>
