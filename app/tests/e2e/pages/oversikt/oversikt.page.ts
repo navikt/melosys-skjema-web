@@ -270,15 +270,13 @@ export class OversiktPage {
         await expect(this.radgiverInfo).not.toBeVisible();
         break;
       }
-      case Representasjonstype.ARBEIDSGIVER:
-      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
+      case Representasjonstype.ARBEIDSGIVER: {
         await expect(this.arbeidsgiverInfo).toBeVisible();
         await expect(this.annenPersonInfo).not.toBeVisible();
         await expect(this.radgiverInfo).not.toBeVisible();
         break;
       }
-      case Representasjonstype.RADGIVER:
-      case Representasjonstype.RADGIVER_MED_FULLMAKT: {
+      case Representasjonstype.RADGIVER: {
         await expect(this.radgiverInfo).toBeVisible();
         await expect(this.annenPersonInfo).not.toBeVisible();
         await expect(this.arbeidsgiverInfo).not.toBeVisible();
@@ -303,15 +301,13 @@ export class OversiktPage {
         );
         break;
       }
-      case Representasjonstype.ARBEIDSGIVER:
-      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
+      case Representasjonstype.ARBEIDSGIVER: {
         await expect(
           this.page.getByText(ettersendelseTekster.arbeidsgiver),
         ).toBeVisible();
         break;
       }
-      case Representasjonstype.RADGIVER:
-      case Representasjonstype.RADGIVER_MED_FULLMAKT: {
+      case Representasjonstype.RADGIVER: {
         await expect(
           this.page.getByText(ettersendelseTekster.radgiver),
         ).toBeVisible();
