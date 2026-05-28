@@ -435,6 +435,11 @@ export const en = {
       herKanDu: "Here you can:",
       infoBullet1: "fill out an application.",
       infoBullet2: "view started and previously submitted applications.",
+      ettersendelse:
+        "You cannot submit additional documentation here. You can either send a new application with attachments or send the documentation via ",
+      ettersendelseLenke: "Send documents to Nav",
+      ettersendelseLenkeUrl:
+        "https://www.nav.no/fyllut-ettersending/nav020807/innsendingsvalg",
     },
     oversiktArbeidsgiver: {
       tittel: "Overview page for applications",
@@ -443,6 +448,8 @@ export const en = {
         "fill out an application for your employer and their employees.",
       infoBullet2: "view accesses and mandates you have been granted.",
       infoBullet3: "view started and previously submitted applications.",
+      ettersendelse:
+        "You cannot submit additional documentation here. Additional documents can be sent as attachments in a new application.",
     },
     oversiktRadgiver: {
       tittel: "Overview page for applications",
@@ -451,6 +458,8 @@ export const en = {
         "fill out an application for an employer and their employees.",
       infoBullet2: "view accesses and mandates you have been granted.",
       infoBullet3: "view started and previously submitted applications.",
+      ettersendelse:
+        "You cannot submit additional documentation here. Additional documents can be sent as attachments in a new application.",
     },
     oversiktAnnenPerson: {
       tittel: "Overview page for applications",
@@ -458,6 +467,8 @@ export const en = {
       infoBullet1:
         "fill out an application for people who have granted you a mandate.",
       infoBullet2: "view started and previously submitted applications.",
+      ettersendelse:
+        "You cannot submit additional documentation here. Additional documents can be sent as attachments in a new application.",
       personVelgerLabel:
         "Select the person you want to fill out an application for",
       personVelgerBeskrivelse:

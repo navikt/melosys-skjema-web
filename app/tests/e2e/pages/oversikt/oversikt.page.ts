@@ -24,6 +24,15 @@ const bekreftelseTekster = {
   radgiverInfo: translations.oversiktBekreftelse.radgiverInfo,
 };
 
+const ettersendelseTekster = {
+  degSelv: translations.oversiktDegSelv.ettersendelse,
+  degSelvLenke: translations.oversiktDegSelv.ettersendelseLenke,
+  degSelvLenkeUrl: translations.oversiktDegSelv.ettersendelseLenkeUrl,
+  arbeidsgiver: translations.oversiktArbeidsgiver.ettersendelse,
+  radgiver: translations.oversiktRadgiver.ettersendelse,
+  annenPerson: translations.oversiktAnnenPerson.ettersendelse,
+};
+
 export class OversiktPage {
   readonly page: Page;
   readonly representasjonstype: Representasjonstype;
@@ -261,18 +270,53 @@ export class OversiktPage {
         await expect(this.radgiverInfo).not.toBeVisible();
         break;
       }
-      case Representasjonstype.ARBEIDSGIVER:
-      case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT: {
+      case Representasjonstype.ARBEIDSGIVER: {
         await expect(this.arbeidsgiverInfo).toBeVisible();
         await expect(this.annenPersonInfo).not.toBeVisible();
         await expect(this.radgiverInfo).not.toBeVisible();
         break;
       }
-      case Representasjonstype.RADGIVER:
-      case Representasjonstype.RADGIVER_MED_FULLMAKT: {
+      case Representasjonstype.RADGIVER: {
         await expect(this.radgiverInfo).toBeVisible();
         await expect(this.annenPersonInfo).not.toBeVisible();
         await expect(this.arbeidsgiverInfo).not.toBeVisible();
+        break;
+      }
+    }
+  }
+
+  async assertEttersendelseTekstForRepresentasjonstype() {
+    switch (this.representasjonstype) {
+      case Representasjonstype.DEG_SELV: {
+        await expect(
+          this.page.getByText(ettersendelseTekster.degSelv),
+        ).toBeVisible();
+        const lenke = this.page.getByRole("link", {
+          name: ettersendelseTekster.degSelvLenke,
+        });
+        await expect(lenke).toBeVisible();
+        await expect(lenke).toHaveAttribute(
+          "href",
+          ettersendelseTekster.degSelvLenkeUrl,
+        );
+        break;
+      }
+      case Representasjonstype.ARBEIDSGIVER: {
+        await expect(
+          this.page.getByText(ettersendelseTekster.arbeidsgiver),
+        ).toBeVisible();
+        break;
+      }
+      case Representasjonstype.RADGIVER: {
+        await expect(
+          this.page.getByText(ettersendelseTekster.radgiver),
+        ).toBeVisible();
+        break;
+      }
+      case Representasjonstype.ANNEN_PERSON: {
+        await expect(
+          this.page.getByText(ettersendelseTekster.annenPerson),
+        ).toBeVisible();
         break;
       }
     }

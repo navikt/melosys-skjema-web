@@ -3,6 +3,7 @@ import {
   BodyShort,
   GuidePanel,
   Heading,
+  Link,
   Loader,
   VStack,
 } from "@navikt/ds-react";
@@ -114,6 +115,34 @@ export function OversiktPage({ representasjonskontekst }: OversiktPageProps) {
     }
   };
 
+  const getEttersendelseTekst = () => {
+    switch (representasjonskontekst.representasjonstype) {
+      case Representasjonstype.DEG_SELV: {
+        return (
+          <>
+            {t("oversiktDegSelv.ettersendelse")}
+            <Link
+              href={t("oversiktDegSelv.ettersendelseLenkeUrl")}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("oversiktDegSelv.ettersendelseLenke")}
+            </Link>
+          </>
+        );
+      }
+      case Representasjonstype.ARBEIDSGIVER: {
+        return t("oversiktArbeidsgiver.ettersendelse");
+      }
+      case Representasjonstype.RADGIVER: {
+        return t("oversiktRadgiver.ettersendelse");
+      }
+      case Representasjonstype.ANNEN_PERSON: {
+        return t("oversiktAnnenPerson.ettersendelse");
+      }
+    }
+  };
+
   return (
     <VStack gap="space-24">
       <GuidePanel
@@ -133,6 +162,9 @@ export function OversiktPage({ representasjonskontekst }: OversiktPageProps) {
             </li>
           ))}
         </ul>
+        <BodyShort size="small" className="mt-4">
+          {getEttersendelseTekst()}
+        </BodyShort>
       </GuidePanel>
       <UtkastListe representasjonskontekst={representasjonskontekst} />
       <SoknadStarter representasjonskontekst={representasjonskontekst} />

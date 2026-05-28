@@ -325,6 +325,11 @@ export const nb = {
       herKanDu: "Her kan du:",
       infoBullet1: "fylle ut søknad.",
       infoBullet2: "se påbegynte og tidligere innsendte søknader.",
+      ettersendelse:
+        "Du kan ikke ettersende dokumentasjon her. Du kan enten sende en ny søknad med vedlegg eller sende dokumentasjonen via ",
+      ettersendelseLenke: "Send dokumenter til Nav",
+      ettersendelseLenkeUrl:
+        "https://www.nav.no/fyllut-ettersending/nav020807/innsendingsvalg",
     },
     oversiktArbeidsgiver: {
       tittel: "Oversiktsside for søknader",
@@ -333,6 +338,8 @@ export const nb = {
         "fylle ut søknad for din arbeidsgiver og dennes arbeidstakere.",
       infoBullet2: "se tilganger og fullmakter som du har fått.",
       infoBullet3: "se påbegynte og tidligere innsendte søknader.",
+      ettersendelse:
+        "Du kan ikke ettersende dokumentasjon her. Ettersendte dokumenter kan sendes i en ny søknad som vedlegg.",
     },
     oversiktRadgiver: {
       tittel: "Oversiktsside for søknader",
@@ -341,12 +348,16 @@ export const nb = {
         "fylle ut søknad for en arbeidsgiver og dennes arbeidstakere.",
       infoBullet2: "se tilganger og fullmakter som du har fått.",
       infoBullet3: "se påbegynte og tidligere innsendte søknader.",
+      ettersendelse:
+        "Du kan ikke ettersende dokumentasjon her. Ettersendte dokumenter kan sendes i en ny søknad som vedlegg.",
     },
     oversiktAnnenPerson: {
       tittel: "Oversiktsside for søknader",
       herKanDu: "Her kan du:",
       infoBullet1: "fylle ut søknad for personer som har gitt deg fullmakt.",
       infoBullet2: "se påbegynte og tidligere innsendte søknader.",
+      ettersendelse:
+        "Du kan ikke ettersende dokumentasjon her. Ettersendte dokumenter kan sendes i en ny søknad som vedlegg.",
       personVelgerLabel: "Velg person du skal fylle ut søknad for",
       personVelgerBeskrivelse:
         "Listen inneholder alle personer du har fått fullmakt fra på nav.no.",
