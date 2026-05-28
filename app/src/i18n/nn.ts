@@ -5,7 +5,8 @@ export const nn = {
       feil: "Det oppstod ein feil",
       feilVedLastingAvSkjema: "Feil ved lasting av skjema",
       fantIkkeSkjema: "Fann ikkje skjema",
-      stegIkkeTilgjengelig: "Steget er ikkje tilgjengeleg for denne skjemadelen",
+      stegIkkeTilgjengelig:
+        "Steget er ikkje tilgjengeleg for denne skjemadelen",
       brukerinfoMangler: "Brukarinfo manglar",
       kunneIkkeOppretteSkjema: "Kunne ikkje opprette skjema. Prøv igjen.",
       manglerOrganisasjonsnummer: "Manglar organisasjonsnummer",
@@ -167,7 +168,8 @@ export const nn = {
       lastOppVedleggBeskrivelse:
         "Du kan laste opp PDF eller bilete (JPG, PNG). Maks filstorleik 10 MB per fil.",
       feilForStor: "Fila er for stor. Maks filstorleik er 10 MB.",
-      feilUgyldigFormat: "Ugyldig filformat. Berre PDF, JPG og PNG er tillatne.",
+      feilUgyldigFormat:
+        "Ugyldig filformat. Berre PDF, JPG og PNG er tillatne.",
       feilVirusFunnet:
         "Fila vart avvist fordi ho kan innehalde skadeleg innhald.",
       feilUkjent: "Kunne ikkje laste opp fila. Prøv igjen seinare.",
@@ -202,7 +204,8 @@ export const nn = {
         "Du må velje kva land som utbetaler pengestøtta",
       duMaOppgiEtGyldigBelopSomErStorreEnn0:
         "Du må oppgi eit gyldig beløp som er større enn 0",
-      duMaVelgeMinstEnInntektKilde: "Du må velje minst éi arbeidsinntektskjelde",
+      duMaVelgeMinstEnInntektKilde:
+        "Du må velje minst éi arbeidsinntektskjelde",
       duMaVelgeMinstEnInntektType: "Du må velje minst éin inntektstype",
       duMaOppgiLonnsinntekt: "Du må oppgi lønsinntekt",
       duMaOppgiInntektFraEgenVirksomhet:
