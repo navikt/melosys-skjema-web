@@ -121,7 +121,10 @@ export function OversiktPage({ representasjonskontekst }: OversiktPageProps) {
         return (
           <>
             {t("oversiktDegSelv.ettersendelse")}
-            <Link href={t("oversiktDegSelv.ettersendelseLenkeUrl")}>
+            <Link
+              href={t("oversiktDegSelv.ettersendelseLenkeUrl")}
+              target="_blank"
+            >
               {t("oversiktDegSelv.ettersendelseLenke")}
             </Link>
           </>
