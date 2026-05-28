@@ -130,22 +130,23 @@ export function KontekstVelger() {
     return t(config.tekstKey);
   };
 
-  const getIcon = () => {
+  const renderIcon = () => {
     if (isDegSelv) {
-      return PersonCircleIcon;
+      return <PersonCircleIcon aria-hidden fontSize="2rem" />;
     }
-    return KONTEKST_CONFIG[
-      representasjonskontekst.representasjonstype as Exclude<
-        Representasjonstype,
-        | Representasjonstype.DEG_SELV
-        | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT
-        | Representasjonstype.RADGIVER_MED_FULLMAKT
-      >
-    ].icon;
+    const config =
+      KONTEKST_CONFIG[
+        representasjonskontekst.representasjonstype as Exclude<
+          Representasjonstype,
+          | Representasjonstype.DEG_SELV
+          | Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT
+          | Representasjonstype.RADGIVER_MED_FULLMAKT
+        >
+      ];
+    return <config.icon aria-hidden fontSize="2rem" />;
   };
 
   const displayText = getDisplayText();
-  const Icon = getIcon();
 
   return (
     <>
@@ -168,7 +169,7 @@ export function KontekstVelger() {
           size="small"
         >
           <HStack align="center" gap="space-8">
-            {Icon && <Icon aria-hidden fontSize="2rem" />}
+            {renderIcon()}
             <ChevronDownIcon aria-hidden fontSize="1.5rem" />
           </HStack>
         </Button>
