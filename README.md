@@ -221,6 +221,15 @@ flowchart LR
 
 Se `useSkjemaDefinisjon.ts` og `skjemaDefinisjonA1.ts` for detaljer.
 
+## Deploy
+
+Appen deployes automatisk via GitHub Actions til NAIS-plattformen:
+
+- **Dev-miljø**: Automatisk deploy ved push til `main`-branch eller `dev/**`-brancher
+- **Prod-miljø**: Automatisk deploy kun ved push til `main`-branch
+
+For å teste endringer i dev uten å deploye til prod, opprett en branch med prefix `dev/` (f.eks. `dev/min-feature`) og push til GitHub.
+
 ## Kodestandarder
 
 - ESLint med strenge regler (Unicorn, React, import-sorting)
