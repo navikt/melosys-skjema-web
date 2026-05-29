@@ -227,3 +227,5 @@ Se `useSkjemaDefinisjon.ts` og `skjemaDefinisjonA1.ts` for detaljer.
 - Prettier for formatering
 - TypeScript strict mode
 - Ingen console.log i produksjonskode
+
+tester deploy
