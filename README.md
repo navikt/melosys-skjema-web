@@ -228,4 +228,4 @@ Se `useSkjemaDefinisjon.ts` og `skjemaDefinisjonA1.ts` for detaljer.
 - TypeScript strict mode
 - Ingen console.log i produksjonskode
 
-tester deploy 2
+tester deploy 3
