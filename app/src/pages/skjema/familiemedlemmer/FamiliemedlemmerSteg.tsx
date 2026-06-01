@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, BodyLong, Link } from "@navikt/ds-react";
+import { InformationSquareIcon } from "@navikt/aksel-icons";
+import { BodyLong, InfoCard, Link } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -96,22 +97,27 @@ function FamiliemedlemmerStegContent({
           />
 
           {skalHaMedFamiliemedlemmer && (
-            <Alert className="mt-4" variant="info">
-              <BodyLong>
-                {t("familiemedlemmerSteg.informasjonOmEgenSoknad")}{" "}
-                <Link
-                  href={t("familiemedlemmerSteg.soknadsskjemaLenke")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t("familiemedlemmerSteg.soknadsskjemaNavn")}
-                </Link>
-                {t("familiemedlemmerSteg.somLiggerPaNavNo")}
-              </BodyLong>
-              <BodyLong className="mt-2">
-                {t("familiemedlemmerSteg.sendeSoknadForBarn")}
-              </BodyLong>
-            </Alert>
+            <InfoCard className="mt-6" data-color="info">
+              <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                <InfoCard.Title as="h2">
+                  {t("familiemedlemmerSteg.infokortTittel")}
+                </InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
+                <div className="flex flex-col gap-6">
+                  <BodyLong>
+                    {t("familiemedlemmerSteg.informasjonOmEgenSoknad")}
+                  </BodyLong>
+                  <Link
+                    href={t("familiemedlemmerSteg.soknadsskjemaLenke")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t("familiemedlemmerSteg.soknadsskjemaNavn")}
+                  </Link>
+                </div>
+              </InfoCard.Content>
+            </InfoCard>
           )}
         </SkjemaSteg>
       </form>
