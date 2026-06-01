@@ -99,12 +99,12 @@ function FamiliemedlemmerStegContent({
           {skalHaMedFamiliemedlemmer && (
             <InfoCard className="mt-6" data-color="info">
               <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-                <InfoCard.Title as="h3">
+                <InfoCard.Title as="h2">
                   {t("familiemedlemmerSteg.infokortTittel")}
                 </InfoCard.Title>
               </InfoCard.Header>
               <InfoCard.Content>
-                <div className="flex flex-col gap-6 pb-8">
+                <div className="flex flex-col gap-6">
                   <BodyLong>
                     {t("familiemedlemmerSteg.informasjonOmEgenSoknad")}
                   </BodyLong>
