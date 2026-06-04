@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@navikt/nav-dekoratoren-moduler':
-        specifier: 3.7.1
-        version: 3.7.1(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)
+        specifier: 4.2.0
+        version: 4.2.0(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)
       '@navikt/oasis':
         specifier: 4.1.4
         version: 4.1.4
@@ -142,8 +142,12 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@navikt/nav-dekoratoren-moduler@3.7.1':
-    resolution: {integrity: sha512-MQLxR4uoADCd6i0hFnWHN/XLPevEfxkBK9yEgbtcY0v2gsj69nALH/7DvTKqSxqRovxOHibVa7mZKZEBAMRBvg==, tarball: https://npm.pkg.github.com/download/@navikt/nav-dekoratoren-moduler/3.7.1/09490a131cedd7779e35d413d20c36bd01ef57a0}
+  '@navikt/analytics-types@0.0.9':
+    resolution: {integrity: sha512-bopCvqEogyFcmrJiBxK/Mr25d6yPKF7GR36MGrJqiHCPJYf1rDu6lK4cpooTG4Q//D/1xTkHRom8ZH5BI6dTew==, tarball: https://npm.pkg.github.com/download/@navikt/analytics-types/0.0.9/5919241a6dbb782eb101fff3234ce5c36d16e942}
+    engines: {node: '>=20.0.0', npm: '>=9.0.0'}
+
+  '@navikt/nav-dekoratoren-moduler@4.2.0':
+    resolution: {integrity: sha512-kmn7Uj4RselUKdYfmpLUxPaMMfgBoqlyuimvOO/sjgUxyWq+qZn1rcZ9JNt58gMCfPI1L6mfnMp+XRvWv4lA1A==, tarball: https://npm.pkg.github.com/download/@navikt/nav-dekoratoren-moduler/4.2.0/f86499ff4bcc9299fa38641ba0906118f7fb1661}
     engines: {node: 24.x}
     peerDependencies:
       html-react-parser: '>=5.x'
@@ -788,9 +792,9 @@ packages:
   jose@6.2.2:
     resolution: {integrity: sha512-d7kPDd34KO/YnzaDOlikGpOurfF0ByC2sEV4cANCtdqLlTfBlw2p14O/5d/zv40gJPbIQxfES3nSx1/oYNyuZQ==}
 
-  js-cookie@3.0.5:
-    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
-    engines: {node: '>=14'}
+  js-cookie@3.0.7:
+    resolution: {integrity: sha512-z/wZZgDrkNV1eA0ULjM/F9/50Ya8fbzgKneSpoPsXSGd0KnpdtHfOZWK+GcwLk+EZbS4F9RBhU+K2RgzuDaItw==}
+    engines: {node: '>=20'}
 
   jsesc@3.1.0:
     resolution: {integrity: sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==}
@@ -1238,11 +1242,14 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@navikt/nav-dekoratoren-moduler@3.7.1(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)':
+  '@navikt/analytics-types@0.0.9': {}
+
+  '@navikt/nav-dekoratoren-moduler@4.2.0(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)':
     dependencies:
+      '@navikt/analytics-types': 0.0.9
       csp-header: 6.3.1
       html-react-parser: 5.2.17(react@19.2.4)
-      js-cookie: 3.0.5
+      js-cookie: 3.0.7
       react: 19.2.4
 
   '@navikt/oasis@4.1.4':
@@ -1929,7 +1936,7 @@ snapshots:
 
   jose@6.2.2: {}
 
-  js-cookie@3.0.5: {}
+  js-cookie@3.0.7: {}
 
   jsesc@3.1.0: {}
 
