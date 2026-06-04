@@ -104,7 +104,13 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
   }
 
   // Ved feil mot Altinn: vis en tydelig feilmelding i stedet for en tom arbeidsgiver-velger.
-  if (skalHenteArbeidsgivere && isErrorArbeidsgivere) {
+  // Hvis et tidligere kall lyktes og en refetch feiler, beholder TanStack Query de cachede
+  // arbeidsgiverne i `data` — da viser vi heller den fungerende lista enn en feil-Alert.
+  if (
+    skalHenteArbeidsgivere &&
+    isErrorArbeidsgivere &&
+    (arbeidsgivere?.length ?? 0) === 0
+  ) {
     return (
       <Alert variant="error">
         {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}

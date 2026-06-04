@@ -277,9 +277,11 @@ export function ArbeidstakerVelger({
                       />
                     </HStack>
                   </Box>
-                ) : error ? (
+                ) : error && personerMedFullmakt.length === 0 ? (
                   // Ved feil mot repr-api: vis tydelig feilmelding i stedet for
                   // "ingen fullmakter"-meldingen (som ville feilinformert brukeren).
+                  // Hvis en refetch feiler men vi har cachede fullmakter, beholder vi
+                  // comboboxen slik at brukeren fortsatt kan velge fra lista.
                   <Alert className="mt-2" size="small" variant="error">
                     {t("oversiktFelles.feilVedHentingAvFullmakter")}
                   </Alert>
