@@ -103,9 +103,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
     return <Loader size="medium" title={t("felles.laster")} />;
   }
 
-  // Ved feil mot Altinn: vis en tydelig feilmelding i stedet for en tom arbeidsgiver-velger.
-  // Hvis et tidligere kall lyktes og en refetch feiler, beholder TanStack Query de cachede
-  // arbeidsgiverne i `data` — da viser vi heller den fungerende lista enn en feil-Alert.
+  // Feil mot Altinn uten cachede arbeidsgivere: vis feil i stedet for tom velger.
   if (
     skalHenteArbeidsgivere &&
     isErrorArbeidsgivere &&
