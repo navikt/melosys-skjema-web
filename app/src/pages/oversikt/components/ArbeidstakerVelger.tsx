@@ -95,7 +95,7 @@ export function ArbeidstakerVelger({
     data: personerMedFullmakt = [],
     isLoading,
     error,
-  } = useQuery(getPersonerMedFullmaktQuery());
+  } = useQuery({ ...getPersonerMedFullmaktQuery(), retry: false });
 
   // Konverter til combobox options med fødselsnummer
   const comboboxOptions = personerMedFullmakt.map(
@@ -277,6 +277,12 @@ export function ArbeidstakerVelger({
                       />
                     </HStack>
                   </Box>
+                ) : error ? (
+                  // Ved feil mot repr-api: vis tydelig feilmelding i stedet for
+                  // "ingen fullmakter"-meldingen (som ville feilinformert brukeren).
+                  <Alert className="mt-2" size="small" variant="error">
+                    {t("oversiktFelles.feilVedHentingAvFullmakter")}
+                  </Alert>
                 ) : !isLoading && personerMedFullmakt.length === 0 ? (
                   <InlineMessage className="mt-2" status="info">
                     {t("oversiktFelles.arbeidstakerIngenFullmakter")}{" "}
@@ -293,11 +299,6 @@ export function ArbeidstakerVelger({
                   // for å sikre at label og beskrivelse er synlig både når Combobox
                   // vises og når valgt person vises i boks. Combobox har ikke innebygd clear-knapp.
                   <UNSAFE_Combobox
-                    error={
-                      error
-                        ? "Kunne ikke laste personer med fullmakt"
-                        : undefined
-                    }
                     isLoading={isLoading}
                     label=""
                     onToggleSelected={handleComboboxChange}

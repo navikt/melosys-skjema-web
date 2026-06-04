@@ -404,6 +404,8 @@ export const nb = {
       ingenArbeidsgivereLenke: "Les mer om hvordan du får tilgang i Altinn",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
+      feilVedHentingAvFullmakter:
+        "Det oppstod en feil ved henting av personer du har fullmakt for. Prøv igjen senere.",
       arbeidstakerTittel: "Arbeidstaker",
       skalFylleUtForArbeidstakerLabel:
         "Skal du fylle ut søknaden for arbeidstaker?",

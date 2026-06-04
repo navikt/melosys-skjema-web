@@ -4,7 +4,9 @@ import {
   interceptOpprettSoknad,
   mockGetEregOrganisasjonMedJuridiskEnhet,
   mockHentTilganger,
+  mockHentTilgangerFeiler,
   mockPersonerMedFullmakt,
+  mockPersonerMedFullmaktFeiler,
   mockVerifiserPerson,
   setupApiMocksForOversikt,
 } from "../fixtures/api-mocks";
@@ -102,6 +104,53 @@ test.describe("Oversikt", () => {
     await oversiktPage.goto();
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertStartSoknadVisible();
+  });
+});
+
+test.describe("Oversikt — feilhåndtering ved API-feil", () => {
+  test("ARBEIDSGIVER: viser feilmelding når Altinn-kallet feiler (ikke tom velger)", async ({
+    page,
+  }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    // Overstyrer 200-mocken fra setup (LIFO): hentTilganger skal feile med 500
+    await mockHentTilgangerFeiler(page);
+
+    const oversiktPage = new OversiktPage(
+      page,
+      Representasjonstype.ARBEIDSGIVER,
+    );
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.assertArbeidsgiverFeilmelding();
+    // Start-søknad-knappen skal ikke vises når arbeidsgivervelgeren ikke kunne lastes
+    await expect(oversiktPage.startSoknadButton).not.toBeVisible();
+  });
+
+  test("ANNEN_PERSON: viser feilmelding når fullmaktskallet feiler (ikke «ingen fullmakter»)", async ({
+    page,
+  }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    await mockPersonerMedFullmaktFeiler(page);
+
+    const oversiktPage = new OversiktPage(
+      page,
+      Representasjonstype.ANNEN_PERSON,
+    );
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.assertFullmaktFeilmelding();
   });
 });
 

@@ -67,7 +67,11 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
     useQuery(getUserInfo());
 
   // Hent Altinn-tilganger for RADGIVER/ARBEIDSGIVER
-  const { data: arbeidsgivere, isLoading: isLoadingArbeidsgivere } = useQuery({
+  const {
+    data: arbeidsgivere,
+    isLoading: isLoadingArbeidsgivere,
+    isError: isErrorArbeidsgivere,
+  } = useQuery({
     ...listAltinnTilganger(),
     enabled: skalHenteArbeidsgivere,
     retry: false,
@@ -97,6 +101,15 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
       isLoadingRadgiver)
   ) {
     return <Loader size="medium" title={t("felles.laster")} />;
+  }
+
+  // Ved feil mot Altinn: vis en tydelig feilmelding i stedet for en tom arbeidsgiver-velger.
+  if (skalHenteArbeidsgivere && isErrorArbeidsgivere) {
+    return (
+      <Alert variant="error">
+        {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}
+      </Alert>
+    );
   }
 
   // Bygg radgiverfirma-objekt fra API-oppslag

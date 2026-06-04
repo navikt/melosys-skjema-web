@@ -41,6 +41,16 @@ export async function mockHentTilganger(
   });
 }
 
+export async function mockHentTilgangerFeiler(page: Page) {
+  await page.route("/api/hentTilganger", async (route) => {
+    await route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({ message: "Det oppstod en uventet feil" }),
+    });
+  });
+}
+
 export async function mockUserInfo(page: Page, userInfo: UserInfo) {
   await page.route("/nav-dekoratoren-api/auth", async (route) => {
     await route.fulfill({
@@ -395,6 +405,16 @@ export async function mockPersonerMedFullmakt(
       status: 200,
       contentType: "application/json",
       body: JSON.stringify(personer),
+    });
+  });
+}
+
+export async function mockPersonerMedFullmaktFeiler(page: Page) {
+  await page.route("/api/representasjon/personer", async (route) => {
+    await route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({ message: "Det oppstod en uventet feil" }),
     });
   });
 }
