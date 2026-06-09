@@ -319,6 +319,11 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Select "Ja" for fullmakt radio
     await oversiktPage.selectSkalFylleUtJa();
+    await expect(
+      page.getByRole("combobox", {
+        name: /Velg arbeidstaker du skal fylle ut søknad for/,
+      }),
+    ).toBeVisible();
 
     // Select person from fullmakt combobox
     await oversiktPage.selectArbeidstakerMedFullmakt(

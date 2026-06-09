@@ -237,7 +237,7 @@ export function ArbeidstakerVelger({
             <div className="navds-form-field navds-form-field--medium">
               {personerMedFullmakt.length > 0 && (
                 <>
-                  <Label className="navds-form-field__label">
+                  <Label as="span" className="navds-form-field__label">
                     {erAnnenPerson
                       ? t("oversiktAnnenPerson.personVelgerLabel")
                       : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
@@ -289,17 +289,19 @@ export function ArbeidstakerVelger({
                     </Link>
                   </InlineMessage>
                 ) : (
-                  // Vi bruker tom label="" fordi vi viser egen Label og BodyShort over
-                  // for å sikre at label og beskrivelse er synlig både når Combobox
-                  // vises og når valgt person vises i boks. Combobox har ikke innebygd clear-knapp.
                   <UNSAFE_Combobox
                     error={
                       error
                         ? "Kunne ikke laste personer med fullmakt"
                         : undefined
                     }
+                    hideLabel
                     isLoading={isLoading}
-                    label=""
+                    label={
+                      erAnnenPerson
+                        ? t("oversiktAnnenPerson.personVelgerLabel")
+                        : t("oversiktFelles.arbeidstakerMedFullmaktLabel")
+                    }
                     onToggleSelected={handleComboboxChange}
                     options={comboboxOptions}
                     placeholder={t(
