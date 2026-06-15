@@ -24,7 +24,7 @@
     "@navikt/ds-react": "8.11.1",
     "@navikt/ds-tailwind": "8.11.1",
     "@navikt/fnrvalidator": "^2.2.1",
-    "@navikt/nav-dekoratoren-moduler": "3.7.1",
+    "@navikt/nav-dekoratoren-moduler": "4.2.2",
     "@tailwindcss/vite": "4.3.0",
     "@tanstack/react-query": "5.101.0",
     "@tanstack/react-router": "1.170.11",
