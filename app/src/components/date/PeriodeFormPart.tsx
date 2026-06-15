@@ -44,6 +44,10 @@ type PeriodeFormPartProps = {
    * Standard valgt dato for "til dato"-feltet.
    */
   defaultTilDato?: Date;
+  /**
+   * Standard valgt måned for "fra dato"-feltet.
+   */
+  defaultTilMåned?: Date;
 } & Omit<UseDatepickerOptions, "onDateChange" | "defaultSelected">;
 
 /**
@@ -76,6 +80,7 @@ export function PeriodeFormPart({
   className,
   defaultFraDato,
   defaultTilDato,
+  defaultTilMåned,
   ...datePickerOptions
 }: PeriodeFormPartProps) {
   const { t } = useTranslation();
@@ -95,6 +100,7 @@ export function PeriodeFormPart({
       <DatePickerFormPart
         className="mt-4"
         defaultSelected={defaultTilDato}
+        defaultMonth={defaultTilMåned}
         description={tilDatoDescription}
         formFieldName={`${formFieldName}.tilDato`}
         label={tilDatoLabel ?? t("periode.tilDato")}

@@ -55,7 +55,8 @@ function UtsendingsperiodeOgLandStegContent({
     ...(stegData && { defaultValues: stegData }),
   });
 
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, watch } = formMethods;
+  const formFraDato = watch("utsendelsePeriode.fraDato");
 
   const dateLimits = {
     // Dato norge ble EØS medlem
@@ -123,6 +124,7 @@ function UtsendingsperiodeOgLandStegContent({
                 ? new Date(stegData.utsendelsePeriode.tilDato)
                 : undefined
             }
+            defaultTilMåned={formFraDato ? new Date(formFraDato) : undefined}
             formFieldName="utsendelsePeriode"
             label={utsendelsePeriodeFelt.label}
             tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
