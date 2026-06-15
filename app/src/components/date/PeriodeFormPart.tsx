@@ -45,10 +45,13 @@ type PeriodeFormPartProps = {
    */
   defaultTilDato?: Date;
   /**
-   * Standard valgt måned for "fra dato"-feltet.
+   * Standard valgt måned for "til dato"-feltet.
    */
   defaultTilMåned?: Date;
-} & Omit<UseDatepickerOptions, "onDateChange" | "defaultSelected">;
+} & Omit<
+  UseDatepickerOptions,
+  "onDateChange" | "defaultSelected" | "defaultMonth"
+>;
 
 /**
  * En gjenbrukbar skjemakomponent for datoperiode-input med integrert validering.
