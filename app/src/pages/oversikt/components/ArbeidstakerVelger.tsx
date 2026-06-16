@@ -289,6 +289,11 @@ export function ArbeidstakerVelger({
                     </Link>
                   </InlineMessage>
                 ) : (
+                  // UNSAFE_Combobox har ingen clear-knapp, så når en person er valgt
+                  // bytter vi den ut med en egen boks med kryss. Derfor ligger label og
+                  // beskrivelse utenfor den, så de blir stående i begge tilstander.
+                  // hideLabel skjuler komponentens egen label så vi slipper den dobbelt –
+                  // den beholdes for skjermlesere.
                   <UNSAFE_Combobox
                     error={
                       error
