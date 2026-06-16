@@ -56,8 +56,8 @@ test.describe("Utsendingsperiode og land - validering", () => {
 
   test("viser feilmelding når til-dato er før fra-dato", async () => {
     await stegPage.velgLand(formFieldValues.utsendelseLand);
-    await stegPage.fillTilDato(formFieldValues.periodeFra);
     await stegPage.fillFraDato(formFieldValues.periodeTil);
+    await stegPage.fillTilDato(formFieldValues.periodeFra);
 
     await stegPage.lagreOgFortsett();
 
