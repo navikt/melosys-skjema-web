@@ -101,7 +101,10 @@ function UtenlandsoppdragetStegContent({
     formState: { errors },
     control,
     unregister,
+    watch,
   } = formMethods;
+
+  const formFraDato = watch("forrigeArbeidstakerUtsendelsePeriode.fraDato");
 
   const arbeidstakerErstatterAnnenPerson = useWatch({
     control,
@@ -232,6 +235,7 @@ function UtenlandsoppdragetStegContent({
                     )
                   : undefined
               }
+              defaultTilMåned={formFraDato ? new Date(formFraDato) : undefined}
               formFieldName="forrigeArbeidstakerUtsendelsePeriode"
               label={forrigePeriodeFelt.label}
               {...DATE_LIMITS}
