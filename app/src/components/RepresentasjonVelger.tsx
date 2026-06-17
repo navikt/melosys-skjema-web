@@ -35,13 +35,13 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
 
   return (
     <button
-      className="w-full text-left border border-border-subtle rounded px-4 py-4 hover:bg-surface-action-subtle transition-colors cursor-pointer"
+      className="w-full text-left border border-ax-border-neutral-subtle rounded px-4 py-4 cursor-pointer transition-colors hover:bg-ax-bg-accent-soft hover:border-ax-border-accent"
       onClick={() => onSelect(option.type)}
       type="button"
     >
       <HStack align="center" gap="space-16" justify="space-between">
         <HStack align="center" gap="space-16">
-          <Icon aria-hidden className="text-icon-action" fontSize="1.75rem" />
+          <Icon aria-hidden className="text-ax-text-accent" fontSize="1.75rem" />
           <div>
             <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
             {option.descriptionKey && (
@@ -51,7 +51,7 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
         </HStack>
         <ChevronRightIcon
           aria-hidden
-          className="text-icon-action"
+          className="text-ax-text-accent"
           fontSize="1.5rem"
         />
       </HStack>
