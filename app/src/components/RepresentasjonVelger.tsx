@@ -41,7 +41,11 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
     >
       <HStack align="center" gap="space-16" justify="space-between">
         <HStack align="center" gap="space-16">
-          <Icon aria-hidden className="text-ax-text-accent" fontSize="1.75rem" />
+          <Icon
+            aria-hidden
+            className="text-ax-text-accent"
+            fontSize="1.75rem"
+          />
           <div>
             <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
             {option.descriptionKey && (
