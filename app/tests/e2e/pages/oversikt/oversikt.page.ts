@@ -194,11 +194,9 @@ export class OversiktPage {
 
   /** Med fullmakt: Select person from the fullmakt combobox */
   async selectArbeidstakerMedFullmakt(personName: string) {
-    // The UNSAFE_Combobox has label="" with a separate Label rendered above it,
-    // so we locate by placeholder text instead
-    const fullmaktCombobox = this.page.getByPlaceholder(
-      translations.oversiktFelles.arbeidstakerMedFullmaktPlaceholder,
-    );
+    const fullmaktCombobox = this.page.getByRole("combobox", {
+      name: translations.oversiktFelles.arbeidstakerMedFullmaktLabel,
+    });
     await fullmaktCombobox.click();
     await this.page
       .getByRole("option", { name: new RegExp(personName) })
