@@ -71,6 +71,10 @@ jobs:
           dockerfile: server/Dockerfile
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          tag: |
+            type=raw,value=latest,priority=9001
+            type=raw,value=${{ github.sha }},priority=9000
+          platforms: linux/amd64,linux/arm64
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
 
