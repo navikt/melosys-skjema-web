@@ -237,7 +237,7 @@ export function ArbeidstakerVelger({
             <div className="navds-form-field navds-form-field--medium">
               {personerMedFullmakt.length > 0 && (
                 <>
-                  <Label className="navds-form-field__label">
+                  <Label as="span" className="navds-form-field__label">
                     {erAnnenPerson
                       ? t("oversiktAnnenPerson.personVelgerLabel")
                       : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
@@ -294,12 +294,24 @@ export function ArbeidstakerVelger({
                     </Link>
                   </InlineMessage>
                 ) : (
-                  // Vi bruker tom label="" fordi vi viser egen Label og BodyShort over
-                  // for å sikre at label og beskrivelse er synlig både når Combobox
-                  // vises og når valgt person vises i boks. Combobox har ikke innebygd clear-knapp.
+                  // UNSAFE_Combobox har ingen clear-knapp, så når en person er valgt
+                  // bytter vi den ut med en egen boks med kryss. Derfor ligger label og
+                  // beskrivelse utenfor den, så de blir stående i begge tilstander.
+                  // hideLabel skjuler komponentens egen label så vi slipper den dobbelt –
+                  // den beholdes for skjermlesere.
                   <UNSAFE_Combobox
+                    error={
+                      error
+                        ? "Kunne ikke laste personer med fullmakt"
+                        : undefined
+                    }
+                    hideLabel
                     isLoading={isLoading}
-                    label=""
+                    label={
+                      erAnnenPerson
+                        ? t("oversiktAnnenPerson.personVelgerLabel")
+                        : t("oversiktFelles.arbeidstakerMedFullmaktLabel")
+                    }
                     onToggleSelected={handleComboboxChange}
                     options={comboboxOptions}
                     placeholder={t(

@@ -1,3 +1,4 @@
+import { nb } from "~/i18n/nb";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
@@ -368,6 +369,11 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Select "Ja" for fullmakt radio
     await oversiktPage.selectSkalFylleUtJa();
+    await expect(
+      page.getByRole("combobox", {
+        name: nb.translation.oversiktFelles.arbeidstakerMedFullmaktLabel,
+      }),
+    ).toBeVisible();
 
     // Select person from fullmakt combobox
     await oversiktPage.selectArbeidstakerMedFullmakt(
