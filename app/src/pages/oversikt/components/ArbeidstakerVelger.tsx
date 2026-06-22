@@ -95,7 +95,7 @@ export function ArbeidstakerVelger({
     data: personerMedFullmakt = [],
     isLoading,
     error,
-  } = useQuery(getPersonerMedFullmaktQuery());
+  } = useQuery({ ...getPersonerMedFullmaktQuery(), retry: false });
 
   // Konverter til combobox options med fødselsnummer
   const comboboxOptions = personerMedFullmakt.map(
@@ -277,6 +277,11 @@ export function ArbeidstakerVelger({
                       />
                     </HStack>
                   </Box>
+                ) : error && personerMedFullmakt.length === 0 ? (
+                  // Feil mot repr-api uten cachede fullmakter: vis feil i stedet for "ingen fullmakter".
+                  <Alert className="mt-2" size="small" variant="error">
+                    {t("oversiktFelles.feilVedHentingAvFullmakter")}
+                  </Alert>
                 ) : !isLoading && personerMedFullmakt.length === 0 ? (
                   <InlineMessage className="mt-2" status="info">
                     {t("oversiktFelles.arbeidstakerIngenFullmakter")}{" "}

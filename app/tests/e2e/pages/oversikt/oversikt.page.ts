@@ -157,6 +157,22 @@ export class OversiktPage {
     await this.startSoknadButton.click();
   }
 
+  async assertArbeidsgiverFeilmelding() {
+    await expect(
+      this.page.getByText(
+        translations.oversiktFelles.feilVedHentingAvArbeidsgivere,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertFullmaktFeilmelding() {
+    await expect(
+      this.page.getByText(
+        translations.oversiktFelles.feilVedHentingAvFullmakter,
+      ),
+    ).toBeVisible();
+  }
+
   async assertUtkastListVisible() {
     await expect(this.utkastExpansionCard.first()).toBeVisible();
   }

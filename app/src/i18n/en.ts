@@ -517,6 +517,8 @@ export const en = {
       ingenArbeidsgivereLenke: "Read more about how to get access in Altinn",
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
+      feilVedHentingAvFullmakter:
+        "An error occurred while fetching the people you are authorized to represent. Please try again later.",
       arbeidstakerTittel: "Employee",
       skalFylleUtForArbeidstakerLabel:
         "Will you fill out the application for the employee?",
