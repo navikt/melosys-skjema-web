@@ -1,7 +1,13 @@
 import { UseDatepickerOptions } from "@navikt/ds-react";
+import { isAfter } from "date-fns";
+import { useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { DatePickerFormPart } from "./DatePickerFormPart.tsx";
+import {
+  DatePickerFormPart,
+  DatePickerFormPartHandle,
+} from "./DatePickerFormPart.tsx";
 
 /**
  * Props for PeriodeFormPart-komponenten
@@ -44,7 +50,14 @@ type PeriodeFormPartProps = {
    * Standard valgt dato for "til dato"-feltet.
    */
   defaultTilDato?: Date;
-} & Omit<UseDatepickerOptions, "onDateChange" | "defaultSelected">;
+  /**
+   * Standard valgt måned for "til dato"-feltet.
+   */
+  defaultTilMåned?: Date;
+} & Omit<
+  UseDatepickerOptions,
+  "onDateChange" | "defaultSelected" | "defaultMonth"
+>;
 
 /**
  * En gjenbrukbar skjemakomponent for datoperiode-input med integrert validering.
@@ -76,9 +89,20 @@ export function PeriodeFormPart({
   className,
   defaultFraDato,
   defaultTilDato,
+  defaultTilMåned,
   ...datePickerOptions
 }: PeriodeFormPartProps) {
   const { t } = useTranslation();
+  const { getValues } = useFormContext();
+  const tilDatoRef = useRef<DatePickerFormPartHandle>(null);
+
+  // Tøm "til dato" hvis "fra dato" settes etter den – uten å vise valideringsfeil.
+  const handleFraDatoChange = (fraDato?: Date) => {
+    const tilDato = getValues(`${formFieldName}.tilDato`);
+    if (fraDato && tilDato && isAfter(fraDato, new Date(tilDato))) {
+      tilDatoRef.current?.clearWithoutValidation();
+    }
+  };
 
   return (
     <div className={className}>
@@ -89,15 +113,18 @@ export function PeriodeFormPart({
         defaultSelected={defaultFraDato}
         formFieldName={`${formFieldName}.fraDato`}
         label={fraDatoLabel ?? t("periode.fraDato")}
+        onDateChange={handleFraDatoChange}
         {...datePickerOptions}
       />
 
       <DatePickerFormPart
         className="mt-4"
         defaultSelected={defaultTilDato}
+        defaultMonth={defaultTilMåned}
         description={tilDatoDescription}
         formFieldName={`${formFieldName}.tilDato`}
         label={tilDatoLabel ?? t("periode.tilDato")}
+        ref={tilDatoRef}
         {...datePickerOptions}
       />
     </div>

@@ -195,11 +195,8 @@ export class UtenlandsoppdragetStegPage {
   }
 
   async fillForrigeArbeidstakerTilDato(date: string) {
-    await selectDateFromCalendar(
-      this.page,
-      this.forrigeArbeidstakerTilDatoInput,
-      date,
-    );
+    await this.forrigeArbeidstakerTilDatoInput.fill(date);
+    await this.forrigeArbeidstakerTilDatoInput.blur();
   }
 
   async assertStillOnStep() {

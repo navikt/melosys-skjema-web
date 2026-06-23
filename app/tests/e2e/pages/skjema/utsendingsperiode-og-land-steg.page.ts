@@ -99,7 +99,8 @@ export class UtsendingsperiodeOgLandStegPage {
   }
 
   async fillTilDato(date: string) {
-    await selectDateFromCalendar(this.page, this.tilDatoInput, date);
+    await this.tilDatoInput.fill(date);
+    await this.tilDatoInput.blur();
   }
 
   async assertLandFeilmeldingIsVisible() {
