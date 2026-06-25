@@ -231,6 +231,26 @@ export class OversiktPage {
     await expect(this.page.getByText(orgName)).toBeVisible();
   }
 
+  /** OrganisasjonSoker viser "fant ingen"-warning (404) */
+  async assertOrganisasjonIkkeFunnetIsVisible() {
+    await expect(
+      this.page.getByText(
+        translations.generellValidering.organisasjonIkkeFunnet,
+      ),
+    ).toBeVisible();
+  }
+
+  /**
+   * Org-feltet er IKKE i feiltilstand (rød boks). Skiller den nye
+   * warning-oppførselen fra den gamle feilboksen, som satte aria-invalid.
+   */
+  async assertArbeidsgiverOrgnrIkkeIFeiltilstand() {
+    await expect(this.arbeidsgiverOrgnrInput).not.toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+  }
+
   /** Wait for the verifiser-person response to show verified person */
   async waitForPersonVerified(personName: string) {
     await expect(this.page.getByText(personName)).toBeVisible();

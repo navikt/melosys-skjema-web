@@ -1,4 +1,4 @@
-import { Loader, TextField } from "@navikt/ds-react";
+import { Alert, Loader, TextField } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -60,20 +60,27 @@ export function OrganisasjonSoker({
 
   const formError = errors[formFieldName]?.message;
 
+  const httpErrorMessage =
+    query.isError && !(query.error instanceof ValideringError)
+      ? query.error.message
+      : null;
+  const statusMatch = httpErrorMessage?.match(/status:\s*(\d+)/);
+  const httpStatus = statusMatch ? statusMatch[1] : null;
+
+  // 404 = manglende treff: en forventet situasjon, ikke en systemfeil. Vises som
+  // egen warning-melding under feltet, ikke som rød feiltilstand i selve feltet.
+  const visIngenTreff = httpStatus === "404";
+
   const getErrorMessage = (): string | undefined => {
     if (query.isError) {
       if (query.error instanceof ValideringError) {
         return t("generellValidering.ugyldigOrganisasjonsnummer");
       }
-
-      const statusMatch = query.error.message.match(/status:\s*(\d+)/);
-      const status = statusMatch ? statusMatch[1] : null;
-
-      if (status === "429") {
+      if (httpStatus === "429") {
         return t("generellValidering.rateLimitOverskredet");
       }
-      if (status === "404") {
-        return t("generellValidering.organisasjonIkkeFunnet");
+      if (httpStatus === "404") {
+        return undefined; // vises som warning-melding via visIngenTreff
       }
       return t("generellValidering.feilVedSok");
     }
@@ -109,6 +116,17 @@ export function OrganisasjonSoker({
         <div aria-live="polite" className="mt-4" role="status">
           <Loader size="medium" title={t("felles.laster")} />
         </div>
+      )}
+
+      {visIngenTreff && !query.isFetching && (
+        <Alert
+          aria-live="polite"
+          className="mt-4"
+          size="small"
+          variant="warning"
+        >
+          {t("generellValidering.organisasjonIkkeFunnet")}
+        </Alert>
       )}
 
       {valgtOrganisasjon && !query.isFetching && (
