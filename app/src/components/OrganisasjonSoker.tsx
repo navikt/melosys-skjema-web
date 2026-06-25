@@ -60,8 +60,6 @@ export function OrganisasjonSoker({
 
   const formError = errors[formFieldName]?.message;
 
-  // En HTTP-feil (ikke ValideringError eller ingen feil) har statuskoden i
-  // meldingen, f.eks. "HTTP error! status: 404".
   const httpErrorMessage =
     query.isError && !(query.error instanceof ValideringError)
       ? query.error.message
