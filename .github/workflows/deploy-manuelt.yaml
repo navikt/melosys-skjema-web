@@ -44,7 +44,7 @@ jobs:
     needs: check_docker_image_exists
     if: needs.check_docker_image_exists.outputs.exists != 'true'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v6
@@ -101,7 +101,7 @@ jobs:
         run: |
           echo "CLUSTER=prod-gcp" >> $GITHUB_ENV
           echo "RESOURCE=.nais/nais-prod.yaml" >> $GITHUB_ENV
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Deploy til ${{ github.event.inputs.environment }}
