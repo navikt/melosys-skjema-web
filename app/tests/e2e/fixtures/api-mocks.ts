@@ -325,6 +325,27 @@ export async function mockGetEregOrganisasjonMedJuridiskEnhet(
   );
 }
 
+/**
+ * Mock der organisasjonsoppslaget gir 404 (manglende treff). Brukes for å teste
+ * at OrganisasjonSoker viser nøytral infotekst i stedet for rød feilboks.
+ */
+export async function mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(
+  page: Page,
+) {
+  await page.route(
+    "/api/ereg/organisasjon-med-juridisk-enhet/*",
+    async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 404,
+          contentType: "application/json",
+          body: JSON.stringify({ error: "Fant ingen organisasjon" }),
+        });
+      }
+    },
+  );
+}
+
 export async function setupApiMocksForArbeidsgiver(
   page: Page,
   skjema: UtsendtArbeidstakerSkjemaDto,
