@@ -160,7 +160,7 @@ export function InnsendteSoknaderTabell({
   return (
     <Box
       background="neutral-soft"
-      borderRadius="2"
+      borderRadius="12"
       borderWidth="1"
       padding="space-24"
     >

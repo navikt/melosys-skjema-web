@@ -266,7 +266,7 @@ function SoknadStarterContent({
       <Box
         background="info-soft"
         borderColor="neutral-subtle"
-        borderRadius="2"
+        borderRadius="12"
         borderWidth="1"
         className="surface-action-subtle"
         padding="space-24"
