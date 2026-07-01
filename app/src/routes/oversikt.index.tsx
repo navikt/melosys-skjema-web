@@ -34,6 +34,7 @@ function OversiktRoute() {
       representasjonskontekst={{
         representasjonstype: search.representasjonstype,
         radgiverOrgnr: search.radgiverOrgnr,
+        arbeidsgiverOrgnr: search.arbeidsgiverOrgnr,
       }}
     />
   );
