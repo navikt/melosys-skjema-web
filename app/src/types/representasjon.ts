@@ -11,6 +11,7 @@ export const representasjonskontekstSchema = z.object({
     Representasjonstype.ANNEN_PERSON,
   ]),
   radgiverOrgnr: z.coerce.string().optional(),
+  arbeidsgiverOrgnr: z.coerce.string().optional(),
 });
 
 export type Representasjonskontekst = z.infer<
