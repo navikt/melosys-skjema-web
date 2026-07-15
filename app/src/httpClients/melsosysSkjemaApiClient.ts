@@ -659,20 +659,13 @@ export const getFeatureTogglesQuery = () =>
     queryFn: fetchFeatureToggles,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    retry: false,
+    retry: 1,
   });
 
 async function fetchFeatureToggles(): Promise<Record<string, boolean>> {
-  // Backend krever features-param; uten kjente toggles er det ingenting å hente.
-  const toggleNavnListe: readonly string[] = alleToggleNavn;
-  if (toggleNavnListe.length === 0) {
-    return {};
-  }
-
-  const params = new URLSearchParams();
-  for (const navn of toggleNavnListe) {
-    params.append("features", navn);
-  }
+  const params = new URLSearchParams(
+    alleToggleNavn.map((navn) => ["features", navn]),
+  );
 
   const response = await fetch(`${API_PROXY_URL}/featuretoggle?${params}`, {
     method: "GET",
