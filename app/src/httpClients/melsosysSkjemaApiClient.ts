@@ -1,6 +1,7 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { StegKey } from "~/constants/stegKeys.ts";
+import { alleToggleNavn } from "~/featuretoggle/toggleNavn.ts";
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidssituasjonDto,
@@ -646,6 +647,42 @@ export async function slettVedlegg(
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
+}
+
+/**
+ * Henter evaluert status for alle kjente feature toggles (se featuretoggle/toggleNavn.ts).
+ * Toggles konsumeres via useFeatureToggle-hooken, ikke denne direkte.
+ */
+export const getFeatureTogglesQuery = () =>
+  queryOptions<Record<string, boolean>>({
+    queryKey: ["featuretoggles"],
+    queryFn: fetchFeatureToggles,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: false,
+  });
+
+async function fetchFeatureToggles(): Promise<Record<string, boolean>> {
+  // Backend krever features-param; uten kjente toggles er det ingenting å hente.
+  const toggleNavnListe: readonly string[] = alleToggleNavn;
+  if (toggleNavnListe.length === 0) {
+    return {};
+  }
+
+  const params = new URLSearchParams();
+  for (const navn of toggleNavnListe) {
+    params.append("features", navn);
+  }
+
+  const response = await fetch(`${API_PROXY_URL}/featuretoggle?${params}`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
 }
 
 export { type VedleggDto } from "~/types/melosysSkjemaTypes.ts";
