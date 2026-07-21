@@ -44,6 +44,7 @@ interface SoknadStarterProps {
 interface SoknadStarterContentProps {
   defaultData: SoknadStarterFormData;
   altinnArbeidsgivere: OrganisasjonDto[];
+  initialArbeidsgiverOrgnr?: string;
 }
 
 /**
@@ -148,6 +149,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
     <SoknadStarterContent
       altinnArbeidsgivere={arbeidsgivere ?? []}
       defaultData={defaultData}
+      initialArbeidsgiverOrgnr={representasjonskontekst.arbeidsgiverOrgnr}
       key={`${representasjonskontekst.representasjonstype}-${representasjonskontekst.radgiverOrgnr ?? ""}`}
     />
   );
@@ -159,6 +161,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
 function SoknadStarterContent({
   defaultData,
   altinnArbeidsgivere,
+  initialArbeidsgiverOrgnr,
 }: SoknadStarterContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -202,6 +205,7 @@ function SoknadStarterContent({
       return (
         <OrganisasjonSoker
           formFieldName="arbeidsgiver"
+          initialOrgnr={initialArbeidsgiverOrgnr}
           label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
         />
       );
@@ -266,7 +270,7 @@ function SoknadStarterContent({
       <Box
         background="info-soft"
         borderColor="neutral-subtle"
-        borderRadius="2"
+        borderRadius="12"
         borderWidth="1"
         className="surface-action-subtle"
         padding="space-24"

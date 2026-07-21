@@ -1,5 +1,5 @@
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
-import { test } from "../../fixtures/test";
+import { expect, test } from "../../fixtures/test";
 import {
   formFieldValues,
   testArbeidstakerSkjema,
@@ -64,5 +64,22 @@ test.describe("Utsendingsperiode og land - validering", () => {
     await stegPage.assertTilDatoForFraDatoFeilmeldingIsVisible();
     await stegPage.assertFraDatoErPakrevdIsNotVisible();
     await stegPage.assertTilDatoErPakrevdIsNotVisible();
+  });
+
+  test("tømmer til-dato uten umiddelbar påkrevd-feil når fra-dato settes etter til-dato", async () => {
+    await stegPage.velgLand(formFieldValues.utsendelseLand);
+    await stegPage.fillFraDato(formFieldValues.periodeFra);
+    await stegPage.fillTilDato(formFieldValues.periodeTil);
+    await expect(stegPage.tilDatoInput).toHaveValue(formFieldValues.periodeTil);
+
+    await stegPage.fraDatoInput.fill("01.01.2027");
+    await stegPage.fraDatoInput.blur();
+
+    await expect(stegPage.tilDatoInput).toHaveValue("");
+    await stegPage.assertTilDatoErPakrevdIsNotVisible();
+
+    await stegPage.lagreOgFortsett();
+
+    await stegPage.assertTilDatoErPakrevdIsVisible();
   });
 });

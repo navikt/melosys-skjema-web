@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - 'main'
-    paths:
-      - 'server/**'
-      - '.github/*/verify-server.yaml'
 
 permissions:
   contents: read

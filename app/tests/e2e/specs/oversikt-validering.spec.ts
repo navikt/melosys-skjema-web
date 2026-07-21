@@ -2,6 +2,7 @@ import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
   mockGetEregOrganisasjonMedJuridiskEnhet,
+  mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet,
   mockHentTilganger,
   mockPersonerMedFullmakt,
   setupApiMocksForOversikt,
@@ -41,6 +42,29 @@ test.describe("Oversikt - validering", () => {
 
     await oversiktPage.assertValideringManglerArbeidsgiverIsVisible();
     await oversiktPage.assertStillOnPage();
+  });
+
+  test("DEG_SELV: viser warning-melding (ikke rød feilboks) når organisasjonssøk gir 404", async ({
+    page,
+  }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+
+    await oversiktPage.fillArbeidsgiverOrgnr(korrektFormatertOrgnr);
+
+    // Manglende treff vises som warning-melding, og feltet er ikke i feiltilstand.
+    await oversiktPage.assertOrganisasjonIkkeFunnetIsVisible();
+    await oversiktPage.assertArbeidsgiverOrgnrIkkeIFeiltilstand();
   });
 
   test("ARBEIDSGIVER: viser feilmeldinger for manglende arbeidsgiver og arbeidstaker samtidig", async ({
