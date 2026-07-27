@@ -445,6 +445,8 @@ export const nb = {
       historikkKolonneFnr: "F.nr/D-nr",
       historikkKolonneInnsendt: "Innsendt",
       historikkKolonneRefnrSaksnummer: "Refnr. / saksnummer",
+      historikkRefnrLabel: "Refnr.",
+      historikkSaksnummerLabel: "Saksnummer",
       historikkKolonneFodselsdato: "Fødselsdato",
       historikkKolonneArbeidsgiver: "Arbeidsgiver",
       historikkSeSkjema: "Se skjema",

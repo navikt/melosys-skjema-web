@@ -300,10 +300,18 @@ export function InnsendteSoknaderTabell({
                     <Table.DataCell>
                       <VStack>
                         <BodyShort size="small">
+                          <span className="sr-only">
+                            {t("oversiktFelles.historikkRefnrLabel")}{" "}
+                          </span>
                           {soknad.referanseId || "-"}
                         </BodyShort>
                         {soknad.saksnummer && (
                           <BodyShort className="text-text-subtle" size="small">
+                            <span className="sr-only">
+                              {t(
+                                "oversiktFelles.historikkSaksnummerLabel",
+                              )}{" "}
+                            </span>
                             {soknad.saksnummer}
                           </BodyShort>
                         )}

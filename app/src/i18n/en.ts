@@ -556,6 +556,8 @@ export const en = {
       historikkKolonneFnr: "Birth/D-no",
       historikkKolonneInnsendt: "Submitted",
       historikkKolonneRefnrSaksnummer: "Ref.no. / case number",
+      historikkRefnrLabel: "Ref.no.",
+      historikkSaksnummerLabel: "Case number",
       historikkKolonneFodselsdato: "Date of birth",
       historikkKolonneArbeidsgiver: "Employer",
       historikkSeSkjema: "View application",
