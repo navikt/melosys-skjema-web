@@ -7,6 +7,7 @@ import {
   Pagination,
   Search,
   Table,
+  Tag,
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +18,11 @@ import { useTranslation } from "react-i18next";
 import { getInnsendteSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   HentInnsendteSoknaderRequest,
+  InnsendtSoknadOversiktDto,
+  MotpartStatus,
   Representasjonstype,
+  Saksstatus,
+  Skjemadel,
   SorteringsFelt,
   Sorteringsretning,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -37,6 +42,54 @@ const formatDato = (dato: string) => {
     year: "numeric",
   });
 };
+
+/**
+ * Statusbadge for en innsendt søknad basert på saksstatus og motpart-status.
+ *
+ * Regler (jf. plan 03):
+ * - AVSLUTTET vinner alltid over "venter på motpart" — nøytral "Ferdig behandlet".
+ * - saksstatus null behandles som MOTTATT (ikke synket ennå).
+ * - VENTER viser hvilken del det ventes på (motsatt del av radens skjemadel).
+ *
+ * NB: Badge-tekstene avventer endelig designer-godkjenning.
+ */
+function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
+  const { t } = useTranslation();
+
+  if (soknad.saksstatus === Saksstatus.AVSLUTTET) {
+    return (
+      <Tag size="small" variant="neutral">
+        {t("oversiktFelles.historikkStatusFerdigBehandlet")}
+      </Tag>
+    );
+  }
+
+  switch (soknad.motpartStatus) {
+    case MotpartStatus.HAR_SENDT: {
+      return (
+        <Tag size="small" variant="success">
+          {t("oversiktFelles.historikkStatusBeggeDelerMottatt")}
+        </Tag>
+      );
+    }
+    case MotpartStatus.VENTER: {
+      return (
+        <Tag size="small" variant="warning">
+          {soknad.skjemadel === Skjemadel.ARBEIDSGIVERS_DEL
+            ? t("oversiktFelles.historikkStatusVenterArbeidstakersDel")
+            : t("oversiktFelles.historikkStatusVenterArbeidsgiversDel")}
+        </Tag>
+      );
+    }
+    case MotpartStatus.IKKE_RELEVANT: {
+      return (
+        <Tag size="small" variant="success">
+          {t("oversiktFelles.historikkStatusKomplettSoknadMottatt")}
+        </Tag>
+      );
+    }
+  }
+}
 
 /**
  * Tabell over innsendte søknader med søk, sortering og paginering.
@@ -154,8 +207,8 @@ export function InnsendteSoknaderTabell({
   const isAnnenPerson =
     representasjonskontekst.representasjonstype ===
     Representasjonstype.ANNEN_PERSON;
-  // DEG_SELV=4, ANNEN_PERSON=5, ARBEIDSGIVER/RADGIVER=6
-  const antallKolonner = isDegSelv ? 4 : isAnnenPerson ? 5 : 6;
+  // DEG_SELV=6, ANNEN_PERSON=7, ARBEIDSGIVER/RADGIVER=8 (inkl. Saksnummer og Status)
+  const antallKolonner = isDegSelv ? 6 : isAnnenPerson ? 7 : 8;
 
   return (
     <Box
@@ -211,6 +264,9 @@ export function InnsendteSoknaderTabell({
                   {t("oversiktFelles.historikkKolonneRefnr")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader>
+                  {t("oversiktFelles.historikkKolonneSaksnummer")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
                   {t("oversiktFelles.historikkKolonneArbeidsgiver")}
                 </Table.ColumnHeader>
                 {!isDegSelv && !isAnnenPerson && (
@@ -223,6 +279,9 @@ export function InnsendteSoknaderTabell({
                     {t("oversiktFelles.historikkKolonneFodselsdato")}
                   </Table.ColumnHeader>
                 )}
+                <Table.ColumnHeader>
+                  {t("oversiktFelles.historikkKolonneStatus")}
+                </Table.ColumnHeader>
                 <Table.ColumnHeader />
               </Table.Row>
             </Table.Header>
@@ -242,6 +301,7 @@ export function InnsendteSoknaderTabell({
                       {formatDato(soknad.innsendtDato)}
                     </Table.DataCell>
                     <Table.DataCell>{soknad.referanseId || "-"}</Table.DataCell>
+                    <Table.DataCell>{soknad.saksnummer ?? "–"}</Table.DataCell>
                     <Table.DataCell>
                       {soknad.arbeidsgiverNavn || "-"}
                     </Table.DataCell>
@@ -255,6 +315,9 @@ export function InnsendteSoknaderTabell({
                         {formatDato(soknad.arbeidstakerFodselsdato)}
                       </Table.DataCell>
                     )}
+                    <Table.DataCell>
+                      <StatusTag soknad={soknad} />
+                    </Table.DataCell>
                     <Table.DataCell>
                       <Link
                         params={{ id: soknad.id }}

@@ -21,6 +21,19 @@ export enum FeltFormat {
   BELOP = "BELOP",
 }
 
+export enum InnsendingStatus {
+  MOTTATT = "MOTTATT",
+  UNDER_BEHANDLING = "UNDER_BEHANDLING",
+  FERDIG = "FERDIG",
+  KAFKA_FEILET = "KAFKA_FEILET",
+}
+
+export enum MotpartStatus {
+  HAR_SENDT = "HAR_SENDT",
+  VENTER = "VENTER",
+  IKKE_RELEVANT = "IKKE_RELEVANT",
+}
+
 export enum Sorteringsretning {
   ASC = "ASC",
   DESC = "DESC",
@@ -63,39 +76,6 @@ export enum Representasjonstype {
   ANNEN_PERSON = "ANNEN_PERSON",
 }
 
-export enum InntektType {
-  LOENN = "LOENN",
-  INNTEKT_FRA_EGEN_VIRKSOMHET = "INNTEKT_FRA_EGEN_VIRKSOMHET",
-}
-
-export enum FastEllerVekslendeArbeidssted {
-  FAST = "FAST",
-  VEKSLENDE = "VEKSLENDE",
-}
-
-export enum Farvann {
-  INTERNASJONALT_FARVANN = "INTERNASJONALT_FARVANN",
-  TERRITORIALFARVANN = "TERRITORIALFARVANN",
-}
-
-export enum ArbeidsstedType {
-  PA_LAND = "PA_LAND",
-  OFFSHORE = "OFFSHORE",
-  PA_SKIP = "PA_SKIP",
-  OM_BORD_PA_FLY = "OM_BORD_PA_FLY",
-}
-
-export enum ArbeidsinntektKilde {
-  NORSK_VIRKSOMHET = "NORSK_VIRKSOMHET",
-  UTENLANDSK_VIRKSOMHET = "UTENLANDSK_VIRKSOMHET",
-}
-
-export enum Ansettelsesform {
-  ARBEIDSTAKER_ELLER_FRILANSER = "ARBEIDSTAKER_ELLER_FRILANSER",
-  SELVSTENDIG_NAERINGSDRIVENDE = "SELVSTENDIG_NAERINGSDRIVENDE",
-  STATSANSATT = "STATSANSATT",
-}
-
 export enum LandKode {
   AT = "AT",
   AX = "AX",
@@ -135,10 +115,48 @@ export enum LandKode {
   SK = "SK",
 }
 
+export enum InntektType {
+  LOENN = "LOENN",
+  INNTEKT_FRA_EGEN_VIRKSOMHET = "INNTEKT_FRA_EGEN_VIRKSOMHET",
+}
+
+export enum FastEllerVekslendeArbeidssted {
+  FAST = "FAST",
+  VEKSLENDE = "VEKSLENDE",
+}
+
+export enum Farvann {
+  INTERNASJONALT_FARVANN = "INTERNASJONALT_FARVANN",
+  TERRITORIALFARVANN = "TERRITORIALFARVANN",
+}
+
+export enum ArbeidsstedType {
+  PA_LAND = "PA_LAND",
+  OFFSHORE = "OFFSHORE",
+  PA_SKIP = "PA_SKIP",
+  OM_BORD_PA_FLY = "OM_BORD_PA_FLY",
+}
+
+export enum ArbeidsinntektKilde {
+  NORSK_VIRKSOMHET = "NORSK_VIRKSOMHET",
+  UTENLANDSK_VIRKSOMHET = "UTENLANDSK_VIRKSOMHET",
+}
+
+export enum Ansettelsesform {
+  ARBEIDSTAKER_ELLER_FRILANSER = "ARBEIDSTAKER_ELLER_FRILANSER",
+  SELVSTENDIG_NAERINGSDRIVENDE = "SELVSTENDIG_NAERINGSDRIVENDE",
+  STATSANSATT = "STATSANSATT",
+}
+
 export enum VedleggFiltype {
   PDF = "PDF",
   JPEG = "JPEG",
   PNG = "PNG",
+}
+
+export enum Saksstatus {
+  MOTTATT = "MOTTATT",
+  AVSLUTTET = "AVSLUTTET",
 }
 
 export interface FeltDefinisjonDto {
@@ -148,11 +166,34 @@ export interface FeltDefinisjonDto {
   type: string;
 }
 
-export interface RegistrerSaksnummerRequest {
+export interface OppdaterSaksstatusRequest {
+  saksnummer: string;
+  saksstatus: Saksstatus;
+}
+
+export interface BulkOppdaterSaksstatusRequest {
   /**
-   * @minLength 0
-   * @maxLength 99
+   * @maxItems 1000
+   * @minItems 0
    */
+  oppdateringer: SaksstatusOppdatering[];
+}
+
+export interface SaksstatusOppdatering {
+  /** @format uuid */
+  skjemaId: string;
+  saksnummer: string;
+  saksstatus: Saksstatus;
+}
+
+export interface BulkOppdaterSaksstatusResultat {
+  /** @format int32 */
+  antallOppdatert: number;
+  ukjenteSkjemaIder: string[];
+  konfliktSkjemaIder: string[];
+}
+
+export interface RegistrerSaksnummerRequest {
   saksnummer: string;
 }
 
@@ -167,23 +208,15 @@ export interface VedleggDto {
   opprettetDato: string;
 }
 
-export interface PeriodeDto {
-  /** @format date */
-  fraDato: string;
-  /** @format date */
-  tilDato: string;
-}
-
-export interface UtsendingsperiodeOgLandDto {
-  utsendelseLand: LandKode;
-  utsendelsePeriode: PeriodeDto;
+export interface VedleggValgDto {
+  harAnnenDokumentasjon: boolean;
 }
 
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "metadatatype"
@@ -198,8 +231,8 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "metadatatype"
@@ -214,8 +247,8 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "metadatatype"
@@ -268,8 +301,8 @@ export interface ArbeidstakersData {
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "metadatatype"
@@ -338,11 +371,18 @@ export interface PaSkipDto {
   territorialfarvannLand?: LandKode;
 }
 
+export interface PeriodeDto {
+  /** @format date */
+  fraDato: string;
+  /** @format date */
+  tilDato: string;
+}
+
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "metadatatype"
@@ -358,8 +398,8 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "metadatatype"
@@ -393,10 +433,6 @@ export interface SkatteforholdOgInntektDto {
 export interface TilleggsopplysningerDto {
   harFlereOpplysningerTilSoknaden: boolean;
   tilleggsopplysningerTilSoknad?: string;
-}
-
-export interface VedleggValgDto {
-  harAnnenDokumentasjon: boolean;
 }
 
 export interface UtenlandskVirksomhet {
@@ -435,12 +471,18 @@ export interface UtenlandsoppdragetDto {
   forrigeArbeidstakerUtsendelsePeriode?: PeriodeDto;
 }
 
+export interface UtsendingsperiodeOgLandDto {
+  utsendelseLand: LandKode;
+  utsendelsePeriode: PeriodeDto;
+}
+
 export type UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto =
   UtilRequiredKeys<UtsendtArbeidstakerSkjemaData, "type"> & {
     arbeidsgiversData: ArbeidsgiversData;
     arbeidstakersData: ArbeidstakersData;
     utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
     tilleggsopplysninger?: TilleggsopplysningerDto;
+    vedlegg?: VedleggValgDto;
   };
 
 export type UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = UtilRequiredKeys<
@@ -453,6 +495,7 @@ export type UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = UtilRequiredKeys<
   arbeidsstedIUtlandet?: ArbeidsstedIUtlandetDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
+  vedlegg?: VedleggValgDto;
 };
 
 export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
@@ -464,25 +507,26 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
   skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
   familiemedlemmer?: FamiliemedlemmerDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
+  vedlegg?: VedleggValgDto;
 };
 
 export interface UtsendtArbeidstakerMetadata {
   representasjonstype: Representasjonstype;
-  skjemadel: Skjemadel;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
   juridiskEnhetOrgnr: string;
+  skjemadel: Skjemadel;
   arbeidsgiverNavn: string;
   /** @format uuid */
   kobletSkjemaId?: string;
-  /** @format uuid */
-  erstatterSkjemaId?: string;
   arbeidstakerNavn: string;
   metadatatype: string;
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
+  vedlegg?: VedleggValgDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
-  vedlegg?: VedleggValgDto;
   type: string;
 }
 
@@ -566,6 +610,10 @@ export interface InnsendtSoknadOversiktDto {
   /** @format uuid */
   id: string;
   referanseId?: string;
+  saksnummer?: string;
+  saksstatus?: Saksstatus;
+  motpartStatus: MotpartStatus;
+  skjemadel: Skjemadel;
   arbeidsgiverNavn?: string;
   arbeidsgiverOrgnr: string;
   arbeidstakerNavn: string;
@@ -601,6 +649,50 @@ export interface VerifiserPersonResponse {
   fodselsdato: string;
 }
 
+export interface ResendVarslerResultatDto {
+  /** @format int32 */
+  antallSendt: number;
+  saksnumre: string[];
+}
+
+export interface RyddUtkastResultatDto {
+  /** @format int32 */
+  antallSkjema: number;
+  /** @format int32 */
+  antallVedleggSlettet: number;
+  /** @format int32 */
+  antallVedleggFeilet: number;
+}
+
+export interface InnsendingAdminDto {
+  /** @format uuid */
+  innsendingId: string;
+  /** @format uuid */
+  skjemaId: string;
+  referanseId: string;
+  status: InnsendingStatus;
+  skjemaStatus: SkjemaStatus;
+  orgnr: string;
+  /** @format int32 */
+  antallForsok: number;
+  feilmelding?: string;
+  /** @format date-time */
+  sisteForsoekTidspunkt?: string;
+  /** @format date-time */
+  opprettetDato: string;
+  saksnummer?: string;
+  saksstatus?: Saksstatus;
+  /** @format date-time */
+  saksstatusOppdatert?: string;
+}
+
+export interface RetryResultatDto {
+  /** @format int32 */
+  antallForsoekt: number;
+  /** @format int32 */
+  antallFeilet: number;
+}
+
 export interface UtsendtArbeidstakerSkjemaM2MDto {
   skjema: UtsendtArbeidstakerSkjemaDto;
   kobletSkjema?: UtsendtArbeidstakerSkjemaDto;
@@ -609,6 +701,7 @@ export interface UtsendtArbeidstakerSkjemaM2MDto {
   /** @format date-time */
   innsendtTidspunkt: string;
   innsenderFnr: string;
+  dokumentTittel: string;
   vedlegg: VedleggDto[];
 }
 
@@ -690,6 +783,12 @@ export interface InnsendtSkjemaResponse {
   definisjon: SkjemaDefinisjonDto;
   /** Indikerer om fullmakt er aktiv. null=ikke relevant, true=aktiv, false=tapt (arbeidstaker-data strippet). */
   fullmaktAktiv?: boolean;
+  /**
+   * Melosys-saksnummer, null hvis ikke mottatt fra melosys-api ennå
+   * @example "MEL-123456"
+   */
+  saksnummer?: string;
+  saksstatus?: Saksstatus;
 }
 
 export type ListeFeltDefinisjon = UtilRequiredKeys<
@@ -948,4 +1047,98 @@ export interface UtsendingsperiodeOgLandTranslation {
 export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
+}
+
+export interface AdminStatistikkDto {
+  skjemaPerStatus: Record<string, number>;
+  innsendingPerStatus: Record<string, number>;
+  /** @format int64 */
+  antallFeiledeInnsendinger: number;
+}
+
+export interface BrukStatistikkDto {
+  /** @format date-time */
+  tidspunkt: string;
+  /** @format date */
+  periodeFraOgMed?: string;
+  /** @format date */
+  periodeTilOgMed?: string;
+  utkast: UtkastStatistikkDto;
+  /** @format int64 */
+  totaltInnsendt: number;
+  /** @format int64 */
+  innsendtSisteDoegn: number;
+  /** @format int64 */
+  innsendtSiste7Dager: number;
+  /** @format int64 */
+  innsendtSiste30Dager: number;
+  innsendtPerSkjemadel: Record<string, number>;
+  innsendtPerFlyt: Record<string, number>;
+  innsendtPerSprak: Record<string, number>;
+  saksdekning: SaksdekningDto;
+  /** @format int64 */
+  antallUnikePersoner: number;
+  /** @format int64 */
+  antallUnikeVirksomheter: number;
+  topplisteVirksomheter: VirksomhetStatistikkDto[];
+}
+
+export interface DelStatusDto {
+  /** @format int64 */
+  totalt: number;
+  /** @format int64 */
+  medMotpart: number;
+  /** @format int64 */
+  venterMotpartHarUtkast: number;
+  /** @format int64 */
+  venterIngenMotpart: number;
+}
+
+export interface SaksdekningDto {
+  /** @format int64 */
+  antallKomplette: number;
+  /** @format int64 */
+  antallSakerMedBeggeDeler: number;
+  arbeidstakerDeler: DelStatusDto;
+  arbeidsgiverDeler: DelStatusDto;
+  /** @format int64 */
+  antallMuligeDobbeltinnsendinger: number;
+  /** @format int64 */
+  antallSakerMedFlereVersjoner: number;
+}
+
+export interface UtkastStatistikkDto {
+  /** @format int64 */
+  antall: number;
+  /** @format int64 */
+  under1Dag: number;
+  /** @format int64 */
+  mellom1Og7Dager: number;
+  /** @format int64 */
+  mellom7Og30Dager: number;
+  /** @format int64 */
+  over30Dager: number;
+  /** @format date-time */
+  eldsteOpprettetDato?: string;
+  perSkjemadel: Record<string, number>;
+}
+
+export interface VirksomhetStatistikkDto {
+  /** @format int64 */
+  antallInnsendinger: number;
+  /** @format int64 */
+  antallUnikeInnsendere: number;
+  /** @format int64 */
+  antallArbeidstakerDel: number;
+  /** @format int64 */
+  antallArbeidsgiverDel: number;
+  /** @format int64 */
+  antallKomplett: number;
+  /** @format int64 */
+  antallSakerMedBeggeDeler: number;
+}
+
+export interface AntallDto {
+  /** @format int64 */
+  antall: number;
 }
