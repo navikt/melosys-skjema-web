@@ -85,8 +85,8 @@ test.describe("Oversikt", () => {
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertHistorikkVisible();
 
-    // Saksnummer-kolonne med verdi fra fixture
-    await oversiktPage.assertHistorikkSaksnummerKolonneVisible();
+    // Refnr./saksnummer-kolonne med verdi fra fixture
+    await oversiktPage.assertHistorikkRefnrSaksnummerKolonneVisible();
     await oversiktPage.assertHistorikkRowVisible("MEL-123456");
 
     // Saksstatus MOTTATT + motpartStatus VENTER for arbeidstakers del
