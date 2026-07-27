@@ -160,6 +160,13 @@ function InnsendtSkjemaPageContent({
 
       <HStack gap="space-16">
         <Tag variant="info">{response.referanseId}</Tag>
+        {response.saksnummer && (
+          <Tag variant="info">
+            {t("innsendtSkjema.saksnummer", {
+              saksnummer: response.saksnummer,
+            })}
+          </Tag>
+        )}
         <BodyShort>{formatDato(response.innsendtDato)}</BodyShort>
       </HStack>
 

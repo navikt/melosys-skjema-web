@@ -41,6 +41,7 @@ test.describe("Innsendt skjema", () => {
       testInnsendtSkjemaArbeidstakersDel.dokumentTittel,
     );
     await innsendtPage.assertReferanseIdVisible("REF-AT-001");
+    await innsendtPage.assertSaksnummerTagVisible("MEL-123456");
     await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
       testArbeidstakerSkjema,
     );
@@ -70,6 +71,8 @@ test.describe("Innsendt skjema", () => {
       testInnsendtSkjemaArbeidsgiverDel.dokumentTittel,
     );
     await innsendtPage.assertReferanseIdVisible("REF-AG-001");
+    // Fixture uten saksnummer → ingen saksnummer-tag
+    await innsendtPage.assertSaksnummerTagNotVisible();
     await innsendtPage.assertArbeidstakerOgArbeidsgiverInfo(
       testArbeidsgiverSkjema,
     );

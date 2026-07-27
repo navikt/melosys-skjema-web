@@ -84,6 +84,14 @@ test.describe("Oversikt", () => {
     await oversiktPage.goto();
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertHistorikkVisible();
+
+    // Saksnummer-kolonne med verdi fra fixture
+    await oversiktPage.assertHistorikkSaksnummerKolonneVisible();
+    await oversiktPage.assertHistorikkRowVisible("MEL-123456");
+
+    // Saksstatus MOTTATT + motpartStatus VENTER for arbeidstakers del
+    // → badge "Venter på arbeidsgivers del"
+    await oversiktPage.assertHistorikkStatusVenterArbeidsgiversDelVisible();
   });
 
   test("Viser start-søknad-skjema med arbeidsgivervalg for ARBEIDSGIVER", async ({
