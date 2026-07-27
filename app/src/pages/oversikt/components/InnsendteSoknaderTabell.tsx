@@ -301,7 +301,7 @@ export function InnsendteSoknaderTabell({
                       {formatDato(soknad.innsendtDato)}
                     </Table.DataCell>
                     <Table.DataCell>{soknad.referanseId || "-"}</Table.DataCell>
-                    <Table.DataCell>{soknad.saksnummer ?? "–"}</Table.DataCell>
+                    <Table.DataCell>{soknad.saksnummer ?? "-"}</Table.DataCell>
                     <Table.DataCell>
                       {soknad.arbeidsgiverNavn || "-"}
                     </Table.DataCell>

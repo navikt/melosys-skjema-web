@@ -408,4 +408,30 @@ export class OversiktPage {
   async assertHistorikkRowNotVisible(text: string) {
     await expect(this.page.getByRole("cell", { name: text })).not.toBeVisible();
   }
+
+  async assertHistorikkSaksnummerKolonneVisible() {
+    await expect(
+      this.page.getByRole("columnheader", {
+        name: translations.oversiktFelles.historikkKolonneSaksnummer,
+      }),
+    ).toBeVisible();
+  }
+
+  async assertHistorikkStatusFerdigBehandletVisible() {
+    await expect(
+      this.page.getByText(
+        translations.oversiktFelles.historikkStatusFerdigBehandlet,
+        { exact: true },
+      ),
+    ).toBeVisible();
+  }
+
+  async assertHistorikkStatusVenterArbeidsgiversDelVisible() {
+    await expect(
+      this.page.getByText(
+        translations.oversiktFelles.historikkStatusVenterArbeidsgiversDel,
+        { exact: true },
+      ),
+    ).toBeVisible();
+  }
 }

@@ -72,6 +72,22 @@ export class InnsendtSkjemaPage {
     await expect(this.page.getByText(referanseId)).toBeVisible();
   }
 
+  async assertSaksnummerTagVisible(saksnummer: string) {
+    await expect(
+      this.page.getByText(
+        translations.saksnummer.replace("{{saksnummer}}", saksnummer),
+      ),
+    ).toBeVisible();
+  }
+
+  async assertSaksnummerTagNotVisible() {
+    await expect(
+      this.page.getByText(
+        translations.saksnummer.replace("{{saksnummer}}", "").trim(),
+      ),
+    ).not.toBeVisible();
+  }
+
   async assertArbeidstakerOgArbeidsgiverInfo(
     skjema: UtsendtArbeidstakerSkjemaDto,
   ) {

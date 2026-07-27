@@ -13,6 +13,7 @@ import {
   type OrganisasjonMedJuridiskEnhetDto,
   type PersonMedFullmaktDto,
   Representasjonstype,
+  Saksstatus,
   Skjemadel,
   type SkjemaInnsendtKvittering,
   SkjemaStatus,
@@ -148,6 +149,8 @@ export const testInnsendteSoknader: InnsendteSoknaderResponse = {
     {
       id: "innsendt-1",
       referanseId: "REF001",
+      saksnummer: "MEL-123456",
+      saksstatus: Saksstatus.MOTTATT,
       arbeidsgiverNavn: "Test Bedrift AS",
       arbeidsgiverOrgnr: "123456789",
       arbeidstakerNavn: "Test Bruker",
@@ -169,6 +172,7 @@ export const testInnsendteSoknaderToTreff: InnsendteSoknaderResponse = {
     {
       id: "innsendt-1",
       referanseId: "REF001",
+      // saksnummer/saksstatus utelatt: ikke synket fra melosys-api ennå (behandles som MOTTATT)
       arbeidsgiverNavn: "Test Bedrift AS",
       arbeidsgiverOrgnr: "123456789",
       arbeidstakerNavn: "Test Bruker",
@@ -182,6 +186,8 @@ export const testInnsendteSoknaderToTreff: InnsendteSoknaderResponse = {
     {
       id: "innsendt-2",
       referanseId: "REF002",
+      saksnummer: "MEL-654321",
+      saksstatus: Saksstatus.AVSLUTTET,
       arbeidsgiverNavn: "Annen Bedrift AS",
       arbeidsgiverOrgnr: "987654321",
       arbeidstakerNavn: "Annen Bruker",
@@ -203,6 +209,8 @@ export const testInnsendteSoknaderToTreff: InnsendteSoknaderResponse = {
 export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
   skjemaId: testArbeidstakerSkjemaId,
   referanseId: "REF-AT-001",
+  saksnummer: "MEL-123456",
+  saksstatus: Saksstatus.MOTTATT,
   innsendtDato: "2026-01-10T12:00:00Z",
   innsendtSprak: Sprak.Nb,
   dokumentTittel: "Søknad om A1 for utsendte arbeidstakere i EØS eller Sveits",

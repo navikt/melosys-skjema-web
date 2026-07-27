@@ -39,6 +39,16 @@ test.describe("Oversikt — Søk i innsendte søknader", () => {
     await oversiktPage.assertHistorikkRowVisible("REF001");
     await oversiktPage.assertHistorikkRowVisible("REF002");
 
+    // REF002 har saksstatus AVSLUTTET → saksnummer i kolonnen og
+    // "Ferdig behandlet"-badge (vinner over motpartStatus HAR_SENDT)
+    await oversiktPage.assertHistorikkSaksnummerKolonneVisible();
+    await oversiktPage.assertHistorikkRowVisible("MEL-654321");
+    await oversiktPage.assertHistorikkStatusFerdigBehandletVisible();
+
+    // REF001 mangler saksstatus (ikke synket ennå → behandles som MOTTATT)
+    // → motpartStatus VENTER avgjør badgen
+    await oversiktPage.assertHistorikkStatusVenterArbeidsgiversDelVisible();
+
     // Søk på REF001
     await oversiktPage.searchHistorikk("REF001");
 
