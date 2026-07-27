@@ -409,19 +409,21 @@ export class OversiktPage {
     await expect(this.page.getByRole("cell", { name: text })).not.toBeVisible();
   }
 
-  async assertHistorikkSaksnummerKolonneVisible() {
+  async assertHistorikkRefnrSaksnummerKolonneVisible() {
     await expect(
       this.page.getByRole("columnheader", {
-        name: translations.oversiktFelles.historikkKolonneSaksnummer,
+        name: translations.oversiktFelles.historikkKolonneRefnrSaksnummer,
       }),
     ).toBeVisible();
   }
 
-  async assertHistorikkStatusFerdigBehandletVisible() {
+  async assertHistorikkStatusAvsluttetVisible() {
     await expect(
       this.page.getByText(
-        translations.oversiktFelles.historikkStatusFerdigBehandlet,
-        { exact: true },
+        translations.oversiktFelles.historikkStatusAvsluttet,
+        {
+          exact: true,
+        },
       ),
     ).toBeVisible();
   }
