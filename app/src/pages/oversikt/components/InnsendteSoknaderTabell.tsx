@@ -47,7 +47,7 @@ const formatDato = (dato: string) => {
  * Statusbadge for en innsendt søknad basert på saksstatus og motpart-status.
  *
  * Regler (jf. plan 03):
- * - AVSLUTTET vinner alltid over "venter på motpart" — nøytral "Ferdig behandlet".
+ * - AVSLUTTET vinner alltid over "venter på motpart" — nøytral "Avsluttet".
  * - saksstatus null behandles som MOTTATT (ikke synket ennå).
  * - VENTER viser hvilken del det ventes på (motsatt del av radens skjemadel).
  *
@@ -59,7 +59,7 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
   if (soknad.saksstatus === Saksstatus.AVSLUTTET) {
     return (
       <Tag size="small" variant="neutral">
-        {t("oversiktFelles.historikkStatusFerdigBehandlet")}
+        {t("oversiktFelles.historikkStatusAvsluttet")}
       </Tag>
     );
   }
@@ -207,8 +207,8 @@ export function InnsendteSoknaderTabell({
   const isAnnenPerson =
     representasjonskontekst.representasjonstype ===
     Representasjonstype.ANNEN_PERSON;
-  // DEG_SELV=6, ANNEN_PERSON=7, ARBEIDSGIVER/RADGIVER=8 (inkl. Saksnummer og Status)
-  const antallKolonner = isDegSelv ? 6 : isAnnenPerson ? 7 : 8;
+  // DEG_SELV=5, ANNEN_PERSON=6, ARBEIDSGIVER/RADGIVER=7 (inkl. Refnr./saksnummer og Status)
+  const antallKolonner = isDegSelv ? 5 : isAnnenPerson ? 6 : 7;
 
   return (
     <Box
@@ -261,10 +261,7 @@ export function InnsendteSoknaderTabell({
                   {t("oversiktFelles.historikkKolonneInnsendt")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader>
-                  {t("oversiktFelles.historikkKolonneRefnr")}
-                </Table.ColumnHeader>
-                <Table.ColumnHeader>
-                  {t("oversiktFelles.historikkKolonneSaksnummer")}
+                  {t("oversiktFelles.historikkKolonneRefnrSaksnummer")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader>
                   {t("oversiktFelles.historikkKolonneArbeidsgiver")}
@@ -300,8 +297,26 @@ export function InnsendteSoknaderTabell({
                     <Table.DataCell>
                       {formatDato(soknad.innsendtDato)}
                     </Table.DataCell>
-                    <Table.DataCell>{soknad.referanseId || "-"}</Table.DataCell>
-                    <Table.DataCell>{soknad.saksnummer ?? "-"}</Table.DataCell>
+                    <Table.DataCell>
+                      <VStack>
+                        <BodyShort size="small">
+                          <span className="sr-only">
+                            {t("oversiktFelles.historikkRefnrLabel")}{" "}
+                          </span>
+                          {soknad.referanseId || "-"}
+                        </BodyShort>
+                        {soknad.saksnummer && (
+                          <BodyShort className="text-text-subtle" size="small">
+                            <span className="sr-only">
+                              {t(
+                                "oversiktFelles.historikkSaksnummerLabel",
+                              )}{" "}
+                            </span>
+                            {soknad.saksnummer}
+                          </BodyShort>
+                        )}
+                      </VStack>
+                    </Table.DataCell>
                     <Table.DataCell>
                       {soknad.arbeidsgiverNavn || "-"}
                     </Table.DataCell>
