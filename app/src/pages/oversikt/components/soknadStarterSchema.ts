@@ -40,6 +40,7 @@ export const soknadStarterSchema = z
     skalFylleUtForArbeidstaker: z.boolean().optional(),
     bekreftelse: z.boolean(),
     opprettetVia: z.enum(OpprettetVia).optional(),
+    prefyllFraSkjemaId: z.string().optional(),
   })
   .refine((data) => !!data.arbeidsgiver, {
     error: "oversiktFelles.valideringManglerArbeidsgiver",
@@ -71,6 +72,7 @@ export const soknadStarterSchema = z
       arbeidsgiver: data.arbeidsgiver!,
       arbeidstaker: data.arbeidstaker!,
       opprettetVia: data.opprettetVia,
+      prefyllFraSkjemaId: data.prefyllFraSkjemaId,
     };
   });
 

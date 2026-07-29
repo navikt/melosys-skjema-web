@@ -66,6 +66,7 @@ function VentendeMotpartAlert({
         representasjonstype: Representasjonstype.DEG_SELV,
         arbeidsgiverOrgnr: soknad.arbeidsgiverOrgnr,
         opprettetVia: OpprettetVia.MOTPART_CTA,
+        prefyllFraSkjemaId: soknad.skjemaId,
       },
     });
   };
@@ -80,6 +81,9 @@ function VentendeMotpartAlert({
       <BodyLong spacing>
         {soknad.utsendingsperiode
           ? t("oversiktDegSelv.motpartCtaBeskrivelse", {
+              land: soknad.utsendelseLand
+                ? t(`land.${soknad.utsendelseLand}`)
+                : t("oversiktDegSelv.motpartCtaUtlandetFallback"),
               fraDato: formatDato(
                 soknad.utsendingsperiode.fraDato,
                 i18n.language,

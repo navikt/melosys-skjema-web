@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, BodyShort, Button, Label } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
@@ -21,6 +24,7 @@ import type {
   UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { formatDato } from "~/utils/datoformat.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtsendingsperiodeOgLand } from "../stegDataGetters.ts";
@@ -37,6 +41,7 @@ function UtsendingsperiodeOgLandStegContent({
 }) {
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const stegData = getUtsendingsperiodeOgLand(skjema);
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const invalidateSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
@@ -49,6 +54,19 @@ function UtsendingsperiodeOgLandStegContent({
     "utsendingsperiodeOgLand",
     "utsendelsePeriode",
   );
+
+  const motpartensVerdier = skjema.motpartensUtsendingsperiodeOgLand;
+  const erUendretFraMotpart =
+    !!motpartensVerdier &&
+    stegData?.utsendelseLand === motpartensVerdier.utsendelseLand &&
+    stegData.utsendelsePeriode?.fraDato ===
+      motpartensVerdier.utsendelsePeriode.fraDato &&
+    stegData.utsendelsePeriode?.tilDato ===
+      motpartensVerdier.utsendelsePeriode.tilDato;
+  const [redigerer, setRedigerer] = useState(false);
+  // Motpartens verdier vises som lesevisning til bruker aktivt velger å endre,
+  // så ingen justerer dato eller land ved et uhell
+  const visLesevisning = erUendretFraMotpart && !redigerer;
 
   const formMethods = useForm({
     resolver: zodResolver(utsendingsperiodeOgLandSchema),
@@ -106,30 +124,76 @@ function UtsendingsperiodeOgLandStegContent({
             />
           }
         >
-          <LandVelgerFormPart
-            className="mt-4"
-            formFieldName="utsendelseLand"
-            label={utsendelseLandFelt.label}
-          />
+          {skjema.motpartensUtsendingsperiodeOgLand && (
+            <Alert className="mt-4" variant="info">
+              {t("utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver", {
+                land: t(
+                  `land.${skjema.motpartensUtsendingsperiodeOgLand.utsendelseLand}`,
+                ),
+                fraDato: formatDato(
+                  skjema.motpartensUtsendingsperiodeOgLand.utsendelsePeriode
+                    .fraDato,
+                  i18n.language,
+                ),
+                tilDato: formatDato(
+                  skjema.motpartensUtsendingsperiodeOgLand.utsendelsePeriode
+                    .tilDato,
+                  i18n.language,
+                ),
+              })}
+            </Alert>
+          )}
 
-          <PeriodeFormPart
-            className="mt-6"
-            defaultFraDato={
-              stegData?.utsendelsePeriode?.fraDato
-                ? new Date(stegData.utsendelsePeriode.fraDato)
-                : undefined
-            }
-            defaultTilDato={
-              stegData?.utsendelsePeriode?.tilDato
-                ? new Date(stegData.utsendelsePeriode.tilDato)
-                : undefined
-            }
-            defaultTilMåned={formFraDato ? new Date(formFraDato) : undefined}
-            formFieldName="utsendelsePeriode"
-            label={utsendelsePeriodeFelt.label}
-            tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
-            {...dateLimits}
-          />
+          {visLesevisning && stegData ? (
+            <div className="mt-6">
+              <Label as="p">{utsendelseLandFelt.label}</Label>
+              <BodyShort spacing>
+                {t(`land.${stegData.utsendelseLand}`)}
+              </BodyShort>
+              <Label as="p">{utsendelsePeriodeFelt.label}</Label>
+              <BodyShort spacing>
+                {formatDato(stegData.utsendelsePeriode.fraDato, i18n.language)}–
+                {formatDato(stegData.utsendelsePeriode.tilDato, i18n.language)}
+              </BodyShort>
+              <Button
+                onClick={() => setRedigerer(true)}
+                size="small"
+                type="button"
+                variant="secondary"
+              >
+                {t("utsendingsperiodeOgLandSteg.endreLandEllerPeriode")}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <LandVelgerFormPart
+                className="mt-4"
+                formFieldName="utsendelseLand"
+                label={utsendelseLandFelt.label}
+              />
+
+              <PeriodeFormPart
+                className="mt-6"
+                defaultFraDato={
+                  stegData?.utsendelsePeriode?.fraDato
+                    ? new Date(stegData.utsendelsePeriode.fraDato)
+                    : undefined
+                }
+                defaultTilDato={
+                  stegData?.utsendelsePeriode?.tilDato
+                    ? new Date(stegData.utsendelsePeriode.tilDato)
+                    : undefined
+                }
+                defaultTilMåned={
+                  formFraDato ? new Date(formFraDato) : undefined
+                }
+                formFieldName="utsendelsePeriode"
+                label={utsendelsePeriodeFelt.label}
+                tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
+                {...dateLimits}
+              />
+            </>
+          )}
         </SkjemaSteg>
       </form>
     </FormProvider>

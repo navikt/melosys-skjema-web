@@ -83,6 +83,7 @@ test.describe("Oversikt — motpart-CTA", () => {
 
     const requestBody = (await requestBodyPromise) as Record<string, unknown>;
     expect(requestBody.opprettetVia).toBe(OpprettetVia.MOTPART_CTA);
+    expect(requestBody.prefyllFraSkjemaId).toBe("ventende-ag-del-1");
     expect(requestBody.arbeidsgiver).toEqual({
       orgnr: korrektFormatertOrgnr,
       navn: "Test Organisasjon AS",
@@ -116,6 +117,7 @@ test.describe("Oversikt — motpart-CTA", () => {
 
     const requestBody = (await requestBodyPromise) as Record<string, unknown>;
     expect(requestBody.opprettetVia).toBeUndefined();
+    expect(requestBody.prefyllFraSkjemaId).toBeUndefined();
     expect(requestBody.arbeidsgiver).toEqual({
       orgnr: korrektFormatertOrgnr2,
       navn: "Annen Arbeidsgiver AS",

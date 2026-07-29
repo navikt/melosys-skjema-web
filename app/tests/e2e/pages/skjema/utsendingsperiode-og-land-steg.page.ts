@@ -58,6 +58,63 @@ export class UtsendingsperiodeOgLandStegPage {
     await expect(this.heading).toBeVisible();
   }
 
+  private preutfyltInfoboksTekst(
+    land: string,
+    fraDato: string,
+    tilDato: string,
+  ) {
+    return nb.translation.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver
+      .replace("{{land}}", land)
+      .replace("{{fraDato}}", fraDato)
+      .replace("{{tilDato}}", tilDato);
+  }
+
+  async assertPreutfyltInfoboksVisible(
+    land: string,
+    fraDato: string,
+    tilDato: string,
+  ) {
+    await expect(
+      this.page.getByText(this.preutfyltInfoboksTekst(land, fraDato, tilDato)),
+    ).toBeVisible();
+  }
+
+  async assertPreutfyltInfoboksNotVisible() {
+    await expect(
+      this.page.getByText(
+        nb.translation.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver.split(
+          "{{land}}",
+        )[0] ?? "Arbeidsgiveren din har oppgitt",
+      ),
+    ).not.toBeVisible();
+  }
+
+  async assertLandValgt(landKode: string) {
+    await expect(this.utsendelseLandCombobox).toHaveValue(landKode);
+  }
+
+  async assertLesevisningVisible(landNavn: string) {
+    await expect(
+      this.page.getByRole("button", {
+        name: nb.translation.utsendingsperiodeOgLandSteg.endreLandEllerPeriode,
+      }),
+    ).toBeVisible();
+    await expect(this.page.getByText(landNavn, { exact: true })).toBeVisible();
+    await expect(this.utsendelseLandCombobox).not.toBeVisible();
+  }
+
+  async clickEndreLandEllerPeriode() {
+    await this.page
+      .getByRole("button", {
+        name: nb.translation.utsendingsperiodeOgLandSteg.endreLandEllerPeriode,
+      })
+      .click();
+  }
+
+  async assertFraDatoValue(dato: string) {
+    await expect(this.fraDatoInput).toHaveValue(dato);
+  }
+
   async velgLand(land: { label: string; value: string }) {
     await this.utsendelseLandCombobox.selectOption(land);
   }

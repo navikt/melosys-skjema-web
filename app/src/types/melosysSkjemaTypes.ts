@@ -46,10 +46,6 @@ export enum SorteringsFelt {
   STATUS = "STATUS",
 }
 
-export enum OpprettetVia {
-  MOTPART_CTA = "MOTPART_CTA",
-}
-
 export enum TypeInnretning {
   PLATTFORM_ELLER_ANNEN_FAST_INNRETNING = "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING",
   BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING = "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING",
@@ -78,6 +74,10 @@ export enum Representasjonstype {
   RADGIVER = "RADGIVER",
   RADGIVER_MED_FULLMAKT = "RADGIVER_MED_FULLMAKT",
   ANNEN_PERSON = "ANNEN_PERSON",
+}
+
+export enum OpprettetVia {
+  MOTPART_CTA = "MOTPART_CTA",
 }
 
 export enum LandKode {
@@ -528,9 +528,9 @@ export interface UtsendtArbeidstakerMetadata {
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
+  tilleggsopplysninger?: TilleggsopplysningerDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   vedlegg?: VedleggValgDto;
-  tilleggsopplysninger?: TilleggsopplysningerDto;
   type: string;
 }
 
@@ -556,6 +556,8 @@ export interface UtsendtArbeidstakerSkjemaDto {
     | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
     | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto
     | UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
+  opprettetVia?: OpprettetVia;
+  motpartensUtsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
 }
 
 export interface SkjemaInnsendtKvittering {
@@ -571,6 +573,8 @@ export interface OpprettUtsendtArbeidstakerSoknadRequest {
   arbeidsgiver: SimpleOrganisasjonDto;
   arbeidstaker: PersonDto;
   opprettetVia?: OpprettetVia;
+  /** @format uuid */
+  prefyllFraSkjemaId?: string;
 }
 
 export interface PersonDto {
@@ -882,6 +886,7 @@ export interface VentendeMotpartSoknadDto {
   arbeidsgiverNavn: string;
   arbeidsgiverOrgnr: string;
   utsendingsperiode?: PeriodeDto;
+  utsendelseLand?: LandKode;
   /** @format date-time */
   innsendtDato: string;
 }

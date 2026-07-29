@@ -11,6 +11,7 @@ import {
 } from "@navikt/ds-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -139,6 +140,11 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
       Representasjonstype.DEG_SELV
         ? representasjonskontekst.opprettetVia
         : undefined,
+    prefyllFraSkjemaId:
+      representasjonskontekst.representasjonstype ===
+      Representasjonstype.DEG_SELV
+        ? representasjonskontekst.prefyllFraSkjemaId
+        : undefined,
     // Setter default skalFylleUtForArbeidstaker:true for rådgiver, siden det er mest vanlig at de fyller ut på vegne av arbeidstaker.
     ...(representasjonskontekst.representasjonstype ===
       Representasjonstype.RADGIVER && {
@@ -175,6 +181,13 @@ function SoknadStarterContent({
   const translateError = useTranslateError();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const boxRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (autoFocusArbeidsgiver) {
+      boxRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [autoFocusArbeidsgiver]);
 
   const formMethods = useForm({
     resolver: zodResolver(soknadStarterSchema),
@@ -263,14 +276,17 @@ function SoknadStarterContent({
   });
 
   const onSubmit = (data: SoknadStarterOutput) => {
-    // opprettetVia gjelder kun søknaden CTA-en pekte på — velger brukeren en
-    // annen arbeidsgiver enn den forhåndsutfylte, skal søknaden ikke tagges.
+    // opprettetVia og prefyll gjelder kun søknaden CTA-en pekte på — velger
+    // brukeren en annen arbeidsgiver enn den forhåndsutfylte, skal søknaden
+    // verken tagges eller forhåndsutfylles fra motpartens del.
+    const arbeidsgiverUendret =
+      data.arbeidsgiver.orgnr === initialOrganisasjon?.juridiskEnhet.orgnr;
     opprettSoknadMutation.mutate({
       ...data,
-      opprettetVia:
-        data.arbeidsgiver.orgnr === initialOrganisasjon?.juridiskEnhet.orgnr
-          ? data.opprettetVia
-          : undefined,
+      opprettetVia: arbeidsgiverUendret ? data.opprettetVia : undefined,
+      prefyllFraSkjemaId: arbeidsgiverUendret
+        ? data.prefyllFraSkjemaId
+        : undefined,
     });
   };
 
@@ -296,6 +312,7 @@ function SoknadStarterContent({
     <FormProvider {...formMethods}>
       <Box
         background="info-soft"
+        ref={boxRef}
         borderColor="neutral-subtle"
         borderRadius="12"
         borderWidth="1"

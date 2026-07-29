@@ -36,6 +36,7 @@ function OversiktRoute() {
         radgiverOrgnr: search.radgiverOrgnr,
         arbeidsgiverOrgnr: search.arbeidsgiverOrgnr,
         opprettetVia: search.opprettetVia,
+        prefyllFraSkjemaId: search.prefyllFraSkjemaId,
       }}
     />
   );

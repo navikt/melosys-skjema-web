@@ -9,6 +9,7 @@ import {
   type InnsendtSkjemaResponse,
   LandKode,
   MotpartStatus,
+  OpprettetVia,
   type OrganisasjonDto,
   type OrganisasjonMedJuridiskEnhetDto,
   type PersonMedFullmaktDto,
@@ -83,6 +84,23 @@ export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
   },
 };
+
+export const testArbeidstakerSkjemaFraMotpartCta: UtsendtArbeidstakerSkjemaDto =
+  {
+    ...testArbeidstakerSkjema,
+    opprettetVia: OpprettetVia.MOTPART_CTA,
+    data: {
+      type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+      utsendingsperiodeOgLand: {
+        utsendelseLand: LandKode.SE,
+        utsendelsePeriode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+      },
+    },
+    motpartensUtsendingsperiodeOgLand: {
+      utsendelseLand: LandKode.SE,
+      utsendelsePeriode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+    },
+  };
 
 export const formFieldValues = {
   // Arbeidsgiver form values
@@ -342,6 +360,7 @@ export const testVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
       arbeidsgiverNavn: "Test Bedrift AS",
       arbeidsgiverOrgnr: korrektFormatertOrgnr,
       utsendingsperiode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+      utsendelseLand: LandKode.SE,
       innsendtDato: "2026-01-15T09:00:00Z",
     },
   ],
