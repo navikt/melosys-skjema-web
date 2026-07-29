@@ -39,6 +39,18 @@ export class RepresentasjonPage {
     await expect(this.heading).toBeVisible();
   }
 
+  async assertSoknadVenterBadgeVisible() {
+    await expect(
+      this.degSelvButton.getByText(translations.soknadVenterPaaDeg),
+    ).toBeVisible();
+  }
+
+  async assertSoknadVenterBadgeNotVisible() {
+    await expect(
+      this.degSelvButton.getByText(translations.soknadVenterPaaDeg),
+    ).not.toBeVisible();
+  }
+
   async velgDegSelv() {
     await this.degSelvButton.click();
   }

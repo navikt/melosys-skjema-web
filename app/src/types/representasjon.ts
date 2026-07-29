@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
-import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+import {
+  OpprettetVia,
+  Representasjonstype,
+} from "~/types/melosysSkjemaTypes.ts";
 
 export const representasjonskontekstSchema = z.object({
   representasjonstype: z.enum([
@@ -12,6 +15,7 @@ export const representasjonskontekstSchema = z.object({
   ]),
   radgiverOrgnr: z.coerce.string().optional(),
   arbeidsgiverOrgnr: z.coerce.string().optional(),
+  opprettetVia: z.enum(OpprettetVia).optional(),
 });
 
 export type Representasjonskontekst = z.infer<

@@ -27,6 +27,7 @@ import {
   UtsendtArbeidstakerSkjemaDto,
   VedleggDto,
   VedleggValgDto,
+  VentendeMotpartSoknaderResponse,
   VerifiserPersonRequest,
   VerifiserPersonResponse,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -647,6 +648,34 @@ export async function slettVedlegg(
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
+}
+
+/**
+ * Innsendte arbeidsgiver-deler som venter på at innlogget bruker sender inn sin
+ * arbeidstaker-del. Tom liste når toggle `melosys.skjema.motpart-cta` er av i backend.
+ */
+export const getVentendeMotpartSoknaderQuery = () =>
+  queryOptions<VentendeMotpartSoknaderResponse>({
+    queryKey: ["ventende-motpart-soknader"],
+    queryFn: fetchVentendeMotpartSoknader,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 1,
+  });
+
+async function fetchVentendeMotpartSoknader(): Promise<VentendeMotpartSoknaderResponse> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/ventende-motpart-soknader`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
 }
 
 /**

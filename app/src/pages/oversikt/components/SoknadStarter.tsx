@@ -133,6 +133,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
     representasjonstype: representasjonskontekst.representasjonstype,
     radgiverfirma,
     bekreftelse: false,
+    opprettetVia: representasjonskontekst.opprettetVia,
     // Setter default skalFylleUtForArbeidstaker:true for rådgiver, siden det er mest vanlig at de fyller ut på vegne av arbeidstaker.
     ...(representasjonskontekst.representasjonstype ===
       Representasjonstype.RADGIVER && {
@@ -150,7 +151,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
       altinnArbeidsgivere={arbeidsgivere ?? []}
       defaultData={defaultData}
       initialArbeidsgiverOrgnr={representasjonskontekst.arbeidsgiverOrgnr}
-      key={`${representasjonskontekst.representasjonstype}-${representasjonskontekst.radgiverOrgnr ?? ""}`}
+      key={`${representasjonskontekst.representasjonstype}-${representasjonskontekst.radgiverOrgnr ?? ""}-${representasjonskontekst.arbeidsgiverOrgnr ?? ""}`}
     />
   );
 }

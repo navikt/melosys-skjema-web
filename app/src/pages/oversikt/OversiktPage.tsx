@@ -16,6 +16,7 @@ import {
   InnsendteSoknaderTabell,
   SoknadStarter,
   UtkastListe,
+  VentendeMotpartBanner,
 } from "~/pages/oversikt/components";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
@@ -166,6 +167,9 @@ export function OversiktPage({ representasjonskontekst }: OversiktPageProps) {
           {getEttersendelseTekst()}
         </BodyShort>
       </GuidePanel>
+      <VentendeMotpartBanner
+        representasjonskontekst={representasjonskontekst}
+      />
       <UtkastListe representasjonskontekst={representasjonskontekst} />
       <SoknadStarter representasjonskontekst={representasjonskontekst} />
       <InnsendteSoknaderTabell

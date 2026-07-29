@@ -413,6 +413,7 @@ export const en = {
         "filling out an application for employer/employee",
       annenPerson: "PRIVATE PERSON",
       annenPersonBeskrivelse: "filling out an application for another person",
+      soknadVenterPaaDeg: "An application is waiting for you",
       avbryt: "Cancel",
     },
     appHeader: {
@@ -438,6 +439,13 @@ export const en = {
       ettersendelseLenke: "Send documents to Nav",
       ettersendelseLenkeUrl:
         "https://www.nav.no/fyllut-ettersending/nav020807/innsendingsvalg",
+      motpartCtaTittel:
+        "{{arbeidsgiverNavn}} has submitted their part of the A1 application",
+      motpartCtaBeskrivelse:
+        "They have stated that you will be working abroad during the period {{fraDato}}–{{tilDato}}. For Nav to process the application, you must fill out your part.",
+      motpartCtaBeskrivelseUtenPeriode:
+        "For Nav to process the application, you must fill out your part.",
+      motpartCtaKnapp: "Fill out your part",
     },
     oversiktArbeidsgiver: {
       tittel: "Overview page for applications",

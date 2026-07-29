@@ -21,6 +21,7 @@ import {
   Sprak,
   type UtkastListeResponse,
   type UtsendtArbeidstakerSkjemaDto,
+  type VentendeMotpartSoknaderResponse,
 } from "~/types/melosysSkjemaTypes";
 
 // Gyldige organisasjonsnummer (MOD11-validert)
@@ -328,4 +329,20 @@ export const testInnsendtSkjemaKombinertDel: InnsendtSkjemaResponse = {
   definisjon: {
     seksjoner: {},
   } as unknown as InnsendtSkjemaResponse["definisjon"],
+};
+
+export const emptyVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
+  soknader: [],
+};
+
+export const testVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
+  soknader: [
+    {
+      skjemaId: "ventende-ag-del-1",
+      arbeidsgiverNavn: "Test Bedrift AS",
+      arbeidsgiverOrgnr: korrektFormatertOrgnr,
+      utsendingsperiode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+      innsendtDato: "2026-01-15T09:00:00Z",
+    },
+  ],
 };

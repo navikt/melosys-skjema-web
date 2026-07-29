@@ -35,6 +35,7 @@ function OversiktRoute() {
         representasjonstype: search.representasjonstype,
         radgiverOrgnr: search.radgiverOrgnr,
         arbeidsgiverOrgnr: search.arbeidsgiverOrgnr,
+        opprettetVia: search.opprettetVia,
       }}
     />
   );

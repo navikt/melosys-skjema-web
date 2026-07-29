@@ -436,4 +436,35 @@ export class OversiktPage {
       ),
     ).toBeVisible();
   }
+
+  // ============ Motpart-CTA ============
+
+  private motpartCtaHeading(arbeidsgiverNavn: string) {
+    return this.page.getByRole("heading", {
+      name: translations.oversiktDegSelv.motpartCtaTittel.replace(
+        "{{arbeidsgiverNavn}}",
+        arbeidsgiverNavn,
+      ),
+    });
+  }
+
+  async assertMotpartCtaVisible(arbeidsgiverNavn: string) {
+    await expect(this.motpartCtaHeading(arbeidsgiverNavn)).toBeVisible();
+  }
+
+  async assertMotpartCtaNotVisible(arbeidsgiverNavn: string) {
+    await expect(this.motpartCtaHeading(arbeidsgiverNavn)).not.toBeVisible();
+  }
+
+  async clickMotpartCtaFyllUtDinDel() {
+    await this.page
+      .getByRole("button", {
+        name: translations.oversiktDegSelv.motpartCtaKnapp,
+      })
+      .click();
+  }
+
+  async assertArbeidsgiverOrgnrPrefilt(orgnr: string) {
+    await expect(this.arbeidsgiverOrgnrInput).toHaveValue(orgnr);
+  }
 }

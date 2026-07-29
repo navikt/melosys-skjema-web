@@ -11,6 +11,7 @@ import type {
   UtsendtArbeidstakerMetadata,
   UtsendtArbeidstakerSkjemaDto,
   VedleggDto,
+  VentendeMotpartSoknaderResponse,
 } from "~/types/melosysSkjemaTypes";
 
 import { skjemaInnsendtKvittering } from "./test-data";
@@ -732,4 +733,35 @@ export async function setupApiMocksForOversikt(
   await mockGetEregOrganisasjon(page);
   await mockUtkastListe(page, utkast);
   await mockInnsendteSoknader(page, innsendteSoknader);
+}
+
+// ============ Feature toggles og motpart-CTA ============
+
+export async function mockFeatureToggles(
+  page: Page,
+  toggles: Record<string, boolean>,
+) {
+  await page.route(/\/api\/featuretoggle(\?.*)?$/, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(toggles),
+    });
+  });
+}
+
+export async function mockVentendeMotpartSoknader(
+  page: Page,
+  response: VentendeMotpartSoknaderResponse,
+) {
+  await page.route(
+    "/api/skjema/utsendt-arbeidstaker/ventende-motpart-soknader",
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(response),
+      });
+    },
+  );
 }

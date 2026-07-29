@@ -303,6 +303,7 @@ export const nb = {
         "som fyller ut søknad for arbeidsgiver/arbeidstaker",
       annenPerson: "PRIVATPERSON",
       annenPersonBeskrivelse: "som fyller ut søknad for en annen person",
+      soknadVenterPaaDeg: "Søknad venter på deg",
       avbryt: "Avbryt",
     },
     appHeader: {
@@ -328,6 +329,13 @@ export const nb = {
       ettersendelseLenke: "Send dokumenter til Nav",
       ettersendelseLenkeUrl:
         "https://www.nav.no/fyllut-ettersending/nav020807/innsendingsvalg",
+      motpartCtaTittel:
+        "{{arbeidsgiverNavn}} har sendt inn sin del av søknaden om A1",
+      motpartCtaBeskrivelse:
+        "De har oppgitt at du skal jobbe i utlandet i perioden {{fraDato}}–{{tilDato}}. For at Nav skal kunne behandle søknaden, må du fylle ut din del.",
+      motpartCtaBeskrivelseUtenPeriode:
+        "For at Nav skal kunne behandle søknaden, må du fylle ut din del.",
+      motpartCtaKnapp: "Fyll ut din del",
     },
     oversiktArbeidsgiver: {
       tittel: "Oversiktsside for søknader",

@@ -46,6 +46,10 @@ export enum SorteringsFelt {
   STATUS = "STATUS",
 }
 
+export enum OpprettetVia {
+  MOTPART_CTA = "MOTPART_CTA",
+}
+
 export enum TypeInnretning {
   PLATTFORM_ELLER_ANNEN_FAST_INNRETNING = "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING",
   BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING = "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING",
@@ -524,8 +528,8 @@ export interface UtsendtArbeidstakerMetadata {
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
-  vedlegg?: VedleggValgDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
+  vedlegg?: VedleggValgDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
   type: string;
 }
@@ -566,6 +570,7 @@ export interface OpprettUtsendtArbeidstakerSoknadRequest {
   radgiverfirma?: SimpleOrganisasjonDto;
   arbeidsgiver: SimpleOrganisasjonDto;
   arbeidstaker: PersonDto;
+  opprettetVia?: OpprettetVia;
 }
 
 export interface PersonDto {
@@ -870,6 +875,20 @@ export type TextareaFeltDefinisjon = UtilRequiredKeys<
   /** @format int32 */
   maxLength?: number;
 };
+
+export interface VentendeMotpartSoknadDto {
+  /** @format uuid */
+  skjemaId: string;
+  arbeidsgiverNavn: string;
+  arbeidsgiverOrgnr: string;
+  utsendingsperiode?: PeriodeDto;
+  /** @format date-time */
+  innsendtDato: string;
+}
+
+export interface VentendeMotpartSoknaderResponse {
+  soknader: VentendeMotpartSoknadDto[];
+}
 
 export interface UtkastListeResponse {
   utkast: UtkastOversiktDto[];
