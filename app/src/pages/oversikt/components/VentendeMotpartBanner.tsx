@@ -12,17 +12,11 @@ import {
   VentendeMotpartSoknadDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
+import { formatDato } from "~/utils/datoformat.ts";
 
 interface VentendeMotpartBannerProps {
   representasjonskontekst: Representasjonskontekst;
 }
-
-const formatDato = (dato: string) =>
-  new Date(dato).toLocaleDateString("nb-NO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
 
 /**
  * Oppfordring til arbeidstaker om å fylle ut sin del når arbeidsgiver allerede
@@ -62,7 +56,7 @@ function VentendeMotpartAlert({
 }: {
   soknad: VentendeMotpartSoknadDto;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const startDinDel = () => {
@@ -86,8 +80,14 @@ function VentendeMotpartAlert({
       <BodyLong spacing>
         {soknad.utsendingsperiode
           ? t("oversiktDegSelv.motpartCtaBeskrivelse", {
-              fraDato: formatDato(soknad.utsendingsperiode.fraDato),
-              tilDato: formatDato(soknad.utsendingsperiode.tilDato),
+              fraDato: formatDato(
+                soknad.utsendingsperiode.fraDato,
+                i18n.language,
+              ),
+              tilDato: formatDato(
+                soknad.utsendingsperiode.tilDato,
+                i18n.language,
+              ),
             })
           : t("oversiktDegSelv.motpartCtaBeskrivelseUtenPeriode")}
       </BodyLong>

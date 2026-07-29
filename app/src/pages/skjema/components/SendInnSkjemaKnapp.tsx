@@ -46,6 +46,10 @@ export function SendInnSkjemaKnapp({
         queryKey: ["utkast"],
       });
 
+      void queryClient.invalidateQueries({
+        queryKey: ["ventende-motpart-soknader"],
+      });
+
       navigate({
         to: "/skjema/$id/kvittering",
         params: { id: response.skjemaId },

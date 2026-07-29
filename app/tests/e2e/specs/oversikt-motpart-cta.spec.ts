@@ -1,18 +1,23 @@
-import { Representasjonstype } from "~/types/melosysSkjemaTypes";
+import { OpprettetVia, Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
+  interceptOpprettSoknad,
   mockFeatureToggles,
   mockGetEregOrganisasjonMedJuridiskEnhet,
+  mockGetEregOrganisasjonMedJuridiskEnhetPerOrgnr,
+  mockPersonerMedFullmakt,
   mockUserInfo,
   mockVentendeMotpartSoknader,
   setupApiMocksForOversikt,
 } from "../fixtures/api-mocks";
-import { test } from "../fixtures/test";
+import { expect, test } from "../fixtures/test";
 import {
   emptyInnsendteSoknader,
   emptyUtkastListe,
   emptyVentendeMotpartSoknader,
   korrektFormatertOrgnr,
+  korrektFormatertOrgnr2,
+  testOpprettSoknadResponseId,
   testUserInfo,
   testVentendeMotpartSoknader,
 } from "../fixtures/test-data";
@@ -39,6 +44,7 @@ test.describe("Oversikt — motpart-CTA", () => {
       emptyInnsendteSoknader,
     );
     await mockGetEregOrganisasjonMedJuridiskEnhet(page);
+    await mockPersonerMedFullmakt(page, []);
   });
 
   test("Viser banner for DEG_SELV og prefiller arbeidsgiver ved klikk", async ({
@@ -56,12 +62,74 @@ test.describe("Oversikt — motpart-CTA", () => {
     await oversiktPage.assertArbeidsgiverOrgnrPrefilt(korrektFormatertOrgnr);
   });
 
+  test("Opprettelse via CTA sender opprettetVia i payload", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
+    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    const requestBodyPromise = interceptOpprettSoknad(
+      page,
+      testOpprettSoknadResponseId,
+    );
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.clickMotpartCtaFyllUtDinDel();
+    await oversiktPage.assertArbeidsgiverOrgnrPrefilt(korrektFormatertOrgnr);
+    await oversiktPage.waitForOrgLookup("Test Organisasjon AS");
+    await oversiktPage.checkBekreftelseCheckbox();
+    await oversiktPage.clickStartSoknad();
+
+    const requestBody = (await requestBodyPromise) as Record<string, unknown>;
+    expect(requestBody.opprettetVia).toBe(OpprettetVia.MOTPART_CTA);
+    expect(requestBody.arbeidsgiver).toEqual({
+      orgnr: korrektFormatertOrgnr,
+      navn: "Test Organisasjon AS",
+    });
+  });
+
+  test("Bytter brukeren arbeidsgiver etter CTA-klikk, sendes ikke opprettetVia", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
+    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    await mockGetEregOrganisasjonMedJuridiskEnhetPerOrgnr(page, {
+      [korrektFormatertOrgnr]: "CTA Arbeidsgiver AS",
+      [korrektFormatertOrgnr2]: "Annen Arbeidsgiver AS",
+    });
+    const requestBodyPromise = interceptOpprettSoknad(
+      page,
+      testOpprettSoknadResponseId,
+    );
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.clickMotpartCtaFyllUtDinDel();
+    await oversiktPage.waitForOrgLookup("CTA Arbeidsgiver AS");
+
+    await oversiktPage.fillArbeidsgiverOrgnr(korrektFormatertOrgnr2);
+    await oversiktPage.waitForOrgLookup("Annen Arbeidsgiver AS");
+    await oversiktPage.checkBekreftelseCheckbox();
+    await oversiktPage.clickStartSoknad();
+
+    const requestBody = (await requestBodyPromise) as Record<string, unknown>;
+    expect(requestBody.opprettetVia).toBeUndefined();
+    expect(requestBody.arbeidsgiver).toEqual({
+      orgnr: korrektFormatertOrgnr2,
+      navn: "Annen Arbeidsgiver AS",
+    });
+  });
+
   test("Viser ikke banner når toggle er av", async ({ page }) => {
     await mockFeatureToggles(page, MOTPART_CTA_AV);
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
 
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    const togglesLastet = oversiktPage.ventPaaFeatureToggles();
     await oversiktPage.goto();
+    await togglesLastet;
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertMotpartCtaNotVisible("Test Bedrift AS");
   });
@@ -71,7 +139,9 @@ test.describe("Oversikt — motpart-CTA", () => {
     await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
 
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    const ventendeLastet = oversiktPage.ventPaaVentendeMotpartSoknader();
     await oversiktPage.goto();
+    await ventendeLastet;
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertMotpartCtaNotVisible("Test Bedrift AS");
   });
@@ -84,7 +154,9 @@ test.describe("Oversikt — motpart-CTA", () => {
       page,
       Representasjonstype.ARBEIDSGIVER,
     );
+    const togglesLastet = oversiktPage.ventPaaFeatureToggles();
     await oversiktPage.goto();
+    await togglesLastet;
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertMotpartCtaNotVisible("Test Bedrift AS");
   });
@@ -112,7 +184,9 @@ test.describe("Landingsside — motpart-hint", () => {
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
 
     const representasjonPage = new RepresentasjonPage(page);
+    const togglesLastet = representasjonPage.ventPaaFeatureToggles();
     await representasjonPage.goto();
+    await togglesLastet;
     await representasjonPage.assertIsVisible();
     await representasjonPage.assertSoknadVenterBadgeNotVisible();
   });
@@ -122,7 +196,9 @@ test.describe("Landingsside — motpart-hint", () => {
     await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
 
     const representasjonPage = new RepresentasjonPage(page);
+    const ventendeLastet = representasjonPage.ventPaaVentendeMotpartSoknader();
     await representasjonPage.goto();
+    await ventendeLastet;
     await representasjonPage.assertIsVisible();
     await representasjonPage.assertSoknadVenterBadgeNotVisible();
   });

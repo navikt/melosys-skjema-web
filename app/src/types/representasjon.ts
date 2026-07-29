@@ -15,7 +15,14 @@ export const representasjonskontekstSchema = z.object({
   ]),
   radgiverOrgnr: z.coerce.string().optional(),
   arbeidsgiverOrgnr: z.coerce.string().optional(),
-  opprettetVia: z.enum(OpprettetVia).optional(),
+  // Ren statistikk-parameter: ukjente verdier ignoreres i stedet for å velte siden
+  opprettetVia: z.preprocess(
+    (verdi) =>
+      Object.values(OpprettetVia).includes(verdi as OpprettetVia)
+        ? verdi
+        : undefined,
+    z.enum(OpprettetVia).optional(),
+  ),
 });
 
 export type Representasjonskontekst = z.infer<

@@ -735,6 +735,31 @@ export async function setupApiMocksForOversikt(
   await mockInnsendteSoknader(page, innsendteSoknader);
 }
 
+export async function mockGetEregOrganisasjonMedJuridiskEnhetPerOrgnr(
+  page: Page,
+  navnPerOrgnr: Record<string, string>,
+) {
+  await page.route(
+    "/api/ereg/organisasjon-med-juridisk-enhet/*",
+    async (route) => {
+      const orgnr =
+        route
+          .request()
+          .url()
+          .split("/api/ereg/organisasjon-med-juridisk-enhet/")[1] ?? "";
+      const navn = navnPerOrgnr[orgnr] ?? "Test Organisasjon AS";
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          organisasjon: { orgnr, navn },
+          juridiskEnhet: { orgnr, navn },
+        }),
+      });
+    },
+  );
+}
+
 // ============ Feature toggles og motpart-CTA ============
 
 export async function mockFeatureToggles(
