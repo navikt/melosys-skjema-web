@@ -368,7 +368,7 @@ export const emptyVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
 export const testVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
   soknader: [
     {
-      skjemaId: "ventende-ag-del-1",
+      skjemaId: "7f9b2c4d-1e3a-4b5c-8d6e-9f0a1b2c3d4e",
       arbeidsgiverNavn: "Test Bedrift AS",
       arbeidsgiverOrgnr: korrektFormatertOrgnr,
       utsendingsperiode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },

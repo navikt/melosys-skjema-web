@@ -57,6 +57,11 @@ test.describe("Oversikt — motpart-CTA", () => {
     await oversiktPage.goto();
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertMotpartCtaVisible("Test Bedrift AS");
+    await oversiktPage.assertMotpartCtaBeskrivelseVisible(
+      "Sverige",
+      "01.02.2026",
+      "31.08.2026",
+    );
 
     await oversiktPage.clickMotpartCtaFyllUtDinDel();
     await oversiktPage.assertArbeidsgiverOrgnrPrefilt(korrektFormatertOrgnr);
@@ -83,7 +88,9 @@ test.describe("Oversikt — motpart-CTA", () => {
 
     const requestBody = (await requestBodyPromise) as Record<string, unknown>;
     expect(requestBody.opprettetVia).toBe(OpprettetVia.MOTPART_CTA);
-    expect(requestBody.prefyllFraSkjemaId).toBe("ventende-ag-del-1");
+    expect(requestBody.prefyllFraSkjemaId).toBe(
+      "7f9b2c4d-1e3a-4b5c-8d6e-9f0a1b2c3d4e",
+    );
     expect(requestBody.arbeidsgiver).toEqual({
       orgnr: korrektFormatertOrgnr,
       navn: "Test Organisasjon AS",

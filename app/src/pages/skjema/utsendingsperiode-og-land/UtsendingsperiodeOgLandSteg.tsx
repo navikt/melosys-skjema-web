@@ -24,7 +24,7 @@ import type {
   UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { formatDato } from "~/utils/datoformat.ts";
+import { formatDato, parseIsoDato } from "~/utils/datoformat.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtsendingsperiodeOgLand } from "../stegDataGetters.ts";
@@ -84,7 +84,8 @@ function UtsendingsperiodeOgLandStegContent({
     formLand !== motpartensVerdier.utsendelseLand;
   const periodeAvviker =
     !!motpartensVerdier &&
-    !!(formFraDato || formTilDato) &&
+    !!formFraDato &&
+    !!formTilDato &&
     (formFraDato !== motpartensVerdier.utsendelsePeriode.fraDato ||
       formTilDato !== motpartensVerdier.utsendelsePeriode.tilDato);
 
@@ -154,15 +155,30 @@ function UtsendingsperiodeOgLandStegContent({
 
           {visLesevisning && stegData ? (
             <div className="mt-6">
-              <Label as="p">{utsendelseLandFelt.label}</Label>
-              <BodyShort spacing>
-                {t(`land.${stegData.utsendelseLand}`)}
-              </BodyShort>
-              <Label as="p">{utsendelsePeriodeFelt.label}</Label>
-              <BodyShort spacing>
-                {formatDato(stegData.utsendelsePeriode.fraDato, i18n.language)}–
-                {formatDato(stegData.utsendelsePeriode.tilDato, i18n.language)}
-              </BodyShort>
+              <dl>
+                <dt>
+                  <Label as="span">{utsendelseLandFelt.label}</Label>
+                </dt>
+                <dd className="mb-4">
+                  <BodyShort>{t(`land.${stegData.utsendelseLand}`)}</BodyShort>
+                </dd>
+                <dt>
+                  <Label as="span">{utsendelsePeriodeFelt.label}</Label>
+                </dt>
+                <dd className="mb-4">
+                  <BodyShort>
+                    {formatDato(
+                      stegData.utsendelsePeriode.fraDato,
+                      i18n.language,
+                    )}
+                    –
+                    {formatDato(
+                      stegData.utsendelsePeriode.tilDato,
+                      i18n.language,
+                    )}
+                  </BodyShort>
+                </dd>
+              </dl>
               <Button
                 onClick={() => setRedigerer(true)}
                 size="small"
@@ -175,6 +191,7 @@ function UtsendingsperiodeOgLandStegContent({
           ) : (
             <>
               <LandVelgerFormPart
+                autoFocus={redigerer}
                 className="mt-4"
                 formFieldName="utsendelseLand"
                 label={utsendelseLandFelt.label}
@@ -191,16 +208,16 @@ function UtsendingsperiodeOgLandStegContent({
                 className="mt-6"
                 defaultFraDato={
                   stegData?.utsendelsePeriode?.fraDato
-                    ? new Date(stegData.utsendelsePeriode.fraDato)
+                    ? parseIsoDato(stegData.utsendelsePeriode.fraDato)
                     : undefined
                 }
                 defaultTilDato={
                   stegData?.utsendelsePeriode?.tilDato
-                    ? new Date(stegData.utsendelsePeriode.tilDato)
+                    ? parseIsoDato(stegData.utsendelsePeriode.tilDato)
                     : undefined
                 }
                 defaultTilMåned={
-                  formFraDato ? new Date(formFraDato) : undefined
+                  formFraDato ? parseIsoDato(formFraDato) : undefined
                 }
                 formFieldName="utsendelsePeriode"
                 label={utsendelsePeriodeFelt.label}

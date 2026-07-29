@@ -23,7 +23,14 @@ export const representasjonskontekstSchema = z.object({
         : undefined,
     z.enum(OpprettetVia).optional(),
   ),
-  prefyllFraSkjemaId: z.string().optional(),
+  // Ugyldig format droppes så opprettelsen aldri feiler på en ødelagt lenke
+  prefyllFraSkjemaId: z.preprocess(
+    (verdi) =>
+      typeof verdi === "string" && z.uuid().safeParse(verdi).success
+        ? verdi
+        : undefined,
+    z.string().optional(),
+  ),
 });
 
 export type Representasjonskontekst = z.infer<

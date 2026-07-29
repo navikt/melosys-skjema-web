@@ -468,6 +468,18 @@ export class OversiktPage {
     await expect(this.motpartCtaHeading(arbeidsgiverNavn)).toBeVisible();
   }
 
+  async assertMotpartCtaBeskrivelseVisible(
+    land: string,
+    fraDato: string,
+    tilDato: string,
+  ) {
+    const tekst = translations.oversiktDegSelv.motpartCtaBeskrivelse
+      .replace("{{land}}", land)
+      .replace("{{fraDato}}", fraDato)
+      .replace("{{tilDato}}", tilDato);
+    await expect(this.page.getByText(tekst)).toBeVisible();
+  }
+
   async assertMotpartCtaNotVisible(arbeidsgiverNavn: string) {
     await expect(this.motpartCtaHeading(arbeidsgiverNavn)).not.toBeVisible();
   }
