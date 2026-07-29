@@ -75,6 +75,18 @@ function UtsendingsperiodeOgLandStegContent({
 
   const { handleSubmit, watch } = formMethods;
   const formFraDato = watch("utsendelsePeriode.fraDato");
+  const formTilDato = watch("utsendelsePeriode.tilDato");
+  const formLand = watch("utsendelseLand");
+
+  const landAvviker =
+    !!motpartensVerdier &&
+    !!formLand &&
+    formLand !== motpartensVerdier.utsendelseLand;
+  const periodeAvviker =
+    !!motpartensVerdier &&
+    !!(formFraDato || formTilDato) &&
+    (formFraDato !== motpartensVerdier.utsendelsePeriode.fraDato ||
+      formTilDato !== motpartensVerdier.utsendelsePeriode.tilDato);
 
   const dateLimits = {
     // Dato norge ble EØS medlem
@@ -124,20 +136,16 @@ function UtsendingsperiodeOgLandStegContent({
             />
           }
         >
-          {skjema.motpartensUtsendingsperiodeOgLand && (
+          {motpartensVerdier && (
             <Alert className="mt-4" variant="info">
               {t("utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver", {
-                land: t(
-                  `land.${skjema.motpartensUtsendingsperiodeOgLand.utsendelseLand}`,
-                ),
+                land: t(`land.${motpartensVerdier.utsendelseLand}`),
                 fraDato: formatDato(
-                  skjema.motpartensUtsendingsperiodeOgLand.utsendelsePeriode
-                    .fraDato,
+                  motpartensVerdier.utsendelsePeriode.fraDato,
                   i18n.language,
                 ),
                 tilDato: formatDato(
-                  skjema.motpartensUtsendingsperiodeOgLand.utsendelsePeriode
-                    .tilDato,
+                  motpartensVerdier.utsendelsePeriode.tilDato,
                   i18n.language,
                 ),
               })}
@@ -171,6 +179,13 @@ function UtsendingsperiodeOgLandStegContent({
                 formFieldName="utsendelseLand"
                 label={utsendelseLandFelt.label}
               />
+              {landAvviker && (
+                <Alert className="mt-2" inline size="small" variant="info">
+                  {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand", {
+                    land: t(`land.${motpartensVerdier.utsendelseLand}`),
+                  })}
+                </Alert>
+              )}
 
               <PeriodeFormPart
                 className="mt-6"
@@ -192,6 +207,20 @@ function UtsendingsperiodeOgLandStegContent({
                 tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
                 {...dateLimits}
               />
+              {periodeAvviker && (
+                <Alert className="mt-2" inline size="small" variant="info">
+                  {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode", {
+                    fraDato: formatDato(
+                      motpartensVerdier.utsendelsePeriode.fraDato,
+                      i18n.language,
+                    ),
+                    tilDato: formatDato(
+                      motpartensVerdier.utsendelsePeriode.tilDato,
+                      i18n.language,
+                    ),
+                  })}
+                </Alert>
+              )}
             </>
           )}
         </SkjemaSteg>

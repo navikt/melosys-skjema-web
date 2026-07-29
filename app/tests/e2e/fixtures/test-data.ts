@@ -102,6 +102,18 @@ export const testArbeidstakerSkjemaFraMotpartCta: UtsendtArbeidstakerSkjemaDto =
     },
   };
 
+export const testArbeidstakerSkjemaMedAvvikFraMotpart: UtsendtArbeidstakerSkjemaDto =
+  {
+    ...testArbeidstakerSkjemaFraMotpartCta,
+    data: {
+      type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+      utsendingsperiodeOgLand: {
+        utsendelseLand: LandKode.DE,
+        utsendelsePeriode: { fraDato: "2026-03-01", tilDato: "2026-09-30" },
+      },
+    },
+  };
+
 export const formFieldValues = {
   // Arbeidsgiver form values
   organisasjonsnummer: testOrganization.orgnr,

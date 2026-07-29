@@ -346,6 +346,9 @@ export const en = {
       preutfyltAvArbeidsgiver:
         "Your employer has stated {{land}} and the period {{fraDato}}–{{tilDato}} in their part of the application. Check that the information is correct, and change it if anything is wrong.",
       endreLandEllerPeriode: "Change country or period",
+      arbeidsgiverOppgaLand: "Your employer stated {{land}}",
+      arbeidsgiverOppgaPeriode:
+        "Your employer stated the period {{fraDato}}–{{tilDato}}",
     },
     utenlandsoppdragetSteg: {
       tittel: "The Foreign Assignment",

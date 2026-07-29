@@ -103,6 +103,30 @@ export class UtsendingsperiodeOgLandStegPage {
     await expect(this.utsendelseLandCombobox).not.toBeVisible();
   }
 
+  async assertArbeidsgiverOppgaLandVisible(land: string) {
+    await expect(
+      this.page.getByText(
+        nb.translation.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand.replace(
+          "{{land}}",
+          land,
+        ),
+      ),
+    ).toBeVisible();
+  }
+
+  async assertArbeidsgiverOppgaPeriodeVisible(
+    fraDato: string,
+    tilDato: string,
+  ) {
+    await expect(
+      this.page.getByText(
+        nb.translation.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode
+          .replace("{{fraDato}}", fraDato)
+          .replace("{{tilDato}}", tilDato),
+      ),
+    ).toBeVisible();
+  }
+
   async clickEndreLandEllerPeriode() {
     await this.page
       .getByRole("button", {

@@ -286,6 +286,9 @@ export const nb = {
       preutfyltAvArbeidsgiver:
         "Arbeidsgiveren din har oppgitt {{land}} og perioden {{fraDato}}–{{tilDato}} i sin del av søknaden. Kontroller at opplysningene stemmer, og endre dem hvis noe er feil.",
       endreLandEllerPeriode: "Endre land eller periode",
+      arbeidsgiverOppgaLand: "Arbeidsgiveren din oppga {{land}}",
+      arbeidsgiverOppgaPeriode:
+        "Arbeidsgiveren din oppga perioden {{fraDato}}–{{tilDato}}",
     },
     arbeidstakerenslonnSteg: {
       tittel: "Arbeidstakerens lønn",

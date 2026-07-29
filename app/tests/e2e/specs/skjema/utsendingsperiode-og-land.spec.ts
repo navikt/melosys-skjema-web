@@ -6,6 +6,7 @@ import {
   formFieldValues,
   testArbeidstakerSkjema,
   testArbeidstakerSkjemaFraMotpartCta,
+  testArbeidstakerSkjemaMedAvvikFraMotpart,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
@@ -44,6 +45,29 @@ test.describe("Utsendingsperiode og land", () => {
     await stegPage.clickEndreLandEllerPeriode();
     await stegPage.assertLandValgt("SE");
     await stegPage.assertFraDatoValue("01.02.2026");
+  });
+
+  test("viser avviks-info når lagrede verdier avviker fra motpartens", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testArbeidstakerSkjemaMedAvvikFraMotpart,
+      testUserInfo,
+    );
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testArbeidstakerSkjemaMedAvvikFraMotpart,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertArbeidsgiverOppgaLandVisible("Sverige");
+    await stegPage.assertArbeidsgiverOppgaPeriodeVisible(
+      "01.02.2026",
+      "31.08.2026",
+    );
+    await stegPage.assertLandValgt("DE");
   });
 
   test("vanlig skjema viser ikke preutfylt-infoboks", async ({ page }) => {
