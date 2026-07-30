@@ -68,7 +68,7 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
     case MotpartStatus.HAR_SENDT: {
       return (
         <Tag size="small" variant="success">
-          {t("oversiktFelles.historikkStatusBeggeDelerMottatt")}
+          {t("oversiktFelles.historikkStatusSoknadMottatt")}
         </Tag>
       );
     }
@@ -84,7 +84,7 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
     case MotpartStatus.IKKE_RELEVANT: {
       return (
         <Tag size="small" variant="success">
-          {t("oversiktFelles.historikkStatusKomplettSoknadMottatt")}
+          {t("oversiktFelles.historikkStatusSoknadMottatt")}
         </Tag>
       );
     }
