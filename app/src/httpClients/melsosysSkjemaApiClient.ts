@@ -654,9 +654,13 @@ export async function slettVedlegg(
  * Innsendte arbeidsgiver-deler som venter på at innlogget bruker sender inn sin
  * arbeidstaker-del. Tom liste når toggle `melosys.skjema.motpart-cta` er av i backend.
  */
+export const VENTENDE_MOTPART_SOKNADER_QUERY_KEY = [
+  "ventende-motpart-soknader",
+] as const;
+
 export const getVentendeMotpartSoknaderQuery = () =>
   queryOptions<VentendeMotpartSoknaderResponse>({
-    queryKey: ["ventende-motpart-soknader"],
+    queryKey: VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
     queryFn: fetchVentendeMotpartSoknader,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

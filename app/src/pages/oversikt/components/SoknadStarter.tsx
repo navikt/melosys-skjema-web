@@ -21,8 +21,10 @@ import {
   getOrganisasjonMedJuridiskEnhetQuery,
   listAltinnTilganger,
   opprettSoknad,
+  VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
+  OpprettetVia,
   OrganisasjonDto,
   Representasjonstype,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -185,7 +187,13 @@ function SoknadStarterContent({
   const boxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (autoFocusArbeidsgiver) {
-      boxRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const foretrekkerRedusertBevegelse = globalThis.matchMedia?.(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      boxRef.current?.scrollIntoView({
+        behavior: foretrekkerRedusertBevegelse ? "auto" : "smooth",
+        block: "start",
+      });
     }
   }, [autoFocusArbeidsgiver]);
 
@@ -266,7 +274,7 @@ function SoknadStarterContent({
     onSuccess: (data) => {
       void queryClient.invalidateQueries({ queryKey: ["utkast"] });
       void queryClient.invalidateQueries({
-        queryKey: ["ventende-motpart-soknader"],
+        queryKey: VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
       });
       void navigate({
         to: "/skjema/$id",
@@ -276,14 +284,16 @@ function SoknadStarterContent({
   });
 
   const onSubmit = (data: SoknadStarterOutput) => {
-    // opprettetVia og prefyll gjelder kun søknaden CTA-en pekte på — velger
-    // brukeren en annen arbeidsgiver enn den forhåndsutfylte, skal søknaden
-    // verken tagges eller forhåndsutfylles fra motpartens del.
+    // CTA-taggen og prefyll gjelder kun søknaden CTA-en pekte på — velger
+    // brukeren en annen arbeidsgiver enn den forhåndsutfylte, regnes
+    // opprettelsen som ordinær og forhåndsutfylles ikke fra motpartens del.
     const arbeidsgiverUendret =
       data.arbeidsgiver.orgnr === initialOrganisasjon?.juridiskEnhet.orgnr;
     opprettSoknadMutation.mutate({
       ...data,
-      opprettetVia: arbeidsgiverUendret ? data.opprettetVia : undefined,
+      opprettetVia: arbeidsgiverUendret
+        ? data.opprettetVia
+        : OpprettetVia.ORDINAER,
       prefyllFraSkjemaId: arbeidsgiverUendret
         ? data.prefyllFraSkjemaId
         : undefined,

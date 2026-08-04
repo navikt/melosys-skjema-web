@@ -123,7 +123,7 @@ test.describe("Oversikt — motpart-CTA", () => {
     await oversiktPage.clickStartSoknad();
 
     const requestBody = (await requestBodyPromise) as Record<string, unknown>;
-    expect(requestBody.opprettetVia).toBeUndefined();
+    expect(requestBody.opprettetVia).toBe(OpprettetVia.ORDINAER);
     expect(requestBody.prefyllFraSkjemaId).toBeUndefined();
     expect(requestBody.arbeidsgiver).toEqual({
       orgnr: korrektFormatertOrgnr2,

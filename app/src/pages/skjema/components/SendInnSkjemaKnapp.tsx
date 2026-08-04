@@ -8,6 +8,7 @@ import {
   getInnsendtKvitteringQuery,
   getSkjemaQuery,
   sendInnSkjema,
+  VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
 interface SendInnSkjemaKnappProps {
@@ -47,7 +48,7 @@ export function SendInnSkjemaKnapp({
       });
 
       void queryClient.invalidateQueries({
-        queryKey: ["ventende-motpart-soknader"],
+        queryKey: VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
       });
 
       navigate({

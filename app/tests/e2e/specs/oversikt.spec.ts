@@ -1,5 +1,5 @@
 import { nb } from "~/i18n/nb";
-import { Representasjonstype } from "~/types/melosysSkjemaTypes";
+import { OpprettetVia, Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
   interceptOpprettSoknad,
@@ -280,6 +280,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Assert POST payload
     expect(requestBody).toEqual({
+      opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.DEG_SELV,
       arbeidsgiver: {
         orgnr: testEregOrganisasjon.juridiskEnhet.orgnr,
@@ -337,6 +338,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Assert POST payload — skalFylleUtForArbeidstaker=false means no fullmakt transform
     expect(requestBody).toEqual({
+      opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.ARBEIDSGIVER,
       arbeidsgiver: {
         orgnr: testArbeidsgiverOrganization.orgnr,
@@ -395,6 +397,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Assert POST payload — skalFylleUtForArbeidstaker=true triggers ARBEIDSGIVER_MED_FULLMAKT
     expect(requestBody).toEqual({
+      opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT,
       arbeidsgiver: {
         orgnr: testArbeidsgiverOrganization.orgnr,
@@ -455,6 +458,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Assert POST payload — includes radgiverfirma, no fullmakt transform
     expect(requestBody).toEqual({
+      opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.RADGIVER,
       radgiverfirma: {
         orgnr: testRadgiverfirmaOrganisasjon.juridiskEnhet.orgnr,
@@ -514,6 +518,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Assert POST payload — includes radgiverfirma, fullmakt transform applies
     expect(requestBody).toEqual({
+      opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.RADGIVER_MED_FULLMAKT,
       radgiverfirma: {
         orgnr: testRadgiverfirmaOrganisasjon.juridiskEnhet.orgnr,

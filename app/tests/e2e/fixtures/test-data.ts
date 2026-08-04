@@ -9,7 +9,6 @@ import {
   type InnsendtSkjemaResponse,
   LandKode,
   MotpartStatus,
-  OpprettetVia,
   type OrganisasjonDto,
   type OrganisasjonMedJuridiskEnhetDto,
   type PersonMedFullmaktDto,
@@ -88,7 +87,6 @@ export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
 export const testArbeidstakerSkjemaFraMotpartCta: UtsendtArbeidstakerSkjemaDto =
   {
     ...testArbeidstakerSkjema,
-    opprettetVia: OpprettetVia.MOTPART_CTA,
     data: {
       type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
       utsendingsperiodeOgLand: {
