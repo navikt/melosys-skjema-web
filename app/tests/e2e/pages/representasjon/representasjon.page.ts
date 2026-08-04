@@ -39,6 +39,34 @@ export class RepresentasjonPage {
     await expect(this.heading).toBeVisible();
   }
 
+  /**
+   * Start disse FØR goto() — negative badge-assertions er ellers racy mot
+   * featuretoggle-/ventende-queriene som avgjør om badgen rendres.
+   */
+  ventPaaFeatureToggles(): Promise<unknown> {
+    return this.page.waitForResponse((response) =>
+      response.url().includes("/api/featuretoggle"),
+    );
+  }
+
+  ventPaaVentendeMotpartSoknader(): Promise<unknown> {
+    return this.page.waitForResponse((response) =>
+      response.url().includes("/ventende-motpart-soknader"),
+    );
+  }
+
+  async assertSoknadVenterBadgeVisible() {
+    await expect(
+      this.degSelvButton.getByText(translations.soknadVenterPaaDeg),
+    ).toBeVisible();
+  }
+
+  async assertSoknadVenterBadgeNotVisible() {
+    await expect(
+      this.degSelvButton.getByText(translations.soknadVenterPaaDeg),
+    ).not.toBeVisible();
+  }
+
   async velgDegSelv() {
     await this.degSelvButton.click();
   }

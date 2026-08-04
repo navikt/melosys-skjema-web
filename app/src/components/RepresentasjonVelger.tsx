@@ -5,11 +5,15 @@ import {
   PersonCircleIcon,
   PersonGroupIcon,
 } from "@navikt/aksel-icons";
-import { BodyShort, Heading, HStack } from "@navikt/ds-react";
+import { BodyShort, Heading, HStack, Tag } from "@navikt/ds-react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
+import { MOTPART_CTA } from "~/featuretoggle/toggleNavn.ts";
+import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
+import { getVentendeMotpartSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
@@ -27,9 +31,14 @@ interface RepresentationOption {
 interface RepresentationCardProps {
   option: RepresentationOption;
   onSelect: (type: Representasjonskontekst["representasjonstype"]) => void;
+  badge?: string;
 }
 
-function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
+function RepresentationCard({
+  option,
+  onSelect,
+  badge,
+}: RepresentationCardProps) {
   const { t } = useTranslation();
   const Icon = option.icon;
 
@@ -47,7 +56,14 @@ function RepresentationCard({ option, onSelect }: RepresentationCardProps) {
             fontSize="1.75rem"
           />
           <div>
-            <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
+            <HStack align="center" gap="space-8">
+              <BodyShort weight="semibold">{t(option.labelKey)}</BodyShort>
+              {badge && (
+                <Tag size="small" variant="info">
+                  {badge}
+                </Tag>
+              )}
+            </HStack>
             {option.descriptionKey && (
               <BodyShort size="small">{t(option.descriptionKey)}</BodyShort>
             )}
@@ -101,6 +117,14 @@ export function RepresentasjonVelger({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const motpartCtaAktiv = useFeatureToggle(MOTPART_CTA) ?? false;
+  const { data: ventendeMotpartSoknader } = useQuery({
+    ...getVentendeMotpartSoknaderQuery(),
+    enabled: motpartCtaAktiv,
+  });
+  const harVentendeMotpartSoknad =
+    (ventendeMotpartSoknader?.soknader.length ?? 0) > 0;
+
   const handleVelgRepresentasjon = (
     representasjonstype: Representasjonskontekst["representasjonstype"],
   ) => {
@@ -129,6 +153,12 @@ export function RepresentasjonVelger({
       <div className="flex flex-col gap-2">
         {REPRESENTATION_OPTIONS.map((option) => (
           <RepresentationCard
+            badge={
+              option.type === Representasjonstype.DEG_SELV &&
+              harVentendeMotpartSoknad
+                ? t("landingsside.soknadVenterPaaDeg")
+                : undefined
+            }
             key={option.type}
             onSelect={handleVelgRepresentasjon}
             option={option}

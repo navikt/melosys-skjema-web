@@ -11,6 +11,7 @@ import {
 } from "@navikt/ds-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -20,8 +21,10 @@ import {
   getOrganisasjonMedJuridiskEnhetQuery,
   listAltinnTilganger,
   opprettSoknad,
+  VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
+  OpprettetVia,
   OrganisasjonDto,
   Representasjonstype,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -45,6 +48,7 @@ interface SoknadStarterContentProps {
   defaultData: SoknadStarterFormData;
   altinnArbeidsgivere: OrganisasjonDto[];
   initialArbeidsgiverOrgnr?: string;
+  autoFocusArbeidsgiver?: boolean;
 }
 
 /**
@@ -133,6 +137,16 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
     representasjonstype: representasjonskontekst.representasjonstype,
     radgiverfirma,
     bekreftelse: false,
+    opprettetVia:
+      representasjonskontekst.representasjonstype ===
+      Representasjonstype.DEG_SELV
+        ? representasjonskontekst.opprettetVia
+        : undefined,
+    prefyllFraSkjemaId:
+      representasjonskontekst.representasjonstype ===
+      Representasjonstype.DEG_SELV
+        ? representasjonskontekst.prefyllFraSkjemaId
+        : undefined,
     // Setter default skalFylleUtForArbeidstaker:true for rådgiver, siden det er mest vanlig at de fyller ut på vegne av arbeidstaker.
     ...(representasjonskontekst.representasjonstype ===
       Representasjonstype.RADGIVER && {
@@ -148,9 +162,10 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
   return (
     <SoknadStarterContent
       altinnArbeidsgivere={arbeidsgivere ?? []}
+      autoFocusArbeidsgiver={!!representasjonskontekst.opprettetVia}
       defaultData={defaultData}
       initialArbeidsgiverOrgnr={representasjonskontekst.arbeidsgiverOrgnr}
-      key={`${representasjonskontekst.representasjonstype}-${representasjonskontekst.radgiverOrgnr ?? ""}`}
+      key={`${representasjonskontekst.representasjonstype}-${representasjonskontekst.radgiverOrgnr ?? ""}-${representasjonskontekst.arbeidsgiverOrgnr ?? ""}`}
     />
   );
 }
@@ -162,11 +177,25 @@ function SoknadStarterContent({
   defaultData,
   altinnArbeidsgivere,
   initialArbeidsgiverOrgnr,
+  autoFocusArbeidsgiver = false,
 }: SoknadStarterContentProps) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const boxRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (autoFocusArbeidsgiver) {
+      const foretrekkerRedusertBevegelse = globalThis.matchMedia?.(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      boxRef.current?.scrollIntoView({
+        behavior: foretrekkerRedusertBevegelse ? "auto" : "smooth",
+        block: "start",
+      });
+    }
+  }, [autoFocusArbeidsgiver]);
 
   const formMethods = useForm({
     resolver: zodResolver(soknadStarterSchema),
@@ -204,6 +233,7 @@ function SoknadStarterContent({
     ) {
       return (
         <OrganisasjonSoker
+          autoFocus={autoFocusArbeidsgiver}
           formFieldName="arbeidsgiver"
           initialOrgnr={initialArbeidsgiverOrgnr}
           label={t("oversiktFelles.arbeidsgiverOrgnrLabel")}
@@ -232,10 +262,20 @@ function SoknadStarterContent({
     );
   }
 
+  // Samme oppslag som OrganisasjonSoker gjør for prefill-orgnr (cache-treff),
+  // siden skjemaverdien holder juridisk enhet-orgnr, ikke det prefylte orgnr.
+  const { data: initialOrganisasjon } = useQuery({
+    ...getOrganisasjonMedJuridiskEnhetQuery(initialArbeidsgiverOrgnr ?? ""),
+    enabled: !!initialArbeidsgiverOrgnr,
+  });
+
   const opprettSoknadMutation = useMutation({
     mutationFn: opprettSoknad,
     onSuccess: (data) => {
       void queryClient.invalidateQueries({ queryKey: ["utkast"] });
+      void queryClient.invalidateQueries({
+        queryKey: VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
+      });
       void navigate({
         to: "/skjema/$id",
         params: { id: data.id },
@@ -244,7 +284,20 @@ function SoknadStarterContent({
   });
 
   const onSubmit = (data: SoknadStarterOutput) => {
-    opprettSoknadMutation.mutate(data);
+    // CTA-taggen og prefyll gjelder kun søknaden CTA-en pekte på — velger
+    // brukeren en annen arbeidsgiver enn den forhåndsutfylte, regnes
+    // opprettelsen som ordinær og forhåndsutfylles ikke fra motpartens del.
+    const arbeidsgiverUendret =
+      data.arbeidsgiver.orgnr === initialOrganisasjon?.juridiskEnhet.orgnr;
+    opprettSoknadMutation.mutate({
+      ...data,
+      opprettetVia: arbeidsgiverUendret
+        ? data.opprettetVia
+        : OpprettetVia.ORDINAER,
+      prefyllFraSkjemaId: arbeidsgiverUendret
+        ? data.prefyllFraSkjemaId
+        : undefined,
+    });
   };
 
   // Samle feilmeldinger for visning
@@ -269,6 +322,7 @@ function SoknadStarterContent({
     <FormProvider {...formMethods}>
       <Box
         background="info-soft"
+        ref={boxRef}
         borderColor="neutral-subtle"
         borderRadius="12"
         borderWidth="1"

@@ -21,6 +21,7 @@ import {
   Sprak,
   type UtkastListeResponse,
   type UtsendtArbeidstakerSkjemaDto,
+  type VentendeMotpartSoknaderResponse,
 } from "~/types/melosysSkjemaTypes";
 
 // Gyldige organisasjonsnummer (MOD11-validert)
@@ -82,6 +83,34 @@ export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
   },
 };
+
+export const testArbeidstakerSkjemaFraMotpartCta: UtsendtArbeidstakerSkjemaDto =
+  {
+    ...testArbeidstakerSkjema,
+    data: {
+      type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+      utsendingsperiodeOgLand: {
+        utsendelseLand: LandKode.SE,
+        utsendelsePeriode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+      },
+    },
+    motpartensUtsendingsperiodeOgLand: {
+      utsendelseLand: LandKode.SE,
+      utsendelsePeriode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+    },
+  };
+
+export const testArbeidstakerSkjemaMedAvvikFraMotpart: UtsendtArbeidstakerSkjemaDto =
+  {
+    ...testArbeidstakerSkjemaFraMotpartCta,
+    data: {
+      type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+      utsendingsperiodeOgLand: {
+        utsendelseLand: LandKode.DE,
+        utsendelsePeriode: { fraDato: "2026-03-01", tilDato: "2026-09-30" },
+      },
+    },
+  };
 
 export const formFieldValues = {
   // Arbeidsgiver form values
@@ -328,4 +357,21 @@ export const testInnsendtSkjemaKombinertDel: InnsendtSkjemaResponse = {
   definisjon: {
     seksjoner: {},
   } as unknown as InnsendtSkjemaResponse["definisjon"],
+};
+
+export const emptyVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
+  soknader: [],
+};
+
+export const testVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
+  soknader: [
+    {
+      skjemaId: "7f9b2c4d-1e3a-4b5c-8d6e-9f0a1b2c3d4e",
+      arbeidsgiverNavn: "Test Bedrift AS",
+      arbeidsgiverOrgnr: korrektFormatertOrgnr,
+      utsendingsperiode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+      utsendelseLand: LandKode.SE,
+      innsendtDato: "2026-01-15T09:00:00Z",
+    },
+  ],
 };

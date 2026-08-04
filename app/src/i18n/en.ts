@@ -343,6 +343,12 @@ export const en = {
       tittel: "Posting period and country",
       duMaVelgeHvilketLandArbeidetSkalUtforesI:
         "You must select which country the work will be performed in",
+      preutfyltAvArbeidsgiver:
+        "Your employer has stated {{land}} and the period {{fraDato}}–{{tilDato}} in their part of the application. Check that the information is correct, and change it if anything is wrong.",
+      endreLandEllerPeriode: "Change country or period",
+      arbeidsgiverOppgaLand: "Your employer stated {{land}}",
+      arbeidsgiverOppgaPeriode:
+        "Your employer stated the period {{fraDato}}–{{tilDato}}",
     },
     utenlandsoppdragetSteg: {
       tittel: "The Foreign Assignment",
@@ -413,6 +419,7 @@ export const en = {
         "filling out an application for employer/employee",
       annenPerson: "PRIVATE PERSON",
       annenPersonBeskrivelse: "filling out an application for another person",
+      soknadVenterPaaDeg: "An application is waiting for you",
       avbryt: "Cancel",
     },
     appHeader: {
@@ -438,6 +445,14 @@ export const en = {
       ettersendelseLenke: "Send documents to Nav",
       ettersendelseLenkeUrl:
         "https://www.nav.no/fyllut-ettersending/nav020807/innsendingsvalg",
+      motpartCtaTittel:
+        "{{arbeidsgiverNavn}} has submitted their part of the application for A1 for workers posted in the EEA or Switzerland",
+      motpartCtaBeskrivelse:
+        "They have stated that you will be working in {{land}} during the period {{fraDato}}–{{tilDato}}. For Nav to process the application, you must fill out your part.",
+      motpartCtaUtlandetFallback: "abroad",
+      motpartCtaBeskrivelseUtenPeriode:
+        "For Nav to process the application, you must fill out your part.",
+      motpartCtaKnapp: "Fill out your part",
     },
     oversiktArbeidsgiver: {
       tittel: "Overview page for applications",

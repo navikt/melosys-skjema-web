@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  OpprettetVia,
   OpprettUtsendtArbeidstakerSoknadRequest,
   Representasjonstype,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -38,6 +39,8 @@ export const soknadStarterSchema = z
       .optional(),
     skalFylleUtForArbeidstaker: z.boolean().optional(),
     bekreftelse: z.boolean(),
+    opprettetVia: z.enum(OpprettetVia).optional(),
+    prefyllFraSkjemaId: z.uuid().optional(),
   })
   .refine((data) => !!data.arbeidsgiver, {
     error: "oversiktFelles.valideringManglerArbeidsgiver",
@@ -68,6 +71,8 @@ export const soknadStarterSchema = z
       radgiverfirma: data.radgiverfirma,
       arbeidsgiver: data.arbeidsgiver!,
       arbeidstaker: data.arbeidstaker!,
+      opprettetVia: data.opprettetVia ?? OpprettetVia.ORDINAER,
+      prefyllFraSkjemaId: data.prefyllFraSkjemaId,
     };
   });
 

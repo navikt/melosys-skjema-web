@@ -436,4 +436,63 @@ export class OversiktPage {
       ),
     ).toBeVisible();
   }
+
+  // ============ Motpart-CTA ============
+
+  /**
+   * Start disse FØR goto() — negative assertions er ellers racy mot
+   * featuretoggle-/ventende-queriene som avgjør om banneret rendres.
+   */
+  ventPaaFeatureToggles(): Promise<unknown> {
+    return this.page.waitForResponse((response) =>
+      response.url().includes("/api/featuretoggle"),
+    );
+  }
+
+  ventPaaVentendeMotpartSoknader(): Promise<unknown> {
+    return this.page.waitForResponse((response) =>
+      response.url().includes("/ventende-motpart-soknader"),
+    );
+  }
+
+  private motpartCtaHeading(arbeidsgiverNavn: string) {
+    return this.page.getByRole("heading", {
+      name: translations.oversiktDegSelv.motpartCtaTittel.replace(
+        "{{arbeidsgiverNavn}}",
+        arbeidsgiverNavn,
+      ),
+    });
+  }
+
+  async assertMotpartCtaVisible(arbeidsgiverNavn: string) {
+    await expect(this.motpartCtaHeading(arbeidsgiverNavn)).toBeVisible();
+  }
+
+  async assertMotpartCtaBeskrivelseVisible(
+    land: string,
+    fraDato: string,
+    tilDato: string,
+  ) {
+    const tekst = translations.oversiktDegSelv.motpartCtaBeskrivelse
+      .replace("{{land}}", land)
+      .replace("{{fraDato}}", fraDato)
+      .replace("{{tilDato}}", tilDato);
+    await expect(this.page.getByText(tekst)).toBeVisible();
+  }
+
+  async assertMotpartCtaNotVisible(arbeidsgiverNavn: string) {
+    await expect(this.motpartCtaHeading(arbeidsgiverNavn)).not.toBeVisible();
+  }
+
+  async clickMotpartCtaFyllUtDinDel() {
+    await this.page
+      .getByRole("button", {
+        name: translations.oversiktDegSelv.motpartCtaKnapp,
+      })
+      .click();
+  }
+
+  async assertArbeidsgiverOrgnrPrefilt(orgnr: string) {
+    await expect(this.arbeidsgiverOrgnrInput).toHaveValue(orgnr);
+  }
 }
