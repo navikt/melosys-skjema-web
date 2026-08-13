@@ -3,7 +3,7 @@
  *
  * Ved endringer i backend, kjør: npm run sync-skjema-definisjon
  *
- * Inneholder definisjoner for språk: nb, en
+ * Inneholder definisjoner for språk: nb, nn, en
  */
 
 const SKJEMA_DEFINISJON_A1_NB = {
@@ -690,12 +690,701 @@ const SKJEMA_DEFINISJON_A1_NB = {
   },
 } as const;
 
+const SKJEMA_DEFINISJON_A1_NN = {
+  type: "UTSENDT_ARBEIDSTAKER",
+  versjon: "1",
+  seksjoner: {
+    utsendingsperiodeOgLand: {
+      tittel: "Utsendingsperiode og land",
+      felter: {
+        utsendelseLand: {
+          type: "COUNTRY_SELECT",
+          label: "I kva for land skal arbeidet utførast?",
+          pakrevd: true,
+        },
+        utsendelsePeriode: {
+          type: "PERIOD",
+          label: "Utsendingsperiode",
+          pakrevd: true,
+          hjelpetekst:
+            "Oppgi omtrentleg dato dersom du ikkje veit nøyaktig dato.",
+          fraDatoLabel: "Frå dato",
+          tilDatoLabel: "Til dato",
+        },
+      },
+    },
+    arbeidssituasjon: {
+      tittel: "Arbeidssituasjon",
+      felter: {
+        harVaertEllerSkalVaereILonnetArbeidFoerUtsending: {
+          type: "BOOLEAN",
+          label:
+            "Har du vore, eller skal du vere i løna arbeid i Noreg i minst ein månad rett før utsendinga?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        aktivitetIMaanedenFoerUtsendingen: {
+          type: "TEXTAREA",
+          label: "Skildre aktiviteten din i månaden før utsendinga",
+          pakrevd: false,
+          hjelpetekst:
+            "For eksempel studium, ferie eller sjølvstendig verksemd",
+        },
+        skalJobbeForFlereVirksomheter: {
+          type: "BOOLEAN",
+          label:
+            "Skal du også drive sjølvstendig verksemd eller arbeide for ein annan arbeidsgivar i utsendingsperioden?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        virksomheterArbeidstakerJobberForIutsendelsesPeriode: {
+          type: "LIST",
+          label: "Kven skal du jobbe for i utsendingsperioden?",
+          pakrevd: false,
+          hjelpetekst:
+            "Legg til norske og/eller utanlandske verksemder du skal jobbe for i utsendingsperioden.",
+          leggTilLabel: "Legg til verksemd",
+          fjernLabel: "Fjern",
+          elementDefinisjon: {
+            organisasjonsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer",
+              pakrevd: true,
+            },
+            navn: {
+              type: "TEXT",
+              label: "Verksemdsnamn",
+              pakrevd: false,
+            },
+            ansettelsesform: {
+              type: "SELECT",
+              label: "Kva jobbar du som i denne verksemda?",
+              pakrevd: true,
+              alternativer: [
+                {
+                  verdi: "ARBEIDSTAKER_ELLER_FRILANSER",
+                  label: "Arbeidstakar eller frilansar",
+                },
+                {
+                  verdi: "SELVSTENDIG_NAERINGSDRIVENDE",
+                  label: "Sjølvstendig næringsdrivande",
+                },
+                {
+                  verdi: "STATSANSATT",
+                  label: "Statstilsett",
+                },
+              ],
+            },
+            vegnavnOgHusnummer: {
+              type: "TEXT",
+              label: "Vegnamn og husnummer",
+              pakrevd: true,
+            },
+            bygning: {
+              type: "TEXT",
+              label: "Bygning",
+              pakrevd: false,
+            },
+            postkode: {
+              type: "TEXT",
+              label: "Postkode",
+              pakrevd: false,
+            },
+            byStedsnavn: {
+              type: "TEXT",
+              label: "By/stadnamn",
+              pakrevd: false,
+            },
+            region: {
+              type: "TEXT",
+              label: "Region",
+              pakrevd: false,
+            },
+            land: {
+              type: "COUNTRY_SELECT",
+              label: "Land",
+              pakrevd: true,
+            },
+            tilhorerSammeKonsern: {
+              type: "BOOLEAN",
+              label:
+                "Høyrer verksemda til same konsern som den norske arbeidsgivaren?",
+              pakrevd: true,
+              jaLabel: "Ja",
+              neiLabel: "Nei",
+            },
+          },
+          itemTypeLabels: {
+            norsk: "Norsk verksemd",
+            utenlandsk: "Utanlandsk verksemd",
+          },
+        },
+      },
+    },
+    skatteforholdOgInntekt: {
+      tittel: "Skatteforhold og inntekt",
+      felter: {
+        erSkattepliktigTilNorgeIHeleutsendingsperioden: {
+          type: "BOOLEAN",
+          label: "Er du skattepliktig til Noreg i heile utsendingsperioden?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        mottarPengestotteFraAnnetEosLandEllerSveits: {
+          type: "BOOLEAN",
+          label: "Tek du imot pengestøtte frå eit anna EØS-land eller Sveits?",
+          pakrevd: true,
+          hjelpetekst:
+            'Med "pengestøtte" meiner vi pengar du tek imot som kompensasjon for tapt arbeidsinntekt. Sjukepengar, foreldrepengar, dagpengar og arbeidsavklaringspengar er eksempel på slik pengestøtte i Noreg.',
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        landSomUtbetalerPengestotte: {
+          type: "COUNTRY_SELECT",
+          label: "Frå kva land tek du imot pengestøtte?",
+          pakrevd: false,
+        },
+        pengestotteSomMottasFraAndreLandBelop: {
+          type: "TEXT",
+          label: "Kor mykje pengar tek du imot brutto per månad?",
+          pakrevd: false,
+          hjelpetekst: "Oppgi beløpet i norske kroner",
+          format: "BELOP",
+        },
+        pengestotteSomMottasFraAndreLandBeskrivelse: {
+          type: "TEXTAREA",
+          label: "Kva slags pengestøtte tek du imot?",
+          pakrevd: false,
+        },
+        inntektFraNorskEllerUtenlandskVirksomhet: {
+          type: "CHECKBOX_GROUP",
+          label:
+            "Får du arbeidsinntekta di frå ei norsk eller utanlandsk verksemd?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: "NORSK_VIRKSOMHET",
+              label: "Norsk verksemd",
+            },
+            {
+              verdi: "UTENLANDSK_VIRKSOMHET",
+              label: "Utanlandsk verksemd",
+            },
+          ],
+        },
+        hvilkeTyperInntektHarDu: {
+          type: "CHECKBOX_GROUP",
+          label: "Kva slags inntekt har du?",
+          pakrevd: false,
+          alternativer: [
+            {
+              verdi: "LOENN",
+              label: "Lønsinntekt",
+            },
+            {
+              verdi: "INNTEKT_FRA_EGEN_VIRKSOMHET",
+              label: "Inntekt frå eiga verksemd",
+            },
+          ],
+        },
+        inntekt: {
+          type: "TEXT",
+          label: "Lønsinntekt",
+          pakrevd: false,
+          hjelpetekst:
+            "Du skal føre opp samla månadleg inntekt, inkludert eventuelle utlandstillegg og verdi av naturalytingar dekte av verksemda. Dersom inntekta di varierer frå månad til månad, oppgi gjennomsnittleg inntekt i brutto per månad.",
+          format: "BELOP",
+        },
+        inntektFraEgenVirksomhet: {
+          type: "TEXT",
+          label: "Inntekter frå eiga verksemd",
+          pakrevd: false,
+          format: "BELOP",
+        },
+      },
+    },
+    familiemedlemmer: {
+      tittel: "Familiemedlemmar",
+      felter: {
+        skalHaMedFamiliemedlemmer: {
+          type: "BOOLEAN",
+          label:
+            "Har du ektefelle, partnar, sambuar eller barn som skal vere med deg?",
+          pakrevd: true,
+          hjelpetekst:
+            "Vi spør om dette fordi vi ønskjer å behandle søknader frå fleire i same familie samtidig",
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+      },
+    },
+    tilleggsopplysningerArbeidstaker: {
+      tittel: "Tilleggsopplysningar",
+      felter: {
+        harFlereOpplysningerTilSoknaden: {
+          type: "BOOLEAN",
+          label: "Har du fleire opplysningar til søknaden?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        tilleggsopplysningerTilSoknad: {
+          type: "TEXTAREA",
+          label: "Skildre desse her",
+          pakrevd: false,
+          maxLength: 2000,
+        },
+      },
+    },
+    vedleggArbeidstaker: {
+      tittel: "Vedlegg",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Har du anna dokumentasjon du ønskjer å leggje ved?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+      },
+    },
+    arbeidsgiverensVirksomhetINorge: {
+      tittel: "Verksemda til arbeidsgivaren i Noreg",
+      felter: {
+        erArbeidsgiverenOffentligVirksomhet: {
+          type: "BOOLEAN",
+          label: "Er arbeidsgivaren ei offentleg verksemd?",
+          pakrevd: true,
+          hjelpetekst:
+            "Offentlege verksemder er statsorgan og underliggjande verksemder, til dømes departement og universitet.",
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        erArbeidsgiverenBemanningsEllerVikarbyraa: {
+          type: "BOOLEAN",
+          label: "Er arbeidsgivaren eit bemannings- eller vikarbyrå?",
+          pakrevd: false,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        opprettholderArbeidsgiverenVanligDrift: {
+          type: "BOOLEAN",
+          label: "Held arbeidsgivaren oppe vanleg drift i Noreg?",
+          pakrevd: false,
+          hjelpetekst:
+            "Med dette meiner vi at arbeidsgivaren framleis har aktivitet og tilsette som jobbar i Noreg i perioden.",
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+      },
+    },
+    utenlandsoppdragetArbeidsgiver: {
+      tittel: "Utsendingsperiode og land",
+      felter: {
+        utsendelseLand: {
+          type: "COUNTRY_SELECT",
+          label: "I kva for land skal arbeidet utførast?",
+          pakrevd: true,
+        },
+        arbeidstakerUtsendelsePeriode: {
+          type: "PERIOD",
+          label: "Utsendingsperiode",
+          pakrevd: true,
+          hjelpetekst:
+            "Oppgi omtrentleg dato dersom du ikkje veit nøyaktig dato.",
+          fraDatoLabel: "Frå dato",
+          tilDatoLabel: "Til dato",
+        },
+        arbeidsgiverHarOppdragILandet: {
+          type: "BOOLEAN",
+          label:
+            "Har du som arbeidsgivar oppdrag i landet arbeidstakaren skal sendast ut til?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        arbeidstakerBleAnsattForUtenlandsoppdraget: {
+          type: "BOOLEAN",
+          label:
+            "Vart arbeidstakaren tilsett på grunn av dette utanlandsoppdraget?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        arbeidstakerForblirAnsattIHelePerioden: {
+          type: "BOOLEAN",
+          label:
+            "Vil arbeidstakaren framleis vere tilsett hos dykk i heile utsendingsperioden?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        arbeidstakerErstatterAnnenPerson: {
+          type: "BOOLEAN",
+          label:
+            "Erstattar arbeidstakaren ein annan person som var sendt ut for å gjere det same arbeidet?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: {
+          type: "BOOLEAN",
+          label:
+            "Vil arbeidstakaren arbeide for verksemda i Noreg etter utanlandsoppdraget?",
+          pakrevd: false,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        utenlandsoppholdetsBegrunnelse: {
+          type: "TEXTAREA",
+          label: "Kvifor skal arbeidstakaren arbeide i utlandet?",
+          pakrevd: false,
+        },
+        ansettelsesforholdBeskrivelse: {
+          type: "TEXTAREA",
+          label:
+            "Skildre tilsetjingsforholdet til arbeidstakaren i utsendingsperioden",
+          pakrevd: false,
+        },
+        forrigeArbeidstakerUtsendelsePeriode: {
+          type: "PERIOD",
+          label: "Utsendinga til førre arbeidstakar",
+          pakrevd: false,
+          hjelpetekst:
+            "Oppgi omtrentleg dato dersom du ikkje veit nøyaktig dato.",
+          fraDatoLabel: "Frå dato",
+          tilDatoLabel: "Til dato",
+        },
+      },
+    },
+    arbeidsstedIUtlandet: {
+      tittel: "Arbeidsstad i utlandet",
+      felter: {
+        arbeidsstedType: {
+          type: "SELECT",
+          label: "Kor skal arbeidet utførast?",
+          pakrevd: true,
+          alternativer: [
+            {
+              verdi: "PA_LAND",
+              label: "På land",
+            },
+            {
+              verdi: "OFFSHORE",
+              label: "Offshore",
+            },
+            {
+              verdi: "PA_SKIP",
+              label: "På skip",
+            },
+            {
+              verdi: "OM_BORD_PA_FLY",
+              label: "Om bord på fly",
+            },
+          ],
+        },
+      },
+    },
+    arbeidsstedPaLand: {
+      tittel: "Arbeidsstad på land",
+      felter: {
+        navnPaVirksomhet: {
+          type: "TEXT",
+          label: "Namn på verksemda",
+          pakrevd: true,
+        },
+        fastEllerVekslendeArbeidssted: {
+          type: "SELECT",
+          label:
+            "Har arbeidstakaren fast arbeidsstad i dette landet, eller vekslar det ofte?",
+          pakrevd: true,
+          alternativer: [
+            {
+              verdi: "FAST",
+              label: "Fast arbeidsstad",
+            },
+            {
+              verdi: "VEKSLENDE",
+              label: "Vekslar ofte",
+            },
+          ],
+        },
+        vegadresse: {
+          type: "TEXT",
+          label: "Gate/veg",
+          pakrevd: false,
+        },
+        nummer: {
+          type: "TEXT",
+          label: "Nummer",
+          pakrevd: false,
+        },
+        postkode: {
+          type: "TEXT",
+          label: "Postkode",
+          pakrevd: false,
+        },
+        bySted: {
+          type: "TEXT",
+          label: "By/stad/region",
+          pakrevd: false,
+        },
+        land: {
+          type: "COUNTRY_SELECT",
+          label: "Land",
+          pakrevd: false,
+        },
+        erHjemmekontor: {
+          type: "BOOLEAN",
+          label: "Er arbeidstakaren utsendt for å jobbe på heimekontor?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+      },
+    },
+    arbeidsstedOffshore: {
+      tittel: "Arbeidsstad offshore",
+      felter: {
+        navnPaVirksomhet: {
+          type: "TEXT",
+          label: "Namn på verksemda",
+          pakrevd: true,
+        },
+        navnPaInnretning: {
+          type: "TEXT",
+          label: "Namn på innretning",
+          pakrevd: true,
+        },
+        typeInnretning: {
+          type: "SELECT",
+          label: "Kva slags type innretning er dette?",
+          pakrevd: true,
+          alternativer: [
+            {
+              verdi: "PLATTFORM_ELLER_ANNEN_FAST_INNRETNING",
+              label: "Plattform eller anna fast innretning",
+            },
+            {
+              verdi: "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING",
+              label: "Boreskip eller anna flyttbar innreting",
+            },
+          ],
+        },
+        sokkelLand: {
+          type: "COUNTRY_SELECT",
+          label: "Kva for lands sokkel er dette?",
+          pakrevd: true,
+        },
+      },
+    },
+    arbeidsstedPaSkip: {
+      tittel: "Arbeidsstad på skip",
+      felter: {
+        navnPaVirksomhet: {
+          type: "TEXT",
+          label: "Namn på verksemda",
+          pakrevd: true,
+        },
+        navnPaSkip: {
+          type: "TEXT",
+          label: "Kva er namnet på skipet arbeidstakaren skal jobbe på?",
+          pakrevd: true,
+        },
+        yrketTilArbeidstaker: {
+          type: "TEXT",
+          label: "Kva er yrket til arbeidstakaren?",
+          pakrevd: true,
+          hjelpetekst:
+            "Vi treng informasjon om kva slags arbeid arbeidstakaren utfører om bord på skipet",
+        },
+        seilerI: {
+          type: "SELECT",
+          label: "Kor skal skipet segle?",
+          pakrevd: true,
+          alternativer: [
+            {
+              verdi: "INTERNASJONALT_FARVANN",
+              label: "Internasjonalt farvatn",
+            },
+            {
+              verdi: "TERRITORIALFARVANN",
+              label: "Innanfor territorialfarvatn",
+            },
+          ],
+        },
+        flaggland: {
+          type: "COUNTRY_SELECT",
+          label: "Kva er flagglandet til skipet?",
+          pakrevd: false,
+        },
+        territorialfarvannLand: {
+          type: "COUNTRY_SELECT",
+          label: "Kva for lands territorialfarvatn?",
+          pakrevd: false,
+        },
+      },
+    },
+    arbeidsstedOmBordPaFly: {
+      tittel: "Arbeidsstad om bord på fly",
+      felter: {
+        navnPaVirksomhet: {
+          type: "TEXT",
+          label: "Namn på verksemda",
+          pakrevd: true,
+        },
+        hjemmebaseLand: {
+          type: "COUNTRY_SELECT",
+          label:
+            "I kva for land har arbeidstakaren heimebase i søknadsperioden?",
+          pakrevd: true,
+          hjelpetekst:
+            "Med heimebase meiner vi flyplassen der arbeidstakaren startar og avsluttar flygingane sine",
+        },
+        hjemmebaseNavn: {
+          type: "TEXT",
+          label: "Kva er namnet på heimebasen?",
+          pakrevd: true,
+        },
+        erVanligHjemmebase: {
+          type: "BOOLEAN",
+          label: "Er dette heimebasen arbeidstakaren vanlegvis jobbar frå?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        vanligHjemmebaseLand: {
+          type: "COUNTRY_SELECT",
+          label:
+            "I kva for land ligg heimebasen arbeidstakaren vanlegvis jobbar frå?",
+          pakrevd: false,
+        },
+        vanligHjemmebaseNavn: {
+          type: "TEXT",
+          label:
+            "Kva er namnet på heimebasen arbeidstakaren vanlegvis jobbar frå?",
+          pakrevd: false,
+        },
+      },
+    },
+    arbeidstakerensLonn: {
+      tittel: "Løna til arbeidstakaren",
+      felter: {
+        arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: {
+          type: "BOOLEAN",
+          label:
+            "Utbetaler du som arbeidsgivar all løn og eventuelle naturalytingar i utsendingsperioden?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        virksomheterSomUtbetalerLonnOgNaturalytelser: {
+          type: "LIST",
+          label: "Kven utbetaler løna og eventuelle naturalytingar?",
+          pakrevd: false,
+          hjelpetekst:
+            "Legg til norske og/eller utanlandske verksemder som utbetaler løna og eventuelle naturalytingar",
+          leggTilLabel: "Legg til verksemd",
+          fjernLabel: "Fjern",
+          elementDefinisjon: {
+            organisasjonsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer",
+              pakrevd: true,
+            },
+            navn: {
+              type: "TEXT",
+              label: "Verksemdsnamn",
+              pakrevd: false,
+            },
+            vegnavnOgHusnummer: {
+              type: "TEXT",
+              label: "Vegnamn og husnummer",
+              pakrevd: true,
+            },
+            bygning: {
+              type: "TEXT",
+              label: "Bygning",
+              pakrevd: false,
+            },
+            postkode: {
+              type: "TEXT",
+              label: "Postkode",
+              pakrevd: false,
+            },
+            byStedsnavn: {
+              type: "TEXT",
+              label: "By/stadnamn",
+              pakrevd: false,
+            },
+            region: {
+              type: "TEXT",
+              label: "Region",
+              pakrevd: false,
+            },
+            land: {
+              type: "COUNTRY_SELECT",
+              label: "Land",
+              pakrevd: true,
+            },
+            tilhorerSammeKonsern: {
+              type: "BOOLEAN",
+              label:
+                "Høyrer verksemda til same konsern som den norske arbeidsgivaren?",
+              pakrevd: true,
+              jaLabel: "Ja",
+              neiLabel: "Nei",
+            },
+          },
+          itemTypeLabels: {
+            norsk: "Norsk verksemd",
+            utenlandsk: "Utanlandsk verksemd",
+          },
+        },
+      },
+    },
+    tilleggsopplysningerArbeidsgiver: {
+      tittel: "Tilleggsopplysningar",
+      felter: {
+        harFlereOpplysningerTilSoknaden: {
+          type: "BOOLEAN",
+          label: "Har du fleire opplysningar til søknaden?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        tilleggsopplysningerTilSoknad: {
+          type: "TEXTAREA",
+          label: "Skildre desse her",
+          pakrevd: false,
+          maxLength: 2000,
+        },
+      },
+    },
+    vedleggArbeidsgiver: {
+      tittel: "Vedlegg",
+      felter: {
+        harAnnenDokumentasjon: {
+          type: "BOOLEAN",
+          label: "Har du anna dokumentasjon du ønskjer å leggje ved?",
+          pakrevd: true,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+      },
+    },
+  },
+} as const;
+
 const SKJEMA_DEFINISJON_A1_EN = {
   type: "UTSENDT_ARBEIDSTAKER",
   versjon: "1",
   seksjoner: {
     utsendingsperiodeOgLand: {
-      tittel: "Foreign assignment",
+      tittel: "Posting Period and Country",
       felter: {
         utsendelseLand: {
           type: "COUNTRY_SELECT",
@@ -707,7 +1396,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
           label: "Posting period",
           pakrevd: true,
           hjelpetekst:
-            "Provide an approximate date if you don't know the exact date.",
+            "Provide an approximate date if you do not know the exact date.",
           fraDatoLabel: "From date",
           tilDatoLabel: "To date",
         },
@@ -719,21 +1408,22 @@ const SKJEMA_DEFINISJON_A1_EN = {
         harVaertEllerSkalVaereILonnetArbeidFoerUtsending: {
           type: "BOOLEAN",
           label:
-            "Have you been or will you be in paid employment in Norway for at least one month right before the posting?",
+            "Have you been, or will you be, in paid employment in Norway for at least one month before being posted abroad?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",
         },
         aktivitetIMaanedenFoerUtsendingen: {
           type: "TEXTAREA",
-          label: "Describe your activity in the month before the posting",
+          label:
+            "Describe your activity in the month prior to being posted abroad",
           pakrevd: false,
-          hjelpetekst: "For example studies, vacation or self-employment",
+          hjelpetekst: "For example studies, holiday or self-employment",
         },
         skalJobbeForFlereVirksomheter: {
           type: "BOOLEAN",
           label:
-            "Will you also work for another employer or run a self-employed business during the posting period?",
+            "Will you also work for another employer or pursue activities as self-employed during the posting period?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",
@@ -749,7 +1439,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
           elementDefinisjon: {
             organisasjonsnummer: {
               type: "TEXT",
-              label: "Organization number",
+              label: "Organisation number",
               pakrevd: true,
             },
             navn: {
@@ -772,7 +1462,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
                 },
                 {
                   verdi: "STATSANSATT",
-                  label: "Government employee",
+                  label: "Civil servant",
                 },
               ],
             },
@@ -808,7 +1498,8 @@ const SKJEMA_DEFINISJON_A1_EN = {
             },
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
-              label: "Belongs to the same group as the Norwegian employer?",
+              label:
+                "Is the company part of the same corporate group as the Norwegian employer?",
               pakrevd: true,
               jaLabel: "Yes",
               neiLabel: "No",
@@ -822,7 +1513,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
       },
     },
     skatteforholdOgInntekt: {
-      tittel: "Tax conditions and income",
+      tittel: "Tax and income information",
       felter: {
         erSkattepliktigTilNorgeIHeleutsendingsperioden: {
           type: "BOOLEAN",
@@ -835,33 +1526,34 @@ const SKJEMA_DEFINISJON_A1_EN = {
         mottarPengestotteFraAnnetEosLandEllerSveits: {
           type: "BOOLEAN",
           label:
-            "Do you receive financial support from another EEA country or Switzerland?",
+            "Do you receive cash benefits from another EEA country or Switzerland?",
           pakrevd: true,
           hjelpetekst:
-            "By «financial support» we mean money you receive as compensation for lost income from work. Sickness benefits, parental benefits, unemployment benefits and work assessment allowance are examples of such financial support in Norway.",
+            'By "cash benefits" we mean money you receive as compensation for lost earnings. Sickness benefits, parental benefits, unemployment benefits and work assessment allowance (AAP) are examples of cash benefits in Norway.',
           jaLabel: "Yes",
           neiLabel: "No",
         },
         landSomUtbetalerPengestotte: {
           type: "COUNTRY_SELECT",
-          label: "From which country do you receive financial support?",
+          label: "From which country do you receive cash benefits?",
           pakrevd: false,
         },
         pengestotteSomMottasFraAndreLandBelop: {
           type: "TEXT",
-          label: "How much money do you receive gross per month?",
+          label: "How much do you receive gross per month?",
           pakrevd: false,
           hjelpetekst: "Enter the amount in Norwegian kroner",
           format: "BELOP",
         },
         pengestotteSomMottasFraAndreLandBeskrivelse: {
           type: "TEXTAREA",
-          label: "What kind of financial support do you receive?",
+          label: "What type of cash benefits do you receive?",
           pakrevd: false,
         },
         inntektFraNorskEllerUtenlandskVirksomhet: {
           type: "CHECKBOX_GROUP",
-          label: "Is your work income from a Norwegian or foreign company?",
+          label:
+            "Is your employment income from a Norwegian or foreign company?",
           pakrevd: false,
           alternativer: [
             {
@@ -885,7 +1577,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
             },
             {
               verdi: "INNTEKT_FRA_EGEN_VIRKSOMHET",
-              label: "Income from your own business",
+              label: "Self-employment income",
             },
           ],
         },
@@ -899,14 +1591,14 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         inntektFraEgenVirksomhet: {
           type: "TEXT",
-          label: "Income from your own business",
+          label: "Self-employment income",
           pakrevd: false,
           format: "BELOP",
         },
       },
     },
     familiemedlemmer: {
-      tittel: "Family Members",
+      tittel: "Family members",
       felter: {
         skalHaMedFamiliemedlemmer: {
           type: "BOOLEAN",
@@ -914,14 +1606,14 @@ const SKJEMA_DEFINISJON_A1_EN = {
             "Do you have a spouse, partner, cohabitant or children who will accompany you?",
           pakrevd: true,
           hjelpetekst:
-            "We ask this because we want to process applications from multiple family members simultaneously",
+            "We ask for this information because we wish to process applications from several members of a family at the same time.",
           jaLabel: "Yes",
           neiLabel: "No",
         },
       },
     },
     tilleggsopplysningerArbeidstaker: {
-      tittel: "Additional Information",
+      tittel: "Additional information",
       felter: {
         harFlereOpplysningerTilSoknaden: {
           type: "BOOLEAN",
@@ -932,7 +1624,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label: "Describe them here",
+          label: "Describe here",
           pakrevd: false,
           maxLength: 2000,
         },
@@ -955,10 +1647,10 @@ const SKJEMA_DEFINISJON_A1_EN = {
       felter: {
         erArbeidsgiverenOffentligVirksomhet: {
           type: "BOOLEAN",
-          label: "Is the employer a public enterprise?",
+          label: "Is the employer a public sector entity?",
           pakrevd: true,
           hjelpetekst:
-            "Public enterprises are state bodies and subordinate enterprises, for example ministries and universities.",
+            "Public sector entities are state bodies and subordinate organisations, for example ministries and universities.",
           jaLabel: "Yes",
           neiLabel: "No",
         },
@@ -971,7 +1663,8 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         opprettholderArbeidsgiverenVanligDrift: {
           type: "BOOLEAN",
-          label: "Does the employer maintain normal operations in Norway?",
+          label:
+            "Does the employer maintain regular business operations in Norway?",
           pakrevd: false,
           hjelpetekst:
             "By this we mean that the employer still has activity and employees working in Norway during the period.",
@@ -981,33 +1674,33 @@ const SKJEMA_DEFINISJON_A1_EN = {
       },
     },
     utenlandsoppdragetArbeidsgiver: {
-      tittel: "The Foreign Assignment",
+      tittel: "Posting Period and Country",
       felter: {
         utsendelseLand: {
           type: "COUNTRY_SELECT",
-          label: "To which country is the employee being sent?",
+          label: "In which country will the work be performed?",
           pakrevd: true,
         },
         arbeidstakerUtsendelsePeriode: {
           type: "PERIOD",
-          label: "Assignment period",
+          label: "Posting period",
           pakrevd: true,
           hjelpetekst:
-            "Enter approximate date if you don't know the exact date.",
+            "Provide an approximate date if you do not know the exact date.",
           fraDatoLabel: "From date",
           tilDatoLabel: "To date",
         },
         arbeidsgiverHarOppdragILandet: {
           type: "BOOLEAN",
           label:
-            "Do you as an employer have assignments in the country where the employee will be sent?",
+            "Do you as an employer have assignments in the country where the employee will be posted?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",
         },
         arbeidstakerBleAnsattForUtenlandsoppdraget: {
           type: "BOOLEAN",
-          label: "Was the employee hired because of this foreign assignment?",
+          label: "Was the employee hired because of this posting assignment?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",
@@ -1015,7 +1708,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         arbeidstakerForblirAnsattIHelePerioden: {
           type: "BOOLEAN",
           label:
-            "Will the employee still be employed by you during the entire assignment period?",
+            "Will the employee still be employed by you during the entire posting period?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",
@@ -1023,7 +1716,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         arbeidstakerErstatterAnnenPerson: {
           type: "BOOLEAN",
           label:
-            "Is the employee replacing another person who was sent out to do the same work?",
+            "Is the employee replacing another person who was posted to do the same work?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",
@@ -1031,28 +1724,28 @@ const SKJEMA_DEFINISJON_A1_EN = {
         arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget: {
           type: "BOOLEAN",
           label:
-            "Will the employee work for the company in Norway after the foreign assignment?",
+            "Will the employee work for the company in Norway after the posting period?",
           pakrevd: false,
           jaLabel: "Yes",
           neiLabel: "No",
         },
         utenlandsoppholdetsBegrunnelse: {
           type: "TEXTAREA",
-          label: "Why should the employee work abroad?",
+          label: "Why will the employee work abroad?",
           pakrevd: false,
         },
         ansettelsesforholdBeskrivelse: {
           type: "TEXTAREA",
           label:
-            "Describe the employee's employment relationship during the assignment period",
+            "Describe the employee's employment relationship during the posting period",
           pakrevd: false,
         },
         forrigeArbeidstakerUtsendelsePeriode: {
           type: "PERIOD",
-          label: "Previous employee's assignment",
+          label: "Previous employee's posting",
           pakrevd: false,
           hjelpetekst:
-            "Enter approximate date if you don't know the exact date.",
+            "Provide an approximate date if you do not know the exact date.",
           fraDatoLabel: "From date",
           tilDatoLabel: "To date",
         },
@@ -1076,22 +1769,22 @@ const SKJEMA_DEFINISJON_A1_EN = {
             },
             {
               verdi: "PA_SKIP",
-              label: "On ship",
+              label: "On a ship",
             },
             {
               verdi: "OM_BORD_PA_FLY",
-              label: "On board an aircraft",
+              label: "On an aircraft",
             },
           ],
         },
       },
     },
     arbeidsstedPaLand: {
-      tittel: "Workplace on land",
+      tittel: "Place of work on land",
       felter: {
         navnPaVirksomhet: {
           type: "TEXT",
-          label: "Name of the business",
+          label: "Name of the company",
           pakrevd: true,
         },
         fastEllerVekslendeArbeidssted: {
@@ -1137,7 +1830,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         erHjemmekontor: {
           type: "BOOLEAN",
-          label: "Is the employee posted to work from home office?",
+          label: "Is the employee being posted to work remotely from home?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",
@@ -1145,11 +1838,11 @@ const SKJEMA_DEFINISJON_A1_EN = {
       },
     },
     arbeidsstedOffshore: {
-      tittel: "Offshore workplace",
+      tittel: "Place of work offshore",
       felter: {
         navnPaVirksomhet: {
           type: "TEXT",
-          label: "Name of the business",
+          label: "Name of the company",
           pakrevd: true,
         },
         navnPaInnretning: {
@@ -1168,7 +1861,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
             },
             {
               verdi: "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING",
-              label: "Drilling ship or other mobile installation",
+              label: "Drillship or other mobile installation",
             },
           ],
         },
@@ -1180,11 +1873,11 @@ const SKJEMA_DEFINISJON_A1_EN = {
       },
     },
     arbeidsstedPaSkip: {
-      tittel: "Workplace on ship",
+      tittel: "Place of work on ship",
       felter: {
         navnPaVirksomhet: {
           type: "TEXT",
-          label: "Name of the business",
+          label: "Name of the company",
           pakrevd: true,
         },
         navnPaSkip: {
@@ -1216,7 +1909,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         flaggland: {
           type: "COUNTRY_SELECT",
-          label: "What is the flag country of the ship?",
+          label: "What is the flag state of the ship?",
           pakrevd: false,
         },
         territorialfarvannLand: {
@@ -1227,11 +1920,11 @@ const SKJEMA_DEFINISJON_A1_EN = {
       },
     },
     arbeidsstedOmBordPaFly: {
-      tittel: "Workplace on board aircraft",
+      tittel: "Place of work on board aircraft",
       felter: {
         navnPaVirksomhet: {
           type: "TEXT",
-          label: "Name of the business",
+          label: "Name of the company",
           pakrevd: true,
         },
         hjemmebaseLand: {
@@ -1290,7 +1983,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
           elementDefinisjon: {
             organisasjonsnummer: {
               type: "TEXT",
-              label: "Organization number",
+              label: "Organisation number",
               pakrevd: true,
             },
             navn: {
@@ -1330,7 +2023,8 @@ const SKJEMA_DEFINISJON_A1_EN = {
             },
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
-              label: "Belongs to the same group as the Norwegian employer?",
+              label:
+                "Is the company part of the same corporate group as the Norwegian employer?",
               pakrevd: true,
               jaLabel: "Yes",
               neiLabel: "No",
@@ -1344,7 +2038,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
       },
     },
     tilleggsopplysningerArbeidsgiver: {
-      tittel: "Additional Information",
+      tittel: "Additional information",
       felter: {
         harFlereOpplysningerTilSoknaden: {
           type: "BOOLEAN",
@@ -1355,7 +2049,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
         tilleggsopplysningerTilSoknad: {
           type: "TEXTAREA",
-          label: "Describe them here",
+          label: "Describe here",
           pakrevd: false,
           maxLength: 2000,
         },
@@ -1378,6 +2072,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
 
 export const SKJEMA_DEFINISJONER_A1 = {
   nb: SKJEMA_DEFINISJON_A1_NB,
+  nn: SKJEMA_DEFINISJON_A1_NN,
   en: SKJEMA_DEFINISJON_A1_EN,
 } as const;
 
@@ -1425,24 +2120,6 @@ export function getFeltForLang<S extends SeksjonsNavn>(
   ] as unknown as SkjemaDefinisjonA1Type;
   const seksjon = definisjon.seksjoner[seksjonNavn];
   return (seksjon.felter as Record<string, BaseFeltType>)[feltNavn as string]!;
-}
-
-/**
- * Typesikker aksess til felt (norsk bokmål).
- */
-export function getFelt<S extends SeksjonsNavn>(
-  seksjonNavn: S,
-  feltNavn: FeltNavn<S>,
-): BaseFeltType {
-  const seksjon = SKJEMA_DEFINISJON_A1.seksjoner[seksjonNavn];
-  return (seksjon.felter as Record<string, BaseFeltType>)[feltNavn as string]!;
-}
-
-/**
- * Hent en hel seksjon (norsk bokmål).
- */
-export function getSeksjon<S extends SeksjonsNavn>(seksjonNavn: S) {
-  return SKJEMA_DEFINISJON_A1.seksjoner[seksjonNavn];
 }
 
 /**
