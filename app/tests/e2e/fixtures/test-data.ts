@@ -18,11 +18,13 @@ import {
   type SkjemaInnsendtKvittering,
   SkjemaStatus,
   SkjemaType,
-  Sprak,
   type UtkastListeResponse,
   type UtsendtArbeidstakerSkjemaDto,
   type VentendeMotpartSoknaderResponse,
 } from "~/types/melosysSkjemaTypes";
+import { toSprak } from "~/utils/languages";
+
+import { E2E_SPRAK } from "../utils/translations";
 
 // Gyldige organisasjonsnummer (MOD11-validert)
 export const korrektFormatertOrgnr = "974760673";
@@ -241,7 +243,7 @@ export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
   saksnummer: "MEL-123456",
   saksstatus: Saksstatus.MOTTATT,
   innsendtDato: "2026-01-10T12:00:00Z",
-  innsendtSprak: Sprak.Nb,
+  innsendtSprak: toSprak(E2E_SPRAK),
   dokumentTittel: "Søknad om A1 for utsendte arbeidstakere i EØS eller Sveits",
   skjemaDefinisjonVersjon: "1",
   skjemaData: {
@@ -256,7 +258,7 @@ export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
   skjemaId: testArbeidsgiverSkjemaId,
   referanseId: "REF-AG-001",
   innsendtDato: "2026-01-10T12:00:00Z",
-  innsendtSprak: Sprak.Nb,
+  innsendtSprak: toSprak(E2E_SPRAK),
   dokumentTittel:
     "Bekreftelse fra arbeidsgiver på utsending til annet EØS-land eller Sveits",
   skjemaDefinisjonVersjon: "1",
@@ -346,7 +348,7 @@ export const testInnsendtSkjemaKombinertDel: InnsendtSkjemaResponse = {
   skjemaId: testKombinertSkjemaId,
   referanseId: "REF-KO-001",
   innsendtDato: "2026-01-10T12:00:00Z",
-  innsendtSprak: Sprak.Nb,
+  innsendtSprak: toSprak(E2E_SPRAK),
   dokumentTittel: "Søknad om A1 for utsendte arbeidstakere i EØS eller Sveits",
   skjemaDefinisjonVersjon: "1",
   skjemaData: {

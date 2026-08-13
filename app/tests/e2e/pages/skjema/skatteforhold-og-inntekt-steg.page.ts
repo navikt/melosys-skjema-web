@@ -1,19 +1,19 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   SkatteforholdOgInntektDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const skatteforholdOgInntekt =
   SKJEMA_DEFINISJON_A1.seksjoner.skatteforholdOgInntekt;
 const felter = skatteforholdOgInntekt.felter;
-const t = nb.translation;
+const t = translations;
 
 // Feilmeldinger
 const feilmeldinger = {
@@ -60,10 +60,10 @@ export class SkatteforholdOgInntektStegPage {
     });
     this.erSkattepliktigTilNorgeRadioGroup = {
       JA: erSkattepliktigTilNorgeGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: erSkattepliktigTilNorgeGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -72,10 +72,10 @@ export class SkatteforholdOgInntektStegPage {
     });
     this.mottarPengestotteFraAnnetEosLandRadioGroup = {
       JA: mottarPengestotteFraAnnetEosLandGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: mottarPengestotteFraAnnetEosLandGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -90,7 +90,7 @@ export class SkatteforholdOgInntektStegPage {
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
 
     const inntektKildeAlternativer =

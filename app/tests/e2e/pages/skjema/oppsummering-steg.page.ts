@@ -1,7 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidssituasjonDto,
@@ -15,6 +14,8 @@ import type {
   UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
+
+import { E2E_SPRAK, translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const virksomhetINorge =
@@ -44,10 +45,10 @@ export class OppsummeringStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.oppsummeringSteg.tittel,
+      name: translations.oppsummeringSteg.tittel,
     });
     this.sendSoknadButton = page.getByRole("button", {
-      name: nb.translation.felles.sendSoknad,
+      name: translations.felles.sendSoknad,
     });
   }
 
@@ -64,21 +65,21 @@ export class OppsummeringStegPage {
 
   async assertArbeidstakerOgArbeidsgiverInfo() {
     await expect(
-      this.page.locator(`dt:text-is("${nb.translation.felles.navn}") + dd`),
+      this.page.locator(`dt:text-is("${translations.felles.navn}") + dd`),
     ).toHaveText(this.skjema.metadata.arbeidstakerNavn);
     await expect(
       this.page.locator(
-        `dt:text-is("${nb.translation.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
+        `dt:text-is("${translations.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
       ),
     ).toHaveText(this.skjema.fnr);
     await expect(
       this.page.locator(
-        `dt:text-is("${nb.translation.felles.virksomhetsnavn}") + dd`,
+        `dt:text-is("${translations.felles.virksomhetsnavn}") + dd`,
       ),
     ).toHaveText(this.skjema.metadata.arbeidsgiverNavn);
     await expect(
       this.page.locator(
-        `dt:text-is("${nb.translation.felles.organisasjonsnummer}") + dd`,
+        `dt:text-is("${translations.felles.organisasjonsnummer}") + dd`,
       ),
     ).toHaveText(this.skjema.orgnr);
   }
@@ -94,8 +95,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.erArbeidsgiverenOffentligVirksomhet
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     if (data.erArbeidsgiverenBemanningsEllerVikarbyraa !== undefined) {
@@ -105,8 +106,8 @@ export class OppsummeringStegPage {
         ),
       ).toHaveText(
         data.erArbeidsgiverenBemanningsEllerVikarbyraa
-          ? nb.translation.felles.ja
-          : nb.translation.felles.nei,
+          ? translations.felles.ja
+          : translations.felles.nei,
       );
     }
 
@@ -117,8 +118,8 @@ export class OppsummeringStegPage {
         ),
       ).toHaveText(
         data.opprettholderArbeidsgiverenVanligDrift
-          ? nb.translation.felles.ja
-          : nb.translation.felles.nei,
+          ? translations.felles.ja
+          : translations.felles.nei,
       );
     }
   }
@@ -130,8 +131,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.arbeidsgiverHarOppdragILandet
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     await expect(
@@ -140,8 +141,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.arbeidstakerBleAnsattForUtenlandsoppdraget
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     await expect(
@@ -150,8 +151,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.arbeidstakerForblirAnsattIHelePerioden
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     await expect(
@@ -160,8 +161,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.arbeidstakerErstatterAnnenPerson
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     if (
@@ -173,8 +174,8 @@ export class OppsummeringStegPage {
         ),
       ).toHaveText(
         data.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget
-          ? nb.translation.felles.ja
-          : nb.translation.felles.nei,
+          ? translations.felles.ja
+          : translations.felles.nei,
       );
     }
 
@@ -231,8 +232,8 @@ export class OppsummeringStegPage {
           ),
         ).toHaveText(
           data.paLand.erHjemmekontor
-            ? nb.translation.felles.ja
-            : nb.translation.felles.nei,
+            ? translations.felles.ja
+            : translations.felles.nei,
         );
       }
     }
@@ -245,8 +246,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     if (data.virksomheterSomUtbetalerLonnOgNaturalytelser !== undefined) {
@@ -282,7 +283,7 @@ export class OppsummeringStegPage {
       this.page.locator(
         `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelseLand.label}") + dd`,
       ),
-    ).toHaveText(nb.translation.land[data.utsendelseLand]);
+    ).toHaveText(translations.land[data.utsendelseLand]);
 
     await expect(
       this.page.locator(
@@ -304,8 +305,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     if (data.aktivitetIMaanedenFoerUtsendingen !== undefined) {
@@ -320,8 +321,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.skalJobbeForFlereVirksomheter
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
   }
 
@@ -332,8 +333,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.erSkattepliktigTilNorgeIHeleutsendingsperioden
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     await expect(
@@ -342,8 +343,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.mottarPengestotteFraAnnetEosLandEllerSveits
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     if (data.landSomUtbetalerPengestotte !== undefined) {
@@ -352,8 +353,8 @@ export class OppsummeringStegPage {
           `dt:has-text("${skatteforholdOgInntekt.felter.landSomUtbetalerPengestotte.label}") + dd`,
         ),
       ).toHaveText(
-        nb.translation.land[
-          data.landSomUtbetalerPengestotte as keyof typeof nb.translation.land
+        translations.land[
+          data.landSomUtbetalerPengestotte as keyof typeof translations.land
         ],
       );
     }
@@ -382,8 +383,8 @@ export class OppsummeringStegPage {
       ),
     ).toHaveText(
       data.skalHaMedFamiliemedlemmer
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
   }
 
@@ -400,8 +401,8 @@ export class OppsummeringStegPage {
         .first(),
     ).toHaveText(
       data.harFlereOpplysningerTilSoknaden
-        ? nb.translation.felles.ja
-        : nb.translation.felles.nei,
+        ? translations.felles.ja
+        : translations.felles.nei,
     );
 
     if (data.tilleggsopplysningerTilSoknad !== undefined) {
@@ -415,7 +416,7 @@ export class OppsummeringStegPage {
     }
   }
 
-  async sendInnAndExpectPost() {
+  async sendInnAndExpectPost(forventetSprak: string = E2E_SPRAK) {
     const responsePromise = this.page.waitForResponse(
       (response) =>
         response
@@ -426,7 +427,11 @@ export class OppsummeringStegPage {
     );
 
     await this.sendSoknadButton.click();
-    await responsePromise;
+    const response = await responsePromise;
+
+    // Innsendingen skal bære språket brukeren fylte ut på — det styrer den arkiverte PDF-en
+    const url = new URL(response.request().url());
+    expect(url.searchParams.get("sprak")).toBe(forventetSprak);
   }
 
   async sendInnAndExpectNoPost() {
@@ -450,7 +455,7 @@ export class OppsummeringStegPage {
 
   async assertManglendeStegVises(steg: Array<{ navn: string; href: string }>) {
     await expect(
-      this.page.getByText(nb.translation.felles.stegManglerUtfylling),
+      this.page.getByText(translations.felles.stegManglerUtfylling),
     ).toBeVisible();
 
     for (const { navn, href } of steg) {
@@ -466,7 +471,7 @@ export class OppsummeringStegPage {
       await expect(
         this.page
           .locator(`a[href="${href}"]`)
-          .filter({ hasText: nb.translation.felles.endreSvar }),
+          .filter({ hasText: translations.felles.endreSvar }),
       ).toHaveCount(1);
     }
   }

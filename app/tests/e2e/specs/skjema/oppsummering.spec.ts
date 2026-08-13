@@ -1,4 +1,3 @@
-import { nb } from "~/i18n/nb";
 import {
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidssituasjonDto,
@@ -29,6 +28,7 @@ import {
   testUserInfo,
 } from "../../fixtures/test-data";
 import { OppsummeringStegPage } from "../../pages/skjema/oppsummering-steg.page";
+import { translations } from "../../utils/translations";
 
 test.describe("Oppsummering", () => {
   test.describe("Arbeidstaker", () => {
@@ -227,11 +227,11 @@ test.describe("Oppsummering", () => {
       await oppsummeringStegPage.sendInnAndExpectNoPost();
       await oppsummeringStegPage.assertManglendeStegVises([
         {
-          navn: nb.translation.arbeidsgiverensVirksomhetINorgeSteg.tittel,
+          navn: translations.arbeidsgiverensVirksomhetINorgeSteg.tittel,
           href: `/skjema/${testArbeidsgiverSkjema.id}/arbeidsgiverens-virksomhet-i-norge`,
         },
         {
-          navn: nb.translation.vedleggSteg.tittel,
+          navn: translations.vedleggSteg.tittel,
           href: `/skjema/${testArbeidsgiverSkjema.id}/vedlegg`,
         },
       ]);

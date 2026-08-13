@@ -1,18 +1,18 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   ArbeidstakerensLonnDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
 const felter = arbeidstakerensLonn.felter;
-const t = nb.translation;
+const t = translations;
 
 // Feilmeldinger
 const feilmeldinger = {

@@ -1,8 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "~/i18n/nb";
+import { translations as alleTranslations } from "../../utils/translations";
 
-const translations = nb.translation.velgRadgiverfirma;
+const translations = alleTranslations.velgRadgiverfirma;
 
 const feilmeldinger = {
   duMaSokeForst: translations.duMaSokeForstFeil,
@@ -25,7 +25,7 @@ export class VelgRadgiverfirmaPage {
       name: translations.ok,
     });
     this.avbrytButton = page.getByRole("button", {
-      name: nb.translation.felles.avbryt,
+      name: alleTranslations.felles.avbryt,
     });
   }
 

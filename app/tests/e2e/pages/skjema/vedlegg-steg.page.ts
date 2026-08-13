@@ -1,8 +1,9 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes";
+
+import { akselTranslations, translations } from "../../utils/translations";
 
 const harAnnenDokumentasjonFelt =
   SKJEMA_DEFINISJON_A1.seksjoner.vedleggArbeidstaker.felter
@@ -21,11 +22,11 @@ export class VedleggStegPage {
     this.page = page;
     this.skjema = skjema;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.vedleggSteg.tittel,
+      name: translations.vedleggSteg.tittel,
     });
 
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
 
     this.fileInput = page.locator("input[type='file']");
@@ -67,7 +68,11 @@ export class VedleggStegPage {
   }
 
   async deleteFileItem() {
-    await this.page.getByRole("button", { name: "Slett filen" }).click();
+    await this.page
+      .getByRole("button", {
+        name: akselTranslations.FileUpload.item.deleteButtonTitle,
+      })
+      .click();
   }
 
   async lagreOgFortsett() {

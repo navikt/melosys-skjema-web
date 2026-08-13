@@ -264,7 +264,7 @@ export async function mockPostSkatteforholdOgInntekt(
 
 export async function mockSendInnSkjema(page: Page, skjemaId: string) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`,
+    new RegExp(`/api/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`),
     async (route) => {
       await route.fulfill({
         status: 200,
@@ -678,7 +678,7 @@ export async function mockPostFamiliemedlemmerFeil(
 
 export async function mockSendInnSkjemaFeil(page: Page, skjemaId: string) {
   await page.route(
-    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`,
+    new RegExp(`/api/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`),
     async (route) => {
       await route.fulfill({
         status: 500,

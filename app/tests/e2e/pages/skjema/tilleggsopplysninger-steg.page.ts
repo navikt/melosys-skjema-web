@@ -1,19 +1,19 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   TilleggsopplysningerDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const tilleggsopplysninger =
   SKJEMA_DEFINISJON_A1.seksjoner.tilleggsopplysningerArbeidsgiver;
 const felter = tilleggsopplysninger.felter;
-const t = nb.translation;
+const t = translations;
 
 // Feilmeldinger
 const feilmeldinger = {
@@ -44,10 +44,10 @@ export class TilleggsopplysningerStegPage {
     });
     this.harFlereOpplysningerRadioGroup = {
       JA: harFlereOpplysningerGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: harFlereOpplysningerGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -56,7 +56,7 @@ export class TilleggsopplysningerStegPage {
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
   }
 

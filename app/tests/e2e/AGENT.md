@@ -41,20 +41,21 @@ app/tests/e2e/
 ```typescript
 import { expect, type Locator, type Page } from "@playwright/test";
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes";
+
+import { translations } from "../../utils/translations";
 
 // Get field labels from static definitions
 const seksjon = SKJEMA_DEFINISJON_A1.seksjoner.seksjonNavn;
 const felter = seksjon.felter;
 
-// Step title from i18n
-const stegTittel = nb.translation.stegNavn.tittel;
+// Step title from i18n (translations follows the active test language, default nb)
+const stegTittel = translations.stegNavn.tittel;
 
 // Error messages from i18n
 const feilmeldinger = {
-  fieldName: nb.translation.stegNavn.feilmelding,
-  datoErPakrevd: nb.translation.periode.datoErPakrevd,
+  fieldName: translations.stegNavn.feilmelding,
+  datoErPakrevd: translations.periode.datoErPakrevd,
 };
 
 export class StegNavnStegPage {
@@ -68,7 +69,7 @@ export class StegNavnStegPage {
     this.skjema = skjema;
     this.heading = page.getByRole("heading", { name: stegTittel });
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
   }
 
@@ -85,8 +86,8 @@ export class StegNavnStegPage {
 
 1. **Constructor** takes `Page` and `UtsendtArbeidstakerSkjemaDto`
 2. **Locators** are `readonly` properties, initialized in the constructor
-3. **Labels** come from `SKJEMA_DEFINISJON_A1` (field labels) and `nb` (i18n translations)
-4. **Error messages** come from `~/i18n/nb.ts` — never hardcode Norwegian strings
+3. **Labels** come from `SKJEMA_DEFINISJON_A1` (field labels) and `translations` from `tests/e2e/utils/translations.ts` (i18n translations for the active test language)
+4. **Error messages** come from the `translations` helper — never hardcode Norwegian strings, and never import `~/i18n/nb.ts` directly (that locks the suite to bokmål)
 5. **Validation assertions** are explicit per field (e.g., `assertFraDatoErPakrevdIsVisible()`) — not generic count-based assertions
 6. Every page object has `goto()`, `assertIsVisible()`, `lagreOgFortsett()`, and `assertNavigatedToNextStep()`
 
@@ -99,21 +100,21 @@ Prefer role-based and label-based locators (Playwright best practice):
 page.getByRole("heading", { name: stegTittel });
 
 // Buttons
-page.getByRole("button", { name: nb.translation.felles.lagreOgFortsett });
+page.getByRole("button", { name: translations.felles.lagreOgFortsett });
 
 // Radio button groups (use RadioButtonGroupJaNeiLocator type)
 const group = page.getByRole("radiogroup", { name: felter.fieldName.label });
 const radioGroup: RadioButtonGroupJaNeiLocator = {
-  JA: group.getByRole("radio", { name: nb.translation.felles.ja }),
-  NEI: group.getByRole("radio", { name: nb.translation.felles.nei }),
+  JA: group.getByRole("radio", { name: translations.felles.ja }),
+  NEI: group.getByRole("radio", { name: translations.felles.nei }),
 };
 
 // Combobox (select)
 page.getByRole("combobox", { name: felter.fieldName.label });
 
 // Date inputs
-page.getByLabel(nb.translation.periode.fraDato);
-page.getByLabel(nb.translation.periode.tilDato);
+page.getByLabel(translations.periode.fraDato);
+page.getByLabel(translations.periode.tilDato);
 
 // Error messages in date fields (NAV Design System DOM structure)
 // DatePicker.Input: textbox -> input-wrapper -> field-wrapper (contains error paragraph)
@@ -244,11 +245,15 @@ Date format is `DD.MM.YYYY` (Norwegian format, e.g., `"01.01.2026"`).
 ## i18n and Labels
 
 - **Field labels**: `SKJEMA_DEFINISJON_A1.seksjoner.<seksjon>.felter.<felt>.label`
-- **Step titles**: `nb.translation.<stegNavn>.tittel`
-- **Common strings**: `nb.translation.felles.*` (e.g., `lagreOgFortsett`, `ja`, `nei`)
-- **Error messages**: `nb.translation.periode.*` and `nb.translation.<stegNavn>.*`
+- **Step titles**: `translations.<stegNavn>.tittel`
+- **Common strings**: `translations.felles.*` (e.g., `lagreOgFortsett`, `ja`, `nei`)
+- **Error messages**: `translations.periode.*` and `translations.<stegNavn>.*`
+- **Aksel component strings** (date picker, search, file upload): `akselTranslations.*`
 
-Never hardcode Norwegian strings — always reference `nb` or `SKJEMA_DEFINISJON_A1`.
+`translations`/`akselTranslations` come from `tests/e2e/utils/translations.ts` and follow the
+active test language (`E2E_SPRAK`, default `nb`). Never hardcode Norwegian strings, and never
+import `~/i18n/nb.ts` directly — that locks the suite structurally to bokmål.
+(Exception: `sprakvalg.spec.ts` imports all three bundles because it tests the switching itself.)
 
 ## Running Tests
 

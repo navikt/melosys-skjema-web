@@ -1,4 +1,3 @@
-import { nb } from "~/i18n/nb";
 import { VedleggFiltype } from "~/types/melosysSkjemaTypes";
 
 import {
@@ -16,8 +15,9 @@ import { expect, test } from "../../fixtures/test";
 import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
 import { FamiliemedlemmerStegPage } from "../../pages/skjema/familiemedlemmer-steg.page";
 import { VedleggStegPage } from "../../pages/skjema/vedlegg-steg.page";
+import { translations } from "../../utils/translations";
 
-const t = nb.translation;
+const t = translations;
 
 test.describe("Feilhåndtering", () => {
   test.describe("SkjemaSteg - submit-feil viser Alert", () => {

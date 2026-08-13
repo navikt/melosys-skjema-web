@@ -1,7 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "~/i18n/nb";
 import { SkjemaInnsendtKvittering } from "~/types/melosysSkjemaTypes";
+
+import { translations } from "../../utils/translations";
 
 export class KvitteringPage {
   readonly page: Page;
@@ -15,12 +16,12 @@ export class KvitteringPage {
     this.page = page;
     this.skjemaId = skjemaId;
     this.heading = page.getByRole("heading", {
-      name: nb.translation.kvittering.tittel,
+      name: translations.kvittering.tittel,
     });
-    this.melding = page.getByText(nb.translation.kvittering.melding);
-    this.infoOversikt = page.getByText(nb.translation.kvittering.infoOversikt);
+    this.melding = page.getByText(translations.kvittering.melding);
+    this.infoOversikt = page.getByText(translations.kvittering.infoOversikt);
     this.tilOversiktLink = page.getByRole("button", {
-      name: nb.translation.kvittering.tilOversikt,
+      name: translations.kvittering.tilOversikt,
     });
   }
 
