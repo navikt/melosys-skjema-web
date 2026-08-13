@@ -27,21 +27,13 @@ import {
   Sorteringsretning,
 } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
+import { formatDato } from "~/utils/datoformat.ts";
 
 interface InnsendteSoknaderTabellProps {
   representasjonskontekst: Representasjonskontekst;
 }
 
 const ANTALL_PER_SIDE = 5;
-
-// Format dato
-const formatDato = (dato: string) => {
-  return new Date(dato).toLocaleDateString("nb-NO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
 
 /**
  * Statusbadge for en innsendt søknad basert på saksstatus og motpart-status.
@@ -97,7 +89,7 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
 export function InnsendteSoknaderTabell({
   representasjonskontekst,
 }: InnsendteSoknaderTabellProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // State management
   const [sokQuery, setSokQuery] = useState("");
@@ -295,7 +287,7 @@ export function InnsendteSoknaderTabell({
                 data.soknader.map((soknad) => (
                   <Table.Row key={soknad.id}>
                     <Table.DataCell>
-                      {formatDato(soknad.innsendtDato)}
+                      {formatDato(soknad.innsendtDato, i18n.language)}
                     </Table.DataCell>
                     <Table.DataCell>
                       <VStack>
@@ -327,7 +319,10 @@ export function InnsendteSoknaderTabell({
                     )}
                     {!isDegSelv && (
                       <Table.DataCell>
-                        {formatDato(soknad.arbeidstakerFodselsdato)}
+                        {formatDato(
+                          soknad.arbeidstakerFodselsdato,
+                          i18n.language,
+                        )}
                       </Table.DataCell>
                     )}
                     <Table.DataCell>

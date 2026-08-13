@@ -17,7 +17,7 @@ interface FeltOppsummeringProps {
 }
 
 export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   if (felt.type === "LIST") {
     return (
       <ListeFeltOppsummering
@@ -49,7 +49,7 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
       <FormSummary.Answer>
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value style={{ whiteSpace: "pre-wrap" }}>
-          {formaterVerdi(felt, verdi, t)}
+          {formaterVerdi(felt, verdi, t, i18n.language)}
         </FormSummary.Value>
       </FormSummary.Answer>
     );
@@ -86,7 +86,9 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
   return (
     <FormSummary.Answer>
       <FormSummary.Label>{felt.label}</FormSummary.Label>
-      <FormSummary.Value>{formaterVerdi(felt, verdi, t)}</FormSummary.Value>
+      <FormSummary.Value>
+        {formaterVerdi(felt, verdi, t, i18n.language)}
+      </FormSummary.Value>
     </FormSummary.Answer>
   );
 }

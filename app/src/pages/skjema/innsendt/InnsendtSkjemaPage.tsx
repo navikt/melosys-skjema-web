@@ -29,22 +29,16 @@ import type {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
+import { formatDato } from "~/utils/datoformat.ts";
+import { toSprak } from "~/utils/languages.ts";
 
 interface InnsendtSkjemaPageProps {
   skjemaId: string;
 }
 
-const formatDato = (dato: string) => {
-  return new Date(dato).toLocaleDateString("nb-NO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
-
 export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProps) {
   const { i18n, t } = useTranslation();
-  const sprak = i18n.language === "en" ? "en" : "nb";
+  const sprak = toSprak(i18n.language);
   const {
     data: innsendtSkjema,
     error: innsendtError,
@@ -125,7 +119,7 @@ function InnsendtSkjemaPageContent({
   response: InnsendtSkjemaResponse;
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
@@ -167,7 +161,9 @@ function InnsendtSkjemaPageContent({
             })}
           </Tag>
         )}
-        <BodyShort>{formatDato(response.innsendtDato)}</BodyShort>
+        <BodyShort>
+          {formatDato(response.innsendtDato, i18n.language)}
+        </BodyShort>
       </HStack>
 
       <ArbeidstakerOgArbeidsgiverOppsummering

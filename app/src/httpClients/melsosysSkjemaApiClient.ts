@@ -20,6 +20,7 @@ import {
   SimpleOrganisasjonDto,
   SkatteforholdOgInntektDto,
   SkjemaInnsendtKvittering,
+  Sprak,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
   UtkastListeResponse,
@@ -182,9 +183,11 @@ export async function postVedleggValg(
 
 export async function sendInnSkjema(
   skjemaId: string,
+  sprak: Sprak,
 ): Promise<SkjemaInnsendtKvittering> {
+  const params = new URLSearchParams({ sprak });
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/send-inn?${params.toString()}`,
     {
       method: "POST",
       headers: {
@@ -516,7 +519,7 @@ async function fetchInnsendteSoknader(
 
 async function fetchInnsendtSkjema(
   skjemaId: string,
-  sprak: string = "nb",
+  sprak: Sprak,
 ): Promise<InnsendtSkjemaResponse> {
   const params = new URLSearchParams({ sprak });
   const response = await fetch(
@@ -533,10 +536,7 @@ async function fetchInnsendtSkjema(
   return response.json();
 }
 
-export const getInnsendtSkjemaQuery = (
-  skjemaId: string,
-  sprak: string = "nb",
-) =>
+export const getInnsendtSkjemaQuery = (skjemaId: string, sprak: Sprak) =>
   queryOptions<InnsendtSkjemaResponse>({
     queryKey: ["innsendt-skjema", skjemaId, sprak],
     queryFn: () => fetchInnsendtSkjema(skjemaId, sprak),
@@ -553,7 +553,7 @@ export const getInnsendtSkjemaQuery = (
  */
 export async function fetchSkjemaDefinisjon(
   type: string,
-  sprak: string = "nb",
+  sprak: Sprak,
 ): Promise<unknown> {
   const params = new URLSearchParams({ sprak });
   const response = await fetch(
@@ -572,7 +572,7 @@ export async function fetchSkjemaDefinisjon(
   return response.json();
 }
 
-export const getSkjemaDefinisjonQuery = (type: string, sprak: string = "nb") =>
+export const getSkjemaDefinisjonQuery = (type: string, sprak: Sprak) =>
   queryOptions<unknown>({
     queryKey: ["skjema-definisjon", type, sprak],
     queryFn: () => fetchSkjemaDefinisjon(type, sprak),

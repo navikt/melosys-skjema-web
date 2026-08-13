@@ -1,5 +1,6 @@
 const LOCALE_MAP: Record<string, string> = {
   nb: "nb-NO",
+  nn: "nn-NO",
   en: "en-GB",
 };
 
@@ -14,7 +15,11 @@ export function parseIsoDato(isoDato: string): Date {
 
 export function formatDato(isoDato: string, sprak: string): string {
   const locale = LOCALE_MAP[sprak] ?? "nb-NO";
-  return parseIsoDato(isoDato).toLocaleDateString(locale, {
+  // Rene datoer (YYYY-MM-DD) må parses til lokal midnatt; tidsstempler tåler Date-konstruktøren
+  const dato = isoDato.includes("T")
+    ? new Date(isoDato)
+    : parseIsoDato(isoDato);
+  return dato.toLocaleDateString(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

@@ -14,7 +14,7 @@ export function ListeFeltOppsummering({
   felt,
   verdi,
 }: ListeFeltOppsummeringProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   if (!verdi || verdi.length === 0) return null;
 
   const elementFelter = Object.entries(felt.elementDefinisjon);
@@ -54,7 +54,7 @@ export function ListeFeltOppsummering({
                     <FormSummary.Answer key={id}>
                       <FormSummary.Label>{subfelt.label}</FormSummary.Label>
                       <FormSummary.Value>
-                        {formaterVerdi(subfelt, subVerdi, t)}
+                        {formaterVerdi(subfelt, subVerdi, t, i18n.language)}
                       </FormSummary.Value>
                     </FormSummary.Answer>
                   );

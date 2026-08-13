@@ -286,7 +286,7 @@ export function ArbeidstakerVelger({
                   <InlineMessage className="mt-2" status="info">
                     {t("oversiktFelles.arbeidstakerIngenFullmakter")}{" "}
                     <Link
-                      href="https://www.nav.no/fullmakt"
+                      href={t("oversiktFelles.fullmaktLenkeUrl")}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
@@ -302,7 +302,7 @@ export function ArbeidstakerVelger({
                   <UNSAFE_Combobox
                     error={
                       error
-                        ? "Kunne ikke laste personer med fullmakt"
+                        ? t("oversiktFelles.feilVedHentingAvFullmakter")
                         : undefined
                     }
                     hideLabel

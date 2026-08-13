@@ -1,5 +1,6 @@
 import { Tooltip } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { getOrganisasjonQueryOptions } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
@@ -12,6 +13,7 @@ import { getOrganisasjonQueryOptions } from "~/httpClients/melsosysSkjemaApiClie
  * <OrganisasjonNameLookup orgnummer="123456789" />
  */
 export function OrganisasjonNameLookup({ orgnummer }: { orgnummer: string }) {
+  const { t } = useTranslation();
   const { data: organisasjon } = useQuery(
     getOrganisasjonQueryOptions(orgnummer),
   );
@@ -23,7 +25,10 @@ export function OrganisasjonNameLookup({ orgnummer }: { orgnummer: string }) {
   return (
     <Tooltip content={orgnummer}>
       <span
-        aria-label={`${organisasjon.navn} med organisasjonsnummer ${orgnummer}`}
+        aria-label={t("felles.organisasjonMedOrgnummerAriaLabel", {
+          navn: organisasjon.navn,
+          orgnummer,
+        })}
       >
         {organisasjon.navn}
       </span>

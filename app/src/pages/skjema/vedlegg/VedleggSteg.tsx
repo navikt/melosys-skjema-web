@@ -141,11 +141,22 @@ function VedleggStegContent({
 
   const getErrorMessage = (error: unknown): string => {
     if (error instanceof VedleggError) {
-      if (error.errorCode === "VIRUS_FOUND") {
-        return t("vedleggSteg.feilVirusFunnet");
-      }
-      if (error.status === 400) {
-        return error.message;
+      switch (error.errorCode) {
+        case "VIRUS_FOUND": {
+          return t("vedleggSteg.feilVirusFunnet");
+        }
+        case "UGYLDIG_FILFORMAT": {
+          return t("vedleggSteg.feilUgyldigFormat");
+        }
+        case "FIL_FOR_STOR": {
+          return t("vedleggSteg.feilForStor");
+        }
+        case "FIL_TOM": {
+          return t("vedleggSteg.feilTomFil");
+        }
+        case "MAKS_ANTALL_VEDLEGG": {
+          return t("vedleggSteg.feilMaksAntallVedlegg");
+        }
       }
     }
     return t("vedleggSteg.feilUkjent");
