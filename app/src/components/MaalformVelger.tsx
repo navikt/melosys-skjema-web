@@ -13,14 +13,12 @@ export function MaalformVelger() {
     SUPPORTED_LANGUAGES[0]!;
 
   const handleChangeLanguage = async (code: Language["code"]) => {
-    await setParams({ language: code });
     await i18n.changeLanguage(code);
+    // Best-effort: oppdaterer NAV-chromen og decorator-language-cookien.
+    // setParams venter på dekoratørens ready-handshake og kan henge når
+    // dekoratøren mangler (e2e) eller er treg — den skal aldri blokkere språkbyttet.
+    void setParams({ language: code });
   };
-
-  // Fjern i MELOSYS-8094
-  if (SUPPORTED_LANGUAGES.length <= 1) {
-    return null;
-  }
 
   return (
     <Dropdown>

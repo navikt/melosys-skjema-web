@@ -12,6 +12,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { initReactI18next } from "react-i18next";
 
+import { mapToSupportedLanguage } from "~/utils/languages.ts";
 import { logSkjemaDefinisjonValidation } from "~/utils/validateSkjemaDefinisjon";
 
 import { resources } from "./i18n/i18n.ts";
@@ -27,22 +28,23 @@ const getDecoratorLangFromCookie = () => {
   );
 };
 
-const i18nLangToHtmlLang = (lng: string): string =>
-  lng === "en" ? "en" : "no";
-
 i18n.use(initReactI18next).init({
-  lng: getDecoratorLangFromCookie(),
+  // Cookien kan inneholde språk appen ikke støtter (se/pl/uk/ru) — guard mot stille feiltilstand
+  lng: mapToSupportedLanguage(getDecoratorLangFromCookie()),
   fallbackLng: "nb",
+  supportedLngs: ["nb", "nn", "en"],
   resources,
   interpolation: {
     escapeValue: false,
   },
 });
 
-// Sett riktig lang-attributt på <html> ved oppstart og ved språkbytte
-document.documentElement.lang = i18nLangToHtmlLang(i18n.language);
+// Sett riktig lang-attributt og fanetittel ved oppstart og ved språkbytte
+document.documentElement.lang = mapToSupportedLanguage(i18n.language);
+document.title = i18n.t("appHeader.tittel");
 i18n.on("languageChanged", (lng) => {
-  document.documentElement.lang = i18nLangToHtmlLang(lng);
+  document.documentElement.lang = mapToSupportedLanguage(lng);
+  document.title = i18n.t("appHeader.tittel");
 });
 
 export const queryClient = new QueryClient();

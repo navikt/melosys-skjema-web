@@ -29,14 +29,12 @@ function MaalformValg() {
   const { i18n } = useTranslation();
 
   const handleChangeLanguage = async (code: Language["code"]) => {
-    await setParams({ language: code });
     await i18n.changeLanguage(code);
+    // Best-effort: oppdaterer NAV-chromen og decorator-language-cookien.
+    // setParams venter på dekoratørens ready-handshake og kan henge når
+    // dekoratøren mangler (e2e) eller er treg — den skal aldri blokkere språkbyttet.
+    void setParams({ language: code });
   };
-
-  // Fjern i MELOSYS-8094
-  if (SUPPORTED_LANGUAGES.length <= 1) {
-    return null;
-  }
 
   return (
     <HStack align="center" gap="space-8">
@@ -185,12 +183,8 @@ export function KontekstVelger() {
             onVelg={() => setIsOpen(false)}
             visOverskrift={false}
           />
-          {SUPPORTED_LANGUAGES.length > 1 && (
-            <>
-              <hr className="my-4 border-border-subtle" />
-              <MaalformValg />
-            </>
-          )}
+          <hr className="my-4 border-border-subtle" />
+          <MaalformValg />
         </Popover.Content>
       </Popover>
     </>
