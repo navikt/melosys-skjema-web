@@ -261,7 +261,9 @@ export const nb = {
         "Du må svare på om arbeidsgiveren opprettholder vanlig drift i Norge",
     },
     utenlandsoppdragetSteg: {
-      tittel: "Utsendingsperiode og land",
+      // Excel-ordlyden «Utsendingsperiode og land» tas sammen med v1->v2-bumpen av
+      // definisjonen, så bokmål viser samme tittel i steget som i oppsummeringen
+      tittel: "Utenlandsoppdraget",
       duMaVelgeHvilketLandArbeidstakerenSendesTil:
         "Du må velge hvilket land arbeidstakeren sendes til",
       duMaSvarePaOmDereHarOppdragILandet:

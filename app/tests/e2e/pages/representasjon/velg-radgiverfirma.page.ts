@@ -23,6 +23,8 @@ export class VelgRadgiverfirmaPage {
     this.sokPaVirksomhetInput = page.getByLabel(translations.sokPaVirksomhet);
     this.okButton = page.getByRole("button", {
       name: translations.ok,
+      // «Ok» er substring av «Bokmål» — språkvelgeren i headeren krever eksakt match
+      exact: true,
     });
     this.avbrytButton = page.getByRole("button", {
       name: alleTranslations.felles.avbryt,
