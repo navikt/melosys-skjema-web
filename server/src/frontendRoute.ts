@@ -42,7 +42,8 @@ type StottetSprak = (typeof STOTTEDE_SPRAK)[number];
  */
 function decoratorLanguage(request: express.Request): StottetSprak {
   const cookieSprak = request.headers.cookie
-    ?.split("; ")
+    ?.split(";")
+    .map((cookie) => cookie.trim())
     .find((cookie) => cookie.startsWith("decorator-language="))
     ?.split("=")[1];
   return STOTTEDE_SPRAK.includes(cookieSprak as StottetSprak)

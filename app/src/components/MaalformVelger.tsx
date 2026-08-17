@@ -17,7 +17,9 @@ export function MaalformVelger() {
     // Best-effort: oppdaterer NAV-chromen og decorator-language-cookien.
     // setParams venter på dekoratørens ready-handshake og kan henge når
     // dekoratøren mangler (e2e) eller er treg — den skal aldri blokkere språkbyttet.
-    void setParams({ language: code });
+    void setParams({ language: code }).catch((error: unknown) => {
+      globalThis.reportError(error);
+    });
   };
 
   return (

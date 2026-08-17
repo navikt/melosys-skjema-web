@@ -22,7 +22,8 @@ import { routeTree } from "./routeTree.gen";
 const getDecoratorLangFromCookie = () => {
   return (
     document.cookie
-      .split("; ")
+      .split(";")
+      .map((row) => row.trim())
       .find((row) => row.startsWith("decorator-language="))
       ?.split("=")[1] || "nb"
   );
