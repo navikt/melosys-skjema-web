@@ -1170,7 +1170,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
             },
             {
               verdi: "BORESKIP_ELLER_ANNEN_FLYTTBAR_INNRETNING",
-              label: "Boreskip eller anna flyttbar innreting",
+              label: "Boreskip eller anna flyttbar innretning",
             },
           ],
         },
