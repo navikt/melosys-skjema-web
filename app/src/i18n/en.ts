@@ -144,10 +144,10 @@ export const en = {
       regionValgfritt: "Region (optional)",
       land: "Country",
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
-        "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
+        "Does the company belong to the same corporate group as the Norwegian employer?",
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
-      ansettelsesform: "what is your current position in this company?",
+      ansettelsesform: "What is your current position in this company?",
       arbeidstakerEllerFrilanser: "Employee or freelancer",
       selvstendigNaeringsdrivende: "Self-employed",
       statsansatt: "Civil servant",
@@ -318,7 +318,7 @@ export const en = {
       enArbeidsgiverSomRadgiver: "ADVISOR",
       enArbeidsgiverSomRadgiverBeskrivelse:
         "submitting the application on behalf of the employer/employee",
-      annenPerson: "PRIVATE INDIVDUAL",
+      annenPerson: "PRIVATE INDIVIDUAL",
       annenPersonBeskrivelse:
         "completing the application on behalf of another person",
       soknadVenterPaaDeg: "An application is waiting for you",
