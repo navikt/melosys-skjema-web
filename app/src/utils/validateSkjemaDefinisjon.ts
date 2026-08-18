@@ -5,12 +5,11 @@
  * the static TypeScript file and the backend definition.
  */
 
+import { API_PROXY_URL } from "~/constants/api.ts";
 import {
   SKJEMA_DEFINISJONER_A1,
   type SupportedLanguage,
 } from "~/constants/skjemaDefinisjonA1";
-
-const API_PROXY_URL = `${import.meta.env.BASE_URL}api`;
 
 interface ValidationResult {
   isValid: boolean;
