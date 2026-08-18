@@ -46,7 +46,7 @@ pnpm install
 
 1. Start react app:
    ```bash
-   pnpm dev
+   pnpm vite-mode
    ```
 
 2. Åpne url i nettleser:
