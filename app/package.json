@@ -5,6 +5,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "vite-mode": "VITE_BASE_PATH=/medlemskap-lovvalg/soknad/ vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "check-types": "tsc --noemit",

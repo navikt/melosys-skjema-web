@@ -1,5 +1,6 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
+import { API_PROXY_URL } from "~/constants/api.ts";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { alleToggleNavn } from "~/featuretoggle/toggleNavn.ts";
 import {
@@ -36,8 +37,6 @@ import {
   organisasjonsnummerHarGyldigFormat,
   ValideringError,
 } from "~/utils/valideringUtils.ts";
-
-const API_PROXY_URL = `${import.meta.env.BASE_URL}api`;
 
 type StegData =
   | ArbeidsgiverensVirksomhetINorgeDto

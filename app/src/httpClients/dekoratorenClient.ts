@@ -1,5 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
+import { DEKORATOREN_API_URL } from "~/constants/api.ts";
+
 export type UserInfo = {
   name: string;
   userId: string;
@@ -19,9 +21,7 @@ export function getUserInfo() {
 }
 
 async function fetchUserInfo(): Promise<UserInfo> {
-  const response = await fetch(
-    `${import.meta.env.BASE_URL}nav-dekoratoren-api/auth`,
-  );
+  const response = await fetch(`${DEKORATOREN_API_URL}/auth`);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
