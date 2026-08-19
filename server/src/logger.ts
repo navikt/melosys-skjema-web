@@ -28,33 +28,35 @@ const colors = {
 
 winston.addColors(colors);
 
+const logFormat = combine(timestamp(), json());
+
 const stdoutLogger = winston.createLogger({
   level: level(),
   levels,
   transports: [
     new winston.transports.Console({
-      format: combine(timestamp(), json()),
+      format: logFormat,
     }),
   ],
 });
 
-const debug = (msg: string) => {
-  stdoutLogger.debug(msg.replaceAll(/[\n\r]/g, ""));
+const debug = (message: string) => {
+  stdoutLogger.debug(message.replaceAll(/[\n\r]/g, ""));
 };
 
-const info = (msg: string) => {
-  stdoutLogger.info(msg.replaceAll(/[\n\r]/g, ""));
+const info = (message: string) => {
+  stdoutLogger.info(message.replaceAll(/[\n\r]/g, ""));
 };
 
-const warning = (msg: string) => {
-  stdoutLogger.warn(msg.replaceAll(/[\n\r]/g, ""));
+const warning = (message: string) => {
+  stdoutLogger.warn(message.replaceAll(/[\n\r]/g, ""));
 };
 
-const error = (msg: string, err: Error) => {
-  if (err) {
-    stdoutLogger.error(msg, { message: `: ${err.message}` });
+const error = (message: string, error_: Error) => {
+  if (error_) {
+    stdoutLogger.error(message, { message: `: ${error_.message}` });
   } else {
-    stdoutLogger.error(msg, { message: `: ${err}` });
+    stdoutLogger.error(message, { message: `: ${error_}` });
   }
 };
 

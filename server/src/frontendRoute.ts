@@ -45,7 +45,7 @@ function decoratorLanguage(request: express.Request): StottetSprak {
     ?.split(";")
     .map((cookie) => cookie.trim())
     .find((cookie) => cookie.startsWith("decorator-language="))
-    ?.split("=")[1];
+    ?.split("=", 2)[1];
   return STOTTEDE_SPRAK.includes(cookieSprak as StottetSprak)
     ? (cookieSprak as StottetSprak)
     : "nb";
@@ -53,7 +53,7 @@ function decoratorLanguage(request: express.Request): StottetSprak {
 
 // Vi sender bevisst IKKE availableLanguages — da rendrer ikke dekoratøren sin egen
 // språkvelger, og appens MaalformVelger forblir den eneste velgeren.
-const decoratorProps = (language: StottetSprak) =>
+const decoratorProperties = (language: StottetSprak) =>
   ({
     env: config.app.env,
     params: {
@@ -117,7 +117,7 @@ export function setupStaticRoutes(router: Router) {
 
     const html = await injectDecoratorServerSide({
       filePath: spaFilePath,
-      ...decoratorProps(decoratorLanguage(request)),
+      ...decoratorProperties(decoratorLanguage(request)),
     });
 
     logger.info("Dekorator hentet");
@@ -132,7 +132,7 @@ async function injectViteModeHtml(html: string, language: StottetSprak) {
     DECORATOR_HEAD_ASSETS,
     DECORATOR_SCRIPTS,
     DECORATOR_FOOTER,
-  } = await fetchDecoratorHtml(decoratorProps(language));
+  } = await fetchDecoratorHtml(decoratorProperties(language));
 
   return [
     DECORATOR_HEADER,
