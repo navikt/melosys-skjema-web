@@ -52,12 +52,12 @@ export const soknadStarterSchema = z
     path: ["arbeidstaker"],
     when: () => true,
   })
-  .superRefine((data, ctx) => {
+  .superRefine((data, context) => {
     if (data.bekreftelse) {
       return;
     }
 
-    ctx.addIssue({
+    context.addIssue({
       code: "custom",
       message: "oversiktFelles.valideringManglerBekreftelseAtVilSvareRiktig",
       path: ["bekreftelse"],

@@ -50,23 +50,31 @@ export class UtsendingsperiodeOgLandStegPage {
     });
   }
 
-  async goto() {
-    await this.page.goto(`/skjema/${this.skjema.id}/utsendingsperiode-og-land`);
-  }
-
-  async assertIsVisible() {
-    await expect(this.heading).toBeVisible();
-  }
-
   private preutfyltInfoboksTekst(
     land: string,
     fraDato: string,
     tilDato: string,
   ) {
     return translations.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver
-      .replace("{{land}}", land)
-      .replace("{{fraDato}}", fraDato)
-      .replace("{{tilDato}}", tilDato);
+      .replaceAll("{{land}}", () => land)
+      .replaceAll("{{fraDato}}", () => fraDato)
+      .replaceAll("{{tilDato}}", () => tilDato);
+  }
+
+  private fraDatoFieldWrapper() {
+    return this.fraDatoInput.locator("..").locator("..");
+  }
+
+  private tilDatoFieldWrapper() {
+    return this.tilDatoInput.locator("..").locator("..");
+  }
+
+  async goto() {
+    await this.page.goto(`/skjema/${this.skjema.id}/utsendingsperiode-og-land`);
+  }
+
+  async assertIsVisible() {
+    await expect(this.heading).toBeVisible();
   }
 
   async assertPreutfyltInfoboksVisible(
@@ -84,6 +92,7 @@ export class UtsendingsperiodeOgLandStegPage {
       this.page.getByText(
         translations.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver.split(
           "{{land}}",
+          1,
         )[0] ?? "Arbeidsgiveren din har oppgitt",
       ),
     ).not.toBeVisible();
@@ -106,9 +115,9 @@ export class UtsendingsperiodeOgLandStegPage {
   async assertArbeidsgiverOppgaLandVisible(land: string) {
     await expect(
       this.page.getByText(
-        translations.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand.replace(
+        translations.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand.replaceAll(
           "{{land}}",
-          land,
+          () => land,
         ),
       ),
     ).toBeVisible();
@@ -121,8 +130,8 @@ export class UtsendingsperiodeOgLandStegPage {
     await expect(
       this.page.getByText(
         translations.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode
-          .replace("{{fraDato}}", fraDato)
-          .replace("{{tilDato}}", tilDato),
+          .replaceAll("{{fraDato}}", () => fraDato)
+          .replaceAll("{{tilDato}}", () => tilDato),
       ),
     ).toBeVisible();
   }
@@ -190,14 +199,6 @@ export class UtsendingsperiodeOgLandStegPage {
 
   async assertLandFeilmeldingIsNotVisible() {
     await expect(this.page.getByText(feilmeldinger.land)).not.toBeVisible();
-  }
-
-  private fraDatoFieldWrapper() {
-    return this.fraDatoInput.locator("..").locator("..");
-  }
-
-  private tilDatoFieldWrapper() {
-    return this.tilDatoInput.locator("..").locator("..");
   }
 
   async assertFraDatoErPakrevdIsVisible() {

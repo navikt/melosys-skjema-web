@@ -6,7 +6,7 @@ import type { SeksjonDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { FeltOppsummering } from "./FeltOppsummering.tsx";
 
-interface SeksjonOppsummeringProps {
+interface SeksjonOppsummeringProperties {
   seksjon: SeksjonDefinisjonDto;
   data: Record<string, unknown>;
   editHref?: string;
@@ -18,7 +18,7 @@ export function SeksjonOppsummering({
   editHref,
   icon,
   seksjon,
-}: SeksjonOppsummeringProps) {
+}: SeksjonOppsummeringProperties) {
   const { t } = useTranslation();
 
   const felterMedData = Object.entries(seksjon.felter).filter(

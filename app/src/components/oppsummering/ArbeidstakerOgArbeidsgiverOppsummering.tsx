@@ -11,16 +11,18 @@ import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts
 
 type HeadingLevel = "2" | "3" | "4" | "5" | "6";
 
-interface ArbeidstakerOgArbeidsgiverOppsummeringProps {
+interface ArbeidstakerOgArbeidsgiverOppsummeringProperties {
   skjema: UtsendtArbeidstakerSkjemaDto;
-  /** Heading-nivå for boks-headingene. Velges ut fra hierarkiet rundt komponenten. */
+  /**
+  Heading-nivå for boks-headingene. Velges ut fra hierarkiet rundt komponenten.
+  */
   headingLevel?: HeadingLevel;
 }
 
 export function ArbeidstakerOgArbeidsgiverOppsummering({
   skjema,
   headingLevel = "3",
-}: ArbeidstakerOgArbeidsgiverOppsummeringProps) {
+}: ArbeidstakerOgArbeidsgiverOppsummeringProperties) {
   const { t } = useTranslation();
 
   return (

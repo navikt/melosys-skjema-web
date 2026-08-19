@@ -4,7 +4,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import type { AlternativDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-type CheckboxGruppeFormPartProps = Omit<
+type CheckboxGruppeFormPartProperties = Omit<
   CheckboxGroupProps,
   "onChange" | "children" | "error" | "value"
 > & {
@@ -15,8 +15,8 @@ type CheckboxGruppeFormPartProps = Omit<
 export function CheckboxGruppeFormPart({
   formFieldName,
   alternativer,
-  ...props
-}: CheckboxGruppeFormPartProps) {
+  ...properties
+}: CheckboxGruppeFormPartProperties) {
   const { control } = useFormContext();
   const translateError = useTranslateError();
 
@@ -26,7 +26,7 @@ export function CheckboxGruppeFormPart({
       name={formFieldName}
       render={({ field, fieldState }) => (
         <CheckboxGroup
-          {...props}
+          {...properties}
           error={translateError(fieldState.error?.message)}
           value={field.value ?? []}
           onChange={field.onChange}

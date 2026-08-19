@@ -70,7 +70,7 @@ async function validateForLanguage(
 
     // Deep compare each section
     for (const seksjon of staticSeksjoner) {
-      if (!backendDefinisjon.seksjoner?.[seksjon]) continue;
+      if (!Object.hasOwn(backendDefinisjon.seksjoner ?? {}, seksjon)) continue;
 
       const staticSeksjon =
         staticDefinisjon.seksjoner[
@@ -105,20 +105,23 @@ async function validateForLanguage(
       }
 
       // Compare field labels (most likely to change)
-      for (const felt of staticFelter) {
-        if (!backendSeksjon.felter?.[felt]) continue;
+      const compareFieldLabels = () => {
+        for (const felt of staticFelter) {
+          if (!Object.hasOwn(backendSeksjon.felter ?? {}, felt)) continue;
 
-        const staticFelt = (staticSeksjon.felter as Record<string, unknown>)[
-          felt
-        ] as { label?: string };
-        const backendFelt = backendSeksjon.felter[felt] as { label?: string };
+          const staticFelt = (staticSeksjon.felter as Record<string, unknown>)[
+            felt
+          ] as { label?: string };
+          const backendFelt = backendSeksjon.felter[felt] as { label?: string };
 
-        if (staticFelt?.label && staticFelt.label !== backendFelt?.label) {
-          differences.push(
-            `[${sprak}] Field '${seksjon}.${felt}' label mismatch:\n  static="${staticFelt.label}"\n  backend="${backendFelt?.label}"`,
-          );
+          if (staticFelt?.label && staticFelt.label !== backendFelt?.label) {
+            differences.push(
+              `[${sprak}] Field '${seksjon}.${felt}' label mismatch:\n  static="${staticFelt.label}"\n  backend="${backendFelt?.label}"`,
+            );
+          }
         }
-      }
+      };
+      compareFieldLabels();
     }
 
     return {

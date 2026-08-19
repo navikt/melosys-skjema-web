@@ -78,18 +78,18 @@ function UtsendingsperiodeOgLandStegContent({
   const formTilDato = watch("utsendelsePeriode.tilDato");
   const formLand = watch("utsendelseLand");
 
-  const landAvviker =
+  const isLandAvviker =
     !!motpartensVerdier &&
     !!formLand &&
     formLand !== motpartensVerdier.utsendelseLand;
-  const periodeAvviker =
+  const isPeriodeAvviker =
     !!motpartensVerdier &&
     !!formFraDato &&
     !!formTilDato &&
     (formFraDato !== motpartensVerdier.utsendelsePeriode.fraDato ||
       formTilDato !== motpartensVerdier.utsendelsePeriode.tilDato);
 
-  const dateLimits = {
+  const [dateLimits] = useState(() => ({
     // Dato norge ble EØS medlem
     fromDate: new Date(1995, 0, 1),
     toDate: new Date(
@@ -97,7 +97,7 @@ function UtsendingsperiodeOgLandStegContent({
       11,
       31,
     ),
-  };
+  }));
 
   const registerUtsendingsperiodeOgLandMutation = useMutation({
     mutationFn: (data: UtsendingsperiodeOgLandDto) => {
@@ -196,7 +196,7 @@ function UtsendingsperiodeOgLandStegContent({
                 formFieldName="utsendelseLand"
                 label={utsendelseLandFelt.label}
               />
-              {landAvviker && (
+              {isLandAvviker && (
                 <Alert className="mt-2" inline size="small" variant="info">
                   {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand", {
                     land: t(`land.${motpartensVerdier.utsendelseLand}`),
@@ -224,7 +224,7 @@ function UtsendingsperiodeOgLandStegContent({
                 tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
                 {...dateLimits}
               />
-              {periodeAvviker && (
+              {isPeriodeAvviker && (
                 <Alert className="mt-2" inline size="small" variant="info">
                   {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode", {
                     fraDato: formatDato(

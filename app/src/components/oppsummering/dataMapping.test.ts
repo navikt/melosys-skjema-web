@@ -303,8 +303,12 @@ describe.each(["nb", "nn", "en"] as const)("resolveSeksjoner (%s)", (sprak) => {
         ?.itemTypeLabels;
 
       expect(labels).toBeDefined();
-      expect(Object.keys(labels ?? {}).toSorted()).toEqual(
-        [VirksomhetTypeKey.NORSK, VirksomhetTypeKey.UTENLANDSK].toSorted(),
+      expect(
+        Object.keys(labels ?? {}).toSorted((a, b) => a.localeCompare(b)),
+      ).toEqual(
+        [VirksomhetTypeKey.NORSK, VirksomhetTypeKey.UTENLANDSK].toSorted(
+          (a, b) => a.localeCompare(b),
+        ),
       );
     });
   });

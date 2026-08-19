@@ -106,6 +106,18 @@ export function KontekstVelger() {
     if (isDegSelv) {
       return null;
     }
+    if (
+      organisasjonData &&
+      representasjonskontekst.representasjonstype ===
+        Representasjonstype.RADGIVER
+    ) {
+      return truncateText(
+        organisasjonData.juridiskEnhet.navn ??
+          representasjonskontekst.radgiverOrgnr ??
+          "",
+        23,
+      );
+    }
     const config =
       KONTEKST_CONFIG[
         representasjonskontekst.representasjonstype as Exclude<
@@ -115,18 +127,6 @@ export function KontekstVelger() {
           | Representasjonstype.RADGIVER_MED_FULLMAKT
         >
       ];
-    if (
-      representasjonskontekst.representasjonstype ===
-        Representasjonstype.RADGIVER &&
-      organisasjonData
-    ) {
-      return truncateText(
-        organisasjonData.juridiskEnhet.navn ??
-          representasjonskontekst.radgiverOrgnr ??
-          "",
-        23,
-      );
-    }
     return t(config.tekstKey);
   };
 

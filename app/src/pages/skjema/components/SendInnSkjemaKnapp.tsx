@@ -12,7 +12,7 @@ import {
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { toSprak } from "~/utils/languages.ts";
 
-interface SendInnSkjemaKnappProps {
+interface SendInnSkjemaKnappProperties {
   skjemaId: string;
   onBeforeSubmit: () => boolean;
   onSubmitError: () => void;
@@ -22,7 +22,7 @@ export function SendInnSkjemaKnapp({
   skjemaId,
   onBeforeSubmit,
   onSubmitError,
-}: SendInnSkjemaKnappProps) {
+}: SendInnSkjemaKnappProperties) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

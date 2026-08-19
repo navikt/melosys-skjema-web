@@ -23,11 +23,11 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 
-interface KvitteringPageProps {
+interface KvitteringPageProperties {
   skjemaId: string;
 }
 
-export function KvitteringPage({ skjemaId }: KvitteringPageProps) {
+export function KvitteringPage({ skjemaId }: KvitteringPageProperties) {
   const { t } = useTranslation();
   const {
     data: kvittering,
@@ -56,7 +56,7 @@ export function KvitteringPage({ skjemaId }: KvitteringPageProps) {
   return <KvitteringPageContent response={kvittering} skjema={skjema} />;
 }
 
-interface KvitteringPageContentProps {
+interface KvitteringPageContentProperties {
   response: SkjemaInnsendtKvittering;
   skjema: UtsendtArbeidstakerSkjemaDto;
 }
@@ -64,7 +64,7 @@ interface KvitteringPageContentProps {
 function KvitteringPageContent({
   response,
   skjema,
-}: KvitteringPageContentProps) {
+}: KvitteringPageContentProperties) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 

@@ -26,14 +26,18 @@ export type FeltUnion =
   | TextFeltDefinisjon
   | TextareaFeltDefinisjon;
 
-/** Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks */
+/**
+Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks
+*/
 function erBelopFelt(felt: FeltUnion): boolean {
   return (
     felt.type === "TEXT" && (felt as TextFeltDefinisjon).format === "BELOP"
   );
 }
 
-/** Henter labels for valgte alternativer i en checkbox-gruppe */
+/**
+Henter labels for valgte alternativer i en checkbox-gruppe
+*/
 function hentValgteCheckboxLabels(
   felt: CheckboxGruppeFeltDefinisjon,
   selected: string[] | undefined,
@@ -50,7 +54,7 @@ export function formaterVerdi(
   t: TFunction,
   sprak: string,
 ): string {
-  if (verdi === null || verdi === undefined) return "\u2013";
+  if (verdi === null || verdi === undefined) return "\u{2013}";
 
   const visningssprak = mapToSupportedLanguage(sprak);
 
@@ -68,11 +72,11 @@ export function formaterVerdi(
       const periode = verdi as { fraDato?: string; tilDato?: string };
       const fra = periode.fraDato
         ? formatDato(periode.fraDato, visningssprak)
-        : "\u2013";
+        : "\u{2013}";
       const til = periode.tilDato
         ? formatDato(periode.tilDato, visningssprak)
-        : "\u2013";
-      return `${fra} \u2013 ${til}`;
+        : "\u{2013}";
+      return `${fra} \u{2013} ${til}`;
     }
 
     case "SELECT": {
@@ -87,7 +91,7 @@ export function formaterVerdi(
       const checkboxFelt = felt as CheckboxGruppeFeltDefinisjon;
       const selected = verdi as string[] | undefined;
       const selectedLabels = hentValgteCheckboxLabels(checkboxFelt, selected);
-      return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u2013";
+      return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u{2013}";
     }
 
     case "COUNTRY_SELECT": {
@@ -95,12 +99,12 @@ export function formaterVerdi(
     }
 
     default: {
-      const strVerdi = String(verdi);
+      const stringVerdi = String(verdi);
       if (erBelopFelt(felt)) {
-        const formatert = formaterBelop(strVerdi, visningssprak);
-        return formatert ? `${formatert} kr` : strVerdi;
+        const formatert = formaterBelop(stringVerdi, visningssprak);
+        return formatert ? `${formatert} kr` : stringVerdi;
       }
-      return strVerdi;
+      return stringVerdi;
     }
   }
 }

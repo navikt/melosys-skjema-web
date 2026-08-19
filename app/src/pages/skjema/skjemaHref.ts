@@ -16,5 +16,8 @@ export function byggSkjemaStegHref(
   skjemaId: string,
   basePath: string = defaultBasePath,
 ): string {
-  return byggHrefMedBasePath(route.replace("$id", skjemaId), basePath);
+  return byggHrefMedBasePath(
+    route.replaceAll("$id", () => skjemaId),
+    basePath,
+  );
 }

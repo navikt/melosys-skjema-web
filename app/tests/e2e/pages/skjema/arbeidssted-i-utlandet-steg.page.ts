@@ -237,6 +237,36 @@ export class ArbeidsstedIUtlandetStegPage {
     });
   }
 
+  private fastEllerVekslendeFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: paLandFelter.fastEllerVekslendeArbeidssted.label,
+    });
+  }
+
+  private erHjemmekontorFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: paLandFelter.erHjemmekontor.label,
+    });
+  }
+
+  private typeInnretningFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: offshoreFelter.typeInnretning.label,
+    });
+  }
+
+  private seilerIFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: paSkipFelter.seilerI.label,
+    });
+  }
+
+  private erVanligHjemmebaseFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: omBordPaFlyFelter.erVanligHjemmebase.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/arbeidssted-i-utlandet`);
   }
@@ -291,24 +321,18 @@ export class ArbeidsstedIUtlandetStegPage {
 
   // --- Validation assertions: Arbeidssted type ---
 
+  // --- Validation assertions: PA_LAND ---
+
   async assertDuMaVelgeArbeidsstedTypeIsVisible() {
     await expect(
       this.page.getByText(feilmeldinger.duMaVelgeArbeidsstedType),
     ).toBeVisible();
   }
 
-  // --- Validation assertions: PA_LAND ---
-
   async assertNavnPaVirksomhetErPakrevdIsVisible() {
     await expect(
       this.page.getByText(feilmeldinger.navnPaVirksomhetErPakrevd),
     ).toBeVisible();
-  }
-
-  private fastEllerVekslendeFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: paLandFelter.fastEllerVekslendeArbeidssted.label,
-    });
   }
 
   async assertDuMaVelgeFastEllerVekslendeIsVisible() {
@@ -317,12 +341,6 @@ export class ArbeidsstedIUtlandetStegPage {
         feilmeldinger.duMaVelgeFastEllerVekslende,
       ),
     ).toBeVisible();
-  }
-
-  private erHjemmekontorFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: paLandFelter.erHjemmekontor.label,
-    });
   }
 
   async assertDuMaSvarePaOmDetErHjemmekontorIsVisible() {
@@ -365,12 +383,6 @@ export class ArbeidsstedIUtlandetStegPage {
     ).toBeVisible();
   }
 
-  private typeInnretningFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: offshoreFelter.typeInnretning.label,
-    });
-  }
-
   async assertDuMaVelgeTypeInnretningIsVisible() {
     await expect(
       this.typeInnretningFieldset().getByText(
@@ -397,12 +409,6 @@ export class ArbeidsstedIUtlandetStegPage {
     await expect(
       this.page.getByText(feilmeldinger.yrketTilArbeidstakerErPakrevd),
     ).toBeVisible();
-  }
-
-  private seilerIFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: paSkipFelter.seilerI.label,
-    });
   }
 
   async assertDuMaVelgeHvorSkipetSeilerIsVisible() {
@@ -435,12 +441,6 @@ export class ArbeidsstedIUtlandetStegPage {
     await expect(
       this.page.getByText(feilmeldinger.hjemmebaseNavnErPakrevd),
     ).toBeVisible();
-  }
-
-  private erVanligHjemmebaseFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: omBordPaFlyFelter.erVanligHjemmebase.label,
-    });
   }
 
   async assertDuMaSvarePaOmDetErVanligHjemmebaseIsVisible() {

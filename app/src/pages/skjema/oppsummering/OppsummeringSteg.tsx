@@ -52,10 +52,12 @@ function OppsummeringStegContent({
   const vedleggSteg = stegRekkefolge.find((s) => s.key === StegKey.VEDLEGG);
 
   useEffect(() => {
-    if (harFeil) {
-      errorRef.current?.scrollIntoView({ behavior: "auto" });
-      errorRef.current?.focus();
+    if (!harFeil) {
+      return;
     }
+
+    errorRef.current?.scrollIntoView({ behavior: "auto" });
+    errorRef.current?.focus();
   }, [harFeil]);
 
   const kanSendeInn = () => {

@@ -11,12 +11,12 @@ import type { FeltUnion } from "./formaterVerdi.ts";
 import { formaterVerdi } from "./formaterVerdi.ts";
 import { ListeFeltOppsummering } from "./ListeFeltOppsummering.tsx";
 
-interface FeltOppsummeringProps {
+interface FeltOppsummeringProperties {
   felt: FeltUnion;
   verdi: unknown;
 }
 
-export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
+export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProperties) {
   const { t, i18n } = useTranslation();
   if (felt.type === "LIST") {
     return (
@@ -34,11 +34,15 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
       <>
         <FormSummary.Answer>
           <FormSummary.Label>{periodeFelt.fraDatoLabel}</FormSummary.Label>
-          <FormSummary.Value>{periode?.fraDato ?? "\u2013"}</FormSummary.Value>
+          <FormSummary.Value>
+            {periode?.fraDato ?? "\u{2013}"}
+          </FormSummary.Value>
         </FormSummary.Answer>
         <FormSummary.Answer>
           <FormSummary.Label>{periodeFelt.tilDatoLabel}</FormSummary.Label>
-          <FormSummary.Value>{periode?.tilDato ?? "\u2013"}</FormSummary.Value>
+          <FormSummary.Value>
+            {periode?.tilDato ?? "\u{2013}"}
+          </FormSummary.Value>
         </FormSummary.Answer>
       </>
     );
@@ -65,7 +69,7 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProps) {
       return (
         <FormSummary.Answer>
           <FormSummary.Label>{felt.label}</FormSummary.Label>
-          <FormSummary.Value>{"\u2013"}</FormSummary.Value>
+          <FormSummary.Value>{"\u{2013}"}</FormSummary.Value>
         </FormSummary.Answer>
       );
     }

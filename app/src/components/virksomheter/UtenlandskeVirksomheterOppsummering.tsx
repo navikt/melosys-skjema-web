@@ -16,13 +16,13 @@ const ansettelsesformTilOversettelsesnokkel: Record<Ansettelsesform, string> = {
   [Ansettelsesform.STATSANSATT]: "utenlandskeVirksomheterFormPart.statsansatt",
 };
 
-interface UtenlandskVirksomhetOppsummeringProps {
+interface UtenlandskVirksomhetOppsummeringProperties {
   virksomhet: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform;
 }
 
 export function UtenlandskVirksomhetOppsummering({
   virksomhet,
-}: UtenlandskVirksomhetOppsummeringProps) {
+}: UtenlandskVirksomhetOppsummeringProperties) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
 
@@ -116,7 +116,7 @@ export function UtenlandskVirksomhetOppsummering({
   );
 }
 
-interface UtenlandskeVirksomheterOppsummeringProps {
+interface UtenlandskeVirksomheterOppsummeringProperties {
   virksomheter?: Array<
     UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform
   >;
@@ -124,7 +124,7 @@ interface UtenlandskeVirksomheterOppsummeringProps {
 
 export function UtenlandskeVirksomheterOppsummering({
   virksomheter,
-}: UtenlandskeVirksomheterOppsummeringProps) {
+}: UtenlandskeVirksomheterOppsummeringProperties) {
   const { t } = useTranslation();
 
   if (!virksomheter || virksomheter.length === 0) {

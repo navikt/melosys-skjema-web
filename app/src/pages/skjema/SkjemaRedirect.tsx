@@ -6,11 +6,11 @@ import { useTranslation } from "react-i18next";
 import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
 
-interface SkjemaRedirectProps {
+interface SkjemaRedirectProperties {
   id: string;
 }
 
-export function SkjemaRedirect({ id }: SkjemaRedirectProps) {
+export function SkjemaRedirect({ id }: SkjemaRedirectProperties) {
   const { data: skjema, isLoading, error } = useQuery(getSkjemaQuery(id));
   const { t } = useTranslation();
 

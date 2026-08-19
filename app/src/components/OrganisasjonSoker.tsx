@@ -8,14 +8,22 @@ import { ValgtOrganisasjon } from "~/components/virksomheter/ValgtOrganisasjon.t
 import { getOrganisasjonMedJuridiskEnhetQuery } from "~/httpClients/melsosysSkjemaApiClient";
 import { ValideringError } from "~/utils/valideringUtils.ts";
 
-interface OrganisasjonSokerProps {
-  /** Feltnavn i react-hook-form (SimpleOrganisasjonDto | null) */
+interface OrganisasjonSokerProperties {
+  /**
+  Feltnavn i react-hook-form (SimpleOrganisasjonDto | null)
+  */
   formFieldName: string;
-  /** Label for tekstfeltet */
+  /**
+  Label for tekstfeltet
+  */
   label: string;
-  /** Om feltet skal ha autofokus */
+  /**
+  Om feltet skal ha autofokus
+  */
   autoFocus?: boolean;
-  /** Forhåndsutfylt organisasjonsnummer (for redigering) */
+  /**
+  Forhåndsutfylt organisasjonsnummer (for redigering)
+  */
   initialOrgnr?: string;
 }
 
@@ -24,7 +32,7 @@ export function OrganisasjonSoker({
   label,
   autoFocus = false,
   initialOrgnr = "",
-}: OrganisasjonSokerProps) {
+}: OrganisasjonSokerProperties) {
   const { t } = useTranslation();
   const {
     control,

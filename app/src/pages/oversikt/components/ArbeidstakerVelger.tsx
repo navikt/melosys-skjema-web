@@ -30,7 +30,7 @@ import { SoknadStarterFormData } from "./soknadStarterSchema.ts";
 
 const FNR_LENGTH = 11;
 
-interface ArbeidstakerVelgerProps {
+interface ArbeidstakerVelgerProperties {
   visKunMedFullmakt?: boolean;
   erAnnenPerson?: boolean;
 }
@@ -45,10 +45,10 @@ interface VerifisertPerson {
 const arbeidstakerSchema = z.object({
   fnr: z
     .string()
-    .refine((val) => val.length === FNR_LENGTH && /^\d+$/.test(val), {
+    .refine((value) => value.length === FNR_LENGTH && /^\d+$/.test(value), {
       error: "oversiktFelles.arbeidstakerFnrUgyldig",
     }),
-  etternavn: z.string().refine((val) => val.trim().length > 0, {
+  etternavn: z.string().refine((value) => value.trim().length > 0, {
     error: "oversiktFelles.arbeidstakerFulltNavnTom",
   }),
 });
@@ -64,7 +64,7 @@ const arbeidstakerSchema = z.object({
 export function ArbeidstakerVelger({
   visKunMedFullmakt = false,
   erAnnenPerson = false,
-}: ArbeidstakerVelgerProps) {
+}: ArbeidstakerVelgerProperties) {
   const { t } = useTranslation();
 
   const {
@@ -238,14 +238,18 @@ export function ArbeidstakerVelger({
               {personerMedFullmakt.length > 0 && (
                 <>
                   <Label as="span" className="navds-form-field__label">
-                    {erAnnenPerson
-                      ? t("oversiktAnnenPerson.personVelgerLabel")
-                      : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+                    {t(
+                      erAnnenPerson
+                        ? "oversiktAnnenPerson.personVelgerLabel"
+                        : "oversiktFelles.arbeidstakerMedFullmaktLabel",
+                    )}
                   </Label>
                   <BodyShort className="navds-form-field__description">
-                    {erAnnenPerson
-                      ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
-                      : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
+                    {t(
+                      erAnnenPerson
+                        ? "oversiktAnnenPerson.personVelgerBeskrivelse"
+                        : "oversiktFelles.arbeidstakerMedFullmaktBeskrivelse",
+                    )}
                   </BodyShort>
                 </>
               )}
@@ -307,11 +311,11 @@ export function ArbeidstakerVelger({
                     }
                     hideLabel
                     isLoading={isLoading}
-                    label={
+                    label={t(
                       erAnnenPerson
-                        ? t("oversiktAnnenPerson.personVelgerLabel")
-                        : t("oversiktFelles.arbeidstakerMedFullmaktLabel")
-                    }
+                        ? "oversiktAnnenPerson.personVelgerLabel"
+                        : "oversiktFelles.arbeidstakerMedFullmaktLabel",
+                    )}
                     onToggleSelected={handleComboboxChange}
                     options={comboboxOptions}
                     placeholder={t(

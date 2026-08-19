@@ -23,7 +23,7 @@ export function getFieldError<T extends FieldValues>(
   errors: FieldErrors<T>,
   field: string,
 ): string | undefined {
-  return field in errors
+  return Object.hasOwn(errors, field)
     ? (errors[field as keyof typeof errors]?.message as string | undefined)
     : undefined;
 }

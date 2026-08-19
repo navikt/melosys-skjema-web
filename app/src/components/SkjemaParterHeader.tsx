@@ -5,13 +5,13 @@ import { useTranslation } from "react-i18next";
 import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 
-interface PartProps {
+interface PartProperties {
   tittel: string;
   navn: string;
   id: string;
 }
 
-function Part({ tittel, navn, id }: PartProps) {
+function Part({ tittel, navn, id }: PartProperties) {
   return (
     <VStack gap="space-4" className="flex-1 basis-50 min-w-0">
       <Label as="span" size="small">

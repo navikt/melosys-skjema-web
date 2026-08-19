@@ -12,7 +12,9 @@ export type E2eSprak = "nb" | "nn" | "en";
 
 const bundles = { nb, nn, en } as const;
 
-/** Aktivt testspråk — styres med E2E_SPRAK-miljøvariabelen, default bokmål. */
+/**
+Aktivt testspråk — styres med E2E_SPRAK-miljøvariabelen, default bokmål.
+*/
 export const E2E_SPRAK: E2eSprak =
   process.env.E2E_SPRAK === "nn" || process.env.E2E_SPRAK === "en"
     ? process.env.E2E_SPRAK
@@ -26,5 +28,7 @@ export const translations = bundles[E2E_SPRAK].translation;
 
 const akselBundles = { nb: akselNb, nn: akselNn, en: akselEn } as const;
 
-/** Aksel-komponentenes egne tekster (FileUpload, Search, DatePicker …) for aktivt testspråk. */
+/**
+Aksel-komponentenes egne tekster (FileUpload, Search, DatePicker …) for aktivt testspråk.
+*/
 export const akselTranslations = akselBundles[E2E_SPRAK];

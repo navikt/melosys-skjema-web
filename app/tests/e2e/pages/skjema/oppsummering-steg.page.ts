@@ -52,6 +52,25 @@ export class OppsummeringStegPage {
     });
   }
 
+  private async assertVirksomheterSomUtbetalerLonnOgNaturalytelser(
+    data: NorskeOgUtenlandskeVirksomheter,
+  ) {
+    if (data.norskeVirksomheter !== undefined) {
+      for (const virksomhet of data.norskeVirksomheter) {
+        await expect(
+          this.page.getByText(virksomhet.organisasjonsnummer),
+        ).toBeVisible();
+      }
+    }
+
+    if (data.utenlandskeVirksomheter !== undefined) {
+      for (const virksomhet of data.utenlandskeVirksomheter) {
+        await expect(this.page.getByText(virksomhet.navn)).toBeVisible();
+        await expect(this.page.getByText(virksomhet.land)).toBeVisible();
+      }
+    }
+  }
+
   async goto(basePath = "") {
     const normalisertBasePath = basePath.replace(/\/+$/, "");
     await this.page.goto(
@@ -257,25 +276,6 @@ export class OppsummeringStegPage {
     }
   }
 
-  private async assertVirksomheterSomUtbetalerLonnOgNaturalytelser(
-    data: NorskeOgUtenlandskeVirksomheter,
-  ) {
-    if (data.norskeVirksomheter !== undefined) {
-      for (const virksomhet of data.norskeVirksomheter) {
-        await expect(
-          this.page.getByText(virksomhet.organisasjonsnummer),
-        ).toBeVisible();
-      }
-    }
-
-    if (data.utenlandskeVirksomheter !== undefined) {
-      for (const virksomhet of data.utenlandskeVirksomheter) {
-        await expect(this.page.getByText(virksomhet.navn)).toBeVisible();
-        await expect(this.page.getByText(virksomhet.land)).toBeVisible();
-      }
-    }
-  }
-
   // --- Arbeidstaker assertions ---
 
   async assertUtsendingsperiodeOgLandData(data: UtsendingsperiodeOgLandDto) {
@@ -435,18 +435,22 @@ export class OppsummeringStegPage {
   }
 
   async sendInnAndExpectNoPost() {
-    const requestPromise = this.page
-      .waitForRequest(
-        (request) =>
-          request
-            .url()
-            .includes(
-              `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/send-inn`,
-            ) && request.method() === "POST",
-        { timeout: 500 },
-      )
-      .then(() => true)
-      .catch(() => false);
+    const requestPromise = (async () => {
+      try {
+        await this.page.waitForRequest(
+          (request) =>
+            request
+              .url()
+              .includes(
+                `/api/skjema/utsendt-arbeidstaker/${this.skjema.id}/send-inn`,
+              ) && request.method() === "POST",
+          { timeout: 500 },
+        );
+        return true;
+      } catch {
+        return false;
+      }
+    })();
 
     await this.sendSoknadButton.click();
 

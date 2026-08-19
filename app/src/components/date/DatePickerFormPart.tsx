@@ -10,18 +10,22 @@ import { get, useFormContext } from "react-hook-form";
 import { useTranslateError } from "~/utils/translation.ts";
 
 export type DatePickerFormPartHandle = {
-  /** Tømmer feltet uten å trigge validering (ingen "påkrevd"-feil vises). */
+  /**
+  Tømmer feltet uten å trigge validering (ingen "påkrevd"-feil vises).
+  */
   clearWithoutValidation: () => void;
 };
 
-type DatePickerFormPartProps = {
+type DatePickerFormPartProperties = {
   formFieldName: string;
   label: string;
   description?: string;
   className?: string;
   error?: string;
   ref?: Ref<DatePickerFormPartHandle>;
-  /** Kalles i tillegg til den interne lagringen når datoen endres. */
+  /**
+  Kalles i tillegg til den interne lagringen når datoen endres.
+  */
   onDateChange?: (date?: Date) => void;
 } & Omit<UseDatepickerOptions, "onDateChange">;
 
@@ -34,7 +38,7 @@ export function DatePickerFormPart({
   ref,
   onDateChange,
   ...datePickerOptions
-}: DatePickerFormPartProps) {
+}: DatePickerFormPartProperties) {
   const {
     register,
     setValue,

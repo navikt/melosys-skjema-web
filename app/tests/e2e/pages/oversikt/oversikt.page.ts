@@ -129,19 +129,28 @@ export class OversiktPage {
     this.radgiverInfo = page.getByText(bekreftelseTekster.radgiverInfo);
   }
 
+  private motpartCtaHeading(arbeidsgiverNavn: string) {
+    return this.page.getByRole("heading", {
+      name: translations.oversiktDegSelv.motpartCtaTittel.replaceAll(
+        "{{arbeidsgiverNavn}}",
+        () => arbeidsgiverNavn,
+      ),
+    });
+  }
+
   async goto() {
-    const params = new URLSearchParams({
+    const parameters = new URLSearchParams({
       representasjonstype: this.representasjonstype,
     });
-    await this.page.goto(`/oversikt?${params.toString()}`);
+    await this.page.goto(`/oversikt?${parameters.toString()}`);
   }
 
   async gotoWithRadgiver(radgiverOrgnr: string) {
-    const params = new URLSearchParams({
+    const parameters = new URLSearchParams({
       representasjonstype: Representasjonstype.RADGIVER,
       radgiverOrgnr,
     });
-    await this.page.goto(`/oversikt?${params.toString()}`);
+    await this.page.goto(`/oversikt?${parameters.toString()}`);
   }
 
   async assertIsVisible() {
@@ -186,28 +195,38 @@ export class OversiktPage {
 
   // ============ SoknadStarter form interactions ============
 
-  /** DEG_SELV: Type org number into the OrganisasjonSoker text field */
+  /**
+  DEG_SELV: Type org number into the OrganisasjonSoker text field
+  */
   async fillArbeidsgiverOrgnr(orgnr: string) {
     await this.arbeidsgiverOrgnrInput.fill(orgnr);
   }
 
-  /** ARBEIDSGIVER/RADGIVER: Select arbeidsgiver from Altinn combobox */
+  /**
+  ARBEIDSGIVER/RADGIVER: Select arbeidsgiver from Altinn combobox
+  */
   async selectArbeidsgiver(orgName: string) {
     await this.arbeidsgiverCombobox.click();
     await this.page.getByRole("option", { name: new RegExp(orgName) }).click();
   }
 
-  /** Click "Ja" on the "Skal du fylle ut for arbeidstaker?" radio */
+  /**
+  Click "Ja" on the "Skal du fylle ut for arbeidstaker?" radio
+  */
   async selectSkalFylleUtJa() {
     await this.skalFylleUtJaRadio.click();
   }
 
-  /** Click "Nei" on the "Skal du fylle ut for arbeidstaker?" radio */
+  /**
+  Click "Nei" on the "Skal du fylle ut for arbeidstaker?" radio
+  */
   async selectSkalFylleUtNei() {
     await this.skalFylleUtNeiRadio.click();
   }
 
-  /** Med fullmakt: Select person from the fullmakt combobox */
+  /**
+  Med fullmakt: Select person from the fullmakt combobox
+  */
   async selectArbeidstakerMedFullmakt(personName: string) {
     const fullmaktCombobox = this.page.getByRole("combobox", {
       name: translations.oversiktFelles.arbeidstakerMedFullmaktLabel,
@@ -218,19 +237,25 @@ export class OversiktPage {
       .click();
   }
 
-  /** Uten fullmakt: Fill in fnr and etternavn, then click Søk */
+  /**
+  Uten fullmakt: Fill in fnr and etternavn, then click Søk
+  */
   async fillArbeidstakerUtenFullmakt(fnr: string, etternavn: string) {
     await this.arbeidstakerFnrInput.fill(fnr);
     await this.arbeidstakerEtternavnInput.fill(etternavn);
     await this.arbeidstakerSokButton.click();
   }
 
-  /** Wait for the OrganisasjonSoker to resolve and show the org name */
+  /**
+  Wait for the OrganisasjonSoker to resolve and show the org name
+  */
   async waitForOrgLookup(orgName: string) {
     await expect(this.page.getByText(orgName)).toBeVisible();
   }
 
-  /** OrganisasjonSoker viser "fant ingen"-warning (404) */
+  /**
+  OrganisasjonSoker viser "fant ingen"-warning (404)
+  */
   async assertOrganisasjonIkkeFunnetIsVisible() {
     await expect(
       this.page.getByText(
@@ -250,7 +275,9 @@ export class OversiktPage {
     );
   }
 
-  /** Wait for the verifiser-person response to show verified person */
+  /**
+  Wait for the verifiser-person response to show verified person
+  */
   async waitForPersonVerified(personName: string) {
     await expect(this.page.getByText(personName)).toBeVisible();
   }
@@ -457,15 +484,6 @@ export class OversiktPage {
     );
   }
 
-  private motpartCtaHeading(arbeidsgiverNavn: string) {
-    return this.page.getByRole("heading", {
-      name: translations.oversiktDegSelv.motpartCtaTittel.replace(
-        "{{arbeidsgiverNavn}}",
-        arbeidsgiverNavn,
-      ),
-    });
-  }
-
   async assertMotpartCtaVisible(arbeidsgiverNavn: string) {
     await expect(this.motpartCtaHeading(arbeidsgiverNavn)).toBeVisible();
   }
@@ -476,9 +494,9 @@ export class OversiktPage {
     tilDato: string,
   ) {
     const tekst = translations.oversiktDegSelv.motpartCtaBeskrivelse
-      .replace("{{land}}", land)
-      .replace("{{fraDato}}", fraDato)
-      .replace("{{tilDato}}", tilDato);
+      .replaceAll("{{land}}", () => land)
+      .replaceAll("{{fraDato}}", () => fraDato)
+      .replaceAll("{{tilDato}}", () => tilDato);
     await expect(this.page.getByText(tekst)).toBeVisible();
   }
 

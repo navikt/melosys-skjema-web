@@ -14,7 +14,7 @@ import {
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { formatDato } from "~/utils/datoformat.ts";
 
-interface VentendeMotpartBannerProps {
+interface VentendeMotpartBannerProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
@@ -27,7 +27,7 @@ interface VentendeMotpartBannerProps {
  */
 export function VentendeMotpartBanner({
   representasjonskontekst,
-}: VentendeMotpartBannerProps) {
+}: VentendeMotpartBannerProperties) {
   const ctaAktiv = useFeatureToggle(MOTPART_CTA) ?? false;
   const erDegSelv =
     representasjonskontekst.representasjonstype ===
@@ -81,9 +81,11 @@ function VentendeMotpartAlert({
       <BodyLong spacing>
         {soknad.utsendingsperiode
           ? t("oversiktDegSelv.motpartCtaBeskrivelse", {
-              land: soknad.utsendelseLand
-                ? t(`land.${soknad.utsendelseLand}`)
-                : t("oversiktDegSelv.motpartCtaUtlandetFallback"),
+              land: t(
+                soknad.utsendelseLand
+                  ? `land.${soknad.utsendelseLand}`
+                  : "oversiktDegSelv.motpartCtaUtlandetFallback",
+              ),
               fraDato: formatDato(
                 soknad.utsendingsperiode.fraDato,
                 i18n.language,

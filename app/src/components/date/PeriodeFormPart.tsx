@@ -12,7 +12,7 @@ import {
 /**
  * Props for PeriodeFormPart-komponenten
  */
-type PeriodeFormPartProps = {
+type PeriodeFormPartProperties = {
   /**
    * Skjemafeltnavn for periodeobjektet. Må være en nøstet sti som peker til et periodeobjekt
    * som inneholder fraDato og tilDato felter.
@@ -91,7 +91,7 @@ export function PeriodeFormPart({
   defaultTilDato,
   defaultTilMåned,
   ...datePickerOptions
-}: PeriodeFormPartProps) {
+}: PeriodeFormPartProperties) {
   const { t } = useTranslation();
   const { getValues } = useFormContext();
   const tilDatoRef = useRef<DatePickerFormPartHandle>(null);
