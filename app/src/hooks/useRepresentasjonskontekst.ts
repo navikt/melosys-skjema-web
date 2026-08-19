@@ -11,8 +11,7 @@ import {
  * ikke har tilgang til child-rutens validateSearch.
  */
 export function useRepresentasjonskontekst():
-  | Representasjonskontekst
-  | undefined {
+  Representasjonskontekst | undefined {
   const search = useSearch({ strict: false });
   const result = representasjonskontekstSchema.safeParse(search);
 

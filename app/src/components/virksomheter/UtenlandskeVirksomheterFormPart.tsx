@@ -37,8 +37,7 @@ import {
 import { useTranslateError } from "~/utils/translation.ts";
 
 type UtenlandskVirksomhetField = (
-  | UtenlandskVirksomhet
-  | UtenlandskVirksomhetMedAnsettelsesform
+  UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform
 ) & { id: string };
 
 interface UtenlandskeVirksomheterFormPartProps {
