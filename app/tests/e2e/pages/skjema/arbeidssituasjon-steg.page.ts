@@ -86,6 +86,20 @@ export class ArbeidssituasjonStegPage {
     });
   }
 
+  // --- Validation assertions ---
+
+  private harVaertILonnetArbeidFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
+    });
+  }
+
+  private skalJobbeForFlereVirksomheterFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.skalJobbeForFlereVirksomheter.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/arbeidssituasjon`);
   }
@@ -122,7 +136,7 @@ export class ArbeidssituasjonStegPage {
    * Opens the "Legg til utenlandsk virksomhet" modal with ansettelsesform
    * (since arbeidssituasjon uses includeAnsettelsesform=true).
    */
-  async leggTilUtenlandskVirksomhetMedAnsettelsesform(opts: {
+  async leggTilUtenlandskVirksomhetMedAnsettelsesform(options: {
     navn: string;
     vegnavnOgHusnummer: string;
     land: string;
@@ -136,24 +150,24 @@ export class ArbeidssituasjonStegPage {
 
     await dialog
       .getByLabel(t.utenlandskeVirksomheterFormPart.navnPaVirksomhet)
-      .fill(opts.navn);
+      .fill(options.navn);
     await dialog
       .getByLabel(
         t.utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks,
       )
-      .fill(opts.vegnavnOgHusnummer);
+      .fill(options.vegnavnOgHusnummer);
 
     await dialog
       .getByRole("combobox", {
         name: t.utenlandskeVirksomheterFormPart.land,
       })
-      .selectOption(opts.land);
+      .selectOption(options.land);
 
     const konsernGroup = dialog.getByRole("radiogroup", {
       name: t.utenlandskeVirksomheterFormPart
         .tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren,
     });
-    await (opts.tilhorerSammeKonsern
+    await (options.tilhorerSammeKonsern
       ? konsernGroup.getByRole("radio", { name: t.felles.ja }).click()
       : konsernGroup.getByRole("radio", { name: t.felles.nei }).click());
 
@@ -162,7 +176,7 @@ export class ArbeidssituasjonStegPage {
       name: t.utenlandskeVirksomheterFormPart.ansettelsesform,
     });
     await ansettelsesformGroup
-      .getByRole("radio", { name: opts.ansettelsesformLabel })
+      .getByRole("radio", { name: options.ansettelsesformLabel })
       .click();
 
     await dialog.getByRole("button", { name: t.felles.lagre }).click();
@@ -197,20 +211,6 @@ export class ArbeidssituasjonStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidssituasjon`,
     );
-  }
-
-  // --- Validation assertions ---
-
-  private harVaertILonnetArbeidFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
-    });
-  }
-
-  private skalJobbeForFlereVirksomheterFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.skalJobbeForFlereVirksomheter.label,
-    });
   }
 
   async assertDuMaSvarePaOmDuHarVertILonnetArbeidIsVisible() {

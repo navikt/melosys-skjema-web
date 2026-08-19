@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { slettUtkast } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
-interface AvbrytOgSlettKnappProps {
+interface AvbrytOgSlettKnappProperties {
   representasjonskontekst: Representasjonskontekst;
   skjemaId: string;
 }
@@ -15,7 +15,7 @@ interface AvbrytOgSlettKnappProps {
 export function AvbrytOgSlettKnapp({
   representasjonskontekst,
   skjemaId,
-}: AvbrytOgSlettKnappProps) {
+}: AvbrytOgSlettKnappProperties) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

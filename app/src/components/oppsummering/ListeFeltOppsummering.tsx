@@ -5,7 +5,7 @@ import type { ListeFeltDefinisjon } from "~/types/melosysSkjemaTypes.ts";
 
 import { formaterVerdi } from "./formaterVerdi.ts";
 
-interface ListeFeltOppsummeringProps {
+interface ListeFeltOppsummeringProperties {
   felt: ListeFeltDefinisjon;
   verdi: unknown[];
 }
@@ -13,7 +13,7 @@ interface ListeFeltOppsummeringProps {
 export function ListeFeltOppsummering({
   felt,
   verdi,
-}: ListeFeltOppsummeringProps) {
+}: ListeFeltOppsummeringProperties) {
   const { t, i18n } = useTranslation();
   if (!verdi || verdi.length === 0) return null;
 

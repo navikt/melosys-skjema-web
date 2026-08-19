@@ -40,18 +40,20 @@ function flattenPaLand(
   utsendelseLand?: LandKode,
 ): Record<string, unknown> | undefined {
   if (!paLand) return undefined;
-  const erFastArbeidssted =
+  const isErFastArbeidssted =
     paLand.fastEllerVekslendeArbeidssted === FastEllerVekslendeArbeidssted.FAST;
   return {
     navnPaVirksomhet: paLand.navnPaVirksomhet,
     fastEllerVekslendeArbeidssted: paLand.fastEllerVekslendeArbeidssted,
-    vegadresse: erFastArbeidssted
+    vegadresse: isErFastArbeidssted
       ? paLand.fastArbeidssted?.vegadresse
       : undefined,
-    nummer: erFastArbeidssted ? paLand.fastArbeidssted?.nummer : undefined,
-    postkode: erFastArbeidssted ? paLand.fastArbeidssted?.postkode : undefined,
-    bySted: erFastArbeidssted ? paLand.fastArbeidssted?.bySted : undefined,
-    land: erFastArbeidssted ? utsendelseLand : undefined,
+    nummer: isErFastArbeidssted ? paLand.fastArbeidssted?.nummer : undefined,
+    postkode: isErFastArbeidssted
+      ? paLand.fastArbeidssted?.postkode
+      : undefined,
+    bySted: isErFastArbeidssted ? paLand.fastArbeidssted?.bySted : undefined,
+    land: isErFastArbeidssted ? utsendelseLand : undefined,
     erHjemmekontor: paLand.erHjemmekontor,
   };
 }
@@ -67,15 +69,15 @@ function flattenVirksomheter(
 ): Record<string, unknown>[] | undefined {
   if (!virksomheter) return undefined;
 
-  const result: Record<string, unknown>[] = [];
-
-  for (const v of virksomheter.norskeVirksomheter ?? []) {
-    result.push({
+  const result: Record<string, unknown>[] = Array.from(
+    virksomheter.norskeVirksomheter ?? [],
+    (v) => ({
       __type: VirksomhetTypeKey.NORSK,
       organisasjonsnummer: v.organisasjonsnummer,
-    });
-  }
-  for (const v of virksomheter.utenlandskeVirksomheter ?? []) {
+    }),
+  );
+  const utenlandskeVirksomheter = virksomheter.utenlandskeVirksomheter ?? [];
+  for (const v of utenlandskeVirksomheter) {
     result.push({
       __type: VirksomhetTypeKey.UTENLANDSK,
       ...(v as unknown as Record<string, unknown>),
@@ -257,8 +259,8 @@ export function resolveSeksjoner(
 ): ResolvedSeksjon[] {
   return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {
     if (
-      options.skjulUtsendingsperiodeOgLand &&
-      seksjonNavn === "utsendingsperiodeOgLand"
+      seksjonNavn === "utsendingsperiodeOgLand" &&
+      options.skjulUtsendingsperiodeOgLand
     )
       return [];
     const seksjon = definisjon.seksjoner[seksjonNavn];

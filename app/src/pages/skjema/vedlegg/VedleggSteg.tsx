@@ -93,19 +93,22 @@ function VedleggStegContent({
   });
 
   useEffect(() => {
-    let cancelled = false;
-    hentVedlegg(skjema.id)
-      .then((vedlegg) => {
-        if (!cancelled) {
-          setEksisterendeVedlegg(vedlegg);
-          setHentVedleggFeil(false);
+    let isCancelled = false;
+    (async () => {
+      try {
+        const vedlegg = await hentVedlegg(skjema.id);
+        if (isCancelled) {
+          return;
         }
-      })
-      .catch(() => {
-        if (!cancelled) setHentVedleggFeil(true);
-      });
+
+        setEksisterendeVedlegg(vedlegg);
+        setHentVedleggFeil(false);
+      } catch {
+        if (!isCancelled) setHentVedleggFeil(true);
+      }
+    })();
     return () => {
-      cancelled = true;
+      isCancelled = true;
     };
   }, [skjema.id]);
 
@@ -131,7 +134,7 @@ function VedleggStegContent({
     vedleggItems.filter((v) => v.vedleggId !== undefined).length;
 
   const onSubmit = (data: VedleggStegFormData) => {
-    if (data.harAnnenDokumentasjon && antallVellykket === 0) {
+    if (antallVellykket === 0 && data.harAnnenDokumentasjon) {
       setManglerVedleggFeil(true);
       return;
     }
@@ -186,22 +189,26 @@ function VedleggStegContent({
     }));
 
     if (acceptedItems.length > 0) setManglerVedleggFeil(false);
-    setVedleggItems((prev) => [...prev, ...rejectedItems, ...acceptedItems]);
+    setVedleggItems((previous) => [
+      ...previous,
+      ...rejectedItems,
+      ...acceptedItems,
+    ]);
 
     for (const item of acceptedItems) {
-      lastOppVedlegg(skjema.id, item.fil)
-        .then((response) => {
-          setVedleggItems((prev) =>
-            prev.map((v) =>
+      (async () => {
+        try {
+          const response = await lastOppVedlegg(skjema.id, item.fil);
+          setVedleggItems((previous) =>
+            previous.map((v) =>
               v.id === item.id
                 ? { ...v, vedleggId: response.id, status: "idle" as const }
                 : v,
             ),
           );
-        })
-        .catch((error) => {
-          setVedleggItems((prev) =>
-            prev.map((v) =>
+        } catch (error) {
+          setVedleggItems((previous) =>
+            previous.map((v) =>
               v.id === item.id
                 ? {
                     ...v,
@@ -211,7 +218,8 @@ function VedleggStegContent({
                 : v,
             ),
           );
-        });
+        }
+      })();
     }
   };
 
@@ -219,29 +227,35 @@ function VedleggStegContent({
     const vedleggItem = vedleggItems.find((v) => v.id === vedleggItemId);
     setSlettVedleggFeil(false);
     if (vedleggItem?.vedleggId) {
-      slettVedlegg(skjema.id, vedleggItem.vedleggId)
-        .then(() => {
-          setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
-        })
-        .catch(() => {
+      (async () => {
+        try {
+          await slettVedlegg(skjema.id, vedleggItem.vedleggId!);
+          setVedleggItems((previous) =>
+            previous.filter((v) => v.id !== vedleggItemId),
+          );
+        } catch {
           setSlettVedleggFeil(true);
-        });
+        }
+      })();
     } else {
-      setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
+      setVedleggItems((previous) =>
+        previous.filter((v) => v.id !== vedleggItemId),
+      );
     }
   };
 
   const handleSlettEksisterende = (vedleggId: string) => {
     setSlettVedleggFeil(false);
-    slettVedlegg(skjema.id, vedleggId)
-      .then(() => {
-        setEksisterendeVedlegg((prev) =>
-          prev.filter((v) => v.id !== vedleggId),
+    (async () => {
+      try {
+        await slettVedlegg(skjema.id, vedleggId);
+        setEksisterendeVedlegg((previous) =>
+          previous.filter((v) => v.id !== vedleggId),
         );
-      })
-      .catch(() => {
+      } catch {
         setSlettVedleggFeil(true);
-      });
+      }
+    })();
   };
 
   return (

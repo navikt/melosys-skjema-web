@@ -60,6 +60,14 @@ export class TilleggsopplysningerStegPage {
     });
   }
 
+  // --- Validation assertions ---
+
+  private harFlereOpplysningerFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.harFlereOpplysningerTilSoknaden.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/tilleggsopplysninger`);
   }
@@ -96,14 +104,6 @@ export class TilleggsopplysningerStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/tilleggsopplysninger`,
     );
-  }
-
-  // --- Validation assertions ---
-
-  private harFlereOpplysningerFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.harFlereOpplysningerTilSoknaden.label,
-    });
   }
 
   async assertDuMaSvarePaOmDuHarFlereOpplysningerIsVisible() {

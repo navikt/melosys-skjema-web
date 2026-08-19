@@ -23,7 +23,7 @@ export function organisasjonsnummerHarGyldigFormat(orgnr: string): boolean {
 
   const siffer = [...orgnr].map(Number);
   const sum = MOD11_VEKTER.reduce(
-    (acc, vekt, i) => acc + (siffer[i] ?? 0) * vekt,
+    (accumulator, vekt, index) => accumulator + (siffer[index] ?? 0) * vekt,
     0,
   );
   const rest = sum % 11;

@@ -1,4 +1,6 @@
-/** Maks lengde for et formatert beløpsfelt (f.eks. "999 999 999 999" = 16 tegn) */
+/**
+Maks lengde for et formatert beløpsfelt (f.eks. "999 999 999 999" = 16 tegn)
+*/
 export const BELOP_MAX_LENGTH = 16;
 
 const belopFormatter = new Intl.NumberFormat("nb-NO", {
@@ -18,7 +20,7 @@ export function formaterBelopForVisning(value: string): string {
 
   const normalized = trimmed.replaceAll(/\s/g, "").replace(/[.,]\d*$/, "");
   if (!/^\d+$/.test(normalized)) return value;
-  const parsed = Number.parseInt(normalized, 10);
+  const parsed = Number(normalized);
 
   return belopFormatter.format(parsed);
 }
@@ -44,7 +46,7 @@ export function formaterBelop(value: string, sprak: string): string {
   return new Intl.NumberFormat(VISNINGS_LOCALE[sprak] ?? "nb-NO", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(Number.parseInt(normalized, 10));
+  }).format(Number(normalized));
 }
 
 /**

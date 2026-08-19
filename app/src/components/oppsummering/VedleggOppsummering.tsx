@@ -14,7 +14,7 @@ import {
   vedleggInnholdUrl,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
-interface VedleggOppsummeringProps {
+interface VedleggOppsummeringProperties {
   skjemaId: string;
   harAnnenDokumentasjon?: boolean;
   editHref?: string;
@@ -24,7 +24,7 @@ export function VedleggOppsummering({
   skjemaId,
   harAnnenDokumentasjon,
   editHref,
-}: VedleggOppsummeringProps) {
+}: VedleggOppsummeringProperties) {
   const { t } = useTranslation();
   const { getFelt } = useSkjemaDefinisjon();
   const [vedlegg, setVedlegg] = useState<VedleggDto[]>([]);
@@ -39,19 +39,22 @@ export function VedleggOppsummering({
     // Eksplisitt Nei skjuler vedlegg. Ja eller udefinert (legacy-skjemaer fra
     // før vedlegg-spørsmålet) henter og viser eventuelle filer.
     if (harAnnenDokumentasjon === false) return;
-    let cancelled = false;
-    hentVedlegg(skjemaId)
-      .then((v) => {
-        if (!cancelled) {
-          setVedlegg(v);
-          setHentVedleggFeil(false);
+    let isCancelled = false;
+    (async () => {
+      try {
+        const v = await hentVedlegg(skjemaId);
+        if (isCancelled) {
+          return;
         }
-      })
-      .catch(() => {
-        if (!cancelled) setHentVedleggFeil(true);
-      });
+
+        setVedlegg(v);
+        setHentVedleggFeil(false);
+      } catch {
+        if (!isCancelled) setHentVedleggFeil(true);
+      }
+    })();
     return () => {
-      cancelled = true;
+      isCancelled = true;
     };
   }, [skjemaId, harAnnenDokumentasjon]);
 

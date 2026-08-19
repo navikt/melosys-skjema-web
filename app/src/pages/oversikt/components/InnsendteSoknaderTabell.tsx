@@ -29,7 +29,7 @@ import {
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { formatDato } from "~/utils/datoformat.ts";
 
-interface InnsendteSoknaderTabellProps {
+interface InnsendteSoknaderTabellProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
@@ -67,9 +67,11 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
     case MotpartStatus.VENTER: {
       return (
         <Tag size="small" variant="warning">
-          {soknad.skjemadel === Skjemadel.ARBEIDSGIVERS_DEL
-            ? t("oversiktFelles.historikkStatusVenterArbeidstakersDel")
-            : t("oversiktFelles.historikkStatusVenterArbeidsgiversDel")}
+          {t(
+            soknad.skjemadel === Skjemadel.ARBEIDSGIVERS_DEL
+              ? "oversiktFelles.historikkStatusVenterArbeidstakersDel"
+              : "oversiktFelles.historikkStatusVenterArbeidsgiversDel",
+          )}
         </Tag>
       );
     }
@@ -88,7 +90,7 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
  */
 export function InnsendteSoknaderTabell({
   representasjonskontekst,
-}: InnsendteSoknaderTabellProps) {
+}: InnsendteSoknaderTabellProperties) {
   const { t, i18n } = useTranslation();
 
   // State management
@@ -144,11 +146,11 @@ export function InnsendteSoknaderTabell({
 
     const sorteringsFelt = sortKey.toUpperCase() as SorteringsFelt;
 
-    setSort((prevSort) => ({
+    setSort((previousSort) => ({
       orderBy: sorteringsFelt,
       direction:
-        prevSort?.orderBy === sorteringsFelt &&
-        prevSort.direction === Sorteringsretning.ASC
+        previousSort?.orderBy === sorteringsFelt &&
+        previousSort.direction === Sorteringsretning.ASC
           ? Sorteringsretning.DESC
           : Sorteringsretning.ASC,
     }));
@@ -187,7 +189,7 @@ export function InnsendteSoknaderTabell({
 
   // Skjul kun hvis ingen søknader finnes og det ikke er et aktivt søk
   // Når det er et aktivt søk, vis tabellen med "ingen resultater"-melding
-  if (!data || (data.totaltAntall === 0 && !aktivtSok)) {
+  if (!data || (!aktivtSok && data.totaltAntall === 0)) {
     return null;
   }
 

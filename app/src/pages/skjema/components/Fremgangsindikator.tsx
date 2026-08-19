@@ -18,7 +18,7 @@ export interface StegIkon {
   ariaLabel: string;
 }
 
-type FremgangsindikatorProps = {
+type FremgangsindikatorProperties = {
   aktivtSteg: number;
   stegRekkefolge: StegRekkefolgeItem[];
   className?: string;
@@ -28,7 +28,7 @@ export const Fremgangsindikator = ({
   aktivtSteg,
   stegRekkefolge,
   className,
-}: FremgangsindikatorProps) => {
+}: FremgangsindikatorProperties) => {
   const { t } = useTranslation();
   return (
     <FormProgress
@@ -57,7 +57,7 @@ export const Fremgangsindikator = ({
   );
 };
 
-type FremgangsindikatorStegProps = Omit<
+type FremgangsindikatorStegProperties = Omit<
   React.ComponentProps<typeof FormProgress.Step>,
   "children"
 > & { children: ReactNode };
@@ -71,6 +71,6 @@ type FremgangsindikatorStegProps = Omit<
 function FremgangsindikatorSteg({
   children,
   ...rest
-}: FremgangsindikatorStegProps) {
+}: FremgangsindikatorStegProperties) {
   return <FormProgress.Step {...rest}>{children as string}</FormProgress.Step>;
 }

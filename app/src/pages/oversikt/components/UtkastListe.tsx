@@ -17,7 +17,7 @@ import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { formatDato } from "~/utils/datoformat.ts";
 
-interface UtkastListeProps {
+interface UtkastListeProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
@@ -26,7 +26,9 @@ interface UtkastListeProps {
  * Viser liste over påbegynte søknader basert på representasjonskontekst.
  * Skjules hvis det ikke finnes noen utkast.
  */
-export function UtkastListe({ representasjonskontekst }: UtkastListeProps) {
+export function UtkastListe({
+  representasjonskontekst,
+}: UtkastListeProperties) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -123,10 +125,12 @@ export function UtkastListe({ representasjonskontekst }: UtkastListeProps) {
                     navigate({ to: "/skjema/$id", params: { id: item.id } })
                   }
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      navigate({ to: "/skjema/$id", params: { id: item.id } });
+                    if (!(e.key === "Enter" || e.key === " ")) {
+                      return;
                     }
+
+                    e.preventDefault();
+                    navigate({ to: "/skjema/$id", params: { id: item.id } });
                   }}
                   padding="space-16"
                   role="button"

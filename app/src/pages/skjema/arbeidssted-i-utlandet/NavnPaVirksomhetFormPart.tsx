@@ -4,7 +4,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-type NavnPaVirksomhetFormPartProps = {
+type NavnPaVirksomhetFormPartProperties = {
   formFieldName: string;
   className?: string;
 };
@@ -12,7 +12,7 @@ type NavnPaVirksomhetFormPartProps = {
 export function NavnPaVirksomhetFormPart({
   formFieldName,
   className,
-}: NavnPaVirksomhetFormPartProps) {
+}: NavnPaVirksomhetFormPartProperties) {
   const translateError = useTranslateError();
   const { control } = useFormContext();
   const { getFelt } = useSkjemaDefinisjon();

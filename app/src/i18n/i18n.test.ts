@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-iterator-to-array */
 import { describe, expect, it } from "vitest";
 
 import { resources } from "./i18n.ts";
@@ -7,10 +8,10 @@ import { resources } from "./i18n.ts";
  * hull oppdages først i produksjon. Denne testen krever identiske nøkkelsett.
  */
 
-function flattenEntries(obj: unknown, prefix = ""): Array<[string, string]> {
-  if (typeof obj === "string") return [[prefix, obj]];
-  if (typeof obj === "object" && obj !== null) {
-    return Object.entries(obj).flatMap(([key, value]) =>
+function flattenEntries(object: unknown, prefix = ""): Array<[string, string]> {
+  if (typeof object === "string") return [[prefix, object]];
+  if (typeof object === "object" && object !== null) {
+    return Object.entries(object).flatMap(([key, value]) =>
       flattenEntries(value, prefix ? `${prefix}.${key}` : key),
     );
   }
@@ -18,9 +19,10 @@ function flattenEntries(obj: unknown, prefix = ""): Array<[string, string]> {
 }
 
 function placeholders(tekst: string): string[] {
-  return [...tekst.matchAll(/\{\{\s*(\w+)\s*\}\}/g)]
-    .map((m) => m[1]!)
-    .toSorted();
+  return Array.from(
+    tekst.matchAll(/\{\{\s*(\w+)\s*\}\}/g),
+    (m) => m[1]!,
+  ).toSorted((a, b) => a.localeCompare(b));
 }
 
 describe("i18n-ressursene", () => {
@@ -29,9 +31,13 @@ describe("i18n-ressursene", () => {
   const enEntries = new Map(flattenEntries(resources.en.translation));
 
   it("nb, nn og en har identiske nøkkelsett", () => {
-    const nbKeys = [...nbEntries.keys()].toSorted();
-    expect([...nnEntries.keys()].toSorted()).toEqual(nbKeys);
-    expect([...enEntries.keys()].toSorted()).toEqual(nbKeys);
+    const nbKeys = [...nbEntries.keys()].toSorted((a, b) => a.localeCompare(b));
+    expect(
+      [...nnEntries.keys()].toSorted((a, b) => a.localeCompare(b)),
+    ).toEqual(nbKeys);
+    expect(
+      [...enEntries.keys()].toSorted((a, b) => a.localeCompare(b)),
+    ).toEqual(nbKeys);
   });
 
   it("ingen tomme oversettelser", () => {

@@ -1,7 +1,7 @@
 import { CheckmarkCircleFillIcon } from "@navikt/aksel-icons";
 import { BodyShort, HStack } from "@navikt/ds-react";
 
-interface ValgtOrganisasjonProps {
+interface ValgtOrganisasjonProperties {
   valgtOrganisasjon: {
     navn?: string;
     orgnr: string;
@@ -10,7 +10,7 @@ interface ValgtOrganisasjonProps {
 
 export function ValgtOrganisasjon({
   valgtOrganisasjon,
-}: ValgtOrganisasjonProps) {
+}: ValgtOrganisasjonProperties) {
   return (
     <HStack align="center" className="mt-4" gap="space-8">
       <CheckmarkCircleFillIcon

@@ -32,11 +32,11 @@ import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 import { formatDato } from "~/utils/datoformat.ts";
 import { toSprak } from "~/utils/languages.ts";
 
-interface InnsendtSkjemaPageProps {
+interface InnsendtSkjemaPageProperties {
   skjemaId: string;
 }
 
-export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProps) {
+export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProperties) {
   const { i18n, t } = useTranslation();
   const sprak = toSprak(i18n.language);
   const {

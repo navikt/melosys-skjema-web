@@ -37,13 +37,13 @@ type ModalFormData = z.input<typeof modalSchema>;
 type NorskVirksomhetFormData = z.infer<typeof norskVirksomhetSchema>;
 type NorskVirksomhetField = NorskVirksomhetFormData & { id: string };
 
-interface NorskeVirksomheterFormPartProps {
+interface NorskeVirksomheterFormPartProperties {
   fieldName: string;
 }
 
 export function NorskeVirksomheterFormPart({
   fieldName,
-}: NorskeVirksomheterFormPartProps) {
+}: NorskeVirksomheterFormPartProperties) {
   const { control } = useFormContext();
   const { t } = useTranslation();
 
@@ -93,7 +93,7 @@ export function NorskeVirksomheterFormPart({
   );
 }
 
-type ValgteNorskeVirksomheterProps = {
+type ValgteNorskeVirksomheterProperties = {
   virksomheter: Array<NorskVirksomhetField>;
   update: (index: number, data: NorskVirksomhetFormData) => void;
   remove: (index: number) => void;
@@ -103,10 +103,14 @@ function ValgteNorskeVirksomheter({
   virksomheter,
   update,
   remove,
-}: ValgteNorskeVirksomheterProps) {
+}: ValgteNorskeVirksomheterProperties) {
   const { t } = useTranslation();
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  if (virksomheter.length === 0) {
+    return null;
+  }
 
   const lukkEditModal = () => {
     setEditingIndex(null);
@@ -115,10 +119,6 @@ function ValgteNorskeVirksomheter({
   const openEditModal = (index: number) => {
     setEditingIndex(index);
   };
-
-  if (virksomheter.length === 0) {
-    return null;
-  }
 
   return (
     <>
@@ -158,7 +158,7 @@ function ValgteNorskeVirksomheter({
   );
 }
 
-interface LeggTilEllerEndreNorskVirksomhetModalContentProps {
+interface LeggTilEllerEndreNorskVirksomhetModalContentProperties {
   onSubmit: (data: NorskVirksomhetFormData) => void;
   onCancel: () => void;
   virksomhet?: NorskVirksomhetFormData;
@@ -168,7 +168,7 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
   onSubmit,
   onCancel,
   virksomhet,
-}: LeggTilEllerEndreNorskVirksomhetModalContentProps) {
+}: LeggTilEllerEndreNorskVirksomhetModalContentProperties) {
   const { t } = useTranslation();
 
   const modalForm = useForm<ModalFormData>({
@@ -202,7 +202,7 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
   );
 }
 
-interface NorskVirksomhetRowProps {
+interface NorskVirksomhetRowProperties {
   virksomhet: NorskVirksomhetField;
   onRemove: () => void;
   onEdit: () => void;
@@ -212,7 +212,7 @@ function NorskVirksomhetRow({
   virksomhet,
   onRemove,
   onEdit,
-}: NorskVirksomhetRowProps) {
+}: NorskVirksomhetRowProperties) {
   return (
     <Table.Row>
       <Table.HeaderCell>

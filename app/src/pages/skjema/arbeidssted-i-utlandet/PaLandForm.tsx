@@ -16,11 +16,11 @@ import { NavnPaVirksomhetFormPart } from "./NavnPaVirksomhetFormPart.tsx";
 
 type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
-interface PaLandFormProps {
+interface PaLandFormProperties {
   utsendelseLand?: LandKode;
 }
 
-export function PaLandForm({ utsendelseLand }: PaLandFormProps) {
+export function PaLandForm({ utsendelseLand }: PaLandFormProperties) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const { getSeksjon } = useSkjemaDefinisjon();

@@ -5,8 +5,7 @@ import { normaliserBelopForApi } from "~/utils/belopFormat.ts";
 function erPositivtBelop(belop?: string): boolean {
   if (!belop) return false;
   const normalized = normaliserBelopForApi(belop);
-  if (!/^[1-9]\d*$/.test(normalized)) return false;
-  return true;
+  return !!/^[1-9]\d*$/.test(normalized);
 }
 
 /**
@@ -19,7 +18,7 @@ export function skalInkludereLoennsinntekt(
   harNorskVirksomhet: boolean,
   harUtenlandskVirksomhet: boolean,
 ): boolean {
-  return !(erSkattepliktig && harNorskVirksomhet && !harUtenlandskVirksomhet);
+  return !(erSkattepliktig && harNorskVirksomhet) || harUtenlandskVirksomhet;
 }
 
 type SchemaData = z.input<typeof baseSchema>;

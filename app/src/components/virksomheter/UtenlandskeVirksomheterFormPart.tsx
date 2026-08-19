@@ -40,7 +40,7 @@ type UtenlandskVirksomhetField = (
   UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform
 ) & { id: string };
 
-interface UtenlandskeVirksomheterFormPartProps {
+interface UtenlandskeVirksomheterFormPartProperties {
   fieldName: string;
   includeAnsettelsesform?: boolean;
 }
@@ -48,7 +48,7 @@ interface UtenlandskeVirksomheterFormPartProps {
 export function UtenlandskeVirksomheterFormPart({
   fieldName,
   includeAnsettelsesform = false,
-}: UtenlandskeVirksomheterFormPartProps) {
+}: UtenlandskeVirksomheterFormPartProperties) {
   const { control } = useFormContext();
   const { t } = useTranslation();
 
@@ -100,7 +100,7 @@ export function UtenlandskeVirksomheterFormPart({
   );
 }
 
-type ValgteUtenlandskeVirksomheterProps = {
+type ValgteUtenlandskeVirksomheterProperties = {
   virksomheter: Array<UtenlandskVirksomhetField>;
   update: (
     index: number,
@@ -113,10 +113,14 @@ function ValgteUtenlandskeVirksomheter({
   virksomheter,
   update,
   remove,
-}: ValgteUtenlandskeVirksomheterProps) {
+}: ValgteUtenlandskeVirksomheterProperties) {
   const { t } = useTranslation();
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  if (virksomheter.length === 0) {
+    return null;
+  }
 
   const lukkEditModal = () => {
     setEditingIndex(null);
@@ -126,13 +130,9 @@ function ValgteUtenlandskeVirksomheter({
     setEditingIndex(index);
   };
 
-  if (virksomheter.length === 0) {
-    return null;
-  }
-
   const virksomhetSomRedigeres =
     editingIndex === null ? undefined : virksomheter[editingIndex];
-  const includeAnsettelsesform =
+  const isIncludeAnsettelsesform =
     virksomhetSomRedigeres !== undefined &&
     "ansettelsesform" in virksomhetSomRedigeres;
 
@@ -166,7 +166,7 @@ function ValgteUtenlandskeVirksomheter({
       >
         {editingIndex !== null && (
           <LeggTilEllerEndreUtenlandskVirksomhetModalContent
-            includeAnsettelsesform={includeAnsettelsesform}
+            includeAnsettelsesform={isIncludeAnsettelsesform}
             onCancel={lukkEditModal}
             onSubmit={(data) => {
               update(editingIndex, data);
@@ -180,7 +180,7 @@ function ValgteUtenlandskeVirksomheter({
   );
 }
 
-interface LeggTilEllerEndreUtenlandskVirksomhetModalContentProps {
+interface LeggTilEllerEndreUtenlandskVirksomhetModalContentProperties {
   onSubmit: (
     data: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform,
   ) => void;
@@ -194,7 +194,7 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
   onCancel,
   virksomhet,
   includeAnsettelsesform,
-}: LeggTilEllerEndreUtenlandskVirksomhetModalContentProps) {
+}: LeggTilEllerEndreUtenlandskVirksomhetModalContentProperties) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
 
@@ -333,7 +333,7 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
   );
 }
 
-interface UtenlandskVirksomhetRowProps {
+interface UtenlandskVirksomhetRowProperties {
   virksomhet: UtenlandskVirksomhetField;
   onRemove: () => void;
   onEdit: () => void;
@@ -343,7 +343,7 @@ function UtenlandskVirksomhetRow({
   virksomhet,
   onRemove,
   onEdit,
-}: UtenlandskVirksomhetRowProps) {
+}: UtenlandskVirksomhetRowProperties) {
   return (
     <Table.ExpandableRow
       content={

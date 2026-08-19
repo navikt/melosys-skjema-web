@@ -22,11 +22,13 @@ import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { ValideringError } from "~/utils/valideringUtils.ts";
 
-interface OversiktPageProps {
+interface OversiktPageProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
-export function OversiktPage({ representasjonskontekst }: OversiktPageProps) {
+export function OversiktPage({
+  representasjonskontekst,
+}: OversiktPageProperties) {
   const { t } = useTranslation();
 
   const isRadgiver =

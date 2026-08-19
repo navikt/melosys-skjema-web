@@ -140,6 +140,20 @@ export class SkatteforholdOgInntektStegPage {
     });
   }
 
+  // --- Validation assertions ---
+
+  private erSkattepliktigFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label,
+    });
+  }
+
+  private mottarPengestotteFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.mottarPengestotteFraAnnetEosLandEllerSveits.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/skatteforhold-og-inntekt`);
   }
@@ -178,20 +192,6 @@ export class SkatteforholdOgInntektStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/skatteforhold-og-inntekt`,
     );
-  }
-
-  // --- Validation assertions ---
-
-  private erSkattepliktigFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.erSkattepliktigTilNorgeIHeleutsendingsperioden.label,
-    });
-  }
-
-  private mottarPengestotteFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.mottarPengestotteFraAnnetEosLandEllerSveits.label,
-    });
   }
 
   async assertDuMaSvarePaOmDuErSkattepliktigIsVisible() {

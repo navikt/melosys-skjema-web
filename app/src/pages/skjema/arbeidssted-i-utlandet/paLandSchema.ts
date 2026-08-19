@@ -5,6 +5,13 @@ import {
   FastEllerVekslendeArbeidssted,
 } from "~/types/melosysSkjemaTypes.ts";
 
+const fastArbeidsstedSchema = z.object({
+  vegadresse: z.string().optional(),
+  nummer: z.string().optional(),
+  postkode: z.string().optional(),
+  bySted: z.string().optional(),
+});
+
 export const paLandSchema = z.object({
   arbeidsstedType: z.literal(ArbeidsstedType.PA_LAND),
   paLand: z
@@ -16,14 +23,7 @@ export const paLandSchema = z.object({
         error: "arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende",
       }),
       // FAST fields
-      fastArbeidssted: z
-        .object({
-          vegadresse: z.string().optional(),
-          nummer: z.string().optional(),
-          postkode: z.string().optional(),
-          bySted: z.string().optional(),
-        })
-        .optional(),
+      fastArbeidssted: fastArbeidsstedSchema.optional(),
       erHjemmekontor: z.boolean({
         error: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
       }),

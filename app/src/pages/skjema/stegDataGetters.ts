@@ -219,6 +219,6 @@ export function finnManglendeSteg(
     .filter((steg) => !harUtfyltSteg(skjema, steg.key))
     .map((steg) => ({
       title: steg.title,
-      href: steg.route.replace("$id", skjemaId),
+      href: steg.route.replaceAll("$id", () => skjemaId),
     }));
 }

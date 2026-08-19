@@ -12,7 +12,7 @@ import {
 /**
  * Props for PeriodeFormPart-komponenten
  */
-type PeriodeFormPartProps = {
+type PeriodeFormPartProperties = {
   /**
    * Skjemafeltnavn for periodeobjektet. Må være en nøstet sti som peker til et periodeobjekt
    * som inneholder fraDato og tilDato felter.
@@ -91,16 +91,16 @@ export function PeriodeFormPart({
   defaultTilDato,
   defaultTilMåned,
   ...datePickerOptions
-}: PeriodeFormPartProps) {
+}: PeriodeFormPartProperties) {
   const { t } = useTranslation();
   const { getValues } = useFormContext();
-  const tilDatoRef = useRef<DatePickerFormPartHandle>(null);
+  const tilDatoReference = useRef<DatePickerFormPartHandle>(null);
 
   // Tøm "til dato" hvis "fra dato" settes etter den – uten å vise valideringsfeil.
   const handleFraDatoChange = (fraDato?: Date) => {
     const tilDato = getValues(`${formFieldName}.tilDato`);
     if (fraDato && tilDato && isAfter(fraDato, new Date(tilDato))) {
-      tilDatoRef.current?.clearWithoutValidation();
+      tilDatoReference.current?.clearWithoutValidation();
     }
   };
 
@@ -124,7 +124,7 @@ export function PeriodeFormPart({
         description={tilDatoDescription}
         formFieldName={`${formFieldName}.tilDato`}
         label={tilDatoLabel ?? t("periode.tilDato")}
-        ref={tilDatoRef}
+        ref={tilDatoReference}
         {...datePickerOptions}
       />
     </div>

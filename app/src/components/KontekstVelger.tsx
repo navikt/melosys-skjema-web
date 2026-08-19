@@ -81,7 +81,7 @@ const KONTEKST_CONFIG: Record<
 export function KontekstVelger() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonReference = useRef<HTMLButtonElement>(null);
   const representasjonskontekst = useRepresentasjonskontekst();
 
   // Slå opp firmanavn for RADGIVER-representasjonskontekst
@@ -106,6 +106,18 @@ export function KontekstVelger() {
     if (isDegSelv) {
       return null;
     }
+    if (
+      organisasjonData &&
+      representasjonskontekst.representasjonstype ===
+        Representasjonstype.RADGIVER
+    ) {
+      return truncateText(
+        organisasjonData.juridiskEnhet.navn ??
+          representasjonskontekst.radgiverOrgnr ??
+          "",
+        23,
+      );
+    }
     const config =
       KONTEKST_CONFIG[
         representasjonskontekst.representasjonstype as Exclude<
@@ -115,18 +127,6 @@ export function KontekstVelger() {
           | Representasjonstype.RADGIVER_MED_FULLMAKT
         >
       ];
-    if (
-      representasjonskontekst.representasjonstype ===
-        Representasjonstype.RADGIVER &&
-      organisasjonData
-    ) {
-      return truncateText(
-        organisasjonData.juridiskEnhet.navn ??
-          representasjonskontekst.radgiverOrgnr ??
-          "",
-        23,
-      );
-    }
     return t(config.tekstKey);
   };
 
@@ -164,7 +164,7 @@ export function KontekstVelger() {
         <Button
           aria-label={t("kontekstVelger.byttKontekstAriaLabel")}
           onClick={() => setIsOpen(!isOpen)}
-          ref={buttonRef}
+          ref={buttonReference}
           variant="secondary"
           size="small"
         >
@@ -175,7 +175,7 @@ export function KontekstVelger() {
         </Button>
       </HStack>
       <Popover
-        anchorEl={buttonRef.current}
+        anchorEl={buttonReference.current}
         onClose={() => setIsOpen(false)}
         open={isOpen}
         placement="bottom-end"

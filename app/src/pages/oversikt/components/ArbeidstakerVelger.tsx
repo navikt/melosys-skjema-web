@@ -30,7 +30,7 @@ import { SoknadStarterFormData } from "./soknadStarterSchema.ts";
 
 const FNR_LENGTH = 11;
 
-interface ArbeidstakerVelgerProps {
+interface ArbeidstakerVelgerProperties {
   visKunMedFullmakt?: boolean;
   erAnnenPerson?: boolean;
 }
@@ -45,10 +45,10 @@ interface VerifisertPerson {
 const arbeidstakerSchema = z.object({
   fnr: z
     .string()
-    .refine((val) => val.length === FNR_LENGTH && /^\d+$/.test(val), {
+    .refine((value) => value.length === FNR_LENGTH && /^\d+$/.test(value), {
       error: "oversiktFelles.arbeidstakerFnrUgyldig",
     }),
-  etternavn: z.string().refine((val) => val.trim().length > 0, {
+  etternavn: z.string().refine((value) => value.trim().length > 0, {
     error: "oversiktFelles.arbeidstakerFulltNavnTom",
   }),
 });
@@ -64,7 +64,7 @@ const arbeidstakerSchema = z.object({
 export function ArbeidstakerVelger({
   visKunMedFullmakt = false,
   erAnnenPerson = false,
-}: ArbeidstakerVelgerProps) {
+}: ArbeidstakerVelgerProperties) {
   const { t } = useTranslation();
 
   const {
@@ -72,7 +72,7 @@ export function ArbeidstakerVelger({
     formState: { errors },
   } = useFormContext<SoknadStarterFormData>();
 
-  const harFeil = !!errors.arbeidstaker;
+  const isHarFeil = !!errors.arbeidstaker;
   const skalFylleUtForArbeidstaker = useWatch<SoknadStarterFormData>({
     name: "skalFylleUtForArbeidstaker",
   });
@@ -105,13 +105,13 @@ export function ArbeidstakerVelger({
     }),
   );
 
-  const harValgtMedFullmakt = selectedPersonFnr !== undefined;
+  const isHarValgtMedFullmakt = selectedPersonFnr !== undefined;
 
   // For ARBEIDSGIVER/RADGIVER: radioen styrer hva som vises
-  const visRadio = !erAnnenPerson && !visKunMedFullmakt;
+  const isVisRadio = !erAnnenPerson && !visKunMedFullmakt;
   const visMedFullmakt =
     erAnnenPerson || visKunMedFullmakt || skalFylleUtForArbeidstaker === true;
-  const visUtenFullmakt =
+  const isVisUtenFullmakt =
     !visKunMedFullmakt &&
     !erAnnenPerson &&
     skalFylleUtForArbeidstaker === false;
@@ -219,13 +219,13 @@ export function ArbeidstakerVelger({
         </Heading>
       )}
       <Box
-        borderColor={harFeil ? "danger" : "info"}
+        borderColor={isHarFeil ? "danger" : "info"}
         borderWidth="0 0 0 4"
         paddingInline="space-16"
       >
         <VStack gap="space-24">
           {/* Radio for ARBEIDSGIVER/RADGIVER */}
-          {visRadio && (
+          {isVisRadio && (
             <RadioGroupJaNeiFormPart
               formFieldName="skalFylleUtForArbeidstaker"
               legend={t("oversiktFelles.skalFylleUtForArbeidstakerLabel")}
@@ -238,20 +238,24 @@ export function ArbeidstakerVelger({
               {personerMedFullmakt.length > 0 && (
                 <>
                   <Label as="span" className="navds-form-field__label">
-                    {erAnnenPerson
-                      ? t("oversiktAnnenPerson.personVelgerLabel")
-                      : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+                    {t(
+                      erAnnenPerson
+                        ? "oversiktAnnenPerson.personVelgerLabel"
+                        : "oversiktFelles.arbeidstakerMedFullmaktLabel",
+                    )}
                   </Label>
                   <BodyShort className="navds-form-field__description">
-                    {erAnnenPerson
-                      ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
-                      : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
+                    {t(
+                      erAnnenPerson
+                        ? "oversiktAnnenPerson.personVelgerBeskrivelse"
+                        : "oversiktFelles.arbeidstakerMedFullmaktBeskrivelse",
+                    )}
                   </BodyShort>
                 </>
               )}
 
               <div className="max-w-lg w-full">
-                {harValgtMedFullmakt ? (
+                {isHarValgtMedFullmakt ? (
                   <Box
                     background="default"
                     borderColor="neutral-subtle"
@@ -307,11 +311,11 @@ export function ArbeidstakerVelger({
                     }
                     hideLabel
                     isLoading={isLoading}
-                    label={
+                    label={t(
                       erAnnenPerson
-                        ? t("oversiktAnnenPerson.personVelgerLabel")
-                        : t("oversiktFelles.arbeidstakerMedFullmaktLabel")
-                    }
+                        ? "oversiktAnnenPerson.personVelgerLabel"
+                        : "oversiktFelles.arbeidstakerMedFullmaktLabel",
+                    )}
                     onToggleSelected={handleComboboxChange}
                     options={comboboxOptions}
                     placeholder={t(
@@ -325,7 +329,7 @@ export function ArbeidstakerVelger({
           )}
 
           {/* Uten fullmakt */}
-          {visUtenFullmakt && (
+          {isVisUtenFullmakt && (
             <div className="max-w-lg w-full">
               {verifisertPerson ? (
                 <Box

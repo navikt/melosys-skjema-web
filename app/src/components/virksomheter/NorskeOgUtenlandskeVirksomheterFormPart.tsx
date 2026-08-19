@@ -5,7 +5,7 @@ import { NorskeVirksomheterFormPart } from "~/components/virksomheter/NorskeVirk
 import { UtenlandskeVirksomheterFormPart } from "~/components/virksomheter/UtenlandskeVirksomheterFormPart.tsx";
 import { useTranslateError } from "~/utils/translation.ts";
 
-interface NorskeOgUtenlandskeVirksomheterFormPartProps {
+interface NorskeOgUtenlandskeVirksomheterFormPartProperties {
   fieldName: string;
   label?: string;
   description?: string;
@@ -17,7 +17,7 @@ export function NorskeOgUtenlandskeVirksomheterFormPart({
   label,
   description,
   includeAnsettelsesform = false,
-}: NorskeOgUtenlandskeVirksomheterFormPartProps) {
+}: NorskeOgUtenlandskeVirksomheterFormPartProperties) {
   const {
     formState: { errors },
   } = useFormContext();
