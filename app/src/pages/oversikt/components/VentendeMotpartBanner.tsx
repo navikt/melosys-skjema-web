@@ -29,16 +29,16 @@ export function VentendeMotpartBanner({
   representasjonskontekst,
 }: VentendeMotpartBannerProperties) {
   const ctaAktiv = useFeatureToggle(MOTPART_CTA) ?? false;
-  const isErDegSelv =
+  const erDegSelv =
     representasjonskontekst.representasjonstype ===
     Representasjonstype.DEG_SELV;
 
   const { data } = useQuery({
     ...getVentendeMotpartSoknaderQuery(),
-    enabled: ctaAktiv && isErDegSelv,
+    enabled: ctaAktiv && erDegSelv,
   });
 
-  if (!ctaAktiv || !isErDegSelv || !data || data.soknader.length === 0) {
+  if (!ctaAktiv || !erDegSelv || !data || data.soknader.length === 0) {
     return null;
   }
 

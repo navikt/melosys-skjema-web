@@ -94,13 +94,13 @@ export function PeriodeFormPart({
 }: PeriodeFormPartProperties) {
   const { t } = useTranslation();
   const { getValues } = useFormContext();
-  const tilDatoReference = useRef<DatePickerFormPartHandle>(null);
+  const tilDatoRef = useRef<DatePickerFormPartHandle>(null);
 
   // Tøm "til dato" hvis "fra dato" settes etter den – uten å vise valideringsfeil.
   const handleFraDatoChange = (fraDato?: Date) => {
     const tilDato = getValues(`${formFieldName}.tilDato`);
     if (fraDato && tilDato && isAfter(fraDato, new Date(tilDato))) {
-      tilDatoReference.current?.clearWithoutValidation();
+      tilDatoRef.current?.clearWithoutValidation();
     }
   };
 
@@ -124,7 +124,7 @@ export function PeriodeFormPart({
         description={tilDatoDescription}
         formFieldName={`${formFieldName}.tilDato`}
         label={tilDatoLabel ?? t("periode.tilDato")}
-        ref={tilDatoReference}
+        ref={tilDatoRef}
         {...datePickerOptions}
       />
     </div>

@@ -63,7 +63,7 @@ export function SoknadStarter({
 }: SoknadStarterProperties) {
   const { t } = useTranslation();
 
-  const isSkalHenteArbeidsgivere =
+  const skalHenteArbeidsgivere =
     representasjonskontekst.representasjonstype ===
       Representasjonstype.RADGIVER ||
     representasjonskontekst.representasjonstype ===
@@ -80,7 +80,7 @@ export function SoknadStarter({
     isError: isErrorArbeidsgivere,
   } = useQuery({
     ...listAltinnTilganger(),
-    enabled: isSkalHenteArbeidsgivere,
+    enabled: skalHenteArbeidsgivere,
     retry: false,
   });
 
@@ -102,7 +102,7 @@ export function SoknadStarter({
     (isLoadingUserInfo &&
       representasjonskontekst.representasjonstype ===
         Representasjonstype.DEG_SELV) ||
-    (isLoadingArbeidsgivere && isSkalHenteArbeidsgivere) ||
+    (isLoadingArbeidsgivere && skalHenteArbeidsgivere) ||
     (isLoadingRadgiver &&
       representasjonskontekst.representasjonstype ===
         Representasjonstype.RADGIVER)
@@ -112,7 +112,7 @@ export function SoknadStarter({
 
   // Feil mot Altinn uten cachede arbeidsgivere: vis feil i stedet for tom velger.
   if (
-    isSkalHenteArbeidsgivere &&
+    skalHenteArbeidsgivere &&
     isErrorArbeidsgivere &&
     (arbeidsgivere?.length ?? 0) === 0
   ) {
@@ -186,7 +186,7 @@ function SoknadStarterContent({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const boxReference = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!autoFocusArbeidsgiver) {
       return;
@@ -195,7 +195,7 @@ function SoknadStarterContent({
     const foretrekkerRedusertBevegelse = globalThis.matchMedia?.(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    boxReference.current?.scrollIntoView({
+    boxRef.current?.scrollIntoView({
       behavior: foretrekkerRedusertBevegelse ? "auto" : "smooth",
       block: "start",
     });
@@ -326,7 +326,7 @@ function SoknadStarterContent({
     <FormProvider {...formMethods}>
       <Box
         background="info-soft"
-        ref={boxReference}
+        ref={boxRef}
         borderColor="neutral-subtle"
         borderRadius="12"
         borderWidth="1"

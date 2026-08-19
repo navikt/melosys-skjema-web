@@ -40,20 +40,18 @@ function flattenPaLand(
   utsendelseLand?: LandKode,
 ): Record<string, unknown> | undefined {
   if (!paLand) return undefined;
-  const isErFastArbeidssted =
+  const erFastArbeidssted =
     paLand.fastEllerVekslendeArbeidssted === FastEllerVekslendeArbeidssted.FAST;
   return {
     navnPaVirksomhet: paLand.navnPaVirksomhet,
     fastEllerVekslendeArbeidssted: paLand.fastEllerVekslendeArbeidssted,
-    vegadresse: isErFastArbeidssted
+    vegadresse: erFastArbeidssted
       ? paLand.fastArbeidssted?.vegadresse
       : undefined,
-    nummer: isErFastArbeidssted ? paLand.fastArbeidssted?.nummer : undefined,
-    postkode: isErFastArbeidssted
-      ? paLand.fastArbeidssted?.postkode
-      : undefined,
-    bySted: isErFastArbeidssted ? paLand.fastArbeidssted?.bySted : undefined,
-    land: isErFastArbeidssted ? utsendelseLand : undefined,
+    nummer: erFastArbeidssted ? paLand.fastArbeidssted?.nummer : undefined,
+    postkode: erFastArbeidssted ? paLand.fastArbeidssted?.postkode : undefined,
+    bySted: erFastArbeidssted ? paLand.fastArbeidssted?.bySted : undefined,
+    land: erFastArbeidssted ? utsendelseLand : undefined,
     erHjemmekontor: paLand.erHjemmekontor,
   };
 }

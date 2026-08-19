@@ -12,9 +12,9 @@ export function AppHeader() {
   const representasjonskontekst = useRepresentasjonskontekst();
   const { id: skjemaId } = useParams({ strict: false });
   const matchRoute = useMatchRoute();
-  const isErInnsendt = !!matchRoute({ to: "/skjema/$id/innsendt" });
+  const erInnsendt = !!matchRoute({ to: "/skjema/$id/innsendt" });
 
-  if (skjemaId && !isErInnsendt) {
+  if (skjemaId && !erInnsendt) {
     return <SkjemaParterHeader skjemaId={skjemaId} />;
   }
 

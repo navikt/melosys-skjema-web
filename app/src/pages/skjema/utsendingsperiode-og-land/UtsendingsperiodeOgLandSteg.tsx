@@ -56,7 +56,7 @@ function UtsendingsperiodeOgLandStegContent({
   );
 
   const motpartensVerdier = skjema.motpartensUtsendingsperiodeOgLand;
-  const isErUendretFraMotpart =
+  const erUendretFraMotpart =
     !!motpartensVerdier &&
     stegData?.utsendelseLand === motpartensVerdier.utsendelseLand &&
     stegData.utsendelsePeriode?.fraDato ===
@@ -66,7 +66,7 @@ function UtsendingsperiodeOgLandStegContent({
   const [redigerer, setRedigerer] = useState(false);
   // Motpartens verdier vises som lesevisning til bruker aktivt velger å endre,
   // så ingen justerer dato eller land ved et uhell
-  const isVisLesevisning = isErUendretFraMotpart && !redigerer;
+  const visLesevisning = erUendretFraMotpart && !redigerer;
 
   const formMethods = useForm({
     resolver: zodResolver(utsendingsperiodeOgLandSchema),
@@ -153,7 +153,7 @@ function UtsendingsperiodeOgLandStegContent({
             </Alert>
           )}
 
-          {isVisLesevisning && stegData ? (
+          {visLesevisning && stegData ? (
             <div className="mt-6">
               <dl>
                 <dt>

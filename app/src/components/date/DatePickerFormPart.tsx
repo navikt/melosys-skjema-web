@@ -49,7 +49,7 @@ export function DatePickerFormPart({
 
   // Engangssignal: settes når feltet tømmes programmatisk, slik at den
   // påfølgende onDateChange hopper over validering for nettopp den endringen.
-  const skipValidationReference = useRef(false);
+  const skipValidationRef = useRef(false);
 
   // Registrer feltet i react-hook-form slik at valideringsfeil
   // fra zodResolver legges inn i formState.errors for dette feltet
@@ -60,8 +60,8 @@ export function DatePickerFormPart({
 
   const datePicker = useDatepicker({
     onDateChange: (date) => {
-      const shouldValidate = !skipValidationReference.current;
-      skipValidationReference.current = false;
+      const shouldValidate = !skipValidationRef.current;
+      skipValidationRef.current = false;
 
       setValue(
         formFieldName,
@@ -80,7 +80,7 @@ export function DatePickerFormPart({
     ref,
     () => ({
       clearWithoutValidation: () => {
-        skipValidationReference.current = true;
+        skipValidationRef.current = true;
         datePicker.setSelected(undefined);
       },
     }),

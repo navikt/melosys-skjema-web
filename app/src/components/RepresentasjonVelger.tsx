@@ -122,7 +122,7 @@ export function RepresentasjonVelger({
     ...getVentendeMotpartSoknaderQuery(),
     enabled: motpartCtaAktiv,
   });
-  const isHarVentendeMotpartSoknad =
+  const harVentendeMotpartSoknad =
     (ventendeMotpartSoknader?.soknader.length ?? 0) > 0;
 
   const handleVelgRepresentasjon = (
@@ -154,7 +154,7 @@ export function RepresentasjonVelger({
         {REPRESENTATION_OPTIONS.map((option) => (
           <RepresentationCard
             badge={
-              isHarVentendeMotpartSoknad &&
+              harVentendeMotpartSoknad &&
               option.type === Representasjonstype.DEG_SELV
                 ? t("landingsside.soknadVenterPaaDeg")
                 : undefined

@@ -77,7 +77,7 @@ export function OrganisasjonSoker({
 
   // 404 = manglende treff: en forventet situasjon, ikke en systemfeil. Vises som
   // egen warning-melding under feltet, ikke som rød feiltilstand i selve feltet.
-  const isVisIngenTreff = httpStatus === "404";
+  const visIngenTreff = httpStatus === "404";
 
   const getErrorMessage = (): string | undefined => {
     if (query.isError) {
@@ -126,7 +126,7 @@ export function OrganisasjonSoker({
         </div>
       )}
 
-      {isVisIngenTreff && !query.isFetching && (
+      {visIngenTreff && !query.isFetching && (
         <Alert
           aria-live="polite"
           className="mt-4"

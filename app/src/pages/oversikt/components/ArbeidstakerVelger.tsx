@@ -72,7 +72,7 @@ export function ArbeidstakerVelger({
     formState: { errors },
   } = useFormContext<SoknadStarterFormData>();
 
-  const isHarFeil = !!errors.arbeidstaker;
+  const harFeil = !!errors.arbeidstaker;
   const skalFylleUtForArbeidstaker = useWatch<SoknadStarterFormData>({
     name: "skalFylleUtForArbeidstaker",
   });
@@ -105,13 +105,13 @@ export function ArbeidstakerVelger({
     }),
   );
 
-  const isHarValgtMedFullmakt = selectedPersonFnr !== undefined;
+  const harValgtMedFullmakt = selectedPersonFnr !== undefined;
 
   // For ARBEIDSGIVER/RADGIVER: radioen styrer hva som vises
-  const isVisRadio = !erAnnenPerson && !visKunMedFullmakt;
+  const visRadio = !erAnnenPerson && !visKunMedFullmakt;
   const visMedFullmakt =
     erAnnenPerson || visKunMedFullmakt || skalFylleUtForArbeidstaker === true;
-  const isVisUtenFullmakt =
+  const visUtenFullmakt =
     !visKunMedFullmakt &&
     !erAnnenPerson &&
     skalFylleUtForArbeidstaker === false;
@@ -219,13 +219,13 @@ export function ArbeidstakerVelger({
         </Heading>
       )}
       <Box
-        borderColor={isHarFeil ? "danger" : "info"}
+        borderColor={harFeil ? "danger" : "info"}
         borderWidth="0 0 0 4"
         paddingInline="space-16"
       >
         <VStack gap="space-24">
           {/* Radio for ARBEIDSGIVER/RADGIVER */}
-          {isVisRadio && (
+          {visRadio && (
             <RadioGroupJaNeiFormPart
               formFieldName="skalFylleUtForArbeidstaker"
               legend={t("oversiktFelles.skalFylleUtForArbeidstakerLabel")}
@@ -255,7 +255,7 @@ export function ArbeidstakerVelger({
               )}
 
               <div className="max-w-lg w-full">
-                {isHarValgtMedFullmakt ? (
+                {harValgtMedFullmakt ? (
                   <Box
                     background="default"
                     borderColor="neutral-subtle"
@@ -329,7 +329,7 @@ export function ArbeidstakerVelger({
           )}
 
           {/* Uten fullmakt */}
-          {isVisUtenFullmakt && (
+          {visUtenFullmakt && (
             <div className="max-w-lg w-full">
               {verifisertPerson ? (
                 <Box

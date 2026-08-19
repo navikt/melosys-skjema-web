@@ -43,7 +43,7 @@ function OppsummeringStegContent({
   const { definisjon } = useSkjemaDefinisjon();
   const [manglendeSteg, setManglendeSteg] = useState<ManglendeSteg>([]);
   const [harInnsendingFeil, setHarInnsendingFeil] = useState(false);
-  const errorReference = useRef<HTMLDivElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
 
   const seksjoner = resolveSeksjoner(data, definisjon as SkjemaDefinisjonDto);
 
@@ -56,8 +56,8 @@ function OppsummeringStegContent({
       return;
     }
 
-    errorReference.current?.scrollIntoView({ behavior: "auto" });
-    errorReference.current?.focus();
+    errorRef.current?.scrollIntoView({ behavior: "auto" });
+    errorRef.current?.focus();
   }, [harFeil]);
 
   const kanSendeInn = () => {
@@ -118,7 +118,7 @@ function OppsummeringStegContent({
         skjemaId={skjema.id}
       />
       {harFeil && (
-        <div ref={errorReference} className="mt-4" tabIndex={-1}>
+        <div ref={errorRef} className="mt-4" tabIndex={-1}>
           {manglendeSteg.length > 0 ? (
             <ErrorSummary heading={t("felles.stegManglerUtfylling")}>
               {manglendeSteg.map((steg) => (

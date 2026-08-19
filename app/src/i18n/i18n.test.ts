@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/prefer-iterator-to-array */
+/* eslint-disable unicorn/prefer-iterator-to-array -- Array.from med mapping-funksjon er mer lesbart enn å spreade iteratoren */
 import { describe, expect, it } from "vitest";
 
 import { resources } from "./i18n.ts";

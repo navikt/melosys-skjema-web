@@ -31,7 +31,7 @@ export function SkjemaParterHeader({ skjemaId }: { skjemaId: string }) {
   }
 
   const { metadata } = skjema;
-  const isVisArbeidstaker =
+  const visArbeidstaker =
     metadata.representasjonstype !== Representasjonstype.DEG_SELV;
 
   return (
@@ -41,7 +41,7 @@ export function SkjemaParterHeader({ skjemaId }: { skjemaId: string }) {
         navn={metadata.arbeidsgiverNavn}
         id={metadata.juridiskEnhetOrgnr}
       />
-      {isVisArbeidstaker && (
+      {visArbeidstaker && (
         <Part
           tittel={t("skjemaParterHeader.arbeidstaker")}
           navn={metadata.arbeidstakerNavn}
