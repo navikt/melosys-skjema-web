@@ -137,7 +137,9 @@ export function getPreviousStep(
   stegRekkefolge: StegRekkefolgeItem[],
 ): StegRekkefolgeItem | undefined {
   const currentIndex = stegRekkefolge.findIndex((step) => step.key === key);
-  return currentIndex > 0 ? stegRekkefolge[currentIndex - 1] : undefined;
+  if (currentIndex > 0) {
+    return stegRekkefolge[currentIndex - 1];
+  }
 }
 
 export function getNextStep(

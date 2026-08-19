@@ -99,13 +99,13 @@ export function SoknadStarter({
 
   // Vent på nødvendig data før vi rendrer skjemaet
   if (
-    (representasjonskontekst.representasjonstype ===
-      Representasjonstype.DEG_SELV &&
-      isLoadingUserInfo) ||
-    (isSkalHenteArbeidsgivere && isLoadingArbeidsgivere) ||
-    (representasjonskontekst.representasjonstype ===
-      Representasjonstype.RADGIVER &&
-      isLoadingRadgiver)
+    (isLoadingUserInfo &&
+      representasjonskontekst.representasjonstype ===
+        Representasjonstype.DEG_SELV) ||
+    (isLoadingArbeidsgivere && isSkalHenteArbeidsgivere) ||
+    (isLoadingRadgiver &&
+      representasjonskontekst.representasjonstype ===
+        Representasjonstype.RADGIVER)
   ) {
     return <Loader size="medium" title={t("felles.laster")} />;
   }
@@ -125,10 +125,9 @@ export function SoknadStarter({
 
   // Bygg radgiverfirma-objekt fra API-oppslag
   const radgiverfirma =
-    representasjonskontekst.representasjonstype ===
-      Representasjonstype.RADGIVER &&
+    radgiverOrganisasjon &&
     representasjonskontekst.radgiverOrgnr &&
-    radgiverOrganisasjon
+    representasjonskontekst.representasjonstype === Representasjonstype.RADGIVER
       ? {
           orgnr: radgiverOrganisasjon.juridiskEnhet.orgnr,
           navn: radgiverOrganisasjon.juridiskEnhet.navn ?? "",
@@ -337,11 +336,13 @@ function SoknadStarterContent({
           <VStack gap="space-24">
             <div>
               <Heading level="2" size="medium" spacing>
-                {representasjonstype === Representasjonstype.DEG_SELV
-                  ? t("oversiktFelles.soknadStarterTittelDegSelv")
-                  : representasjonstype === Representasjonstype.ANNEN_PERSON
-                    ? t("oversiktFelles.soknadStarterTittelAnnenPerson")
-                    : t("oversiktFelles.soknadStarterTittel")}
+                {t(
+                  representasjonstype === Representasjonstype.DEG_SELV
+                    ? "oversiktFelles.soknadStarterTittelDegSelv"
+                    : representasjonstype === Representasjonstype.ANNEN_PERSON
+                      ? "oversiktFelles.soknadStarterTittelAnnenPerson"
+                      : "oversiktFelles.soknadStarterTittel",
+                )}
               </Heading>
               {representasjonstype === Representasjonstype.ANNEN_PERSON && (
                 <BodyLong spacing>

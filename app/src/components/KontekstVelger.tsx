@@ -28,15 +28,15 @@ interface KontekstConfig {
 function MaalformValg() {
   const { i18n } = useTranslation();
 
-  const handleChangeLanguage = async (code: Language["code"]) => {
-    await setParams({ language: code });
-    await i18n.changeLanguage(code);
-  };
-
   // Fjern i MELOSYS-8094
   if (SUPPORTED_LANGUAGES.length <= 1) {
     return null;
   }
+
+  const handleChangeLanguage = async (code: Language["code"]) => {
+    await setParams({ language: code });
+    await i18n.changeLanguage(code);
+  };
 
   return (
     <HStack align="center" gap="space-8">
@@ -106,6 +106,18 @@ export function KontekstVelger() {
     if (isDegSelv) {
       return null;
     }
+    if (
+      organisasjonData &&
+      representasjonskontekst.representasjonstype ===
+        Representasjonstype.RADGIVER
+    ) {
+      return truncateText(
+        organisasjonData.juridiskEnhet.navn ??
+          representasjonskontekst.radgiverOrgnr ??
+          "",
+        23,
+      );
+    }
     const config =
       KONTEKST_CONFIG[
         representasjonskontekst.representasjonstype as Exclude<
@@ -115,18 +127,6 @@ export function KontekstVelger() {
           | Representasjonstype.RADGIVER_MED_FULLMAKT
         >
       ];
-    if (
-      representasjonskontekst.representasjonstype ===
-        Representasjonstype.RADGIVER &&
-      organisasjonData
-    ) {
-      return truncateText(
-        organisasjonData.juridiskEnhet.navn ??
-          representasjonskontekst.radgiverOrgnr ??
-          "",
-        23,
-      );
-    }
     return t(config.tekstKey);
   };
 

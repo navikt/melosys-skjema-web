@@ -609,7 +609,12 @@ export async function lastOppVedlegg(
   });
 
   if (!response.ok) {
-    const body = await response.json().catch(() => ({}));
+    let body: Record<string, string> = {};
+    try {
+      body = await response.json();
+    } catch {
+      // ignore JSON parse errors
+    }
     throw new VedleggError(
       body.message || "Kunne ikke laste opp vedlegg",
       response.status,

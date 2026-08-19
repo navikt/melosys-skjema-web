@@ -86,6 +86,18 @@ export class ArbeidssituasjonStegPage {
     });
   }
 
+  private harVaertILonnetArbeidFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
+    });
+  }
+
+  private skalJobbeForFlereVirksomheterFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.skalJobbeForFlereVirksomheter.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/arbeidssituasjon`);
   }
@@ -197,20 +209,6 @@ export class ArbeidssituasjonStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidssituasjon`,
     );
-  }
-
-  // --- Validation assertions ---
-
-  private harVaertILonnetArbeidFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label,
-    });
-  }
-
-  private skalJobbeForFlereVirksomheterFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.skalJobbeForFlereVirksomheter.label,
-    });
   }
 
   async assertDuMaSvarePaOmDuHarVertILonnetArbeidIsVisible() {

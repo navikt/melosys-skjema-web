@@ -16,9 +16,9 @@ export async function selectDateFromCalendar(
   const day = parts[0] ?? "";
   const month = parts[1] ?? "";
   const year = parts[2] ?? "";
-  const dayNumber = Number.parseInt(day, 10);
-  const monthNumber = Number.parseInt(month, 10);
-  const yearNumber = Number.parseInt(year, 10);
+  const dayNumber = Number(day);
+  const monthNumber = Number(month);
+  const yearNumber = Number(year);
 
   // Find and click the calendar button next to this input
   // The button is a sibling of the input's container

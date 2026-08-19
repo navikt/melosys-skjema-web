@@ -85,6 +85,24 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     });
   }
 
+  private offentligVirksomhetFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.erArbeidsgiverenOffentligVirksomhet.label,
+    });
+  }
+
+  private bemanningsEllerVikarbyraFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label,
+    });
+  }
+
+  private vanligDriftFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.opprettholderArbeidsgiverenVanligDrift.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(
       `/skjema/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
@@ -137,26 +155,6 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
     );
-  }
-
-  // --- Validation assertions ---
-
-  private offentligVirksomhetFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.erArbeidsgiverenOffentligVirksomhet.label,
-    });
-  }
-
-  private bemanningsEllerVikarbyraFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label,
-    });
-  }
-
-  private vanligDriftFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.opprettholderArbeidsgiverenVanligDrift.label,
-    });
   }
 
   async assertOffentligVirksomhetErPakrevdIsVisible() {

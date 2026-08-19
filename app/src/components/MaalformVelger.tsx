@@ -8,6 +8,11 @@ import { type Language, SUPPORTED_LANGUAGES } from "~/utils/languages.ts";
 export function MaalformVelger() {
   const { i18n } = useTranslation();
 
+  // Fjern i MELOSYS-8094
+  if (SUPPORTED_LANGUAGES.length <= 1) {
+    return null;
+  }
+
   const currentLanguage =
     SUPPORTED_LANGUAGES.find((lang) => lang.code === i18n.language) ??
     SUPPORTED_LANGUAGES[0]!;
@@ -16,11 +21,6 @@ export function MaalformVelger() {
     await setParams({ language: code });
     await i18n.changeLanguage(code);
   };
-
-  // Fjern i MELOSYS-8094
-  if (SUPPORTED_LANGUAGES.length <= 1) {
-    return null;
-  }
 
   return (
     <Dropdown>

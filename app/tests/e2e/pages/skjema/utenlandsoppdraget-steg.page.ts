@@ -152,6 +152,36 @@ export class UtenlandsoppdragetStegPage {
     });
   }
 
+  private harOppdragILandetFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.arbeidsgiverHarOppdragILandet.label,
+    });
+  }
+
+  private bleAnsattForUtenlandsoppdragetFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.arbeidstakerBleAnsattForUtenlandsoppdraget.label,
+    });
+  }
+
+  private forblirAnsattIHelePeriodenFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.arbeidstakerForblirAnsattIHelePerioden.label,
+    });
+  }
+
+  private erstatterAnnenPersonFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.arbeidstakerErstatterAnnenPerson.label,
+    });
+  }
+
+  private vilJobbeEtterOppdragetFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/utenlandsoppdraget`);
   }
@@ -205,32 +235,6 @@ export class UtenlandsoppdragetStegPage {
     );
   }
 
-  // --- Validation assertions: always-required boolean fields ---
-
-  private harOppdragILandetFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.arbeidsgiverHarOppdragILandet.label,
-    });
-  }
-
-  private bleAnsattForUtenlandsoppdragetFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.arbeidstakerBleAnsattForUtenlandsoppdraget.label,
-    });
-  }
-
-  private forblirAnsattIHelePeriodenFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.arbeidstakerForblirAnsattIHelePerioden.label,
-    });
-  }
-
-  private erstatterAnnenPersonFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.arbeidstakerErstatterAnnenPerson.label,
-    });
-  }
-
   async assertHarOppdragILandetErPakrevdIsVisible() {
     await expect(
       this.harOppdragILandetFieldset().getByText(
@@ -261,14 +265,6 @@ export class UtenlandsoppdragetStegPage {
         feilmeldinger.erstatterAnnenPersonErPakrevd,
       ),
     ).toBeVisible();
-  }
-
-  // --- Validation assertions: conditional fields ---
-
-  private vilJobbeEtterOppdragetFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdraget.label,
-    });
   }
 
   async assertBegrunnelseErPakrevdNarIkkeOppdragIsVisible() {

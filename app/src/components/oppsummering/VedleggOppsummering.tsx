@@ -40,18 +40,16 @@ export function VedleggOppsummering({
     // før vedlegg-spørsmålet) henter og viser eventuelle filer.
     if (harAnnenDokumentasjon === false) return;
     let isCancelled = false;
-    hentVedlegg(skjemaId)
-      .then((v) => {
-        if (isCancelled) {
-          return;
-        }
-
+    (async () => {
+      try {
+        const v = await hentVedlegg(skjemaId);
+        if (isCancelled) return;
         setVedlegg(v);
         setHentVedleggFeil(false);
-      })
-      .catch(() => {
+      } catch {
         if (!isCancelled) setHentVedleggFeil(true);
-      });
+      }
+    })();
     return () => {
       isCancelled = true;
     };

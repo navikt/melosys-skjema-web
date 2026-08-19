@@ -118,6 +118,10 @@ function ValgteUtenlandskeVirksomheter({
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
+  if (virksomheter.length === 0) {
+    return null;
+  }
+
   const lukkEditModal = () => {
     setEditingIndex(null);
   };
@@ -125,10 +129,6 @@ function ValgteUtenlandskeVirksomheter({
   const openEditModal = (index: number) => {
     setEditingIndex(index);
   };
-
-  if (virksomheter.length === 0) {
-    return null;
-  }
 
   const virksomhetSomRedigeres =
     editingIndex === null ? undefined : virksomheter[editingIndex];

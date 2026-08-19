@@ -9,5 +9,5 @@ export function useTranslateError() {
 export function useBooleanToJaNei() {
   const { t } = useTranslation();
 
-  return (value: boolean) => (value ? t("felles.ja") : t("felles.nei"));
+  return (value: boolean) => t(value ? "felles.ja" : "felles.nei");
 }

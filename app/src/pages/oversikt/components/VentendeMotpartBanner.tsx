@@ -81,9 +81,11 @@ function VentendeMotpartAlert({
       <BodyLong spacing>
         {soknad.utsendingsperiode
           ? t("oversiktDegSelv.motpartCtaBeskrivelse", {
-              land: soknad.utsendelseLand
-                ? t(`land.${soknad.utsendelseLand}`)
-                : t("oversiktDegSelv.motpartCtaUtlandetFallback"),
+              land: t(
+                soknad.utsendelseLand
+                  ? `land.${soknad.utsendelseLand}`
+                  : "oversiktDegSelv.motpartCtaUtlandetFallback",
+              ),
               fraDato: formatDato(
                 soknad.utsendingsperiode.fraDato,
                 i18n.language,

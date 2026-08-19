@@ -20,7 +20,7 @@ export function formaterBelopForVisning(value: string): string {
 
   const normalized = trimmed.replaceAll(/\s/g, "").replace(/[.,]\d*$/, "");
   if (!/^\d+$/.test(normalized)) return value;
-  const parsed = Number.parseInt(normalized, 10);
+  const parsed = Number(normalized);
 
   return belopFormatter.format(parsed);
 }

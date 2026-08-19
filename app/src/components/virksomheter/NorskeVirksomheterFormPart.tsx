@@ -108,6 +108,10 @@ function ValgteNorskeVirksomheter({
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
+  if (virksomheter.length === 0) {
+    return null;
+  }
+
   const lukkEditModal = () => {
     setEditingIndex(null);
   };
@@ -115,10 +119,6 @@ function ValgteNorskeVirksomheter({
   const openEditModal = (index: number) => {
     setEditingIndex(index);
   };
-
-  if (virksomheter.length === 0) {
-    return null;
-  }
 
   return (
     <>

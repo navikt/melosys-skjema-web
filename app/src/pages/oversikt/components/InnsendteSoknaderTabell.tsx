@@ -75,9 +75,11 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
     case MotpartStatus.VENTER: {
       return (
         <Tag size="small" variant="warning">
-          {soknad.skjemadel === Skjemadel.ARBEIDSGIVERS_DEL
-            ? t("oversiktFelles.historikkStatusVenterArbeidstakersDel")
-            : t("oversiktFelles.historikkStatusVenterArbeidsgiversDel")}
+          {t(
+            soknad.skjemadel === Skjemadel.ARBEIDSGIVERS_DEL
+              ? "oversiktFelles.historikkStatusVenterArbeidstakersDel"
+              : "oversiktFelles.historikkStatusVenterArbeidsgiversDel",
+          )}
         </Tag>
       );
     }
@@ -195,7 +197,7 @@ export function InnsendteSoknaderTabell({
 
   // Skjul kun hvis ingen søknader finnes og det ikke er et aktivt søk
   // Når det er et aktivt søk, vis tabellen med "ingen resultater"-melding
-  if (!data || (data.totaltAntall === 0 && !aktivtSok)) {
+  if (!data || (!aktivtSok && data.totaltAntall === 0)) {
     return null;
   }
 

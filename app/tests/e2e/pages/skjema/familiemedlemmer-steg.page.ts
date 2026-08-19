@@ -52,6 +52,12 @@ export class FamiliemedlemmerStegPage {
     });
   }
 
+  private skalHaMedFamiliemedlemmerFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.skalHaMedFamiliemedlemmer.label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/familiemedlemmer`);
   }
@@ -98,14 +104,6 @@ export class FamiliemedlemmerStegPage {
 
   async assertInfoboksIsNotVisible() {
     await expect(this.infoboks).toBeHidden();
-  }
-
-  // --- Validation assertions ---
-
-  private skalHaMedFamiliemedlemmerFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.skalHaMedFamiliemedlemmer.label,
-    });
   }
 
   async assertDuMaSvarePaOmDuHarFamiliemedlemmerIsVisible() {

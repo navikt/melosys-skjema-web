@@ -77,6 +77,13 @@ export class ArbeidstakerensLonnStegPage {
     });
   }
 
+  private betalerAllLonnFieldset() {
+    return this.page.getByRole("radiogroup", {
+      name: felter.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
+        .label,
+    });
+  }
+
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/arbeidstakerens-lonn`);
   }
@@ -184,15 +191,6 @@ export class ArbeidstakerensLonnStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidstakerens-lonn`,
     );
-  }
-
-  // --- Validation assertions ---
-
-  private betalerAllLonnFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
-        .label,
-    });
   }
 
   async assertDuMaSvarePaOmDuBetalerAllLonnIsVisible() {

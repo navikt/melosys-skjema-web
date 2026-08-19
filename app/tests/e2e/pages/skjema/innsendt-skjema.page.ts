@@ -75,7 +75,7 @@ export class InnsendtSkjemaPage {
   async assertSaksnummerTagVisible(saksnummer: string) {
     await expect(
       this.page.getByText(
-        translations.saksnummer.replace("{{saksnummer}}", saksnummer),
+        translations.saksnummer.replaceAll("{{saksnummer}}", () => saksnummer),
       ),
     ).toBeVisible();
   }

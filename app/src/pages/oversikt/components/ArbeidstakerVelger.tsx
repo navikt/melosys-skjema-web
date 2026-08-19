@@ -238,14 +238,18 @@ export function ArbeidstakerVelger({
               {personerMedFullmakt.length > 0 && (
                 <>
                   <Label as="span" className="navds-form-field__label">
-                    {erAnnenPerson
-                      ? t("oversiktAnnenPerson.personVelgerLabel")
-                      : t("oversiktFelles.arbeidstakerMedFullmaktLabel")}
+                    {t(
+                      erAnnenPerson
+                        ? "oversiktAnnenPerson.personVelgerLabel"
+                        : "oversiktFelles.arbeidstakerMedFullmaktLabel",
+                    )}
                   </Label>
                   <BodyShort className="navds-form-field__description">
-                    {erAnnenPerson
-                      ? t("oversiktAnnenPerson.personVelgerBeskrivelse")
-                      : t("oversiktFelles.arbeidstakerMedFullmaktBeskrivelse")}
+                    {t(
+                      erAnnenPerson
+                        ? "oversiktAnnenPerson.personVelgerBeskrivelse"
+                        : "oversiktFelles.arbeidstakerMedFullmaktBeskrivelse",
+                    )}
                   </BodyShort>
                 </>
               )}
@@ -307,11 +311,11 @@ export function ArbeidstakerVelger({
                     }
                     hideLabel
                     isLoading={isLoading}
-                    label={
+                    label={t(
                       erAnnenPerson
-                        ? t("oversiktAnnenPerson.personVelgerLabel")
-                        : t("oversiktFelles.arbeidstakerMedFullmaktLabel")
-                    }
+                        ? "oversiktAnnenPerson.personVelgerLabel"
+                        : "oversiktFelles.arbeidstakerMedFullmaktLabel",
+                    )}
                     onToggleSelected={handleComboboxChange}
                     options={comboboxOptions}
                     placeholder={t(

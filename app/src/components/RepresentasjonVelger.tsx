@@ -154,8 +154,8 @@ export function RepresentasjonVelger({
         {REPRESENTATION_OPTIONS.map((option) => (
           <RepresentationCard
             badge={
-              option.type === Representasjonstype.DEG_SELV &&
-              isHarVentendeMotpartSoknad
+              isHarVentendeMotpartSoknad &&
+              option.type === Representasjonstype.DEG_SELV
                 ? t("landingsside.soknadVenterPaaDeg")
                 : undefined
             }

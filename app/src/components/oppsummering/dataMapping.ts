@@ -76,7 +76,8 @@ function flattenVirksomheter(
       organisasjonsnummer: v.organisasjonsnummer,
     }),
   );
-  for (const v of virksomheter.utenlandskeVirksomheter ?? []) {
+  const utenlandskeVirksomheter = virksomheter.utenlandskeVirksomheter ?? [];
+  for (const v of utenlandskeVirksomheter) {
     result.push({
       __type: VirksomhetTypeKey.UTENLANDSK,
       ...(v as unknown as Record<string, unknown>),
@@ -258,8 +259,8 @@ export function resolveSeksjoner(
 ): ResolvedSeksjon[] {
   return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {
     if (
-      options.skjulUtsendingsperiodeOgLand &&
-      seksjonNavn === "utsendingsperiodeOgLand"
+      seksjonNavn === "utsendingsperiodeOgLand" &&
+      options.skjulUtsendingsperiodeOgLand
     )
       return [];
     const seksjon = definisjon.seksjoner[seksjonNavn];

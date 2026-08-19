@@ -130,6 +130,15 @@ export class OversiktPage {
     this.radgiverInfo = page.getByText(bekreftelseTekster.radgiverInfo);
   }
 
+  private motpartCtaHeading(arbeidsgiverNavn: string) {
+    return this.page.getByRole("heading", {
+      name: translations.oversiktDegSelv.motpartCtaTittel.replaceAll(
+        "{{arbeidsgiverNavn}}",
+        () => arbeidsgiverNavn,
+      ),
+    });
+  }
+
   async goto() {
     const parameters = new URLSearchParams({
       representasjonstype: this.representasjonstype,
@@ -473,15 +482,6 @@ export class OversiktPage {
     );
   }
 
-  private motpartCtaHeading(arbeidsgiverNavn: string) {
-    return this.page.getByRole("heading", {
-      name: translations.oversiktDegSelv.motpartCtaTittel.replace(
-        "{{arbeidsgiverNavn}}",
-        arbeidsgiverNavn,
-      ),
-    });
-  }
-
   async assertMotpartCtaVisible(arbeidsgiverNavn: string) {
     await expect(this.motpartCtaHeading(arbeidsgiverNavn)).toBeVisible();
   }
@@ -492,9 +492,9 @@ export class OversiktPage {
     tilDato: string,
   ) {
     const tekst = translations.oversiktDegSelv.motpartCtaBeskrivelse
-      .replace("{{land}}", land)
-      .replace("{{fraDato}}", fraDato)
-      .replace("{{tilDato}}", tilDato);
+      .replaceAll("{{land}}", () => land)
+      .replaceAll("{{fraDato}}", () => fraDato)
+      .replaceAll("{{tilDato}}", () => tilDato);
     await expect(this.page.getByText(tekst)).toBeVisible();
   }
 

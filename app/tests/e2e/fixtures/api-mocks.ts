@@ -510,7 +510,9 @@ export async function mockInnsendteSoknaderMedSok(
       const body = route.request().postDataJSON();
       const sok = body?.sok as string | undefined;
       const response =
-        sok && sok in responseMap ? responseMap[sok] : defaultResponse;
+        sok && Object.hasOwn(responseMap, sok)
+          ? responseMap[sok]
+          : defaultResponse;
       await route.fulfill({
         status: 200,
         contentType: "application/json",
