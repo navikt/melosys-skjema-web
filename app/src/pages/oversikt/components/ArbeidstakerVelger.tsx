@@ -349,8 +349,9 @@ export function ArbeidstakerVelger({
                 </Box>
               ) : (
                 <>
-                  <HStack align="start" gap="space-8" wrap={false}>
+                  <div className="grid grid-cols-[auto_auto_1fr] grid-rows-[auto_auto_auto] items-start gap-2">
                     <TextField
+                      className="row-span-3 grid-rows-subgrid"
                       error={fnrError ?? undefined}
                       label={t("oversiktFelles.arbeidstakerFnrLabel")}
                       maxLength={FNR_LENGTH}
@@ -361,6 +362,7 @@ export function ArbeidstakerVelger({
                       value={fnr}
                     />
                     <TextField
+                      className="row-span-3 grid-rows-subgrid"
                       error={etternavnError ?? undefined}
                       label={t("oversiktFelles.arbeidstakerFulltNavnLabel")}
                       onChange={(e) => {
@@ -369,16 +371,15 @@ export function ArbeidstakerVelger({
                       }}
                       value={etternavn}
                     />
-                    <Box className="mt-8">
-                      <Button
-                        loading={verifiserer}
-                        onClick={handleVerifiser}
-                        variant="secondary"
-                      >
-                        {t("oversiktFelles.arbeidstakerSokKnapp")}
-                      </Button>
-                    </Box>
-                  </HStack>
+                    <Button
+                      className="col-start-3 row-start-2 justify-self-start"
+                      loading={verifiserer}
+                      onClick={handleVerifiser}
+                      variant="secondary"
+                    >
+                      {t("oversiktFelles.arbeidstakerSokKnapp")}
+                    </Button>
+                  </div>
 
                   {verifiseringFeil && (
                     <Alert size="small" variant="error">

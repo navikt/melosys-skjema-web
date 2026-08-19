@@ -450,12 +450,12 @@ export const en = {
       arbeidstakerSelvUtfyllingCheckbox:
         "The employee will complete their part of the application themselves.",
       arbeidstakerMedFullmaktPlaceholder:
-        "National identity number/ d- number or name",
+        "National identity number/ d-number or name",
       arbeidstakerMedFullmaktListePlaceholder: "+ Select...",
       arbeidstakerUtenFullmaktTittel: "Employee without a power of attorney",
       arbeidstakerUtenFullmaktBeskrivelse:
         "The employee must complete their part of the application themselves.",
-      arbeidstakerFnrLabel: "National identity number/ d- number",
+      arbeidstakerFnrLabel: "National identity number/ d-number",
       arbeidstakerFulltNavnLabel: "Last name",
       arbeidstakerSokKnapp: "Search",
       arbeidstakerFnrTom: "Enter national identity number",
