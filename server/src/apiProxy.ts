@@ -189,11 +189,10 @@ async function exchangeOboTokenAndStoreInHeader(
     request.headers["obo-token"] = obo.token;
     logger.debug("OBO-veksling vellykket");
     return next();
-  } else {
-    logger.error("OBO-veksling feilet", obo.error);
-    response.status(403).send();
-    return;
   }
+  logger.error("OBO-veksling feilet", obo.error);
+  response.status(403).send();
+  return;
 }
 
 function addOboTokenToProxyRequest(
