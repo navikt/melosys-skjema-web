@@ -10,6 +10,12 @@ const IGNORED_UNICORN_RULES = {
   "unicorn/no-null": "off",
   "unicorn/prevent-abbreviations": "off",
   "unicorn/no-nested-ternary": "off",
+  // Norsk kode bruker "er", "har", "skal" som boolean-prefix, ikke "is", "has", "should"
+  "unicorn/consistent-boolean-name": "off",
+  // Route-filnavn og variabelnavn med "i" (norsk) tolkes feil som forkortelse
+  "unicorn/name-replacements": "off",
+  // main.tsx er entry point og må ha top-level side effects
+  "unicorn/no-top-level-side-effects": "off",
 };
 
 export default tseslint.config(
