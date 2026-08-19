@@ -24,22 +24,26 @@ export type FeltUnion =
   | TextFeltDefinisjon
   | TextareaFeltDefinisjon;
 
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("nb-NO", {
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString("nb-NO", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   });
 }
 
-/** Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks */
+/**
+Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks
+*/
 function erBelopFelt(felt: FeltUnion): boolean {
   return (
     felt.type === "TEXT" && (felt as TextFeltDefinisjon).format === "BELOP"
   );
 }
 
-/** Henter labels for valgte alternativer i en checkbox-gruppe */
+/**
+Henter labels for valgte alternativer i en checkbox-gruppe
+*/
 function hentValgteCheckboxLabels(
   felt: CheckboxGruppeFeltDefinisjon,
   selected: string[] | undefined,
@@ -55,7 +59,7 @@ export function formaterVerdi(
   verdi: unknown,
   t: TFunction,
 ): string {
-  if (verdi === null || verdi === undefined) return "\u2013";
+  if (verdi === null || verdi === undefined) return "\u{2013}";
 
   switch (felt.type) {
     case "BOOLEAN": {
@@ -69,9 +73,9 @@ export function formaterVerdi(
 
     case "PERIOD": {
       const periode = verdi as { fraDato?: string; tilDato?: string };
-      const fra = periode.fraDato ? formatDate(periode.fraDato) : "\u2013";
-      const til = periode.tilDato ? formatDate(periode.tilDato) : "\u2013";
-      return `${fra} \u2013 ${til}`;
+      const fra = periode.fraDato ? formatDate(periode.fraDato) : "\u{2013}";
+      const til = periode.tilDato ? formatDate(periode.tilDato) : "\u{2013}";
+      return `${fra} \u{2013} ${til}`;
     }
 
     case "SELECT": {
@@ -86,7 +90,7 @@ export function formaterVerdi(
       const checkboxFelt = felt as CheckboxGruppeFeltDefinisjon;
       const selected = verdi as string[] | undefined;
       const selectedLabels = hentValgteCheckboxLabels(checkboxFelt, selected);
-      return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u2013";
+      return selectedLabels.length > 0 ? selectedLabels.join(", ") : "\u{2013}";
     }
 
     case "COUNTRY_SELECT": {
@@ -94,12 +98,12 @@ export function formaterVerdi(
     }
 
     default: {
-      const strVerdi = String(verdi);
+      const stringVerdi = String(verdi);
       if (erBelopFelt(felt)) {
-        const formatert = formaterBelopForVisning(strVerdi);
-        return formatert ? `${formatert} kr` : strVerdi;
+        const formatert = formaterBelopForVisning(stringVerdi);
+        return formatert ? `${formatert} kr` : stringVerdi;
       }
-      return strVerdi;
+      return stringVerdi;
     }
   }
 }

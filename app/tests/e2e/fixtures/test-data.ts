@@ -272,40 +272,52 @@ export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
 
 export const testOpprettSoknadResponseId = "opprettet-soknad-id-123";
 
-/** Person med fullmakt — used for "med fullmakt" combobox selection */
+/**
+Person med fullmakt — used for "med fullmakt" combobox selection
+*/
 export const testPersonMedFullmakt: PersonMedFullmaktDto = {
   fnr: "01019000083",
   navn: "Fullmakt Person",
   fodselsdato: "1990-01-01",
 };
 
-/** Arbeidstaker for "uten fullmakt" flow — fnr + etternavn typed manually */
+/**
+Arbeidstaker for "uten fullmakt" flow — fnr + etternavn typed manually
+*/
 export const testArbeidstakerUtenFullmakt = {
   fnr: "01019000083",
   etternavn: "Testersen",
 };
 
-/** VerifiserPerson response for uten-fullmakt flow */
+/**
+VerifiserPerson response for uten-fullmakt flow
+*/
 export const testVerifiserPersonResponse = {
   navn: "Ola Testersen",
   fodselsdato: "1990-01-01",
 };
 
-/** Arbeidsgiver org used in ARBEIDSGIVER/RADGIVER flows (from Altinn tilganger) */
+/**
+Arbeidsgiver org used in ARBEIDSGIVER/RADGIVER flows (from Altinn tilganger)
+*/
 export const testArbeidsgiverOrganization: OrganisasjonDto = {
   orgnr: korrektFormatertOrgnr,
   navn: "Arbeidsgiveren AS",
   organisasjonsform: "AS",
 };
 
-/** Rådgiverfirma org for RADGIVER flow (from ereg lookup) */
+/**
+Rådgiverfirma org for RADGIVER flow (from ereg lookup)
+*/
 export const testRadgiverfirmaOrgnr = korrektFormatertOrgnr2;
 export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
   organisasjon: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiver Filial" },
   juridiskEnhet: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiverfirma AS" },
 };
 
-/** Ereg response for DEG_SELV org search (OrganisasjonSoker) */
+/**
+Ereg response for DEG_SELV org search (OrganisasjonSoker)
+*/
 export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
   organisasjon: {
     orgnr: korrektFormatertOrgnr,

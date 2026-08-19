@@ -283,16 +283,18 @@ export async function mockGetEregOrganisasjon(
   navn = "Test Organisasjon AS",
 ) {
   await page.route("/api/ereg/organisasjon/*", async (route) => {
-    if (route.request().method() === "GET") {
-      // Extract the orgnr from the URL so the response matches the search value
-      const url = route.request().url();
-      const orgnrFromUrl = url.split("/api/ereg/organisasjon/")[1];
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({ orgnr: orgnrFromUrl, navn }),
-      });
+    if (route.request().method() !== "GET") {
+      return;
     }
+
+    // Extract the orgnr from the URL so the response matches the search value
+    const url = route.request().url();
+    const orgnrFromUrl = url.split("/api/ereg/organisasjon/", 2)[1];
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ orgnr: orgnrFromUrl, navn }),
+    });
   });
 }
 
@@ -303,25 +305,28 @@ export async function mockGetEregOrganisasjonMedJuridiskEnhet(
   await page.route(
     "/api/ereg/organisasjon-med-juridisk-enhet/*",
     async (route) => {
-      if (route.request().method() === "GET") {
-        const body =
-          response ??
-          (() => {
-            const url = route.request().url();
-            const orgnr = url.split(
-              "/api/ereg/organisasjon-med-juridisk-enhet/",
-            )[1];
-            return {
-              organisasjon: { orgnr, navn: "Test Organisasjon AS" },
-              juridiskEnhet: { orgnr, navn: "Test Organisasjon AS" },
-            };
-          })();
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify(body),
-        });
+      if (route.request().method() !== "GET") {
+        return;
       }
+
+      const body =
+        response ??
+        (() => {
+          const url = route.request().url();
+          const orgnr = url.split(
+            "/api/ereg/organisasjon-med-juridisk-enhet/",
+            2,
+          )[1];
+          return {
+            organisasjon: { orgnr, navn: "Test Organisasjon AS" },
+            juridiskEnhet: { orgnr, navn: "Test Organisasjon AS" },
+          };
+        })();
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(body),
+      });
     },
   );
 }
@@ -746,7 +751,7 @@ export async function mockGetEregOrganisasjonMedJuridiskEnhetPerOrgnr(
         route
           .request()
           .url()
-          .split("/api/ereg/organisasjon-med-juridisk-enhet/")[1] ?? "";
+          .split("/api/ereg/organisasjon-med-juridisk-enhet/", 2)[1] ?? "";
       const navn = navnPerOrgnr[orgnr] ?? "Test Organisasjon AS";
       await route.fulfill({
         status: 200,

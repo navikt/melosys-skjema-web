@@ -17,11 +17,13 @@ import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 
-interface SkjemaVeiledningProps {
+interface SkjemaVeiledningProperties {
   onStartSoknad: () => void;
 }
 
-export function SkjemaVeiledning({ onStartSoknad }: SkjemaVeiledningProps) {
+export function SkjemaVeiledning({
+  onStartSoknad,
+}: SkjemaVeiledningProperties) {
   const { t } = useTranslation();
 
   const userInfo = useQuery(getUserInfo());

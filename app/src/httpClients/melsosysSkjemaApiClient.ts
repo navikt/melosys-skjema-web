@@ -411,8 +411,8 @@ export const getUtkastQuery = (
 async function fetchUtkast(
   representasjonskontekst: Representasjonskontekst,
 ): Promise<UtkastListeResponse> {
-  const params = new URLSearchParams();
-  params.append(
+  const parameters = new URLSearchParams();
+  parameters.append(
     "representasjonstype",
     representasjonskontekst.representasjonstype,
   );
@@ -430,11 +430,14 @@ async function fetchUtkast(
         `Ugyldig organisasjonsnummer: ${representasjonskontekst.radgiverOrgnr}`,
       );
     }
-    params.append("radgiverfirmaOrgnr", representasjonskontekst.radgiverOrgnr);
+    parameters.append(
+      "radgiverfirmaOrgnr",
+      representasjonskontekst.radgiverOrgnr,
+    );
   }
 
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/utkast?${params.toString()}`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/utkast?${parameters.toString()}`,
     {
       method: "GET",
     },
@@ -517,9 +520,9 @@ async function fetchInnsendtSkjema(
   skjemaId: string,
   sprak: string = "nb",
 ): Promise<InnsendtSkjemaResponse> {
-  const params = new URLSearchParams({ sprak });
+  const parameters = new URLSearchParams({ sprak });
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/innsendt?${params.toString()}`,
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/innsendt?${parameters.toString()}`,
     {
       method: "GET",
     },
@@ -554,9 +557,9 @@ export async function fetchSkjemaDefinisjon(
   type: string,
   sprak: string = "nb",
 ): Promise<unknown> {
-  const params = new URLSearchParams({ sprak });
+  const parameters = new URLSearchParams({ sprak });
   const response = await fetch(
-    `${API_PROXY_URL}/skjema/definisjon/${type}?${params.toString()}`,
+    `${API_PROXY_URL}/skjema/definisjon/${type}?${parameters.toString()}`,
     {
       method: "GET",
     },
@@ -695,11 +698,11 @@ export const getFeatureTogglesQuery = () =>
   });
 
 async function fetchFeatureToggles(): Promise<Record<string, boolean>> {
-  const params = new URLSearchParams(
+  const parameters = new URLSearchParams(
     alleToggleNavn.map((navn) => ["features", navn]),
   );
 
-  const response = await fetch(`${API_PROXY_URL}/featuretoggle?${params}`, {
+  const response = await fetch(`${API_PROXY_URL}/featuretoggle?${parameters}`, {
     method: "GET",
   });
 

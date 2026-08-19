@@ -6,11 +6,13 @@ import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 
 import type { SoknadStarterFormData } from "./soknadStarterSchema.ts";
 
-interface BekreftelseBoksProps {
+interface BekreftelseBoksProperties {
   representasjonstype: Representasjonstype;
 }
 
-export function BekreftelseBoks({ representasjonstype }: BekreftelseBoksProps) {
+export function BekreftelseBoks({
+  representasjonstype,
+}: BekreftelseBoksProperties) {
   const { t } = useTranslation();
   const {
     control,

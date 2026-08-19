@@ -30,7 +30,7 @@ import type {
 } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 
-interface InnsendtSkjemaPageProps {
+interface InnsendtSkjemaPageProperties {
   skjemaId: string;
 }
 
@@ -42,7 +42,7 @@ const formatDato = (dato: string) => {
   });
 };
 
-export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProps) {
+export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProperties) {
   const { i18n, t } = useTranslation();
   const sprak = i18n.language === "en" ? "en" : "nb";
   const {

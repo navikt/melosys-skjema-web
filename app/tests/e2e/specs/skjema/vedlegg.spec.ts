@@ -55,9 +55,9 @@ test.describe("Vedlegg", () => {
       await vedleggStegPage.velgHarAnnenDokumentasjonJa();
 
       const uploadRequestPromise = page.waitForRequest(
-        (req) =>
-          req.url().includes(`/api/skjema/${skjemaId}/vedlegg`) &&
-          req.method() === "POST",
+        (request) =>
+          request.url().includes(`/api/skjema/${skjemaId}/vedlegg`) &&
+          request.method() === "POST",
       );
 
       await vedleggStegPage.uploadFile(

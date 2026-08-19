@@ -56,7 +56,7 @@ function UtsendingsperiodeOgLandStegContent({
   );
 
   const motpartensVerdier = skjema.motpartensUtsendingsperiodeOgLand;
-  const erUendretFraMotpart =
+  const isErUendretFraMotpart =
     !!motpartensVerdier &&
     stegData?.utsendelseLand === motpartensVerdier.utsendelseLand &&
     stegData.utsendelsePeriode?.fraDato ===
@@ -66,7 +66,7 @@ function UtsendingsperiodeOgLandStegContent({
   const [redigerer, setRedigerer] = useState(false);
   // Motpartens verdier vises som lesevisning til bruker aktivt velger å endre,
   // så ingen justerer dato eller land ved et uhell
-  const visLesevisning = erUendretFraMotpart && !redigerer;
+  const isVisLesevisning = isErUendretFraMotpart && !redigerer;
 
   const formMethods = useForm({
     resolver: zodResolver(utsendingsperiodeOgLandSchema),
@@ -78,11 +78,11 @@ function UtsendingsperiodeOgLandStegContent({
   const formTilDato = watch("utsendelsePeriode.tilDato");
   const formLand = watch("utsendelseLand");
 
-  const landAvviker =
+  const isLandAvviker =
     !!motpartensVerdier &&
     !!formLand &&
     formLand !== motpartensVerdier.utsendelseLand;
-  const periodeAvviker =
+  const isPeriodeAvviker =
     !!motpartensVerdier &&
     !!formFraDato &&
     !!formTilDato &&
@@ -153,7 +153,7 @@ function UtsendingsperiodeOgLandStegContent({
             </Alert>
           )}
 
-          {visLesevisning && stegData ? (
+          {isVisLesevisning && stegData ? (
             <div className="mt-6">
               <dl>
                 <dt>
@@ -196,7 +196,7 @@ function UtsendingsperiodeOgLandStegContent({
                 formFieldName="utsendelseLand"
                 label={utsendelseLandFelt.label}
               />
-              {landAvviker && (
+              {isLandAvviker && (
                 <Alert className="mt-2" inline size="small" variant="info">
                   {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand", {
                     land: t(`land.${motpartensVerdier.utsendelseLand}`),
@@ -224,7 +224,7 @@ function UtsendingsperiodeOgLandStegContent({
                 tilDatoDescription={utsendelsePeriodeFelt.hjelpetekst}
                 {...dateLimits}
               />
-              {periodeAvviker && (
+              {isPeriodeAvviker && (
                 <Alert className="mt-2" inline size="small" variant="info">
                   {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode", {
                     fraDato: formatDato(

@@ -40,11 +40,11 @@ import {
   soknadStarterSchema,
 } from "./soknadStarterSchema.ts";
 
-interface SoknadStarterProps {
+interface SoknadStarterProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
-interface SoknadStarterContentProps {
+interface SoknadStarterContentProperties {
   defaultData: SoknadStarterFormData;
   altinnArbeidsgivere: OrganisasjonDto[];
   initialArbeidsgiverOrgnr?: string;
@@ -58,10 +58,12 @@ interface SoknadStarterContentProps {
  * Wrapper-komponent som henter brukerinfo og forbereder defaultValues
  * før SoknadStarterContent rendres.
  */
-export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
+export function SoknadStarter({
+  representasjonskontekst,
+}: SoknadStarterProperties) {
   const { t } = useTranslation();
 
-  const skalHenteArbeidsgivere =
+  const isSkalHenteArbeidsgivere =
     representasjonskontekst.representasjonstype ===
       Representasjonstype.RADGIVER ||
     representasjonskontekst.representasjonstype ===
@@ -78,7 +80,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
     isError: isErrorArbeidsgivere,
   } = useQuery({
     ...listAltinnTilganger(),
-    enabled: skalHenteArbeidsgivere,
+    enabled: isSkalHenteArbeidsgivere,
     retry: false,
   });
 
@@ -100,7 +102,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
     (representasjonskontekst.representasjonstype ===
       Representasjonstype.DEG_SELV &&
       isLoadingUserInfo) ||
-    (skalHenteArbeidsgivere && isLoadingArbeidsgivere) ||
+    (isSkalHenteArbeidsgivere && isLoadingArbeidsgivere) ||
     (representasjonskontekst.representasjonstype ===
       Representasjonstype.RADGIVER &&
       isLoadingRadgiver)
@@ -110,7 +112,7 @@ export function SoknadStarter({ representasjonskontekst }: SoknadStarterProps) {
 
   // Feil mot Altinn uten cachede arbeidsgivere: vis feil i stedet for tom velger.
   if (
-    skalHenteArbeidsgivere &&
+    isSkalHenteArbeidsgivere &&
     isErrorArbeidsgivere &&
     (arbeidsgivere?.length ?? 0) === 0
   ) {
@@ -178,23 +180,25 @@ function SoknadStarterContent({
   altinnArbeidsgivere,
   initialArbeidsgiverOrgnr,
   autoFocusArbeidsgiver = false,
-}: SoknadStarterContentProps) {
+}: SoknadStarterContentProperties) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const boxRef = useRef<HTMLDivElement>(null);
+  const boxReference = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (autoFocusArbeidsgiver) {
-      const foretrekkerRedusertBevegelse = globalThis.matchMedia?.(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      boxRef.current?.scrollIntoView({
-        behavior: foretrekkerRedusertBevegelse ? "auto" : "smooth",
-        block: "start",
-      });
+    if (!autoFocusArbeidsgiver) {
+      return;
     }
+
+    const foretrekkerRedusertBevegelse = globalThis.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    boxReference.current?.scrollIntoView({
+      behavior: foretrekkerRedusertBevegelse ? "auto" : "smooth",
+      block: "start",
+    });
   }, [autoFocusArbeidsgiver]);
 
   const formMethods = useForm({
@@ -287,14 +291,14 @@ function SoknadStarterContent({
     // CTA-taggen og prefyll gjelder kun søknaden CTA-en pekte på — velger
     // brukeren en annen arbeidsgiver enn den forhåndsutfylte, regnes
     // opprettelsen som ordinær og forhåndsutfylles ikke fra motpartens del.
-    const arbeidsgiverUendret =
+    const isArbeidsgiverUendret =
       data.arbeidsgiver.orgnr === initialOrganisasjon?.juridiskEnhet.orgnr;
     opprettSoknadMutation.mutate({
       ...data,
-      opprettetVia: arbeidsgiverUendret
+      opprettetVia: isArbeidsgiverUendret
         ? data.opprettetVia
         : OpprettetVia.ORDINAER,
-      prefyllFraSkjemaId: arbeidsgiverUendret
+      prefyllFraSkjemaId: isArbeidsgiverUendret
         ? data.prefyllFraSkjemaId
         : undefined,
     });
@@ -322,7 +326,7 @@ function SoknadStarterContent({
     <FormProvider {...formMethods}>
       <Box
         background="info-soft"
-        ref={boxRef}
+        ref={boxReference}
         borderColor="neutral-subtle"
         borderRadius="12"
         borderWidth="1"

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { useTranslateError } from "~/utils/translation.ts";
 
-type RadioGroupJaNeiProps = Omit<
+type RadioGroupJaNeiProperties = Omit<
   RadioGroupProps,
   "onChange" | "children" | "error"
 > & {
@@ -19,8 +19,8 @@ export function RadioGroupJaNeiFormPart({
   lockedValue,
   jaLabel,
   neiLabel,
-  ...props
-}: RadioGroupJaNeiProps) {
+  ...properties
+}: RadioGroupJaNeiProperties) {
   const { control } = useFormContext();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -36,8 +36,8 @@ export function RadioGroupJaNeiFormPart({
 
         return (
           <RadioGroup
-            {...props}
-            disabled={lockedValue !== undefined || props.disabled}
+            {...properties}
+            disabled={lockedValue !== undefined || properties.disabled}
             error={translateError(fieldState.error?.message)}
             onChange={(value) => {
               // Bare oppdater form state hvis ikke låst

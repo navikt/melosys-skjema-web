@@ -93,19 +93,21 @@ function VedleggStegContent({
   });
 
   useEffect(() => {
-    let cancelled = false;
+    let isCancelled = false;
     hentVedlegg(skjema.id)
       .then((vedlegg) => {
-        if (!cancelled) {
-          setEksisterendeVedlegg(vedlegg);
-          setHentVedleggFeil(false);
+        if (isCancelled) {
+          return;
         }
+
+        setEksisterendeVedlegg(vedlegg);
+        setHentVedleggFeil(false);
       })
       .catch(() => {
-        if (!cancelled) setHentVedleggFeil(true);
+        if (!isCancelled) setHentVedleggFeil(true);
       });
     return () => {
-      cancelled = true;
+      isCancelled = true;
     };
   }, [skjema.id]);
 
@@ -175,13 +177,17 @@ function VedleggStegContent({
     }));
 
     if (acceptedItems.length > 0) setManglerVedleggFeil(false);
-    setVedleggItems((prev) => [...prev, ...rejectedItems, ...acceptedItems]);
+    setVedleggItems((previous) => [
+      ...previous,
+      ...rejectedItems,
+      ...acceptedItems,
+    ]);
 
     for (const item of acceptedItems) {
       lastOppVedlegg(skjema.id, item.fil)
         .then((response) => {
-          setVedleggItems((prev) =>
-            prev.map((v) =>
+          setVedleggItems((previous) =>
+            previous.map((v) =>
               v.id === item.id
                 ? { ...v, vedleggId: response.id, status: "idle" as const }
                 : v,
@@ -189,8 +195,8 @@ function VedleggStegContent({
           );
         })
         .catch((error) => {
-          setVedleggItems((prev) =>
-            prev.map((v) =>
+          setVedleggItems((previous) =>
+            previous.map((v) =>
               v.id === item.id
                 ? {
                     ...v,
@@ -210,13 +216,17 @@ function VedleggStegContent({
     if (vedleggItem?.vedleggId) {
       slettVedlegg(skjema.id, vedleggItem.vedleggId)
         .then(() => {
-          setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
+          setVedleggItems((previous) =>
+            previous.filter((v) => v.id !== vedleggItemId),
+          );
         })
         .catch(() => {
           setSlettVedleggFeil(true);
         });
     } else {
-      setVedleggItems((prev) => prev.filter((v) => v.id !== vedleggItemId));
+      setVedleggItems((previous) =>
+        previous.filter((v) => v.id !== vedleggItemId),
+      );
     }
   };
 
@@ -224,8 +234,8 @@ function VedleggStegContent({
     setSlettVedleggFeil(false);
     slettVedlegg(skjema.id, vedleggId)
       .then(() => {
-        setEksisterendeVedlegg((prev) =>
-          prev.filter((v) => v.id !== vedleggId),
+        setEksisterendeVedlegg((previous) =>
+          previous.filter((v) => v.id !== vedleggId),
         );
       })
       .catch(() => {

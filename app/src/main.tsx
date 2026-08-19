@@ -23,7 +23,7 @@ const getDecoratorLangFromCookie = () => {
     document.cookie
       .split("; ")
       .find((row) => row.startsWith("decorator-language="))
-      ?.split("=")[1] || "nb"
+      ?.split("=", 2)[1] || "nb"
   );
 };
 

@@ -31,7 +31,7 @@ interface StegConfig {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }
 
-interface SkjemaStegProps {
+interface SkjemaStegProperties {
   config: StegConfig;
   nesteKnapp: ReactNode;
   children?: ReactNode;
@@ -43,14 +43,14 @@ export function SkjemaSteg({
   nesteKnapp,
   children,
   isSubmitError,
-}: SkjemaStegProps) {
+}: SkjemaStegProperties) {
   const { i18n, t } = useTranslation();
   const { skjema } = config;
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
   const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
 
   const stepNumber = getStepNumber(config.stepKey, stegRekkefolge);
-  const prevStep = getPreviousStep(config.stepKey, stegRekkefolge);
+  const previousStep = getPreviousStep(config.stepKey, stegRekkefolge);
 
   // Get step title from config
   const stepInfo = stegRekkefolge.find((step) => step.key === config.stepKey);
@@ -92,8 +92,8 @@ export function SkjemaSteg({
             as={Link}
             className="w-full"
             icon={<ArrowLeftIcon />}
-            style={prevStep ? undefined : { visibility: "hidden" }}
-            to={prevStep ? `../${prevStep.key}` : ""}
+            style={previousStep ? undefined : { visibility: "hidden" }}
+            to={previousStep ? `../${previousStep.key}` : ""}
             variant="secondary"
           >
             {t("felles.forrigeSteg")}

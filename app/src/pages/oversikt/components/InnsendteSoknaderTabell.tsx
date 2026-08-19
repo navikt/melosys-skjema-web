@@ -28,7 +28,7 @@ import {
 } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
-interface InnsendteSoknaderTabellProps {
+interface InnsendteSoknaderTabellProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
@@ -96,7 +96,7 @@ function StatusTag({ soknad }: { soknad: InnsendtSoknadOversiktDto }) {
  */
 export function InnsendteSoknaderTabell({
   representasjonskontekst,
-}: InnsendteSoknaderTabellProps) {
+}: InnsendteSoknaderTabellProperties) {
   const { t } = useTranslation();
 
   // State management
@@ -152,11 +152,11 @@ export function InnsendteSoknaderTabell({
 
     const sorteringsFelt = sortKey.toUpperCase() as SorteringsFelt;
 
-    setSort((prevSort) => ({
+    setSort((previousSort) => ({
       orderBy: sorteringsFelt,
       direction:
-        prevSort?.orderBy === sorteringsFelt &&
-        prevSort.direction === Sorteringsretning.ASC
+        previousSort?.orderBy === sorteringsFelt &&
+        previousSort.direction === Sorteringsretning.ASC
           ? Sorteringsretning.DESC
           : Sorteringsretning.ASC,
     }));

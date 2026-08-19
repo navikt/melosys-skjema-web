@@ -28,7 +28,7 @@ interface RepresentationOption {
   descriptionKey?: string;
 }
 
-interface RepresentationCardProps {
+interface RepresentationCardProperties {
   option: RepresentationOption;
   onSelect: (type: Representasjonskontekst["representasjonstype"]) => void;
   badge?: string;
@@ -38,7 +38,7 @@ function RepresentationCard({
   option,
   onSelect,
   badge,
-}: RepresentationCardProps) {
+}: RepresentationCardProperties) {
   const { t } = useTranslation();
   const Icon = option.icon;
 
@@ -105,7 +105,7 @@ const REPRESENTATION_OPTIONS: RepresentationOption[] = [
   },
 ];
 
-interface RepresentasjonVelgerProps {
+interface RepresentasjonVelgerProperties {
   onVelg?: () => void;
   visOverskrift?: boolean;
 }
@@ -113,7 +113,7 @@ interface RepresentasjonVelgerProps {
 export function RepresentasjonVelger({
   onVelg,
   visOverskrift = true,
-}: RepresentasjonVelgerProps) {
+}: RepresentasjonVelgerProperties) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -122,7 +122,7 @@ export function RepresentasjonVelger({
     ...getVentendeMotpartSoknaderQuery(),
     enabled: motpartCtaAktiv,
   });
-  const harVentendeMotpartSoknad =
+  const isHarVentendeMotpartSoknad =
     (ventendeMotpartSoknader?.soknader.length ?? 0) > 0;
 
   const handleVelgRepresentasjon = (
@@ -155,7 +155,7 @@ export function RepresentasjonVelger({
           <RepresentationCard
             badge={
               option.type === Representasjonstype.DEG_SELV &&
-              harVentendeMotpartSoknad
+              isHarVentendeMotpartSoknad
                 ? t("landingsside.soknadVenterPaaDeg")
                 : undefined
             }

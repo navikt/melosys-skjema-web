@@ -11,7 +11,7 @@ import {
   VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 
-interface SendInnSkjemaKnappProps {
+interface SendInnSkjemaKnappProperties {
   skjemaId: string;
   onBeforeSubmit: () => boolean;
   onSubmitError: () => void;
@@ -21,7 +21,7 @@ export function SendInnSkjemaKnapp({
   skjemaId,
   onBeforeSubmit,
   onSubmitError,
-}: SendInnSkjemaKnappProps) {
+}: SendInnSkjemaKnappProperties) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

@@ -10,18 +10,22 @@ import { get, useFormContext } from "react-hook-form";
 import { useTranslateError } from "~/utils/translation.ts";
 
 export type DatePickerFormPartHandle = {
-  /** Tømmer feltet uten å trigge validering (ingen "påkrevd"-feil vises). */
+  /**
+  Tømmer feltet uten å trigge validering (ingen "påkrevd"-feil vises).
+  */
   clearWithoutValidation: () => void;
 };
 
-type DatePickerFormPartProps = {
+type DatePickerFormPartProperties = {
   formFieldName: string;
   label: string;
   description?: string;
   className?: string;
   error?: string;
   ref?: Ref<DatePickerFormPartHandle>;
-  /** Kalles i tillegg til den interne lagringen når datoen endres. */
+  /**
+  Kalles i tillegg til den interne lagringen når datoen endres.
+  */
   onDateChange?: (date?: Date) => void;
 } & Omit<UseDatepickerOptions, "onDateChange">;
 
@@ -34,7 +38,7 @@ export function DatePickerFormPart({
   ref,
   onDateChange,
   ...datePickerOptions
-}: DatePickerFormPartProps) {
+}: DatePickerFormPartProperties) {
   const {
     register,
     setValue,
@@ -45,7 +49,7 @@ export function DatePickerFormPart({
 
   // Engangssignal: settes når feltet tømmes programmatisk, slik at den
   // påfølgende onDateChange hopper over validering for nettopp den endringen.
-  const skipValidationRef = useRef(false);
+  const skipValidationReference = useRef(false);
 
   // Registrer feltet i react-hook-form slik at valideringsfeil
   // fra zodResolver legges inn i formState.errors for dette feltet
@@ -56,8 +60,8 @@ export function DatePickerFormPart({
 
   const datePicker = useDatepicker({
     onDateChange: (date) => {
-      const shouldValidate = !skipValidationRef.current;
-      skipValidationRef.current = false;
+      const shouldValidate = !skipValidationReference.current;
+      skipValidationReference.current = false;
 
       setValue(
         formFieldName,
@@ -76,7 +80,7 @@ export function DatePickerFormPart({
     ref,
     () => ({
       clearWithoutValidation: () => {
-        skipValidationRef.current = true;
+        skipValidationReference.current = true;
         datePicker.setSelected(undefined);
       },
     }),

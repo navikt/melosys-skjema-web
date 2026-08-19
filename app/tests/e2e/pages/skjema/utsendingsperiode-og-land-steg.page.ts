@@ -84,6 +84,7 @@ export class UtsendingsperiodeOgLandStegPage {
       this.page.getByText(
         nb.translation.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver.split(
           "{{land}}",
+          1,
         )[0] ?? "Arbeidsgiveren din har oppgitt",
       ),
     ).not.toBeVisible();

@@ -7,7 +7,7 @@ import {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-interface SkjemaStegLoaderProps<T extends UtsendtArbeidstakerSkjemaDto> {
+interface SkjemaStegLoaderProperties<T extends UtsendtArbeidstakerSkjemaDto> {
   id: string;
   skjemaQuery: (id: string) => UseQueryOptions<T>;
   children: (skjema: T) => React.ReactNode;
@@ -19,7 +19,7 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   skjemaQuery,
   children,
   allowedSkjemadeler,
-}: SkjemaStegLoaderProps<T>) {
+}: SkjemaStegLoaderProperties<T>) {
   const { data: skjema, isLoading, error } = useQuery(skjemaQuery(id));
   const { t } = useTranslation();
 

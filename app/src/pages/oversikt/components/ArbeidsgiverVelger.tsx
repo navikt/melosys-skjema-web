@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { OrganisasjonDto } from "~/types/melosysSkjemaTypes.ts";
 
-interface ArbeidsgiverVelgerProps {
+interface ArbeidsgiverVelgerProperties {
   arbeidsgivere: OrganisasjonDto[];
   formFieldName: string;
 }
@@ -19,7 +19,7 @@ interface ArbeidsgiverVelgerProps {
 export function ArbeidsgiverVelger({
   arbeidsgivere,
   formFieldName,
-}: ArbeidsgiverVelgerProps) {
+}: ArbeidsgiverVelgerProperties) {
   const { t } = useTranslation();
 
   const { setValue } = useFormContext();

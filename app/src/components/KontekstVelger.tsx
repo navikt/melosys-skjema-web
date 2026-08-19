@@ -81,7 +81,7 @@ const KONTEKST_CONFIG: Record<
 export function KontekstVelger() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonReference = useRef<HTMLButtonElement>(null);
   const representasjonskontekst = useRepresentasjonskontekst();
 
   // Slå opp firmanavn for RADGIVER-representasjonskontekst
@@ -164,7 +164,7 @@ export function KontekstVelger() {
         <Button
           aria-label={t("kontekstVelger.byttKontekstAriaLabel")}
           onClick={() => setIsOpen(!isOpen)}
-          ref={buttonRef}
+          ref={buttonReference}
           variant="secondary"
           size="small"
         >
@@ -175,7 +175,7 @@ export function KontekstVelger() {
         </Button>
       </HStack>
       <Popover
-        anchorEl={buttonRef.current}
+        anchorEl={buttonReference.current}
         onClose={() => setIsOpen(false)}
         open={isOpen}
         placement="bottom-end"

@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { ApplicationPictogram } from "~/assets/ApplicationPictogram.tsx";
 import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
-interface Props {
+interface Properties {
   skjemadel: Skjemadel;
 }
 
-export function SkjemaHeader({ skjemadel }: Props) {
+export function SkjemaHeader({ skjemadel }: Properties) {
   const { t } = useTranslation();
   const tittelKey =
     skjemadel === Skjemadel.ARBEIDSGIVERS_DEL

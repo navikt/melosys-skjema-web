@@ -34,11 +34,11 @@ export async function selectDateFromCalendar(
   const monthsToNavigate = totalMonthsTarget - totalMonthsCurrent;
 
   if (monthsToNavigate > 0) {
-    for (let i = 0; i < monthsToNavigate; i++) {
+    for (let index = 0; index < monthsToNavigate; index++) {
       await page.getByRole("button", { name: "Neste måned" }).click();
     }
   } else if (monthsToNavigate < 0) {
-    for (let i = 0; i < Math.abs(monthsToNavigate); i++) {
+    for (let index = 0; index < Math.abs(monthsToNavigate); index++) {
       await page.getByRole("button", { name: "Forrige måned" }).click();
     }
   }

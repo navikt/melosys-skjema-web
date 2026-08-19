@@ -1,4 +1,6 @@
-/** Maks lengde for et formatert beløpsfelt (f.eks. "999 999 999 999" = 16 tegn) */
+/**
+Maks lengde for et formatert beløpsfelt (f.eks. "999 999 999 999" = 16 tegn)
+*/
 export const BELOP_MAX_LENGTH = 16;
 
 const belopFormatter = new Intl.NumberFormat("nb-NO", {

@@ -114,7 +114,7 @@ export class ArbeidstakerensLonnStegPage {
   /**
    * Opens the "Legg til utenlandsk virksomhet" modal, fills required fields, clicks Lagre.
    */
-  async leggTilUtenlandskVirksomhet(opts: {
+  async leggTilUtenlandskVirksomhet(options: {
     navn: string;
     vegnavnOgHusnummer: string;
     land: string;
@@ -127,24 +127,24 @@ export class ArbeidstakerensLonnStegPage {
 
     await dialog
       .getByLabel(t.utenlandskeVirksomheterFormPart.navnPaVirksomhet)
-      .fill(opts.navn);
+      .fill(options.navn);
     await dialog
       .getByLabel(
         t.utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks,
       )
-      .fill(opts.vegnavnOgHusnummer);
+      .fill(options.vegnavnOgHusnummer);
 
     await dialog
       .getByRole("combobox", {
         name: t.utenlandskeVirksomheterFormPart.land,
       })
-      .selectOption(opts.land);
+      .selectOption(options.land);
 
     const konsernGroup = dialog.getByRole("radiogroup", {
       name: t.utenlandskeVirksomheterFormPart
         .tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren,
     });
-    await (opts.tilhorerSammeKonsern
+    await (options.tilhorerSammeKonsern
       ? konsernGroup.getByRole("radio", { name: t.felles.ja }).click()
       : konsernGroup.getByRole("radio", { name: t.felles.nei }).click());
 

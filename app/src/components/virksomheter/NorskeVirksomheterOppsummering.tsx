@@ -7,13 +7,13 @@ import { norskVirksomhetSchema } from "~/components/virksomheter/virksomheterSch
 
 type NorskVirksomhetFormData = z.infer<typeof norskVirksomhetSchema>;
 
-interface NorskVirksomhetOppsummeringProps {
+interface NorskVirksomhetOppsummeringProperties {
   virksomhet: NorskVirksomhetFormData;
 }
 
 export function NorskVirksomhetOppsummering({
   virksomhet,
-}: NorskVirksomhetOppsummeringProps) {
+}: NorskVirksomhetOppsummeringProperties) {
   const { t } = useTranslation();
 
   return (
@@ -32,13 +32,13 @@ export function NorskVirksomhetOppsummering({
   );
 }
 
-interface NorskeVirksomheterOppsummeringProps {
+interface NorskeVirksomheterOppsummeringProperties {
   virksomheter?: Array<NorskVirksomhetFormData>;
 }
 
 export function NorskeVirksomheterOppsummering({
   virksomheter,
-}: NorskeVirksomheterOppsummeringProps) {
+}: NorskeVirksomheterOppsummeringProperties) {
   const { t } = useTranslation();
 
   if (!virksomheter || virksomheter.length === 0) {

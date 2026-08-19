@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { LandKode } from "~/types/melosysSkjemaTypes.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
-type LandVelgerFormPartProps = {
+type LandVelgerFormPartProperties = {
   formFieldName: string;
   label: string;
   className?: string;
@@ -58,8 +58,8 @@ export function LandVelgerFormPart({
   label,
   className,
   inkluderNorge,
-  ...selectProps
-}: LandVelgerFormPartProps) {
+  ...selectProperties
+}: LandVelgerFormPartProperties) {
   const { register, getFieldState, formState } = useFormContext();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -83,7 +83,7 @@ export function LandVelgerFormPart({
       error={error}
       label={label}
       {...register(formFieldName)}
-      {...selectProps}
+      {...selectProperties}
     >
       <option value="">{t("landVelgerFormPart.velgLand")}</option>
       {options.map((land) => (

@@ -11,21 +11,23 @@ export const arbeidstakerensLonnSchema = z
     virksomheterSomUtbetalerLonnOgNaturalytelser:
       norskeOgUtenlandskeVirksomheterSchema.optional(),
   })
-  .superRefine((data, ctx) => {
-    if (!data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
-      const v = data.virksomheterSomUtbetalerLonnOgNaturalytelser;
-      const hasAny =
-        (v?.norskeVirksomheter?.length ?? 0) > 0 ||
-        (v?.utenlandskeVirksomheter?.length ?? 0) > 0;
+  .superRefine((data, context) => {
+    if (data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden) {
+      return;
+    }
 
-      if (!hasAny) {
-        ctx.addIssue({
-          code: "custom",
-          message:
-            "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
-          path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
-        });
-      }
+    const v = data.virksomheterSomUtbetalerLonnOgNaturalytelser;
+    const hasAny =
+      (v?.norskeVirksomheter?.length ?? 0) > 0 ||
+      (v?.utenlandskeVirksomheter?.length ?? 0) > 0;
+
+    if (!hasAny) {
+      context.addIssue({
+        code: "custom",
+        message:
+          "arbeidstakerenslonnSteg.duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv",
+        path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
+      });
     }
   })
   .transform((data) => ({

@@ -14,7 +14,7 @@ import {
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { formatDato } from "~/utils/datoformat.ts";
 
-interface VentendeMotpartBannerProps {
+interface VentendeMotpartBannerProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
@@ -27,18 +27,18 @@ interface VentendeMotpartBannerProps {
  */
 export function VentendeMotpartBanner({
   representasjonskontekst,
-}: VentendeMotpartBannerProps) {
+}: VentendeMotpartBannerProperties) {
   const ctaAktiv = useFeatureToggle(MOTPART_CTA) ?? false;
-  const erDegSelv =
+  const isErDegSelv =
     representasjonskontekst.representasjonstype ===
     Representasjonstype.DEG_SELV;
 
   const { data } = useQuery({
     ...getVentendeMotpartSoknaderQuery(),
-    enabled: ctaAktiv && erDegSelv,
+    enabled: ctaAktiv && isErDegSelv,
   });
 
-  if (!ctaAktiv || !erDegSelv || !data || data.soknader.length === 0) {
+  if (!ctaAktiv || !isErDegSelv || !data || data.soknader.length === 0) {
     return null;
   }
 

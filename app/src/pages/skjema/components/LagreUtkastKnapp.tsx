@@ -6,13 +6,13 @@ import { useTranslation } from "react-i18next";
 
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 
-interface LagreUtkastKnappProps {
+interface LagreUtkastKnappProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
 export function LagreUtkastKnapp({
   representasjonskontekst,
-}: LagreUtkastKnappProps) {
+}: LagreUtkastKnappProperties) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

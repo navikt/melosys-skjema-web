@@ -2,14 +2,18 @@ import { PencilIcon } from "@navikt/aksel-icons";
 import { Button, ButtonProps } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
-interface EndreKnappProps extends Omit<
+interface EndreKnappProperties extends Omit<
   ButtonProps,
   "icon" | "type" | "variant"
 > {
   children?: React.ReactNode;
 }
 
-export function EndreKnapp({ children, className, ...rest }: EndreKnappProps) {
+export function EndreKnapp({
+  children,
+  className,
+  ...rest
+}: EndreKnappProperties) {
   const { t } = useTranslation();
   return (
     <Button
