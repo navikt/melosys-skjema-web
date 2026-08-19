@@ -1,13 +1,13 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
+import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const utsendingsperiodeOgLand =
@@ -15,14 +15,14 @@ const utsendingsperiodeOgLand =
 const felter = utsendingsperiodeOgLand.felter;
 
 // Tittel hentes fra i18n, ikke fra skjemadefinisjonen
-const stegTittel = nb.translation.utsendingsperiodeOgLandSteg.tittel;
+const stegTittel = translations.utsendingsperiodeOgLandSteg.tittel;
 
 // Feilmeldinger
 const feilmeldinger = {
-  land: nb.translation.utsendingsperiodeOgLandSteg
+  land: translations.utsendingsperiodeOgLandSteg
     .duMaVelgeHvilketLandArbeidetSkalUtforesI,
-  datoErPakrevd: nb.translation.periode.datoErPakrevd,
-  tilDatoForFraDato: nb.translation.periode.tilDatoMaVareEtterFraDato,
+  datoErPakrevd: translations.periode.datoErPakrevd,
+  tilDatoForFraDato: translations.periode.tilDatoMaVareEtterFraDato,
 };
 
 export class UtsendingsperiodeOgLandStegPage {
@@ -43,10 +43,10 @@ export class UtsendingsperiodeOgLandStegPage {
     this.utsendelseLandCombobox = page.getByRole("combobox", {
       name: felter.utsendelseLand.label,
     });
-    this.fraDatoInput = page.getByLabel(nb.translation.periode.fraDato);
-    this.tilDatoInput = page.getByLabel(nb.translation.periode.tilDato);
+    this.fraDatoInput = page.getByLabel(translations.periode.fraDato);
+    this.tilDatoInput = page.getByLabel(translations.periode.tilDato);
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
   }
 
@@ -63,7 +63,7 @@ export class UtsendingsperiodeOgLandStegPage {
     fraDato: string,
     tilDato: string,
   ) {
-    return nb.translation.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver
+    return translations.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver
       .replace("{{land}}", land)
       .replace("{{fraDato}}", fraDato)
       .replace("{{tilDato}}", tilDato);
@@ -82,7 +82,7 @@ export class UtsendingsperiodeOgLandStegPage {
   async assertPreutfyltInfoboksNotVisible() {
     await expect(
       this.page.getByText(
-        nb.translation.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver.split(
+        translations.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver.split(
           "{{land}}",
         )[0] ?? "Arbeidsgiveren din har oppgitt",
       ),
@@ -96,7 +96,7 @@ export class UtsendingsperiodeOgLandStegPage {
   async assertLesevisningVisible(landNavn: string) {
     await expect(
       this.page.getByRole("button", {
-        name: nb.translation.utsendingsperiodeOgLandSteg.endreLandEllerPeriode,
+        name: translations.utsendingsperiodeOgLandSteg.endreLandEllerPeriode,
       }),
     ).toBeVisible();
     await expect(this.page.getByText(landNavn, { exact: true })).toBeVisible();
@@ -106,7 +106,7 @@ export class UtsendingsperiodeOgLandStegPage {
   async assertArbeidsgiverOppgaLandVisible(land: string) {
     await expect(
       this.page.getByText(
-        nb.translation.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand.replace(
+        translations.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand.replace(
           "{{land}}",
           land,
         ),
@@ -120,7 +120,7 @@ export class UtsendingsperiodeOgLandStegPage {
   ) {
     await expect(
       this.page.getByText(
-        nb.translation.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode
+        translations.utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode
           .replace("{{fraDato}}", fraDato)
           .replace("{{tilDato}}", tilDato),
       ),
@@ -130,7 +130,7 @@ export class UtsendingsperiodeOgLandStegPage {
   async clickEndreLandEllerPeriode() {
     await this.page
       .getByRole("button", {
-        name: nb.translation.utsendingsperiodeOgLandSteg.endreLandEllerPeriode,
+        name: translations.utsendingsperiodeOgLandSteg.endreLandEllerPeriode,
       })
       .click();
   }

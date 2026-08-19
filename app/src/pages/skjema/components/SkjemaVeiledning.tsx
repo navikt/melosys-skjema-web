@@ -76,7 +76,7 @@ export function SkjemaVeiledning({ onStartSoknad }: SkjemaVeiledningProps) {
             </List>
             <BodyLong>
               {t("skjemaVeiledning.forAnnenUtfyllendeInformasjon")}{" "}
-              <Link href="https://www.nav.no/dagpenger#sok">
+              <Link href={t("skjemaVeiledning.detteEksempeletForDagpengerUrl")}>
                 {t("skjemaVeiledning.detteEksempeletForDagpenger")}
               </Link>
               .
@@ -133,7 +133,7 @@ export function SkjemaVeiledning({ onStartSoknad }: SkjemaVeiledningProps) {
           <div>
             <BodyLong>
               {t("skjemaVeiledning.detErViktigAtDuGirOss")}{" "}
-              <Link href="https://www.nav.no/endringer">
+              <Link href={t("skjemaVeiledning.lesMerOmViktighetenUrl")}>
                 {t("skjemaVeiledning.lesMerOmViktigheten")}
               </Link>
             </BodyLong>

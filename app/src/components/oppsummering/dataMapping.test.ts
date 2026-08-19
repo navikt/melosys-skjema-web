@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1.ts";
+import { SKJEMA_DEFINISJONER_A1 } from "~/constants/skjemaDefinisjonA1.ts";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
 import {
@@ -20,8 +20,6 @@ import {
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { resolveSeksjoner, VirksomhetTypeKey } from "./dataMapping.ts";
-
-const definisjon = SKJEMA_DEFINISJON_A1 as unknown as SkjemaDefinisjonDto;
 
 const utsendingsperiodeOgLand = {
   utsendelseLand: LandKode.SE,
@@ -97,7 +95,12 @@ const kombinertDto: UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto =
     },
   };
 
-describe("resolveSeksjoner", () => {
+// Kjøres per språk: strukturen i generert definisjon skal matche TS-enumene for nb, nn og en
+describe.each(["nb", "nn", "en"] as const)("resolveSeksjoner (%s)", (sprak) => {
+  const definisjon = SKJEMA_DEFINISJONER_A1[
+    sprak
+  ] as unknown as SkjemaDefinisjonDto;
+
   it("arbeidstakers del inneholder alle forventede seksjoner med utsendingsperiodeOgLand øverst", () => {
     const seksjoner = resolveSeksjoner(arbeidstakersDelDto, definisjon);
     expect(seksjoner.map((s) => s.seksjonNavn)).toEqual([

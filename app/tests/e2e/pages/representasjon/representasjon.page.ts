@@ -1,8 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "~/i18n/nb";
+import { translations as alleTranslations } from "../../utils/translations";
 
-const translations = nb.translation.landingsside;
+const translations = alleTranslations.landingsside;
 
 export class RepresentasjonPage {
   readonly page: Page;

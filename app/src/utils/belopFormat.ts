@@ -23,6 +23,30 @@ export function formaterBelopForVisning(value: string): string {
   return belopFormatter.format(parsed);
 }
 
+const VISNINGS_LOCALE: Record<string, string> = {
+  nb: "nb-NO",
+  nn: "nb-NO",
+  en: "en-GB",
+};
+
+/**
+ * Formaterer et beløp for ren VISNING (oppsummering) med språkets tusenskilletegn.
+ * Skal ikke brukes for input-felter — de bruker formaterBelopForVisning, som er
+ * koblet til stripBelopFormatering/normaliserBelopForApi og alltid grupperer med mellomrom.
+ */
+export function formaterBelop(value: string, sprak: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+
+  const normalized = trimmed.replaceAll(/\s/g, "").replace(/[.,]\d*$/, "");
+  if (!/^\d+$/.test(normalized)) return value;
+
+  return new Intl.NumberFormat(VISNINGS_LOCALE[sprak] ?? "nb-NO", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(Number.parseInt(normalized, 10));
+}
+
 /**
  * Fjerner formatering (mellomrom) fra et visningsformatert beløp,
  * beholder kun siffer — formatet melosys-skjema-api forventer: "1234"

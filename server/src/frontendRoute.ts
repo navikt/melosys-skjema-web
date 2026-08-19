@@ -31,14 +31,38 @@ const csp = await buildCspHeader(
   { env: config.app.env },
 );
 
-const decoratorProps = {
-  env: config.app.env,
-  params: {
-    context: "privatperson",
-    logoutWarning: true,
-    chatbot: false,
-  },
-} satisfies DecoratorFetchProps;
+const STOTTEDE_SPRAK = ["nb", "nn", "en"] as const;
+type StottetSprak = (typeof STOTTEDE_SPRAK)[number];
+
+/**
+ * Leser språket fra decorator-language-cookien slik at NAV-chromen (header/footer/meny)
+ * rendres på riktig språk allerede på first paint. Cookien settes av dekoratøren når
+ * appen kaller setParams({ language }) ved språkbytte. Ukjente verdier (f.eks. se/pl)
+ * faller tilbake til bokmål, likt appens egen språk-guard.
+ */
+function decoratorLanguage(request: express.Request): StottetSprak {
+  const cookieSprak = request.headers.cookie
+    ?.split(";")
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith("decorator-language="))
+    ?.split("=")[1];
+  return STOTTEDE_SPRAK.includes(cookieSprak as StottetSprak)
+    ? (cookieSprak as StottetSprak)
+    : "nb";
+}
+
+// Vi sender bevisst IKKE availableLanguages — da rendrer ikke dekoratøren sin egen
+// språkvelger, og appens MaalformVelger forblir den eneste velgeren.
+const decoratorProps = (language: StottetSprak) =>
+  ({
+    env: config.app.env,
+    params: {
+      context: "privatperson",
+      logoutWarning: true,
+      chatbot: false,
+      language,
+    },
+  }) satisfies DecoratorFetchProps;
 
 export function setupStaticRoutes(router: Router) {
   // Set up rate limiter: maximum of 900 requests per 15 minutes which
@@ -75,7 +99,9 @@ export function setupStaticRoutes(router: Router) {
     const viteModeHtml = response.viteModeHtml;
 
     if (viteModeHtml) {
-      return response.send(await injectViteModeHtml(viteModeHtml));
+      return response.send(
+        await injectViteModeHtml(viteModeHtml, decoratorLanguage(request)),
+      );
     }
 
     // Kun ved lokal kjøring (NAIS_CLUSTER_NAME er ikke satt) finnes ikke
@@ -91,7 +117,7 @@ export function setupStaticRoutes(router: Router) {
 
     const html = await injectDecoratorServerSide({
       filePath: spaFilePath,
-      ...decoratorProps,
+      ...decoratorProps(decoratorLanguage(request)),
     });
 
     logger.info("Dekorator hentet");
@@ -100,13 +126,13 @@ export function setupStaticRoutes(router: Router) {
   });
 }
 
-async function injectViteModeHtml(html: string) {
+async function injectViteModeHtml(html: string, language: StottetSprak) {
   const {
     DECORATOR_HEADER,
     DECORATOR_HEAD_ASSETS,
     DECORATOR_SCRIPTS,
     DECORATOR_FOOTER,
-  } = await fetchDecoratorHtml(decoratorProps);
+  } = await fetchDecoratorHtml(decoratorProps(language));
 
   return [
     DECORATOR_HEADER,

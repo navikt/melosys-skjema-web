@@ -1,17 +1,17 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   ArbeidssituasjonDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { translations } from "../../utils/translations";
 
 const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
 const felter = arbeidssituasjon.felter;
-const t = nb.translation;
+const t = translations;
 
 // Feilmeldinger
 const feilmeldinger = {

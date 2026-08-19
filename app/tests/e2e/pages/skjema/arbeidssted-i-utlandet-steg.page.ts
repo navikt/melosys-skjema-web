@@ -1,7 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   ArbeidsstedIUtlandetDto,
   UtsendtArbeidstakerSkjemaDto,
@@ -9,6 +8,7 @@ import type {
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 import { mockFetchSkjema } from "../../fixtures/api-mocks";
+import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const arbeidsstedIUtlandet =
@@ -24,49 +24,48 @@ const omBordPaFlyFelter =
 const feilmeldinger = {
   // Arbeidssted type (discriminated union)
   duMaVelgeArbeidsstedType:
-    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeArbeidsstedType,
+    translations.arbeidsstedIUtlandetSteg.duMaVelgeArbeidsstedType,
   // Felles
   navnPaVirksomhetErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd,
   // På land
   duMaVelgeFastEllerVekslende:
-    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende,
+    translations.arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende,
   duMaSvarePaOmDetErHjemmekontor:
-    nb.translation.arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor,
+    translations.arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor,
   vegadresseErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.vegadresseErPakrevd,
-  nummerErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.nummerErPakrevd,
-  postkodeErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.postkodeErPakrevd,
-  byStedErPakrevd: nb.translation.arbeidsstedIUtlandetSteg.byStedErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.vegadresseErPakrevd,
+  nummerErPakrevd: translations.arbeidsstedIUtlandetSteg.nummerErPakrevd,
+  postkodeErPakrevd: translations.arbeidsstedIUtlandetSteg.postkodeErPakrevd,
+  byStedErPakrevd: translations.arbeidsstedIUtlandetSteg.byStedErPakrevd,
   // Offshore
   navnPaInnretningErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd,
   duMaVelgeTypeInnretning:
-    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeTypeInnretning,
+    translations.arbeidsstedIUtlandetSteg.duMaVelgeTypeInnretning,
   sokkelLandErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.sokkelLandErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.sokkelLandErPakrevd,
   // På skip
   navnPaSkipErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.navnPaSkipErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.navnPaSkipErPakrevd,
   yrketTilArbeidstakerErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.yrketTilArbeidstakerErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.yrketTilArbeidstakerErPakrevd,
   duMaVelgeHvorSkipetSeiler:
-    nb.translation.arbeidsstedIUtlandetSteg.duMaVelgeHvorSkipetSeiler,
-  flagglandErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.flagglandErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.duMaVelgeHvorSkipetSeiler,
+  flagglandErPakrevd: translations.arbeidsstedIUtlandetSteg.flagglandErPakrevd,
   territorialfarvannLandErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.territorialfarvannLandErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.territorialfarvannLandErPakrevd,
   // Om bord på fly
   hjemmebaseLandErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseLandErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.hjemmebaseLandErPakrevd,
   hjemmebaseNavnErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.hjemmebaseNavnErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.hjemmebaseNavnErPakrevd,
   duMaSvarePaOmDetErVanligHjemmebase:
-    nb.translation.arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErVanligHjemmebase,
+    translations.arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErVanligHjemmebase,
   vanligHjemmebaseLandErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseLandErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.vanligHjemmebaseLandErPakrevd,
   vanligHjemmebaseNavnErPakrevd:
-    nb.translation.arbeidsstedIUtlandetSteg.vanligHjemmebaseNavnErPakrevd,
+    translations.arbeidsstedIUtlandetSteg.vanligHjemmebaseNavnErPakrevd,
 };
 
 export class ArbeidsstedIUtlandetStegPage {
@@ -153,10 +152,10 @@ export class ArbeidsstedIUtlandetStegPage {
     });
     this.erHjemmekontorRadioGroup = {
       JA: erHjemmekontorGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: erHjemmekontorGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -219,10 +218,10 @@ export class ArbeidsstedIUtlandetStegPage {
     });
     this.erVanligHjemmebaseRadioGroup = {
       JA: erVanligHjemmebaseGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: erVanligHjemmebaseGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -234,7 +233,7 @@ export class ArbeidsstedIUtlandetStegPage {
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
   }
 

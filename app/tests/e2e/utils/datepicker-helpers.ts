@@ -1,4 +1,12 @@
+import { en, nb, nn } from "@navikt/ds-react/locales";
 import type { Locator, Page } from "@playwright/test";
+
+import { E2E_SPRAK } from "./translations";
+
+// Aksels egne locale-bundles er fasit for komponent-tekstene — hardkodede
+// strenger brekker så snart en test kjører under en Provider med nn/en.
+const AKSEL_LOCALES = { nb, nn, en } as const;
+export type DatePickerSprak = keyof typeof AKSEL_LOCALES;
 
 /**
  * Helper function to select a date using the NAV Design System date picker calendar
@@ -10,7 +18,9 @@ export async function selectDateFromCalendar(
   page: Page,
   dateInput: Locator,
   date: string,
+  sprak: DatePickerSprak = E2E_SPRAK,
 ) {
+  const datePickerTekster = AKSEL_LOCALES[sprak].DatePicker;
   // Parse date string (format: DD.MM.YYYY)
   const parts = date.split(".");
   const day = parts[0] ?? "";
@@ -23,7 +33,9 @@ export async function selectDateFromCalendar(
   // Find and click the calendar button next to this input
   // The button is a sibling of the input's container
   const container = dateInput.locator("..");
-  await container.getByRole("button", { name: "Åpne datovelger" }).click();
+  await container
+    .getByRole("button", { name: datePickerTekster.openDatePicker })
+    .click();
 
   // Navigate to correct year and month
   const currentYear = new Date().getFullYear();
@@ -35,11 +47,15 @@ export async function selectDateFromCalendar(
 
   if (monthsToNavigate > 0) {
     for (let i = 0; i < monthsToNavigate; i++) {
-      await page.getByRole("button", { name: "Neste måned" }).click();
+      await page
+        .getByRole("button", { name: datePickerTekster.goToNextMonth })
+        .click();
     }
   } else if (monthsToNavigate < 0) {
     for (let i = 0; i < Math.abs(monthsToNavigate); i++) {
-      await page.getByRole("button", { name: "Forrige måned" }).click();
+      await page
+        .getByRole("button", { name: datePickerTekster.goToPreviousMonth })
+        .click();
     }
   }
 

@@ -15,18 +15,11 @@ import { useTranslation } from "react-i18next";
 import { getUtkastQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
+import { formatDato } from "~/utils/datoformat.ts";
 
 interface UtkastListeProps {
   representasjonskontekst: Representasjonskontekst;
 }
-
-const formatDato = (dato: string) => {
-  return new Date(dato).toLocaleDateString("nb-NO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
 
 /**
  * Utkast/påbegynte søknader komponent.
@@ -34,7 +27,7 @@ const formatDato = (dato: string) => {
  * Skjules hvis det ikke finnes noen utkast.
  */
 export function UtkastListe({ representasjonskontekst }: UtkastListeProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery(
@@ -170,7 +163,7 @@ export function UtkastListe({ representasjonskontekst }: UtkastListeProps) {
                             {t("oversiktFelles.utkastOpprettet")}
                           </BodyShort>
                           <BodyShort size="small">
-                            {formatDato(item.opprettetDato)}
+                            {formatDato(item.opprettetDato, i18n.language)}
                           </BodyShort>
                         </div>
                         <div>
@@ -178,7 +171,7 @@ export function UtkastListe({ representasjonskontekst }: UtkastListeProps) {
                             {t("oversiktFelles.utkastSistEndret")}
                           </BodyShort>
                           <BodyShort size="small">
-                            {formatDato(item.sistEndretDato)}
+                            {formatDato(item.sistEndretDato, i18n.language)}
                           </BodyShort>
                         </div>
                       </HStack>

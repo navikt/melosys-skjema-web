@@ -10,6 +10,7 @@ import {
   sendInnSkjema,
   VENTENDE_MOTPART_SOKNADER_QUERY_KEY,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { toSprak } from "~/utils/languages.ts";
 
 interface SendInnSkjemaKnappProps {
   skjemaId: string;
@@ -22,12 +23,12 @@ export function SendInnSkjemaKnapp({
   onBeforeSubmit,
   onSubmitError,
 }: SendInnSkjemaKnappProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const sendInnSkjemaMutation = useMutation({
-    mutationFn: () => sendInnSkjema(skjemaId),
+    mutationFn: () => sendInnSkjema(skjemaId, toSprak(i18n.language)),
     onSuccess: (response) => {
       // Populer cache for kvittering-query
       queryClient.setQueryData(

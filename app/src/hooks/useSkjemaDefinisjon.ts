@@ -6,17 +6,8 @@ import {
   getSeksjonForLang,
   getSkjemaDefinisjon,
   type SeksjonsNavn,
-  type SupportedLanguage,
 } from "~/constants/skjemaDefinisjonA1";
-
-/**
- * Mapper i18n språkkode til støttet skjemadefinisjon-språk.
- * Fallback til 'nb' hvis språket ikke støttes.
- */
-function mapToSupportedLanguage(i18nLang: string): SupportedLanguage {
-  if (i18nLang === "en") return "en";
-  return "nb"; // Fallback til norsk
-}
+import { mapToSupportedLanguage } from "~/utils/languages.ts";
 
 /**
  * Hook for å hente felt fra skjemadefinisjon basert på nåværende språk.

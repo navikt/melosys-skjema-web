@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const LANGUAGES = ["nb", "en"];
+const LANGUAGES = ["nb", "nn", "en"];
 const SCHEMA_TYPE = "UTSENDT_ARBEIDSTAKER";
 const SCHEMA_VERSION = "v1";
 
@@ -266,8 +266,9 @@ function generateTypeScriptFile(definitions: Record<string, EnkeltsprakligDefini
   }
 
   const allLanguagesExport = `export const SKJEMA_DEFINISJONER_A1 = {
-  nb: SKJEMA_DEFINISJON_A1_NB,
-  en: SKJEMA_DEFINISJON_A1_EN,
+${Object.keys(definitions)
+  .map((lang) => `  ${lang}: SKJEMA_DEFINISJON_A1_${lang.toUpperCase()},`)
+  .join("\n")}
 } as const;
 
 export type SupportedLanguage = keyof typeof SKJEMA_DEFINISJONER_A1;
@@ -316,24 +317,6 @@ export function getFeltForLang<S extends SeksjonsNavn>(
   const definisjon = SKJEMA_DEFINISJONER_A1[lang] as unknown as SkjemaDefinisjonA1Type;
   const seksjon = definisjon.seksjoner[seksjonNavn];
   return (seksjon.felter as Record<string, BaseFeltType>)[feltNavn as string]!;
-}
-
-/**
- * Typesikker aksess til felt (norsk bokmål).
- */
-export function getFelt<S extends SeksjonsNavn>(
-  seksjonNavn: S,
-  feltNavn: FeltNavn<S>,
-): BaseFeltType {
-  const seksjon = SKJEMA_DEFINISJON_A1.seksjoner[seksjonNavn];
-  return (seksjon.felter as Record<string, BaseFeltType>)[feltNavn as string]!;
-}
-
-/**
- * Hent en hel seksjon (norsk bokmål).
- */
-export function getSeksjon<S extends SeksjonsNavn>(seksjonNavn: S) {
-  return SKJEMA_DEFINISJON_A1.seksjoner[seksjonNavn];
 }
 
 /**

@@ -1,17 +1,17 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   FamiliemedlemmerDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { translations } from "../../utils/translations";
 
 const familiemedlemmerSeksjon = SKJEMA_DEFINISJON_A1.seksjoner.familiemedlemmer;
 const felter = familiemedlemmerSeksjon.felter;
-const t = nb.translation;
+const t = translations;
 
 export class FamiliemedlemmerStegPage {
   readonly page: Page;
@@ -36,10 +36,10 @@ export class FamiliemedlemmerStegPage {
     );
     this.harDuFamiliemedlemmerSomSkalVaereMedRadioGroup = {
       JA: harDuFamiliemedlemmerSomSkalVaereMedGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: harDuFamiliemedlemmerSomSkalVaereMedGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -48,7 +48,7 @@ export class FamiliemedlemmerStegPage {
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
   }
 

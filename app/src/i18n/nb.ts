@@ -49,6 +49,8 @@ export const nb = {
         "Du må fylle ut følgende steg før du kan sende inn søknaden",
       feilVedInnsending:
         "Det oppstod en feil ved innsending av søknaden. Prøv igjen på et senere tidspunkt.",
+      organisasjonMedOrgnummerAriaLabel:
+        "{{navn}} med organisasjonsnummer {{orgnummer}}",
     },
     periode: {
       fraDato: "Fra dato",
@@ -105,10 +107,12 @@ export const nb = {
       lesMerOmViktigheten:
         "Les mer om viktigheten av å gi riktige opplysninger.",
       jegBekrefter: "Jeg bekrefter at jeg vil svare så riktig som jeg kan.",
+      detteEksempeletForDagpengerUrl: "https://www.nav.no/dagpenger#sok",
+      lesMerOmViktighetenUrl: "https://www.nav.no/endringer",
     },
     soknadHeader: {
       soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
-        "Søknad for utsendt arbeidstaker innen EU/EØS og Sveits",
+        "Søknad om A1 for utsendte arbeidstakere i EØS eller Sveits",
       bekreftelseFraArbeidsgiver:
         "Bekreftelse fra arbeidsgiver på utsending til annet EØS-land eller Sveits",
     },
@@ -151,10 +155,10 @@ export const nb = {
         "Du må svare på om du har ektefelle, partner, samboer eller barn som skal være med deg",
       infokortTittel: "Medfølgende familiemedlemmer",
       informasjonOmEgenSoknad:
-        "For medfølgende barn under 18 år som du søker på vegne av og for andre familiemedlemmer som trenger avklaring om sin trygdetilhørighet, skal følgende skjema benyttes:",
+        "Hvis familiemedlemmer trenger avklaring av sin trygdetilhørighet, må de sende inn egen søknad. Medfølgende familiemedlemmer kan søke i skjemaet:",
       soknadsskjemaLenke: "https://www.nav.no/fyllut/nav020807",
       soknadsskjemaNavn:
-        "Søknad om avklaring av trygdetilhørighet under opphold i EØS eller Sveits",
+        "søknad om avklaring av trygdetilhørighet under opphold i EØS eller Sveits",
     },
     tilleggsopplysningerSteg: {
       tittel: "Tilleggsopplysninger",
@@ -179,6 +183,8 @@ export const nb = {
       duMaLasteOppMinstEttVedlegg: "Du må laste opp minst ett vedlegg",
       feilVedHentingAvVedlegg: "Kunne ikke hente vedlegg. Prøv igjen senere.",
       feilVedSlettingAvVedlegg: "Kunne ikke slette vedlegget. Prøv igjen.",
+      feilTomFil: "Filen er tom.",
+      feilMaksAntallVedlegg: "Maks antall vedlegg (10) er nådd.",
     },
     arbeidssituasjonSteg: {
       tittel: "Arbeidssituasjon",
@@ -216,7 +222,6 @@ export const nb = {
     arbeidsstedIUtlandetSteg: {
       tittel: "Arbeidssted i utlandet",
       velgArbeidssted: "Velg arbeidssted",
-      // Feilmeldinger
       duMaVelgeArbeidsstedType: "Du må velge hvor arbeidet skal utføres",
       duMaVelgeFastEllerVekslende:
         "Du må velge om arbeidstakeren har fast arbeidssted eller om det veksler ofte",
@@ -256,6 +261,8 @@ export const nb = {
         "Du må svare på om arbeidsgiveren opprettholder vanlig drift i Norge",
     },
     utenlandsoppdragetSteg: {
+      // Excel-ordlyden «Utsendingsperiode og land» tas sammen med v1->v2-bumpen av
+      // definisjonen, så bokmål viser samme tittel i steget som i oppsummeringen
       tittel: "Utenlandsoppdraget",
       duMaVelgeHvilketLandArbeidstakerenSendesTil:
         "Du må velge hvilket land arbeidstakeren sendes til",
@@ -267,17 +274,12 @@ export const nb = {
         "Du må svare på om arbeidstaker vil fortsatt være ansatt i hele utsendingsperioden",
       duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson:
         "Du må svare på om arbeidstaker erstatter en annen person",
-      tilDatoKanIkkeVareForFraDato: "Til dato kan ikke være før fra dato",
       begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet:
         "Begrunnelse er påkrevd når arbeidsgiver ikke har oppdrag i landet",
       beskrivelseAvAnsettelsesforholdErPakrevd:
         "Beskrivelse av ansettelsesforhold er påkrevd",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
-      fraDatoForForrigeArbeidstakerErPakrevd:
-        "Fra-dato for forrige arbeidstaker er påkrevd",
-      tilDatoForForrigeArbeidstakerErPakrevd:
-        "Til-dato for forrige arbeidstaker er påkrevd",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utsendingsperiode og land",
@@ -481,6 +483,7 @@ export const nb = {
       orgnrLabel: "Org.nr:",
       feilVedOpprettelse:
         "Det oppstod en feil ved opprettelse av søknad. Prøv igjen senere.",
+      fullmaktLenkeUrl: "https://www.nav.no/fullmakt",
     },
     velgRadgiverfirma: {
       tittel: "Hvilket rådgivingsfirma jobber du hos?",

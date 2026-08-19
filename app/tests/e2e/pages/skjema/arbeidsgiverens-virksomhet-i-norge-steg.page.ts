@@ -1,7 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   ArbeidsgiverensVirksomhetINorgeDto,
   UtsendtArbeidstakerSkjemaDto,
@@ -9,6 +8,7 @@ import type {
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 import { mockFetchSkjema } from "../../fixtures/api-mocks";
+import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const virksomhetINorge =
@@ -18,13 +18,13 @@ const felter = virksomhetINorge.felter;
 // Feilmeldinger
 const feilmeldinger = {
   offentligVirksomhetErPakrevd:
-    nb.translation.arbeidsgiverensVirksomhetINorgeSteg
+    translations.arbeidsgiverensVirksomhetINorgeSteg
       .duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet,
   bemanningsEllerVikarbyraErPakrevd:
-    nb.translation.arbeidsgiverensVirksomhetINorgeSteg
+    translations.arbeidsgiverensVirksomhetINorgeSteg
       .duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra,
   vanligDriftErPakrevd:
-    nb.translation.arbeidsgiverensVirksomhetINorgeSteg
+    translations.arbeidsgiverensVirksomhetINorgeSteg
       .duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge,
 };
 
@@ -49,10 +49,10 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     });
     this.offentligVirksomhetRadioGroup = {
       JA: offentligVirksomhetGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: offentligVirksomhetGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -61,10 +61,10 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     });
     this.bemanningsEllerVikarbyraRadioGroup = {
       JA: bemanningsEllerVikarbyraGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: bemanningsEllerVikarbyraGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -73,15 +73,15 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     });
     this.vanligDriftRadioGroup = {
       JA: vanligDriftGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: vanligDriftGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
   }
 

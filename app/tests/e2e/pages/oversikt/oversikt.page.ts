@@ -1,9 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "~/i18n/nb";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
-const translations = nb.translation;
+import { akselTranslations, translations } from "../../utils/translations";
 
 const feilmeldinger = {
   valideringManglerArbeidsgiver:
@@ -84,7 +83,7 @@ export class OversiktPage {
     });
 
     this.historikkSearchButton = page.getByRole("button", {
-      name: "Søk",
+      name: akselTranslations.Search.search,
       exact: true,
     });
 
@@ -377,7 +376,10 @@ export class OversiktPage {
 
   async clearHistorikkSearch() {
     await this.page
-      .getByRole("button", { name: "Tøm feltet", exact: true })
+      .getByRole("button", {
+        name: akselTranslations.Search.clear,
+        exact: true,
+      })
       .click();
   }
 

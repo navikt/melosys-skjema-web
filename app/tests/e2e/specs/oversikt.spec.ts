@@ -1,4 +1,3 @@
-import { nb } from "~/i18n/nb";
 import { OpprettetVia, Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
@@ -30,6 +29,7 @@ import {
   testVerifiserPersonResponse,
 } from "../fixtures/test-data";
 import { OversiktPage } from "../pages/oversikt/oversikt.page";
+import { translations } from "../utils/translations";
 
 test.describe("Oversikt", () => {
   test("Viser oversiktssiden for DEG_SELV med start-søknad-knapp", async ({
@@ -381,7 +381,7 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.selectSkalFylleUtJa();
     await expect(
       page.getByRole("combobox", {
-        name: nb.translation.oversiktFelles.arbeidstakerMedFullmaktLabel,
+        name: translations.oversiktFelles.arbeidstakerMedFullmaktLabel,
       }),
     ).toBeVisible();
 

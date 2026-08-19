@@ -1,4 +1,3 @@
-import { nb } from "~/i18n/nb";
 import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes";
 import { Ansettelsesform, LandKode } from "~/types/melosysSkjemaTypes";
 
@@ -10,6 +9,7 @@ import {
   testUserInfo,
 } from "../../fixtures/test-data";
 import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidssituasjon-steg.page";
+import { translations } from "../../utils/translations";
 
 test.describe("Arbeidssituasjon", () => {
   test.beforeEach(async ({ page }) => {
@@ -124,8 +124,7 @@ test.describe("Arbeidssituasjon", () => {
       land: "SE",
       tilhorerSammeKonsern: true,
       ansettelsesformLabel:
-        nb.translation.utenlandskeVirksomheterFormPart
-          .arbeidstakerEllerFrilanser,
+        translations.utenlandskeVirksomheterFormPart.arbeidstakerEllerFrilanser,
     });
 
     const expectedPayload: ArbeidssituasjonDto = {

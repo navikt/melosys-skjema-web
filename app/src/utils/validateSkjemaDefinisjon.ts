@@ -137,12 +137,12 @@ async function validateForLanguage(
 
 /**
  * Fetches the current definition from backend and compares with static.
- * Validates all languages (nb, en).
+ * Validates all languages (nb, nn, en).
  */
 export async function validateSkjemaDefinisjon(
   skjemaType: string = "UTSENDT_ARBEIDSTAKER",
 ): Promise<ValidationResult> {
-  const languages: SupportedLanguage[] = ["nb", "en"];
+  const languages: SupportedLanguage[] = ["nb", "nn", "en"];
 
   // Valider alle språk parallelt
   const results = await Promise.all(

@@ -1,7 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import { nb } from "~/i18n/nb";
 import type {
   UtenlandsoppdragetDto,
   UtsendtArbeidstakerSkjemaDto,
@@ -9,6 +8,7 @@ import type {
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
+import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const utenlandsoppdraget =
@@ -18,26 +18,26 @@ const felter = utenlandsoppdraget.felter;
 // Feilmeldinger
 const feilmeldinger = {
   harOppdragILandetErPakrevd:
-    nb.translation.utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet,
+    translations.utenlandsoppdragetSteg.duMaSvarePaOmDereHarOppdragILandet,
   bleAnsattForUtenlandsoppdragetErPakrevd:
-    nb.translation.utenlandsoppdragetSteg
+    translations.utenlandsoppdragetSteg
       .duMaSvarePaOmArbeidstakerBleAnsattPaGrunnAvDetteUtenlandsoppdraget,
   forblirAnsattIHelePeriodenErPakrevd:
-    nb.translation.utenlandsoppdragetSteg
+    translations.utenlandsoppdragetSteg
       .duMaSvarePaOmArbeidstakerVilFortsattVareAnsattIHeleUtsendingsperioden,
   erstatterAnnenPersonErPakrevd:
-    nb.translation.utenlandsoppdragetSteg
+    translations.utenlandsoppdragetSteg
       .duMaSvarePaOmArbeidstakerErstatterEnAnnenPerson,
   begrunnelseErPakrevdNarIkkeOppdrag:
-    nb.translation.utenlandsoppdragetSteg
+    translations.utenlandsoppdragetSteg
       .begrunnelseErPakrevdNarArbeidsgiverIkkeHarOppdragILandet,
   vilJobbeEtterOppdragetErPakrevd:
-    nb.translation.utenlandsoppdragetSteg
+    translations.utenlandsoppdragetSteg
       .duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget,
   ansettelsesforholdBeskrivelseErPakrevd:
-    nb.translation.utenlandsoppdragetSteg
+    translations.utenlandsoppdragetSteg
       .beskrivelseAvAnsettelsesforholdErPakrevd,
-  periodeErPakrevd: nb.translation.periode.datoErPakrevd,
+  periodeErPakrevd: translations.periode.datoErPakrevd,
 };
 
 export class UtenlandsoppdragetStegPage {
@@ -67,10 +67,10 @@ export class UtenlandsoppdragetStegPage {
     });
     this.arbeidsgiverHarOppdragILandetRadioGroup = {
       JA: arbeidsgiverHarOppdragILandetGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: arbeidsgiverHarOppdragILandetGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -82,10 +82,10 @@ export class UtenlandsoppdragetStegPage {
     );
     this.arbeidstakerBleAnsattForUtenlandsoppdragetRadioGroup = {
       JA: arbeidstakerBleAnsattForUtenlandsoppdragetGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: arbeidstakerBleAnsattForUtenlandsoppdragetGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -97,10 +97,10 @@ export class UtenlandsoppdragetStegPage {
     );
     this.arbeidstakerForblirAnsattIHelePeriodenRadioGroup = {
       JA: arbeidstakerForblirAnsattIHelePeriodenGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: arbeidstakerForblirAnsattIHelePeriodenGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -109,10 +109,10 @@ export class UtenlandsoppdragetStegPage {
     });
     this.arbeidstakerErstatterAnnenPersonRadioGroup = {
       JA: arbeidstakerErstatterAnnenPersonGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: arbeidstakerErstatterAnnenPersonGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -126,10 +126,10 @@ export class UtenlandsoppdragetStegPage {
     );
     this.arbeidstakerVilJobbeForVirksomhetINorgeEtterOppdragetRadioGroup = {
       JA: arbeidstakerVilJobbeEtterOppdragetGroup.getByRole("radio", {
-        name: nb.translation.felles.ja,
+        name: translations.felles.ja,
       }),
       NEI: arbeidstakerVilJobbeEtterOppdragetGroup.getByRole("radio", {
-        name: nb.translation.felles.nei,
+        name: translations.felles.nei,
       }),
     };
 
@@ -148,7 +148,7 @@ export class UtenlandsoppdragetStegPage {
     );
 
     this.lagreOgFortsettButton = page.getByRole("button", {
-      name: nb.translation.felles.lagreOgFortsett,
+      name: translations.felles.lagreOgFortsett,
     });
   }
 

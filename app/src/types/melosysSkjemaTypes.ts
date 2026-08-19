@@ -14,6 +14,7 @@ type UtilRequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 export enum Sprak {
   Nb = "nb",
+  Nn = "nn",
   En = "en",
 }
 
@@ -69,7 +70,6 @@ export enum SkjemaType {
 export enum SkjemaStatus {
   UTKAST = "UTKAST",
   SENDT = "SENDT",
-  SLETTET = "SLETTET",
 }
 
 export enum Representasjonstype {
@@ -165,9 +165,9 @@ export enum Saksstatus {
 }
 
 export interface FeltDefinisjonDto {
+  label: string;
   hjelpetekst?: string;
   pakrevd: boolean;
-  label: string;
   type: string;
 }
 
@@ -517,9 +517,9 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
 
 export interface UtsendtArbeidstakerMetadata {
   representasjonstype: Representasjonstype;
+  juridiskEnhetOrgnr: string;
   /** @format uuid */
   erstatterSkjemaId?: string;
-  juridiskEnhetOrgnr: string;
   skjemadel: Skjemadel;
   arbeidsgiverNavn: string;
   /** @format uuid */
@@ -530,8 +530,8 @@ export interface UtsendtArbeidstakerMetadata {
 
 export interface UtsendtArbeidstakerSkjemaData {
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
-  vedlegg?: VedleggValgDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
+  vedlegg?: VedleggValgDto;
   type: string;
 }
 
@@ -658,19 +658,19 @@ export interface VerifiserPersonResponse {
   fodselsdato: string;
 }
 
+export interface ResendVarslerRequestDto {
+  ekskluderteSaksnumre: string[];
+}
+
 export interface ResendVarslerResultatDto {
+  dryRun: boolean;
   /** @format int32 */
   antallSendt: number;
   saksnumre: string[];
-}
-
-export interface RyddUtkastResultatDto {
   /** @format int32 */
-  antallSkjema: number;
-  /** @format int32 */
-  antallVedleggSlettet: number;
-  /** @format int32 */
-  antallVedleggFeilet: number;
+  antallEkskludert: number;
+  ekskluderte: string[];
+  ikkeFunnetEkskluderte: string[];
 }
 
 export interface InnsendingAdminDto {
@@ -722,7 +722,7 @@ export interface AlternativDefinisjonDto {
 
 export type BooleanFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   jaLabel: string;
@@ -731,7 +731,7 @@ export type BooleanFeltDefinisjon = UtilRequiredKeys<
 
 export type CheckboxGruppeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   alternativer: AlternativDefinisjonDto[];
@@ -739,14 +739,14 @@ export type CheckboxGruppeFeltDefinisjon = UtilRequiredKeys<
 
 export type CountrySelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
 };
 
 export type DateFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
 };
@@ -802,7 +802,7 @@ export interface InnsendtSkjemaResponse {
 
 export type ListeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   leggTilLabel: string;
@@ -825,7 +825,7 @@ export type ListeFeltDefinisjon = UtilRequiredKeys<
 
 export type PeriodeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   fraDatoLabel: string;
@@ -851,7 +851,7 @@ export interface SeksjonDefinisjonDto {
 
 export type SelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   alternativer: AlternativDefinisjonDto[];
@@ -865,7 +865,7 @@ export interface SkjemaDefinisjonDto {
 
 export type TextFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   format?: FeltFormat;
@@ -873,7 +873,7 @@ export type TextFeltDefinisjon = UtilRequiredKeys<
 
 export type TextareaFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   /** @format int32 */
@@ -1100,10 +1100,14 @@ export interface BrukStatistikkDto {
   innsendtPerFlyt: Record<string, number>;
   innsendtPerSprak: Record<string, number>;
   saksdekning: SaksdekningDto;
+  saksstatusFordeling: SaksstatusFordelingDto;
+  motpartCta: MotpartCtaStatistikkDto;
   /** @format int64 */
   antallUnikePersoner: number;
   /** @format int64 */
   antallUnikeVirksomheter: number;
+  /** @format int64 */
+  antallUnikeJuridiskeEnheter: number;
   topplisteVirksomheter: VirksomhetStatistikkDto[];
 }
 
@@ -1111,24 +1115,86 @@ export interface DelStatusDto {
   /** @format int64 */
   totalt: number;
   /** @format int64 */
+  antallErstattedeVersjoner: number;
+  /** @format int64 */
   medMotpart: number;
+  /** @format int64 */
+  medMotpartAktivSak: number;
+  /** @format int64 */
+  medMotpartAvsluttetSak: number;
+  /** @format int64 */
+  dekketAvKomplettSkjema: number;
+  /** @format int64 */
+  dekketAvKomplettSkjemaAktivSak: number;
+  /** @format int64 */
+  dekketAvKomplettSkjemaAvsluttetSak: number;
   /** @format int64 */
   venterMotpartHarUtkast: number;
   /** @format int64 */
   venterIngenMotpart: number;
+  /** @format int64 */
+  venterMotpartHarUtkastAktivSak: number;
+  /** @format int64 */
+  venterMotpartHarUtkastAvsluttetSak: number;
+  /** @format int64 */
+  venterIngenMotpartAktivSak: number;
+  /** @format int64 */
+  venterIngenMotpartAvsluttetSak: number;
+}
+
+export interface DobbeltinnsendingDto {
+  /** @format int32 */
+  antallInnsendinger: number;
+  saksnumre: string[];
+}
+
+export interface MotpartCtaStatistikkDto {
+  /** @format int64 */
+  antallUtkastViaCta: number;
+  /** @format int64 */
+  antallInnsendtViaCta: number;
 }
 
 export interface SaksdekningDto {
   /** @format int64 */
   antallKomplette: number;
   /** @format int64 */
+  antallErstattedeKomplette: number;
+  /** @format int64 */
   antallSakerMedBeggeDeler: number;
+  /** @format int64 */
+  antallSakerMedKomplett: number;
+  /** @format int64 */
+  antallSakerMedMatchendeSeparateDeler: number;
+  /** @format int64 */
+  antallSakerMedBaadeKomplettOgSeparate: number;
   arbeidstakerDeler: DelStatusDto;
   arbeidsgiverDeler: DelStatusDto;
   /** @format int64 */
   antallMuligeDobbeltinnsendinger: number;
+  muligeDobbeltinnsendinger: DobbeltinnsendingDto[];
   /** @format int64 */
   antallSakerMedFlereVersjoner: number;
+  /** @format int64 */
+  antallVentendeMedAvsluttetSak: number;
+  /** @format int64 */
+  parInitiertAvArbeidsgiver: number;
+  /** @format int64 */
+  parInitiertAvArbeidstaker: number;
+  /** @format int64 */
+  parUavhengigStartet: number;
+  komplettPerFlyt: Record<string, number>;
+  /** @format int64 */
+  antallDelerUtenPeriode: number;
+}
+
+export interface SaksstatusFordelingDto {
+  /** @format int64 */
+  mottatt: number;
+  /** @format int64 */
+  avsluttet: number;
+  /** @format int64 */
+  ukjent: number;
 }
 
 export interface UtkastStatistikkDto {
@@ -1160,6 +1226,38 @@ export interface VirksomhetStatistikkDto {
   antallKomplett: number;
   /** @format int64 */
   antallSakerMedBeggeDeler: number;
+  /** @format int64 */
+  antallMottatt: number;
+  /** @format int64 */
+  antallAvsluttet: number;
+  /** @format int64 */
+  antallUkjent: number;
+}
+
+export interface VirksomhetSaksnumreDto {
+  /** @format int32 */
+  rang: number;
+  /** @format int64 */
+  antallInnsendinger: number;
+  saksnumre: string[];
+}
+
+export interface SaksstatusEksportDto {
+  /** @format date-time */
+  tidspunkt: string;
+  /** @format int32 */
+  antall: number;
+  rader: SaksstatusEksportRadDto[];
+}
+
+export interface SaksstatusEksportRadDto {
+  /** @format uuid */
+  skjemaId: string;
+  referanseId: string;
+  saksnummer?: string;
+  saksstatus?: Saksstatus;
+  /** @format date-time */
+  saksstatusOppdatert?: string;
 }
 
 export interface AntallDto {

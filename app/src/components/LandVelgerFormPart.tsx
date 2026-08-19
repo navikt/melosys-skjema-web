@@ -61,7 +61,7 @@ export function LandVelgerFormPart({
   ...selectProps
 }: LandVelgerFormPartProps) {
   const { register, getFieldState, formState } = useFormContext();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const translateError = useTranslateError();
 
   const fieldState = getFieldState(formFieldName, formState);
@@ -69,13 +69,13 @@ export function LandVelgerFormPart({
 
   const koder = inkluderNorge ? landKoderMedNorge : landKoder;
 
-  const options = useMemo(
-    () =>
-      koder
-        .map((kode) => ({ value: kode, label: t(`land.${kode}`) }))
-        .toSorted((a, b) => a.label.localeCompare(b.label)),
-    [koder, t],
-  );
+  const options = useMemo(() => {
+    // Sortér etter UI-språket, ikke nettleserens locale
+    const collator = new Intl.Collator(i18n.language);
+    return koder
+      .map((kode) => ({ value: kode, label: t(`land.${kode}`) }))
+      .toSorted((a, b) => collator.compare(a.label, b.label));
+  }, [koder, t, i18n.language]);
 
   return (
     <Select

@@ -1,9 +1,10 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { nb } from "~/i18n/nb";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes";
 
-const translations = nb.translation.innsendtSkjema;
+import { translations as alleTranslations } from "../../utils/translations";
+
+const translations = alleTranslations.innsendtSkjema;
 
 export class InnsendtSkjemaPage {
   readonly page: Page;
@@ -92,21 +93,21 @@ export class InnsendtSkjemaPage {
     skjema: UtsendtArbeidstakerSkjemaDto,
   ) {
     await expect(
-      this.page.locator(`dt:text-is("${nb.translation.felles.navn}") + dd`),
+      this.page.locator(`dt:text-is("${alleTranslations.felles.navn}") + dd`),
     ).toHaveText(skjema.metadata.arbeidstakerNavn);
     await expect(
       this.page.locator(
-        `dt:text-is("${nb.translation.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
+        `dt:text-is("${alleTranslations.oversiktFelles.arbeidstakerFnrLabel}") + dd`,
       ),
     ).toHaveText(skjema.fnr);
     await expect(
       this.page.locator(
-        `dt:text-is("${nb.translation.felles.virksomhetsnavn}") + dd`,
+        `dt:text-is("${alleTranslations.felles.virksomhetsnavn}") + dd`,
       ),
     ).toHaveText(skjema.metadata.arbeidsgiverNavn);
     await expect(
       this.page.locator(
-        `dt:text-is("${nb.translation.felles.organisasjonsnummer}") + dd`,
+        `dt:text-is("${alleTranslations.felles.organisasjonsnummer}") + dd`,
       ),
     ).toHaveText(skjema.orgnr);
   }

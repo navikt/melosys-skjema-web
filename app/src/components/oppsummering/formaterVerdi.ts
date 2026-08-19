@@ -11,7 +11,9 @@ import type {
   TextareaFeltDefinisjon,
   TextFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
-import { formaterBelopForVisning } from "~/utils/belopFormat.ts";
+import { formaterBelop } from "~/utils/belopFormat.ts";
+import { formatDato } from "~/utils/datoformat.ts";
+import { mapToSupportedLanguage } from "~/utils/languages.ts";
 
 export type FeltUnion =
   | BooleanFeltDefinisjon
@@ -23,14 +25,6 @@ export type FeltUnion =
   | SelectFeltDefinisjon
   | TextFeltDefinisjon
   | TextareaFeltDefinisjon;
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("nb-NO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-}
 
 /** Beløpsfelter som skal formateres med tusenskilletegn og kr-suffiks */
 function erBelopFelt(felt: FeltUnion): boolean {
@@ -54,8 +48,11 @@ export function formaterVerdi(
   felt: FeltUnion,
   verdi: unknown,
   t: TFunction,
+  sprak: string,
 ): string {
   if (verdi === null || verdi === undefined) return "\u2013";
+
+  const visningssprak = mapToSupportedLanguage(sprak);
 
   switch (felt.type) {
     case "BOOLEAN": {
@@ -64,13 +61,17 @@ export function formaterVerdi(
     }
 
     case "DATE": {
-      return formatDate(verdi as string);
+      return formatDato(verdi as string, visningssprak);
     }
 
     case "PERIOD": {
       const periode = verdi as { fraDato?: string; tilDato?: string };
-      const fra = periode.fraDato ? formatDate(periode.fraDato) : "\u2013";
-      const til = periode.tilDato ? formatDate(periode.tilDato) : "\u2013";
+      const fra = periode.fraDato
+        ? formatDato(periode.fraDato, visningssprak)
+        : "\u2013";
+      const til = periode.tilDato
+        ? formatDato(periode.tilDato, visningssprak)
+        : "\u2013";
       return `${fra} \u2013 ${til}`;
     }
 
@@ -96,7 +97,7 @@ export function formaterVerdi(
     default: {
       const strVerdi = String(verdi);
       if (erBelopFelt(felt)) {
-        const formatert = formaterBelopForVisning(strVerdi);
+        const formatert = formaterBelop(strVerdi, visningssprak);
         return formatert ? `${formatert} kr` : strVerdi;
       }
       return strVerdi;

@@ -4,7 +4,7 @@ import {
   mockSkjemaMetadata,
   mockUserInfo,
 } from "../../fixtures/api-mocks";
-import { test } from "../../fixtures/test";
+import { expect, test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testArbeidstakerSkjema,
@@ -17,6 +17,50 @@ import {
 import { InnsendtSkjemaPage } from "../../pages/skjema/innsendt-skjema.page";
 
 test.describe("Innsendt skjema", () => {
+  test("readonly-visningen følger GUI-språket — henter innsendt med sprak=en", async ({
+    page,
+  }) => {
+    await page.context().addCookies([
+      {
+        name: "decorator-language",
+        value: "en",
+        url: "http://localhost:5173",
+      },
+    ]);
+    await mockUserInfo(page, testUserInfo);
+    await mockSkjemaMetadata(
+      page,
+      testArbeidstakerSkjema.id,
+      testArbeidstakerSkjema.metadata,
+    );
+    await mockFetchSkjema(page, testArbeidstakerSkjema);
+    await mockInnsendtSkjema(
+      page,
+      testArbeidstakerSkjema.id,
+      testInnsendtSkjemaArbeidstakersDel,
+    );
+
+    const innsendtRequest = page.waitForRequest(
+      (request) =>
+        request
+          .url()
+          .includes(
+            `/api/skjema/utsendt-arbeidstaker/${testArbeidstakerSkjema.id}/innsendt`,
+          ) && request.method() === "GET",
+    );
+
+    const innsendtPage = new InnsendtSkjemaPage(
+      page,
+      testArbeidstakerSkjema.id,
+    );
+    await innsendtPage.goto();
+
+    // Skjermvisningen skal følge språket i GUI-et — kun den arkiverte PDF-en
+    // er låst til innsendingsspråket
+    const request = await innsendtRequest;
+    expect(new URL(request.url()).searchParams.get("sprak")).toBe("en");
+  });
+
   test("Viser innsendt — arbeidstakers del", async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
     await mockSkjemaMetadata(
