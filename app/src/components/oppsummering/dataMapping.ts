@@ -158,8 +158,7 @@ function mapArbeidsgiverSeksjoner(
       seksjonNavn: "arbeidsgiverensVirksomhetINorge",
       stegKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
       data: dto.arbeidsgiverensVirksomhetINorge as
-        | Record<string, unknown>
-        | undefined,
+        Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "utenlandsoppdragetArbeidsgiver",
@@ -180,22 +179,19 @@ function mapArbeidsgiverSeksjoner(
       seksjonNavn: "arbeidsstedOffshore",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.offshore as
-        | Record<string, unknown>
-        | undefined,
+        Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedPaSkip",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.paSkip as
-        | Record<string, unknown>
-        | undefined,
+        Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidsstedOmBordPaFly",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
       data: dto.arbeidsstedIUtlandet?.omBordPaFly as
-        | Record<string, unknown>
-        | undefined,
+        Record<string, unknown> | undefined,
     },
     {
       seksjonNavn: "arbeidstakerensLonn",
