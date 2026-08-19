@@ -89,7 +89,7 @@ function UtsendingsperiodeOgLandStegContent({
     (formFraDato !== motpartensVerdier.utsendelsePeriode.fraDato ||
       formTilDato !== motpartensVerdier.utsendelsePeriode.tilDato);
 
-  const dateLimits = {
+  const [dateLimits] = useState(() => ({
     // Dato norge ble EØS medlem
     fromDate: new Date(1995, 0, 1),
     toDate: new Date(
@@ -97,7 +97,7 @@ function UtsendingsperiodeOgLandStegContent({
       11,
       31,
     ),
-  };
+  }));
 
   const registerUtsendingsperiodeOgLandMutation = useMutation({
     mutationFn: (data: UtsendingsperiodeOgLandDto) => {
