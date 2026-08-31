@@ -87,7 +87,11 @@ function ArbeidssituasjonStegContent({
 
   const postArbeidssituasjonMutation = useMutation({
     mutationFn: (data: ArbeidssituasjonFormData) => {
-      return postArbeidssituasjon(skjema.id, data);
+      return postArbeidssituasjon(
+        skjema.id,
+        skjema.skjemaDefinisjonVersjon,
+        data,
+      );
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);

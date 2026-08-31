@@ -4,6 +4,8 @@ export const en = {
       laster: "Loading...",
       feil: "An error occurred",
       feilVedLastingAvSkjema: "Error loading form",
+      utkastReinitialisert:
+        "The form has been updated since you started. Your previous answers and attachments have therefore been removed, and you must complete the form again.",
       fantIkkeSkjema: "Form not found",
       stegIkkeTilgjengelig: "This step is not available for this form part",
       brukerinfoMangler: "User information missing",

@@ -1,10 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { z } from "zod";
+import { FormProvider, Resolver, useForm, useWatch } from "react-hook-form";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import {
+  getSkjemaVersjonsprofil,
+  OffentligArbeidsgiverKilde,
+} from "~/constants/skjemaVersjoner.ts";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
@@ -25,23 +28,26 @@ import {
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
-import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
-
-type ArbeidsgiverensVirksomhetFormData = z.infer<
-  typeof arbeidsgiverensVirksomhetSchema
->;
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import {
+  arbeidsgiverensVirksomhetSchema,
+  arbeidsgiverensVirksomhetSchemaV2,
+} from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
+  const brukerRegisterklassifisering =
+    getSkjemaVersjonsprofil(skjema.skjemaDefinisjonVersjon)
+      .offentligArbeidsgiverKilde ===
+    OffentligArbeidsgiverKilde.ENHETSREGISTERET;
   const stegData = getArbeidsgiverensVirksomhetINorge(skjema);
   const navigate = useNavigate();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
-  const { getFelt } = useSkjemaDefinisjon();
+  const { getFelt } = useSkjemaDefinisjon(skjema.skjemaDefinisjonVersjon);
 
   const erOffentligFelt = getFelt(
     "arbeidsgiverensVirksomhetINorge",
@@ -56,8 +62,12 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     "opprettholderArbeidsgiverenVanligDrift",
   );
 
-  const formMethods = useForm({
-    resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
+  const formMethods = useForm<ArbeidsgiverensVirksomhetINorgeDto>({
+    resolver: zodResolver(
+      brukerRegisterklassifisering
+        ? arbeidsgiverensVirksomhetSchemaV2
+        : arbeidsgiverensVirksomhetSchema,
+    ) as Resolver<ArbeidsgiverensVirksomhetINorgeDto>,
     ...(stegData && { defaultValues: stegData }),
   });
 
@@ -69,9 +79,10 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   });
 
   const registerVirksomhetMutation = useMutation({
-    mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
+    mutationFn: (data: ArbeidsgiverensVirksomhetINorgeDto) => {
       return postArbeidsgiverensVirksomhetINorge(
         skjema.id,
+        skjema.skjemaDefinisjonVersjon,
         data as ArbeidsgiverensVirksomhetINorgeDto,
       );
     },
@@ -90,7 +101,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     },
   });
 
-  const onSubmit = (data: ArbeidsgiverensVirksomhetFormData) => {
+  const onSubmit = (data: ArbeidsgiverensVirksomhetINorgeDto) => {
     registerVirksomhetMutation.mutate(data);
   };
 
@@ -107,14 +118,17 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />
           }
         >
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            description={erOffentligFelt.hjelpetekst}
-            formFieldName="erArbeidsgiverenOffentligVirksomhet"
-            legend={erOffentligFelt.label}
-          />
+          {!brukerRegisterklassifisering && (
+            <RadioGroupJaNeiFormPart
+              className="mt-4"
+              description={erOffentligFelt.hjelpetekst}
+              formFieldName="erArbeidsgiverenOffentligVirksomhet"
+              legend={erOffentligFelt.label}
+            />
+          )}
 
-          {erArbeidsgiverenOffentligVirksomhet === false && (
+          {(brukerRegisterklassifisering ||
+            erArbeidsgiverenOffentligVirksomhet === false) && (
             <>
               <RadioGroupJaNeiFormPart
                 className="mt-4"
@@ -145,6 +159,7 @@ export function ArbeidsgiverensVirksomhetINorgeSteg({ id }: { id: string }) {
       ]}
       id={id}
       skjemaQuery={getSkjemaQuery}
+      stepKey={StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE}
     >
       {(skjema) => (
         <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />

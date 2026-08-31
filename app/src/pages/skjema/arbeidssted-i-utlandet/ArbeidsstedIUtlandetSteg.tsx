@@ -73,7 +73,11 @@ function ArbeidsstedIUtlandetStegContent({
   const registerArbeidsstedMutation = useMutation({
     mutationFn: (data: ArbeidsstedIUtlandetFormData) => {
       const apiPayload = data as ArbeidsstedIUtlandetDto;
-      return postArbeidsstedIUtlandet(skjema.id, apiPayload);
+      return postArbeidsstedIUtlandet(
+        skjema.id,
+        skjema.skjemaDefinisjonVersjon,
+        apiPayload,
+      );
     },
     onSuccess: () => {
       invalidateArbeidsgiverSkjemaQuery(skjema.id);

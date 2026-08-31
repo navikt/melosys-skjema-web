@@ -97,4 +97,64 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.lagreOgFortsettAndExpectPayload(expectedPayload);
     await virksomhetStegPage.assertNavigatedToNextStep();
   });
+
+  test("v2 privat virksomhet viser bare oppfølgingsspørsmålene", async ({
+    page,
+  }) => {
+    const v2Skjema = {
+      ...testArbeidsgiverSkjema,
+      skjemaDefinisjonVersjon: "2",
+      metadata: {
+        ...testArbeidsgiverSkjema.metadata,
+        erOffentligArbeidsgiver: false,
+      },
+    };
+    await setupApiMocksForArbeidsgiver(
+      page,
+      v2Skjema,
+      [testOrganization],
+      testUserInfo,
+    );
+    const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
+      page,
+      v2Skjema,
+    );
+
+    await virksomhetStegPage.goto();
+    await expect(
+      virksomhetStegPage.offentligVirksomhetRadioGroup.JA,
+    ).not.toBeVisible();
+    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
+    await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
+      erArbeidsgiverenBemanningsEllerVikarbyraa: false,
+      opprettholderArbeidsgiverenVanligDrift: true,
+    });
+  });
+
+  test("v2 offentlig virksomhet kan ikke åpne steget direkte", async ({
+    page,
+  }) => {
+    const v2Skjema = {
+      ...testArbeidsgiverSkjema,
+      skjemaDefinisjonVersjon: "2",
+      metadata: {
+        ...testArbeidsgiverSkjema.metadata,
+        erOffentligArbeidsgiver: true,
+      },
+    };
+    await setupApiMocksForArbeidsgiver(
+      page,
+      v2Skjema,
+      [testOrganization],
+      testUserInfo,
+    );
+    const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
+      page,
+      v2Skjema,
+    );
+
+    await virksomhetStegPage.goto();
+    await virksomhetStegPage.assertNavigatedToNextStep();
+  });
 });

@@ -7,6 +7,13 @@ import {
   getSkjemaDefinisjon,
   type SeksjonsNavn,
 } from "~/constants/skjemaDefinisjonA1";
+import {
+  getFeltForLang as getFeltForLangV2,
+  getSeksjonForLang as getSeksjonForLangV2,
+  getSkjemaDefinisjon as getSkjemaDefinisjonV2,
+} from "~/constants/skjemaDefinisjonA1V2";
+import { getSkjemaVersjonsprofil } from "~/constants/skjemaVersjoner.ts";
+import { useSkjemaVersjon } from "~/pages/skjema/components/SkjemaVersjonContext.tsx";
 import { mapToSupportedLanguage } from "~/utils/languages.ts";
 
 /**
@@ -18,16 +25,29 @@ import { mapToSupportedLanguage } from "~/utils/languages.ts";
  * const felt = getFelt("arbeidssituasjon", "harVaertEllerSkalVaere...");
  * <Input label={felt.label} />
  */
-export function useSkjemaDefinisjon() {
+export function useSkjemaDefinisjon(versjon?: string) {
   const { i18n } = useTranslation();
   const lang = mapToSupportedLanguage(i18n.language);
+  const contextVersjon = useSkjemaVersjon();
+  const faktiskVersjon = versjon ?? contextVersjon;
+  if (!faktiskVersjon) {
+    throw new Error("Skjemadefinisjonsversjon mangler");
+  }
+  const { definisjonsversjon } = getSkjemaVersjonsprofil(faktiskVersjon);
+  const brukV2Definisjon = definisjonsversjon === "2";
 
   return {
-    definisjon: getSkjemaDefinisjon(lang),
+    definisjon: brukV2Definisjon
+      ? getSkjemaDefinisjonV2(lang)
+      : getSkjemaDefinisjon(lang),
     getSeksjon: <S extends SeksjonsNavn>(seksjonNavn: S) =>
-      getSeksjonForLang(lang, seksjonNavn),
+      brukV2Definisjon
+        ? getSeksjonForLangV2(lang, seksjonNavn)
+        : getSeksjonForLang(lang, seksjonNavn),
     getFelt: <S extends SeksjonsNavn>(seksjonNavn: S, feltNavn: FeltNavn<S>) =>
-      getFeltForLang(lang, seksjonNavn, feltNavn),
+      brukV2Definisjon
+        ? getFeltForLangV2(lang, seksjonNavn, feltNavn as never)
+        : getFeltForLang(lang, seksjonNavn, feltNavn),
     lang,
   };
 }

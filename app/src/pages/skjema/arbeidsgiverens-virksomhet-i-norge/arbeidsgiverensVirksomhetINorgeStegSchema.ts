@@ -42,3 +42,15 @@ export const arbeidsgiverensVirksomhetSchema = z
         ? undefined
         : data.opprettholderArbeidsgiverenVanligDrift,
   }));
+
+export const arbeidsgiverensVirksomhetSchemaV2 = z.object({
+  erArbeidsgiverenOffentligVirksomhet: z.boolean().optional(),
+  erArbeidsgiverenBemanningsEllerVikarbyraa: z.boolean({
+    error:
+      "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra",
+  }),
+  opprettholderArbeidsgiverenVanligDrift: z.boolean({
+    error:
+      "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge",
+  }),
+});

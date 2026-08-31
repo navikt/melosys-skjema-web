@@ -22,7 +22,7 @@ const __dirname = dirname(__filename);
 
 const LANGUAGES = ["nb", "nn", "en"];
 const SCHEMA_TYPE = "UTSENDT_ARBEIDSTAKER";
-const SCHEMA_VERSION = "v1";
+const SCHEMA_VERSIONS = ["v1", "v2"] as const;
 
 function buildPossibleBasePaths(): string[] {
   const paths = [
@@ -41,7 +41,11 @@ function buildPossibleBasePaths(): string[] {
 }
 
 const POSSIBLE_BASE_PATHS = buildPossibleBasePaths();
-const OUTPUT_PATH = resolve(__dirname, "../src/constants/skjemaDefinisjonA1.ts");
+const outputPath = (version: string) =>
+  resolve(
+    __dirname,
+    `../src/constants/skjemaDefinisjonA1${version === "v1" ? "" : "V2"}.ts`,
+  );
 
 interface FlersprakligTekst {
   [språk: string]: string;
@@ -121,7 +125,7 @@ function findBackendBasePath(): string | null {
   for (const basePath of POSSIBLE_BASE_PATHS) {
     const defPath = resolve(
       basePath,
-      `src/main/resources/skjema-definisjoner/${SCHEMA_TYPE}/${SCHEMA_VERSION}/definisjon.json`
+      `src/main/resources/skjema-definisjoner/${SCHEMA_TYPE}/${SCHEMA_VERSIONS[0]}/definisjon.json`
     );
     if (existsSync(defPath)) {
       return basePath;
@@ -130,10 +134,10 @@ function findBackendBasePath(): string | null {
   return null;
 }
 
-function getDefinisjonPath(basePath: string): string {
+function getDefinisjonPath(basePath: string, version: string): string {
   return resolve(
     basePath,
-    `src/main/resources/skjema-definisjoner/${SCHEMA_TYPE}/${SCHEMA_VERSION}/definisjon.json`
+    `src/main/resources/skjema-definisjoner/${SCHEMA_TYPE}/${version}/definisjon.json`
   );
 }
 
@@ -352,48 +356,23 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const defPath = getDefinisjonPath(backendBasePath);
-  console.log(`📖 Leser: ${defPath}`);
+  for (const version of SCHEMA_VERSIONS) {
+    const defPath = getDefinisjonPath(backendBasePath, version);
+    console.log(`📖 Leser: ${defPath}`);
+    const flersprakligDef: FlersprakligDefinisjon = JSON.parse(readFileSync(defPath, "utf-8"));
+    const definitions: Record<string, EnkeltsprakligDefinisjon> = {};
+    for (const lang of LANGUAGES) definitions[lang] = transformToSingleLanguage(flersprakligDef, lang);
 
-  const jsonContent = readFileSync(defPath, "utf-8");
-  const flersprakligDef: FlersprakligDefinisjon = JSON.parse(jsonContent);
-
-  console.log(`   Type: ${flersprakligDef.type}`);
-  console.log(`   Versjon: ${flersprakligDef.versjon}`);
-  console.log(`   Seksjoner: ${Object.keys(flersprakligDef.seksjoner).length}`);
-
-  const definitions: Record<string, EnkeltsprakligDefinisjon> = {};
-
-  for (const lang of LANGUAGES) {
-    console.log(`\n🌐 Transformerer til ${lang}...`);
-    definitions[lang] = transformToSingleLanguage(flersprakligDef, lang);
+    const targetPath = outputPath(version);
+    const outputDir = dirname(targetPath);
+    if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+    const suffix = version === "v1" ? "" : "_V2";
+    const tsContent = generateTypeScriptFile(definitions).replaceAll("A1", `A1${suffix}`);
+    writeFileSync(targetPath, tsContent, "utf-8");
+    execSync(`npx prettier --write "${targetPath}"`, { cwd: dirname(__dirname), stdio: "pipe" });
   }
 
-  console.log(`\n📝 Genererer TypeScript...`);
-  const tsContent = generateTypeScriptFile(definitions);
-
-  // Opprett output-mappe hvis den ikke finnes
-  const outputDir = dirname(OUTPUT_PATH);
-  if (!existsSync(outputDir)) {
-    mkdirSync(outputDir, { recursive: true });
-  }
-
-  console.log(`💾 Skriver: ${OUTPUT_PATH}`);
-  writeFileSync(OUTPUT_PATH, tsContent, "utf-8");
-
-  // Formater med Prettier
-  console.log("🎨 Formaterer med Prettier...");
-  try {
-    execSync(`npx prettier --write "${OUTPUT_PATH}"`, {
-      cwd: dirname(__dirname),
-      stdio: "pipe",
-    });
-  } catch {
-    console.warn("⚠️  Prettier-formatering feilet, kjør manuelt: npm run lint:fix");
-  }
-
-  console.log("\n✅ Skjemadefinisjoner synkronisert!");
-  console.log(`   Språk: ${Object.keys(definitions).join(", ")}`);
+  console.log("\n✅ Skjemadefinisjoner v1 og v2 synkronisert!");
 }
 
 main().catch((error) => {

@@ -19,7 +19,7 @@ import type {
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { byggHrefMedBasePath, byggSkjemaStegHref } from "../skjemaHref.ts";
 import { finnManglendeSteg } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { isArbeidsgiverOgArbeidstakersDel } from "../types.ts";
 
 type ManglendeSteg = ReturnType<typeof finnManglendeSteg>;
@@ -37,15 +37,19 @@ function OppsummeringStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const data = skjema.data;
   const { t } = useTranslation();
-  const { definisjon } = useSkjemaDefinisjon();
+  const { definisjon } = useSkjemaDefinisjon(skjema.skjemaDefinisjonVersjon);
   const [manglendeSteg, setManglendeSteg] = useState<ManglendeSteg>([]);
   const [harInnsendingFeil, setHarInnsendingFeil] = useState(false);
   const errorRef = useRef<HTMLDivElement>(null);
 
-  const seksjoner = resolveSeksjoner(data, definisjon as SkjemaDefinisjonDto);
+  const gyldigeSteg = new Set(stegRekkefolge.map(({ key }) => key));
+  const seksjoner = resolveSeksjoner(
+    data,
+    definisjon as SkjemaDefinisjonDto,
+  ).filter(({ stegKey }) => !stegKey || gyldigeSteg.has(stegKey as StegKey));
 
   const erKombinertSkjema = isArbeidsgiverOgArbeidstakersDel(data);
   const harFeil = manglendeSteg.length > 0 || harInnsendingFeil;
@@ -85,6 +89,7 @@ function OppsummeringStegContent({
       nesteKnapp={
         <SendInnSkjemaKnapp
           skjemaId={skjema.id}
+          skjemaDefinisjonVersjon={skjema.skjemaDefinisjonVersjon}
           onBeforeSubmit={kanSendeInn}
           onSubmitError={() => setHarInnsendingFeil(true)}
         />

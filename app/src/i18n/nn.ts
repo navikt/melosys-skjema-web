@@ -4,6 +4,8 @@ export const nn = {
       laster: "Lastar...",
       feil: "Det oppstod ein feil",
       feilVedLastingAvSkjema: "Feil ved lasting av skjema",
+      utkastReinitialisert:
+        "Skjemaet er oppdatert sidan du starta. Tidlegare svar og vedlegg er derfor fjerna, og du må fylle ut skjemaet på nytt.",
       fantIkkeSkjema: "Fann ikkje skjema",
       stegIkkeTilgjengelig:
         "Steget er ikkje tilgjengeleg for denne skjemadelen",

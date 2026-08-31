@@ -1,11 +1,18 @@
 import { BriefcaseIcon, PersonRectangleIcon } from "@navikt/aksel-icons";
 
+import {
+  getSkjemaVersjonsprofil,
+  OffentligArbeidsgiverKilde,
+} from "~/constants/skjemaVersjoner.ts";
 import { StegKey } from "~/constants/stegKeys.ts";
 import {
   StegIkon,
   StegRekkefolgeItem,
 } from "~/pages/skjema/components/Fremgangsindikator.tsx";
-import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
+import {
+  Skjemadel,
+  UtsendtArbeidstakerSkjemaDto,
+} from "~/types/melosysSkjemaTypes.ts";
 
 export const ARBEIDSGIVER_IKON: StegIkon = {
   icon: BriefcaseIcon,
@@ -131,4 +138,27 @@ export const STEG_REKKEFOLGE: Record<Skjemadel, StegRekkefolgeItem[]> = {
   [Skjemadel.ARBEIDSTAKERS_DEL]: ARBEIDSTAKER_STEG_REKKEFOLGE,
   [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL]:
     ARBEIDSGIVER_OG_ARBEIDSTAKER_STEG_REKKEFOLGE,
+};
+
+export const getStegRekkefolge = (
+  skjema: Pick<
+    UtsendtArbeidstakerSkjemaDto,
+    "skjemaDefinisjonVersjon" | "metadata"
+  >,
+): StegRekkefolgeItem[] => {
+  const steg = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const versjonsprofil = getSkjemaVersjonsprofil(
+    skjema.skjemaDefinisjonVersjon,
+  );
+  const skalHoppeOverVirksomhetssteget =
+    versjonsprofil.offentligArbeidsgiverKilde ===
+      OffentligArbeidsgiverKilde.ENHETSREGISTERET &&
+    skjema.metadata.erOffentligArbeidsgiver === true &&
+    skjema.metadata.skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL;
+
+  return skalHoppeOverVirksomhetssteget
+    ? steg.filter(
+        ({ key }) => key !== StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
+      )
+    : steg;
 };

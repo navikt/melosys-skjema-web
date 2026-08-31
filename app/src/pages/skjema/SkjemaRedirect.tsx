@@ -4,7 +4,7 @@ import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
+import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 
 interface SkjemaRedirectProperties {
   id: string;
@@ -27,7 +27,7 @@ export function SkjemaRedirect({ id }: SkjemaRedirectProperties) {
     return <ErrorMessage>{t("felles.feil")}</ErrorMessage>;
   }
 
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
 
   return <Navigate params={{ id }} to={stegRekkefolge[0]!.route} />;
 }

@@ -14,12 +14,14 @@ import { toSprak } from "~/utils/languages.ts";
 
 interface SendInnSkjemaKnappProperties {
   skjemaId: string;
+  skjemaDefinisjonVersjon: string;
   onBeforeSubmit: () => boolean;
   onSubmitError: () => void;
 }
 
 export function SendInnSkjemaKnapp({
   skjemaId,
+  skjemaDefinisjonVersjon,
   onBeforeSubmit,
   onSubmitError,
 }: SendInnSkjemaKnappProperties) {
@@ -28,7 +30,8 @@ export function SendInnSkjemaKnapp({
   const queryClient = useQueryClient();
 
   const sendInnSkjemaMutation = useMutation({
-    mutationFn: () => sendInnSkjema(skjemaId, toSprak(i18n.language)),
+    mutationFn: () =>
+      sendInnSkjema(skjemaId, skjemaDefinisjonVersjon, toSprak(i18n.language)),
     onSuccess: (response) => {
       // Populer cache for kvittering-query
       queryClient.setQueryData(

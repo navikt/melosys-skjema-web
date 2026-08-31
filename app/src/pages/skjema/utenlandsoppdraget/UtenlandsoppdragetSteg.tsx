@@ -131,7 +131,11 @@ function UtenlandsoppdragetStegContent({
 
   const registerUtenlandsoppdragMutation = useMutation({
     mutationFn: (data: UtenlandsoppdragetDto) => {
-      return postUtenlandsoppdraget(skjema.id, data);
+      return postUtenlandsoppdraget(
+        skjema.id,
+        skjema.skjemaDefinisjonVersjon,
+        data,
+      );
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjema.id);
