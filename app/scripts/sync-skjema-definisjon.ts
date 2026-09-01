@@ -22,7 +22,6 @@ const __dirname = dirname(__filename);
 
 const LANGUAGES = ["nb", "nn", "en"];
 const SCHEMA_TYPE = "UTSENDT_ARBEIDSTAKER";
-const SCHEMA_VERSIONS = ["v1", "v2"] as const;
 
 function buildPossibleBasePaths(): string[] {
   const paths = [
@@ -41,11 +40,7 @@ function buildPossibleBasePaths(): string[] {
 }
 
 const POSSIBLE_BASE_PATHS = buildPossibleBasePaths();
-const outputPath = (version: string) =>
-  resolve(
-    __dirname,
-    `../src/constants/skjemaDefinisjonA1${version === "v1" ? "" : "V2"}.ts`,
-  );
+const OUTPUT_PATH = resolve(__dirname, "../src/constants/skjemaDefinisjonA1.ts");
 
 interface FlersprakligTekst {
   [språk: string]: string;
@@ -123,21 +118,41 @@ interface EnkeltsprakligDefinisjon {
 
 function findBackendBasePath(): string | null {
   for (const basePath of POSSIBLE_BASE_PATHS) {
-    const defPath = resolve(
+    const applicationConfigPath = resolve(
       basePath,
-      `src/main/resources/skjema-definisjoner/${SCHEMA_TYPE}/${SCHEMA_VERSIONS[0]}/definisjon.json`
+      "src/main/resources/application.yml",
     );
-    if (existsSync(defPath)) {
+    if (existsSync(applicationConfigPath)) {
       return basePath;
     }
   }
   return null;
 }
 
+function getActiveSchemaVersion(basePath: string): string {
+  const applicationConfigPath = resolve(
+    basePath,
+    "src/main/resources/application.yml",
+  );
+  const applicationConfig = readFileSync(applicationConfigPath, "utf-8");
+  const versionMatch = applicationConfig.match(
+    new RegExp(
+      `^\\s*${SCHEMA_TYPE}:\\s*["']?([^"'\\s#]+)["']?\\s*$`,
+      "m",
+    ),
+  );
+  if (!versionMatch) {
+    throw new Error(
+      `Fant ikke aktiv versjon for ${SCHEMA_TYPE} i ${applicationConfigPath}`,
+    );
+  }
+  return versionMatch[1];
+}
+
 function getDefinisjonPath(basePath: string, version: string): string {
   return resolve(
     basePath,
-    `src/main/resources/skjema-definisjoner/${SCHEMA_TYPE}/${version}/definisjon.json`
+    `src/main/resources/skjema-definisjoner/${SCHEMA_TYPE}/v${version}/definisjon.json`,
   );
 }
 
@@ -286,7 +301,8 @@ export const SKJEMA_DEFINISJON_A1 = SKJEMA_DEFINISJON_A1_NB;
 `;
 
   const types = `// Typer inferert fra konstanten
-export type SkjemaDefinisjonA1Type = typeof SKJEMA_DEFINISJON_A1_NB;
+export type SkjemaDefinisjonA1Type =
+  (typeof SKJEMA_DEFINISJONER_A1)[SupportedLanguage];
 export type SeksjonsNavn = keyof typeof SKJEMA_DEFINISJON_A1_NB.seksjoner;
 export type FeltNavn<S extends SeksjonsNavn> =
   keyof (typeof SKJEMA_DEFINISJON_A1_NB.seksjoner)[S]["felter"];
@@ -307,7 +323,7 @@ interface BaseFeltType {
  * Hent skjemadefinisjon for et gitt språk.
  */
 export function getSkjemaDefinisjon(lang: SupportedLanguage): SkjemaDefinisjonA1Type {
-  return SKJEMA_DEFINISJONER_A1[lang] as unknown as SkjemaDefinisjonA1Type;
+  return SKJEMA_DEFINISJONER_A1[lang];
 }
 
 /**
@@ -318,7 +334,7 @@ export function getFeltForLang<S extends SeksjonsNavn>(
   seksjonNavn: S,
   feltNavn: FeltNavn<S>,
 ): BaseFeltType {
-  const definisjon = SKJEMA_DEFINISJONER_A1[lang] as unknown as SkjemaDefinisjonA1Type;
+  const definisjon = SKJEMA_DEFINISJONER_A1[lang];
   const seksjon = definisjon.seksjoner[seksjonNavn];
   return (seksjon.felter as Record<string, BaseFeltType>)[feltNavn as string]!;
 }
@@ -330,7 +346,7 @@ export function getSeksjonForLang<S extends SeksjonsNavn>(
   lang: SupportedLanguage,
   seksjonNavn: S,
 ) {
-  const definisjon = SKJEMA_DEFINISJONER_A1[lang] as unknown as SkjemaDefinisjonA1Type;
+  const definisjon = SKJEMA_DEFINISJONER_A1[lang];
   return definisjon.seksjoner[seksjonNavn];
 }
 `;
@@ -356,23 +372,26 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  for (const version of SCHEMA_VERSIONS) {
-    const defPath = getDefinisjonPath(backendBasePath, version);
-    console.log(`📖 Leser: ${defPath}`);
-    const flersprakligDef: FlersprakligDefinisjon = JSON.parse(readFileSync(defPath, "utf-8"));
-    const definitions: Record<string, EnkeltsprakligDefinisjon> = {};
-    for (const lang of LANGUAGES) definitions[lang] = transformToSingleLanguage(flersprakligDef, lang);
-
-    const targetPath = outputPath(version);
-    const outputDir = dirname(targetPath);
-    if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
-    const suffix = version === "v1" ? "" : "_V2";
-    const tsContent = generateTypeScriptFile(definitions).replaceAll("A1", `A1${suffix}`);
-    writeFileSync(targetPath, tsContent, "utf-8");
-    execSync(`npx prettier --write "${targetPath}"`, { cwd: dirname(__dirname), stdio: "pipe" });
+  const schemaVersion = getActiveSchemaVersion(backendBasePath);
+  const defPath = getDefinisjonPath(backendBasePath, schemaVersion);
+  console.log(`📖 Leser: ${defPath}`);
+  const flersprakligDef: FlersprakligDefinisjon = JSON.parse(
+    readFileSync(defPath, "utf-8"),
+  );
+  const definitions: Record<string, EnkeltsprakligDefinisjon> = {};
+  for (const lang of LANGUAGES) {
+    definitions[lang] = transformToSingleLanguage(flersprakligDef, lang);
   }
 
-  console.log("\n✅ Skjemadefinisjoner v1 og v2 synkronisert!");
+  const outputDir = dirname(OUTPUT_PATH);
+  if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+  writeFileSync(OUTPUT_PATH, generateTypeScriptFile(definitions), "utf-8");
+  execSync(`npx prettier --write "${OUTPUT_PATH}"`, {
+    cwd: dirname(__dirname),
+    stdio: "pipe",
+  });
+
+  console.log(`\n✅ Aktiv skjemadefinisjon synkronisert: v${schemaVersion}`);
 }
 
 main().catch((error) => {

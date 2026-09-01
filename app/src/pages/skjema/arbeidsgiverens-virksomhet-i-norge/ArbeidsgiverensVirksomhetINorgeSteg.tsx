@@ -1,13 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, Resolver, useForm, useWatch } from "react-hook-form";
+import { FormProvider, Resolver, useForm } from "react-hook-form";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
-import {
-  getSkjemaVersjonsprofil,
-  OffentligArbeidsgiverKilde,
-} from "~/constants/skjemaVersjoner.ts";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
@@ -29,10 +25,7 @@ import {
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
 import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import {
-  arbeidsgiverensVirksomhetSchema,
-  arbeidsgiverensVirksomhetSchemaV2,
-} from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
@@ -40,19 +33,10 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
   const stegRekkefolge = getStegRekkefolge(skjema);
-  const brukerRegisterklassifisering =
-    getSkjemaVersjonsprofil(skjema.skjemaDefinisjonVersjon)
-      .offentligArbeidsgiverKilde ===
-    OffentligArbeidsgiverKilde.ENHETSREGISTERET;
   const stegData = getArbeidsgiverensVirksomhetINorge(skjema);
   const navigate = useNavigate();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
-  const { getFelt } = useSkjemaDefinisjon(skjema.skjemaDefinisjonVersjon);
-
-  const erOffentligFelt = getFelt(
-    "arbeidsgiverensVirksomhetINorge",
-    "erArbeidsgiverenOffentligVirksomhet",
-  );
+  const { getFelt } = useSkjemaDefinisjon();
   const erBemanningFelt = getFelt(
     "arbeidsgiverensVirksomhetINorge",
     "erArbeidsgiverenBemanningsEllerVikarbyraa",
@@ -64,19 +48,12 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
 
   const formMethods = useForm<ArbeidsgiverensVirksomhetINorgeDto>({
     resolver: zodResolver(
-      brukerRegisterklassifisering
-        ? arbeidsgiverensVirksomhetSchemaV2
-        : arbeidsgiverensVirksomhetSchema,
+      arbeidsgiverensVirksomhetSchema,
     ) as Resolver<ArbeidsgiverensVirksomhetINorgeDto>,
     ...(stegData && { defaultValues: stegData }),
   });
 
-  const { handleSubmit, control } = formMethods;
-
-  const erArbeidsgiverenOffentligVirksomhet = useWatch({
-    control,
-    name: "erArbeidsgiverenOffentligVirksomhet",
-  });
+  const { handleSubmit } = formMethods;
 
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetINorgeDto) => {
@@ -118,32 +95,18 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />
           }
         >
-          {!brukerRegisterklassifisering && (
-            <RadioGroupJaNeiFormPart
-              className="mt-4"
-              description={erOffentligFelt.hjelpetekst}
-              formFieldName="erArbeidsgiverenOffentligVirksomhet"
-              legend={erOffentligFelt.label}
-            />
-          )}
+          <RadioGroupJaNeiFormPart
+            className="mt-4"
+            formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
+            legend={erBemanningFelt.label}
+          />
 
-          {(brukerRegisterklassifisering ||
-            erArbeidsgiverenOffentligVirksomhet === false) && (
-            <>
-              <RadioGroupJaNeiFormPart
-                className="mt-4"
-                formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
-                legend={erBemanningFelt.label}
-              />
-
-              <RadioGroupJaNeiFormPart
-                className="mt-4"
-                description={opprettholderDriftFelt.hjelpetekst}
-                formFieldName="opprettholderArbeidsgiverenVanligDrift"
-                legend={opprettholderDriftFelt.label}
-              />
-            </>
-          )}
+          <RadioGroupJaNeiFormPart
+            className="mt-4"
+            description={opprettholderDriftFelt.hjelpetekst}
+            formFieldName="opprettholderArbeidsgiverenVanligDrift"
+            legend={opprettholderDriftFelt.label}
+          />
         </SkjemaSteg>
       </form>
     </FormProvider>

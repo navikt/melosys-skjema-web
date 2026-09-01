@@ -10,18 +10,10 @@ import {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-const lagSkjema = (
-  skjemaDefinisjonVersjon: string,
-  skjemadel: Skjemadel,
-  erOffentligArbeidsgiver?: boolean,
-) =>
+const lagSkjema = (skjemadel: Skjemadel, erOffentligArbeidsgiver?: boolean) =>
   ({
-    skjemaDefinisjonVersjon,
     metadata: { skjemadel, erOffentligArbeidsgiver },
-  }) as Pick<
-    UtsendtArbeidstakerSkjemaDto,
-    "skjemaDefinisjonVersjon" | "metadata"
-  >;
+  }) as Pick<UtsendtArbeidstakerSkjemaDto, "metadata">;
 
 const harVirksomhetssteg = (skjema: ReturnType<typeof lagSkjema>) =>
   getStegRekkefolge(skjema).some(
@@ -30,16 +22,14 @@ const harVirksomhetssteg = (skjema: ReturnType<typeof lagSkjema>) =>
 
 describe("getStegRekkefolge", () => {
   it.each([
-    ["1", Skjemadel.ARBEIDSGIVERS_DEL, true, true],
-    ["1", Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, true],
-    ["2", Skjemadel.ARBEIDSGIVERS_DEL, false, true],
-    ["2", Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, false, true],
-    ["2", Skjemadel.ARBEIDSGIVERS_DEL, true, false],
-    ["2", Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, false],
+    [Skjemadel.ARBEIDSGIVERS_DEL, false, true],
+    [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, false, true],
+    [Skjemadel.ARBEIDSGIVERS_DEL, true, false],
+    [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, false],
   ])(
-    "versjon %s, skjemadel %s og offentlig=%s gir virksomhetssteg=%s",
-    (versjon, skjemadel, offentlig, forventet) => {
-      expect(harVirksomhetssteg(lagSkjema(versjon, skjemadel, offentlig))).toBe(
+    "skjemadel %s og offentlig=%s gir virksomhetssteg=%s",
+    (skjemadel, offentlig, forventet) => {
+      expect(harVirksomhetssteg(lagSkjema(skjemadel, offentlig))).toBe(
         forventet,
       );
     },
@@ -49,16 +39,8 @@ describe("getStegRekkefolge", () => {
     const grunnliste = STEG_REKKEFOLGE[Skjemadel.ARBEIDSTAKERS_DEL];
 
     expect(
-      getStegRekkefolge(lagSkjema("2", Skjemadel.ARBEIDSTAKERS_DEL, true)),
+      getStegRekkefolge(lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true)),
     ).toEqual(grunnliste);
     expect(STEG_REKKEFOLGE[Skjemadel.ARBEIDSGIVERS_DEL]).toHaveLength(8);
-  });
-
-  it("feiler på ukjent versjon uten fallback", () => {
-    expect(() =>
-      getStegRekkefolge(
-        lagSkjema("ukjent", Skjemadel.ARBEIDSGIVERS_DEL, false),
-      ),
-    ).toThrow("Ukjent skjemadefinisjonsversjon");
   });
 });

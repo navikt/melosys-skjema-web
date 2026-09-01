@@ -7,33 +7,42 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
   hentVedlegg,
   VedleggDto,
   vedleggInnholdUrl,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { SkjemaDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 interface VedleggOppsummeringProperties {
   skjemaId: string;
+  definisjon: SkjemaDefinisjonDto;
   harAnnenDokumentasjon?: boolean;
   editHref?: string;
 }
 
 export function VedleggOppsummering({
   skjemaId,
+  definisjon,
   harAnnenDokumentasjon,
   editHref,
 }: VedleggOppsummeringProperties) {
   const { t } = useTranslation();
-  const { getFelt } = useSkjemaDefinisjon();
   const [vedlegg, setVedlegg] = useState<VedleggDto[]>([]);
   const [hentVedleggFeil, setHentVedleggFeil] = useState(false);
 
-  const harAnnenDokumentasjonFelt = getFelt(
-    "vedleggArbeidstaker",
-    "harAnnenDokumentasjon",
-  );
+  const feltDefinisjon =
+    definisjon.seksjoner.vedleggArbeidstaker?.felter.harAnnenDokumentasjon;
+  if (
+    !feltDefinisjon ||
+    !("jaLabel" in feltDefinisjon) ||
+    !("neiLabel" in feltDefinisjon)
+  ) {
+    throw new Error(
+      "Skjemadefinisjonen mangler BOOLEAN-feltet vedleggArbeidstaker.harAnnenDokumentasjon",
+    );
+  }
+  const harAnnenDokumentasjonFelt = feltDefinisjon;
 
   useEffect(() => {
     // Eksplisitt Nei skjuler vedlegg. Ja eller udefinert (legacy-skjemaer fra

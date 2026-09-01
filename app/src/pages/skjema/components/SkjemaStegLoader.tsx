@@ -12,8 +12,6 @@ import {
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-import { SkjemaVersjonProvider } from "./SkjemaVersjonContext.tsx";
-
 interface SkjemaStegLoaderProperties<T extends UtsendtArbeidstakerSkjemaDto> {
   id: string;
   skjemaQuery: (id: string) => UseQueryOptions<T>;
@@ -80,12 +78,7 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
           {t("felles.utkastReinitialisert")}
         </Alert>
       )}
-      <SkjemaVersjonProvider
-        key={skjema.skjemaDefinisjonVersjon}
-        versjon={skjema.skjemaDefinisjonVersjon}
-      >
-        {children(skjema)}
-      </SkjemaVersjonProvider>
+      {children(skjema)}
     </>
   );
 }

@@ -202,6 +202,7 @@ function InnsendtSkjemaPageContent({
       )}
 
       <VedleggOppsummering
+        definisjon={response.definisjon}
         harAnnenDokumentasjon={
           response.skjemaData.vedlegg?.harAnnenDokumentasjon
         }

@@ -1,9 +1,5 @@
 import { BriefcaseIcon, PersonRectangleIcon } from "@navikt/aksel-icons";
 
-import {
-  getSkjemaVersjonsprofil,
-  OffentligArbeidsgiverKilde,
-} from "~/constants/skjemaVersjoner.ts";
 import { StegKey } from "~/constants/stegKeys.ts";
 import {
   StegIkon,
@@ -141,18 +137,10 @@ export const STEG_REKKEFOLGE: Record<Skjemadel, StegRekkefolgeItem[]> = {
 };
 
 export const getStegRekkefolge = (
-  skjema: Pick<
-    UtsendtArbeidstakerSkjemaDto,
-    "skjemaDefinisjonVersjon" | "metadata"
-  >,
+  skjema: Pick<UtsendtArbeidstakerSkjemaDto, "metadata">,
 ): StegRekkefolgeItem[] => {
   const steg = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
-  const versjonsprofil = getSkjemaVersjonsprofil(
-    skjema.skjemaDefinisjonVersjon,
-  );
   const skalHoppeOverVirksomhetssteget =
-    versjonsprofil.offentligArbeidsgiverKilde ===
-      OffentligArbeidsgiverKilde.ENHETSREGISTERET &&
     skjema.metadata.erOffentligArbeidsgiver === true &&
     skjema.metadata.skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL;
 

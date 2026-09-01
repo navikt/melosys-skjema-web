@@ -11,10 +11,7 @@ import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { SendInnSkjemaKnapp } from "~/pages/skjema/components/SendInnSkjemaKnapp.tsx";
 import { SkjemaSteg } from "~/pages/skjema/components/SkjemaSteg.tsx";
-import type {
-  SkjemaDefinisjonDto,
-  UtsendtArbeidstakerSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
+import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { byggHrefMedBasePath, byggSkjemaStegHref } from "../skjemaHref.ts";
@@ -40,16 +37,15 @@ function OppsummeringStegContent({
   const stegRekkefolge = getStegRekkefolge(skjema);
   const data = skjema.data;
   const { t } = useTranslation();
-  const { definisjon } = useSkjemaDefinisjon(skjema.skjemaDefinisjonVersjon);
+  const { definisjon } = useSkjemaDefinisjon();
   const [manglendeSteg, setManglendeSteg] = useState<ManglendeSteg>([]);
   const [harInnsendingFeil, setHarInnsendingFeil] = useState(false);
   const errorRef = useRef<HTMLDivElement>(null);
 
   const gyldigeSteg = new Set(stegRekkefolge.map(({ key }) => key));
-  const seksjoner = resolveSeksjoner(
-    data,
-    definisjon as SkjemaDefinisjonDto,
-  ).filter(({ stegKey }) => !stegKey || gyldigeSteg.has(stegKey as StegKey));
+  const seksjoner = resolveSeksjoner(data, definisjon).filter(
+    ({ stegKey }) => !stegKey || gyldigeSteg.has(stegKey as StegKey),
+  );
 
   const erKombinertSkjema = isArbeidsgiverOgArbeidstakersDel(data);
   const harFeil = manglendeSteg.length > 0 || harInnsendingFeil;
@@ -116,6 +112,7 @@ function OppsummeringStegContent({
         );
       })}
       <VedleggOppsummering
+        definisjon={definisjon}
         editHref={
           vedleggSteg ? byggSkjemaStegHref(vedleggSteg.route, skjema.id) : ""
         }

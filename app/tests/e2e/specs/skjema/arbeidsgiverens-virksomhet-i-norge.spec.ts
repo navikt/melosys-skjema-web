@@ -1,7 +1,7 @@
 import { ArbeidsgiverensVirksomhetINorgeDto } from "~/types/melosysSkjemaTypes";
 
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
-import { expect, test } from "../../fixtures/test";
+import { test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testOrganization,
@@ -27,48 +27,15 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
       testArbeidsgiverSkjema,
     );
 
-    await virksomhetStegPage.mockArbeidsgiverensVirksomhetINorgeStegData({
-      erArbeidsgiverenOffentligVirksomhet: false,
-    });
-
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();
 
-    await virksomhetStegPage.offentligVirksomhetRadioGroup.NEI.click();
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
     await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
 
     const expectedPayload: ArbeidsgiverensVirksomhetINorgeDto = {
-      erArbeidsgiverenOffentligVirksomhet: false,
       erArbeidsgiverenBemanningsEllerVikarbyraa: false,
       opprettholderArbeidsgiverenVanligDrift: true,
-    };
-
-    await virksomhetStegPage.lagreOgFortsettAndExpectPayload(expectedPayload);
-    await virksomhetStegPage.assertNavigatedToNextStep();
-  });
-
-  test("variant: offentlig virksomhet — ingen oppfølgingsspørsmål", async ({
-    page,
-  }) => {
-    const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
-      page,
-      testArbeidsgiverSkjema,
-    );
-
-    await virksomhetStegPage.goto();
-    await virksomhetStegPage.assertIsVisible();
-
-    await virksomhetStegPage.offentligVirksomhetRadioGroup.JA.click();
-
-    // Bemanningsbyrå and vanlig drift should NOT be visible
-    await expect(
-      virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.JA,
-    ).not.toBeVisible();
-    await expect(virksomhetStegPage.vanligDriftRadioGroup.JA).not.toBeVisible();
-
-    const expectedPayload: ArbeidsgiverensVirksomhetINorgeDto = {
-      erArbeidsgiverenOffentligVirksomhet: true,
     };
 
     await virksomhetStegPage.lagreOgFortsettAndExpectPayload(expectedPayload);
@@ -84,12 +51,10 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();
 
-    await virksomhetStegPage.offentligVirksomhetRadioGroup.NEI.click();
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
     await virksomhetStegPage.vanligDriftRadioGroup.NEI.click();
 
     const expectedPayload: ArbeidsgiverensVirksomhetINorgeDto = {
-      erArbeidsgiverenOffentligVirksomhet: false,
       erArbeidsgiverenBemanningsEllerVikarbyraa: true,
       opprettholderArbeidsgiverenVanligDrift: false,
     };
@@ -98,46 +63,11 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertNavigatedToNextStep();
   });
 
-  test("v2 privat virksomhet viser bare oppfølgingsspørsmålene", async ({
+  test("offentlig virksomhet kan ikke åpne steget direkte", async ({
     page,
   }) => {
-    const v2Skjema = {
+    const offentligSkjema = {
       ...testArbeidsgiverSkjema,
-      skjemaDefinisjonVersjon: "2",
-      metadata: {
-        ...testArbeidsgiverSkjema.metadata,
-        erOffentligArbeidsgiver: false,
-      },
-    };
-    await setupApiMocksForArbeidsgiver(
-      page,
-      v2Skjema,
-      [testOrganization],
-      testUserInfo,
-    );
-    const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
-      page,
-      v2Skjema,
-    );
-
-    await virksomhetStegPage.goto();
-    await expect(
-      virksomhetStegPage.offentligVirksomhetRadioGroup.JA,
-    ).not.toBeVisible();
-    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
-    await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
-    await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
-      erArbeidsgiverenBemanningsEllerVikarbyraa: false,
-      opprettholderArbeidsgiverenVanligDrift: true,
-    });
-  });
-
-  test("v2 offentlig virksomhet kan ikke åpne steget direkte", async ({
-    page,
-  }) => {
-    const v2Skjema = {
-      ...testArbeidsgiverSkjema,
-      skjemaDefinisjonVersjon: "2",
       metadata: {
         ...testArbeidsgiverSkjema.metadata,
         erOffentligArbeidsgiver: true,
@@ -145,13 +75,13 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     };
     await setupApiMocksForArbeidsgiver(
       page,
-      v2Skjema,
+      offentligSkjema,
       [testOrganization],
       testUserInfo,
     );
     const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
       page,
-      v2Skjema,
+      offentligSkjema,
     );
 
     await virksomhetStegPage.goto();

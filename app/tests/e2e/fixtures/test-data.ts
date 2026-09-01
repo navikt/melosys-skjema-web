@@ -46,7 +46,7 @@ export const testArbeidstakerSkjemaId = "test-arbeidstaker-skjema-id";
 
 export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
   utkastReinitialisert: false,
-  skjemaDefinisjonVersjon: "1",
+  skjemaDefinisjonVersjon: "2",
   id: testArbeidsgiverSkjemaId,
   orgnr: "123456789",
   fnr: "",
@@ -61,6 +61,7 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
     arbeidsgiverNavn: "Test Bedrift AS",
     arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVERS_DEL,
+    erOffentligArbeidsgiver: false,
   } as ArbeidsgiverMetadata,
   data: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
@@ -69,7 +70,7 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
 
 export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
   utkastReinitialisert: false,
-  skjemaDefinisjonVersjon: "1",
+  skjemaDefinisjonVersjon: "2",
   id: testArbeidstakerSkjemaId,
   fnr: testUserInfo.userId,
   orgnr: "",
