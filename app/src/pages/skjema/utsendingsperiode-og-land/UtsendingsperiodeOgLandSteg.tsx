@@ -101,11 +101,7 @@ function UtsendingsperiodeOgLandStegContent({
 
   const registerUtsendingsperiodeOgLandMutation = useMutation({
     mutationFn: (data: UtsendingsperiodeOgLandDto) => {
-      return postUtsendingsperiodeOgLand(
-        skjema.id,
-        skjema.skjemaDefinisjonVersjon,
-        data,
-      );
+      return postUtsendingsperiodeOgLand(skjema.id, data);
     },
     onSuccess: async () => {
       await invalidateSkjemaQuery(skjema.id);

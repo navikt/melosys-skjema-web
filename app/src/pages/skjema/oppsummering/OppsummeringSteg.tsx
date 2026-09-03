@@ -85,7 +85,6 @@ function OppsummeringStegContent({
       nesteKnapp={
         <SendInnSkjemaKnapp
           skjemaId={skjema.id}
-          skjemaDefinisjonVersjon={skjema.skjemaDefinisjonVersjon}
           onBeforeSubmit={kanSendeInn}
           onSubmitError={() => setHarInnsendingFeil(true)}
         />

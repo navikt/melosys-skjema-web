@@ -1,6 +1,7 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { API_PROXY_URL } from "~/constants/api.ts";
+import { SKJEMA_DEFINISJON_VERSJON } from "~/constants/skjemaVersjon.ts";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { alleToggleNavn } from "~/featuretoggle/toggleNavn.ts";
 import {
@@ -41,6 +42,7 @@ import {
 
 export const SKJEMA_DEFINISJON_VERSJON_HEADER = "X-Skjema-Definisjon-Versjon";
 export const UTDATERT_UTKAST_STORAGE_KEY = "utdatert-utkast-reinitialisert";
+export const VERSJON_RELOAD_FORSOKT_KEY = "skjema-versjon-reload-forsokt";
 const UTDATERT_SKJEMAVERSJON_ERROR = "SKJEMA_DEFINISJON_VERSJON_UTDATERT";
 
 export class SkjemaApiError extends Error {
@@ -61,6 +63,18 @@ export class VedleggError extends SkjemaApiError {
   }
 }
 
+/**
+ * Bundelen er bygget for en annen skjemaversjon enn den backend har aktiv, og en reload
+ * hjalp ikke - typisk i vinduet mellom at melosys-skjema-api og melosys-skjema-web
+ * deployes, der web fortsatt serverer den gamle bundelen.
+ */
+export class UtdatertKlientError extends SkjemaApiError {
+  constructor(message: string, status: number, errorCode?: string) {
+    super(message, status, errorCode);
+    this.name = "UtdatertKlientError";
+  }
+}
+
 async function kastApiFeil(
   response: Response,
   skjemaId: string,
@@ -75,15 +89,22 @@ async function kastApiFeil(
   }
   const message = (body.message as string) || standardmelding;
   const errorCode = body.error as string | undefined;
-  const error = erVedlegg
-    ? new VedleggError(message, response.status, errorCode)
-    : new SkjemaApiError(message, response.status, errorCode);
 
   if (errorCode === UTDATERT_SKJEMAVERSJON_ERROR && response.status === 409) {
+    // Én reload, ikke en løkke: er bundelen fortsatt utdatert etterpå, er ikke den nye
+    // versjonen av melosys-skjema-web deployet ennå, og en ny reload gir samme bundel.
+    if (sessionStorage.getItem(VERSJON_RELOAD_FORSOKT_KEY) === skjemaId) {
+      sessionStorage.removeItem(UTDATERT_UTKAST_STORAGE_KEY);
+      throw new UtdatertKlientError(message, response.status, errorCode);
+    }
+    sessionStorage.setItem(VERSJON_RELOAD_FORSOKT_KEY, skjemaId);
     sessionStorage.setItem(UTDATERT_UTKAST_STORAGE_KEY, skjemaId);
     globalThis.location.reload();
   }
-  throw error;
+
+  throw erVedlegg
+    ? new VedleggError(message, response.status, errorCode)
+    : new SkjemaApiError(message, response.status, errorCode);
 }
 
 type StegData =
@@ -100,7 +121,6 @@ type StegData =
 
 async function postStegData(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   stegNavn: StegKey,
   data: StegData,
 ): Promise<void> {
@@ -110,7 +130,7 @@ async function postStegData(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        [SKJEMA_DEFINISJON_VERSJON_HEADER]: skjemaDefinisjonVersjon,
+        [SKJEMA_DEFINISJON_VERSJON_HEADER]: SKJEMA_DEFINISJON_VERSJON,
       },
       body: JSON.stringify(data),
     },
@@ -159,50 +179,44 @@ async function fetchSkjema(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}`,
     {
       method: "GET",
+      headers: {
+        [SKJEMA_DEFINISJON_VERSJON_HEADER]: SKJEMA_DEFINISJON_VERSJON,
+      },
     },
   );
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    // Lesestien er der en gammel fane først oppdager at den er utdatert, så den må
+    // innom samme 409-håndtering som skrivestiene.
+    return kastApiFeil(response, skjemaId, "Kunne ikke hente skjemaet");
   }
+
+  // Bundelen og backend er i takt igjen, så neste versjonsbump får lov til å reloade på nytt.
+  sessionStorage.removeItem(VERSJON_RELOAD_FORSOKT_KEY);
 
   return response.json();
 }
 
 export async function postArbeidssituasjon(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: ArbeidssituasjonDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.ARBEIDSSITUASJON,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.ARBEIDSSITUASJON, request);
 }
 
 export async function postSkatteforholdOgInntekt(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: SkatteforholdOgInntektDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.SKATTEFORHOLD_OG_INNTEKT,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.SKATTEFORHOLD_OG_INNTEKT, request);
 }
 
 export async function postArbeidsgiverensVirksomhetINorge(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: ArbeidsgiverensVirksomhetINorgeDto,
 ): Promise<void> {
   return postStegData(
     skjemaId,
-    skjemaDefinisjonVersjon,
     StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
     request,
   );
@@ -210,72 +224,41 @@ export async function postArbeidsgiverensVirksomhetINorge(
 
 export async function postUtenlandsoppdraget(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: UtenlandsoppdragetDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.UTENLANDSOPPDRAGET,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.UTENLANDSOPPDRAGET, request);
 }
 
 export async function postArbeidsstedIUtlandet(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: ArbeidsstedIUtlandetDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.ARBEIDSSTED_I_UTLANDET,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.ARBEIDSSTED_I_UTLANDET, request);
 }
 
 export async function postArbeidstakerensLonn(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: ArbeidstakerensLonnDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.ARBEIDSTAKERENS_LONN,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.ARBEIDSTAKERENS_LONN, request);
 }
 
 export async function postTilleggsopplysninger(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: TilleggsopplysningerDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.TILLEGGSOPPLYSNINGER,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.TILLEGGSOPPLYSNINGER, request);
 }
 
 export async function postVedleggValg(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: VedleggValgDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.VEDLEGG,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.VEDLEGG, request);
 }
 
 export async function sendInnSkjema(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   sprak: Sprak,
 ): Promise<SkjemaInnsendtKvittering> {
   const parameters = new URLSearchParams({ sprak });
@@ -285,7 +268,7 @@ export async function sendInnSkjema(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        [SKJEMA_DEFINISJON_VERSJON_HEADER]: skjemaDefinisjonVersjon,
+        [SKJEMA_DEFINISJON_VERSJON_HEADER]: SKJEMA_DEFINISJON_VERSJON,
       },
     },
   );
@@ -324,28 +307,16 @@ export const getInnsendtKvitteringQuery = (skjemaId: string) =>
 
 export async function postUtsendingsperiodeOgLand(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: UtsendingsperiodeOgLandDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.UTSENDINGSPERIODE_OG_LAND,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.UTSENDINGSPERIODE_OG_LAND, request);
 }
 
 export async function postFamiliemedlemmer(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   request: FamiliemedlemmerDto,
 ): Promise<void> {
-  return postStegData(
-    skjemaId,
-    skjemaDefinisjonVersjon,
-    StegKey.FAMILIEMEDLEMMER,
-    request,
-  );
+  return postStegData(skjemaId, StegKey.FAMILIEMEDLEMMER, request);
 }
 
 export const getOrganisasjonMedJuridiskEnhetQuery = (orgnummer: string) =>
@@ -693,7 +664,6 @@ export const getSkjemaDefinisjonQuery = (type: string, sprak: Sprak) =>
 
 export async function lastOppVedlegg(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   fil: File,
 ): Promise<VedleggDto> {
   const formData = new FormData();
@@ -702,7 +672,7 @@ export async function lastOppVedlegg(
   const response = await fetch(`${API_PROXY_URL}/skjema/${skjemaId}/vedlegg`, {
     method: "POST",
     headers: {
-      [SKJEMA_DEFINISJON_VERSJON_HEADER]: skjemaDefinisjonVersjon,
+      [SKJEMA_DEFINISJON_VERSJON_HEADER]: SKJEMA_DEFINISJON_VERSJON,
     },
     body: formData,
   });
@@ -737,7 +707,6 @@ export function vedleggInnholdUrl(skjemaId: string, vedleggId: string): string {
 
 export async function slettVedlegg(
   skjemaId: string,
-  skjemaDefinisjonVersjon: string,
   vedleggId: string,
 ): Promise<void> {
   const response = await fetch(
@@ -745,7 +714,7 @@ export async function slettVedlegg(
     {
       method: "DELETE",
       headers: {
-        [SKJEMA_DEFINISJON_VERSJON_HEADER]: skjemaDefinisjonVersjon,
+        [SKJEMA_DEFINISJON_VERSJON_HEADER]: SKJEMA_DEFINISJON_VERSJON,
       },
     },
   );

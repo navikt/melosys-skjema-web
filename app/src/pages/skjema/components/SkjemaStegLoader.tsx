@@ -5,7 +5,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { StegKey } from "~/constants/stegKeys.ts";
-import { UTDATERT_UTKAST_STORAGE_KEY } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  UTDATERT_UTKAST_STORAGE_KEY,
+  UtdatertKlientError,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 import {
   Skjemadel,
@@ -46,6 +49,12 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
         <Detail>{t("felles.laster")}</Detail>
       </HStack>
     );
+  }
+
+  // Backend kjører en nyere skjemaversjon enn denne bundelen, og en reload har allerede
+  // vært forsøkt. Da er ikke ny melosys-skjema-web deployet ennå - det går over av seg selv.
+  if (error instanceof UtdatertKlientError) {
+    return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
   }
 
   if (error) {

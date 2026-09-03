@@ -59,11 +59,7 @@ function FamiliemedlemmerStegContent({
 
   const postFamiliemedlemmerMutation = useMutation({
     mutationFn: (data: FamiliemedlemmerDto) => {
-      return postFamiliemedlemmer(
-        skjema.id,
-        skjema.skjemaDefinisjonVersjon,
-        data,
-      );
+      return postFamiliemedlemmer(skjema.id, data);
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);

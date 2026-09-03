@@ -79,7 +79,6 @@ function TilleggsopplysningerStegContent({
     mutationFn: (data: TilleggsopplysningerFormData) => {
       return postTilleggsopplysninger(
         skjema.id,
-        skjema.skjemaDefinisjonVersjon,
         data as TilleggsopplysningerDto,
       );
     },

@@ -114,11 +114,7 @@ function VedleggStegContent({
 
   const postVedleggValgMutation = useMutation({
     mutationFn: (data: VedleggStegFormData) => {
-      return postVedleggValg(
-        skjema.id,
-        skjema.skjemaDefinisjonVersjon,
-        data as VedleggValgDto,
-      );
+      return postVedleggValg(skjema.id, data as VedleggValgDto);
     },
     onSuccess: () => {
       invalidateArbeidstakerSkjemaQuery(skjema.id);
@@ -202,11 +198,7 @@ function VedleggStegContent({
     for (const item of acceptedItems) {
       (async () => {
         try {
-          const response = await lastOppVedlegg(
-            skjema.id,
-            skjema.skjemaDefinisjonVersjon,
-            item.fil,
-          );
+          const response = await lastOppVedlegg(skjema.id, item.fil);
           setVedleggItems((previous) =>
             previous.map((v) =>
               v.id === item.id
@@ -237,11 +229,7 @@ function VedleggStegContent({
     if (vedleggItem?.vedleggId) {
       (async () => {
         try {
-          await slettVedlegg(
-            skjema.id,
-            skjema.skjemaDefinisjonVersjon,
-            vedleggItem.vedleggId!,
-          );
+          await slettVedlegg(skjema.id, vedleggItem.vedleggId!);
           setVedleggItems((previous) =>
             previous.filter((v) => v.id !== vedleggItemId),
           );
@@ -260,11 +248,7 @@ function VedleggStegContent({
     setSlettVedleggFeil(false);
     (async () => {
       try {
-        await slettVedlegg(
-          skjema.id,
-          skjema.skjemaDefinisjonVersjon,
-          vedleggId,
-        );
+        await slettVedlegg(skjema.id, vedleggId);
         setEksisterendeVedlegg((previous) =>
           previous.filter((v) => v.id !== vedleggId),
         );

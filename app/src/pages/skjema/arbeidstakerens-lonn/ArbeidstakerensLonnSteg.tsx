@@ -69,11 +69,7 @@ function ArbeidstakerensLonnStegContent({
 
   const registerArbeidstakerLonnMutation = useMutation({
     mutationFn: (data: ArbeidstakerensLonnFormData) => {
-      return postArbeidstakerensLonn(
-        skjema.id,
-        skjema.skjemaDefinisjonVersjon,
-        data as ArbeidstakerensLonnDto,
-      );
+      return postArbeidstakerensLonn(skjema.id, data as ArbeidstakerensLonnDto);
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjema.id);

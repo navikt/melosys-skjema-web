@@ -59,7 +59,6 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     mutationFn: (data: ArbeidsgiverensVirksomhetINorgeDto) => {
       return postArbeidsgiverensVirksomhetINorge(
         skjema.id,
-        skjema.skjemaDefinisjonVersjon,
         data as ArbeidsgiverensVirksomhetINorgeDto,
       );
     },

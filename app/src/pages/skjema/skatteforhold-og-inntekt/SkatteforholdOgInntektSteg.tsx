@@ -180,7 +180,6 @@ function SkatteforholdOgInntektStegContent({
     mutationFn: (data: SkatteforholdOgInntektFormData) => {
       return postSkatteforholdOgInntekt(
         skjema.id,
-        skjema.skjemaDefinisjonVersjon,
         data as SkatteforholdOgInntektDto,
       );
     },
