@@ -33,10 +33,10 @@
     "i18next": "26.4.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "react-hook-form": "7.86.0",
+    "react-hook-form": "7.87.0",
     "react-i18next": "17.0.12",
     "tailwindcss": "^4.3.3",
-    "zod": "4.4.3"
+    "zod": "4.5.4"
   },
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^5.18.6",
