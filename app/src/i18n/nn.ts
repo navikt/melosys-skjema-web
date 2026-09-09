@@ -7,7 +7,7 @@ export const nn = {
       skjemaOppdateres:
         "Vi oppdaterer skjemaet akkurat no. Prøv igjen om nokre minutt.",
       utkastReinitialisert:
-        "Skjemaet er oppdatert sidan du starta. Tidlegare svar og vedlegg er derfor fjerna, og du må fylle ut skjemaet på nytt.",
+        "Skjemaet er oppdatert, så tidlegare svar og vedlegg er fjerna. Ver venleg og fyll ut søknaden på nytt.",
       fantIkkeSkjema: "Fann ikkje skjema",
       stegIkkeTilgjengelig:
         "Steget er ikkje tilgjengeleg for denne skjemadelen",

@@ -168,6 +168,8 @@ export const getSkjemaQuery = (skjemaId: string) =>
   queryOptions<UtsendtArbeidstakerSkjemaDto>({
     queryKey: ["skjema", skjemaId],
     queryFn: () => fetchSkjema(skjemaId),
+    retry: (antallForsok, feil) =>
+      !(feil instanceof UtdatertKlientError) && antallForsok < 3,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
@@ -192,7 +194,9 @@ async function fetchSkjema(
   }
 
   // Bundelen og backend er i takt igjen, så neste versjonsbump får lov til å reloade på nytt.
-  sessionStorage.removeItem(VERSJON_RELOAD_FORSOKT_KEY);
+  if (typeof sessionStorage !== "undefined") {
+    sessionStorage.removeItem(VERSJON_RELOAD_FORSOKT_KEY);
+  }
 
   return response.json();
 }
