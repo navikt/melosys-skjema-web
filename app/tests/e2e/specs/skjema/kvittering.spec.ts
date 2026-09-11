@@ -8,11 +8,7 @@ import {
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import {
-  mockFetchSkjema,
-  mockSkjemaMetadata,
-  mockUserInfo,
-} from "../../fixtures/api-mocks";
+import { mockFetchSkjema, mockUserInfo } from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
 import { testUserInfo } from "../../fixtures/test-data";
 import { KvitteringPage } from "../../pages/skjema/kvittering-page";
@@ -41,7 +37,6 @@ test.describe("Kvittering", () => {
 
   test.beforeEach(async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
-    await mockSkjemaMetadata(page, skjemaId, metadata);
     await mockFetchSkjema(page, skjema);
   });
 
