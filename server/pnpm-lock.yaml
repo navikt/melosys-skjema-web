@@ -15,8 +15,8 @@ importers:
         specifier: 4.3.0
         version: 4.3.0(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)
       '@navikt/oasis':
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.2.2
+        version: 4.2.2
       '@navikt/vite-mode':
         specifier: 1.0.0
         version: 1.0.0(express@5.2.1)
@@ -153,12 +153,12 @@ packages:
       html-react-parser: '>=5.x'
       react: '>=17.x'
 
-  '@navikt/oasis@4.2.0':
-    resolution: {integrity: sha512-WeqVPdJJBNSZcoYlyd5yHhfozcbVjxedrzv29h1ZcCgAgbgg/NKX3+MwJGxaawIOHpV/pLmL3d8Iw66TjVbkIQ==, tarball: https://npm.pkg.github.com/download/@navikt/oasis/4.2.0/b12e5ab20d3bce926871d205fafd1620da001942}
+  '@navikt/oasis@4.2.2':
+    resolution: {integrity: sha512-EVMsF8uKbLPNRWuPfH1IKVJhqtibFzSTSyNkzj5mTCVMZV2QPS5W3uYMD4r0rXsmLx7nv0HnLovDphb3AFEjvw==, tarball: https://npm.pkg.github.com/download/@navikt/oasis/4.2.2/3c43e1e89bb2d46646a9a2aaf27972a024377a6f}
     engines: {node: ^20.19.0 || >= 22.12.0 || 24.x || 25.x}
 
-  '@navikt/texas@4.2.0':
-    resolution: {integrity: sha512-OdDoKKBSb2q02aI0nXx0/1ucWXe+p7IDFn99S1eQMYQE7qbDz8USj0BkyXX3JCRSR8PE08Rl9Lsn5O/y8B5SnQ==, tarball: https://npm.pkg.github.com/download/@navikt/texas/4.2.0/5f1e0e66d7d06742ce47b4b9738fe17b4f97d6ac}
+  '@navikt/texas@4.2.2':
+    resolution: {integrity: sha512-w/iTWLSdmvn2j2U3M+sJX9bSBvoV5UcMk+FuKs9EKz1QuaCoUksZrEfqX9/FtqyTUaOhwDnm/1iIuR6BudzFAg==, tarball: https://npm.pkg.github.com/download/@navikt/texas/4.2.2/862d743a1df21630a007a0d2d2a36a74dd8b5187}
     engines: {node: ^20.19.0 || >= 22.12.0 || 24.x || 25.x}
 
   '@navikt/vite-mode@1.0.0':
@@ -805,8 +805,8 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  jose@6.2.10:
-    resolution: {integrity: sha512-iiW7J9qRFlGxvCOIBDBDxFePQSn7ZMAnrYGhrrOo6siO/MIqwfyilLR27pkfDgUk+raLuzADS8A3S/KLBisc0g==}
+  jose@6.2.11:
+    resolution: {integrity: sha512-A5NPn7g8EAzGU3IzRs+Yiq8K5n3ypYS75M5+KKiVHdUexfpWK1kP4ZMq7QnTGDoMj6TJ1dtcEJjW60yZDXS4hg==}
 
   js-cookie@3.0.8:
     resolution: {integrity: sha512-yeJd4aNAdYZQjaon2bpD/Gb0B/omw7HQOsynXXcOiWVCacbBcPlgn8S/d1X6blFSaHao7ozqtW7NZW19xpCtIw==}
@@ -1301,14 +1301,14 @@ snapshots:
       js-cookie: 3.0.8
       react: 19.2.4
 
-  '@navikt/oasis@4.2.0':
+  '@navikt/oasis@4.2.2':
     dependencies:
-      '@navikt/texas': 4.2.0
+      '@navikt/texas': 4.2.2
       '@opentelemetry/api': 1.9.1
       '@prometheus-io/client': 0.16.1
-      jose: 6.2.10
+      jose: 6.2.11
 
-  '@navikt/texas@4.2.0': {}
+  '@navikt/texas@4.2.2': {}
 
   '@navikt/vite-mode@1.0.0(express@5.2.1)':
     dependencies:
@@ -2004,7 +2004,7 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  jose@6.2.10: {}
+  jose@6.2.11: {}
 
   js-cookie@3.0.8: {}
 
