@@ -68,10 +68,10 @@ export class VedleggError extends SkjemaApiError {
  * hjalp ikke - typisk i vinduet mellom at melosys-skjema-api og melosys-skjema-web
  * deployes, der web fortsatt serverer den gamle bundelen.
  */
-export class UtdatertKlientError extends SkjemaApiError {
+export class FeilSkjemaVersjonError extends SkjemaApiError {
   constructor(message: string, status: number, errorCode?: string) {
     super(message, status, errorCode);
-    this.name = "UtdatertKlientError";
+    this.name = "FeilSkjemaVersjonError";
   }
 }
 
@@ -95,7 +95,7 @@ async function kastApiFeil(
     // versjonen av melosys-skjema-web deployet ennå, og en ny reload gir samme bundel.
     if (sessionStorage.getItem(VERSJON_RELOAD_FORSOKT_KEY) === skjemaId) {
       sessionStorage.removeItem(UTDATERT_UTKAST_STORAGE_KEY);
-      throw new UtdatertKlientError(message, response.status, errorCode);
+      throw new FeilSkjemaVersjonError(message, response.status, errorCode);
     }
     sessionStorage.setItem(VERSJON_RELOAD_FORSOKT_KEY, skjemaId);
     sessionStorage.setItem(UTDATERT_UTKAST_STORAGE_KEY, skjemaId);
@@ -169,7 +169,7 @@ export const getSkjemaQuery = (skjemaId: string) =>
     queryKey: ["skjema", skjemaId],
     queryFn: () => fetchSkjema(skjemaId),
     retry: (antallForsok, feil) =>
-      !(feil instanceof UtdatertKlientError) && antallForsok < 3,
+      !(feil instanceof FeilSkjemaVersjonError) && antallForsok < 3,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });

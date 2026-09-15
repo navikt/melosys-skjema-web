@@ -3,11 +3,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { SKJEMA_DEFINISJON_VERSJON } from "~/constants/skjemaVersjon.ts";
 
 import {
+  FeilSkjemaVersjonError,
   postArbeidssituasjon,
   SKJEMA_DEFINISJON_VERSJON_HEADER,
   SkjemaApiError,
   UTDATERT_UTKAST_STORAGE_KEY,
-  UtdatertKlientError,
   VERSJON_RELOAD_FORSOKT_KEY,
 } from "./melsosysSkjemaApiClient.ts";
 
@@ -90,7 +90,7 @@ describe("skjemaversjon på mutasjoner", () => {
 
     await expect(
       postArbeidssituasjon("skjema-id", request),
-    ).rejects.toBeInstanceOf(UtdatertKlientError);
+    ).rejects.toBeInstanceOf(FeilSkjemaVersjonError);
 
     expect(reload).not.toHaveBeenCalled();
     // Utkastet ble aldri reinitialisert - backend avviste klienten før den kom så langt,

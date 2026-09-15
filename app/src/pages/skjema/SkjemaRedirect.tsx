@@ -4,8 +4,8 @@ import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import {
+  FeilSkjemaVersjonError,
   getSkjemaQuery,
-  UtdatertKlientError,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 
@@ -26,7 +26,7 @@ export function SkjemaRedirect({ id }: SkjemaRedirectProperties) {
     );
   }
 
-  if (error instanceof UtdatertKlientError) {
+  if (error instanceof FeilSkjemaVersjonError) {
     return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
   }
 
