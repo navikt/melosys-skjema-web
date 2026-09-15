@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, Resolver, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
@@ -17,7 +18,6 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import {
-  ArbeidsgiverensVirksomhetINorgeDto,
   Skjemadel,
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -26,6 +26,10 @@ import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
 import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+
+type ArbeidsgiverensVirksomhetFormData = z.infer<
+  typeof arbeidsgiverensVirksomhetSchema
+>;
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
@@ -46,21 +50,16 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     "opprettholderArbeidsgiverenVanligDrift",
   );
 
-  const formMethods = useForm<ArbeidsgiverensVirksomhetINorgeDto>({
-    resolver: zodResolver(
-      arbeidsgiverensVirksomhetSchema,
-    ) as Resolver<ArbeidsgiverensVirksomhetINorgeDto>,
+  const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
+    resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
     ...(stegData && { defaultValues: stegData }),
   });
 
   const { handleSubmit } = formMethods;
 
   const registerVirksomhetMutation = useMutation({
-    mutationFn: (data: ArbeidsgiverensVirksomhetINorgeDto) => {
-      return postArbeidsgiverensVirksomhetINorge(
-        skjema.id,
-        data as ArbeidsgiverensVirksomhetINorgeDto,
-      );
+    mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
+      return postArbeidsgiverensVirksomhetINorge(skjema.id, data);
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjema.id);
@@ -77,7 +76,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     },
   });
 
-  const onSubmit = (data: ArbeidsgiverensVirksomhetINorgeDto) => {
+  const onSubmit = (data: ArbeidsgiverensVirksomhetFormData) => {
     registerVirksomhetMutation.mutate(data);
   };
 
