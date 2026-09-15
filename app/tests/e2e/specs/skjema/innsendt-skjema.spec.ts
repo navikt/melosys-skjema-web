@@ -1,7 +1,6 @@
 import {
   mockFetchSkjema,
   mockInnsendtSkjema,
-  mockSkjemaMetadata,
   mockUserInfo,
 } from "../../fixtures/api-mocks";
 import { expect, test } from "../../fixtures/test";
@@ -28,11 +27,6 @@ test.describe("Innsendt skjema", () => {
       },
     ]);
     await mockUserInfo(page, testUserInfo);
-    await mockSkjemaMetadata(
-      page,
-      testArbeidstakerSkjema.id,
-      testArbeidstakerSkjema.metadata,
-    );
     await mockFetchSkjema(page, testArbeidstakerSkjema);
     await mockInnsendtSkjema(
       page,
@@ -63,11 +57,6 @@ test.describe("Innsendt skjema", () => {
 
   test("Viser innsendt — arbeidstakers del", async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
-    await mockSkjemaMetadata(
-      page,
-      testArbeidstakerSkjema.id,
-      testArbeidstakerSkjema.metadata,
-    );
     await mockFetchSkjema(page, testArbeidstakerSkjema);
     await mockInnsendtSkjema(
       page,
@@ -93,11 +82,6 @@ test.describe("Innsendt skjema", () => {
 
   test("Viser innsendt — arbeidsgivers del", async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
-    await mockSkjemaMetadata(
-      page,
-      testArbeidsgiverSkjema.id,
-      testArbeidsgiverSkjema.metadata,
-    );
     await mockFetchSkjema(page, testArbeidsgiverSkjema);
     await mockInnsendtSkjema(
       page,
@@ -126,11 +110,6 @@ test.describe("Innsendt skjema", () => {
     page,
   }) => {
     await mockUserInfo(page, testUserInfo);
-    await mockSkjemaMetadata(
-      page,
-      testKombinertSkjema.id,
-      testKombinertSkjema.metadata,
-    );
     await mockFetchSkjema(page, testKombinertSkjema);
     await mockInnsendtSkjema(
       page,

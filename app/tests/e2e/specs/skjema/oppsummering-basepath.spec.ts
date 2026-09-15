@@ -39,17 +39,6 @@ async function setupBasePathMocks(
   });
 
   await page.route(
-    `${basePath}/api/skjema/${skjema.id}/metadata`,
-    async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify(skjema.metadata),
-      });
-    },
-  );
-
-  await page.route(
     `${basePath}/api/skjema/utsendt-arbeidstaker/${skjema.id}`,
     async (route) => {
       await route.fulfill({
