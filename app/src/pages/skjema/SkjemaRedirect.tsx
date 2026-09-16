@@ -1,9 +1,12 @@
-import { Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
+import { Alert, Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import {
+  FeilSkjemaVersjonError,
+  getSkjemaQuery,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 
 interface SkjemaRedirectProperties {
@@ -21,6 +24,10 @@ export function SkjemaRedirect({ id }: SkjemaRedirectProperties) {
         <Detail>{t("felles.laster")}</Detail>
       </HStack>
     );
+  }
+
+  if (error instanceof FeilSkjemaVersjonError) {
+    return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
   }
 
   if (error || !skjema) {

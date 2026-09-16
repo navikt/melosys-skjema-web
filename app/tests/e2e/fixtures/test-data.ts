@@ -45,6 +45,8 @@ export const testArbeidsgiverSkjemaId = "test-arbeidsgiver-skjema-id";
 export const testArbeidstakerSkjemaId = "test-arbeidstaker-skjema-id";
 
 export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
+  utkastReinitialisert: false,
+  skjemaDefinisjonVersjon: "2",
   id: testArbeidsgiverSkjemaId,
   orgnr: "123456789",
   fnr: "",
@@ -67,6 +69,8 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
 };
 
 export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
+  utkastReinitialisert: false,
+  skjemaDefinisjonVersjon: "2",
   id: testArbeidstakerSkjemaId,
   fnr: testUserInfo.userId,
   orgnr: "",
@@ -336,6 +340,8 @@ export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
 export const testKombinertSkjemaId = "test-kombinert-skjema-id";
 
 export const testKombinertSkjema: UtsendtArbeidstakerSkjemaDto = {
+  utkastReinitialisert: false,
+  skjemaDefinisjonVersjon: "2",
   id: testKombinertSkjemaId,
   orgnr: "123456789",
   fnr: "",

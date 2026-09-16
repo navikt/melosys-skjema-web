@@ -558,7 +558,9 @@ export interface UtsendtArbeidstakerSkjemaDto {
     | UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
     | UtsendtArbeidstakerArbeidsgiversSkjemaDataDto
     | UtsendtArbeidstakerArbeidstakersSkjemaDataDto;
+  skjemaDefinisjonVersjon: string;
   motpartensUtsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
+  utkastReinitialisert: boolean;
 }
 
 export interface SkjemaInnsendtKvittering {

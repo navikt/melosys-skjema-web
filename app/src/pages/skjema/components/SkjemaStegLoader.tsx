@@ -1,9 +1,10 @@
-import { Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
+import { Alert, Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { StegKey } from "~/constants/stegKeys.ts";
+import { FeilSkjemaVersjonError } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 import {
   Skjemadel,
@@ -37,6 +38,10 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
     );
   }
 
+  if (error instanceof FeilSkjemaVersjonError) {
+    return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
+  }
+
   if (error) {
     return <ErrorMessage>{t("felles.feilVedLastingAvSkjema")}</ErrorMessage>;
   }
@@ -60,5 +65,14 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
     return <Navigate params={{ id }} to={nesteSteg!.route} replace />;
   }
 
-  return <>{children(skjema)}</>;
+  return (
+    <>
+      {skjema.utkastReinitialisert && (
+        <Alert className="mb-4" variant="warning">
+          {t("felles.utkastReinitialisert")}
+        </Alert>
+      )}
+      {children(skjema)}
+    </>
+  );
 }
