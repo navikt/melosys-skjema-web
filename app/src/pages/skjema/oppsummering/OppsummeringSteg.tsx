@@ -111,6 +111,7 @@ function OppsummeringStegContent({
         );
       })}
       <VedleggOppsummering
+        definisjon={definisjon}
         editHref={
           vedleggSteg ? byggSkjemaStegHref(vedleggSteg.route, skjema.id) : ""
         }

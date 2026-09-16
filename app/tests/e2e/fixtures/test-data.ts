@@ -1,5 +1,6 @@
 // Test data constants that can be reused across tests
 
+import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import type { UserInfo } from "~/httpClients/dekoratorenClient";
 import {
   type ArbeidsgiverMedFullmaktMetadata,
@@ -242,6 +243,13 @@ export const testInnsendteSoknaderToTreff: InnsendteSoknaderResponse = {
 
 // ============ Innsendt skjema test data ============
 
+// Fixturene har tomme skjemaData, så bare vedlegg-seksjonen (som VedleggOppsummering viser) trengs.
+const testInnsendtDefinisjon = {
+  seksjoner: {
+    vedleggArbeidstaker: SKJEMA_DEFINISJON_A1.seksjoner.vedleggArbeidstaker,
+  },
+} as unknown as InnsendtSkjemaResponse["definisjon"];
+
 export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
   skjemaId: testArbeidstakerSkjemaId,
   referanseId: "REF-AT-001",
@@ -254,9 +262,7 @@ export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
   } as InnsendtSkjemaResponse["skjemaData"],
-  definisjon: {
-    seksjoner: {},
-  } as unknown as InnsendtSkjemaResponse["definisjon"],
+  definisjon: testInnsendtDefinisjon,
 };
 
 export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
@@ -270,9 +276,7 @@ export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
   } as InnsendtSkjemaResponse["skjemaData"],
-  definisjon: {
-    seksjoner: {},
-  } as unknown as InnsendtSkjemaResponse["definisjon"],
+  definisjon: testInnsendtDefinisjon,
 };
 
 // ============ SoknadStarter test data ============
@@ -377,9 +381,7 @@ export const testInnsendtSkjemaKombinertDel: InnsendtSkjemaResponse = {
     arbeidsgiversData: {},
     arbeidstakersData: {},
   } as InnsendtSkjemaResponse["skjemaData"],
-  definisjon: {
-    seksjoner: {},
-  } as unknown as InnsendtSkjemaResponse["definisjon"],
+  definisjon: testInnsendtDefinisjon,
 };
 
 export const emptyVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
