@@ -265,7 +265,7 @@ export type ArbeidsgiverMetadata = UtilRequiredKeys<
 };
 
 export interface ArbeidsgiverensVirksomhetINorgeDto {
-  erArbeidsgiverenOffentligVirksomhet: boolean;
+  erArbeidsgiverenOffentligVirksomhet?: boolean;
   erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
   opprettholderArbeidsgiverenVanligDrift?: boolean;
 }
@@ -525,6 +525,7 @@ export interface UtsendtArbeidstakerMetadata {
   /** @format uuid */
   kobletSkjemaId?: string;
   arbeidstakerNavn: string;
+  erOffentligArbeidsgiver?: boolean;
   metadatatype: string;
 }
 
@@ -1071,6 +1072,7 @@ export interface UtsendingsperiodeOgLandTranslation {
 export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
+  erOffentligArbeidsgiver: boolean;
 }
 
 export interface AdminStatistikkDto {

@@ -253,8 +253,6 @@ export const nb = {
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Arbeidsgiverens virksomhet i Norge",
-      duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
-        "Du må svare på om arbeidsgiveren er en offentlig virksomhet",
       duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
         "Du må svare på om arbeidsgiveren er et bemannings- eller vikarbyrå",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:

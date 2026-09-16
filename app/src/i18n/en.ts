@@ -264,8 +264,6 @@ export const en = {
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Employer's business in Norway",
-      duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
-        "You must answer whether the employer is a public sector entity.",
       duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
         "You must answer whether the employer is a staffing or temporary work agency",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:

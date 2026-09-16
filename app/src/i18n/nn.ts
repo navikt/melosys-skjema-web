@@ -257,8 +257,6 @@ export const nn = {
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Verksemda til arbeidsgivaren i Noreg",
-      duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
-        "Du må svare på om arbeidsgivaren er ei offentleg verksemd",
       duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
         "Du må svare på om arbeidsgivaren er eit bemannings- eller vikarbyrå",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:

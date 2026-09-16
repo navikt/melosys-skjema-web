@@ -31,7 +31,7 @@ import {
   getArbeidsstedIUtlandet,
   getUtsendingsperiodeOgLand,
 } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
 import { OffshoreForm } from "./OffshoreForm.tsx";
 import { OmBordPaFlyForm } from "./OmBordPaFlyForm.tsx";
@@ -45,7 +45,7 @@ function ArbeidsstedIUtlandetStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidsstedIUtlandet(skjema);
   const utsendelseLand = getUtsendingsperiodeOgLand(skjema)?.utsendelseLand;
   const navigate = useNavigate();

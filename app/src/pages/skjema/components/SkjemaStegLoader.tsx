@@ -1,7 +1,10 @@
 import { Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { StegKey } from "~/constants/stegKeys.ts";
+import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 import {
   Skjemadel,
   UtsendtArbeidstakerSkjemaDto,
@@ -12,6 +15,7 @@ interface SkjemaStegLoaderProperties<T extends UtsendtArbeidstakerSkjemaDto> {
   skjemaQuery: (id: string) => UseQueryOptions<T>;
   children: (skjema: T) => React.ReactNode;
   allowedSkjemadeler?: Skjemadel[];
+  stepKey?: StegKey;
 }
 
 export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
@@ -19,6 +23,7 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   skjemaQuery,
   children,
   allowedSkjemadeler,
+  stepKey,
 }: SkjemaStegLoaderProperties<T>) {
   const { data: skjema, isLoading, error } = useQuery(skjemaQuery(id));
   const { t } = useTranslation();
@@ -45,6 +50,14 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
     !allowedSkjemadeler.includes(skjema.metadata.skjemadel)
   ) {
     return <ErrorMessage>{t("felles.stegIkkeTilgjengelig")}</ErrorMessage>;
+  }
+
+  const stegRekkefolge = getStegRekkefolge(skjema);
+  if (stepKey && stegRekkefolge.every(({ key }) => key !== stepKey)) {
+    const nesteSteg =
+      stegRekkefolge.find(({ key }) => key === StegKey.UTENLANDSOPPDRAGET) ??
+      stegRekkefolge[0];
+    return <Navigate params={{ id }} to={nesteSteg!.route} replace />;
   }
 
   return <>{children(skjema)}</>;
