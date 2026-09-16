@@ -10,8 +10,7 @@ import {
 import { mapToSupportedLanguage } from "~/utils/languages.ts";
 
 /**
- * Hook for å hente felt fra skjemadefinisjon basert på nåværende språk.
- * Bruker statisk definisjon fra constants/skjemaDefinisjonA1.ts.
+ * Hook for å hente felt fra den aktive skjemadefinisjonen basert på språk.
  *
  * @example
  * const { getFelt, getSeksjon } = useSkjemaDefinisjon();
