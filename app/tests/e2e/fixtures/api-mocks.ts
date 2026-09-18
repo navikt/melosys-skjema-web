@@ -779,3 +779,24 @@ export async function mockVentendeMotpartSoknader(
     },
   );
 }
+
+export async function mockFetchSkjemaVersjonskonflikt(
+  page: Page,
+  skjemaId: string,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}`,
+    async (route) => {
+      await (route.request().method() === "GET"
+        ? route.fulfill({
+            status: 409,
+            contentType: "application/json",
+            body: JSON.stringify({
+              message: "Utdatert skjemaversjon",
+              error: "SKJEMA_DEFINISJON_VERSJON_UTDATERT",
+            }),
+          })
+        : route.fallback());
+    },
+  );
+}

@@ -29,7 +29,7 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtenlandsoppdraget } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
 // Date range constants for assignment period selection
@@ -50,7 +50,7 @@ function UtenlandsoppdragetStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getUtenlandsoppdraget(skjema);
   const navigate = useNavigate();
   const translateError = useTranslateError();

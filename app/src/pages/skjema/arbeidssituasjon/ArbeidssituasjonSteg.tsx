@@ -28,7 +28,7 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidssituasjon } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
 
 type ArbeidssituasjonFormData = z.infer<typeof arbeidssituasjonSchema>;
@@ -38,7 +38,7 @@ function ArbeidssituasjonStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidssituasjon(skjema);
   const skjemadel = skjema.metadata.skjemadel;
   const navigate = useNavigate();
