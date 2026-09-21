@@ -66,6 +66,51 @@ test.describe("Oversikt", () => {
     await oversiktPage.assertUtkastListVisible();
   });
 
+  for (const utkast of [emptyUtkastListe, testUtkastListe]) {
+    test(`Rendrer ikke utkastlisten før svaret med ${utkast.antall} utkast er hentet`, async ({
+      page,
+    }) => {
+      await setupApiMocksForOversikt(
+        page,
+        testUserInfo,
+        [],
+        utkast,
+        emptyInnsendteSoknader,
+      );
+
+      let frigiSvar!: () => void;
+      // eslint-disable-next-line unicorn/prefer-promise-with-resolvers -- Prosjektet bruker ES2023, uten Promise.withResolvers.
+      const svarKlart = new Promise<void>((resolve) => {
+        frigiSvar = resolve;
+      });
+      const utkastUrl = /\/api\/skjema\/utsendt-arbeidstaker\/utkast/;
+      await page.route(utkastUrl, async (route) => {
+        await svarKlart;
+        await route.fallback();
+      });
+      const foresporsel = page.waitForRequest(utkastUrl);
+      const svar = page.waitForResponse(utkastUrl);
+      const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+
+      await oversiktPage.goto();
+      await foresporsel;
+      await oversiktPage.assertIsVisible();
+      try {
+        await oversiktPage.assertUtkastListNotRendered();
+      } finally {
+        frigiSvar();
+        const respons = await svar;
+        await respons.finished();
+      }
+
+      if (utkast.antall === 0) {
+        await oversiktPage.assertUtkastListNotRendered();
+      } else {
+        await oversiktPage.assertUtkastListVisible();
+      }
+    });
+  }
+
   test("Viser innsendte søknader-tabell når det finnes innsendte søknader", async ({
     page,
   }) => {
