@@ -185,6 +185,10 @@ export class OversiktPage {
     await expect(this.utkastExpansionCard.first()).toBeVisible();
   }
 
+  async assertUtkastListNotRendered() {
+    await expect(this.utkastExpansionCard).toHaveCount(0);
+  }
+
   async assertHistorikkVisible() {
     await expect(this.historikkHeading).toBeVisible();
   }
