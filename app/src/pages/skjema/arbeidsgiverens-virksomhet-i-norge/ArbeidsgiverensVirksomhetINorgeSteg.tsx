@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
@@ -18,14 +18,13 @@ import {
   SkjemaSteg,
 } from "~/pages/skjema/components/SkjemaSteg.tsx";
 import {
-  ArbeidsgiverensVirksomhetINorgeDto,
   Skjemadel,
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 
 type ArbeidsgiverensVirksomhetFormData = z.infer<
@@ -37,16 +36,11 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidsgiverensVirksomhetINorge(skjema);
   const navigate = useNavigate();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
-
-  const erOffentligFelt = getFelt(
-    "arbeidsgiverensVirksomhetINorge",
-    "erArbeidsgiverenOffentligVirksomhet",
-  );
   const erBemanningFelt = getFelt(
     "arbeidsgiverensVirksomhetINorge",
     "erArbeidsgiverenBemanningsEllerVikarbyraa",
@@ -56,24 +50,16 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     "opprettholderArbeidsgiverenVanligDrift",
   );
 
-  const formMethods = useForm({
+  const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
     resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
     ...(stegData && { defaultValues: stegData }),
   });
 
-  const { handleSubmit, control } = formMethods;
-
-  const erArbeidsgiverenOffentligVirksomhet = useWatch({
-    control,
-    name: "erArbeidsgiverenOffentligVirksomhet",
-  });
+  const { handleSubmit } = formMethods;
 
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
-      return postArbeidsgiverensVirksomhetINorge(
-        skjema.id,
-        data as ArbeidsgiverensVirksomhetINorgeDto,
-      );
+      return postArbeidsgiverensVirksomhetINorge(skjema.id, data);
     },
     onSuccess: async () => {
       await invalidateArbeidsgiverSkjemaQuery(skjema.id);
@@ -109,27 +95,16 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
         >
           <RadioGroupJaNeiFormPart
             className="mt-4"
-            description={erOffentligFelt.hjelpetekst}
-            formFieldName="erArbeidsgiverenOffentligVirksomhet"
-            legend={erOffentligFelt.label}
+            formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
+            legend={erBemanningFelt.label}
           />
 
-          {erArbeidsgiverenOffentligVirksomhet === false && (
-            <>
-              <RadioGroupJaNeiFormPart
-                className="mt-4"
-                formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
-                legend={erBemanningFelt.label}
-              />
-
-              <RadioGroupJaNeiFormPart
-                className="mt-4"
-                description={opprettholderDriftFelt.hjelpetekst}
-                formFieldName="opprettholderArbeidsgiverenVanligDrift"
-                legend={opprettholderDriftFelt.label}
-              />
-            </>
-          )}
+          <RadioGroupJaNeiFormPart
+            className="mt-4"
+            description={opprettholderDriftFelt.hjelpetekst}
+            formFieldName="opprettholderArbeidsgiverenVanligDrift"
+            legend={opprettholderDriftFelt.label}
+          />
         </SkjemaSteg>
       </form>
     </FormProvider>
@@ -145,6 +120,7 @@ export function ArbeidsgiverensVirksomhetINorgeSteg({ id }: { id: string }) {
       ]}
       id={id}
       skjemaQuery={getSkjemaQuery}
+      stepKey={StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE}
     >
       {(skjema) => (
         <ArbeidsgiverensVirksomhetINorgeStegContent skjema={skjema} />

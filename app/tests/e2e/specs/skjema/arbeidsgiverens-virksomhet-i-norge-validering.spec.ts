@@ -28,16 +28,6 @@ test.describe("Arbeidsgiverens virksomhet i Norge - validering", () => {
   test("viser feilmelding når ingen felter er fylt ut", async () => {
     await stegPage.lagreOgFortsett();
 
-    await stegPage.assertOffentligVirksomhetErPakrevdIsVisible();
-    await stegPage.assertStillOnStep();
-  });
-
-  test("viser feilmelding på oppfølgingsspørsmål når kun offentlig virksomhet er besvart med nei", async () => {
-    await stegPage.offentligVirksomhetRadioGroup.NEI.click();
-
-    await stegPage.lagreOgFortsett();
-
-    await stegPage.assertOffentligVirksomhetErPakrevdIsNotVisible();
     await stegPage.assertBemanningsEllerVikarbyraErPakrevdIsVisible();
     await stegPage.assertVanligDriftErPakrevdIsVisible();
     await stegPage.assertStillOnStep();

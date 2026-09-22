@@ -8,7 +8,7 @@
 
 const SKJEMA_DEFINISJON_A1_NB = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "1",
+  versjon: "2",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utenlandsoppdraget",
@@ -268,15 +268,6 @@ const SKJEMA_DEFINISJON_A1_NB = {
     arbeidsgiverensVirksomhetINorge: {
       tittel: "Arbeidsgiverens virksomhet i Norge",
       felter: {
-        erArbeidsgiverenOffentligVirksomhet: {
-          type: "BOOLEAN",
-          label: "Er arbeidsgiveren en offentlig virksomhet?",
-          pakrevd: true,
-          hjelpetekst:
-            "Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter.",
-          jaLabel: "Ja",
-          neiLabel: "Nei",
-        },
         erArbeidsgiverenBemanningsEllerVikarbyraa: {
           type: "BOOLEAN",
           label: "Er arbeidsgiveren et bemannings- eller vikarbyrå?",
@@ -692,7 +683,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
 
 const SKJEMA_DEFINISJON_A1_NN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "1",
+  versjon: "2",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utsendingsperiode og land",
@@ -954,15 +945,6 @@ const SKJEMA_DEFINISJON_A1_NN = {
     arbeidsgiverensVirksomhetINorge: {
       tittel: "Verksemda til arbeidsgivaren i Noreg",
       felter: {
-        erArbeidsgiverenOffentligVirksomhet: {
-          type: "BOOLEAN",
-          label: "Er arbeidsgivaren ei offentleg verksemd?",
-          pakrevd: true,
-          hjelpetekst:
-            "Offentlege verksemder er statsorgan og underliggjande verksemder, til dømes departement og universitet.",
-          jaLabel: "Ja",
-          neiLabel: "Nei",
-        },
         erArbeidsgiverenBemanningsEllerVikarbyraa: {
           type: "BOOLEAN",
           label: "Er arbeidsgivaren eit bemannings- eller vikarbyrå?",
@@ -1381,7 +1363,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
 
 const SKJEMA_DEFINISJON_A1_EN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "1",
+  versjon: "2",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Posting Period and Country",
@@ -1645,15 +1627,6 @@ const SKJEMA_DEFINISJON_A1_EN = {
     arbeidsgiverensVirksomhetINorge: {
       tittel: "Employer's business in Norway",
       felter: {
-        erArbeidsgiverenOffentligVirksomhet: {
-          type: "BOOLEAN",
-          label: "Is the employer a public sector entity?",
-          pakrevd: true,
-          hjelpetekst:
-            "Public sector entities are state bodies and subordinate organisations, for example ministries and universities.",
-          jaLabel: "Yes",
-          neiLabel: "No",
-        },
         erArbeidsgiverenBemanningsEllerVikarbyraa: {
           type: "BOOLEAN",
           label: "Is the employer a staffing or temporary work agency?",
@@ -2083,7 +2056,8 @@ export type SupportedLanguage = keyof typeof SKJEMA_DEFINISJONER_A1;
 export const SKJEMA_DEFINISJON_A1 = SKJEMA_DEFINISJON_A1_NB;
 
 // Typer inferert fra konstanten
-export type SkjemaDefinisjonA1Type = typeof SKJEMA_DEFINISJON_A1_NB;
+export type SkjemaDefinisjonA1Type =
+  (typeof SKJEMA_DEFINISJONER_A1)[SupportedLanguage];
 export type SeksjonsNavn = keyof typeof SKJEMA_DEFINISJON_A1_NB.seksjoner;
 export type FeltNavn<S extends SeksjonsNavn> =
   keyof (typeof SKJEMA_DEFINISJON_A1_NB.seksjoner)[S]["felter"];
@@ -2104,7 +2078,7 @@ interface BaseFeltType {
 export function getSkjemaDefinisjon(
   lang: SupportedLanguage,
 ): SkjemaDefinisjonA1Type {
-  return SKJEMA_DEFINISJONER_A1[lang] as unknown as SkjemaDefinisjonA1Type;
+  return SKJEMA_DEFINISJONER_A1[lang];
 }
 
 /**
@@ -2115,9 +2089,7 @@ export function getFeltForLang<S extends SeksjonsNavn>(
   seksjonNavn: S,
   feltNavn: FeltNavn<S>,
 ): BaseFeltType {
-  const definisjon = SKJEMA_DEFINISJONER_A1[
-    lang
-  ] as unknown as SkjemaDefinisjonA1Type;
+  const definisjon = SKJEMA_DEFINISJONER_A1[lang];
   const seksjon = definisjon.seksjoner[seksjonNavn];
   return (seksjon.felter as Record<string, BaseFeltType>)[feltNavn as string]!;
 }
@@ -2129,8 +2101,6 @@ export function getSeksjonForLang<S extends SeksjonsNavn>(
   lang: SupportedLanguage,
   seksjonNavn: S,
 ) {
-  const definisjon = SKJEMA_DEFINISJONER_A1[
-    lang
-  ] as unknown as SkjemaDefinisjonA1Type;
+  const definisjon = SKJEMA_DEFINISJONER_A1[lang];
   return definisjon.seksjoner[seksjonNavn];
 }

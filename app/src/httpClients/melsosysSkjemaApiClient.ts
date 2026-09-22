@@ -1,6 +1,7 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { API_PROXY_URL } from "~/constants/api.ts";
+import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { alleToggleNavn } from "~/featuretoggle/toggleNavn.ts";
 import {
@@ -39,6 +40,67 @@ import {
   ValideringError,
 } from "~/utils/valideringUtils.ts";
 
+export const SKJEMA_DEFINISJON_VERSJON_HEADER = "X-Skjema-Definisjon-Versjon";
+export const VERSJON_RELOAD_FORSOKT_KEY = "skjema-versjon-reload-forsokt";
+const UTDATERT_SKJEMAVERSJON_ERROR = "SKJEMA_DEFINISJON_VERSJON_UTDATERT";
+const A1_VERSJON_HEADER = {
+  [SKJEMA_DEFINISJON_VERSJON_HEADER]: SKJEMA_DEFINISJON_A1.versjon,
+};
+
+export class SkjemaApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly errorCode?: string,
+  ) {
+    super(message);
+    this.name = "SkjemaApiError";
+  }
+}
+
+export class VedleggError extends SkjemaApiError {
+  constructor(message: string, status: number, errorCode?: string) {
+    super(message, status, errorCode);
+    this.name = "VedleggError";
+  }
+}
+
+export class FeilSkjemaVersjonError extends SkjemaApiError {
+  constructor(message: string, status: number, errorCode?: string) {
+    super(message, status, errorCode);
+    this.name = "FeilSkjemaVersjonError";
+  }
+}
+
+async function kastApiFeil(
+  response: Response,
+  skjemaId: string,
+  standardmelding: string,
+  erVedlegg = false,
+): Promise<never> {
+  let body: Record<string, unknown> = {};
+  try {
+    body = await response.json();
+  } catch {
+    // Ikke alle feilresponser har JSON-body.
+  }
+  const message = (body.message as string) || standardmelding;
+  const errorCode = body.error as string | undefined;
+
+  if (errorCode === UTDATERT_SKJEMAVERSJON_ERROR && response.status === 409) {
+    // Én reload per skjema. Hjelper det ikke, er ny frontend ikke deployet ennå.
+    if (sessionStorage.getItem(VERSJON_RELOAD_FORSOKT_KEY) !== skjemaId) {
+      sessionStorage.setItem(VERSJON_RELOAD_FORSOKT_KEY, skjemaId);
+      globalThis.location.reload();
+    }
+    throw new FeilSkjemaVersjonError(message, response.status, errorCode);
+  }
+
+  throw erVedlegg
+    ? new VedleggError(message, response.status, errorCode)
+    : new SkjemaApiError(message, response.status, errorCode);
+}
+
 type StegData =
   | ArbeidsgiverensVirksomhetINorgeDto
   | UtenlandsoppdragetDto
@@ -62,13 +124,14 @@ async function postStegData(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...A1_VERSJON_HEADER,
       },
       body: JSON.stringify(data),
     },
   );
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    return kastApiFeil(response, skjemaId, "Kunne ikke lagre skjemasteget");
   }
 }
 
@@ -99,6 +162,9 @@ export const getSkjemaQuery = (skjemaId: string) =>
   queryOptions<UtsendtArbeidstakerSkjemaDto>({
     queryKey: ["skjema", skjemaId],
     queryFn: () => fetchSkjema(skjemaId),
+    retry: (antallForsok, feil) =>
+      !(feil instanceof SkjemaApiError && feil.status === 409) &&
+      antallForsok < 3,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
@@ -110,12 +176,15 @@ async function fetchSkjema(
     `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}`,
     {
       method: "GET",
+      headers: A1_VERSJON_HEADER,
     },
   );
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    return kastApiFeil(response, skjemaId, "Kunne ikke hente skjemaet");
   }
+
+  sessionStorage.removeItem(VERSJON_RELOAD_FORSOKT_KEY);
 
   return response.json();
 }
@@ -191,12 +260,13 @@ export async function sendInnSkjema(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...A1_VERSJON_HEADER,
       },
     },
   );
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    return kastApiFeil(response, skjemaId, "Kunne ikke sende inn skjemaet");
   }
 
   return response.json();
@@ -584,18 +654,6 @@ export const getSkjemaDefinisjonQuery = (type: string, sprak: Sprak) =>
 
 // ============ Vedlegg ============
 
-export class VedleggError extends Error {
-  status: number;
-  errorCode?: string;
-
-  constructor(message: string, status: number, errorCode?: string) {
-    super(message);
-    this.name = "VedleggError";
-    this.status = status;
-    this.errorCode = errorCode;
-  }
-}
-
 export async function lastOppVedlegg(
   skjemaId: string,
   fil: File,
@@ -605,20 +663,16 @@ export async function lastOppVedlegg(
 
   const response = await fetch(`${API_PROXY_URL}/skjema/${skjemaId}/vedlegg`, {
     method: "POST",
+    headers: A1_VERSJON_HEADER,
     body: formData,
   });
 
   if (!response.ok) {
-    let body: Record<string, unknown> = {};
-    try {
-      body = await response.json();
-    } catch {
-      // ignore parse errors
-    }
-    throw new VedleggError(
-      (body.message as string) || "Kunne ikke laste opp vedlegg",
-      response.status,
-      body.error as string | undefined,
+    return kastApiFeil(
+      response,
+      skjemaId,
+      "Kunne ikke laste opp vedlegg",
+      true,
     );
   }
 
@@ -649,11 +703,12 @@ export async function slettVedlegg(
     `${API_PROXY_URL}/skjema/${skjemaId}/vedlegg/${vedleggId}`,
     {
       method: "DELETE",
+      headers: A1_VERSJON_HEADER,
     },
   );
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    return kastApiFeil(response, skjemaId, "Kunne ikke slette vedlegg", true);
   }
 }
 
