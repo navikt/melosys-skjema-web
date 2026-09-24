@@ -266,11 +266,13 @@ function addProxyWithLocalToken(
       on: {
         proxyReq: (proxyRequest, request) => {
           const token = request.headers["x-local-token"];
-          if (typeof token === "string" && token.length > 0) {
-            proxyRequest.removeHeader("cookie");
-            proxyRequest.removeHeader("x-local-token");
-            proxyRequest.setHeader("Authorization", `Bearer ${token}`);
+          if (!(typeof token === "string" && token.length > 0)) {
+            return;
           }
+
+          proxyRequest.removeHeader("cookie");
+          proxyRequest.removeHeader("x-local-token");
+          proxyRequest.setHeader("Authorization", `Bearer ${token}`);
         },
       },
     }),
