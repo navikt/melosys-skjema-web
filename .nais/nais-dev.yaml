@@ -53,6 +53,9 @@ spec:
     enabled: true
     path: internal/prometheus
   observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
     logging:
       destinations:
         - id: loki
