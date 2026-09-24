@@ -224,37 +224,36 @@ export class OppsummeringStegPage {
     ).toBeVisible();
 
     // Verifiser på land data hvis det finnes
-    if (data.paLand) {
-      if (data.paLand.fastEllerVekslendeArbeidssted) {
-        await expect(
-          this.page.locator(
-            `dt:has-text("${paLandFelter.fastEllerVekslendeArbeidssted.label}") + dd`,
-          ),
-        ).toBeVisible();
-      }
+    if (!data.paLand) {
+      return;
+    }
 
-      if (
-        data.paLand.fastArbeidssted &&
-        data.paLand.fastArbeidssted.vegadresse
-      ) {
-        await expect(
-          this.page.locator(
-            `dt:has-text("${paLandFelter.vegadresse.label}") + dd`,
-          ),
-        ).toHaveText(data.paLand.fastArbeidssted.vegadresse);
-      }
+    if (data.paLand.fastEllerVekslendeArbeidssted) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${paLandFelter.fastEllerVekslendeArbeidssted.label}") + dd`,
+        ),
+      ).toBeVisible();
+    }
 
-      if (data.paLand.erHjemmekontor !== undefined) {
-        await expect(
-          this.page.locator(
-            `dt:has-text("${paLandFelter.erHjemmekontor.label}") + dd`,
-          ),
-        ).toHaveText(
-          data.paLand.erHjemmekontor
-            ? translations.felles.ja
-            : translations.felles.nei,
-        );
-      }
+    if (data.paLand.fastArbeidssted && data.paLand.fastArbeidssted.vegadresse) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${paLandFelter.vegadresse.label}") + dd`,
+        ),
+      ).toHaveText(data.paLand.fastArbeidssted.vegadresse);
+    }
+
+    if (data.paLand.erHjemmekontor !== undefined) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${paLandFelter.erHjemmekontor.label}") + dd`,
+        ),
+      ).toHaveText(
+        data.paLand.erHjemmekontor
+          ? translations.felles.ja
+          : translations.felles.nei,
+      );
     }
   }
 

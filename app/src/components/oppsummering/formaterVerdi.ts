@@ -42,10 +42,11 @@ function hentValgteCheckboxLabels(
   felt: CheckboxGruppeFeltDefinisjon,
   selected: string[] | undefined,
 ): string[] {
-  if (!selected || selected.length === 0) return [];
-  return felt.alternativer
-    .filter((a) => selected.includes(a.verdi))
-    .map((a) => a.label);
+  return !selected || selected.length === 0
+    ? []
+    : felt.alternativer
+        .filter((a) => selected.includes(a.verdi))
+        .map((a) => a.label);
 }
 
 export function formaterVerdi(

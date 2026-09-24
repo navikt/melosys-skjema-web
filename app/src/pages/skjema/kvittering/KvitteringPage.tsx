@@ -49,11 +49,11 @@ export function KvitteringPage({ skjemaId }: KvitteringPageProperties) {
     );
   }
 
-  if (kvitteringError || skjemaError || !kvittering || !skjema) {
-    return <ErrorMessage>{t("felles.feil")}</ErrorMessage>;
-  }
-
-  return <KvitteringPageContent response={kvittering} skjema={skjema} />;
+  return kvitteringError || skjemaError || !kvittering || !skjema ? (
+    <ErrorMessage>{t("felles.feil")}</ErrorMessage>
+  ) : (
+    <KvitteringPageContent response={kvittering} skjema={skjema} />
+  );
 }
 
 interface KvitteringPageContentProperties {

@@ -65,15 +65,12 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProperties) {
     const valgteAlternativer = checkboxFelt.alternativer.filter((a) =>
       selected?.includes(a.verdi),
     );
-    if (valgteAlternativer.length === 0) {
-      return (
-        <FormSummary.Answer>
-          <FormSummary.Label>{felt.label}</FormSummary.Label>
-          <FormSummary.Value>{"\u{2013}"}</FormSummary.Value>
-        </FormSummary.Answer>
-      );
-    }
-    return (
+    return valgteAlternativer.length === 0 ? (
+      <FormSummary.Answer>
+        <FormSummary.Label>{felt.label}</FormSummary.Label>
+        <FormSummary.Value>{"\u{2013}"}</FormSummary.Value>
+      </FormSummary.Answer>
+    ) : (
       <FormSummary.Answer>
         <FormSummary.Label>{felt.label}</FormSummary.Label>
         <FormSummary.Value>

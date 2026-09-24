@@ -18,11 +18,7 @@ export function OrganisasjonNameLookup({ orgnummer }: { orgnummer: string }) {
     getOrganisasjonQueryOptions(orgnummer),
   );
 
-  if (!organisasjon?.navn) {
-    return <span>{orgnummer}</span>;
-  }
-
-  return (
+  return organisasjon?.navn ? (
     <Tooltip content={orgnummer}>
       <span
         aria-label={t("felles.organisasjonMedOrgnummerAriaLabel", {
@@ -33,5 +29,7 @@ export function OrganisasjonNameLookup({ orgnummer }: { orgnummer: string }) {
         {organisasjon.navn}
       </span>
     </Tooltip>
+  ) : (
+    <span>{orgnummer}</span>
   );
 }

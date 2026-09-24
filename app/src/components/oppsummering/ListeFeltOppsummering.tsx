@@ -49,8 +49,7 @@ export function ListeFeltOppsummering({
               <FormSummary.Answers>
                 {elementFelter.map(([id, subfelt]) => {
                   const subVerdi = record[id];
-                  if (subVerdi === undefined || subVerdi === null) return null;
-                  return (
+                  return subVerdi === undefined || subVerdi === null ? null : (
                     <FormSummary.Answer key={id}>
                       <FormSummary.Label>{subfelt.label}</FormSummary.Label>
                       <FormSummary.Value>

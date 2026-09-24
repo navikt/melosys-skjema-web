@@ -10,12 +10,11 @@ import { resources } from "./i18n.ts";
 
 function flattenEntries(object: unknown, prefix = ""): Array<[string, string]> {
   if (typeof object === "string") return [[prefix, object]];
-  if (typeof object === "object" && object !== null) {
-    return Object.entries(object).flatMap(([key, value]) =>
-      flattenEntries(value, prefix ? `${prefix}.${key}` : key),
-    );
-  }
-  return [];
+  return typeof object === "object" && object !== null
+    ? Object.entries(object).flatMap(([key, value]) =>
+        flattenEntries(value, prefix ? `${prefix}.${key}` : key),
+      )
+    : [];
 }
 
 function placeholders(tekst: string): string[] {

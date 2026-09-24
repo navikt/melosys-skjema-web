@@ -87,17 +87,12 @@ export function OrganisasjonSoker({
       if (httpStatus === "429") {
         return t("generellValidering.rateLimitOverskredet");
       }
-      if (httpStatus === "404") {
-        return undefined; // vises som warning-melding via visIngenTreff
-      }
-      return t("generellValidering.feilVedSok");
+      return httpStatus === "404"
+        ? undefined // vises som warning-melding via visIngenTreff
+        : t("generellValidering.feilVedSok");
     }
 
-    if (typeof formError === "string") {
-      return t(formError);
-    }
-
-    return undefined;
+    return typeof formError === "string" ? t(formError) : undefined;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
