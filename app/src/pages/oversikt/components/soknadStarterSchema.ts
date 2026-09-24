@@ -11,9 +11,9 @@ function representasjonstypeMedFullmakt(
 ): Representasjonstype {
   if (representasjonstype === Representasjonstype.ARBEIDSGIVER)
     return Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT;
-  if (representasjonstype === Representasjonstype.RADGIVER)
-    return Representasjonstype.RADGIVER_MED_FULLMAKT;
-  return representasjonstype;
+  return representasjonstype === Representasjonstype.RADGIVER
+    ? Representasjonstype.RADGIVER_MED_FULLMAKT
+    : representasjonstype;
 }
 
 export const soknadStarterSchema = z

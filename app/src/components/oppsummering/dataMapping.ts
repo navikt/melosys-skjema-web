@@ -262,7 +262,6 @@ export function resolveSeksjoner(
     )
       return [];
     const seksjon = definisjon.seksjoner[seksjonNavn];
-    if (!seksjon || !data) return [];
-    return [{ seksjonNavn, seksjon, data, stegKey }];
+    return !seksjon || !data ? [] : [{ seksjonNavn, seksjon, data, stegKey }];
   });
 }

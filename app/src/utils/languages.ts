@@ -29,6 +29,5 @@ Som mapToSupportedLanguage, men typet som API-enumen for kall mot backend.
 export function toSprak(lang: string): Sprak {
   const code = mapToSupportedLanguage(lang);
   if (code === "nn") return Sprak.Nn;
-  if (code === "en") return Sprak.En;
-  return Sprak.Nb;
+  return code === "en" ? Sprak.En : Sprak.Nb;
 }

@@ -38,11 +38,10 @@ export function VentendeMotpartBanner({
     enabled: ctaAktiv && erDegSelv,
   });
 
-  if (!ctaAktiv || !erDegSelv || !data || data.soknader.length === 0) {
-    return null;
-  }
-
-  return (
+  return !ctaAktiv ||
+    !erDegSelv ||
+    !data ||
+    data.soknader.length === 0 ? null : (
     <VStack gap="space-16">
       {data.soknader.map((soknad) => (
         <VentendeMotpartAlert key={soknad.skjemaId} soknad={soknad} />

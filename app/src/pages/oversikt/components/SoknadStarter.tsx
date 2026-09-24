@@ -245,20 +245,16 @@ function SoknadStarterContent({
       );
     }
 
-    if (forhandsvalgtArbeidsgiver) {
-      return (
-        <div>
-          <BodyShort size={"medium"} weight="semibold">
-            {forhandsvalgtArbeidsgiver.navn}
-          </BodyShort>
-          <BodyShort size="small">
-            {t("oversiktFelles.orgnrLabel")} {forhandsvalgtArbeidsgiver.orgnr}
-          </BodyShort>
-        </div>
-      );
-    }
-
-    return (
+    return forhandsvalgtArbeidsgiver ? (
+      <div>
+        <BodyShort size={"medium"} weight="semibold">
+          {forhandsvalgtArbeidsgiver.navn}
+        </BodyShort>
+        <BodyShort size="small">
+          {t("oversiktFelles.orgnrLabel")} {forhandsvalgtArbeidsgiver.orgnr}
+        </BodyShort>
+      </div>
+    ) : (
       <ArbeidsgiverVelger
         arbeidsgivere={altinnArbeidsgivere}
         formFieldName="arbeidsgiver"
@@ -305,22 +301,13 @@ function SoknadStarterContent({
   };
 
   // Samle feilmeldinger for visning
-  const valideringsfeil: string[] = [];
-  if (errors.arbeidsgiver?.message) {
-    valideringsfeil.push(
-      translateError(errors.arbeidsgiver.message as string) ?? "",
-    );
-  }
-  if (errors.arbeidstaker?.message) {
-    valideringsfeil.push(
-      translateError(errors.arbeidstaker.message as string) ?? "",
-    );
-  }
-  if (errors.bekreftelse?.message) {
-    valideringsfeil.push(
-      translateError(errors.bekreftelse.message as string) ?? "",
-    );
-  }
+  const valideringsfeil = [
+    errors.arbeidsgiver?.message,
+    errors.arbeidstaker?.message,
+    errors.bekreftelse?.message,
+  ]
+    .filter((message): message is string => Boolean(message))
+    .map((message) => translateError(message) ?? "");
 
   return (
     <FormProvider {...formMethods}>

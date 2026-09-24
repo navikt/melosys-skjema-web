@@ -40,12 +40,10 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
     return <ErrorMessage>{t("felles.fantIkkeSkjema")}</ErrorMessage>;
   }
 
-  if (
-    allowedSkjemadeler &&
-    !allowedSkjemadeler.includes(skjema.metadata.skjemadel)
-  ) {
-    return <ErrorMessage>{t("felles.stegIkkeTilgjengelig")}</ErrorMessage>;
-  }
-
-  return <>{children(skjema)}</>;
+  return allowedSkjemadeler &&
+    !allowedSkjemadeler.includes(skjema.metadata.skjemadel) ? (
+    <ErrorMessage>{t("felles.stegIkkeTilgjengelig")}</ErrorMessage>
+  ) : (
+    <>{children(skjema)}</>
+  );
 }

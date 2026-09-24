@@ -43,10 +43,11 @@ export function OversiktPage({
   });
 
   if (isRadgiver && isError) {
-    if (error instanceof ValideringError) {
-      return <Navigate to="/representasjon/velg-radgiverfirma" />;
-    }
-    return <Alert variant="error">{t("generellValidering.feilVedSok")}</Alert>;
+    return error instanceof ValideringError ? (
+      <Navigate to="/representasjon/velg-radgiverfirma" />
+    ) : (
+      <Alert variant="error">{t("generellValidering.feilVedSok")}</Alert>
+    );
   }
 
   if (isRadgiver && isLoading) {
