@@ -1,11 +1,22 @@
-import { Alert, BodyLong, Button, Heading, VStack } from "@navikt/ds-react";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import {
+  Alert,
+  BodyLong,
+  Button,
+  ErrorMessage,
+  Heading,
+  VStack,
+} from "@navikt/ds-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { MOTPART_CTA } from "~/featuretoggle/toggleNavn.ts";
 import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
-import { getVentendeMotpartSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
+import {
+  getOrganisasjonMedJuridiskEnhetQuery,
+  getVentendeMotpartSoknaderQuery,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { useGaTilSkjemaStart } from "~/pages/skjema/nySoknad.ts";
 import {
   OpprettetVia,
   Representasjonstype,
@@ -22,8 +33,8 @@ interface VentendeMotpartBannerProperties {
  * Oppfordring til arbeidstaker om å fylle ut sin del når arbeidsgiver allerede
  * har sendt inn sin. Vises kun for DEG_SELV og bak toggle `melosys.skjema.motpart-cta`.
  *
- * Knappen navigerer til oversikten med arbeidsgivers orgnr forhåndsutfylt i
- * søknadsstarteren; bekreftelsen må fortsatt hukes av som vanlig.
+ * Knappen sender brukeren rett til skjemaets startside med arbeidsgiver og
+ * prefyll fra arbeidsgivers del; utkastet opprettes når brukeren har bekreftet.
  */
 export function VentendeMotpartBanner({
   representasjonskontekst,
@@ -56,19 +67,30 @@ function VentendeMotpartAlert({
   soknad: VentendeMotpartSoknadDto;
 }) {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const gaTilSkjemaStart = useGaTilSkjemaStart();
 
-  const startDinDel = () => {
-    void navigate({
-      to: "/oversikt",
-      search: {
+  const startDinDel = useMutation({
+    mutationFn: async () => {
+      // Samme oppslag som søknadsstarteren: arbeidsgiver lagres som juridisk enhet.
+      const [organisasjon, bruker] = await Promise.all([
+        queryClient.fetchQuery(
+          getOrganisasjonMedJuridiskEnhetQuery(soknad.arbeidsgiverOrgnr),
+        ),
+        queryClient.fetchQuery(getUserInfo()),
+      ]);
+      await gaTilSkjemaStart({
         representasjonstype: Representasjonstype.DEG_SELV,
-        arbeidsgiverOrgnr: soknad.arbeidsgiverOrgnr,
+        arbeidsgiver: {
+          orgnr: organisasjon.juridiskEnhet.orgnr,
+          navn: organisasjon.juridiskEnhet.navn ?? "",
+        },
+        arbeidstaker: { fnr: bruker.userId, etternavn: bruker.name },
         opprettetVia: OpprettetVia.MOTPART_CTA,
         prefyllFraSkjemaId: soknad.skjemaId,
-      },
-    });
-  };
+      });
+    },
+  });
 
   return (
     <Alert variant="info">
@@ -96,7 +118,17 @@ function VentendeMotpartAlert({
             })
           : t("oversiktDegSelv.motpartCtaBeskrivelseUtenPeriode")}
       </BodyLong>
-      <Button onClick={startDinDel} size="small" variant="primary">
+      {startDinDel.isError && (
+        <ErrorMessage className="mb-4" showIcon size="small">
+          {t("oversiktDegSelv.motpartCtaFeil")}
+        </ErrorMessage>
+      )}
+      <Button
+        loading={startDinDel.isPending}
+        onClick={() => startDinDel.mutate()}
+        size="small"
+        variant="primary"
+      >
         {t("oversiktDegSelv.motpartCtaKnapp")}
       </Button>
     </Alert>

@@ -9,18 +9,6 @@ const feilmeldinger = {
     translations.oversiktFelles.valideringManglerArbeidsgiver,
   valideringManglerArbeidstaker:
     translations.oversiktFelles.valideringManglerArbeidstaker,
-  valideringManglerBekreftelseAtVilSvareRiktig:
-    translations.oversiktFelles.valideringManglerBekreftelseAtVilSvareRiktig,
-};
-
-const bekreftelseTekster = {
-  intro: translations.oversiktBekreftelse.intro,
-  linkText: translations.oversiktBekreftelse.linkText,
-  bekreftAtVilSvareRiktig:
-    translations.oversiktBekreftelse.bekreftAtVilSvareRiktig,
-  annenPersonInfo: translations.oversiktBekreftelse.annenPersonInfo,
-  arbeidsgiverInfo: translations.oversiktBekreftelse.arbeidsgiverInfo,
-  radgiverInfo: translations.oversiktBekreftelse.radgiverInfo,
 };
 
 const ettersendelseTekster = {
@@ -50,12 +38,6 @@ export class OversiktPage {
   readonly arbeidstakerFnrInput: Locator;
   readonly arbeidstakerEtternavnInput: Locator;
   readonly arbeidstakerSokButton: Locator;
-  readonly bekreftelseCheckbox: Locator;
-  readonly bekreftelseIntro: Locator;
-  readonly bekreftelseLink: Locator;
-  readonly annenPersonInfo: Locator;
-  readonly arbeidsgiverInfo: Locator;
-  readonly radgiverInfo: Locator;
 
   constructor(page: Page, representasjonstype: Representasjonstype) {
     this.page = page;
@@ -116,17 +98,6 @@ export class OversiktPage {
       name: translations.oversiktFelles.arbeidstakerSokKnapp,
       exact: true,
     });
-
-    this.bekreftelseCheckbox = page.getByRole("checkbox", {
-      name: bekreftelseTekster.bekreftAtVilSvareRiktig,
-    });
-    this.bekreftelseIntro = page.getByText(bekreftelseTekster.intro);
-    this.bekreftelseLink = page.getByRole("link", {
-      name: bekreftelseTekster.linkText,
-    });
-    this.annenPersonInfo = page.getByText(bekreftelseTekster.annenPersonInfo);
-    this.arbeidsgiverInfo = page.getByText(bekreftelseTekster.arbeidsgiverInfo);
-    this.radgiverInfo = page.getByText(bekreftelseTekster.radgiverInfo);
   }
 
   private motpartCtaHeading(arbeidsgiverNavn: string) {
@@ -308,47 +279,6 @@ export class OversiktPage {
     ).toBeVisible();
   }
 
-  async assertBekreftelseCheckboxForRepresentasjonstypeIsVisible() {
-    await expect(this.bekreftelseCheckbox).toBeVisible();
-  }
-
-  async assertBekreftelseBoksContentForRepresentasjonstype() {
-    await expect(this.bekreftelseIntro).toBeVisible();
-    await expect(this.bekreftelseLink).toBeVisible();
-    await expect(this.bekreftelseLink).toHaveAttribute(
-      "href",
-      "https://www.nav.no/endringer",
-    );
-    await expect(this.bekreftelseCheckbox).toBeVisible();
-
-    switch (this.representasjonstype) {
-      case Representasjonstype.DEG_SELV: {
-        await expect(this.annenPersonInfo).not.toBeVisible();
-        await expect(this.arbeidsgiverInfo).not.toBeVisible();
-        await expect(this.radgiverInfo).not.toBeVisible();
-        break;
-      }
-      case Representasjonstype.ANNEN_PERSON: {
-        await expect(this.annenPersonInfo).toBeVisible();
-        await expect(this.arbeidsgiverInfo).not.toBeVisible();
-        await expect(this.radgiverInfo).not.toBeVisible();
-        break;
-      }
-      case Representasjonstype.ARBEIDSGIVER: {
-        await expect(this.arbeidsgiverInfo).toBeVisible();
-        await expect(this.annenPersonInfo).not.toBeVisible();
-        await expect(this.radgiverInfo).not.toBeVisible();
-        break;
-      }
-      case Representasjonstype.RADGIVER: {
-        await expect(this.radgiverInfo).toBeVisible();
-        await expect(this.annenPersonInfo).not.toBeVisible();
-        await expect(this.arbeidsgiverInfo).not.toBeVisible();
-        break;
-      }
-    }
-  }
-
   async assertEttersendelseTekstForRepresentasjonstype() {
     switch (this.representasjonstype) {
       case Representasjonstype.DEG_SELV: {
@@ -384,18 +314,6 @@ export class OversiktPage {
         break;
       }
     }
-  }
-
-  async checkBekreftelseCheckbox() {
-    await this.bekreftelseCheckbox.check();
-  }
-
-  async assertValideringManglerBekreftelseIsVisible() {
-    await expect(
-      this.page.getByRole("listitem").filter({
-        hasText: feilmeldinger.valideringManglerBekreftelseAtVilSvareRiktig,
-      }),
-    ).toBeVisible();
   }
 
   // ============ Historikk søk interactions ============
@@ -514,9 +432,5 @@ export class OversiktPage {
         name: translations.oversiktDegSelv.motpartCtaKnapp,
       })
       .click();
-  }
-
-  async assertArbeidsgiverOrgnrPrefilt(orgnr: string) {
-    await expect(this.arbeidsgiverOrgnrInput).toHaveValue(orgnr);
   }
 }

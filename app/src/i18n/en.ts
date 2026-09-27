@@ -36,7 +36,6 @@ export const en = {
       lagreUtkastBeskrivelse:
         "The form will be saved as a draft on My Page so you can complete it later.",
       jaLagreOgFortsettSenere: "Yes, save and continue later",
-      startSoknad: "Start application",
       valgtVirksomhet: "Selected company",
       valgtOrganisasjon: "Selected organization",
       navn: "Name",
@@ -58,59 +57,6 @@ export const en = {
       tilDato: "To date",
       datoErPakrevd: "You must enter a valid date",
       tilDatoMaVareEtterFraDato: "To date cannot be before from date",
-    },
-    skjemaVeiledning: {
-      hei: "Hello",
-      guidePanelTekst1:
-        "The GuidePanel section is used for brief, high-level guidance to the applicant. The section retrieves the applicant's name and provides a condensed explanation of the cash benefits, measure, or aid. This text is taken from the introduction to the product page on nav.no.",
-      guidePanelTekst2:
-        "End the text in the section with a link to the product page on nav.no that opens in a new tab.",
-      forDuSoker: "Before you apply",
-      denneSeksjonenBrukesTil:
-        "This section is used to give applicants information they will find very useful before starting the application. Examples of useful information:",
-      oppgaverBrukerenMaHaGjort:
-        "Tasks the user must have completed before applying.",
-      duMaHaMeldtDegSomArbeidssøker:
-        "You must have registered as a job seeker before you can apply for unemployment benefits.",
-      dokumentasjonBrukerenKanBliBedtOm:
-        "Documentation the user may be asked for.",
-      noenAvOpplysningeneViBeOmDokumentation:
-        "Some of the information you provide along the way you will be asked to document. You will need xx and xx to complete this application.",
-      automatiskLagring: "Automatic saving.",
-      viLagrerSvarene:
-        "We save your answers (xx hours) while you fill out, so you can take breaks along the way.",
-      antallStegOgEstimertTidsbruk: "Number of steps and estimated time.",
-      detErXXStegISoknaden:
-        "There are XX steps in the application, and you can expect to spend about XX minutes.",
-      soknadsfrist: "Application deadlines.",
-      huskAtDuMaSokeOmXX: "Remember that you must apply for xx within xx days.",
-      saksbehandlingstiderOgInfo:
-        "Processing times and info about validity, requirements, etc.",
-      viBrukerCaXXUker:
-        "We use about xx weeks to process your application. Remember that you must send status reports xx often even if you haven't received a response to your unemployment benefit application yet.",
-      forAnnenUtfyllendeInformasjon:
-        "For other, detailed information about the application, you should link directly to the application chapter in the product page, like",
-      detteEksempeletForDagpenger: "this example for unemployment benefits",
-      informasjonViHenterOmDeg: "Information we collect about you",
-      herSkalDetStaInformasjonOmHvorVi:
-        "Here should be information about where we will obtain information about the applicant and what kind of information we collect.",
-      hvordanViBehandlerPersonopplysninger:
-        "How we process your personal information",
-      herSkalDetStaInformasjonOmHvordanVi:
-        "Here should be information about how we process the applicant's personal information.",
-      automatiskSaksbehandling: "Automatic case processing",
-      herSkalDetStaInformasjonOmHvaAutomatisk:
-        "Here should be information about what automatic processing is, what it means for the applicant and information about the applicant's rights in case of automatic rejection.",
-      viLagrerSvarUnderveis: "We save answers along the way",
-      herSkalDetStaInformasjonOmHvordanDenne:
-        "Here should be information about how this application temporarily stores the applicant's information and how long the information is stored. We should inform about temporary storage both for automatic saving and for consent to saving with the save button.",
-      detErViktigAtDuGirOss:
-        "It is important that you give us correct information so that we can process your case.",
-      lesMerOmViktigheten:
-        "Read more about the importance of providing correct information.",
-      jegBekrefter: "I confirm that I will answer as accurately as I can.",
-      detteEksempeletForDagpengerUrl: "https://www.nav.no/dagpenger/en#apply",
-      lesMerOmViktighetenUrl: "https://www.nav.no/endringer/en",
     },
     soknadHeader: {
       soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
@@ -355,6 +301,8 @@ export const en = {
       motpartCtaBeskrivelseUtenPeriode:
         "For Nav to process the application, you must complete your part.",
       motpartCtaKnapp: "Complete your part",
+      motpartCtaFeil:
+        "Could not retrieve the information. Please try again later.",
     },
     oversiktArbeidsgiver: {
       tittel: "Overview page for applications",
@@ -390,7 +338,7 @@ export const en = {
       personVelgerBeskrivelse:
         "The list contains all persons who have given you power of attorney on nav.no.",
     },
-    oversiktBekreftelse: {
+    skjemaStart: {
       intro:
         "It is important that you provide correct information so that we can process your application.",
       linkText:
@@ -404,6 +352,11 @@ export const en = {
         "The company you work for will receive all letters regarding the processing of the case in Altinn as long as the access and powers of attorney are valid.",
       annenPersonInfo:
         "As an authorized representative, you will receive letters regarding the processing of the case for as long as the power of attorney remains valid.",
+      startSoknad: "Start application",
+      manglerBekreftelse:
+        "You must confirm that you will answer as accurately as you can",
+      feilVedOpprettelse:
+        "An error occurred while creating the application. Please try again later.",
     },
     oversiktFelles: {
       utkastTittel: "DRAFTS",
@@ -469,8 +422,6 @@ export const en = {
       valideringFeilTittel: "You must fill in these fields:",
       valideringManglerArbeidsgiver: "Employer must be selected",
       valideringManglerArbeidstaker: "Employee must be selected",
-      valideringManglerBekreftelseAtVilSvareRiktig:
-        "You must confirm that you will answer as accurately as you can",
       historikkTittel: "Previously submitted applications",
       historikkSokPlaceholder: "Search...",
       historikkKolonneVirksomhet: "Company",
@@ -497,8 +448,6 @@ export const en = {
       paginationForrige: "Previous",
       paginationNeste: "Next",
       orgnrLabel: "Org. no:",
-      feilVedOpprettelse:
-        "An error occurred while creating the application. Please try again later.",
       fullmaktLenkeUrl: "https://www.nav.no/fullmakt/en",
     },
     velgRadgiverfirma: {

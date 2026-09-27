@@ -575,6 +575,7 @@ export interface OpprettUtsendtArbeidstakerSoknadRequest {
   opprettetVia: OpprettetVia;
   /** @format uuid */
   prefyllFraSkjemaId?: string;
+  bekreftetRiktigeOpplysninger: boolean;
 }
 
 export interface PersonDto {

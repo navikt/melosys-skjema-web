@@ -29,5 +29,5 @@ export function SkjemaRedirect({ id }: SkjemaRedirectProperties) {
 
   const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
 
-  return <Navigate params={{ id }} to={stegRekkefolge[0]!.route} />;
+  return <Navigate params={{ id }} replace to={stegRekkefolge[0]!.route} />;
 }

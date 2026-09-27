@@ -18,6 +18,7 @@ import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
 import { Route as SkjemaIndexRouteImport } from './routes/skjema.index'
 import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
+import { Route as SkjemaStartRouteImport } from './routes/skjema.start'
 import { Route as SkjemaIdIndexRouteImport } from './routes/skjema.$id.index'
 import { Route as SkjemaIdArbeidsgiverensVirksomhetINorgeRouteImport } from './routes/skjema.$id.arbeidsgiverens-virksomhet-i-norge'
 import { Route as SkjemaIdArbeidssituasjonRouteImport } from './routes/skjema.$id.arbeidssituasjon'
@@ -77,6 +78,11 @@ const SkjemaIndexRoute = SkjemaIndexRouteImport.update({
 const SkjemaIdRoute = SkjemaIdRouteImport.update({
   id: '/$id',
   path: '/$id',
+  getParentRoute: () => SkjemaRoute,
+} as any)
+const SkjemaStartRoute = SkjemaStartRouteImport.update({
+  id: '/start',
+  path: '/start',
   getParentRoute: () => SkjemaRoute,
 } as any)
 const SkjemaIdIndexRoute = SkjemaIdIndexRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/skjema': typeof SkjemaRouteWithChildren
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
+  '/skjema/start': typeof SkjemaStartRoute
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
+  '/skjema/start': typeof SkjemaStartRoute
   '/oversikt': typeof OversiktIndexRoute
   '/representasjon': typeof RepresentasjonIndexRoute
   '/skjema': typeof SkjemaIndexRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/skjema': typeof SkjemaRouteWithChildren
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
+  '/skjema/start': typeof SkjemaStartRoute
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/skjema'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
+    | '/skjema/start'
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/representasjon/velg-radgiverfirma'
+    | '/skjema/start'
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/skjema'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
+    | '/skjema/start'
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
@@ -375,6 +387,13 @@ declare module '@tanstack/react-router' {
       path: '/$id'
       fullPath: '/skjema/$id'
       preLoaderRoute: typeof SkjemaIdRouteImport
+      parentRoute: typeof SkjemaRoute
+    }
+    '/skjema/start': {
+      id: '/skjema/start'
+      path: '/start'
+      fullPath: '/skjema/start'
+      preLoaderRoute: typeof SkjemaStartRouteImport
       parentRoute: typeof SkjemaRoute
     }
     '/skjema/$id/': {
@@ -545,11 +564,13 @@ const SkjemaIdRouteWithChildren = SkjemaIdRoute._addFileChildren(
 
 interface SkjemaRouteChildren {
   SkjemaIdRoute: typeof SkjemaIdRouteWithChildren
+  SkjemaStartRoute: typeof SkjemaStartRoute
   SkjemaIndexRoute: typeof SkjemaIndexRoute
 }
 
 const SkjemaRouteChildren: SkjemaRouteChildren = {
   SkjemaIdRoute: SkjemaIdRouteWithChildren,
+  SkjemaStartRoute: SkjemaStartRoute,
   SkjemaIndexRoute: SkjemaIndexRoute,
 }
 

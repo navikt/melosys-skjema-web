@@ -29,6 +29,7 @@ import {
   testVerifiserPersonResponse,
 } from "../fixtures/test-data";
 import { OversiktPage } from "../pages/oversikt/oversikt.page";
+import { SkjemaStartPage } from "../pages/skjema/skjema-start.page";
 import { translations } from "../utils/translations";
 
 test.describe("Oversikt", () => {
@@ -317,14 +318,17 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.waitForOrgLookup(
       testEregOrganisasjon.juridiskEnhet.navn,
     );
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload
     expect(requestBody).toEqual({
+      bekreftetRiktigeOpplysninger: true,
       opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.DEG_SELV,
       arbeidsgiver: {
@@ -375,14 +379,17 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
       testArbeidstakerUtenFullmakt.etternavn,
     );
     await oversiktPage.waitForPersonVerified(testVerifiserPersonResponse.navn);
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — skalFylleUtForArbeidstaker=false means no fullmakt transform
     expect(requestBody).toEqual({
+      bekreftetRiktigeOpplysninger: true,
       opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.ARBEIDSGIVER,
       arbeidsgiver: {
@@ -434,14 +441,17 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.selectArbeidstakerMedFullmakt(
       testPersonMedFullmakt.navn,
     );
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — skalFylleUtForArbeidstaker=true triggers ARBEIDSGIVER_MED_FULLMAKT
     expect(requestBody).toEqual({
+      bekreftetRiktigeOpplysninger: true,
       opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT,
       arbeidsgiver: {
@@ -495,14 +505,17 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
       testArbeidstakerUtenFullmakt.etternavn,
     );
     await oversiktPage.waitForPersonVerified(testVerifiserPersonResponse.navn);
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — includes radgiverfirma, no fullmakt transform
     expect(requestBody).toEqual({
+      bekreftetRiktigeOpplysninger: true,
       opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.RADGIVER,
       radgiverfirma: {
@@ -555,14 +568,17 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.selectArbeidstakerMedFullmakt(
       testPersonMedFullmakt.navn,
     );
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — includes radgiverfirma, fullmakt transform applies
     expect(requestBody).toEqual({
+      bekreftetRiktigeOpplysninger: true,
       opprettetVia: OpprettetVia.ORDINAER,
       representasjonstype: Representasjonstype.RADGIVER_MED_FULLMAKT,
       radgiverfirma: {
