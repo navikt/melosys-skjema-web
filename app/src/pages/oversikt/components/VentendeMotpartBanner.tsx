@@ -33,8 +33,8 @@ interface VentendeMotpartBannerProperties {
  * Oppfordring til arbeidstaker om å fylle ut sin del når arbeidsgiver allerede
  * har sendt inn sin. Vises kun for DEG_SELV og bak toggle `melosys.skjema.motpart-cta`.
  *
- * Knappen sender brukeren rett til skjemaets startside med arbeidsgiver og
- * prefyll fra arbeidsgivers del; utkastet opprettes når brukeren har bekreftet.
+ * Knappen sender brukeren rett til introsiden (/skjema/start) med arbeidsgiver,
+ * arbeidstaker og prefyll fra arbeidsgivers del; utkastet opprettes etter bekreftelse.
  */
 export function VentendeMotpartBanner({
   representasjonskontekst,
