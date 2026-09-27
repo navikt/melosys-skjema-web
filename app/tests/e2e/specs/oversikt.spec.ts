@@ -382,6 +382,12 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    // Introsiden viser verifisert fullt navn, ikke bare innskrevet etternavn
+    await expect(
+      page.getByText(
+        `${testVerifiserPersonResponse.navn} (${testArbeidstakerUtenFullmakt.fnr})`,
+      ),
+    ).toBeVisible();
     await new SkjemaStartPage(page).bekreftOgStart(
       oversiktPage.representasjonstype,
     );

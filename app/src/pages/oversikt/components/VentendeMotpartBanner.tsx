@@ -77,17 +77,21 @@ function VentendeMotpartAlert({
         queryClient.fetchQuery(
           getOrganisasjonMedJuridiskEnhetQuery(soknad.arbeidsgiverOrgnr),
         ),
-        queryClient.fetchQuery(getUserInfo()),
+        queryClient.ensureQueryData(getUserInfo()),
       ]);
       await gaTilSkjemaStart({
-        representasjonstype: Representasjonstype.DEG_SELV,
-        arbeidsgiver: {
-          orgnr: organisasjon.juridiskEnhet.orgnr,
-          navn: organisasjon.juridiskEnhet.navn ?? "",
+        request: {
+          representasjonstype: Representasjonstype.DEG_SELV,
+          arbeidsgiver: {
+            orgnr: organisasjon.juridiskEnhet.orgnr,
+            // API-et krever navn; bruk navnet fra arbeidsgivers del hvis registeret mangler det
+            navn: organisasjon.juridiskEnhet.navn || soknad.arbeidsgiverNavn,
+          },
+          arbeidstaker: { fnr: bruker.userId, etternavn: bruker.name },
+          opprettetVia: OpprettetVia.MOTPART_CTA,
+          prefyllFraSkjemaId: soknad.skjemaId,
         },
-        arbeidstaker: { fnr: bruker.userId, etternavn: bruker.name },
-        opprettetVia: OpprettetVia.MOTPART_CTA,
-        prefyllFraSkjemaId: soknad.skjemaId,
+        arbeidstakerNavn: bruker.name,
       });
     },
   });

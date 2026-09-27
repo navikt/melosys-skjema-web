@@ -9,7 +9,7 @@ import {
   SkjemaParterHeader,
 } from "~/components/SkjemaParterHeader.tsx";
 import { useRepresentasjonskontekst } from "~/hooks/useRepresentasjonskontekst.ts";
-import { useNySoknadFraHistorikk } from "~/pages/skjema/nySoknad.ts";
+import { hentNySoknad } from "~/pages/skjema/nySoknad.ts";
 
 export function AppHeader() {
   const { t } = useTranslation();
@@ -17,23 +17,23 @@ export function AppHeader() {
   const { id: skjemaId } = useParams({ strict: false });
   const matchRoute = useMatchRoute();
   const erInnsendt = !!matchRoute({ to: "/skjema/$id/innsendt" });
-  const nySoknad = useNySoknadFraHistorikk();
 
   if (skjemaId && !erInnsendt) {
     return <SkjemaParterHeader skjemaId={skjemaId} />;
   }
 
   const erSkjemaStart = !!matchRoute({ to: "/skjema/start" });
+  const nySoknad = erSkjemaStart ? hentNySoknad() : undefined;
 
-  // Introsiden: utkastet finnes ikke ennå, så partene hentes fra history state.
-  return erSkjemaStart && nySoknad ? (
+  // Introsiden: utkastet finnes ikke ennå, så partene hentes fra opplysningene i minnet.
+  return nySoknad ? (
     <SkjemaParter
-      arbeidsgiver={nySoknad.arbeidsgiver}
+      arbeidsgiver={nySoknad.request.arbeidsgiver}
       arbeidstaker={{
-        navn: nySoknad.arbeidstaker.etternavn ?? "",
-        fnr: nySoknad.arbeidstaker.fnr,
+        navn: nySoknad.arbeidstakerNavn,
+        fnr: nySoknad.request.arbeidstaker.fnr,
       }}
-      representasjonstype={nySoknad.representasjonstype}
+      representasjonstype={nySoknad.request.representasjonstype}
     />
   ) : (
     <HStack align="center" justify="space-between">

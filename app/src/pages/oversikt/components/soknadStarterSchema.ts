@@ -35,6 +35,8 @@ export const soknadStarterSchema = z
       .object({
         fnr: z.string().min(1),
         etternavn: z.string().optional(),
+        // Fullt navn til visning; sendes ikke til API-et
+        navn: z.string().optional(),
       })
       .optional(),
     skalFylleUtForArbeidstaker: z.boolean().optional(),
@@ -50,19 +52,23 @@ export const soknadStarterSchema = z
     when: () => true,
   })
   .transform((data): NySoknad => {
+    const { fnr, etternavn, navn } = data.arbeidstaker!;
     return {
-      representasjonstype: data.skalFylleUtForArbeidstaker
-        ? representasjonstypeMedFullmakt(data.representasjonstype)
-        : data.representasjonstype,
-      radgiverfirma: data.radgiverfirma,
-      arbeidsgiver: data.arbeidsgiver!,
-      arbeidstaker: data.arbeidstaker!,
-      opprettetVia: OpprettetVia.ORDINAER,
+      request: {
+        representasjonstype: data.skalFylleUtForArbeidstaker
+          ? representasjonstypeMedFullmakt(data.representasjonstype)
+          : data.representasjonstype,
+        radgiverfirma: data.radgiverfirma,
+        arbeidsgiver: data.arbeidsgiver!,
+        arbeidstaker: { fnr, etternavn },
+        opprettetVia: OpprettetVia.ORDINAER,
+      },
+      arbeidstakerNavn: navn ?? etternavn ?? "",
     };
   });
 
 // Input-type for skjemaet (før transform)
 export type SoknadStarterFormData = z.input<typeof soknadStarterSchema>;
 
-// Output-type etter transform (= API request)
+// Output-type etter transform (request + visningsnavn)
 export type SoknadStarterOutput = z.output<typeof soknadStarterSchema>;

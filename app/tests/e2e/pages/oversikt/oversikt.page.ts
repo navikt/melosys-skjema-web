@@ -204,7 +204,10 @@ export class OversiktPage {
   */
   async selectArbeidstakerMedFullmakt(personName: string) {
     const fullmaktCombobox = this.page.getByRole("combobox", {
-      name: translations.oversiktFelles.arbeidstakerMedFullmaktLabel,
+      name:
+        this.representasjonstype === Representasjonstype.ANNEN_PERSON
+          ? translations.oversiktAnnenPerson.personVelgerLabel
+          : translations.oversiktFelles.arbeidstakerMedFullmaktLabel,
     });
     await fullmaktCombobox.click();
     await this.page

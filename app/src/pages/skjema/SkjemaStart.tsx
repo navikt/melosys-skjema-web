@@ -19,8 +19,9 @@ import {
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
 import {
+  glemNySoknad,
+  hentNySoknad,
   type NySoknad,
-  useNySoknadFraHistorikk,
 } from "~/pages/skjema/nySoknad.ts";
 import { Representasjonstype, Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
@@ -30,12 +31,9 @@ import { Representasjonstype, Skjemadel } from "~/types/melosysSkjemaTypes.ts";
  * at hen vil svare så riktig som mulig; backend lagrer tidspunktet.
  */
 export function SkjemaStart() {
-  const gjeldende = useNySoknadFraHistorikk();
-  // Låses ved første render: under navigasjonen videre til skjemaet peker
-  // location allerede på neste side (uten state) før denne siden avmonteres.
-  const [nySoknad] = useState(gjeldende);
+  const [nySoknad] = useState(hentNySoknad);
 
-  // Uten opplysninger (direkte lenke, ny fane) finnes det ingenting å starte.
+  // Uten opplysninger (direkte lenke, ny fane, oppfrisking) finnes det ingenting å starte.
   return nySoknad ? (
     <SkjemaStartInnhold nySoknad={nySoknad} />
   ) : (
@@ -76,7 +74,7 @@ function SkjemaStartInnhold({ nySoknad }: { nySoknad: NySoknad }) {
       return;
     }
     opprettSoknadMutation.mutate(
-      { ...nySoknad, bekreftetRiktigeOpplysninger: true },
+      { ...nySoknad.request, bekreftetRiktigeOpplysninger: true },
       {
         // Her (ikke i useMutation) så brukeren ikke dras inn i skjemaet hvis hen
         // har navigert bort mens opprettelsen pågikk. replace: tilbake fra
@@ -86,16 +84,18 @@ function SkjemaStartInnhold({ nySoknad }: { nySoknad: NySoknad }) {
             to: "/skjema/$id",
             params: { id: data.id },
             replace: true,
-          }),
+          }).then(glemNySoknad),
       },
     );
   };
 
-  const rolleInfo = rolleInfoNokkel(nySoknad.representasjonstype);
+  const rolleInfo = rolleInfoNokkel(nySoknad.request.representasjonstype);
 
   return (
     <VStack gap="space-32">
-      <SkjemaHeader skjemadel={skjemadelFor(nySoknad.representasjonstype)} />
+      <SkjemaHeader
+        skjemadel={skjemadelFor(nySoknad.request.representasjonstype)}
+      />
       {rolleInfo && <BodyLong>{t(rolleInfo)}</BodyLong>}
       <VStack gap="space-16">
         <BodyLong>
@@ -163,19 +163,10 @@ function rolleInfoNokkel(representasjonstype: Representasjonstype) {
   }
 }
 
-// Speiler backendens Representasjonstype.skjemadel; brukes kun til overskriften.
+// Kun til overskriften, som bare skiller arbeidsgivers del fra resten.
 function skjemadelFor(representasjonstype: Representasjonstype): Skjemadel {
-  switch (representasjonstype) {
-    case Representasjonstype.ARBEIDSGIVER:
-    case Representasjonstype.RADGIVER: {
-      return Skjemadel.ARBEIDSGIVERS_DEL;
-    }
-    case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT:
-    case Representasjonstype.RADGIVER_MED_FULLMAKT: {
-      return Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL;
-    }
-    default: {
-      return Skjemadel.ARBEIDSTAKERS_DEL;
-    }
-  }
+  return representasjonstype === Representasjonstype.ARBEIDSGIVER ||
+    representasjonstype === Representasjonstype.RADGIVER
+    ? Skjemadel.ARBEIDSGIVERS_DEL
+    : Skjemadel.ARBEIDSTAKERS_DEL;
 }

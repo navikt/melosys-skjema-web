@@ -20,7 +20,6 @@ import {
 } from "../../fixtures/test-data";
 import { OversiktPage } from "../../pages/oversikt/oversikt.page";
 import { SkjemaStartPage } from "../../pages/skjema/skjema-start.page";
-import { translations } from "../../utils/translations";
 
 test.describe("Skjema — introside med bekreftelse", () => {
   test.beforeEach(async ({ page }) => {
@@ -59,9 +58,6 @@ test.describe("Skjema — introside med bekreftelse", () => {
 
     const startPage = new SkjemaStartPage(page);
     await startPage.assertIsVisible();
-    // Opplysningene ligger i history state og overlever oppfrisking
-    await page.reload();
-    await startPage.assertIsVisible();
     await expect(
       page.getByText(`${testEregOrganisasjon.juridiskEnhet.navn} (`),
     ).toBeVisible();
@@ -91,14 +87,9 @@ test.describe("Skjema — introside med bekreftelse", () => {
       Representasjonstype.ANNEN_PERSON,
     );
     await oversiktPage.goto();
-    await page
-      .getByRole("combobox", {
-        name: translations.oversiktAnnenPerson.personVelgerLabel,
-      })
-      .click();
-    await page
-      .getByRole("option", { name: new RegExp(testPersonMedFullmakt.navn) })
-      .click();
+    await oversiktPage.selectArbeidstakerMedFullmakt(
+      testPersonMedFullmakt.navn,
+    );
     await oversiktPage.fillArbeidsgiverOrgnr(korrektFormatertOrgnr);
     await oversiktPage.waitForOrgLookup(
       testEregOrganisasjon.juridiskEnhet.navn,
@@ -108,6 +99,25 @@ test.describe("Skjema — introside med bekreftelse", () => {
     const startPage = new SkjemaStartPage(page);
     await startPage.assertIsVisible();
     await startPage.assertInnhold(Representasjonstype.ANNEN_PERSON);
+  });
+
+  test("oppfrisking av introsiden glemmer opplysningene (fnr lagres ikke i nettleseren)", async ({
+    page,
+  }) => {
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.fillArbeidsgiverOrgnr(korrektFormatertOrgnr);
+    await oversiktPage.waitForOrgLookup(
+      testEregOrganisasjon.juridiskEnhet.navn,
+    );
+    await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).assertIsVisible();
+
+    expect(
+      await page.evaluate(() => JSON.stringify(globalThis.history.state)),
+    ).not.toContain(testUserInfo.userId);
+    await page.reload();
+    await expect(page).toHaveURL("/representasjon");
   });
 
   test("direkte besøk uten søknadsdata sender brukeren til forsiden", async ({
