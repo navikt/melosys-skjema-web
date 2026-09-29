@@ -20,6 +20,7 @@ import {
 } from "../../fixtures/test-data";
 import { OversiktPage } from "../../pages/oversikt/oversikt.page";
 import { SkjemaStartPage } from "../../pages/skjema/skjema-start.page";
+import { translations } from "../../utils/translations";
 
 test.describe("Skjema — introside med bekreftelse", () => {
   test.beforeEach(async ({ page }) => {
@@ -116,6 +117,49 @@ test.describe("Skjema — introside med bekreftelse", () => {
     ).not.toContain(testUserInfo.userId);
     await page.reload();
     await expect(page).toHaveURL("/representasjon");
+  });
+
+  test("feil ved opprettelse beholder opplysningene så brukeren kan prøve igjen", async ({
+    page,
+  }) => {
+    let antallOpprettelser = 0;
+    await page.route(
+      "/api/skjema/utsendt-arbeidstaker/opprett-med-kontekst",
+      async (route) => {
+        antallOpprettelser++;
+        await (antallOpprettelser === 1
+          ? route.fulfill({ status: 500 })
+          : route.fulfill({
+              status: 200,
+              contentType: "application/json",
+              body: JSON.stringify({
+                id: testOpprettSoknadResponseId,
+                status: "UTKAST",
+              }),
+            }));
+      },
+    );
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.fillArbeidsgiverOrgnr(korrektFormatertOrgnr);
+    await oversiktPage.waitForOrgLookup(
+      testEregOrganisasjon.juridiskEnhet.navn,
+    );
+    await oversiktPage.clickStartSoknad();
+
+    const startPage = new SkjemaStartPage(page);
+    await startPage.bekreftOgStart(Representasjonstype.DEG_SELV);
+    await expect(
+      page.getByText(translations.skjemaStart.feilVedOpprettelse),
+    ).toBeVisible();
+    await expect(page).toHaveURL("/skjema/start");
+
+    await startPage.startSoknad();
+    await expect(page).toHaveURL(
+      `/skjema/${testOpprettSoknadResponseId}/utsendingsperiode-og-land`,
+    );
+    expect(antallOpprettelser).toBe(2);
   });
 
   test("direkte besøk uten søknadsdata sender brukeren til forsiden", async ({
