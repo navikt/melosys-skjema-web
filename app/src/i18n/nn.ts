@@ -288,7 +288,7 @@ export const nn = {
       duMaVelgeHvilketLandArbeidetSkalUtforesI:
         "Du må velje kva for land arbeidet skal utførast i",
       preutfyltAvArbeidsgiver:
-        "Arbeidsgivaren din har oppgitt {{land}} og perioden {{fraDato}}–{{tilDato}} i sin del av søknaden. Kontroller at opplysningane stemmer, og endre dei dersom noko er feil.",
+        "Arbeidsgivaren din, {{arbeidsgiverNavn}}, har stadfesta at du skal arbeide i {{land}} i perioden {{fraDato}}–{{tilDato}}. Du må kontrollere at opplysningane stemmer, og gjere endringar dersom noko er feil.",
       endreLandEllerPeriode: "Endre land eller periode",
       arbeidsgiverOppgaLand: "Arbeidsgivaren din oppgav {{land}}",
       arbeidsgiverOppgaPeriode:
@@ -340,12 +340,12 @@ export const nn = {
       ettersendelseLenkeUrl:
         "https://www.nav.no/fyllut-ettersending/nn/nav020807/innsendingsvalg",
       motpartCtaTittel:
-        "{{arbeidsgiverNavn}} har sendt inn sin del av søknaden om A1 for utsende arbeidstakarar i EØS eller Sveits",
+        "{{arbeidsgiverNavn}} har sendt inn ei stadfesting på at du er send ut til eit anna EØS-land eller Sveits",
       motpartCtaBeskrivelse:
-        "Dei har oppgitt at du skal jobbe i {{land}} i perioden {{fraDato}}–{{tilDato}}. For at Nav skal kunne behandle søknaden, må du fylle ut din del.",
+        "Dei har oppgitt at du skal arbeide i {{land}} i perioden {{fraDato}}–{{tilDato}}. Du kan sende inn søknad om A1 for utsende arbeidstakarar i EØS eller Sveits ved å fylle ut din del.",
       motpartCtaUtlandetFallback: "utlandet",
       motpartCtaBeskrivelseUtenPeriode:
-        "For at Nav skal kunne behandle søknaden, må du fylle ut din del.",
+        "Du kan sende inn søknad om A1 for utsende arbeidstakarar i EØS eller Sveits ved å fylle ut din del.",
       motpartCtaKnapp: "Fyll ut din del",
     },
     oversiktArbeidsgiver: {
