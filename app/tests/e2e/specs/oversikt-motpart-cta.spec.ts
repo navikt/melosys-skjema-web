@@ -4,6 +4,7 @@ import {
   interceptOpprettSoknad,
   mockFeatureToggles,
   mockGetEregOrganisasjonMedJuridiskEnhet,
+  mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet,
   mockPersonerMedFullmakt,
   mockUserInfo,
   mockVentendeMotpartSoknader,
@@ -22,6 +23,7 @@ import {
 import { OversiktPage } from "../pages/oversikt/oversikt.page";
 import { RepresentasjonPage } from "../pages/representasjon/representasjon.page";
 import { SkjemaStartPage } from "../pages/skjema/skjema-start.page";
+import { translations } from "../utils/translations";
 
 const ALLE_TOGGLES_PAA = {
   "melosys.skjema.motpart-cta": true,
@@ -84,6 +86,25 @@ test.describe("Oversikt — motpart-CTA", () => {
     await expect(page).toHaveURL(
       new RegExp(`/skjema/${testOpprettSoknadResponseId}`),
     );
+  });
+
+  test("«Fyll ut din del» viser feil og blir på oversikten når arbeidsgiveroppslaget feiler", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
+    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    // Registrert etter beforeEach-mocken, så denne vinner (Playwright matcher sist registrerte først)
+    await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.clickMotpartCtaFyllUtDinDel();
+
+    await expect(
+      page.getByText(translations.oversiktDegSelv.motpartCtaFeil),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/oversikt/);
   });
 
   test("Viser ikke banner når toggle er av", async ({ page }) => {

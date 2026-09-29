@@ -160,10 +160,20 @@ function rolleInfoNokkel(representasjonstype: Representasjonstype) {
   }
 }
 
-// Kun til overskriften, som bare skiller arbeidsgivers del fra resten.
+// Samme mapping som Representasjonstype.tilSkjemadel() i melosys-skjema-api.
 function skjemadelFor(representasjonstype: Representasjonstype): Skjemadel {
-  return representasjonstype === Representasjonstype.ARBEIDSGIVER ||
-    representasjonstype === Representasjonstype.RADGIVER
-    ? Skjemadel.ARBEIDSGIVERS_DEL
-    : Skjemadel.ARBEIDSTAKERS_DEL;
+  switch (representasjonstype) {
+    case Representasjonstype.ARBEIDSGIVER:
+    case Representasjonstype.RADGIVER: {
+      return Skjemadel.ARBEIDSGIVERS_DEL;
+    }
+    case Representasjonstype.ARBEIDSGIVER_MED_FULLMAKT:
+    case Representasjonstype.RADGIVER_MED_FULLMAKT: {
+      return Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL;
+    }
+    case Representasjonstype.DEG_SELV:
+    case Representasjonstype.ANNEN_PERSON: {
+      return Skjemadel.ARBEIDSTAKERS_DEL;
+    }
+  }
 }
