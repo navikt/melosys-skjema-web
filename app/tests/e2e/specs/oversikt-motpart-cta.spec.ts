@@ -72,7 +72,6 @@ test.describe("Oversikt — motpart-CTA", () => {
     );
 
     expect(await requestBodyPromise).toEqual({
-      bekreftetRiktigeOpplysninger: true,
       representasjonstype: Representasjonstype.DEG_SELV,
       arbeidsgiver: {
         orgnr: korrektFormatertOrgnr,

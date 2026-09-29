@@ -68,9 +68,7 @@ test.describe("Skjema — introside med bekreftelse", () => {
 
     await startPage.bekreft();
     await startPage.startSoknad();
-    expect(await requestBodyPromise).toMatchObject({
-      bekreftetRiktigeOpplysninger: true,
-    });
+    await requestBodyPromise;
     await expect(page).toHaveURL(
       `/skjema/${testOpprettSoknadResponseId}/utsendingsperiode-og-land`,
     );

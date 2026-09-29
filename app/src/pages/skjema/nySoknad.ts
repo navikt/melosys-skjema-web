@@ -6,10 +6,7 @@ import type { OpprettUtsendtArbeidstakerSoknadRequest } from "~/types/melosysSkj
 Opplysningene som trengs for å opprette en søknad, før brukeren har bekreftet.
 */
 export interface NySoknad {
-  request: Omit<
-    OpprettUtsendtArbeidstakerSoknadRequest,
-    "bekreftetRiktigeOpplysninger"
-  >;
+  request: OpprettUtsendtArbeidstakerSoknadRequest;
   /**
   Fullt (verifisert) navn på arbeidstaker, kun til visning på introsiden.
   */

@@ -28,7 +28,7 @@ import { Representasjonstype, Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 /**
  * Introside for en ny søknad, etter Aksels mal for søknadsdialoger, men kun med
  * rolleinfo og bekreftelse. Utkastet opprettes først når brukeren har bekreftet
- * at hen vil svare så riktig som mulig; backend lagrer tidspunktet.
+ * at hen vil svare så riktig som mulig.
  */
 export function SkjemaStart() {
   const [nySoknad] = useState(hentNySoknad);
@@ -73,20 +73,17 @@ function SkjemaStartInnhold({ nySoknad }: { nySoknad: NySoknad }) {
       setVisFeil(true);
       return;
     }
-    opprettSoknadMutation.mutate(
-      { ...nySoknad.request, bekreftetRiktigeOpplysninger: true },
-      {
-        // Her (ikke i useMutation) så brukeren ikke dras inn i skjemaet hvis hen
-        // har navigert bort mens opprettelsen pågikk. replace: tilbake fra
-        // skjemaet skal ikke lande på introsiden og gi en ny opprettelse.
-        onSuccess: (data) =>
-          void navigate({
-            to: "/skjema/$id",
-            params: { id: data.id },
-            replace: true,
-          }).then(glemNySoknad),
-      },
-    );
+    opprettSoknadMutation.mutate(nySoknad.request, {
+      // Her (ikke i useMutation) så brukeren ikke dras inn i skjemaet hvis hen
+      // har navigert bort mens opprettelsen pågikk. replace: tilbake fra
+      // skjemaet skal ikke lande på introsiden og gi en ny opprettelse.
+      onSuccess: (data) =>
+        void navigate({
+          to: "/skjema/$id",
+          params: { id: data.id },
+          replace: true,
+        }).then(glemNySoknad),
+    });
   };
 
   const rolleInfo = rolleInfoNokkel(nySoknad.request.representasjonstype);
