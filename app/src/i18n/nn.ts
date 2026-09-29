@@ -342,10 +342,10 @@ export const nn = {
       motpartCtaTittel:
         "{{arbeidsgiverNavn}} har sendt inn ei stadfesting på at du er send ut til eit anna EØS-land eller Sveits",
       motpartCtaBeskrivelse:
-        "Dei har oppgitt at du skal jobbe i {{land}} i perioden {{fraDato}}–{{tilDato}}. Du kan sende inn søknad om A1 for utsende arbeidstakarar i EØS eller Sveits, ved å fylle ut din del.",
+        "Dei har oppgitt at du skal arbeide i {{land}} i perioden {{fraDato}}–{{tilDato}}. Du kan sende inn søknad om A1 for utsende arbeidstakarar i EØS eller Sveits ved å fylle ut din del.",
       motpartCtaUtlandetFallback: "utlandet",
       motpartCtaBeskrivelseUtenPeriode:
-        "Du kan sende inn søknad om A1 for utsende arbeidstakarar i EØS eller Sveits, ved å fylle ut din del.",
+        "Du kan sende inn søknad om A1 for utsende arbeidstakarar i EØS eller Sveits ved å fylle ut din del.",
       motpartCtaKnapp: "Fyll ut din del",
     },
     oversiktArbeidsgiver: {
