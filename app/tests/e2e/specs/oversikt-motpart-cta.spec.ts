@@ -147,6 +147,88 @@ test.describe("Oversikt — motpart-CTA", () => {
   });
 });
 
+const ventendeSkjemaId = testVentendeMotpartSoknader.soknader[0]!.skjemaId;
+const varselLenke = (skjemaId: string) =>
+  `/fyll-ut-din-del?skjemaId=${skjemaId}&arbeidsgiverOrgnr=${korrektFormatertOrgnr}`;
+
+test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
+  test.beforeEach(async ({ page }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    await mockGetEregOrganisasjonMedJuridiskEnhet(page);
+    await mockPersonerMedFullmakt(page, []);
+    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
+  });
+
+  test("ventende arbeidsgiver-del går rett til introsiden med prefyll", async ({
+    page,
+  }) => {
+    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    const requestBodyPromise = interceptOpprettSoknad(
+      page,
+      testOpprettSoknadResponseId,
+    );
+
+    await page.goto(varselLenke(ventendeSkjemaId));
+    await new SkjemaStartPage(page).bekreftOgStart(
+      Representasjonstype.DEG_SELV,
+    );
+
+    expect(await requestBodyPromise).toEqual({
+      representasjonstype: Representasjonstype.DEG_SELV,
+      arbeidsgiver: {
+        orgnr: korrektFormatertOrgnr,
+        navn: "Test Organisasjon AS",
+      },
+      arbeidstaker: { fnr: testUserInfo.userId, etternavn: testUserInfo.name },
+      opprettetVia: OpprettetVia.MOTPART_CTA,
+      prefyllFraSkjemaId: ventendeSkjemaId,
+    });
+  });
+
+  test("arbeidsgiver-del som ikke venter lenger går til oversikten med arbeidsgiver utfylt", async ({
+    page,
+  }) => {
+    await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
+
+    await page.goto(varselLenke(ventendeSkjemaId));
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.assertIsVisible();
+    await expect(page).toHaveURL(/\/oversikt\?representasjonstype=DEG_SELV/);
+    await expect(oversiktPage.arbeidsgiverOrgnrInput).toHaveValue(
+      korrektFormatertOrgnr,
+    );
+  });
+
+  test("feil ved oppslag viser feilmelding med vei videre til oversikten", async ({
+    page,
+  }) => {
+    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
+
+    await page.goto(varselLenke(ventendeSkjemaId));
+
+    await expect(
+      page.getByText(translations.oversiktDegSelv.motpartCtaFeil),
+    ).toBeVisible();
+    await page
+      .getByRole("button", {
+        name: translations.oversiktDegSelv.motpartLenkeGaTilOversikten,
+      })
+      .click();
+    await new OversiktPage(
+      page,
+      Representasjonstype.DEG_SELV,
+    ).assertIsVisible();
+  });
+});
+
 test.describe("Landingsside — motpart-hint", () => {
   test.beforeEach(async ({ page }) => {
     await mockUserInfo(page, testUserInfo);

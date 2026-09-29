@@ -11,14 +11,12 @@ import { useTranslation } from "react-i18next";
 
 import { MOTPART_CTA } from "~/featuretoggle/toggleNavn.ts";
 import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
-import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
+import { getVentendeMotpartSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
-  getOrganisasjonMedJuridiskEnhetQuery,
-  getVentendeMotpartSoknaderQuery,
-} from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { useGaTilSkjemaStart } from "~/pages/skjema/nySoknad.ts";
+  byggMotpartSoknad,
+  useGaTilSkjemaStart,
+} from "~/pages/skjema/nySoknad.ts";
 import {
-  OpprettetVia,
   Representasjonstype,
   VentendeMotpartSoknadDto,
 } from "~/types/melosysSkjemaTypes.ts";
@@ -71,29 +69,8 @@ function VentendeMotpartAlert({
   const gaTilSkjemaStart = useGaTilSkjemaStart();
 
   const startDinDel = useMutation({
-    mutationFn: async () => {
-      // Samme oppslag som søknadsstarteren: arbeidsgiver lagres som juridisk enhet.
-      const [organisasjon, bruker] = await Promise.all([
-        queryClient.fetchQuery(
-          getOrganisasjonMedJuridiskEnhetQuery(soknad.arbeidsgiverOrgnr),
-        ),
-        queryClient.ensureQueryData(getUserInfo()),
-      ]);
-      await gaTilSkjemaStart({
-        request: {
-          representasjonstype: Representasjonstype.DEG_SELV,
-          arbeidsgiver: {
-            orgnr: organisasjon.juridiskEnhet.orgnr,
-            // API-et krever navn; bruk navnet fra arbeidsgivers del hvis registeret mangler det
-            navn: organisasjon.juridiskEnhet.navn || soknad.arbeidsgiverNavn,
-          },
-          arbeidstaker: { fnr: bruker.userId, etternavn: bruker.name },
-          opprettetVia: OpprettetVia.MOTPART_CTA,
-          prefyllFraSkjemaId: soknad.skjemaId,
-        },
-        arbeidstakerNavn: bruker.name,
-      });
-    },
+    mutationFn: async () =>
+      gaTilSkjemaStart(await byggMotpartSoknad(queryClient, soknad)),
   });
 
   return (

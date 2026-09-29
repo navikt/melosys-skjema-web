@@ -303,6 +303,7 @@ export const en = {
       motpartCtaKnapp: "Complete your part",
       motpartCtaFeil:
         "Could not retrieve the information. Please try again later.",
+      motpartLenkeGaTilOversikten: "Go to the overview",
     },
     oversiktArbeidsgiver: {
       tittel: "Overview page for applications",

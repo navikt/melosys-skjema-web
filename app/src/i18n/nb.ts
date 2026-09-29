@@ -293,6 +293,7 @@ export const nb = {
         "For at Nav skal kunne behandle søknaden, må du fylle ut din del.",
       motpartCtaKnapp: "Fyll ut din del",
       motpartCtaFeil: "Kunne ikke hente opplysningene. Prøv igjen senere.",
+      motpartLenkeGaTilOversikten: "Gå til oversikten",
     },
     oversiktArbeidsgiver: {
       tittel: "Oversiktsside for søknader",
