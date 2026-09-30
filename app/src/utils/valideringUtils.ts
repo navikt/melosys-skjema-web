@@ -29,7 +29,7 @@ export function organisasjonsnummerHarGyldigFormat(orgnr: string): boolean {
   const rest = sum % 11;
   const kontrollsiffer = 11 - rest;
 
-  if (kontrollsiffer === 10) return false;
-
-  return (kontrollsiffer === 11 ? 0 : kontrollsiffer) === siffer[8];
+  return kontrollsiffer === 10
+    ? false
+    : (kontrollsiffer === 11 ? 0 : kontrollsiffer) === siffer[8];
 }

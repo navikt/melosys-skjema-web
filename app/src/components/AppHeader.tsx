@@ -14,11 +14,9 @@ export function AppHeader() {
   const matchRoute = useMatchRoute();
   const erInnsendt = !!matchRoute({ to: "/skjema/$id/innsendt" });
 
-  if (skjemaId && !erInnsendt) {
-    return <SkjemaParterHeader skjemaId={skjemaId} />;
-  }
-
-  return (
+  return skjemaId && !erInnsendt ? (
+    <SkjemaParterHeader skjemaId={skjemaId} />
+  ) : (
     <HStack align="center" justify="space-between">
       <Heading level="1" size="medium">
         {t("appHeader.tittel")}

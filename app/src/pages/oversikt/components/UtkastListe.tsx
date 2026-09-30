@@ -5,7 +5,6 @@ import {
   ExpansionCard,
   Heading,
   HStack,
-  Skeleton,
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
@@ -21,47 +20,16 @@ interface UtkastListeProperties {
   representasjonskontekst: Representasjonskontekst;
 }
 
-/**
- * Utkast/påbegynte søknader komponent.
- * Viser liste over påbegynte søknader basert på representasjonskontekst.
- * Skjules hvis det ikke finnes noen utkast.
- */
 export function UtkastListe({
   representasjonskontekst,
 }: UtkastListeProperties) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery(
-    getUtkastQuery(representasjonskontekst),
-  );
+  const { data, isError } = useQuery(getUtkastQuery(representasjonskontekst));
 
-  // Skjul komponenten hvis det er 0 utkast (etter at data er lastet)
-  if (!isLoading && (!data || data.antall === 0)) {
+  if (!data || data.antall === 0) {
     return null;
-  }
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <ExpansionCard aria-label={t("oversiktFelles.utkastTittel")} size="small">
-        <ExpansionCard.Header className="rounded-small">
-          <HStack align="center" gap="space-8">
-            <NotePencilDashIcon
-              aria-hidden
-              className="text-surface-action"
-              fontSize="2rem"
-            />
-            <Heading level="3" size="small">
-              {t("oversiktFelles.utkastTittel")}
-            </Heading>
-          </HStack>
-        </ExpansionCard.Header>
-        <ExpansionCard.Content>
-          <Skeleton height={100} variant="rectangle" width="100%" />
-        </ExpansionCard.Content>
-      </ExpansionCard>
-    );
   }
 
   // Error state - vis likevel komponenten men med feilmelding
@@ -85,11 +53,6 @@ export function UtkastListe({
         </ExpansionCard.Content>
       </ExpansionCard>
     );
-  }
-
-  // Sikre at data finnes før vi bruker den
-  if (!data) {
-    return null;
   }
 
   const utkast = data.utkast;

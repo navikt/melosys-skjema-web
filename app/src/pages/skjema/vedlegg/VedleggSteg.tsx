@@ -166,10 +166,11 @@ function VedleggStegContent({
   };
 
   const getRejectionMessage = (reasons: string[]): string => {
-    if (reasons.includes("fileSize")) {
-      return t("vedleggSteg.feilForStor");
-    }
-    return t("vedleggSteg.feilUgyldigFormat");
+    return t(
+      reasons.includes("fileSize")
+        ? "vedleggSteg.feilForStor"
+        : "vedleggSteg.feilUgyldigFormat",
+    );
   };
 
   const handleSelect = (_files: unknown, partitioned: FilesPartitioned) => {

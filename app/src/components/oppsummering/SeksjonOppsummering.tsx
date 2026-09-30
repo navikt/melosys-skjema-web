@@ -25,9 +25,7 @@ export function SeksjonOppsummering({
     ([feltNavn]) => data[feltNavn] !== undefined && data[feltNavn] !== null,
   );
 
-  if (felterMedData.length === 0) return null;
-
-  return (
+  return felterMedData.length === 0 ? null : (
     <FormSummary className="mt-8">
       <FormSummary.Header>
         <FormSummary.Heading level="3">

@@ -35,12 +35,11 @@ export function getArbeidsgiverensVirksomhetINorge(
     return (skjema.data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
       .arbeidsgiverensVirksomhetINorge;
   }
-  if (skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
-    return (
-      skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
-    ).arbeidsgiversData?.arbeidsgiverensVirksomhetINorge;
-  }
-  return undefined;
+  return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+    ? (
+        skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
+      ).arbeidsgiversData?.arbeidsgiverensVirksomhetINorge
+    : undefined;
 }
 
 export function getUtenlandsoppdraget(
@@ -51,12 +50,11 @@ export function getUtenlandsoppdraget(
     return (skjema.data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
       .utenlandsoppdraget;
   }
-  if (skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
-    return (
-      skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
-    ).arbeidsgiversData?.utenlandsoppdraget;
-  }
-  return undefined;
+  return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+    ? (
+        skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
+      ).arbeidsgiversData?.utenlandsoppdraget
+    : undefined;
 }
 
 export function getArbeidsstedIUtlandet(
@@ -67,12 +65,11 @@ export function getArbeidsstedIUtlandet(
     return (skjema.data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
       .arbeidsstedIUtlandet;
   }
-  if (skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
-    return (
-      skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
-    ).arbeidsgiversData?.arbeidsstedIUtlandet;
-  }
-  return undefined;
+  return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+    ? (
+        skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
+      ).arbeidsgiversData?.arbeidsstedIUtlandet
+    : undefined;
 }
 
 export function getArbeidstakerensLonn(
@@ -83,12 +80,11 @@ export function getArbeidstakerensLonn(
     return (skjema.data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
       .arbeidstakerensLonn;
   }
-  if (skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
-    return (
-      skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
-    ).arbeidsgiversData?.arbeidstakerensLonn;
-  }
-  return undefined;
+  return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+    ? (
+        skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
+      ).arbeidsgiversData?.arbeidstakerensLonn
+    : undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -103,12 +99,11 @@ export function getArbeidssituasjon(
     return (skjema.data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
       .arbeidssituasjon;
   }
-  if (skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
-    return (
-      skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
-    ).arbeidstakersData?.arbeidssituasjon;
-  }
-  return undefined;
+  return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+    ? (
+        skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
+      ).arbeidstakersData?.arbeidssituasjon
+    : undefined;
 }
 
 export function getSkatteforholdOgInntekt(
@@ -119,12 +114,11 @@ export function getSkatteforholdOgInntekt(
     return (skjema.data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
       .skatteforholdOgInntekt;
   }
-  if (skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
-    return (
-      skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
-    ).arbeidstakersData?.skatteforholdOgInntekt;
-  }
-  return undefined;
+  return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+    ? (
+        skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
+      ).arbeidstakersData?.skatteforholdOgInntekt
+    : undefined;
 }
 
 export function getFamiliemedlemmer(
@@ -135,12 +129,11 @@ export function getFamiliemedlemmer(
     return (skjema.data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
       .familiemedlemmer;
   }
-  if (skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL) {
-    return (
-      skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
-    ).arbeidstakersData?.familiemedlemmer;
-  }
-  return undefined;
+  return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
+    ? (
+        skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
+      ).arbeidstakersData?.familiemedlemmer
+    : undefined;
 }
 
 // ---------------------------------------------------------------------------

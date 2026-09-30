@@ -41,12 +41,12 @@ export function formaterBelop(value: string, sprak: string): string {
   if (!trimmed) return "";
 
   const normalized = trimmed.replaceAll(/\s/g, "").replace(/[.,]\d*$/, "");
-  if (!/^\d+$/.test(normalized)) return value;
-
-  return new Intl.NumberFormat(VISNINGS_LOCALE[sprak] ?? "nb-NO", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Number(normalized));
+  return /^\d+$/.test(normalized)
+    ? new Intl.NumberFormat(VISNINGS_LOCALE[sprak] ?? "nb-NO", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(Number(normalized))
+    : value;
 }
 
 /**

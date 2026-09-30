@@ -40,19 +40,20 @@ function harUtenlandsk(data: SchemaData): boolean {
 }
 
 function skalValidereLoennsinntekt(data: SchemaData): boolean {
-  if (!data.hvilkeTyperInntektHarDu?.includes("LOENN")) return false;
-  if (!harNorsk(data) && !harUtenlandsk(data)) return false;
-  return skalInkludereLoennsinntekt(
-    data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
-    harNorsk(data),
-    harUtenlandsk(data),
-  );
+  return !data.hvilkeTyperInntektHarDu?.includes("LOENN") ||
+    (!harNorsk(data) && !harUtenlandsk(data))
+    ? false
+    : skalInkludereLoennsinntekt(
+        data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
+        harNorsk(data),
+        harUtenlandsk(data),
+      );
 }
 
 function skalValidereEgenVirksomhetInntekt(data: SchemaData): boolean {
-  if (!data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET"))
-    return false;
-  return harNorsk(data) || harUtenlandsk(data);
+  return data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
+    ? harNorsk(data) || harUtenlandsk(data)
+    : false;
 }
 
 const checkboxGroupSchema = z.array(z.string()).optional();
@@ -132,8 +133,7 @@ export const skatteforholdOgInntektSchema = baseSchema
   .refine(
     (data) => {
       if (!skalValidereLoennsinntekt(data)) return true;
-      if (!data.inntekt?.trim()) return false;
-      return erPositivtBelop(data.inntekt);
+      return data.inntekt?.trim() ? erPositivtBelop(data.inntekt) : false;
     },
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
@@ -143,8 +143,9 @@ export const skatteforholdOgInntektSchema = baseSchema
   .refine(
     (data) => {
       if (!skalValidereEgenVirksomhetInntekt(data)) return true;
-      if (!data.inntektFraEgenVirksomhet?.trim()) return false;
-      return erPositivtBelop(data.inntektFraEgenVirksomhet);
+      return data.inntektFraEgenVirksomhet?.trim()
+        ? erPositivtBelop(data.inntektFraEgenVirksomhet)
+        : false;
     },
     {
       error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",

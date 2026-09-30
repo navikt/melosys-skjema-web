@@ -59,11 +59,9 @@ export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProperties) {
     );
   }
 
-  if (innsendtError || skjemaError || !innsendtSkjema || !skjema) {
-    return <Alert variant="error">{t("innsendtSkjema.feilVedLasting")}</Alert>;
-  }
-
-  return (
+  return innsendtError || skjemaError || !innsendtSkjema || !skjema ? (
+    <Alert variant="error">{t("innsendtSkjema.feilVedLasting")}</Alert>
+  ) : (
     <InnsendtSkjemaPageContent response={innsendtSkjema} skjema={skjema} />
   );
 }
@@ -138,12 +136,12 @@ function InnsendtSkjemaPageContent({
 
   const arbeidsgiverSeksjoner = (() => {
     const data = getArbeidsgiverData(response.skjemaData);
-    if (!data) return [];
-
-    return resolveSeksjoner(data, response.definisjon, {
-      skjulUtsendingsperiodeOgLand:
-        response.skjemaData.type === ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
-    });
+    return data
+      ? resolveSeksjoner(data, response.definisjon, {
+          skjulUtsendingsperiodeOgLand:
+            response.skjemaData.type === ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
+        })
+      : [];
   })();
 
   return (

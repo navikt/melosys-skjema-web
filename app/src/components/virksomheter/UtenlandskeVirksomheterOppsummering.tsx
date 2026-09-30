@@ -127,11 +127,7 @@ export function UtenlandskeVirksomheterOppsummering({
 }: UtenlandskeVirksomheterOppsummeringProperties) {
   const { t } = useTranslation();
 
-  if (!virksomheter || virksomheter.length === 0) {
-    return;
-  }
-
-  return (
+  return !virksomheter || virksomheter.length === 0 ? undefined : (
     <FormSummary.Answer className="mt-4">
       <FormSummary.Label>
         {t("utenlandskeVirksomheterFormPart.utenlandskeVirksomheter")}

@@ -21,9 +21,9 @@ export function RepresentasjonPage() {
     );
   }
 
-  if (!userInfoQuery.data) {
-    return <Loader size="xlarge" title={t("felles.laster")} />;
-  }
-
-  return <RepresentasjonVelger />;
+  return userInfoQuery.data ? (
+    <RepresentasjonVelger />
+  ) : (
+    <Loader size="xlarge" title={t("felles.laster")} />
+  );
 }

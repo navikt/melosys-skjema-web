@@ -39,15 +39,14 @@ async function validateForLanguage(
 
     const backendDefinisjon = await response.json();
     const staticDefinisjon = SKJEMA_DEFINISJONER_A1[sprak];
-    const differences: string[] = [];
+    const differences: string[] =
+      backendDefinisjon.versjon === staticDefinisjon.versjon
+        ? []
+        : [
+            `[${sprak}] Version mismatch: static=${staticDefinisjon.versjon}, backend=${backendDefinisjon.versjon}`,
+          ];
 
     // Compare version
-    if (backendDefinisjon.versjon !== staticDefinisjon.versjon) {
-      differences.push(
-        `[${sprak}] Version mismatch: static=${staticDefinisjon.versjon}, backend=${backendDefinisjon.versjon}`,
-      );
-    }
-
     // Compare sections
     const staticSeksjoner = Object.keys(staticDefinisjon.seksjoner);
     const backendSeksjoner = Object.keys(backendDefinisjon.seksjoner || {});

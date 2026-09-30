@@ -119,17 +119,19 @@ export function ArbeidstakerVelger({
   const handleComboboxChange = (value: string) => {
     const person = personerMedFullmakt.find((p) => p.fnr === value);
 
-    if (person) {
-      setSelectedPersonFnr(person.fnr);
-      // Clear validation errors from "uten fullmakt" section
-      setFnrError(null);
-      setEtternavnError(null);
-      // Set arbeidstaker in form
-      setValue("arbeidstaker", {
-        fnr: person.fnr,
-        etternavn: person.navn,
-      });
+    if (!person) {
+      return;
     }
+
+    setSelectedPersonFnr(person.fnr);
+    // Clear validation errors from "uten fullmakt" section
+    setFnrError(null);
+    setEtternavnError(null);
+    // Set arbeidstaker in form
+    setValue("arbeidstaker", {
+      fnr: person.fnr,
+      etternavn: person.navn,
+    });
   };
 
   const handleClearMedFullmakt = () => {
