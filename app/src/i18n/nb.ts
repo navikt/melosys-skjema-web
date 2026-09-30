@@ -4,6 +4,10 @@ export const nb = {
       laster: "Laster...",
       feil: "Det oppstod en feil",
       feilVedLastingAvSkjema: "Feil ved lasting av skjema",
+      skjemaOppdateres:
+        "Vi oppdaterer skjemaet akkurat nå. Prøv igjen om noen minutter.",
+      utkastReinitialisert:
+        "Skjemaet er oppdatert siden du startet. Tidligere svar og vedlegg er derfor fjernet, og du må fylle ut skjemaet på nytt.",
       fantIkkeSkjema: "Fant ikke skjema",
       stegIkkeTilgjengelig: "Steget er ikke tilgjengelig for denne skjemadelen",
       brukerinfoMangler: "Brukerinfo mangler",
@@ -253,8 +257,6 @@ export const nb = {
     },
     arbeidsgiverensVirksomhetINorgeSteg: {
       tittel: "Arbeidsgiverens virksomhet i Norge",
-      duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet:
-        "Du må svare på om arbeidsgiveren er en offentlig virksomhet",
       duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra:
         "Du må svare på om arbeidsgiveren er et bemannings- eller vikarbyrå",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:

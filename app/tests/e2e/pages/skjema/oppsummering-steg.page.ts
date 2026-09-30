@@ -108,16 +108,6 @@ export class OppsummeringStegPage {
   async assertArbeidsgiverensVirksomhetINorgeData(
     data: ArbeidsgiverensVirksomhetINorgeDto,
   ) {
-    await expect(
-      this.page.locator(
-        `dt:has-text("${virksomhetINorge.felter.erArbeidsgiverenOffentligVirksomhet.label}") + dd`,
-      ),
-    ).toHaveText(
-      data.erArbeidsgiverenOffentligVirksomhet
-        ? translations.felles.ja
-        : translations.felles.nei,
-    );
-
     if (data.erArbeidsgiverenBemanningsEllerVikarbyraa !== undefined) {
       await expect(
         this.page.locator(

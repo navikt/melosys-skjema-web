@@ -18,7 +18,7 @@ import {
   StegRekkefolgeItem,
 } from "~/pages/skjema/components/Fremgangsindikator";
 import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
-import { STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
+import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 import { formatDatotid } from "~/utils/datoformat.ts";
@@ -46,7 +46,7 @@ export function SkjemaSteg({
 }: SkjemaStegProperties) {
   const { i18n, t } = useTranslation();
   const { skjema } = config;
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
 
   const stepNumber = getStepNumber(config.stepKey, stegRekkefolge);

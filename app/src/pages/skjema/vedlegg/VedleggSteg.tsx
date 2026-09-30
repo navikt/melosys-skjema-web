@@ -34,7 +34,7 @@ import type {
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getVedleggValg } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { vedleggStegSchema } from "./vedleggStegSchema.ts";
 
 type VedleggStegFormData = z.infer<typeof vedleggStegSchema>;
@@ -60,7 +60,7 @@ function VedleggStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery = useInvalidateSkjemaQuery();

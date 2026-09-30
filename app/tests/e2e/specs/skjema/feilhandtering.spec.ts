@@ -2,6 +2,7 @@ import { VedleggFiltype } from "~/types/melosysSkjemaTypes";
 
 import {
   mockFetchSkjema,
+  mockFetchSkjemaVersjonskonflikt,
   mockHentVedlegg,
   mockHentVedleggFeil,
   mockLastOppVedlegg,
@@ -184,6 +185,46 @@ test.describe("Feilhåndtering", () => {
       await expect(page).toHaveURL(
         `/skjema/${testArbeidstakerSkjema.id}/oppsummering`,
       );
+    });
+  });
+
+  test.describe("Skjemaversjon", () => {
+    test("viser varsel når utkastet er reinitialisert", async ({ page }) => {
+      await setupApiMocksForArbeidstaker(
+        page,
+        { ...testArbeidstakerSkjema, utkastReinitialisert: true },
+        testUserInfo,
+      );
+
+      const familiemedlemmerStegPage = new FamiliemedlemmerStegPage(
+        page,
+        testArbeidstakerSkjema,
+      );
+
+      await familiemedlemmerStegPage.goto();
+      await familiemedlemmerStegPage.assertIsVisible();
+
+      await expect(page.getByText(t.felles.utkastReinitialisert)).toBeVisible();
+    });
+
+    test("viser at skjemaet oppdateres når klienten er utdatert også etter reload", async ({
+      page,
+    }) => {
+      await setupApiMocksForArbeidstaker(
+        page,
+        testArbeidstakerSkjema,
+        testUserInfo,
+      );
+      await mockFetchSkjemaVersjonskonflikt(page, testArbeidstakerSkjema.id);
+
+      const familiemedlemmerStegPage = new FamiliemedlemmerStegPage(
+        page,
+        testArbeidstakerSkjema,
+      );
+
+      await familiemedlemmerStegPage.goto();
+
+      await expect(page.getByText(t.felles.skjemaOppdateres)).toBeVisible();
     });
   });
 

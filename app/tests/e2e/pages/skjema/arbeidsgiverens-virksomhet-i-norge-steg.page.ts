@@ -17,9 +17,6 @@ const felter = virksomhetINorge.felter;
 
 // Feilmeldinger
 const feilmeldinger = {
-  offentligVirksomhetErPakrevd:
-    translations.arbeidsgiverensVirksomhetINorgeSteg
-      .duMaSvarePaOmArbeidsgiverenErEnOffentligVirksomhet,
   bemanningsEllerVikarbyraErPakrevd:
     translations.arbeidsgiverensVirksomhetINorgeSteg
       .duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra,
@@ -32,7 +29,6 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
   readonly heading: Locator;
-  readonly offentligVirksomhetRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly bemanningsEllerVikarbyraRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly vanligDriftRadioGroup: RadioButtonGroupJaNeiLocator;
   readonly lagreOgFortsettButton: Locator;
@@ -43,18 +39,6 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     this.heading = page.getByRole("heading", {
       name: virksomhetINorge.tittel,
     });
-
-    const offentligVirksomhetGroup = page.getByRole("radiogroup", {
-      name: felter.erArbeidsgiverenOffentligVirksomhet.label,
-    });
-    this.offentligVirksomhetRadioGroup = {
-      JA: offentligVirksomhetGroup.getByRole("radio", {
-        name: translations.felles.ja,
-      }),
-      NEI: offentligVirksomhetGroup.getByRole("radio", {
-        name: translations.felles.nei,
-      }),
-    };
 
     const bemanningsEllerVikarbyraGroup = page.getByRole("radiogroup", {
       name: felter.erArbeidsgiverenBemanningsEllerVikarbyraa.label,
@@ -86,12 +70,6 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
   }
 
   // --- Validation assertions ---
-
-  private offentligVirksomhetFieldset() {
-    return this.page.getByRole("radiogroup", {
-      name: felter.erArbeidsgiverenOffentligVirksomhet.label,
-    });
-  }
 
   private bemanningsEllerVikarbyraFieldset() {
     return this.page.getByRole("radiogroup", {
@@ -157,22 +135,6 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidsgiverens-virksomhet-i-norge`,
     );
-  }
-
-  async assertOffentligVirksomhetErPakrevdIsVisible() {
-    await expect(
-      this.offentligVirksomhetFieldset().getByText(
-        feilmeldinger.offentligVirksomhetErPakrevd,
-      ),
-    ).toBeVisible();
-  }
-
-  async assertOffentligVirksomhetErPakrevdIsNotVisible() {
-    await expect(
-      this.offentligVirksomhetFieldset().getByText(
-        feilmeldinger.offentligVirksomhetErPakrevd,
-      ),
-    ).not.toBeVisible();
   }
 
   async assertBemanningsEllerVikarbyraErPakrevdIsVisible() {

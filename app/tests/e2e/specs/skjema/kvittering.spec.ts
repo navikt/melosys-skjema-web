@@ -24,6 +24,8 @@ test.describe("Kvittering", () => {
     metadatatype: "DegSelvMetadata",
   };
   const skjema: UtsendtArbeidstakerSkjemaDto = {
+    utkastReinitialisert: false,
+    skjemaDefinisjonVersjon: "1",
     id: skjemaId,
     fnr: testUserInfo.userId,
     orgnr: "",

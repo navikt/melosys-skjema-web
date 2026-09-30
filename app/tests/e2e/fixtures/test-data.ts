@@ -1,5 +1,6 @@
 // Test data constants that can be reused across tests
 
+import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import type { UserInfo } from "~/httpClients/dekoratorenClient";
 import {
   type ArbeidsgiverMedFullmaktMetadata,
@@ -45,6 +46,8 @@ export const testArbeidsgiverSkjemaId = "test-arbeidsgiver-skjema-id";
 export const testArbeidstakerSkjemaId = "test-arbeidstaker-skjema-id";
 
 export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
+  utkastReinitialisert: false,
+  skjemaDefinisjonVersjon: "2",
   id: testArbeidsgiverSkjemaId,
   orgnr: "123456789",
   fnr: "",
@@ -59,6 +62,7 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
     arbeidsgiverNavn: "Test Bedrift AS",
     arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVERS_DEL,
+    erOffentligArbeidsgiver: false,
   } as ArbeidsgiverMetadata,
   data: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
@@ -66,6 +70,8 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
 };
 
 export const testArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
+  utkastReinitialisert: false,
+  skjemaDefinisjonVersjon: "2",
   id: testArbeidstakerSkjemaId,
   fnr: testUserInfo.userId,
   orgnr: "",
@@ -237,6 +243,13 @@ export const testInnsendteSoknaderToTreff: InnsendteSoknaderResponse = {
 
 // ============ Innsendt skjema test data ============
 
+// Fixturene har tomme skjemaData, så bare vedlegg-seksjonen (som VedleggOppsummering viser) trengs.
+const testInnsendtDefinisjon = {
+  seksjoner: {
+    vedleggArbeidstaker: SKJEMA_DEFINISJON_A1.seksjoner.vedleggArbeidstaker,
+  },
+} as unknown as InnsendtSkjemaResponse["definisjon"];
+
 export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
   skjemaId: testArbeidstakerSkjemaId,
   referanseId: "REF-AT-001",
@@ -249,9 +262,7 @@ export const testInnsendtSkjemaArbeidstakersDel: InnsendtSkjemaResponse = {
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
   } as InnsendtSkjemaResponse["skjemaData"],
-  definisjon: {
-    seksjoner: {},
-  } as unknown as InnsendtSkjemaResponse["definisjon"],
+  definisjon: testInnsendtDefinisjon,
 };
 
 export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
@@ -265,9 +276,7 @@ export const testInnsendtSkjemaArbeidsgiverDel: InnsendtSkjemaResponse = {
   skjemaData: {
     type: "UTSENDT_ARBEIDSTAKER_ARBEIDSGIVERS_DEL",
   } as InnsendtSkjemaResponse["skjemaData"],
-  definisjon: {
-    seksjoner: {},
-  } as unknown as InnsendtSkjemaResponse["definisjon"],
+  definisjon: testInnsendtDefinisjon,
 };
 
 // ============ SoknadStarter test data ============
@@ -313,6 +322,7 @@ Rådgiverfirma org for RADGIVER flow (from ereg lookup)
 */
 export const testRadgiverfirmaOrgnr = korrektFormatertOrgnr2;
 export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
+  erOffentligArbeidsgiver: false,
   organisasjon: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiver Filial" },
   juridiskEnhet: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiverfirma AS" },
 };
@@ -321,6 +331,7 @@ export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
 Ereg response for DEG_SELV org search (OrganisasjonSoker)
 */
 export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
+  erOffentligArbeidsgiver: false,
   organisasjon: {
     orgnr: korrektFormatertOrgnr,
     navn: "Arbeidsgiver Virksomhet",
@@ -333,6 +344,8 @@ export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
 export const testKombinertSkjemaId = "test-kombinert-skjema-id";
 
 export const testKombinertSkjema: UtsendtArbeidstakerSkjemaDto = {
+  utkastReinitialisert: false,
+  skjemaDefinisjonVersjon: "2",
   id: testKombinertSkjemaId,
   orgnr: "123456789",
   fnr: "",
@@ -368,9 +381,7 @@ export const testInnsendtSkjemaKombinertDel: InnsendtSkjemaResponse = {
     arbeidsgiversData: {},
     arbeidstakersData: {},
   } as InnsendtSkjemaResponse["skjemaData"],
-  definisjon: {
-    seksjoner: {},
-  } as unknown as InnsendtSkjemaResponse["definisjon"],
+  definisjon: testInnsendtDefinisjon,
 };
 
 export const emptyVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {

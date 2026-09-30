@@ -24,7 +24,7 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getTilleggsopplysninger } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import {
   type TilleggsopplysningerFormData,
   tilleggsopplysningerSchema,
@@ -43,7 +43,7 @@ function TilleggsopplysningerStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getTilleggsopplysninger(skjema);
   const navigate = useNavigate();
   const translateError = useTranslateError();

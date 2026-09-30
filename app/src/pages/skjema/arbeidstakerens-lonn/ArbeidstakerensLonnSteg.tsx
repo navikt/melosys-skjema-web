@@ -27,7 +27,7 @@ import {
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidstakerensLonn } from "../stegDataGetters.ts";
-import { STEG_REKKEFOLGE } from "../stegRekkefølge.ts";
+import { getStegRekkefolge } from "../stegRekkefølge.ts";
 import { arbeidstakerensLonnSchema } from "./arbeidstakerensLonnStegSchema.ts";
 
 type ArbeidstakerensLonnFormData = z.infer<typeof arbeidstakerensLonnSchema>;
@@ -37,7 +37,7 @@ function ArbeidstakerensLonnStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidstakerensLonn(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();

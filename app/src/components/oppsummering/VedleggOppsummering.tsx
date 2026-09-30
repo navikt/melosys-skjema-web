@@ -7,33 +7,35 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
+import { formaterVerdi } from "~/components/oppsummering/formaterVerdi.ts";
 import {
   hentVedlegg,
   VedleggDto,
   vedleggInnholdUrl,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import type { SkjemaDefinisjonDto } from "~/types/melosysSkjemaTypes.ts";
 
 interface VedleggOppsummeringProperties {
   skjemaId: string;
+  definisjon: SkjemaDefinisjonDto;
   harAnnenDokumentasjon?: boolean;
   editHref?: string;
 }
 
 export function VedleggOppsummering({
   skjemaId,
+  definisjon,
   harAnnenDokumentasjon,
   editHref,
 }: VedleggOppsummeringProperties) {
-  const { t } = useTranslation();
-  const { getFelt } = useSkjemaDefinisjon();
+  const { t, i18n } = useTranslation();
   const [vedlegg, setVedlegg] = useState<VedleggDto[]>([]);
   const [hentVedleggFeil, setHentVedleggFeil] = useState(false);
 
-  const harAnnenDokumentasjonFelt = getFelt(
-    "vedleggArbeidstaker",
-    "harAnnenDokumentasjon",
-  );
+  // Definisjonen kommer fra kalleren og kan være en eldre versjon, så feltet
+  // slås opp i runtime. Mangler det, utelates svarraden og vedleggene vises.
+  const harAnnenDokumentasjonFelt =
+    definisjon.seksjoner.vedleggArbeidstaker?.felter.harAnnenDokumentasjon;
 
   useEffect(() => {
     // Eksplisitt Nei skjuler vedlegg. Ja eller udefinert (legacy-skjemaer fra
@@ -59,11 +61,14 @@ export function VedleggOppsummering({
   }, [skjemaId, harAnnenDokumentasjon]);
 
   const svarLabel =
-    harAnnenDokumentasjon === undefined
-      ? undefined
-      : harAnnenDokumentasjon
-        ? harAnnenDokumentasjonFelt.jaLabel
-        : harAnnenDokumentasjonFelt.neiLabel;
+    harAnnenDokumentasjonFelt && harAnnenDokumentasjon !== undefined
+      ? formaterVerdi(
+          harAnnenDokumentasjonFelt,
+          harAnnenDokumentasjon,
+          t,
+          i18n.language,
+        )
+      : undefined;
 
   return (
     <FormSummary className="mt-8">
@@ -80,7 +85,7 @@ export function VedleggOppsummering({
             </Alert>
           </FormSummary.Answer>
         )}
-        {svarLabel !== undefined && (
+        {svarLabel !== undefined && harAnnenDokumentasjonFelt && (
           <FormSummary.Answer>
             <FormSummary.Label>
               {harAnnenDokumentasjonFelt.label}

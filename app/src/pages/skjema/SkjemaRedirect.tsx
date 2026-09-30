@@ -1,10 +1,13 @@
-import { Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
+import { Alert, Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { getSkjemaQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { STEG_REKKEFOLGE } from "~/pages/skjema/stegRekkefølge.ts";
+import {
+  FeilSkjemaVersjonError,
+  getSkjemaQuery,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 
 interface SkjemaRedirectProperties {
   id: string;
@@ -23,11 +26,15 @@ export function SkjemaRedirect({ id }: SkjemaRedirectProperties) {
     );
   }
 
+  if (error instanceof FeilSkjemaVersjonError) {
+    return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
+  }
+
   if (error || !skjema) {
     return <ErrorMessage>{t("felles.feil")}</ErrorMessage>;
   }
 
-  const stegRekkefolge = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
+  const stegRekkefolge = getStegRekkefolge(skjema);
 
   return <Navigate params={{ id }} to={stegRekkefolge[0]!.route} />;
 }
