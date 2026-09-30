@@ -291,6 +291,10 @@ export const en = {
         "Description of employment relationship is required",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "You must answer whether the employee will work for the company in Norway after the posting period",
+      registrertSomOffentligVirksomhet:
+        "Information has been retrieved from the Central Coordinating Register for Legal Entities. {{virksomhetsnavn}} is registered as a <lookup>public sector organisation</lookup>. If this is incorrect, you must contact the Brønnøysund Register Centre.",
+      offentligVirksomhetForklaring:
+        "Public sector organisations are government bodies and their subordinate agencies, for example ministries and universities.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",

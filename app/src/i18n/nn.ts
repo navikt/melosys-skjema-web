@@ -284,6 +284,10 @@ export const nn = {
         "Skildring av tilsetjingsforhold er påkravd",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "Du må svare på om arbeidstakaren vil arbeide for verksemda i Noreg etter oppdraget",
+      registrertSomOffentligVirksomhet:
+        "Informasjon er henta frå Einingsregisteret. {{virksomhetsnavn}} er registrert som <lookup>offentleg verksemd</lookup>. Dersom dette er feil, må du kontakte Brønnøysundregistra.",
+      offentligVirksomhetForklaring:
+        "Offentlege verksemder er statsorgan og underliggjande verksemder, til dømes departement og universitet.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utsendingsperiode og land",
