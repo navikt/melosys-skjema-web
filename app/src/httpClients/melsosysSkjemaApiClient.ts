@@ -265,11 +265,9 @@ export async function sendInnSkjema(
     },
   );
 
-  if (!response.ok) {
-    return kastApiFeil(response, skjemaId, "Kunne ikke sende inn skjemaet");
-  }
-
-  return response.json();
+  return response.ok
+    ? response.json()
+    : kastApiFeil(response, skjemaId, "Kunne ikke sende inn skjemaet");
 }
 
 export async function fetchInnsendtKvittering(
@@ -667,16 +665,9 @@ export async function lastOppVedlegg(
     body: formData,
   });
 
-  if (!response.ok) {
-    return kastApiFeil(
-      response,
-      skjemaId,
-      "Kunne ikke laste opp vedlegg",
-      true,
-    );
-  }
-
-  return response.json();
+  return response.ok
+    ? response.json()
+    : kastApiFeil(response, skjemaId, "Kunne ikke laste opp vedlegg", true);
 }
 
 export async function hentVedlegg(skjemaId: string): Promise<VedleggDto[]> {
