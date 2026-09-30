@@ -34,7 +34,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-hook-form": "7.88.0",
-    "react-i18next": "17.0.14",
+    "react-i18next": "17.0.15",
     "tailwindcss": "^4.3.3",
     "zod": "4.6.5"
   },
