@@ -5,3 +5,8 @@
 hr {
     color: var(--a-gray-300);
 }
+
+/* Aksel Lookup bruker samme ord som lenketekst og tittel, men tittelen skal ha stor forbokstav */
+.aksel-lookup__title::first-letter {
+    text-transform: uppercase;
+}
