@@ -149,4 +149,52 @@ test.describe("Utenlandsoppdraget", () => {
     );
     await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
   });
+
+  test("privat arbeidsgiver - viser ikke registeropplysning om offentlig virksomhet", async ({
+    page,
+  }) => {
+    const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    await utenlandsoppdragetStegPage.goto();
+    await utenlandsoppdragetStegPage.assertIsVisible();
+    await utenlandsoppdragetStegPage.assertRegistrertSomOffentligVirksomhetIsNotVisible();
+  });
+});
+
+test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
+  const offentligSkjema = {
+    ...testArbeidsgiverSkjema,
+    metadata: {
+      ...testArbeidsgiverSkjema.metadata,
+      erOffentligArbeidsgiver: true,
+    },
+  };
+
+  test.beforeEach(async ({ page }) => {
+    await setupApiMocksForArbeidsgiver(
+      page,
+      offentligSkjema,
+      [testOrganization],
+      testUserInfo,
+    );
+  });
+
+  test("viser registeropplysning med virksomhetsnavn og forklaring på offentlig virksomhet", async ({
+    page,
+  }) => {
+    const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
+      page,
+      offentligSkjema,
+    );
+
+    await utenlandsoppdragetStegPage.goto();
+    await utenlandsoppdragetStegPage.assertIsVisible();
+    await utenlandsoppdragetStegPage.assertRegistrertSomOffentligVirksomhetIsVisible(
+      offentligSkjema.metadata.arbeidsgiverNavn,
+    );
+    await utenlandsoppdragetStegPage.openOffentligVirksomhetLookupAndAssertForklaring();
+  });
 });

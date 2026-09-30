@@ -30,6 +30,7 @@ import { useTranslateError } from "~/utils/translation.ts";
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtenlandsoppdraget } from "../stegDataGetters.ts";
 import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { RegistrertSomOffentligVirksomhet } from "./RegistrertSomOffentligVirksomhet.tsx";
 import { utenlandsoppdragSchema } from "./utenlandsoppdragetStegSchema.ts";
 
 // Date range constants for assignment period selection
@@ -158,6 +159,13 @@ function UtenlandsoppdragetStegContent({
             skjema,
           }}
           isSubmitError={registerUtenlandsoppdragMutation.isError}
+          infoOverTittel={
+            skjema.metadata.erOffentligArbeidsgiver === true && (
+              <RegistrertSomOffentligVirksomhet
+                virksomhetsnavn={skjema.metadata.arbeidsgiverNavn}
+              />
+            )
+          }
           nesteKnapp={
             <NesteStegKnapp
               loading={registerUtenlandsoppdragMutation.isPending}

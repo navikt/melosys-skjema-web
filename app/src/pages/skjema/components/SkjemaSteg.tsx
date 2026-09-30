@@ -35,6 +35,7 @@ interface SkjemaStegProperties {
   config: StegConfig;
   nesteKnapp: ReactNode;
   children?: ReactNode;
+  infoOverTittel?: ReactNode;
   isSubmitError?: boolean;
 }
 
@@ -42,6 +43,7 @@ export function SkjemaSteg({
   config,
   nesteKnapp,
   children,
+  infoOverTittel,
   isSubmitError,
 }: SkjemaStegProperties) {
   const { i18n, t } = useTranslation();
@@ -66,6 +68,7 @@ export function SkjemaSteg({
         className="mt-4"
         stegRekkefolge={stegRekkefolge}
       />
+      {infoOverTittel}
       <Heading className="mt-8" level="1" size="large">
         {stepInfo?.icon ? (
           <HStack as="span" align="center" gap="space-16">

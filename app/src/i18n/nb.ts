@@ -282,6 +282,10 @@ export const nb = {
         "Beskrivelse av ansettelsesforhold er påkrevd",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
+      registrertSomOffentligVirksomhet:
+        "Informasjon er hentet fra Enhetsregisteret. {{virksomhetsnavn}} er registrert som <lookup>offentlig virksomhet</lookup>. Hvis dette er feil, må du kontakte Brønnøysundregistrene.",
+      offentligVirksomhetForklaring:
+        "Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utsendingsperiode og land",
