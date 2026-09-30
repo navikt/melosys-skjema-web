@@ -241,7 +241,7 @@ export const en = {
       duMaVelgeHvilketLandArbeidetSkalUtforesI:
         "You must select which country the work will be performed in",
       preutfyltAvArbeidsgiver:
-        "Your employer has stated {{land}} and the period {{fraDato}}–{{tilDato}} in their part of the application. Check that the information is correct, and change it if anything is wrong.",
+        "Your employer, {{arbeidsgiverNavn}}, has confirmed that you will be working in {{land}} during the period {{fraDato}}–{{tilDato}}. You must check that the information is correct, and make changes if anything is wrong.",
       endreLandEllerPeriode: "Edit country or period",
       arbeidsgiverOppgaLand: "Your employer stated {{land}}",
       arbeidsgiverOppgaPeriode:
@@ -294,12 +294,12 @@ export const en = {
       ettersendelseLenkeUrl:
         "https://www.nav.no/fyllut-ettersending/en/nav020807/innsendingsvalg",
       motpartCtaTittel:
-        "{{arbeidsgiverNavn}} has submitted their part of the application for an A1 Certificate for Posted Workers in the EEA or Switzerland",
+        "{{arbeidsgiverNavn}} has submitted a confirmation that you are posted to another EEA country or Switzerland",
       motpartCtaBeskrivelse:
-        "They have stated that you will be working in {{land}} during the period {{fraDato}}–{{tilDato}}. For Nav to process the application, you must complete your part.",
+        "They have stated that you will be working in {{land}} during the period {{fraDato}}–{{tilDato}}. You can apply for an A1 Certificate for Posted Workers in the EEA or Switzerland by completing your part.",
       motpartCtaUtlandetFallback: "another country",
       motpartCtaBeskrivelseUtenPeriode:
-        "For Nav to process the application, you must complete your part.",
+        "You can apply for an A1 Certificate for Posted Workers in the EEA or Switzerland by completing your part.",
       motpartCtaKnapp: "Complete your part",
       motpartCtaFeil:
         "Could not retrieve the information. Please try again later.",

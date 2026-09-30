@@ -140,6 +140,7 @@ function UtsendingsperiodeOgLandStegContent({
           {motpartensVerdier && (
             <Alert className="mt-4" variant="info">
               {t("utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver", {
+                arbeidsgiverNavn: skjema.metadata.arbeidsgiverNavn,
                 land: t(`land.${motpartensVerdier.utsendelseLand}`),
                 fraDato: formatDato(
                   motpartensVerdier.utsendelsePeriode.fraDato,

@@ -56,6 +56,10 @@ export class UtsendingsperiodeOgLandStegPage {
     tilDato: string,
   ) {
     return translations.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver
+      .replaceAll(
+        "{{arbeidsgiverNavn}}",
+        () => this.skjema.metadata.arbeidsgiverNavn,
+      )
       .replaceAll("{{land}}", () => land)
       .replaceAll("{{fraDato}}", () => fraDato)
       .replaceAll("{{tilDato}}", () => tilDato);
@@ -91,9 +95,9 @@ export class UtsendingsperiodeOgLandStegPage {
     await expect(
       this.page.getByText(
         translations.utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver.split(
-          "{{land}}",
+          "{{arbeidsgiverNavn}}",
           1,
-        )[0] ?? "Arbeidsgiveren din har oppgitt",
+        )[0] ?? "Arbeidsgiveren din, ",
       ),
     ).not.toBeVisible();
   }
