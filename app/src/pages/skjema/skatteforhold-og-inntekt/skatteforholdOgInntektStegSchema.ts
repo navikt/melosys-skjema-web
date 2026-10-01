@@ -40,14 +40,15 @@ function harUtenlandsk(data: SchemaData): boolean {
 }
 
 function skalValidereLoennsinntekt(data: SchemaData): boolean {
-  return !data.hvilkeTyperInntektHarDu?.includes("LOENN") ||
-    (!harNorsk(data) && !harUtenlandsk(data))
-    ? false
-    : skalInkludereLoennsinntekt(
-        data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
-        harNorsk(data),
-        harUtenlandsk(data),
-      );
+  return (
+    !!data.hvilkeTyperInntektHarDu?.includes("LOENN") &&
+    (harNorsk(data) || harUtenlandsk(data)) &&
+    skalInkludereLoennsinntekt(
+      data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
+      harNorsk(data),
+      harUtenlandsk(data),
+    )
+  );
 }
 
 function skalValidereEgenVirksomhetInntekt(data: SchemaData): boolean {
