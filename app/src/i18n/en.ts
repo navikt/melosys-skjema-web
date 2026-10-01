@@ -218,6 +218,28 @@ export const en = {
         "You must answer whether the employer is a staffing or temporary work agency",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
         "You must answer whether the employer maintains regular business operations in Norway",
+      opplysningerOmForetaketsSamledeVirksomhet:
+        "Information about the company's overall business",
+      registrertMedFaerreEnnAnsatte:
+        "Information has been retrieved from the Brønnøysund Register Centre. {{virksomhetsnavn}} is registered with fewer than {{ansattgrense}} employees. If this is incorrect, please contact the Brønnøysund Register Centre.",
+      registrertMedAnsatteEllerFlere:
+        "Information has been retrieved from the Brønnøysund Register Centre. {{virksomhetsnavn}} is registered with {{ansattgrense}} or more employees. If this is incorrect, please contact the Brønnøysund Register Centre.",
+      duMaOppgiAntallAdministrativtAnsatte:
+        "You must state the number of administrative employees",
+      duMaOppgiAntallUtsendteArbeidstakere:
+        "You must state the number of posted workers",
+      duMaOppgiAndelAnsatteRekruttertINorge:
+        "You must state the share of employees recruited in Norway",
+      duMaOppgiAndelOmsetningINorge:
+        "You must state the share of turnover earned in Norway",
+      duMaOppgiAndelOppdragUtfortINorge:
+        "You must state the share of assignments performed in Norway",
+      duMaOppgiAndelOppdragskontrakterInngattINorge:
+        "You must state the share of assignment contracts concluded in Norway",
+      antallMaVaereEtHeltallSomErNullEllerMer:
+        "You must enter a whole number that is 0 or higher",
+      andelMaVaereEtHeltallMellom0Og100:
+        "You must enter a whole number between 0 and 100",
     },
     utenlandsoppdragetSteg: {
       tittel: "Posting Period and Country",

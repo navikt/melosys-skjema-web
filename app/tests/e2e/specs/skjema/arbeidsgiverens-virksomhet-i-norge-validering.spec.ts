@@ -32,4 +32,31 @@ test.describe("Arbeidsgiverens virksomhet i Norge - validering", () => {
     await stegPage.assertVanligDriftErPakrevdIsVisible();
     await stegPage.assertStillOnStep();
   });
+
+  test("bemanningsbyrå må fylle ut opplysninger om samlet virksomhet", async () => {
+    await stegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
+    await stegPage.vanligDriftRadioGroup.JA.click();
+    await stegPage.lagreOgFortsett();
+
+    await stegPage.assertSamletVirksomhetPakrevdIsVisible();
+    await stegPage.assertStillOnStep();
+  });
+
+  test("viser feilmelding for ugyldig antall og andel", async () => {
+    await stegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
+    await stegPage.vanligDriftRadioGroup.JA.click();
+    await stegPage.fyllSamletVirksomhet({
+      antallAdministrativtAnsatte: 3,
+      andelAnsatteRekruttertINorge: 50,
+      andelOmsetningINorge: 50,
+      andelOppdragUtfortINorge: 50,
+      andelOppdragskontrakterInngattINorge: 101,
+    });
+    await stegPage.fyllFelt("antallUtsendteArbeidstakere", "2,5");
+    await stegPage.lagreOgFortsett();
+
+    await stegPage.assertAntallMaVaereHeltallIsVisible();
+    await stegPage.assertAndelMaVaereMellom0Og100IsVisible();
+    await stegPage.assertStillOnStep();
+  });
 });

@@ -212,6 +212,28 @@ export const nn = {
         "Du må svare på om arbeidsgivaren er eit bemannings- eller vikarbyrå",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
         "Du må svare på om arbeidsgivaren held oppe vanleg drift i Noreg",
+      opplysningerOmForetaketsSamledeVirksomhet:
+        "Opplysningar om den samla verksemda til føretaket",
+      registrertMedFaerreEnnAnsatte:
+        "Informasjon er henta frå Einingsregisteret. {{virksomhetsnavn}} er registrert med færre enn {{ansattgrense}} tilsette. Dersom dette er feil, må du kontakte Brønnøysundregistra.",
+      registrertMedAnsatteEllerFlere:
+        "Informasjon er henta frå Einingsregisteret. {{virksomhetsnavn}} er registrert med {{ansattgrense}} eller fleire tilsette. Dersom dette er feil, må du kontakte Brønnøysundregistra.",
+      duMaOppgiAntallAdministrativtAnsatte:
+        "Du må oppgi talet på administrativt tilsette",
+      duMaOppgiAntallUtsendteArbeidstakere:
+        "Du må oppgi talet på utsende arbeidstakarar",
+      duMaOppgiAndelAnsatteRekruttertINorge:
+        "Du må oppgi delen tilsette rekrutterte i Noreg",
+      duMaOppgiAndelOmsetningINorge:
+        "Du må oppgi delen omsetnad opptent i Noreg",
+      duMaOppgiAndelOppdragUtfortINorge:
+        "Du må oppgi delen oppdrag utførte i Noreg",
+      duMaOppgiAndelOppdragskontrakterInngattINorge:
+        "Du må oppgi delen oppdragskontraktar inngåtte i Noreg",
+      antallMaVaereEtHeltallSomErNullEllerMer:
+        "Du må oppgi eit heilt tal som er 0 eller høgare",
+      andelMaVaereEtHeltallMellom0Og100:
+        "Du må oppgi eit heilt tal mellom 0 og 100",
     },
     utenlandsoppdragetSteg: {
       tittel: "Utsendingsperiode og land",

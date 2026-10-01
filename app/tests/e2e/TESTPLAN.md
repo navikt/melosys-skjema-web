@@ -118,9 +118,12 @@ test.describe('StegNavn', () => {
 
 | Test                                                          |
 | ------------------------------------------------------------- |
-| Offentlig virksomhet (Ja) — ingen oppfølgingsspørsmål         |
-| Privat virksomhet + bemanningsbyrå                            |
-| Privat virksomhet + ikke bemanningsbyrå                       |
+| Privat virksomhet (20+ ansatte) + ikke bemanningsbyrå         |
+| Privat virksomhet + bemanningsbyrå — samlet virksomhet        |
+| Færre enn 20 ansatte — infoboks og samlet virksomhet          |
+| Lagrede opplysninger om samlet virksomhet vises               |
+| Skjulte felter for samlet virksomhet sendes ikke              |
+| Offentlig virksomhet kan ikke åpne steget direkte             |
 
 ### `utenlandsoppdraget.spec.ts`
 

@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Heading, HGrid, TextField } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { useMemo } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
@@ -21,15 +24,28 @@ import {
   Skjemadel,
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
 import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+import {
+  ANDELFELTER,
+  ANTALLFELTER,
+  lagArbeidsgiverensVirksomhetSchema,
+  skalOppgiSamletVirksomhet,
+  tallTilFeltverdi,
+} from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+import { ProsentFelt } from "./ProsentFelt.tsx";
+import { RegistrertAntallAnsatte } from "./RegistrertAntallAnsatte.tsx";
 
-type ArbeidsgiverensVirksomhetFormData = z.infer<
-  typeof arbeidsgiverensVirksomhetSchema
+type ArbeidsgiverensVirksomhetSchema = ReturnType<
+  typeof lagArbeidsgiverensVirksomhetSchema
 >;
+type ArbeidsgiverensVirksomhetFormInput =
+  z.input<ArbeidsgiverensVirksomhetSchema>;
+type ArbeidsgiverensVirksomhetFormData =
+  z.infer<ArbeidsgiverensVirksomhetSchema>;
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
@@ -39,8 +55,12 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidsgiverensVirksomhetINorge(skjema);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
+  const { antallAnsatte, arbeidsgiverNavn, erOffentligArbeidsgiver } =
+    skjema.metadata;
   const erBemanningFelt = getFelt(
     "arbeidsgiverensVirksomhetINorge",
     "erArbeidsgiverenBemanningsEllerVikarbyraa",
@@ -50,12 +70,49 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     "opprettholderArbeidsgiverenVanligDrift",
   );
 
-  const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
-    resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
-    ...(stegData && { defaultValues: stegData }),
+  const schema = useMemo(
+    () => lagArbeidsgiverensVirksomhetSchema(antallAnsatte),
+    [antallAnsatte],
+  );
+
+  const formMethods = useForm<
+    ArbeidsgiverensVirksomhetFormInput,
+    unknown,
+    ArbeidsgiverensVirksomhetFormData
+  >({
+    resolver: zodResolver(schema),
+    ...(stegData && {
+      defaultValues: {
+        erArbeidsgiverenBemanningsEllerVikarbyraa:
+          stegData.erArbeidsgiverenBemanningsEllerVikarbyraa,
+        opprettholderArbeidsgiverenVanligDrift:
+          stegData.opprettholderArbeidsgiverenVanligDrift,
+        ...Object.fromEntries(
+          [...ANTALLFELTER, ...ANDELFELTER].map((felt) => [
+            felt,
+            tallTilFeltverdi(stegData[felt]),
+          ]),
+        ),
+      },
+    }),
   });
 
-  const { handleSubmit } = formMethods;
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = formMethods;
+
+  const erBemanningsEllerVikarbyraa = useWatch({
+    control,
+    name: "erArbeidsgiverenBemanningsEllerVikarbyraa",
+  });
+
+  const visSamletVirksomhet = skalOppgiSamletVirksomhet(
+    antallAnsatte,
+    erBemanningsEllerVikarbyraa,
+  );
 
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
@@ -88,6 +145,15 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             stepKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
             skjema,
           }}
+          infoOverTittel={
+            erOffentligArbeidsgiver === false &&
+            antallAnsatte !== undefined && (
+              <RegistrertAntallAnsatte
+                antallAnsatte={antallAnsatte}
+                virksomhetsnavn={arbeidsgiverNavn}
+              />
+            )
+          }
           isSubmitError={registerVirksomhetMutation.isError}
           nesteKnapp={
             <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />
@@ -105,6 +171,46 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             formFieldName="opprettholderArbeidsgiverenVanligDrift"
             legend={opprettholderDriftFelt.label}
           />
+
+          {visSamletVirksomhet && (
+            <section aria-labelledby="samlet-virksomhet-tittel">
+              <Heading
+                className="mt-8"
+                id="samlet-virksomhet-tittel"
+                level="2"
+                size="small"
+              >
+                {t(
+                  "arbeidsgiverensVirksomhetINorgeSteg.opplysningerOmForetaketsSamledeVirksomhet",
+                )}
+              </Heading>
+              <HGrid className="mt-4" columns={{ xs: 1, md: 2 }} gap="space-24">
+                {ANTALLFELTER.map((felt) => (
+                  <TextField
+                    error={translateError(errors[felt]?.message)}
+                    htmlSize={10}
+                    inputMode="numeric"
+                    key={felt}
+                    label={
+                      getFelt("arbeidsgiverensVirksomhetINorge", felt).label
+                    }
+                    maxLength={9}
+                    {...register(felt)}
+                  />
+                ))}
+                {ANDELFELTER.map((felt) => (
+                  <ProsentFelt
+                    error={translateError(errors[felt]?.message)}
+                    key={felt}
+                    label={
+                      getFelt("arbeidsgiverensVirksomhetINorge", felt).label
+                    }
+                    {...register(felt)}
+                  />
+                ))}
+              </HGrid>
+            </section>
+          )}
         </SkjemaSteg>
       </form>
     </FormProvider>

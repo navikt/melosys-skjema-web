@@ -8,7 +8,7 @@
 
 const SKJEMA_DEFINISJON_A1_NB = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "2",
+  versjon: "3",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utenlandsoppdraget",
@@ -283,6 +283,40 @@ const SKJEMA_DEFINISJON_A1_NB = {
             "Med dette mener vi at arbeidsgiveren fortsatt har aktivitet og ansatte som jobber i Norge i perioden.",
           jaLabel: "Ja",
           neiLabel: "Nei",
+        },
+        antallAdministrativtAnsatte: {
+          type: "TEXT",
+          label: "Antall administrativt ansatte",
+          pakrevd: false,
+        },
+        antallUtsendteArbeidstakere: {
+          type: "TEXT",
+          label: "Antall utsendte arbeidstakere",
+          pakrevd: false,
+        },
+        andelAnsatteRekruttertINorge: {
+          type: "TEXT",
+          label: "Andel ansatte rekruttert i Norge",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOmsetningINorge: {
+          type: "TEXT",
+          label: "Andel omsetning opptjent i Norge",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOppdragUtfortINorge: {
+          type: "TEXT",
+          label: "Andel oppdrag utført i Norge",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOppdragskontrakterInngattINorge: {
+          type: "TEXT",
+          label: "Andel oppdragskontrakter inngått i Norge",
+          pakrevd: false,
+          format: "PROSENT",
         },
       },
     },
@@ -683,7 +717,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
 
 const SKJEMA_DEFINISJON_A1_NN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "2",
+  versjon: "3",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utsendingsperiode og land",
@@ -960,6 +994,40 @@ const SKJEMA_DEFINISJON_A1_NN = {
             "Med dette meiner vi at arbeidsgivaren framleis har aktivitet og tilsette som jobbar i Noreg i perioden.",
           jaLabel: "Ja",
           neiLabel: "Nei",
+        },
+        antallAdministrativtAnsatte: {
+          type: "TEXT",
+          label: "Tal på administrativt tilsette",
+          pakrevd: false,
+        },
+        antallUtsendteArbeidstakere: {
+          type: "TEXT",
+          label: "Tal på utsende arbeidstakarar",
+          pakrevd: false,
+        },
+        andelAnsatteRekruttertINorge: {
+          type: "TEXT",
+          label: "Del tilsette rekrutterte i Noreg",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOmsetningINorge: {
+          type: "TEXT",
+          label: "Del omsetnad opptent i Noreg",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOppdragUtfortINorge: {
+          type: "TEXT",
+          label: "Del oppdrag utførte i Noreg",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOppdragskontrakterInngattINorge: {
+          type: "TEXT",
+          label: "Del oppdragskontraktar inngåtte i Noreg",
+          pakrevd: false,
+          format: "PROSENT",
         },
       },
     },
@@ -1363,7 +1431,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
 
 const SKJEMA_DEFINISJON_A1_EN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "2",
+  versjon: "3",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Posting Period and Country",
@@ -1643,6 +1711,40 @@ const SKJEMA_DEFINISJON_A1_EN = {
             "By this we mean that the employer still has activity and employees working in Norway during the period.",
           jaLabel: "Yes",
           neiLabel: "No",
+        },
+        antallAdministrativtAnsatte: {
+          type: "TEXT",
+          label: "Number of administrative employees",
+          pakrevd: false,
+        },
+        antallUtsendteArbeidstakere: {
+          type: "TEXT",
+          label: "Number of posted workers",
+          pakrevd: false,
+        },
+        andelAnsatteRekruttertINorge: {
+          type: "TEXT",
+          label: "Share of employees recruited in Norway",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOmsetningINorge: {
+          type: "TEXT",
+          label: "Share of turnover earned in Norway",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOppdragUtfortINorge: {
+          type: "TEXT",
+          label: "Share of assignments performed in Norway",
+          pakrevd: false,
+          format: "PROSENT",
+        },
+        andelOppdragskontrakterInngattINorge: {
+          type: "TEXT",
+          label: "Share of assignment contracts concluded in Norway",
+          pakrevd: false,
+          format: "PROSENT",
         },
       },
     },

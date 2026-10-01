@@ -109,8 +109,14 @@ test.describe("Oppsummering", () => {
     const arbeidsgiverensVirksomhetINorgeData: ArbeidsgiverensVirksomhetINorgeDto =
       {
         erArbeidsgiverenOffentligVirksomhet: false,
-        erArbeidsgiverenBemanningsEllerVikarbyraa: false,
+        erArbeidsgiverenBemanningsEllerVikarbyraa: true,
         opprettholderArbeidsgiverenVanligDrift: true,
+        antallAdministrativtAnsatte: 3,
+        antallUtsendteArbeidstakere: 2,
+        andelAnsatteRekruttertINorge: 80,
+        andelOmsetningINorge: 60,
+        andelOppdragUtfortINorge: 0,
+        andelOppdragskontrakterInngattINorge: 100,
       };
 
     const utenlandsoppdragetData: UtenlandsoppdragetDto = {
