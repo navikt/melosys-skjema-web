@@ -4,7 +4,11 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { getVentendeMotpartSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
-import { byggMotpartSoknad, huskNySoknad } from "~/pages/skjema/nySoknad.ts";
+import {
+  byggMotpartSoknad,
+  huskNySoknad,
+  skjemaStartSearch,
+} from "~/pages/skjema/nySoknad.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 
 const searchSchema = z.object({
@@ -39,8 +43,13 @@ export const Route = createFileRoute("/fyll-ut-din-del")({
       });
     }
 
-    huskNySoknad(await byggMotpartSoknad(queryClient, soknad));
-    throw redirect({ to: "/skjema/start", replace: true });
+    const nySoknad = await byggMotpartSoknad(queryClient, soknad);
+    huskNySoknad(nySoknad);
+    throw redirect({
+      to: "/skjema/start",
+      search: skjemaStartSearch(nySoknad),
+      replace: true,
+    });
   },
   pendingComponent: FyllUtDinDelLaster,
   errorComponent: FyllUtDinDelFeil,

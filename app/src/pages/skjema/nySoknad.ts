@@ -9,6 +9,10 @@ import {
   Representasjonstype,
   type VentendeMotpartSoknadDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import {
+  type Representasjonskontekst,
+  tilKontekstType,
+} from "~/types/representasjon.ts";
 
 /**
 Opplysningene som trengs for å opprette en søknad, før brukeren har bekreftet.
@@ -23,11 +27,25 @@ export interface NySoknad {
 
 // Opplysningene (bl.a. fnr) holdes bare i minnet: ikke i URL-en, som ofte logges,
 // og ikke i nettleserhistorikken, der de ville overlevd utlogging og oppfrisking.
-// Oppfriskes introsiden, er de borte og brukeren sendes til forsiden.
+// Oppfriskes introsiden, er de borte. Representasjonskonteksten (ingen persondata)
+// ligger derfor i URL-en, så brukeren kan sendes tilbake til riktig oversikt.
 const minne: { nySoknad?: NySoknad } = {};
 
 export function huskNySoknad(nySoknad: NySoknad) {
   minne.nySoknad = nySoknad;
+}
+
+/**
+Representasjonskonteksten søknaden ble startet fra, til URL-en for introsiden.
+*/
+export function skjemaStartSearch({
+  request,
+}: NySoknad): Representasjonskontekst {
+  return {
+    representasjonstype: tilKontekstType(request.representasjonstype),
+    radgiverOrgnr: request.radgiverfirma?.orgnr,
+    arbeidsgiverOrgnr: request.arbeidsgiver.orgnr,
+  };
 }
 
 /**
@@ -37,7 +55,10 @@ export function useGaTilSkjemaStart() {
   const navigate = useNavigate();
   return (nySoknad: NySoknad) => {
     huskNySoknad(nySoknad);
-    return navigate({ to: "/skjema/start" });
+    return navigate({
+      to: "/skjema/start",
+      search: skjemaStartSearch(nySoknad),
+    });
   };
 }
 

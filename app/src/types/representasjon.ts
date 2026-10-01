@@ -33,7 +33,7 @@ export function toRepresentasjonskontekst(
   return { representasjonstype, radgiverOrgnr };
 }
 
-function tilKontekstType(
+export function tilKontekstType(
   representasjonstype: Representasjonstype,
 ): Representasjonskontekst["representasjonstype"] {
   switch (representasjonstype) {

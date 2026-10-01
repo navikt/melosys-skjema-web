@@ -31,7 +31,7 @@ export class SkjemaStartPage {
   }
 
   async assertIsVisible() {
-    await expect(this.page).toHaveURL("/skjema/start");
+    await expect(this.page).toHaveURL(/\/skjema\/start(\?|$)/);
     await expect(this.bekreftelseCheckbox).toBeVisible();
   }
 
@@ -68,6 +68,6 @@ export class SkjemaStartPage {
 
   async assertManglerBekreftelseVisible() {
     await expect(this.page.getByText(tekster.manglerBekreftelse)).toBeVisible();
-    await expect(this.page).toHaveURL("/skjema/start");
+    await expect(this.page).toHaveURL(/\/skjema\/start(\?|$)/);
   }
 }

@@ -100,7 +100,7 @@ test.describe("Skjema — introside med bekreftelse", () => {
     await startPage.assertInnhold(Representasjonstype.ANNEN_PERSON);
   });
 
-  test("oppfrisking av introsiden glemmer opplysningene (fnr lagres ikke i nettleseren)", async ({
+  test("oppfrisking av introsiden glemmer opplysningene og sender brukeren til oversikten for rollen", async ({
     page,
   }) => {
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
@@ -112,11 +112,21 @@ test.describe("Skjema — introside med bekreftelse", () => {
     await oversiktPage.clickStartSoknad();
     await new SkjemaStartPage(page).assertIsVisible();
 
+    expect(page.url()).not.toContain(testUserInfo.userId);
     expect(
       await page.evaluate(() => JSON.stringify(globalThis.history.state)),
     ).not.toContain(testUserInfo.userId);
     await page.reload();
-    await expect(page).toHaveURL("/representasjon");
+
+    await expect(page).toHaveURL(/\/oversikt\?/);
+    const params = new URL(page.url()).searchParams;
+    expect(params.get("representasjonstype")).toBe(
+      Representasjonstype.DEG_SELV,
+    );
+    expect(params.get("arbeidsgiverOrgnr")).toBe(korrektFormatertOrgnr);
+    await oversiktPage.waitForOrgLookup(
+      testEregOrganisasjon.juridiskEnhet.navn,
+    );
   });
 
   test("feil ved opprettelse beholder opplysningene så brukeren kan prøve igjen", async ({
@@ -153,7 +163,7 @@ test.describe("Skjema — introside med bekreftelse", () => {
     await expect(
       page.getByText(translations.skjemaStart.feilVedOpprettelse),
     ).toBeVisible();
-    await expect(page).toHaveURL("/skjema/start");
+    await expect(page).toHaveURL(/\/skjema\/start(\?|$)/);
 
     await startPage.startSoknad();
     await expect(page).toHaveURL(

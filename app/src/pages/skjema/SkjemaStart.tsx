@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Navigate, useNavigate } from "@tanstack/react-router";
+import { Navigate, useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -32,10 +32,20 @@ import { Representasjonstype, Skjemadel } from "~/types/melosysSkjemaTypes.ts";
  */
 export function SkjemaStart() {
   const [nySoknad] = useState(hentNySoknad);
+  const { representasjonstype, ...kontekst } = useSearch({
+    from: "/skjema/start",
+  });
 
-  // Uten opplysninger (direkte lenke, ny fane, oppfrisking) finnes det ingenting å starte.
-  return nySoknad ? (
-    <SkjemaStartInnhold nySoknad={nySoknad} />
+  if (nySoknad) return <SkjemaStartInnhold nySoknad={nySoknad} />;
+
+  // Opplysningene er borte etter oppfrisking: tilbake til oversikten for rollen.
+  // Uten kontekst (direkte lenke, ny fane) finnes det ingenting å starte.
+  return representasjonstype ? (
+    <Navigate
+      replace
+      search={{ ...kontekst, representasjonstype }}
+      to="/oversikt"
+    />
   ) : (
     <Navigate replace to="/" />
   );
