@@ -29,6 +29,7 @@ import {
   testVerifiserPersonResponse,
 } from "../fixtures/test-data";
 import { OversiktPage } from "../pages/oversikt/oversikt.page";
+import { SkjemaStartPage } from "../pages/skjema/skjema-start.page";
 import { translations } from "../utils/translations";
 
 test.describe("Oversikt", () => {
@@ -317,10 +318,12 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.waitForOrgLookup(
       testEregOrganisasjon.juridiskEnhet.navn,
     );
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload
@@ -375,10 +378,18 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
       testArbeidstakerUtenFullmakt.etternavn,
     );
     await oversiktPage.waitForPersonVerified(testVerifiserPersonResponse.navn);
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    // Introsiden viser verifisert fullt navn, ikke bare innskrevet etternavn
+    await expect(
+      page.getByText(
+        `${testVerifiserPersonResponse.navn} (${testArbeidstakerUtenFullmakt.fnr})`,
+      ),
+    ).toBeVisible();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — skalFylleUtForArbeidstaker=false means no fullmakt transform
@@ -434,10 +445,12 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.selectArbeidstakerMedFullmakt(
       testPersonMedFullmakt.navn,
     );
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — skalFylleUtForArbeidstaker=true triggers ARBEIDSGIVER_MED_FULLMAKT
@@ -495,10 +508,12 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
       testArbeidstakerUtenFullmakt.etternavn,
     );
     await oversiktPage.waitForPersonVerified(testVerifiserPersonResponse.navn);
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — includes radgiverfirma, no fullmakt transform
@@ -555,10 +570,12 @@ test.describe("Oversikt — Start søknad POST-payload", () => {
     await oversiktPage.selectArbeidstakerMedFullmakt(
       testPersonMedFullmakt.navn,
     );
-    await oversiktPage.checkBekreftelseCheckbox();
 
     // Submit
     await oversiktPage.clickStartSoknad();
+    await new SkjemaStartPage(page).bekreftOgStart(
+      oversiktPage.representasjonstype,
+    );
     const requestBody = await requestBodyPromise;
 
     // Assert POST payload — includes radgiverfirma, fullmakt transform applies

@@ -131,6 +131,7 @@ export function ArbeidstakerVelger({
     setValue("arbeidstaker", {
       fnr: person.fnr,
       etternavn: person.navn,
+      navn: person.navn,
     });
   };
 
@@ -180,6 +181,7 @@ export function ArbeidstakerVelger({
       setValue("arbeidstaker", {
         fnr,
         etternavn: etternavn, // Etternavn fra brukerens input (for backend-validering)
+        navn: response.navn,
       });
     } catch (error: unknown) {
       setVerifisertPerson(undefined);

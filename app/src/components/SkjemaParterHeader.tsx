@@ -22,8 +22,41 @@ function Part({ tittel, navn, id }: PartProperties) {
   );
 }
 
-export function SkjemaParterHeader({ skjemaId }: { skjemaId: string }) {
+interface SkjemaParterProperties {
+  representasjonstype: Representasjonstype;
+  arbeidsgiver: { navn: string; orgnr: string };
+  arbeidstaker: { navn: string; fnr: string };
+}
+
+/**
+Arbeidsgiver og (unntatt for DEG_SELV) arbeidstaker øverst i skjemaet.
+*/
+export function SkjemaParter({
+  representasjonstype,
+  arbeidsgiver,
+  arbeidstaker,
+}: SkjemaParterProperties) {
   const { t } = useTranslation();
+
+  return (
+    <HStack gap="space-24" paddingBlock="space-16" wrap>
+      <Part
+        tittel={t("skjemaParterHeader.arbeidsgiver")}
+        navn={arbeidsgiver.navn}
+        id={arbeidsgiver.orgnr}
+      />
+      {representasjonstype !== Representasjonstype.DEG_SELV && (
+        <Part
+          tittel={t("skjemaParterHeader.arbeidstaker")}
+          navn={arbeidstaker.navn}
+          id={arbeidstaker.fnr}
+        />
+      )}
+    </HStack>
+  );
+}
+
+export function SkjemaParterHeader({ skjemaId }: { skjemaId: string }) {
   const { data: skjema } = useQuery(getSkjemaQuery(skjemaId));
 
   if (!skjema) {
@@ -31,23 +64,14 @@ export function SkjemaParterHeader({ skjemaId }: { skjemaId: string }) {
   }
 
   const { metadata } = skjema;
-  const visArbeidstaker =
-    metadata.representasjonstype !== Representasjonstype.DEG_SELV;
-
   return (
-    <HStack gap="space-24" paddingBlock="space-16" wrap>
-      <Part
-        tittel={t("skjemaParterHeader.arbeidsgiver")}
-        navn={metadata.arbeidsgiverNavn}
-        id={metadata.juridiskEnhetOrgnr}
-      />
-      {visArbeidstaker && (
-        <Part
-          tittel={t("skjemaParterHeader.arbeidstaker")}
-          navn={metadata.arbeidstakerNavn}
-          id={skjema.fnr}
-        />
-      )}
-    </HStack>
+    <SkjemaParter
+      arbeidsgiver={{
+        navn: metadata.arbeidsgiverNavn,
+        orgnr: metadata.juridiskEnhetOrgnr,
+      }}
+      arbeidstaker={{ navn: metadata.arbeidstakerNavn, fnr: skjema.fnr }}
+      representasjonstype={metadata.representasjonstype}
+    />
   );
 }

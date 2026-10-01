@@ -4,8 +4,12 @@ import { useTranslation } from "react-i18next";
 
 import { KontekstVelger } from "~/components/KontekstVelger.tsx";
 import { MaalformVelger } from "~/components/MaalformVelger.tsx";
-import { SkjemaParterHeader } from "~/components/SkjemaParterHeader.tsx";
+import {
+  SkjemaParter,
+  SkjemaParterHeader,
+} from "~/components/SkjemaParterHeader.tsx";
 import { useRepresentasjonskontekst } from "~/hooks/useRepresentasjonskontekst.ts";
+import { hentNySoknad } from "~/pages/skjema/nySoknad.ts";
 
 export function AppHeader() {
   const { t } = useTranslation();
@@ -14,8 +18,23 @@ export function AppHeader() {
   const matchRoute = useMatchRoute();
   const erInnsendt = !!matchRoute({ to: "/skjema/$id/innsendt" });
 
-  return skjemaId && !erInnsendt ? (
-    <SkjemaParterHeader skjemaId={skjemaId} />
+  if (skjemaId && !erInnsendt) {
+    return <SkjemaParterHeader skjemaId={skjemaId} />;
+  }
+
+  const erSkjemaStart = !!matchRoute({ to: "/skjema/start" });
+  const nySoknad = erSkjemaStart ? hentNySoknad() : undefined;
+
+  // Introsiden: utkastet finnes ikke ennå, så partene hentes fra opplysningene i minnet.
+  return nySoknad ? (
+    <SkjemaParter
+      arbeidsgiver={nySoknad.request.arbeidsgiver}
+      arbeidstaker={{
+        navn: nySoknad.arbeidstakerNavn,
+        fnr: nySoknad.request.arbeidstaker.fnr,
+      }}
+      representasjonstype={nySoknad.request.representasjonstype}
+    />
   ) : (
     <HStack align="center" justify="space-between">
       <Heading level="1" size="medium">

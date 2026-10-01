@@ -4,7 +4,7 @@ import {
   interceptOpprettSoknad,
   mockFeatureToggles,
   mockGetEregOrganisasjonMedJuridiskEnhet,
-  mockGetEregOrganisasjonMedJuridiskEnhetPerOrgnr,
+  mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet,
   mockPersonerMedFullmakt,
   mockUserInfo,
   mockVentendeMotpartSoknader,
@@ -16,13 +16,14 @@ import {
   emptyUtkastListe,
   emptyVentendeMotpartSoknader,
   korrektFormatertOrgnr,
-  korrektFormatertOrgnr2,
   testOpprettSoknadResponseId,
   testUserInfo,
   testVentendeMotpartSoknader,
 } from "../fixtures/test-data";
 import { OversiktPage } from "../pages/oversikt/oversikt.page";
 import { RepresentasjonPage } from "../pages/representasjon/representasjon.page";
+import { SkjemaStartPage } from "../pages/skjema/skjema-start.page";
+import { translations } from "../utils/translations";
 
 const ALLE_TOGGLES_PAA = {
   "melosys.skjema.motpart-cta": true,
@@ -47,11 +48,15 @@ test.describe("Oversikt — motpart-CTA", () => {
     await mockPersonerMedFullmakt(page, []);
   });
 
-  test("Viser banner for DEG_SELV og prefiller arbeidsgiver ved klikk", async ({
+  test("«Fyll ut din del» går rett til introsiden med arbeidsgiver og arbeidstaker utfylt", async ({
     page,
   }) => {
     await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    const requestBodyPromise = interceptOpprettSoknad(
+      page,
+      testOpprettSoknadResponseId,
+    );
 
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
     await oversiktPage.goto();
@@ -64,71 +69,42 @@ test.describe("Oversikt — motpart-CTA", () => {
     );
 
     await oversiktPage.clickMotpartCtaFyllUtDinDel();
-    await oversiktPage.assertArbeidsgiverOrgnrPrefilt(korrektFormatertOrgnr);
+    await new SkjemaStartPage(page).bekreftOgStart(
+      Representasjonstype.DEG_SELV,
+    );
+
+    expect(await requestBodyPromise).toEqual({
+      representasjonstype: Representasjonstype.DEG_SELV,
+      arbeidsgiver: {
+        orgnr: korrektFormatertOrgnr,
+        navn: "Test Organisasjon AS",
+      },
+      arbeidstaker: { fnr: testUserInfo.userId, etternavn: testUserInfo.name },
+      opprettetVia: OpprettetVia.MOTPART_CTA,
+      prefyllFraSkjemaId: "7f9b2c4d-1e3a-4b5c-8d6e-9f0a1b2c3d4e",
+    });
+    await expect(page).toHaveURL(
+      new RegExp(`/skjema/${testOpprettSoknadResponseId}`),
+    );
   });
 
-  test("Opprettelse via CTA sender opprettetVia i payload", async ({
+  test("«Fyll ut din del» viser feil og blir på oversikten når arbeidsgiveroppslaget feiler", async ({
     page,
   }) => {
     await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
-    const requestBodyPromise = interceptOpprettSoknad(
-      page,
-      testOpprettSoknadResponseId,
-    );
+    // Registrert etter beforeEach-mocken, så denne vinner (Playwright matcher sist registrerte først)
+    await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
 
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
     await oversiktPage.goto();
     await oversiktPage.assertIsVisible();
     await oversiktPage.clickMotpartCtaFyllUtDinDel();
-    await oversiktPage.assertArbeidsgiverOrgnrPrefilt(korrektFormatertOrgnr);
-    await oversiktPage.waitForOrgLookup("Test Organisasjon AS");
-    await oversiktPage.checkBekreftelseCheckbox();
-    await oversiktPage.clickStartSoknad();
 
-    const requestBody = (await requestBodyPromise) as Record<string, unknown>;
-    expect(requestBody.opprettetVia).toBe(OpprettetVia.MOTPART_CTA);
-    expect(requestBody.prefyllFraSkjemaId).toBe(
-      "7f9b2c4d-1e3a-4b5c-8d6e-9f0a1b2c3d4e",
-    );
-    expect(requestBody.arbeidsgiver).toEqual({
-      orgnr: korrektFormatertOrgnr,
-      navn: "Test Organisasjon AS",
-    });
-  });
-
-  test("Bytter brukeren arbeidsgiver etter CTA-klikk, sendes ikke opprettetVia", async ({
-    page,
-  }) => {
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
-    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
-    await mockGetEregOrganisasjonMedJuridiskEnhetPerOrgnr(page, {
-      [korrektFormatertOrgnr]: "CTA Arbeidsgiver AS",
-      [korrektFormatertOrgnr2]: "Annen Arbeidsgiver AS",
-    });
-    const requestBodyPromise = interceptOpprettSoknad(
-      page,
-      testOpprettSoknadResponseId,
-    );
-
-    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
-    await oversiktPage.goto();
-    await oversiktPage.assertIsVisible();
-    await oversiktPage.clickMotpartCtaFyllUtDinDel();
-    await oversiktPage.waitForOrgLookup("CTA Arbeidsgiver AS");
-
-    await oversiktPage.fillArbeidsgiverOrgnr(korrektFormatertOrgnr2);
-    await oversiktPage.waitForOrgLookup("Annen Arbeidsgiver AS");
-    await oversiktPage.checkBekreftelseCheckbox();
-    await oversiktPage.clickStartSoknad();
-
-    const requestBody = (await requestBodyPromise) as Record<string, unknown>;
-    expect(requestBody.opprettetVia).toBe(OpprettetVia.ORDINAER);
-    expect(requestBody.prefyllFraSkjemaId).toBeUndefined();
-    expect(requestBody.arbeidsgiver).toEqual({
-      orgnr: korrektFormatertOrgnr2,
-      navn: "Annen Arbeidsgiver AS",
-    });
+    await expect(
+      page.getByText(translations.oversiktDegSelv.motpartCtaFeil),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/oversikt/);
   });
 
   test("Viser ikke banner når toggle er av", async ({ page }) => {
@@ -168,6 +144,88 @@ test.describe("Oversikt — motpart-CTA", () => {
     await togglesLastet;
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertMotpartCtaNotVisible("Test Bedrift AS");
+  });
+});
+
+const ventendeSkjemaId = testVentendeMotpartSoknader.soknader[0]!.skjemaId;
+const varselLenke = (skjemaId: string) =>
+  `/fyll-ut-din-del?skjemaId=${skjemaId}&arbeidsgiverOrgnr=${korrektFormatertOrgnr}`;
+
+test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
+  test.beforeEach(async ({ page }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    await mockGetEregOrganisasjonMedJuridiskEnhet(page);
+    await mockPersonerMedFullmakt(page, []);
+    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
+  });
+
+  test("ventende arbeidsgiver-del går rett til introsiden med prefyll", async ({
+    page,
+  }) => {
+    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    const requestBodyPromise = interceptOpprettSoknad(
+      page,
+      testOpprettSoknadResponseId,
+    );
+
+    await page.goto(varselLenke(ventendeSkjemaId));
+    await new SkjemaStartPage(page).bekreftOgStart(
+      Representasjonstype.DEG_SELV,
+    );
+
+    expect(await requestBodyPromise).toEqual({
+      representasjonstype: Representasjonstype.DEG_SELV,
+      arbeidsgiver: {
+        orgnr: korrektFormatertOrgnr,
+        navn: "Test Organisasjon AS",
+      },
+      arbeidstaker: { fnr: testUserInfo.userId, etternavn: testUserInfo.name },
+      opprettetVia: OpprettetVia.MOTPART_CTA,
+      prefyllFraSkjemaId: ventendeSkjemaId,
+    });
+  });
+
+  test("arbeidsgiver-del som ikke venter lenger går til oversikten med arbeidsgiver utfylt", async ({
+    page,
+  }) => {
+    await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
+
+    await page.goto(varselLenke(ventendeSkjemaId));
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.assertIsVisible();
+    await expect(page).toHaveURL(/\/oversikt\?representasjonstype=DEG_SELV/);
+    await expect(oversiktPage.arbeidsgiverOrgnrInput).toHaveValue(
+      korrektFormatertOrgnr,
+    );
+  });
+
+  test("feil ved oppslag viser feilmelding med vei videre til oversikten", async ({
+    page,
+  }) => {
+    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
+    await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
+
+    await page.goto(varselLenke(ventendeSkjemaId));
+
+    await expect(
+      page.getByText(translations.oversiktDegSelv.motpartCtaFeil),
+    ).toBeVisible();
+    await page
+      .getByRole("button", {
+        name: translations.oversiktDegSelv.motpartLenkeGaTilOversikten,
+      })
+      .click();
+    await new OversiktPage(
+      page,
+      Representasjonstype.DEG_SELV,
+    ).assertIsVisible();
   });
 });
 

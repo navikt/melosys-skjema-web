@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FyllUtDinDelRouteImport } from './routes/fyll-ut-din-del'
 import { Route as OversiktRouteImport } from './routes/oversikt'
 import { Route as RepresentasjonRouteImport } from './routes/representasjon'
 import { Route as SkjemaRouteImport } from './routes/skjema'
@@ -18,6 +19,7 @@ import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
 import { Route as SkjemaIndexRouteImport } from './routes/skjema.index'
 import { Route as SkjemaIdRouteImport } from './routes/skjema.$id'
+import { Route as SkjemaStartRouteImport } from './routes/skjema.start'
 import { Route as SkjemaIdIndexRouteImport } from './routes/skjema.$id.index'
 import { Route as SkjemaIdArbeidsgiverensVirksomhetINorgeRouteImport } from './routes/skjema.$id.arbeidsgiverens-virksomhet-i-norge'
 import { Route as SkjemaIdArbeidssituasjonRouteImport } from './routes/skjema.$id.arbeidssituasjon'
@@ -36,6 +38,11 @@ import { Route as SkjemaIdVedleggRouteImport } from './routes/skjema.$id.vedlegg
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FyllUtDinDelRoute = FyllUtDinDelRouteImport.update({
+  id: '/fyll-ut-din-del',
+  path: '/fyll-ut-din-del',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OversiktRoute = OversiktRouteImport.update({
@@ -77,6 +84,11 @@ const SkjemaIndexRoute = SkjemaIndexRouteImport.update({
 const SkjemaIdRoute = SkjemaIdRouteImport.update({
   id: '/$id',
   path: '/$id',
+  getParentRoute: () => SkjemaRoute,
+} as any)
+const SkjemaStartRoute = SkjemaStartRouteImport.update({
+  id: '/start',
+  path: '/start',
   getParentRoute: () => SkjemaRoute,
 } as any)
 const SkjemaIdIndexRoute = SkjemaIdIndexRouteImport.update({
@@ -161,11 +173,13 @@ const SkjemaIdVedleggRoute = SkjemaIdVedleggRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/fyll-ut-din-del': typeof FyllUtDinDelRoute
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
+  '/skjema/start': typeof SkjemaStartRoute
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
@@ -186,7 +200,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/fyll-ut-din-del': typeof FyllUtDinDelRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
+  '/skjema/start': typeof SkjemaStartRoute
   '/oversikt': typeof OversiktIndexRoute
   '/representasjon': typeof RepresentasjonIndexRoute
   '/skjema': typeof SkjemaIndexRoute
@@ -208,11 +224,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/fyll-ut-din-del': typeof FyllUtDinDelRoute
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
+  '/skjema/start': typeof SkjemaStartRoute
   '/oversikt/': typeof OversiktIndexRoute
   '/representasjon/': typeof RepresentasjonIndexRoute
   '/skjema/': typeof SkjemaIndexRoute
@@ -235,11 +253,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/fyll-ut-din-del'
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
+    | '/skjema/start'
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
@@ -260,7 +280,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/fyll-ut-din-del'
     | '/representasjon/velg-radgiverfirma'
+    | '/skjema/start'
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
@@ -281,11 +303,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/fyll-ut-din-del'
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
+    | '/skjema/start'
     | '/oversikt/'
     | '/representasjon/'
     | '/skjema/'
@@ -307,6 +331,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FyllUtDinDelRoute: typeof FyllUtDinDelRoute
   OversiktRoute: typeof OversiktRouteWithChildren
   RepresentasjonRoute: typeof RepresentasjonRouteWithChildren
   SkjemaRoute: typeof SkjemaRouteWithChildren
@@ -319,6 +344,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fyll-ut-din-del': {
+      id: '/fyll-ut-din-del'
+      path: '/fyll-ut-din-del'
+      fullPath: '/fyll-ut-din-del'
+      preLoaderRoute: typeof FyllUtDinDelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/oversikt': {
@@ -375,6 +407,13 @@ declare module '@tanstack/react-router' {
       path: '/$id'
       fullPath: '/skjema/$id'
       preLoaderRoute: typeof SkjemaIdRouteImport
+      parentRoute: typeof SkjemaRoute
+    }
+    '/skjema/start': {
+      id: '/skjema/start'
+      path: '/start'
+      fullPath: '/skjema/start'
+      preLoaderRoute: typeof SkjemaStartRouteImport
       parentRoute: typeof SkjemaRoute
     }
     '/skjema/$id/': {
@@ -545,11 +584,13 @@ const SkjemaIdRouteWithChildren = SkjemaIdRoute._addFileChildren(
 
 interface SkjemaRouteChildren {
   SkjemaIdRoute: typeof SkjemaIdRouteWithChildren
+  SkjemaStartRoute: typeof SkjemaStartRoute
   SkjemaIndexRoute: typeof SkjemaIndexRoute
 }
 
 const SkjemaRouteChildren: SkjemaRouteChildren = {
   SkjemaIdRoute: SkjemaIdRouteWithChildren,
+  SkjemaStartRoute: SkjemaStartRoute,
   SkjemaIndexRoute: SkjemaIndexRoute,
 }
 
@@ -558,6 +599,7 @@ const SkjemaRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FyllUtDinDelRoute: FyllUtDinDelRoute,
   OversiktRoute: OversiktRouteWithChildren,
   RepresentasjonRoute: RepresentasjonRouteWithChildren,
   SkjemaRoute: SkjemaRouteWithChildren,

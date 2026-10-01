@@ -41,7 +41,6 @@ export const nn = {
       lagreUtkastBeskrivelse:
         "Skjemaet blir lagra som eit utkast på Mi side slik at du kan fullføre seinare.",
       jaLagreOgFortsettSenere: "Ja, lagre og hald fram seinare",
-      startSoknad: "Start søknad",
       valgtVirksomhet: "Vald verksemd",
       valgtOrganisasjon: "Vald organisasjon",
       navn: "Namn",
@@ -62,58 +61,6 @@ export const nn = {
       tilDato: "Til dato",
       datoErPakrevd: "Du må fylle inn ein gyldig dato",
       tilDatoMaVareEtterFraDato: "Til-dato kan ikkje vere før frå-dato",
-    },
-    skjemaVeiledning: {
-      hei: "Hei",
-      guidePanelTekst1:
-        "Seksjonen GuidePanel blir brukt til ei kort, overordna rettleiing til søkaren. Seksjonen hentar inn søkarens namn, og gjev ei komprimert forklaring av pengestøtta, tiltaket eller hjelpemiddelet. Denne teksten blir henta frå ingressen til produktsida på nav.no.",
-      guidePanelTekst2:
-        "Avslutt teksten i seksjonen med ei lenkje til produktsida på nav.no som blir opna i ny fane.",
-      forDuSoker: "Før du søker",
-      denneSeksjonenBrukesTil:
-        "Denne seksjonen blir brukt til å gi søkarane informasjon dei vil ha stor nytte av før dei går i gang med søknaden. Eksempel på nyttig informasjon:",
-      oppgaverBrukerenMaHaGjort: "Oppgåver brukaren må ha gjort før dei søker.",
-      duMaHaMeldtDegSomArbeidssøker:
-        "Du må ha meldt deg som arbeidssøkar før du kan søke om dagpengar.",
-      dokumentasjonBrukerenKanBliBedtOm:
-        "Dokumentasjon brukaren kan bli beden om.",
-      noenAvOpplysningeneViBeOmDokumentation:
-        "Nokre av opplysningane du gjev undervegs vil du bli beden om å dokumentere. Du vil trenge xx og xx for å fullføre denne søknaden.",
-      automatiskLagring: "Automatisk lagring.",
-      viLagrerSvarene:
-        "Vi lagrar svara dine (xx timar) medan du fyller ut, slik at du kan ta pausar undervegs.",
-      antallStegOgEstimertTidsbruk: "Tal på steg og estimert tidsbruk.",
-      detErXXStegISoknaden:
-        "Det er XX steg i søknaden, og du kan rekne med å bruke ca. XX minutt.",
-      soknadsfrist: "Søknadsfristar.",
-      huskAtDuMaSokeOmXX: "Hugs at du må søke om xx innan xx dagar.",
-      saksbehandlingstiderOgInfo:
-        "Saksbehandlingstider og info om gyldigheit, krav osv.",
-      viBrukerCaXXUker:
-        "Vi brukar ca. xx veker på å behandle søknaden din. Hugs at du må sende meldekort xx ofte sjølv om du ikkje har fått svar på søknaden din om dagpengar endå.",
-      forAnnenUtfyllendeInformasjon:
-        "For anna, utfyllande informasjon om søknaden bør du lenkje direkte til søknadskapittelet i produktsida, som",
-      detteEksempeletForDagpenger: "dette eksempelet for dagpengar",
-      informasjonViHenterOmDeg: "Informasjon vi hentar om deg",
-      herSkalDetStaInformasjonOmHvorVi:
-        "Her skal det stå informasjon om kor vi vil hente opplysningar om søkaren og kva slags opplysningar vi hentar.",
-      hvordanViBehandlerPersonopplysninger:
-        "Korleis vi behandlar personopplysningar",
-      herSkalDetStaInformasjonOmHvordanVi:
-        "Her skal det stå informasjon om korleis vi behandlar personopplysningane til søkaren.",
-      automatiskSaksbehandling: "Automatisk saksbehandling",
-      herSkalDetStaInformasjonOmHvaAutomatisk:
-        "Her skal det stå informasjon om kva automatisk behandling er, kva det betyr for søkaren og informasjon om søkarens rettar ved automatisk avslag.",
-      viLagrerSvarUnderveis: "Vi lagrar svar undervegs",
-      herSkalDetStaInformasjonOmHvordanDenne:
-        "Her skal det stå informasjon om korleis denne søknaden mellomlagrar informasjonen til søkaren og kor lenge informasjonen blir lagra. Vi skal informere om mellomlagring ved både automatisk lagring og ved samtykke til lagring med lagreknappen.",
-      detErViktigAtDuGirOss:
-        "Det er viktig at du gjev oss riktige opplysningar slik at vi kan behandle saka di.",
-      lesMerOmViktigheten:
-        "Les meir om kor viktig det er å gje riktige opplysningar.",
-      jegBekrefter: "Eg stadfestar at eg vil svare så riktig som eg kan.",
-      detteEksempeletForDagpengerUrl: "https://www.nav.no/dagpenger#sok",
-      lesMerOmViktighetenUrl: "https://www.nav.no/endringer",
     },
     soknadHeader: {
       soknadForUtsendtArbeidstakerInnenEuEosOgSveits:
@@ -353,6 +300,8 @@ export const nn = {
       motpartCtaBeskrivelseUtenPeriode:
         "Du kan sende inn søknad om A1 for utsende arbeidstakarar i EØS eller Sveits ved å fylle ut din del.",
       motpartCtaKnapp: "Fyll ut din del",
+      motpartCtaFeil: "Kunne ikkje hente opplysningane. Prøv igjen seinare.",
+      motpartLenkeGaTilOversikten: "Gå til oversikta",
     },
     oversiktArbeidsgiver: {
       tittel: "Oversiktsside for søknader",
@@ -385,7 +334,7 @@ export const nn = {
       personVelgerBeskrivelse:
         "Lista inneheld alle personar du har fått fullmakt frå på nav.no.",
     },
-    oversiktBekreftelse: {
+    skjemaStart: {
       intro:
         "Det er viktig at du gjev oss riktige opplysningar slik at vi kan behandle saka.",
       linkText: "Les meir om kor viktig det er å gje riktige opplysningar.",
@@ -398,6 +347,11 @@ export const nn = {
         "Verksemda du jobbar for vil ta imot alle brev om saksbehandlinga i Altinn så lenge tilgangen og fullmakta gjeld.",
       annenPersonInfo:
         "Du som fullmektig vil ta imot brev om saksbehandlinga så lenge fullmakta gjeld.",
+      startSoknad: "Start søknad",
+      manglerBekreftelse:
+        "Du må stadfeste at du vil svare så riktig som du kan",
+      feilVedOpprettelse:
+        "Det oppstod ein feil ved oppretting av søknad. Prøv igjen seinare.",
     },
     oversiktFelles: {
       utkastTittel: "UTKAST",
@@ -461,8 +415,6 @@ export const nn = {
       valideringFeilTittel: "Du må fylle ut desse felta:",
       valideringManglerArbeidsgiver: "Arbeidsgivar må veljast",
       valideringManglerArbeidstaker: "Arbeidstakar må veljast",
-      valideringManglerBekreftelseAtVilSvareRiktig:
-        "Du må stadfeste at du vil svare så riktig som du kan",
       historikkTittel: "Tidlegare innsendte søknader",
       historikkSokPlaceholder: "Søk...",
       historikkKolonneVirksomhet: "Verksemd",
@@ -489,8 +441,6 @@ export const nn = {
       paginationForrige: "Førre",
       paginationNeste: "Neste",
       orgnrLabel: "Org.nr:",
-      feilVedOpprettelse:
-        "Det oppstod ein feil ved oppretting av søknad. Prøv igjen seinare.",
       fullmaktLenkeUrl: "https://www.nav.no/fullmakt",
     },
     velgRadgiverfirma: {

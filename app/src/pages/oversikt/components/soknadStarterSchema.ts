@@ -1,8 +1,8 @@
 import { z } from "zod";
 
+import type { NySoknad } from "~/pages/skjema/nySoknad.ts";
 import {
   OpprettetVia,
-  OpprettUtsendtArbeidstakerSoknadRequest,
   Representasjonstype,
 } from "~/types/melosysSkjemaTypes.ts";
 
@@ -35,12 +35,11 @@ export const soknadStarterSchema = z
       .object({
         fnr: z.string().min(1),
         etternavn: z.string().optional(),
+        // Fullt navn til visning; sendes ikke til API-et
+        navn: z.string().optional(),
       })
       .optional(),
     skalFylleUtForArbeidstaker: z.boolean().optional(),
-    bekreftelse: z.boolean(),
-    opprettetVia: z.enum(OpprettetVia).optional(),
-    prefyllFraSkjemaId: z.uuid().optional(),
   })
   .refine((data) => !!data.arbeidsgiver, {
     error: "oversiktFelles.valideringManglerArbeidsgiver",
@@ -52,32 +51,24 @@ export const soknadStarterSchema = z
     path: ["arbeidstaker"],
     when: () => true,
   })
-  .superRefine((data, context) => {
-    if (data.bekreftelse) {
-      return;
-    }
-
-    context.addIssue({
-      code: "custom",
-      message: "oversiktFelles.valideringManglerBekreftelseAtVilSvareRiktig",
-      path: ["bekreftelse"],
-    });
-  })
-  .transform((data): OpprettUtsendtArbeidstakerSoknadRequest => {
+  .transform((data): NySoknad => {
+    const { fnr, etternavn, navn } = data.arbeidstaker!;
     return {
-      representasjonstype: data.skalFylleUtForArbeidstaker
-        ? representasjonstypeMedFullmakt(data.representasjonstype)
-        : data.representasjonstype,
-      radgiverfirma: data.radgiverfirma,
-      arbeidsgiver: data.arbeidsgiver!,
-      arbeidstaker: data.arbeidstaker!,
-      opprettetVia: data.opprettetVia ?? OpprettetVia.ORDINAER,
-      prefyllFraSkjemaId: data.prefyllFraSkjemaId,
+      request: {
+        representasjonstype: data.skalFylleUtForArbeidstaker
+          ? representasjonstypeMedFullmakt(data.representasjonstype)
+          : data.representasjonstype,
+        radgiverfirma: data.radgiverfirma,
+        arbeidsgiver: data.arbeidsgiver!,
+        arbeidstaker: { fnr, etternavn },
+        opprettetVia: OpprettetVia.ORDINAER,
+      },
+      arbeidstakerNavn: navn ?? etternavn ?? "",
     };
   });
 
 // Input-type for skjemaet (før transform)
 export type SoknadStarterFormData = z.input<typeof soknadStarterSchema>;
 
-// Output-type etter transform (= API request)
+// Output-type etter transform (request + visningsnavn)
 export type SoknadStarterOutput = z.output<typeof soknadStarterSchema>;

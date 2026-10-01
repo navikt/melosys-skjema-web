@@ -1,7 +1,6 @@
 import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
-  mockGetEregOrganisasjonMedJuridiskEnhet,
   mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet,
   mockHentTilganger,
   mockPersonerMedFullmakt,
@@ -13,11 +12,7 @@ import {
   emptyUtkastListe,
   korrektFormatertOrgnr,
   testArbeidsgiverOrganization,
-  testEregOrganisasjon,
   testOrganization,
-  testPersonMedFullmakt,
-  testRadgiverfirmaOrganisasjon,
-  testRadgiverfirmaOrgnr,
   testUserInfo,
 } from "../fixtures/test-data";
 import { OversiktPage } from "../pages/oversikt/oversikt.page";
@@ -96,115 +91,5 @@ test.describe("Oversikt - validering", () => {
     await oversiktPage.assertValideringManglerArbeidsgiverIsVisible();
     await oversiktPage.assertValideringManglerArbeidstakerIsVisible();
     await oversiktPage.assertStillOnPage();
-  });
-
-  test("DEG_SELV: viser checkbox-tekst og riktig bekreftelsesfeil når arbeidsgiver er valgt", async ({
-    page,
-  }) => {
-    await setupApiMocksForOversikt(
-      page,
-      testUserInfo,
-      [],
-      emptyUtkastListe,
-      emptyInnsendteSoknader,
-    );
-    await mockGetEregOrganisasjonMedJuridiskEnhet(page, testEregOrganisasjon);
-
-    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
-    await oversiktPage.goto();
-    await oversiktPage.assertIsVisible();
-    await oversiktPage.assertBekreftelseBoksContentForRepresentasjonstype();
-    await oversiktPage.assertBekreftelseCheckboxForRepresentasjonstypeIsVisible();
-
-    await oversiktPage.fillArbeidsgiverOrgnr(korrektFormatertOrgnr);
-    await oversiktPage.waitForOrgLookup(
-      testEregOrganisasjon.juridiskEnhet.navn,
-    );
-
-    await oversiktPage.clickStartSoknad();
-
-    await oversiktPage.assertValideringManglerBekreftelseIsVisible();
-    await oversiktPage.assertStillOnPage();
-  });
-
-  test("ARBEIDSGIVER: viser checkbox-tekst og riktig bekreftelsesfeil når øvrige felt er fylt ut", async ({
-    page,
-  }) => {
-    await setupApiMocksForOversikt(
-      page,
-      testUserInfo,
-      [testArbeidsgiverOrganization],
-      emptyUtkastListe,
-      emptyInnsendteSoknader,
-    );
-    await mockHentTilganger(page, [testArbeidsgiverOrganization]);
-    await mockPersonerMedFullmakt(page, [testPersonMedFullmakt]);
-
-    const oversiktPage = new OversiktPage(
-      page,
-      Representasjonstype.ARBEIDSGIVER,
-    );
-    await oversiktPage.goto();
-    await oversiktPage.assertIsVisible();
-    await oversiktPage.assertBekreftelseBoksContentForRepresentasjonstype();
-    await oversiktPage.assertBekreftelseCheckboxForRepresentasjonstypeIsVisible();
-
-    await oversiktPage.selectSkalFylleUtJa();
-    await oversiktPage.selectArbeidstakerMedFullmakt(
-      testPersonMedFullmakt.navn,
-    );
-
-    await oversiktPage.clickStartSoknad();
-
-    await oversiktPage.assertValideringManglerBekreftelseIsVisible();
-    await oversiktPage.assertStillOnPage();
-  });
-
-  test("ANNEN_PERSON: viser korrekt tekstinnhold i bekreftelsesboksen", async ({
-    page,
-  }) => {
-    await setupApiMocksForOversikt(
-      page,
-      testUserInfo,
-      [],
-      emptyUtkastListe,
-      emptyInnsendteSoknader,
-    );
-    await mockPersonerMedFullmakt(page, [testPersonMedFullmakt]);
-
-    const oversiktPage = new OversiktPage(
-      page,
-      Representasjonstype.ANNEN_PERSON,
-    );
-    await oversiktPage.goto();
-    await oversiktPage.assertIsVisible();
-
-    await oversiktPage.assertBekreftelseBoksContentForRepresentasjonstype();
-    await oversiktPage.assertBekreftelseCheckboxForRepresentasjonstypeIsVisible();
-  });
-
-  test("RADGIVER: viser korrekt tekstinnhold i bekreftelsesboksen", async ({
-    page,
-  }) => {
-    await setupApiMocksForOversikt(
-      page,
-      testUserInfo,
-      [testArbeidsgiverOrganization],
-      emptyUtkastListe,
-      emptyInnsendteSoknader,
-    );
-    await mockHentTilganger(page, [testArbeidsgiverOrganization]);
-    await mockGetEregOrganisasjonMedJuridiskEnhet(
-      page,
-      testRadgiverfirmaOrganisasjon,
-    );
-    await mockPersonerMedFullmakt(page, [testPersonMedFullmakt]);
-
-    const oversiktPage = new OversiktPage(page, Representasjonstype.RADGIVER);
-    await oversiktPage.gotoWithRadgiver(testRadgiverfirmaOrgnr);
-    await oversiktPage.assertIsVisible();
-
-    await oversiktPage.assertBekreftelseBoksContentForRepresentasjonstype();
-    await oversiktPage.assertBekreftelseCheckboxForRepresentasjonstypeIsVisible();
   });
 });
