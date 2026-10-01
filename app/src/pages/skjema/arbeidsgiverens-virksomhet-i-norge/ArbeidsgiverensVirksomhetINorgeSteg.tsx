@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Heading, HGrid, TextField } from "@navikt/ds-react";
+import { Box, Heading, HGrid, TextField } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -36,7 +36,7 @@ import {
   skalOppgiSamletVirksomhet,
   tallTilFeltverdi,
 } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
-import { ProsentFelt } from "./ProsentFelt.tsx";
+import { FELTBREDDE, ProsentFelt } from "./ProsentFelt.tsx";
 import { RegistrertAntallAnsatte } from "./RegistrertAntallAnsatte.tsx";
 
 type ArbeidsgiverensVirksomhetSchema = ReturnType<
@@ -165,52 +165,59 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             legend={erBemanningFelt.label}
           />
 
+          {visSamletVirksomhet && (
+            <section
+              aria-labelledby="samlet-virksomhet-tittel"
+              className="my-8"
+            >
+              <Heading id="samlet-virksomhet-tittel" level="2" size="small">
+                {t(
+                  "arbeidsgiverensVirksomhetINorgeSteg.opplysningerOmForetaketsSamledeVirksomhet",
+                )}
+              </Heading>
+              <Box
+                background="info-moderateA"
+                borderColor="info-subtleA"
+                borderRadius="12"
+                borderWidth="1"
+                className="mt-4"
+                padding="space-24"
+              >
+                <HGrid align="start" columns={{ xs: 1, md: 2 }} gap="space-24">
+                  {ANTALLFELTER.map((felt) => (
+                    <TextField
+                      error={translateError(errors[felt]?.message)}
+                      className={FELTBREDDE}
+                      inputMode="numeric"
+                      key={felt}
+                      label={
+                        getFelt("arbeidsgiverensVirksomhetINorge", felt).label
+                      }
+                      maxLength={9}
+                      {...register(felt)}
+                    />
+                  ))}
+                  {ANDELFELTER.map((felt) => (
+                    <ProsentFelt
+                      error={translateError(errors[felt]?.message)}
+                      key={felt}
+                      label={
+                        getFelt("arbeidsgiverensVirksomhetINorge", felt).label
+                      }
+                      {...register(felt)}
+                    />
+                  ))}
+                </HGrid>
+              </Box>
+            </section>
+          )}
+
           <RadioGroupJaNeiFormPart
             className="mt-4"
             description={opprettholderDriftFelt.hjelpetekst}
             formFieldName="opprettholderArbeidsgiverenVanligDrift"
             legend={opprettholderDriftFelt.label}
           />
-
-          {visSamletVirksomhet && (
-            <section aria-labelledby="samlet-virksomhet-tittel">
-              <Heading
-                className="mt-8"
-                id="samlet-virksomhet-tittel"
-                level="2"
-                size="small"
-              >
-                {t(
-                  "arbeidsgiverensVirksomhetINorgeSteg.opplysningerOmForetaketsSamledeVirksomhet",
-                )}
-              </Heading>
-              <HGrid className="mt-4" columns={{ xs: 1, md: 2 }} gap="space-24">
-                {ANTALLFELTER.map((felt) => (
-                  <TextField
-                    error={translateError(errors[felt]?.message)}
-                    htmlSize={10}
-                    inputMode="numeric"
-                    key={felt}
-                    label={
-                      getFelt("arbeidsgiverensVirksomhetINorge", felt).label
-                    }
-                    maxLength={9}
-                    {...register(felt)}
-                  />
-                ))}
-                {ANDELFELTER.map((felt) => (
-                  <ProsentFelt
-                    error={translateError(errors[felt]?.message)}
-                    key={felt}
-                    label={
-                      getFelt("arbeidsgiverensVirksomhetINorge", felt).label
-                    }
-                    {...register(felt)}
-                  />
-                ))}
-              </HGrid>
-            </section>
-          )}
         </SkjemaSteg>
       </form>
     </FormProvider>

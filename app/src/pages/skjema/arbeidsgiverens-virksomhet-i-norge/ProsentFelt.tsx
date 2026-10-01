@@ -8,8 +8,10 @@ type ProsentFeltProperties = Omit<
   label: string;
 };
 
+export const FELTBREDDE = "[&_input]:w-36";
+
 /**
- * TextField med «%» bak inputen. Aksel har ikke innebygd suffiks, så labelen vises
+ * TextField med «%» inne i inputen. Aksel har ikke innebygd suffiks, så labelen vises
  * separat (aria-hidden) mens TextField har skjult label som gir tilgjengelig navn.
  */
 export function ProsentFelt({
@@ -24,7 +26,7 @@ export function ProsentFelt({
       </Label>
       <div className="relative">
         <TextField
-          className="[&_input]:w-20"
+          className={`${FELTBREDDE} [&_input]:pr-10`}
           hideLabel
           inputMode="numeric"
           label={label}
@@ -34,7 +36,8 @@ export function ProsentFelt({
         <BodyShort
           aria-hidden
           as="span"
-          className="absolute top-0 left-22 flex h-12 items-center"
+          className="pointer-events-none absolute top-0 left-0 flex h-12 w-36 items-center justify-end pr-4"
+          textColor="subtle"
         >
           %
         </BodyShort>
