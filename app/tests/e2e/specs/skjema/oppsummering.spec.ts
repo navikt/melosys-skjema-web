@@ -110,7 +110,6 @@ test.describe("Oppsummering", () => {
       {
         erArbeidsgiverenOffentligVirksomhet: false,
         erArbeidsgiverenBemanningsEllerVikarbyraa: true,
-        opprettholderArbeidsgiverenVanligDrift: true,
         antallAdministrativtAnsatte: 3,
         antallUtsendteArbeidstakere: 2,
         andelAnsatteRekruttertINorge: 80,

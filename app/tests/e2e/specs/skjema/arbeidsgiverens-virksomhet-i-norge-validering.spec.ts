@@ -35,7 +35,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge - validering", () => {
 
   test("bemanningsbyrå må fylle ut opplysninger om samlet virksomhet", async () => {
     await stegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
-    await stegPage.vanligDriftRadioGroup.JA.click();
+    await stegPage.assertVanligDriftIsHidden();
     await stegPage.lagreOgFortsett();
 
     await stegPage.assertSamletVirksomhetPakrevdIsVisible();
@@ -44,7 +44,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge - validering", () => {
 
   test("viser feilmelding for ugyldig antall og andel", async () => {
     await stegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
-    await stegPage.vanligDriftRadioGroup.JA.click();
+    await stegPage.assertVanligDriftIsHidden();
     await stegPage.fyllSamletVirksomhet({
       antallAdministrativtAnsatte: 3,
       andelAnsatteRekruttertINorge: 50,

@@ -190,6 +190,14 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     }
   }
 
+  async assertVanligDriftIsVisible() {
+    await expect(this.vanligDriftFieldset()).toBeVisible();
+  }
+
+  async assertVanligDriftIsHidden() {
+    await expect(this.vanligDriftFieldset()).toHaveCount(0);
+  }
+
   async assertSamletVirksomhetVerdier(data: SamletVirksomhetData) {
     for (const felt of SAMLET_VIRKSOMHET_FELTER) {
       await expect(this.samletVirksomhetFelter[felt]).toHaveValue(

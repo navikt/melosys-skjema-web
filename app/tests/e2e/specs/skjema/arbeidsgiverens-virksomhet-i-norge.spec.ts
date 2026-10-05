@@ -50,6 +50,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertSamletVirksomhetIsHidden();
 
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.assertVanligDriftIsVisible();
     await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
 
     const expectedPayload: ArbeidsgiverensVirksomhetINorgeDto = {
@@ -71,13 +72,12 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertIsVisible();
 
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
-    await virksomhetStegPage.vanligDriftRadioGroup.NEI.click();
+    await virksomhetStegPage.assertVanligDriftIsHidden();
     await virksomhetStegPage.assertSamletVirksomhetIsVisible();
     await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
 
     const expectedPayload: ArbeidsgiverensVirksomhetINorgeDto = {
       erArbeidsgiverenBemanningsEllerVikarbyraa: true,
-      opprettholderArbeidsgiverenVanligDrift: false,
       ...samletVirksomhet,
     };
 
@@ -103,14 +103,13 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertIsVisible();
     await virksomhetStegPage.assertIngenRegisterinfoboks();
     await virksomhetStegPage.assertSamletVirksomhetIsVisible();
+    await virksomhetStegPage.assertVanligDriftIsHidden();
 
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
-    await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
     await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
 
     await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
       erArbeidsgiverenBemanningsEllerVikarbyraa: false,
-      opprettholderArbeidsgiverenVanligDrift: true,
       ...samletVirksomhet,
     });
     await virksomhetStegPage.assertNavigatedToNextStep();
@@ -129,13 +128,13 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     );
     await virksomhetStegPage.mockArbeidsgiverensVirksomhetINorgeStegData({
       erArbeidsgiverenBemanningsEllerVikarbyraa: false,
-      opprettholderArbeidsgiverenVanligDrift: true,
       ...samletVirksomhet,
     });
 
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();
     await virksomhetStegPage.assertSamletVirksomhetVerdier(samletVirksomhet);
+    await virksomhetStegPage.assertVanligDriftIsHidden();
   });
 
   test("bemanningsbyrå som angrer - skjulte felter sendes ikke", async ({
@@ -147,15 +146,40 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     );
 
     await virksomhetStegPage.goto();
+    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
+    await virksomhetStegPage.assertVanligDriftIsHidden();
     await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
     await virksomhetStegPage.assertSamletVirksomhetIsHidden();
-    await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
+    await virksomhetStegPage.assertVanligDriftIsVisible();
 
     await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
       erArbeidsgiverenBemanningsEllerVikarbyraa: false,
       opprettholderArbeidsgiverenVanligDrift: true,
+    });
+    await virksomhetStegPage.assertNavigatedToNextStep();
+  });
+
+  test("tidligere svar om vanlig drift sendes ikke når bemanningsbyrå velges", async ({
+    page,
+  }) => {
+    const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
+      page,
+      testArbeidsgiverSkjema,
+    );
+
+    await virksomhetStegPage.goto();
+    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.vanligDriftRadioGroup.JA.click();
+    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
+    await virksomhetStegPage.assertVanligDriftIsHidden();
+    await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
+
+    await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
+      erArbeidsgiverenBemanningsEllerVikarbyraa: true,
+      ...samletVirksomhet,
     });
     await virksomhetStegPage.assertNavigatedToNextStep();
   });

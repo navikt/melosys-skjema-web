@@ -66,10 +66,7 @@ const baseSchema = z.object({
     error:
       "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra",
   }),
-  opprettholderArbeidsgiverenVanligDrift: z.boolean({
-    error:
-      "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge",
-  }),
+  opprettholderArbeidsgiverenVanligDrift: z.boolean().optional(),
   antallAdministrativtAnsatte: z.string().optional(),
   antallUtsendteArbeidstakere: z.string().optional(),
   andelAnsatteRekruttertINorge: z.string().optional(),
@@ -92,6 +89,17 @@ export function lagArbeidsgiverensVirksomhetSchema(
   return baseSchema
     .superRefine(
       (data, context) => {
+        if (
+          !skalOppgi(data) &&
+          data.opprettholderArbeidsgiverenVanligDrift === undefined
+        ) {
+          context.addIssue({
+            code: "custom",
+            message:
+              "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge",
+            path: ["opprettholderArbeidsgiverenVanligDrift"],
+          });
+        }
         if (!skalOppgi(data)) return;
 
         for (const felt of [...ANTALLFELTER, ...ANDELFELTER]) {
@@ -132,8 +140,9 @@ export function lagArbeidsgiverensVirksomhetSchema(
       return {
         erArbeidsgiverenBemanningsEllerVikarbyraa:
           data.erArbeidsgiverenBemanningsEllerVikarbyraa,
-        opprettholderArbeidsgiverenVanligDrift:
-          data.opprettholderArbeidsgiverenVanligDrift,
+        opprettholderArbeidsgiverenVanligDrift: medSamletVirksomhet
+          ? undefined
+          : data.opprettholderArbeidsgiverenVanligDrift,
         antallAdministrativtAnsatte: tall("antallAdministrativtAnsatte"),
         antallUtsendteArbeidstakere: tall("antallUtsendteArbeidstakere"),
         andelAnsatteRekruttertINorge: tall("andelAnsatteRekruttertINorge"),

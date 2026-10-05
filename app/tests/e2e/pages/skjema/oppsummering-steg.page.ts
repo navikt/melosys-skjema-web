@@ -120,7 +120,14 @@ export class OppsummeringStegPage {
       );
     }
 
-    if (data.opprettholderArbeidsgiverenVanligDrift !== undefined) {
+    if (data.opprettholderArbeidsgiverenVanligDrift === undefined) {
+      await expect(
+        this.page.getByText(
+          virksomhetINorge.felter.opprettholderArbeidsgiverenVanligDrift.label,
+          { exact: true },
+        ),
+      ).toHaveCount(0);
+    } else {
       await expect(
         this.page.locator(
           `dt:has-text("${virksomhetINorge.felter.opprettholderArbeidsgiverenVanligDrift.label}") + dd`,

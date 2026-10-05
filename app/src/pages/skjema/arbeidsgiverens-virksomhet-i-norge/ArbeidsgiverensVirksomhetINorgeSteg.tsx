@@ -201,12 +201,14 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             </section>
           )}
 
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            description={opprettholderDriftFelt.hjelpetekst}
-            formFieldName="opprettholderArbeidsgiverenVanligDrift"
-            legend={opprettholderDriftFelt.label}
-          />
+          {!visSamletVirksomhet && (
+            <RadioGroupJaNeiFormPart
+              className="mt-4"
+              description={opprettholderDriftFelt.hjelpetekst}
+              formFieldName="opprettholderArbeidsgiverenVanligDrift"
+              legend={opprettholderDriftFelt.label}
+            />
+          )}
         </SkjemaSteg>
       </form>
     </FormProvider>
