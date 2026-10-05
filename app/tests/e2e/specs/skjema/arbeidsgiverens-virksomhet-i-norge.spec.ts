@@ -46,9 +46,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
 
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();
-    await virksomhetStegPage.assertInfoboks20EllerFlereAnsatte(
-      testArbeidsgiverSkjema.metadata.arbeidsgiverNavn,
-    );
+    await virksomhetStegPage.assertIngenRegisterinfoboks();
     await virksomhetStegPage.assertSamletVirksomhetIsHidden();
 
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
@@ -87,7 +85,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertNavigatedToNextStep();
   });
 
-  test("færre enn 20 ansatte - viser infoboks og samlet virksomhet", async ({
+  test("færre enn 20 ansatte - viser samlet virksomhet uten infoboks", async ({
     page,
   }) => {
     await setupApiMocksForArbeidsgiver(
@@ -103,9 +101,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
 
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();
-    await virksomhetStegPage.assertInfoboksFaerreEnn20Ansatte(
-      skjemaMedFaaAnsatte.metadata.arbeidsgiverNavn,
-    );
+    await virksomhetStegPage.assertIngenRegisterinfoboks();
     await virksomhetStegPage.assertSamletVirksomhetIsVisible();
 
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();

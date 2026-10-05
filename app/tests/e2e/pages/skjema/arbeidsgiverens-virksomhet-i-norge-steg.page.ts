@@ -198,24 +198,8 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     }
   }
 
-  async assertInfoboksFaerreEnn20Ansatte(virksomhetsnavn: string) {
-    await expect(
-      this.page.getByText(
-        translations.arbeidsgiverensVirksomhetINorgeSteg.registrertMedFaerreEnnAnsatte
-          .replace("{{virksomhetsnavn}}", () => virksomhetsnavn)
-          .replace("{{ansattgrense}}", "20"),
-      ),
-    ).toBeVisible();
-  }
-
-  async assertInfoboks20EllerFlereAnsatte(virksomhetsnavn: string) {
-    await expect(
-      this.page.getByText(
-        translations.arbeidsgiverensVirksomhetINorgeSteg.registrertMedAnsatteEllerFlere
-          .replace("{{virksomhetsnavn}}", () => virksomhetsnavn)
-          .replace("{{ansattgrense}}", "20"),
-      ),
-    ).toBeVisible();
+  async assertIngenRegisterinfoboks() {
+    await expect(this.page.getByRole("alert")).toHaveCount(0);
   }
 
   async assertSamletVirksomhetPakrevdIsVisible() {

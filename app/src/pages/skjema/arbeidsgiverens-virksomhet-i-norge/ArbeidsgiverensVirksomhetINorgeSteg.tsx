@@ -37,7 +37,6 @@ import {
   tallTilFeltverdi,
 } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
 import { FELTBREDDE, ProsentFelt } from "./ProsentFelt.tsx";
-import { RegistrertAntallAnsatte } from "./RegistrertAntallAnsatte.tsx";
 
 type ArbeidsgiverensVirksomhetSchema = ReturnType<
   typeof lagArbeidsgiverensVirksomhetSchema
@@ -59,8 +58,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
-  const { antallAnsatte, arbeidsgiverNavn, erOffentligArbeidsgiver } =
-    skjema.metadata;
+  const { antallAnsatte } = skjema.metadata;
   const erBemanningFelt = getFelt(
     "arbeidsgiverensVirksomhetINorge",
     "erArbeidsgiverenBemanningsEllerVikarbyraa",
@@ -145,15 +143,6 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             stepKey: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
             skjema,
           }}
-          infoOverTittel={
-            erOffentligArbeidsgiver === false &&
-            antallAnsatte !== undefined && (
-              <RegistrertAntallAnsatte
-                antallAnsatte={antallAnsatte}
-                virksomhetsnavn={arbeidsgiverNavn}
-              />
-            )
-          }
           isSubmitError={registerVirksomhetMutation.isError}
           nesteKnapp={
             <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />

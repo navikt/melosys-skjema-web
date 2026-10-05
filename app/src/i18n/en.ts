@@ -220,10 +220,6 @@ export const en = {
         "You must answer whether the employer maintains regular business operations in Norway",
       opplysningerOmForetaketsSamledeVirksomhet:
         "Information about the company's overall business",
-      registrertMedFaerreEnnAnsatte:
-        "Information has been retrieved from the Brønnøysund Register Centre. {{virksomhetsnavn}} is registered with fewer than {{ansattgrense}} employees. If this is incorrect, please contact the Brønnøysund Register Centre.",
-      registrertMedAnsatteEllerFlere:
-        "Information has been retrieved from the Brønnøysund Register Centre. {{virksomhetsnavn}} is registered with {{ansattgrense}} or more employees. If this is incorrect, please contact the Brønnøysund Register Centre.",
       duMaOppgiAntallAdministrativtAnsatte:
         "You must state the number of administrative employees",
       duMaOppgiAntallUtsendteArbeidstakere:

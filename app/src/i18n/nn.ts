@@ -214,10 +214,6 @@ export const nn = {
         "Du må svare på om arbeidsgivaren held oppe vanleg drift i Noreg",
       opplysningerOmForetaketsSamledeVirksomhet:
         "Opplysningar om den samla verksemda til føretaket",
-      registrertMedFaerreEnnAnsatte:
-        "Informasjon er henta frå Einingsregisteret. {{virksomhetsnavn}} er registrert med færre enn {{ansattgrense}} tilsette. Dersom dette er feil, må du kontakte Brønnøysundregistra.",
-      registrertMedAnsatteEllerFlere:
-        "Informasjon er henta frå Einingsregisteret. {{virksomhetsnavn}} er registrert med {{ansattgrense}} eller fleire tilsette. Dersom dette er feil, må du kontakte Brønnøysundregistra.",
       duMaOppgiAntallAdministrativtAnsatte:
         "Du må oppgi talet på administrativt tilsette",
       duMaOppgiAntallUtsendteArbeidstakere:

@@ -210,10 +210,6 @@ export const nb = {
         "Du må svare på om arbeidsgiveren opprettholder vanlig drift i Norge",
       opplysningerOmForetaketsSamledeVirksomhet:
         "Opplysninger om foretakets samlede virksomhet",
-      registrertMedFaerreEnnAnsatte:
-        "Informasjon er hentet fra Enhetsregisteret. {{virksomhetsnavn}} er registrert med færre enn {{ansattgrense}} ansatte. Hvis dette er feil, må du kontakte Brønnøysundregistrene.",
-      registrertMedAnsatteEllerFlere:
-        "Informasjon er hentet fra Enhetsregisteret. {{virksomhetsnavn}} er registrert med {{ansattgrense}} eller flere ansatte. Hvis dette er feil, må du kontakte Brønnøysundregistrene.",
       duMaOppgiAntallAdministrativtAnsatte:
         "Du må oppgi antall administrativt ansatte",
       duMaOppgiAntallUtsendteArbeidstakere:
