@@ -74,6 +74,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.JA.click();
     await virksomhetStegPage.assertVanligDriftIsHidden();
     await virksomhetStegPage.assertSamletVirksomhetIsVisible();
+    await virksomhetStegPage.assertSamletVirksomhetStyling();
     await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
 
     const expectedPayload: ArbeidsgiverensVirksomhetINorgeDto = {

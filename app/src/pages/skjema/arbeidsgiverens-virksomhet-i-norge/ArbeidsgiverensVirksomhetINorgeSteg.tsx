@@ -157,9 +157,9 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
           {visSamletVirksomhet && (
             <section
               aria-labelledby="samlet-virksomhet-tittel"
-              className="my-8"
+              className="mt-4 mb-8"
             >
-              <Heading id="samlet-virksomhet-tittel" level="2" size="small">
+              <Heading id="samlet-virksomhet-tittel" level="2" size="xsmall">
                 {t(
                   "arbeidsgiverensVirksomhetINorgeSteg.opplysningerOmForetaketsSamledeVirksomhet",
                 )}

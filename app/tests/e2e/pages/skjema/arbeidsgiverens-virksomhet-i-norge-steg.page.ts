@@ -183,6 +183,14 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     }
   }
 
+  async assertSamletVirksomhetStyling() {
+    await expect(this.samletVirksomhetHeading).toHaveCSS("font-size", "18px");
+    await expect(this.samletVirksomhetHeading.locator("..")).toHaveCSS(
+      "margin-top",
+      "16px",
+    );
+  }
+
   async assertSamletVirksomhetIsHidden() {
     await expect(this.samletVirksomhetHeading).toBeHidden();
     for (const felt of SAMLET_VIRKSOMHET_FELTER) {
