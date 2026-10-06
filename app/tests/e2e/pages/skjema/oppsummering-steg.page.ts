@@ -120,7 +120,14 @@ export class OppsummeringStegPage {
       );
     }
 
-    if (data.opprettholderArbeidsgiverenVanligDrift !== undefined) {
+    if (data.opprettholderArbeidsgiverenVanligDrift === undefined) {
+      await expect(
+        this.page.getByText(
+          virksomhetINorge.felter.opprettholderArbeidsgiverenVanligDrift.label,
+          { exact: true },
+        ),
+      ).toHaveCount(0);
+    } else {
       await expect(
         this.page.locator(
           `dt:has-text("${virksomhetINorge.felter.opprettholderArbeidsgiverenVanligDrift.label}") + dd`,
@@ -130,6 +137,38 @@ export class OppsummeringStegPage {
           ? translations.felles.ja
           : translations.felles.nei,
       );
+    }
+
+    const antallFelter = [
+      "antallAdministrativtAnsatte",
+      "antallUtsendteArbeidstakere",
+    ] as const;
+    for (const felt of antallFelter) {
+      const verdi = data[felt];
+      if (verdi !== undefined) {
+        await expect(
+          this.page.locator(
+            `dt:text-is("${virksomhetINorge.felter[felt].label}") + dd`,
+          ),
+        ).toHaveText(String(verdi));
+      }
+    }
+
+    const andelFelter = [
+      "andelAnsatteRekruttertINorge",
+      "andelOmsetningINorge",
+      "andelOppdragUtfortINorge",
+      "andelOppdragskontrakterInngattINorge",
+    ] as const;
+    for (const felt of andelFelter) {
+      const verdi = data[felt];
+      if (verdi !== undefined) {
+        await expect(
+          this.page.locator(
+            `dt:text-is("${virksomhetINorge.felter[felt].label}") + dd`,
+          ),
+        ).toHaveText(`${verdi} %`);
+      }
     }
   }
 

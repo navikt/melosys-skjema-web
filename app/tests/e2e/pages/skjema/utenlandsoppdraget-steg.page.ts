@@ -40,18 +40,6 @@ const feilmeldinger = {
   periodeErPakrevd: translations.periode.datoErPakrevd,
 };
 
-const registrertSomOffentligVirksomhetMal =
-  translations.utenlandsoppdragetSteg.registrertSomOffentligVirksomhet;
-const offentligVirksomhetOrdMatch = /<lookup>(.+?)<\/lookup>/.exec(
-  registrertSomOffentligVirksomhetMal,
-);
-if (!offentligVirksomhetOrdMatch?.[1]) {
-  throw new Error(
-    "registrertSomOffentligVirksomhet mangler <lookup>…</lookup> i oversettelsen",
-  );
-}
-const offentligVirksomhetOrd = offentligVirksomhetOrdMatch[1];
-
 export class UtenlandsoppdragetStegPage {
   readonly page: Page;
   readonly skjema: UtsendtArbeidstakerSkjemaDto;
@@ -196,10 +184,6 @@ export class UtenlandsoppdragetStegPage {
     });
   }
 
-  private offentligVirksomhetLookup() {
-    return this.page.getByRole("button", { name: offentligVirksomhetOrd });
-  }
-
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/utenlandsoppdraget`);
   }
@@ -313,30 +297,7 @@ export class UtenlandsoppdragetStegPage {
     ).toBeVisible();
   }
 
-  // --- Registeropplysning: offentlig virksomhet (fra Enhetsregisteret) ---
-
-  async assertRegistrertSomOffentligVirksomhetIsVisible(
-    virksomhetsnavn: string,
-  ) {
-    const forventetTekst = registrertSomOffentligVirksomhetMal
-      .replace("{{virksomhetsnavn}}", () => virksomhetsnavn)
-      .replaceAll(/<\/?lookup>/g, "");
-    await expect(this.page.getByText(forventetTekst)).toBeVisible();
-    await expect(this.offentligVirksomhetLookup()).toBeVisible();
-  }
-
-  async assertRegistrertSomOffentligVirksomhetIsNotVisible() {
-    await expect(this.offentligVirksomhetLookup()).toHaveCount(0);
-  }
-
-  async openOffentligVirksomhetLookupAndAssertForklaring() {
-    await this.offentligVirksomhetLookup().click();
-    await expect(
-      this.page
-        .getByRole("dialog", { name: offentligVirksomhetOrd })
-        .getByText(
-          translations.utenlandsoppdragetSteg.offentligVirksomhetForklaring,
-        ),
-    ).toBeVisible();
+  async assertIngenRegisterinfoboks() {
+    await expect(this.page.getByRole("alert")).toHaveCount(0);
   }
 }

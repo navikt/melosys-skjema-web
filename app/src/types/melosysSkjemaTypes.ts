@@ -20,6 +20,7 @@ export enum Sprak {
 
 export enum FeltFormat {
   BELOP = "BELOP",
+  PROSENT = "PROSENT",
 }
 
 export enum InnsendingStatus {
@@ -172,6 +173,10 @@ export interface FeltDefinisjonDto {
 }
 
 export interface OppdaterSaksstatusRequest {
+  /**
+   * @minLength 0
+   * @maxLength 99
+   */
   saksnummer: string;
   saksstatus: Saksstatus;
 }
@@ -187,6 +192,10 @@ export interface BulkOppdaterSaksstatusRequest {
 export interface SaksstatusOppdatering {
   /** @format uuid */
   skjemaId: string;
+  /**
+   * @minLength 0
+   * @maxLength 99
+   */
   saksnummer: string;
   saksstatus: Saksstatus;
 }
@@ -199,6 +208,10 @@ export interface BulkOppdaterSaksstatusResultat {
 }
 
 export interface RegistrerSaksnummerRequest {
+  /**
+   * @minLength 0
+   * @maxLength 99
+   */
   saksnummer: string;
 }
 
@@ -221,12 +234,15 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
   | "juridiskEnhetOrgnr"
-  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
+  erOffentligArbeidsgiver?: boolean;
+  /** @format int32 */
+  antallAnsatte?: number;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -237,12 +253,15 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
   | "juridiskEnhetOrgnr"
-  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
+  erOffentligArbeidsgiver?: boolean;
+  /** @format int32 */
+  antallAnsatte?: number;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -253,11 +272,14 @@ export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
   | "juridiskEnhetOrgnr"
-  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
+  erOffentligArbeidsgiver?: boolean;
+  /** @format int32 */
+  antallAnsatte?: number;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -265,9 +287,25 @@ export type ArbeidsgiverMetadata = UtilRequiredKeys<
 };
 
 export interface ArbeidsgiverensVirksomhetINorgeDto {
+  /**
+   * Brukes kun til visning av historiske V1 innsendinger, kan fjernes når visning av disse ikke er nødvendig lenger
+   * @deprecated
+   */
   erArbeidsgiverenOffentligVirksomhet?: boolean;
   erArbeidsgiverenBemanningsEllerVikarbyraa?: boolean;
   opprettholderArbeidsgiverenVanligDrift?: boolean;
+  /** @format int32 */
+  antallAdministrativtAnsatte?: number;
+  /** @format int32 */
+  antallUtsendteArbeidstakere?: number;
+  /** @format int32 */
+  andelAnsatteRekruttertINorge?: number;
+  /** @format int32 */
+  andelOmsetningINorge?: number;
+  /** @format int32 */
+  andelOppdragUtfortINorge?: number;
+  /** @format int32 */
+  andelOppdragskontrakterInngattINorge?: number;
 }
 
 export interface ArbeidsgiversData {
@@ -307,11 +345,14 @@ export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
   | "juridiskEnhetOrgnr"
-  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
+  erOffentligArbeidsgiver?: boolean;
+  /** @format int32 */
+  antallAnsatte?: number;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -387,12 +428,15 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
   | "juridiskEnhetOrgnr"
-  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
+  erOffentligArbeidsgiver?: boolean;
+  /** @format int32 */
+  antallAnsatte?: number;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -404,11 +448,14 @@ export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
   | "representasjonstype"
   | "juridiskEnhetOrgnr"
-  | "skjemadel"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
+  erOffentligArbeidsgiver?: boolean;
+  /** @format int32 */
+  antallAnsatte?: number;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -520,11 +567,13 @@ export interface UtsendtArbeidstakerMetadata {
   juridiskEnhetOrgnr: string;
   /** @format uuid */
   erstatterSkjemaId?: string;
-  skjemadel: Skjemadel;
-  arbeidsgiverNavn: string;
   /** @format uuid */
   kobletSkjemaId?: string;
+  arbeidsgiverNavn: string;
   arbeidstakerNavn: string;
+  /** @format int32 */
+  antallAnsatte?: number;
+  skjemadel: Skjemadel;
   erOffentligArbeidsgiver?: boolean;
   metadatatype: string;
 }
@@ -676,6 +725,11 @@ export interface ResendVarslerResultatDto {
   ikkeFunnetEkskluderte: string[];
 }
 
+export interface HentInnsendingerDto {
+  fnr?: string;
+  orgnr?: string;
+}
+
 export interface InnsendingAdminDto {
   /** @format uuid */
   innsendingId: string;
@@ -800,6 +854,7 @@ export interface InnsendtSkjemaResponse {
    * @example "MEL-123456"
    */
   saksnummer?: string;
+  /** Saksstatus i melosys-api, null = ikke synket ennå (behandles som MOTTATT) */
   saksstatus?: Saksstatus;
 }
 
@@ -967,6 +1022,9 @@ export interface ArbeidsgiverensVirksomhetINorgeTranslation {
   offentligVirksomhetSkalIkkeOppgiVanligDrift: string;
   maaOppgiOmBemanningsbyraa: string;
   maaOppgiOmVanligDrift: string;
+  skalIkkeOppgiSamletVirksomhet: string;
+  antallMaaVaereNullEllerMer: string;
+  andelMaaVaereMellom0Og100: string;
 }
 
 export interface ArbeidssituasjonTranslation {
@@ -1075,6 +1133,8 @@ export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
   erOffentligArbeidsgiver: boolean;
+  /** @format int32 */
+  antallAnsatte: number;
 }
 
 export interface AdminStatistikkDto {

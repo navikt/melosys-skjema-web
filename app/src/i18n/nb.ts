@@ -208,6 +208,24 @@ export const nb = {
         "Du må svare på om arbeidsgiveren er et bemannings- eller vikarbyrå",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
         "Du må svare på om arbeidsgiveren opprettholder vanlig drift i Norge",
+      opplysningerOmForetaketsSamledeVirksomhet:
+        "Opplysninger om foretakets samlede virksomhet",
+      duMaOppgiAntallAdministrativtAnsatte:
+        "Du må oppgi antall administrativt ansatte",
+      duMaOppgiAntallUtsendteArbeidstakere:
+        "Du må oppgi antall utsendte arbeidstakere",
+      duMaOppgiAndelAnsatteRekruttertINorge:
+        "Du må oppgi andel ansatte rekruttert i Norge",
+      duMaOppgiAndelOmsetningINorge:
+        "Du må oppgi andel omsetning opptjent i Norge",
+      duMaOppgiAndelOppdragUtfortINorge:
+        "Du må oppgi andel oppdrag utført i Norge",
+      duMaOppgiAndelOppdragskontrakterInngattINorge:
+        "Du må oppgi andel oppdragskontrakter inngått i Norge",
+      antallMaVaereEtHeltallSomErNullEllerMer:
+        "Du må oppgi et helt tall som er 0 eller høyere",
+      andelMaVaereEtHeltallMellom0Og100:
+        "Du må oppgi et helt tall mellom 0 og 100",
     },
     utenlandsoppdragetSteg: {
       // Excel-ordlyden «Utsendingsperiode og land» tas sammen med v1->v2-bumpen av
@@ -229,10 +247,6 @@ export const nb = {
         "Beskrivelse av ansettelsesforhold er påkrevd",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
-      registrertSomOffentligVirksomhet:
-        "Informasjon er hentet fra Enhetsregisteret. {{virksomhetsnavn}} er registrert som <lookup>offentlig virksomhet</lookup>. Hvis dette er feil, må du kontakte Brønnøysundregistrene.",
-      offentligVirksomhetForklaring:
-        "Offentlige virksomheter er statsorganer og underliggende virksomheter, for eksempel departementer og universiteter.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utsendingsperiode og land",

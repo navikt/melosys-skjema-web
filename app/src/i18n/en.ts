@@ -218,6 +218,24 @@ export const en = {
         "You must answer whether the employer is a staffing or temporary work agency",
       duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge:
         "You must answer whether the employer maintains regular business operations in Norway",
+      opplysningerOmForetaketsSamledeVirksomhet:
+        "Information about the company's overall business",
+      duMaOppgiAntallAdministrativtAnsatte:
+        "You must state the number of administrative employees",
+      duMaOppgiAntallUtsendteArbeidstakere:
+        "You must state the number of posted workers",
+      duMaOppgiAndelAnsatteRekruttertINorge:
+        "You must state the share of employees recruited in Norway",
+      duMaOppgiAndelOmsetningINorge:
+        "You must state the share of turnover earned in Norway",
+      duMaOppgiAndelOppdragUtfortINorge:
+        "You must state the share of assignments performed in Norway",
+      duMaOppgiAndelOppdragskontrakterInngattINorge:
+        "You must state the share of assignment contracts concluded in Norway",
+      antallMaVaereEtHeltallSomErNullEllerMer:
+        "You must enter a whole number that is 0 or higher",
+      andelMaVaereEtHeltallMellom0Og100:
+        "You must enter a whole number between 0 and 100",
     },
     utenlandsoppdragetSteg: {
       tittel: "Posting Period and Country",
@@ -237,10 +255,6 @@ export const en = {
         "Description of employment relationship is required",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "You must answer whether the employee will work for the company in Norway after the posting period",
-      registrertSomOffentligVirksomhet:
-        "Information has been retrieved from the Brønnøysund Register Centre. {{virksomhetsnavn}} is registered as a <lookup>public sector organisation</lookup>. If this is incorrect, please contact the Brønnøysund Register Centre.",
-      offentligVirksomhetForklaring:
-        "Public sector organisations are government bodies and their subordinate agencies, for example ministries and universities.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",

@@ -35,6 +35,12 @@ function erBelopFelt(felt: FeltUnion): boolean {
   );
 }
 
+function erProsentFelt(felt: FeltUnion): boolean {
+  return (
+    felt.type === "TEXT" && (felt as TextFeltDefinisjon).format === "PROSENT"
+  );
+}
+
 /**
 Henter labels for valgte alternativer i en checkbox-gruppe
 */
@@ -105,7 +111,7 @@ export function formaterVerdi(
         const formatert = formaterBelop(stringVerdi, visningssprak);
         return formatert ? `${formatert} kr` : stringVerdi;
       }
-      return stringVerdi;
+      return erProsentFelt(felt) ? `${stringVerdi} %` : stringVerdi;
     }
   }
 }

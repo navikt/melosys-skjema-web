@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Heading, HGrid, TextField } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { FormProvider, useForm } from "react-hook-form";
+import { useMemo } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
@@ -21,15 +24,27 @@ import {
   Skjemadel,
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
+import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
 import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import { arbeidsgiverensVirksomhetSchema } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+import {
+  ANDELFELTER,
+  ANTALLFELTER,
+  lagArbeidsgiverensVirksomhetSchema,
+  skalOppgiSamletVirksomhet,
+  tallTilFeltverdi,
+} from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
+import { FELTBREDDE, ProsentFelt } from "./ProsentFelt.tsx";
 
-type ArbeidsgiverensVirksomhetFormData = z.infer<
-  typeof arbeidsgiverensVirksomhetSchema
+type ArbeidsgiverensVirksomhetSchema = ReturnType<
+  typeof lagArbeidsgiverensVirksomhetSchema
 >;
+type ArbeidsgiverensVirksomhetFormInput =
+  z.input<ArbeidsgiverensVirksomhetSchema>;
+type ArbeidsgiverensVirksomhetFormData =
+  z.infer<ArbeidsgiverensVirksomhetSchema>;
 
 function ArbeidsgiverensVirksomhetINorgeStegContent({
   skjema,
@@ -39,8 +54,11 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidsgiverensVirksomhetINorge(skjema);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
+  const { antallAnsatte } = skjema.metadata;
   const erBemanningFelt = getFelt(
     "arbeidsgiverensVirksomhetINorge",
     "erArbeidsgiverenBemanningsEllerVikarbyraa",
@@ -50,12 +68,49 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
     "opprettholderArbeidsgiverenVanligDrift",
   );
 
-  const formMethods = useForm<ArbeidsgiverensVirksomhetFormData>({
-    resolver: zodResolver(arbeidsgiverensVirksomhetSchema),
-    ...(stegData && { defaultValues: stegData }),
+  const schema = useMemo(
+    () => lagArbeidsgiverensVirksomhetSchema(antallAnsatte),
+    [antallAnsatte],
+  );
+
+  const formMethods = useForm<
+    ArbeidsgiverensVirksomhetFormInput,
+    unknown,
+    ArbeidsgiverensVirksomhetFormData
+  >({
+    resolver: zodResolver(schema),
+    ...(stegData && {
+      defaultValues: {
+        erArbeidsgiverenBemanningsEllerVikarbyraa:
+          stegData.erArbeidsgiverenBemanningsEllerVikarbyraa,
+        opprettholderArbeidsgiverenVanligDrift:
+          stegData.opprettholderArbeidsgiverenVanligDrift,
+        ...Object.fromEntries(
+          [...ANTALLFELTER, ...ANDELFELTER].map((felt) => [
+            felt,
+            tallTilFeltverdi(stegData[felt]),
+          ]),
+        ),
+      },
+    }),
   });
 
-  const { handleSubmit } = formMethods;
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = formMethods;
+
+  const erBemanningsEllerVikarbyraa = useWatch({
+    control,
+    name: "erArbeidsgiverenBemanningsEllerVikarbyraa",
+  });
+
+  const visSamletVirksomhet = skalOppgiSamletVirksomhet(
+    antallAnsatte,
+    erBemanningsEllerVikarbyraa,
+  );
 
   const registerVirksomhetMutation = useMutation({
     mutationFn: (data: ArbeidsgiverensVirksomhetFormData) => {
@@ -99,12 +154,61 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             legend={erBemanningFelt.label}
           />
 
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            description={opprettholderDriftFelt.hjelpetekst}
-            formFieldName="opprettholderArbeidsgiverenVanligDrift"
-            legend={opprettholderDriftFelt.label}
-          />
+          {visSamletVirksomhet && (
+            <section
+              aria-labelledby="samlet-virksomhet-tittel"
+              className="mt-4 mb-8"
+            >
+              <Heading id="samlet-virksomhet-tittel" level="2" size="xsmall">
+                {t(
+                  "arbeidsgiverensVirksomhetINorgeSteg.opplysningerOmForetaketsSamledeVirksomhet",
+                )}
+              </Heading>
+              <Box
+                background="info-moderateA"
+                borderColor="info-subtleA"
+                borderRadius="12"
+                borderWidth="1"
+                className="mt-4"
+                padding="space-24"
+              >
+                <HGrid align="start" columns={{ xs: 1, md: 2 }} gap="space-24">
+                  {ANTALLFELTER.map((felt) => (
+                    <TextField
+                      error={translateError(errors[felt]?.message)}
+                      className={FELTBREDDE}
+                      inputMode="numeric"
+                      key={felt}
+                      label={
+                        getFelt("arbeidsgiverensVirksomhetINorge", felt).label
+                      }
+                      maxLength={9}
+                      {...register(felt)}
+                    />
+                  ))}
+                  {ANDELFELTER.map((felt) => (
+                    <ProsentFelt
+                      error={translateError(errors[felt]?.message)}
+                      key={felt}
+                      label={
+                        getFelt("arbeidsgiverensVirksomhetINorge", felt).label
+                      }
+                      {...register(felt)}
+                    />
+                  ))}
+                </HGrid>
+              </Box>
+            </section>
+          )}
+
+          {!visSamletVirksomhet && (
+            <RadioGroupJaNeiFormPart
+              className="mt-4"
+              description={opprettholderDriftFelt.hjelpetekst}
+              formFieldName="opprettholderArbeidsgiverenVanligDrift"
+              legend={opprettholderDriftFelt.label}
+            />
+          )}
         </SkjemaSteg>
       </form>
     </FormProvider>

@@ -149,19 +149,6 @@ test.describe("Utenlandsoppdraget", () => {
     );
     await utenlandsoppdragetStegPage.assertNavigatedToNextStep();
   });
-
-  test("privat arbeidsgiver - viser ikke registeropplysning om offentlig virksomhet", async ({
-    page,
-  }) => {
-    const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
-      page,
-      testArbeidsgiverSkjema,
-    );
-
-    await utenlandsoppdragetStegPage.goto();
-    await utenlandsoppdragetStegPage.assertIsVisible();
-    await utenlandsoppdragetStegPage.assertRegistrertSomOffentligVirksomhetIsNotVisible();
-  });
 });
 
 test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
@@ -182,7 +169,7 @@ test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
     );
   });
 
-  test("viser registeropplysning med virksomhetsnavn og forklaring på offentlig virksomhet", async ({
+  test("viser utenlandsoppdraget uten registerinfoboks for offentlig arbeidsgiver", async ({
     page,
   }) => {
     const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
@@ -192,9 +179,6 @@ test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
 
     await utenlandsoppdragetStegPage.goto();
     await utenlandsoppdragetStegPage.assertIsVisible();
-    await utenlandsoppdragetStegPage.assertRegistrertSomOffentligVirksomhetIsVisible(
-      offentligSkjema.metadata.arbeidsgiverNavn,
-    );
-    await utenlandsoppdragetStegPage.openOffentligVirksomhetLookupAndAssertForklaring();
+    await utenlandsoppdragetStegPage.assertIngenRegisterinfoboks();
   });
 });
