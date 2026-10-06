@@ -89,18 +89,17 @@ export function lagArbeidsgiverensVirksomhetSchema(
   return baseSchema
     .superRefine(
       (data, context) => {
-        if (
-          !skalOppgi(data) &&
-          data.opprettholderArbeidsgiverenVanligDrift === undefined
-        ) {
-          context.addIssue({
-            code: "custom",
-            message:
-              "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge",
-            path: ["opprettholderArbeidsgiverenVanligDrift"],
-          });
+        if (!skalOppgi(data)) {
+          if (data.opprettholderArbeidsgiverenVanligDrift === undefined) {
+            context.addIssue({
+              code: "custom",
+              message:
+                "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenOpprettholderVanligDriftINorge",
+              path: ["opprettholderArbeidsgiverenVanligDrift"],
+            });
+          }
+          return;
         }
-        if (!skalOppgi(data)) return;
 
         for (const felt of [...ANTALLFELTER, ...ANDELFELTER]) {
           const verdi = normaliser(data[felt]);
