@@ -48,6 +48,7 @@ test.describe("Oversikt", () => {
     await oversiktPage.goto();
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertStartSoknadVisible();
+    await oversiktPage.assertDegSelvInfoVisible();
   });
 
   test("Viser utkastliste når det finnes påbegynte søknader", async ({
@@ -159,6 +160,7 @@ test.describe("Oversikt", () => {
     await oversiktPage.goto();
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertStartSoknadVisible();
+    await oversiktPage.assertDegSelvInfoNotVisible();
   });
 });
 
