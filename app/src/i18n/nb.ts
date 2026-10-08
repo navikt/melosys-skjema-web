@@ -375,6 +375,9 @@ export const nb = {
       utkastSistEndret: "Sist endret",
       soknadStarterTittel: "Hvem skal du fylle ut søknaden på vegne av?",
       soknadStarterTittelDegSelv: "Oppgi arbeidsgiver som sender deg ut",
+      soknadStarterInfoTittelDegSelv: "Hva må sendes inn?",
+      soknadStarterInfoDegSelv:
+        "Vi trenger opplysninger om deg og i de fleste tilfeller en bekreftelse på utsending fra arbeidsgiveren din. Dere benytter samme digitale skjema, men skal fylle ut og sende inn hver deres del.",
       soknadStarterTittelAnnenPerson:
         "Hvem skal du fylle ut søknaden på vegne av?",
       soknadStarterInfoAnnenPerson:
