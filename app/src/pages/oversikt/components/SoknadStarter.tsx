@@ -251,16 +251,7 @@ function SoknadStarterContent({
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack gap="space-24">
             <div>
-              {representasjonstype !== Representasjonstype.DEG_SELV && (
-                <Heading level="2" size="medium" spacing>
-                  {t(
-                    representasjonstype === Representasjonstype.ANNEN_PERSON
-                      ? "oversiktFelles.soknadStarterTittelAnnenPerson"
-                      : "oversiktFelles.soknadStarterTittel",
-                  )}
-                </Heading>
-              )}
-              {representasjonstype === Representasjonstype.DEG_SELV && (
+              {representasjonstype === Representasjonstype.DEG_SELV ? (
                 <>
                   <Heading level="2" size="medium" spacing>
                     {t("oversiktFelles.soknadStarterInfoTittelDegSelv")}
@@ -269,6 +260,14 @@ function SoknadStarterContent({
                     {t("oversiktFelles.soknadStarterInfoDegSelv")}
                   </BodyLong>
                 </>
+              ) : (
+                <Heading level="2" size="medium" spacing>
+                  {t(
+                    representasjonstype === Representasjonstype.ANNEN_PERSON
+                      ? "oversiktFelles.soknadStarterTittelAnnenPerson"
+                      : "oversiktFelles.soknadStarterTittel",
+                  )}
+                </Heading>
               )}
               {representasjonstype === Representasjonstype.ANNEN_PERSON && (
                 <BodyLong spacing>

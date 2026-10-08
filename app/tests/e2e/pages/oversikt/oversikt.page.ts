@@ -143,8 +143,19 @@ export class OversiktPage {
   }
 
   async assertDegSelvInfoVisible() {
-    await expect(this.soknadStarterInfoHeading).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 2,
+        name: translations.oversiktFelles.soknadStarterInfoTittelDegSelv,
+      }),
+    ).toBeVisible();
     await expect(this.soknadStarterInfo).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: translations.oversiktFelles.soknadStarterTittelDegSelv,
+      }),
+    ).toBeVisible();
   }
 
   async assertDegSelvInfoNotVisible() {
