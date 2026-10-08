@@ -349,9 +349,20 @@ export const nn = {
         "Lista inneheld alle personar du har fått fullmakt frå på nav.no.",
     },
     skjemaStart: {
+      informasjonViHenterInn: "Informasjon vi hentar inn",
+      informasjonViHenterInnIntro:
+        "I tillegg til informasjonen du oppgir i skjemaet, hentar vi:",
+      folkeregisteret: "Person- og adresseopplysningar frå Folkeregisteret",
+      enhetsregisteret:
+        "Opplysningar om verksemda frå Einingsregisteret eller Føretaksregisteret",
+      aaRegisteret: "Opplysningar om arbeidsforholda dine frå Aa-registeret",
+      personvernLinkText:
+        "Slik behandlar vi personopplysningane dine (opnast i ny fane).",
+      personvernLinkUrl: "https://www.nav.no/personvernerklaering",
       intro:
         "Det er viktig at du gjev oss riktige opplysningar slik at vi kan behandle saka.",
-      linkText: "Les meir om kor viktig det er å gje riktige opplysningar.",
+      linkText:
+        "Les meir om kor viktig det er å gje riktige opplysningar (opnast i ny fane).",
       linkUrl: "https://www.nav.no/endringer",
       bekreftAtVilSvareRiktig:
         "Eg stadfestar at eg vil svare så riktig som eg kan",

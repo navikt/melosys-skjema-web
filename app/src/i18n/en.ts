@@ -360,10 +360,22 @@ export const en = {
         "The list contains all persons who have given you power of attorney on nav.no.",
     },
     skjemaStart: {
+      informasjonViHenterInn: "Information we collect",
+      informasjonViHenterInnIntro:
+        "In addition to the information you provide in the application, we collect:",
+      folkeregisteret:
+        "Personal and address information from the National Population Register",
+      enhetsregisteret:
+        "Information about the business from the Central Coordinating Register for Legal Entities or the Register of Business Enterprises",
+      aaRegisteret:
+        "Information about your employment relationships from Aa-registeret",
+      personvernLinkText:
+        "How we process your personal data (opens in a new tab).",
+      personvernLinkUrl: "https://www.nav.no/personvernerklaering",
       intro:
         "It is important that you provide correct information so that we can process your application.",
       linkText:
-        "Read more about why it is important to provide correct information.",
+        "Read more about why it is important to provide correct information (opens in a new tab).",
       linkUrl: "https://www.nav.no/endringer/en",
       bekreftAtVilSvareRiktig:
         "I confirm that I will answer as accurately as I can",

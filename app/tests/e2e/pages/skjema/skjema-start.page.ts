@@ -36,10 +36,39 @@ export class SkjemaStartPage {
   }
 
   async assertInnhold(representasjonstype: Representasjonstype) {
-    await expect(this.page.getByText(tekster.intro)).toBeVisible();
     await expect(
-      this.page.getByRole("link", { name: tekster.linkText }),
-    ).toHaveAttribute("href", "https://www.nav.no/endringer");
+      this.page.getByRole("heading", {
+        name: tekster.informasjonViHenterInn,
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText(tekster.informasjonViHenterInnIntro),
+    ).toBeVisible();
+    for (const tekst of [
+      tekster.folkeregisteret,
+      tekster.enhetsregisteret,
+      tekster.aaRegisteret,
+    ]) {
+      await expect(this.page.getByText(tekst)).toBeVisible();
+    }
+    const personvernLink = this.page.getByRole("link", {
+      name: tekster.personvernLinkText,
+    });
+    await expect(personvernLink).toHaveAttribute(
+      "href",
+      "https://www.nav.no/personvernerklaering",
+    );
+    await expect(personvernLink).toHaveAttribute("target", "_blank");
+    await expect(personvernLink).toHaveAttribute("rel", "noopener noreferrer");
+    await expect(this.page.getByText(tekster.intro)).toBeVisible();
+    const bekreftelsesLink = this.page.getByRole("link", {
+      name: tekster.linkText,
+    });
+    await expect(bekreftelsesLink).toHaveAttribute(
+      "href",
+      "https://www.nav.no/endringer",
+    );
+    await expect(bekreftelsesLink).toHaveAttribute("target", "_blank");
 
     for (const [type, tekst] of Object.entries(ROLLE_INFO)) {
       await (type === representasjonstype
