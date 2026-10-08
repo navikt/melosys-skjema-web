@@ -251,15 +251,24 @@ function SoknadStarterContent({
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack gap="space-24">
             <div>
-              <Heading level="2" size="medium" spacing>
-                {t(
-                  representasjonstype === Representasjonstype.DEG_SELV
-                    ? "oversiktFelles.soknadStarterTittelDegSelv"
-                    : representasjonstype === Representasjonstype.ANNEN_PERSON
+              {representasjonstype === Representasjonstype.DEG_SELV ? (
+                <>
+                  <Heading level="2" size="medium" spacing>
+                    {t("oversiktFelles.soknadStarterInfoTittelDegSelv")}
+                  </Heading>
+                  <BodyLong className="mb-2">
+                    {t("oversiktFelles.soknadStarterInfoDegSelv")}
+                  </BodyLong>
+                </>
+              ) : (
+                <Heading level="2" size="medium" spacing>
+                  {t(
+                    representasjonstype === Representasjonstype.ANNEN_PERSON
                       ? "oversiktFelles.soknadStarterTittelAnnenPerson"
                       : "oversiktFelles.soknadStarterTittel",
-                )}
-              </Heading>
+                  )}
+                </Heading>
+              )}
               {representasjonstype === Representasjonstype.ANNEN_PERSON && (
                 <BodyLong spacing>
                   {t("oversiktFelles.soknadStarterInfoAnnenPerson")}
@@ -281,11 +290,13 @@ function SoknadStarterContent({
             )}
 
             <div>
-              {representasjonstype !== Representasjonstype.DEG_SELV && (
-                <Heading level="3" size="medium" spacing>
-                  {t("oversiktFelles.arbeidsgiverTittel")}
-                </Heading>
-              )}
+              <Heading level="3" size="medium" spacing>
+                {t(
+                  representasjonstype === Representasjonstype.DEG_SELV
+                    ? "oversiktFelles.soknadStarterTittelDegSelv"
+                    : "oversiktFelles.arbeidsgiverTittel",
+                )}
+              </Heading>
               {renderArbeidsgiverValg()}
             </div>
 

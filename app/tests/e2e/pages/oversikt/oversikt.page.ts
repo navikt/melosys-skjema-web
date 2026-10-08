@@ -24,6 +24,8 @@ export class OversiktPage {
   readonly page: Page;
   readonly representasjonstype: Representasjonstype;
   readonly heading: Locator;
+  readonly soknadStarterInfoHeading: Locator;
+  readonly soknadStarterInfo: Locator;
   readonly startSoknadButton: Locator;
   readonly utkastExpansionCard: Locator;
   readonly historikkHeading: Locator;
@@ -47,6 +49,14 @@ export class OversiktPage {
     this.heading = page.getByRole("heading", {
       name: translations.oversiktDegSelv.tittel,
     });
+
+    this.soknadStarterInfoHeading = page.getByRole("heading", {
+      name: translations.oversiktFelles.soknadStarterInfoTittelDegSelv,
+    });
+    this.soknadStarterInfo = page.getByText(
+      translations.oversiktFelles.soknadStarterInfoDegSelv,
+      { exact: true },
+    );
 
     this.startSoknadButton = page.getByRole("button", {
       name: translations.oversiktFelles.gaTilSkjemaKnapp,
@@ -130,6 +140,27 @@ export class OversiktPage {
 
   async assertStartSoknadVisible() {
     await expect(this.startSoknadButton).toBeVisible();
+  }
+
+  async assertDegSelvInfoVisible() {
+    await expect(
+      this.page.getByRole("heading", {
+        level: 2,
+        name: translations.oversiktFelles.soknadStarterInfoTittelDegSelv,
+      }),
+    ).toBeVisible();
+    await expect(this.soknadStarterInfo).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: translations.oversiktFelles.soknadStarterTittelDegSelv,
+      }),
+    ).toBeVisible();
+  }
+
+  async assertDegSelvInfoNotVisible() {
+    await expect(this.soknadStarterInfoHeading).toHaveCount(0);
+    await expect(this.soknadStarterInfo).toHaveCount(0);
   }
 
   async clickStartSoknad() {

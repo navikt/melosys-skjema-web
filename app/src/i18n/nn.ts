@@ -389,6 +389,9 @@ export const nn = {
       utkastSistEndret: "Sist endra",
       soknadStarterTittel: "Kven skal du fylle ut søknaden på vegner av?",
       soknadStarterTittelDegSelv: "Oppgi arbeidsgivar som sender deg ut",
+      soknadStarterInfoTittelDegSelv: "Kva må sendast inn?",
+      soknadStarterInfoDegSelv:
+        "Vi treng opplysningar om deg og i dei fleste tilfella ei stadfesting på utsending frå arbeidsgivaren din. De nyttar same digitale skjema, men skal fylle ut og sende inn kvar dykkar del.",
       soknadStarterTittelAnnenPerson:
         "Kven skal du fylle ut søknaden på vegner av?",
       soknadStarterInfoAnnenPerson:
