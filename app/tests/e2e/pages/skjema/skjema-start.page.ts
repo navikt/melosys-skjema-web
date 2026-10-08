@@ -44,13 +44,16 @@ export class SkjemaStartPage {
     await expect(
       this.page.getByText(tekster.informasjonViHenterInnIntro),
     ).toBeVisible();
-    for (const tekst of [
+    await expect(
+      this.page
+        .getByRole("region", { name: tekster.informasjonViHenterInn })
+        .getByRole("list")
+        .getByRole("listitem"),
+    ).toHaveText([
       tekster.folkeregisteret,
       tekster.enhetsregisteret,
       tekster.aaRegisteret,
-    ]) {
-      await expect(this.page.getByText(tekst)).toBeVisible();
-    }
+    ]);
     const personvernLink = this.page.getByRole("link", {
       name: tekster.personvernLinkText,
     });
@@ -64,10 +67,7 @@ export class SkjemaStartPage {
     const bekreftelsesLink = this.page.getByRole("link", {
       name: tekster.linkText,
     });
-    await expect(bekreftelsesLink).toHaveAttribute(
-      "href",
-      "https://www.nav.no/endringer",
-    );
+    await expect(bekreftelsesLink).toHaveAttribute("href", tekster.linkUrl);
     await expect(bekreftelsesLink).toHaveAttribute("target", "_blank");
 
     for (const [type, tekst] of Object.entries(ROLLE_INFO)) {
