@@ -1,11 +1,15 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   Alert,
+  Bleed,
   BodyLong,
+  Box,
   Button,
   Checkbox,
   ErrorMessage,
+  Heading,
   Link,
+  List,
   VStack,
 } from "@navikt/ds-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -104,49 +108,84 @@ function SkjemaStartInnhold({ nySoknad }: { nySoknad: NySoknad }) {
         skjemadel={skjemadelFor(nySoknad.request.representasjonstype)}
       />
       {rolleInfo && <BodyLong>{t(rolleInfo)}</BodyLong>}
-      <VStack gap="space-16">
-        <BodyLong>
-          {t("skjemaStart.intro")}{" "}
-          <Link
-            href={t("skjemaStart.linkUrl")}
-            rel="noopener noreferrer"
-            target="_blank"
+      <section aria-labelledby="informasjon-vi-henter-inn-tittel">
+        <Heading
+          id="informasjon-vi-henter-inn-tittel"
+          level="2"
+          size="small"
+          spacing
+        >
+          {t("skjemaStart.informasjonViHenterInn")}
+        </Heading>
+        <BodyLong>{t("skjemaStart.informasjonViHenterInnIntro")}</BodyLong>
+        <List className="mt-2 mb-4">
+          <List.Item>{t("skjemaStart.folkeregisteret")}</List.Item>
+          <List.Item>{t("skjemaStart.enhetsregisteret")}</List.Item>
+          <List.Item>{t("skjemaStart.aaRegisteret")}</List.Item>
+        </List>
+        <Link
+          href={t("skjemaStart.personvernLinkUrl")}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {t("skjemaStart.personvernLinkText")}
+        </Link>
+      </section>
+      <Bleed marginInline="space-24">
+        <VStack gap="space-32">
+          <Box
+            background="info-soft"
+            borderColor="info-subtleA"
+            borderRadius="12"
+            borderWidth="1"
+            padding="space-24"
           >
-            {t("skjemaStart.linkText")}
-          </Link>
-        </BodyLong>
-        <div>
-          <Checkbox
-            aria-describedby={feilmelding ? feilmeldingId : undefined}
-            checked={bekreftet}
-            error={!!feilmelding}
-            onChange={(event) => setBekreftet(event.target.checked)}
-            ref={checkboxRef}
-          >
-            {t("skjemaStart.bekreftAtVilSvareRiktig")}
-          </Checkbox>
-          {feilmelding && (
-            <ErrorMessage id={feilmeldingId} showIcon size="small">
-              {feilmelding}
-            </ErrorMessage>
+            <VStack gap="space-16">
+              <BodyLong>
+                {t("skjemaStart.intro")}{" "}
+                <Link
+                  href={t("skjemaStart.linkUrl")}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {t("skjemaStart.linkText")}
+                </Link>
+              </BodyLong>
+              <div>
+                <Checkbox
+                  aria-describedby={feilmelding ? feilmeldingId : undefined}
+                  checked={bekreftet}
+                  error={!!feilmelding}
+                  onChange={(event) => setBekreftet(event.target.checked)}
+                  ref={checkboxRef}
+                >
+                  {t("skjemaStart.bekreftAtVilSvareRiktig")}
+                </Checkbox>
+                {feilmelding && (
+                  <ErrorMessage id={feilmeldingId} showIcon size="small">
+                    {feilmelding}
+                  </ErrorMessage>
+                )}
+              </div>
+            </VStack>
+          </Box>
+          {opprettSoknadMutation.isError && (
+            <Alert variant="error">{t("skjemaStart.feilVedOpprettelse")}</Alert>
           )}
-        </div>
-      </VStack>
-      {opprettSoknadMutation.isError && (
-        <Alert variant="error">{t("skjemaStart.feilVedOpprettelse")}</Alert>
-      )}
-      <Button
-        className="w-fit"
-        icon={<ArrowRightIcon aria-hidden />}
-        iconPosition="right"
-        loading={
-          opprettSoknadMutation.isPending || opprettSoknadMutation.isSuccess
-        }
-        onClick={startSoknad}
-        variant="primary"
-      >
-        {t("skjemaStart.startSoknad")}
-      </Button>
+          <Button
+            className="w-fit"
+            icon={<ArrowRightIcon aria-hidden />}
+            iconPosition="right"
+            loading={
+              opprettSoknadMutation.isPending || opprettSoknadMutation.isSuccess
+            }
+            onClick={startSoknad}
+            variant="primary"
+          >
+            {t("skjemaStart.startSoknad")}
+          </Button>
+        </VStack>
+      </Bleed>
     </VStack>
   );
 }

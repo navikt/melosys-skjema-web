@@ -20,10 +20,19 @@ import {
 } from "../../fixtures/test-data";
 import { OversiktPage } from "../../pages/oversikt/oversikt.page";
 import { SkjemaStartPage } from "../../pages/skjema/skjema-start.page";
-import { translations } from "../../utils/translations";
+import { E2E_SPRAK, translations } from "../../utils/translations";
 
 test.describe("Skjema — introside med bekreftelse", () => {
   test.beforeEach(async ({ page }) => {
+    if (E2E_SPRAK !== "nb") {
+      await page.context().addCookies([
+        {
+          name: "decorator-language",
+          value: E2E_SPRAK,
+          url: "http://localhost:5173",
+        },
+      ]);
+    }
     await setupApiMocksForOversikt(
       page,
       testUserInfo,
