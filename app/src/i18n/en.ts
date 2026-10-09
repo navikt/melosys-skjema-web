@@ -282,7 +282,7 @@ export const en = {
       oppholdTittel: "Will work or stay in one or more countries",
       oppholdBeskrivelse:
         "You will work, or stay without working, in one or more EEA countries or Switzerland.",
-      oppholdLenke: "https://www.nav.no/fyllut/nav020807?lang=en",
+      oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital&lang=en",
       gaTilbake: "Go back",
     },
     landingsside: {

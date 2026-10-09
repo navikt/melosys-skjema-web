@@ -274,7 +274,7 @@ export const nb = {
       oppholdTittel: "Skal arbeide eller oppholde deg i et eller flere land",
       oppholdBeskrivelse:
         "Du skal arbeide, eller oppholde deg uten å arbeide, i ett eller flere EØS-land eller Sveits.",
-      oppholdLenke: "https://www.nav.no/fyllut/nav020807",
+      oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital",
       gaTilbake: "Gå tilbake",
     },
     landingsside: {
