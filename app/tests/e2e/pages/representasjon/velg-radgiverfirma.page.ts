@@ -59,6 +59,10 @@ export class VelgRadgiverfirmaPage {
     );
   }
 
+  async assertNavigatedToRepresentasjon() {
+    await expect(this.page).toHaveURL(/\/representasjon$/);
+  }
+
   async assertStillOnPage() {
     await expect(this.page).toHaveURL(/\/representasjon\/velg-radgiverfirma/);
   }
