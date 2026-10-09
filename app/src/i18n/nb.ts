@@ -266,6 +266,17 @@ export const nb = {
       duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
         "Du må legge til minst én virksomhet når du ikke betaler all lønn selv",
     },
+    velgSituasjon: {
+      tittel: "Velg situasjonen som gjelder for deg.",
+      utsendtTittel: "Er sendt ut av norsk arbeidsgiver",
+      utsendtBeskrivelse:
+        "Du har en norsk arbeidsgiver og er sendt ut for å arbeide midlertidig i et annet EØS-land eller Sveits. Du skal bruke skjemaet under hvis du jobber regelmessig både i Norge og i ett eller flere andre land.",
+      oppholdTittel: "Skal arbeide eller oppholde deg i et eller flere land",
+      oppholdBeskrivelse:
+        "Du skal arbeide, eller oppholde deg uten å arbeide, i ett eller flere EØS-land eller Sveits.",
+      oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital",
+      gaTilbake: "Gå tilbake",
+    },
     landingsside: {
       hei: "Hei",
       hvemVilDuBrukeNavPaVegneAv: "Hvem skal du opptre som?",

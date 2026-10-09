@@ -5,9 +5,16 @@ import {
   PersonCircleIcon,
   PersonGroupIcon,
 } from "@navikt/aksel-icons";
-import { BodyShort, Heading, HStack, Tag } from "@navikt/ds-react";
+import {
+  BodyShort,
+  Heading,
+  HStack,
+  LinkCard,
+  Tag,
+  VStack,
+} from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -79,6 +86,55 @@ function RepresentationCard({
   );
 }
 
+function RepresentasjonLenkekort({
+  option,
+  onVelg,
+  badge,
+}: {
+  option: RepresentationOption;
+  onVelg?: () => void;
+  badge?: string;
+}) {
+  const { t } = useTranslation();
+  const Icon = option.icon;
+  const tittel = t(option.labelKey);
+
+  return (
+    <LinkCard arrowPosition="center" data-color="accent">
+      <LinkCard.Icon>
+        <Icon aria-hidden fontSize="2rem" />
+      </LinkCard.Icon>
+      <LinkCard.Title as="h2">
+        <LinkCard.Anchor asChild>
+          {option.type === Representasjonstype.RADGIVER ? (
+            <Link onClick={onVelg} to="/representasjon/velg-radgiverfirma">
+              {tittel}
+            </Link>
+          ) : (
+            <Link
+              onClick={onVelg}
+              search={{ representasjonstype: option.type }}
+              to="/oversikt"
+            >
+              {tittel}
+            </Link>
+          )}
+        </LinkCard.Anchor>
+      </LinkCard.Title>
+      {option.descriptionKey && (
+        <LinkCard.Description>{t(option.descriptionKey)}</LinkCard.Description>
+      )}
+      {badge && (
+        <LinkCard.Footer>
+          <Tag size="small" variant="info">
+            {badge}
+          </Tag>
+        </LinkCard.Footer>
+      )}
+    </LinkCard>
+  );
+}
+
 const REPRESENTATION_OPTIONS: RepresentationOption[] = [
   {
     type: Representasjonstype.DEG_SELV,
@@ -107,12 +163,15 @@ const REPRESENTATION_OPTIONS: RepresentationOption[] = [
 
 interface RepresentasjonVelgerProperties {
   onVelg?: () => void;
-  visOverskrift?: boolean;
+  /**
+  "header" gir knapper uten overskrift, for menyen i headeren.
+  */
+  variant?: "side" | "header";
 }
 
 export function RepresentasjonVelger({
   onVelg,
-  visOverskrift = true,
+  variant = "side",
 }: RepresentasjonVelgerProperties) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -142,29 +201,42 @@ export function RepresentasjonVelger({
     }
   };
 
-  return (
-    <>
-      {visOverskrift && (
-        <Heading className="mt-4" level="1" size="large">
-          {t("landingsside.hvemVilDuBrukeNavPaVegneAv")}
-        </Heading>
-      )}
+  const badgeFor = (option: RepresentationOption) =>
+    harVentendeMotpartSoknad && option.type === Representasjonstype.DEG_SELV
+      ? t("landingsside.soknadVenterPaaDeg")
+      : undefined;
 
+  if (variant === "header") {
+    return (
       <div className="flex flex-col gap-2">
         {REPRESENTATION_OPTIONS.map((option) => (
           <RepresentationCard
-            badge={
-              harVentendeMotpartSoknad &&
-              option.type === Representasjonstype.DEG_SELV
-                ? t("landingsside.soknadVenterPaaDeg")
-                : undefined
-            }
+            badge={badgeFor(option)}
             key={option.type}
             onSelect={handleVelgRepresentasjon}
             option={option}
           />
         ))}
       </div>
-    </>
+    );
+  }
+
+  return (
+    <VStack gap="space-24">
+      <Heading className="mt-4" level="1" size="small">
+        {t("landingsside.hvemVilDuBrukeNavPaVegneAv")}
+      </Heading>
+
+      <VStack gap="space-24">
+        {REPRESENTATION_OPTIONS.map((option) => (
+          <RepresentasjonLenkekort
+            badge={badgeFor(option)}
+            key={option.type}
+            onVelg={onVelg}
+            option={option}
+          />
+        ))}
+      </VStack>
+    </VStack>
   );
 }

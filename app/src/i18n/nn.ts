@@ -268,6 +268,18 @@ export const nn = {
       duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
         "Du må leggje til minst éi verksemd når du ikkje betaler all løn sjølv",
     },
+    velgSituasjon: {
+      tittel: "Vel situasjonen som gjeld for deg.",
+      utsendtTittel: "Er send ut av norsk arbeidsgivar",
+      utsendtBeskrivelse:
+        "Du har ein norsk arbeidsgivar og er send ut for å arbeide mellombels i eit anna EØS-land eller Sveits. Du skal bruke skjemaet under dersom du jobbar regelmessig både i Noreg og i eitt eller fleire andre land.",
+      oppholdTittel: "Skal arbeide eller opphalde deg i eitt eller fleire land",
+      oppholdBeskrivelse:
+        "Du skal arbeide, eller opphalde deg utan å arbeide, i eitt eller fleire EØS-land eller Sveits.",
+      oppholdLenke:
+        "https://www.nav.no/fyllut/nav020807?sub=digital&lang=nn-NO",
+      gaTilbake: "Gå tilbake",
+    },
     landingsside: {
       hei: "Hei",
       hvemVilDuBrukeNavPaVegneAv: "Kven skal du opptre som?",

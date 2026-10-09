@@ -4,6 +4,11 @@
  */
 export const MOTPART_CTA = "melosys.skjema.motpart-cta";
 export const INNSENDT_SAMMENDRAG = "melosys.skjema.innsendt-sammendrag";
+export const VELG_SITUASJON = "melosys.skjema.velg-situasjon";
 
-export const alleToggleNavn = [MOTPART_CTA, INNSENDT_SAMMENDRAG] as const;
+export const alleToggleNavn = [
+  MOTPART_CTA,
+  INNSENDT_SAMMENDRAG,
+  VELG_SITUASJON,
+] as const;
 export type ToggleNavn = (typeof alleToggleNavn)[number];

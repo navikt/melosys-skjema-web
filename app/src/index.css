@@ -10,3 +10,8 @@ hr {
 .aksel-lookup__title::first-letter {
     text-transform: uppercase;
 }
+
+/* Pilen i accent-LinkCards skal ha kortets farge, slik som på nav.no sin mellomside foran søknaden */
+.aksel-link-card[data-color="accent"] .aksel-link-anchor__arrow {
+    color: var(--ax-text-subtle);
+}

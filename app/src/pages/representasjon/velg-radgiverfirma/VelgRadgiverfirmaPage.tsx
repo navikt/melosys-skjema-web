@@ -31,7 +31,7 @@ export function VelgRadgiverfirmaPage() {
   };
 
   const handleAvbryt = (): void => {
-    void navigate({ to: "/" });
+    void navigate({ to: "/representasjon" });
   };
 
   return (
