@@ -164,14 +164,14 @@ const REPRESENTATION_OPTIONS: RepresentationOption[] = [
 interface RepresentasjonVelgerProperties {
   onVelg?: () => void;
   /**
-  Kompakte knapper uten overskrift, for popoveren i headeren.
+  "header" gir knapper uten overskrift, for menyen i headeren.
   */
-  kompakt?: boolean;
+  variant?: "side" | "header";
 }
 
 export function RepresentasjonVelger({
   onVelg,
-  kompakt = false,
+  variant = "side",
 }: RepresentasjonVelgerProperties) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -206,7 +206,7 @@ export function RepresentasjonVelger({
       ? t("landingsside.soknadVenterPaaDeg")
       : undefined;
 
-  if (kompakt) {
+  if (variant === "header") {
     return (
       <div className="flex flex-col gap-2">
         {REPRESENTATION_OPTIONS.map((option) => (
