@@ -14,6 +14,7 @@ import { Route as FyllUtDinDelRouteImport } from './routes/fyll-ut-din-del'
 import { Route as OversiktRouteImport } from './routes/oversikt'
 import { Route as RepresentasjonRouteImport } from './routes/representasjon'
 import { Route as SkjemaRouteImport } from './routes/skjema'
+import { Route as VelgSituasjonRouteImport } from './routes/velg-situasjon'
 import { Route as OversiktIndexRouteImport } from './routes/oversikt.index'
 import { Route as RepresentasjonIndexRouteImport } from './routes/representasjon.index'
 import { Route as RepresentasjonVelgRadgiverfirmaRouteImport } from './routes/representasjon.velg-radgiverfirma'
@@ -58,6 +59,11 @@ const RepresentasjonRoute = RepresentasjonRouteImport.update({
 const SkjemaRoute = SkjemaRouteImport.update({
   id: '/skjema',
   path: '/skjema',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VelgSituasjonRoute = VelgSituasjonRouteImport.update({
+  id: '/velg-situasjon',
+  path: '/velg-situasjon',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OversiktIndexRoute = OversiktIndexRouteImport.update({
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
+  '/velg-situasjon': typeof VelgSituasjonRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
   '/skjema/start': typeof SkjemaStartRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/fyll-ut-din-del': typeof FyllUtDinDelRoute
+  '/velg-situasjon': typeof VelgSituasjonRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/start': typeof SkjemaStartRoute
   '/oversikt': typeof OversiktIndexRoute
@@ -228,6 +236,7 @@ export interface FileRoutesById {
   '/oversikt': typeof OversiktRouteWithChildren
   '/representasjon': typeof RepresentasjonRouteWithChildren
   '/skjema': typeof SkjemaRouteWithChildren
+  '/velg-situasjon': typeof VelgSituasjonRoute
   '/representasjon/velg-radgiverfirma': typeof RepresentasjonVelgRadgiverfirmaRoute
   '/skjema/$id': typeof SkjemaIdRouteWithChildren
   '/skjema/start': typeof SkjemaStartRoute
@@ -257,6 +266,7 @@ export interface FileRouteTypes {
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
+    | '/velg-situasjon'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/skjema/start'
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/fyll-ut-din-del'
+    | '/velg-situasjon'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/start'
     | '/oversikt'
@@ -307,6 +318,7 @@ export interface FileRouteTypes {
     | '/oversikt'
     | '/representasjon'
     | '/skjema'
+    | '/velg-situasjon'
     | '/representasjon/velg-radgiverfirma'
     | '/skjema/$id'
     | '/skjema/start'
@@ -335,6 +347,7 @@ export interface RootRouteChildren {
   OversiktRoute: typeof OversiktRouteWithChildren
   RepresentasjonRoute: typeof RepresentasjonRouteWithChildren
   SkjemaRoute: typeof SkjemaRouteWithChildren
+  VelgSituasjonRoute: typeof VelgSituasjonRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -372,6 +385,13 @@ declare module '@tanstack/react-router' {
       path: '/skjema'
       fullPath: '/skjema'
       preLoaderRoute: typeof SkjemaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/velg-situasjon': {
+      id: '/velg-situasjon'
+      path: '/velg-situasjon'
+      fullPath: '/velg-situasjon'
+      preLoaderRoute: typeof VelgSituasjonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/oversikt/': {
@@ -603,6 +623,7 @@ const rootRouteChildren: RootRouteChildren = {
   OversiktRoute: OversiktRouteWithChildren,
   RepresentasjonRoute: RepresentasjonRouteWithChildren,
   SkjemaRoute: SkjemaRouteWithChildren,
+  VelgSituasjonRoute: VelgSituasjonRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

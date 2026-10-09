@@ -274,6 +274,17 @@ export const en = {
       duMaLeggeTilMinstEnVirksomhetNarDuIkkeBetalerAllLonnSelv:
         "You must add at least one other company when your company does not pay all the salary",
     },
+    velgSituasjon: {
+      tittel: "Choose the situation that applies to you.",
+      utsendtTittel: "Posted by a Norwegian employer",
+      utsendtBeskrivelse:
+        "You have a Norwegian employer and have been posted to work temporarily in another EEA country or Switzerland. You should use the form below if you regularly work both in Norway and in one or more other countries.",
+      oppholdTittel: "Will work or stay in one or more countries",
+      oppholdBeskrivelse:
+        "You will work, or stay without working, in one or more EEA countries or Switzerland.",
+      oppholdLenke: "https://www.nav.no/fyllut/nav020807?lang=en",
+      gaTilbake: "Go back",
+    },
     landingsside: {
       hei: "Hello",
       hvemVilDuBrukeNavPaVegneAv: "Who are you acting on behalf of?",
