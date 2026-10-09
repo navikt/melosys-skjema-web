@@ -14,12 +14,12 @@ export function VelgSituasjonPage() {
 
   return (
     <VStack gap="space-24">
-      <Heading className="mt-4" level="1" size="large">
+      <Heading className="mt-4" level="1" size="small">
         {t("velgSituasjon.tittel")}
       </Heading>
 
-      <VStack gap="space-16">
-        <LinkCard arrowPosition="center">
+      <VStack gap="space-24">
+        <LinkCard arrowPosition="center" data-color="accent">
           <LinkCard.Title as="h2">
             <LinkCard.Anchor asChild>
               <Link to="/representasjon">
@@ -32,7 +32,7 @@ export function VelgSituasjonPage() {
           </LinkCard.Description>
         </LinkCard>
 
-        <LinkCard arrowPosition="center">
+        <LinkCard arrowPosition="center" data-color="accent">
           <LinkCard.Title as="h2">
             <LinkCard.Anchor href={t("velgSituasjon.oppholdLenke")}>
               {t("velgSituasjon.oppholdTittel")}
