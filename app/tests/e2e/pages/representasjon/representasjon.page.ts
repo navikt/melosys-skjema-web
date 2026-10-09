@@ -7,28 +7,36 @@ const translations = alleTranslations.landingsside;
 export class RepresentasjonPage {
   readonly page: Page;
   readonly heading: Locator;
-  readonly degSelvButton: Locator;
-  readonly arbeidsgiverButton: Locator;
-  readonly radgiverButton: Locator;
-  readonly annenPersonButton: Locator;
+  readonly degSelvLenke: Locator;
+  readonly arbeidsgiverLenke: Locator;
+  readonly radgiverLenke: Locator;
+  readonly annenPersonLenke: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.heading = page.getByRole("heading", {
       name: translations.hvemVilDuBrukeNavPaVegneAv,
     });
-    this.degSelvButton = page.getByRole("button", {
+    this.degSelvLenke = page.getByRole("link", {
       name: translations.degSelv,
+      exact: true,
     });
-    this.arbeidsgiverButton = page.getByRole("button", {
-      name: `${translations.dinArbeidsgiver} ${translations.dinArbeidsgiverBeskrivelse}`,
+    this.arbeidsgiverLenke = page.getByRole("link", {
+      name: translations.dinArbeidsgiver,
+      exact: true,
     });
-    this.radgiverButton = page.getByRole("button", {
-      name: `${translations.enArbeidsgiverSomRadgiver} ${translations.enArbeidsgiverSomRadgiverBeskrivelse}`,
+    this.radgiverLenke = page.getByRole("link", {
+      name: translations.enArbeidsgiverSomRadgiver,
+      exact: true,
     });
-    this.annenPersonButton = page.getByRole("button", {
+    this.annenPersonLenke = page.getByRole("link", {
       name: translations.annenPerson,
+      exact: true,
     });
+  }
+
+  private kortFor(lenke: Locator): Locator {
+    return this.page.locator(".aksel-link-card").filter({ has: lenke });
   }
 
   async goto() {
@@ -57,30 +65,34 @@ export class RepresentasjonPage {
 
   async assertSoknadVenterBadgeVisible() {
     await expect(
-      this.degSelvButton.getByText(translations.soknadVenterPaaDeg),
+      this.kortFor(this.degSelvLenke).getByText(
+        translations.soknadVenterPaaDeg,
+      ),
     ).toBeVisible();
   }
 
   async assertSoknadVenterBadgeNotVisible() {
     await expect(
-      this.degSelvButton.getByText(translations.soknadVenterPaaDeg),
+      this.kortFor(this.degSelvLenke).getByText(
+        translations.soknadVenterPaaDeg,
+      ),
     ).not.toBeVisible();
   }
 
   async velgDegSelv() {
-    await this.degSelvButton.click();
+    await this.degSelvLenke.click();
   }
 
   async velgArbeidsgiver() {
-    await this.arbeidsgiverButton.click();
+    await this.arbeidsgiverLenke.click();
   }
 
   async velgRadgiver() {
-    await this.radgiverButton.click();
+    await this.radgiverLenke.click();
   }
 
   async velgAnnenPerson() {
-    await this.annenPersonButton.click();
+    await this.annenPersonLenke.click();
   }
 
   async assertNavigatedToOversikt() {

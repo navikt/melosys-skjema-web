@@ -181,10 +181,7 @@ export function KontekstVelger() {
         placement="bottom-end"
       >
         <Popover.Content>
-          <RepresentasjonVelger
-            onVelg={() => setIsOpen(false)}
-            visOverskrift={false}
-          />
+          <RepresentasjonVelger kompakt onVelg={() => setIsOpen(false)} />
           <hr className="my-4 border-border-subtle" />
           <MaalformValg />
         </Popover.Content>
