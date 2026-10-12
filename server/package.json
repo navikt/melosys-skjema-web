@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "build:ci": "tsc && rm -rf build && mkdir -p build && cp -r dist build/dist && cp package.json build/package.json && cp pnpm-lock.yaml build/pnpm-lock.yaml && cp .npmrc build/.npmrc && cd build && pnpm install --prod --frozen-lockfile && cp -r ../../app/dist public",
+    "build:ci": "tsc && rm -rf build && mkdir -p build && cp -r dist build/dist && cp package.json build/package.json && cp pnpm-lock.yaml build/pnpm-lock.yaml && cp pnpm-workspace.yaml build/pnpm-workspace.yaml && cp .npmrc build/.npmrc && cd build && pnpm install --prod --frozen-lockfile && cp -r ../../app/dist public",
     "dev": "tsc && node dist/index.js",
     "start": "node dist/index.js",
     "check-types": "tsc --noemit",
