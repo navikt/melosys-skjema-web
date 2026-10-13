@@ -1,0 +1,8 @@
+packages:
+  - .
+
+minimumReleaseAge: 10080
+ignoreScripts: true
+
+overrides:
+  undici: "^7.25.0"
