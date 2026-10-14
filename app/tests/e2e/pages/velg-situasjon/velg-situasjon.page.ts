@@ -31,10 +31,6 @@ export class VelgSituasjonPage {
     });
   }
 
-  async gotoRot() {
-    await this.page.goto("/");
-  }
-
   async goto() {
     await this.page.goto("/velg-situasjon");
   }

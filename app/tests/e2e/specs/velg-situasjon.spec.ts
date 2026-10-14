@@ -1,3 +1,5 @@
+import { expect } from "@playwright/test";
+
 import { VELG_SITUASJON } from "~/featuretoggle/toggleNavn";
 
 import { mockFeatureToggles, mockUserInfo } from "../fixtures/api-mocks";
@@ -25,10 +27,13 @@ test.describe("Velg situasjon — toggle på", () => {
     await mockFeatureToggles(page, { [VELG_SITUASJON]: true });
   });
 
-  test("/ går til velg situasjon", async ({ page }) => {
-    const velgSituasjonPage = new VelgSituasjonPage(page);
-    await velgSituasjonPage.gotoRot();
-    await velgSituasjonPage.assertIsVisible();
+  test("/ går rett til «Hvem skal du opptre som?» også når togglen er på", async ({
+    page,
+  }) => {
+    const representasjonPage = new RepresentasjonPage(page);
+    await representasjonPage.goto();
+    await expect(page).toHaveURL(/\/representasjon$/);
+    await representasjonPage.assertIsVisible();
   });
 
   test("kortet for opphold og «Gå tilbake» lenker til riktige eksterne sider", async ({
@@ -60,6 +65,7 @@ test.describe("Velg situasjon — toggle av", () => {
   test("/ går rett til «Hvem skal du opptre som?»", async ({ page }) => {
     const representasjonPage = new RepresentasjonPage(page);
     await representasjonPage.goto();
+    await expect(page).toHaveURL(/\/representasjon$/);
     await representasjonPage.assertIsVisible();
   });
 
@@ -74,11 +80,14 @@ test.describe("Velg situasjon — toggle av", () => {
 });
 
 test.describe("Velg situasjon — togglene feiler", () => {
-  test("/ faller tilbake til «Hvem skal du opptre som?»", async ({ page }) => {
+  test("/ går rett til «Hvem skal du opptre som?» selv om togglene feiler", async ({
+    page,
+  }) => {
     // Featuretoggle-endepunktet er ikke mocket, så catch-all svarer 404
     await mockUserInfo(page, testUserInfo);
     const representasjonPage = new RepresentasjonPage(page);
     await representasjonPage.goto();
+    await expect(page).toHaveURL(/\/representasjon$/);
     await representasjonPage.assertIsVisible();
   });
 });
