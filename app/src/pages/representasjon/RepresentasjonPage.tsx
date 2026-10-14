@@ -5,10 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { RepresentasjonVelger } from "~/components/RepresentasjonVelger.tsx";
-import { VELG_SITUASJON } from "~/featuretoggle/toggleNavn.ts";
-import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
-import { VALG_DIGITAL_ELLER_PAPIR_URL } from "~/pages/velgSituasjon/VelgSituasjonPage.tsx";
 
 export function RepresentasjonPage() {
   const { t } = useTranslation();
@@ -36,28 +33,20 @@ export function RepresentasjonPage() {
   );
 }
 
-/**
-Tilbake til siden brukeren kom fra: velg situasjon når togglen er på, ellers nav.no sin mellomside.
-*/
 function GaTilbakeKnapp() {
   const { t } = useTranslation();
-  const velgSituasjonAktiv = useFeatureToggle(VELG_SITUASJON) ?? false;
-  const knappProps = {
-    icon: <ArrowLeftIcon aria-hidden />,
-    variant: "secondary",
-  } as const;
 
+  // TODO (fagavklaring 15.10.2026): Avklar tilbakeknapp for direkte inngang fra eksterne parter.
   return (
     <div>
-      {velgSituasjonAktiv ? (
-        <Button {...knappProps} as={Link} to="/velg-situasjon">
-          {t("velgSituasjon.gaTilbake")}
-        </Button>
-      ) : (
-        <Button {...knappProps} as="a" href={VALG_DIGITAL_ELLER_PAPIR_URL}>
-          {t("velgSituasjon.gaTilbake")}
-        </Button>
-      )}
+      <Button
+        as={Link}
+        to="/velg-situasjon"
+        icon={<ArrowLeftIcon aria-hidden />}
+        variant="secondary"
+      >
+        {t("velgSituasjon.gaTilbake")}
+      </Button>
     </div>
   );
 }

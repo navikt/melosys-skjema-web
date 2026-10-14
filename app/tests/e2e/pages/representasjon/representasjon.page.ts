@@ -108,10 +108,6 @@ export class RepresentasjonPage {
     await this.gaTilbakeKnapp.click();
   }
 
-  async assertGaTilbakePekerPa(href: string) {
-    await expect(this.gaTilbakeKnapp).toHaveAttribute("href", href);
-  }
-
   async assertNavigatedToOversikt() {
     await expect(this.page).toHaveURL(/\/oversikt\?representasjonstype=/);
   }

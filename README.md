@@ -5,7 +5,7 @@ Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 ## Innganger til søknaden
 
 - `/medlemskap-lovvalg/soknad` går alltid til representasjonsvalget, uavhengig av featuretoggles. Eksisterende lenker fra eksterne parter kan fortsatt bruke denne inngangen.
-- `/medlemskap-lovvalg/soknad/velg-situasjon` viser situasjonsvelgeren når `melosys.skjema.velg-situasjon` er aktiv. Lenker på nav.no som trenger mellomsiden, skal bruke denne URL-en. Når togglen er av, går også denne inngangen til representasjonsvalget.
+- `/medlemskap-lovvalg/soknad/velg-situasjon` viser alltid situasjonsvelgeren. Lenker på nav.no som trenger mellomsiden, skal bruke denne URL-en.
 
 ## Tech Stack
 
