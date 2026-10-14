@@ -267,8 +267,8 @@ importers:
         specifier: 14.0.0
         version: 14.0.0(eslint@10.12.0(jiti@2.7.0))
       eslint-plugin-unicorn:
-        specifier: 76.0.0
-        version: 76.0.0(eslint@10.12.0(jiti@2.7.0))
+        specifier: 77.0.0
+        version: 77.0.0(eslint@10.12.0(jiti@2.7.0))
       globals:
         specifier: 17.13.0
         version: 17.13.0
@@ -1426,11 +1426,6 @@ packages:
     resolution: {integrity: sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==}
     engines: {node: 20 || >=22}
 
-  browserslist@4.29.0:
-    resolution: {integrity: sha512-3GSvyjvDI4Dur1Meg2BekJquu5uF+9R9a1+5M1Mde192eZoXbeXjzgOsgqPS2V8D5wrrip0gR5Hf/GhWQ9ZzaA==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-
   browserslist@4.29.3:
     resolution: {integrity: sha512-1R4kiYKXGViqEN0CnoDrXc1StD9niAwu+j2dukWzrD4bJgsD4lDmEp0CRbc6E/vYJIfTHwPmwyaKtVSudICdPA==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -1453,9 +1448,6 @@ packages:
 
   call-me-maybe@1.0.2:
     resolution: {integrity: sha512-HpX65o1Hnr9HH25ojC1YGs7HCQLq0GCOibSaWER0eNpgJ/Z1MZv2mTc7+xh6WOPxbRVcmgbv4hGU+uSQ/2xFZQ==}
-
-  caniuse-lite@1.0.30001810:
-    resolution: {integrity: sha512-TITQPUkaz+aVk5GL6NhOdwk1aEaNTSDPsGFWrTuhKGtjTF70jL/Oht2W4c6rXUe5fu7Ie19VIahAXHIIiWWNeg==}
 
   caniuse-lite@1.0.30001814:
     resolution: {integrity: sha512-/Uaf1lAzr59XcMpW0o96WoEfr+VXK2OX4U9AgFoiSHsVJ4HppnIFUjtYzsyDH2+tgANaQb2/oxYGwCPapN1FpA==}
@@ -1597,9 +1589,6 @@ packages:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
 
-  electron-to-chromium@1.5.438:
-    resolution: {integrity: sha512-AN9xMU1hJiT65LkCUPL1DZm5TCbOPb2Qsm5pYwFLEXp6/qj9SdT4yMiqs7Qqstwvkn1zF7l36SRGt+s6XcJ0FA==}
-
   electron-to-chromium@1.5.444:
     resolution: {integrity: sha512-5ss/uJfoDYDHT0lfJzT6FbcskIzROIOPf0BbbFkGcvDzoJU7i//9GDrwwIHQVmIsrAGiF3ihpADBRIsrEFt1rQ==}
 
@@ -1729,8 +1718,8 @@ packages:
     peerDependencies:
       eslint: '>=5.0.0'
 
-  eslint-plugin-unicorn@76.0.0:
-    resolution: {integrity: sha512-3ywJrCMHKYhcBP5yFzGaOOX3dY7+iR3hvpuoS/0EnhRFgVWLejly+t4fOdJvWQxJdHZl1C+QBW7hybXPDld4Pw==}
+  eslint-plugin-unicorn@77.0.0:
+    resolution: {integrity: sha512-aayznMCKTXlPAsoyUjRok862sz3BJAfxpQX/t79AT/uVQTmWsCx3FXfXo+9hfhL8aR2mMZQYyXoDZo3/ly6lJw==}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10.4'
@@ -3216,7 +3205,7 @@ snapshots:
   '@eslint/css-tree@4.1.1':
     dependencies:
       mdn-data: 2.35.0
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
 
   '@eslint/js@10.0.1(eslint@10.12.0(jiti@2.7.0))':
     optionalDependencies:
@@ -3823,14 +3812,6 @@ snapshots:
     dependencies:
       balanced-match: 4.0.4
 
-  browserslist@4.29.0:
-    dependencies:
-      baseline-browser-mapping: 2.11.27
-      caniuse-lite: 1.0.30001810
-      electron-to-chromium: 1.5.438
-      node-releases: 2.0.57
-      update-browserslist-db: 1.3.3(browserslist@4.29.0)
-
   browserslist@4.29.3:
     dependencies:
       baseline-browser-mapping: 2.11.27
@@ -3865,8 +3846,6 @@ snapshots:
       qified: 0.10.1
 
   call-me-maybe@1.0.2: {}
-
-  caniuse-lite@1.0.30001810: {}
 
   caniuse-lite@1.0.30001814: {}
 
@@ -3914,7 +3893,7 @@ snapshots:
 
   core-js-compat@3.50.0:
     dependencies:
-      browserslist: 4.29.0
+      browserslist: 4.29.3
 
   cross-spawn@7.0.6:
     dependencies:
@@ -3986,8 +3965,6 @@ snapshots:
       domhandler: 5.0.3
 
   dotenv@17.4.2: {}
-
-  electron-to-chromium@1.5.438: {}
 
   electron-to-chromium@1.5.444: {}
 
@@ -4161,11 +4138,11 @@ snapshots:
     dependencies:
       eslint: 10.12.0(jiti@2.7.0)
 
-  eslint-plugin-unicorn@76.0.0(eslint@10.12.0(jiti@2.7.0)):
+  eslint-plugin-unicorn@77.0.0(eslint@10.12.0(jiti@2.7.0)):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.12.0(jiti@2.7.0))
       '@eslint/css-tree': 4.1.1
-      browserslist: 4.29.0
+      browserslist: 4.29.3
       change-case: 5.4.4
       ci-info: 4.4.0
       core-js-compat: 3.50.0
@@ -4991,12 +4968,6 @@ snapshots:
       esbuild: 0.28.2
       rolldown: 1.2.12
       vite: 8.3.3(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
-
-  update-browserslist-db@1.3.3(browserslist@4.29.0):
-    dependencies:
-      browserslist: 4.29.0
-      escalade: 3.2.0
-      picocolors: 1.1.1
 
   update-browserslist-db@1.3.3(browserslist@4.29.3):
     dependencies:
