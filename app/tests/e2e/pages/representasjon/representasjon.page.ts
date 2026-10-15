@@ -104,8 +104,8 @@ export class RepresentasjonPage {
     await this.annenPersonLenke.click();
   }
 
-  async gaTilbake() {
-    await this.gaTilbakeKnapp.click();
+  async assertGaTilbakeKnappIkkeFinnes() {
+    await expect(this.gaTilbakeKnapp).toHaveCount(0);
   }
 
   async assertNavigatedToOversikt() {

@@ -7,7 +7,6 @@ import { test } from "../fixtures/test";
 import { korrektFormatertOrgnr, testUserInfo } from "../fixtures/test-data";
 import { RepresentasjonPage } from "../pages/representasjon/representasjon.page";
 import { VelgRadgiverfirmaPage } from "../pages/representasjon/velg-radgiverfirma.page";
-import { VelgSituasjonPage } from "../pages/velg-situasjon/velg-situasjon.page";
 
 test.describe("Representasjon", () => {
   test.beforeEach(async ({ page }) => {
@@ -88,13 +87,11 @@ test.describe("Representasjon — Gå tilbake", () => {
     await mockUserInfo(page, testUserInfo);
   });
 
-  test("går til velg situasjon", async ({ page }) => {
+  test("viser ikke tilbakeknapp ved direkte inngang", async ({ page }) => {
     const representasjonPage = new RepresentasjonPage(page);
-    const velgSituasjonPage = new VelgSituasjonPage(page);
     await representasjonPage.gotoDirekte();
     await representasjonPage.assertIsVisible();
-    await representasjonPage.gaTilbake();
-    await velgSituasjonPage.assertIsVisible();
+    await representasjonPage.assertGaTilbakeKnappIkkeFinnes();
   });
 });
 

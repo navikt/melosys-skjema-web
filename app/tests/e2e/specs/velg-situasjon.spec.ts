@@ -31,6 +31,7 @@ test.describe("Velg situasjon", () => {
     await representasjonPage.goto();
     await expect(page).toHaveURL(/\/representasjon$/);
     await representasjonPage.assertIsVisible();
+    await representasjonPage.assertGaTilbakeKnappIkkeFinnes();
   });
 
   test("/velg-situasjon er tilgjengelig uten tilgjengelige toggles", async ({
@@ -58,5 +59,6 @@ test.describe("Velg situasjon", () => {
     await velgSituasjonPage.goto();
     await velgSituasjonPage.velgUtsendt();
     await representasjonPage.assertIsVisible();
+    await representasjonPage.assertGaTilbakeKnappIkkeFinnes();
   });
 });
