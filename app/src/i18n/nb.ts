@@ -399,7 +399,7 @@ export const nb = {
       soknadStarterTittelDegSelv: "Oppgi arbeidsgiver som sender deg ut",
       soknadStarterInfoTittelDegSelv: "Hva må sendes inn?",
       soknadStarterInfoDegSelv:
-        "Vi trenger opplysninger om deg og i de fleste tilfeller en bekreftelse på utsending fra arbeidsgiveren din. Dere benytter samme digitale skjema, men skal fylle ut og sende inn hver deres del.",
+        "Vi trenger opplysninger fra deg og en bekreftelse på utsending fra arbeidsgiveren din. Dere benytter samme digitale skjema, og fyller ut og sender inn hver deres del. Hvis du jobber for en statlig arbeidsgiver i Norge, trenger du kun å sende inn din egen del",
       soknadStarterTittelAnnenPerson:
         "Hvem skal du fylle ut søknaden på vegne av?",
       soknadStarterInfoAnnenPerson:

@@ -403,7 +403,7 @@ export const nn = {
       soknadStarterTittelDegSelv: "Oppgi arbeidsgivar som sender deg ut",
       soknadStarterInfoTittelDegSelv: "Kva må sendast inn?",
       soknadStarterInfoDegSelv:
-        "Vi treng opplysningar om deg og i dei fleste tilfella ei stadfesting på utsending frå arbeidsgivaren din. De nyttar same digitale skjema, men skal fylle ut og sende inn kvar dykkar del.",
+        "Vi treng opplysningar frå deg og ei stadfesting på utsending frå arbeidsgivaren din. De nyttar same digitale skjema, og fyller ut og sender inn kvar dykkar del. Viss du jobbar for ein statleg arbeidsgivar i Noreg, treng du berre å sende inn din eigen del",
       soknadStarterTittelAnnenPerson:
         "Kven skal du fylle ut søknaden på vegner av?",
       soknadStarterInfoAnnenPerson:
