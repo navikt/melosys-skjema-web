@@ -5,6 +5,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
 import logger from "./logger.js";
+import { traceIdHeader } from "./traceId.js";
 import { requireEnvironment } from "./utils.js";
 
 const useLocalToken = process.env.USE_LOCAL_TOKEN === "true";
@@ -156,6 +157,7 @@ function addProxyWithOboExchangeHandler(
 ) {
   router.use(
     ingoingUrl,
+    traceIdHeader(),
     async (request: Request, response: Response, next: NextFunction) => {
       logger.debug(`Inngående request url ${ingoingUrl}`);
       logger.debug(`Utgående request url ${outgoingUrl}`);
@@ -233,6 +235,7 @@ function addProxyWithLocalToken(
 ) {
   router.use(
     ingoingUrl,
+    traceIdHeader(),
     async (request: Request, response: Response, next: NextFunction) => {
       const staticToken = getStaticLocalToken();
       if (staticToken) {

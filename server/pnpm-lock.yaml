@@ -178,6 +178,9 @@ importers:
       '@navikt/vite-mode':
         specifier: 1.0.1
         version: 1.0.1(express@5.2.1)
+      '@opentelemetry/api':
+        specifier: 1.9.1
+        version: 1.9.1
       express:
         specifier: 5.2.1
         version: 5.2.1
