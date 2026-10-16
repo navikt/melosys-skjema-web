@@ -417,7 +417,7 @@ export const en = {
         "Provide the name of the employer posting you abroad",
       soknadStarterInfoTittelDegSelv: "What needs to be submitted?",
       soknadStarterInfoDegSelv:
-        "We need information about you and, in most cases, confirmation from your employer that you are being posted abroad. You and your employer use the same digital form, but each of you must complete and submit your own part.",
+        "We need information from you and confirmation from your employer. You use the same digital form, but each of you completes and submits your own part.\nIf your employer is a Norwegian state organisation, they do not need to submit a confirmation. You should then only complete and submit your own part of the form.",
       soknadStarterTittelAnnenPerson:
         "Who are you submitting the application on behalf of?",
       soknadStarterInfoAnnenPerson:
