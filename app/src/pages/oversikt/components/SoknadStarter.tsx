@@ -256,7 +256,7 @@ function SoknadStarterContent({
                   <Heading level="2" size="medium" spacing>
                     {t("oversiktFelles.soknadStarterInfoTittelDegSelv")}
                   </Heading>
-                  <BodyLong className="mb-2">
+                  <BodyLong className="mb-2 whitespace-pre-line">
                     {t("oversiktFelles.soknadStarterInfoDegSelv")}
                   </BodyLong>
                 </>
