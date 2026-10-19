@@ -1,8 +1,9 @@
 import { z } from "zod";
 
 /**
- * Foretak med færre ansatte enn dette (eller bemannings-/vikarbyråer) må oppgi
- * opplysninger om foretakets samlede virksomhet.
+ * Foretak med færre ansatte enn dette (eller bemannings-/vikarbyråer og
+ * norskregistrerte utenlandske foretak) må oppgi opplysninger om foretakets
+ * samlede virksomhet.
  * Må holdes i synk med ANSATTGRENSE_SAMLET_VIRKSOMHET i melosys-skjema-api.
  */
 export const ANSATTGRENSE_SAMLET_VIRKSOMHET = 20;
@@ -10,8 +11,10 @@ export const ANSATTGRENSE_SAMLET_VIRKSOMHET = 20;
 export function skalOppgiSamletVirksomhet(
   antallAnsatte: number | undefined,
   erBemanningsEllerVikarbyraa: boolean | undefined,
+  erNorskregistrertUtenlandskForetak: boolean | undefined,
 ): boolean {
   return (
+    erNorskregistrertUtenlandskForetak === true ||
     erBemanningsEllerVikarbyraa === true ||
     (antallAnsatte !== undefined &&
       antallAnsatte < ANSATTGRENSE_SAMLET_VIRKSOMHET)
@@ -79,11 +82,13 @@ type SchemaInput = z.input<typeof baseSchema>;
 
 export function lagArbeidsgiverensVirksomhetSchema(
   antallAnsatte: number | undefined,
+  erNorskregistrertUtenlandskForetak: boolean | undefined,
 ) {
   const skalOppgi = (data: SchemaInput) =>
     skalOppgiSamletVirksomhet(
       antallAnsatte,
       data.erArbeidsgiverenBemanningsEllerVikarbyraa,
+      erNorskregistrertUtenlandskForetak,
     );
 
   return baseSchema

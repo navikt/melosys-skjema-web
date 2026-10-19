@@ -26,6 +26,15 @@ const skjemaMedFaaAnsatte = {
   metadata: { ...testArbeidsgiverSkjema.metadata, antallAnsatte: 5 },
 };
 
+const nufSkjema = {
+  ...testArbeidsgiverSkjema,
+  metadata: {
+    ...testArbeidsgiverSkjema.metadata,
+    antallAnsatte: 50,
+    erNorskregistrertUtenlandskForetak: true,
+  },
+};
+
 test.describe("Arbeidsgiverens virksomhet i Norge", () => {
   test.beforeEach(async ({ page }) => {
     await setupApiMocksForArbeidsgiver(
@@ -107,6 +116,37 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertVanligDriftIsHidden();
 
     await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
+
+    await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
+      erArbeidsgiverenBemanningsEllerVikarbyraa: false,
+      ...samletVirksomhet,
+    });
+    await virksomhetStegPage.assertNavigatedToNextStep();
+  });
+
+  test("NUF med 20 eller flere ansatte - viser samlet virksomhet uten vanlig drift", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidsgiver(
+      page,
+      nufSkjema,
+      [testOrganization],
+      testUserInfo,
+    );
+    const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
+      page,
+      nufSkjema,
+    );
+
+    await virksomhetStegPage.goto();
+    await virksomhetStegPage.assertIsVisible();
+    await virksomhetStegPage.assertSamletVirksomhetIsVisible();
+    await virksomhetStegPage.assertVanligDriftIsHidden();
+
+    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.assertSamletVirksomhetIsVisible();
+    await virksomhetStegPage.assertVanligDriftIsHidden();
     await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
 
     await virksomhetStegPage.lagreOgFortsettAndExpectPayload({

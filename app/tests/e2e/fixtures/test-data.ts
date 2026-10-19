@@ -63,6 +63,7 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
     arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVERS_DEL,
     erOffentligArbeidsgiver: false,
+    erNorskregistrertUtenlandskForetak: false,
     antallAnsatte: 50,
   } as ArbeidsgiverMetadata,
   data: {
@@ -324,6 +325,7 @@ Rådgiverfirma org for RADGIVER flow (from ereg lookup)
 export const testRadgiverfirmaOrgnr = korrektFormatertOrgnr2;
 export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
   erOffentligArbeidsgiver: false,
+  erNorskregistrertUtenlandskForetak: false,
   antallAnsatte: 50,
   organisasjon: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiver Filial" },
   juridiskEnhet: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiverfirma AS" },
@@ -334,6 +336,7 @@ Ereg response for DEG_SELV org search (OrganisasjonSoker)
 */
 export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
   erOffentligArbeidsgiver: false,
+  erNorskregistrertUtenlandskForetak: false,
   antallAnsatte: 50,
   organisasjon: {
     orgnr: korrektFormatertOrgnr,

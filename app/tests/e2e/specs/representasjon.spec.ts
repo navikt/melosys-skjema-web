@@ -55,6 +55,7 @@ test.describe("Velg rådgiverfirma", () => {
     await mockUserInfo(page, testUserInfo);
     await mockGetEregOrganisasjonMedJuridiskEnhet(page, {
       erOffentligArbeidsgiver: false,
+      erNorskregistrertUtenlandskForetak: false,
       antallAnsatte: 50,
       organisasjon: {
         orgnr: korrektFormatertOrgnr,
