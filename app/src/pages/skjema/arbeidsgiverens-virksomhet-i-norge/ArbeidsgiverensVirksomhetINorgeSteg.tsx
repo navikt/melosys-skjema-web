@@ -58,7 +58,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   const translateError = useTranslateError();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
-  const { antallAnsatte, erNorskregistrertUtenlandskForetak } = skjema.metadata;
+  const { metadata } = skjema;
   const erBemanningFelt = getFelt(
     "arbeidsgiverensVirksomhetINorge",
     "erArbeidsgiverenBemanningsEllerVikarbyraa",
@@ -69,12 +69,8 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   );
 
   const schema = useMemo(
-    () =>
-      lagArbeidsgiverensVirksomhetSchema(
-        antallAnsatte,
-        erNorskregistrertUtenlandskForetak,
-      ),
-    [antallAnsatte, erNorskregistrertUtenlandskForetak],
+    () => lagArbeidsgiverensVirksomhetSchema(metadata),
+    [metadata],
   );
 
   const formMethods = useForm<
@@ -112,9 +108,8 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
   });
 
   const visSamletVirksomhet = skalOppgiSamletVirksomhet(
-    antallAnsatte,
+    metadata,
     erBemanningsEllerVikarbyraa,
-    erNorskregistrertUtenlandskForetak,
   );
 
   const registerVirksomhetMutation = useMutation({

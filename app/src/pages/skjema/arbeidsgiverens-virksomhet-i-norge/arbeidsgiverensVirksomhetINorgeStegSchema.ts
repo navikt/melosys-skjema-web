@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import type { UtsendtArbeidstakerMetadata } from "~/types/melosysSkjemaTypes.ts";
+
 /**
  * Foretak med færre ansatte enn dette (eller bemannings-/vikarbyråer og
  * norskregistrerte utenlandske foretak) må oppgi opplysninger om foretakets
@@ -9,15 +11,14 @@ import { z } from "zod";
 export const ANSATTGRENSE_SAMLET_VIRKSOMHET = 20;
 
 export function skalOppgiSamletVirksomhet(
-  antallAnsatte: number | undefined,
+  metadata: UtsendtArbeidstakerMetadata,
   erBemanningsEllerVikarbyraa: boolean | undefined,
-  erNorskregistrertUtenlandskForetak: boolean | undefined,
 ): boolean {
   return (
-    erNorskregistrertUtenlandskForetak === true ||
+    metadata.erNorskregistrertUtenlandskForetak === true ||
     erBemanningsEllerVikarbyraa === true ||
-    (antallAnsatte !== undefined &&
-      antallAnsatte < ANSATTGRENSE_SAMLET_VIRKSOMHET)
+    (metadata.antallAnsatte !== undefined &&
+      metadata.antallAnsatte < ANSATTGRENSE_SAMLET_VIRKSOMHET)
   );
 }
 
@@ -81,14 +82,12 @@ const baseSchema = z.object({
 type SchemaInput = z.input<typeof baseSchema>;
 
 export function lagArbeidsgiverensVirksomhetSchema(
-  antallAnsatte: number | undefined,
-  erNorskregistrertUtenlandskForetak: boolean | undefined,
+  metadata: UtsendtArbeidstakerMetadata,
 ) {
   const skalOppgi = (data: SchemaInput) =>
     skalOppgiSamletVirksomhet(
-      antallAnsatte,
+      metadata,
       data.erArbeidsgiverenBemanningsEllerVikarbyraa,
-      erNorskregistrertUtenlandskForetak,
     );
 
   return baseSchema
