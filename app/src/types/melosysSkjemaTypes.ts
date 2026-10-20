@@ -167,8 +167,8 @@ export enum Saksstatus {
 
 export interface FeltDefinisjonDto {
   label: string;
-  hjelpetekst?: string;
   pakrevd: boolean;
+  hjelpetekst?: string;
   type: string;
 }
 
@@ -241,8 +241,10 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 > & {
   fullmektigFnr: string;
   erOffentligArbeidsgiver?: boolean;
+  erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
+  erOffentligTjenesteperson?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -260,8 +262,10 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 > & {
   fullmektigFnr: string;
   erOffentligArbeidsgiver?: boolean;
+  erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
+  erOffentligTjenesteperson?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -278,8 +282,10 @@ export type ArbeidsgiverMetadata = UtilRequiredKeys<
   | "metadatatype"
 > & {
   erOffentligArbeidsgiver?: boolean;
+  erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
+  erOffentligTjenesteperson?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -351,8 +357,10 @@ export type DegSelvMetadata = UtilRequiredKeys<
   | "metadatatype"
 > & {
   erOffentligArbeidsgiver?: boolean;
+  erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
+  erOffentligTjenesteperson?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -435,8 +443,10 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 > & {
   fullmektigFnr: string;
   erOffentligArbeidsgiver?: boolean;
+  erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
+  erOffentligTjenesteperson?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -454,8 +464,10 @@ export type RadgiverMetadata = UtilRequiredKeys<
   | "metadatatype"
 > & {
   erOffentligArbeidsgiver?: boolean;
+  erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
+  erOffentligTjenesteperson?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -564,6 +576,7 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
 
 export interface UtsendtArbeidstakerMetadata {
   representasjonstype: Representasjonstype;
+  erOffentligTjenesteperson?: boolean;
   juridiskEnhetOrgnr: string;
   /** @format uuid */
   erstatterSkjemaId?: string;
@@ -571,17 +584,18 @@ export interface UtsendtArbeidstakerMetadata {
   kobletSkjemaId?: string;
   arbeidsgiverNavn: string;
   arbeidstakerNavn: string;
-  /** @format int32 */
-  antallAnsatte?: number;
+  erNorskregistrertUtenlandskForetak?: boolean;
   skjemadel: Skjemadel;
   erOffentligArbeidsgiver?: boolean;
+  /** @format int32 */
+  antallAnsatte?: number;
   metadatatype: string;
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
+  vedlegg?: VedleggValgDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
-  vedlegg?: VedleggValgDto;
   type: string;
 }
 
@@ -1022,6 +1036,7 @@ export interface ArbeidsgiverensVirksomhetINorgeTranslation {
   offentligVirksomhetSkalIkkeOppgiVanligDrift: string;
   maaOppgiOmBemanningsbyraa: string;
   maaOppgiOmVanligDrift: string;
+  skalIkkeOppgiVanligDrift: string;
   skalIkkeOppgiSamletVirksomhet: string;
   antallMaaVaereNullEllerMer: string;
   andelMaaVaereMellom0Og100: string;
@@ -1133,6 +1148,7 @@ export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
   erOffentligArbeidsgiver: boolean;
+  erNorskregistrertUtenlandskForetak: boolean;
   /** @format int32 */
   antallAnsatte: number;
 }
@@ -1186,6 +1202,12 @@ export interface DelStatusDto {
   medMotpartAktivSak: number;
   /** @format int64 */
   medMotpartAvsluttetSak: number;
+  /** @format int64 */
+  komplettSomOffentligTjenesteperson: number;
+  /** @format int64 */
+  komplettSomOffentligTjenestepersonAktivSak: number;
+  /** @format int64 */
+  komplettSomOffentligTjenestepersonAvsluttetSak: number;
   /** @format int64 */
   dekketAvKomplettSkjema: number;
   /** @format int64 */

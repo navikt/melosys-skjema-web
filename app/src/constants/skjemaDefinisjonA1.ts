@@ -8,7 +8,7 @@
 
 const SKJEMA_DEFINISJON_A1_NB = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "3",
+  versjon: "4",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utenlandsoppdraget",
@@ -717,7 +717,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
 
 const SKJEMA_DEFINISJON_A1_NN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "3",
+  versjon: "4",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utsendingsperiode og land",
@@ -1431,7 +1431,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
 
 const SKJEMA_DEFINISJON_A1_EN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "3",
+  versjon: "4",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Posting Period and Country",
