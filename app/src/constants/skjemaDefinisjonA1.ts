@@ -11,7 +11,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
   versjon: "4",
   seksjoner: {
     utsendingsperiodeOgLand: {
-      tittel: "Utenlandsoppdraget",
+      tittel: "Utenlandsperiode og land",
       felter: {
         utsendelseLand: {
           type: "COUNTRY_SELECT",

@@ -249,7 +249,7 @@ export const nb = {
         "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
     },
     utsendingsperiodeOgLandSteg: {
-      tittel: "Utsendingsperiode og land",
+      tittel: "Utenlandsperiode og land",
       duMaVelgeHvilketLandArbeidetSkalUtforesI:
         "Du må velge hvilket land arbeidet skal utføres i",
       preutfyltAvArbeidsgiver:
