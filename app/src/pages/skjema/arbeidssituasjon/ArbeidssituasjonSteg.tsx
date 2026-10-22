@@ -29,7 +29,11 @@ import { useTranslateError } from "~/utils/translation.ts";
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidssituasjon } from "../stegDataGetters.ts";
 import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import { arbeidssituasjonSchema } from "./arbeidssituasjonStegSchema.ts";
+import { getUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
+import {
+  arbeidssituasjonSchema,
+  lagArbeidssituasjonSchema,
+} from "./arbeidssituasjonStegSchema.ts";
 
 type ArbeidssituasjonFormData = z.infer<typeof arbeidssituasjonSchema>;
 
@@ -41,6 +45,7 @@ function ArbeidssituasjonStegContent({
   const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidssituasjon(skjema);
   const skjemadel = skjema.metadata.skjemadel;
+  const { forenkletArbeidstakerdel } = getUtsendtArbeidstakerFlyt(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -65,7 +70,9 @@ function ArbeidssituasjonStegContent({
   );
 
   const formMethods = useForm({
-    resolver: zodResolver(arbeidssituasjonSchema),
+    resolver: zodResolver(
+      lagArbeidssituasjonSchema({ forenklet: forenkletArbeidstakerdel }),
+    ),
     ...(stegData && { defaultValues: stegData }),
   });
 
@@ -129,23 +136,26 @@ function ArbeidssituasjonStegContent({
             </Alert>
           )}
 
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
-            legend={harVaertFelt.label}
-          />
-
-          {harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
-            <Textarea
+          {!forenkletArbeidstakerdel && (
+            <RadioGroupJaNeiFormPart
               className="mt-4"
-              description={aktivitetFelt.hjelpetekst}
-              error={translateError(
-                errors.aktivitetIMaanedenFoerUtsendingen?.message,
-              )}
-              label={aktivitetFelt.label}
-              {...register("aktivitetIMaanedenFoerUtsendingen")}
+              formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
+              legend={harVaertFelt.label}
             />
           )}
+
+          {!forenkletArbeidstakerdel &&
+            harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
+              <Textarea
+                className="mt-4"
+                description={aktivitetFelt.hjelpetekst}
+                error={translateError(
+                  errors.aktivitetIMaanedenFoerUtsendingen?.message,
+                )}
+                label={aktivitetFelt.label}
+                {...register("aktivitetIMaanedenFoerUtsendingen")}
+              />
+            )}
 
           <RadioGroupJaNeiFormPart
             className="mt-4"
@@ -176,6 +186,7 @@ export function ArbeidssituasjonSteg({ id }: { id: string }) {
       ]}
       id={id}
       skjemaQuery={getSkjemaQuery}
+      stepKey={StegKey.ARBEIDSSITUASJON}
     >
       {(skjema) => <ArbeidssituasjonStegContent skjema={skjema} />}
     </SkjemaStegLoader>

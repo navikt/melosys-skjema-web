@@ -8,7 +8,7 @@
 
 const SKJEMA_DEFINISJON_A1_NB = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "4",
+  versjon: "5",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utenlandsoppdraget",
@@ -140,6 +140,76 @@ const SKJEMA_DEFINISJON_A1_NB = {
     skatteforholdOgInntekt: {
       tittel: "Skatteforhold og inntekt",
       felter: {
+        arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: {
+          type: "BOOLEAN",
+          label:
+            "Utbetaler arbeidsgiveren din all lønn og eventuelle naturalytelser i hele utsendingsperioden?",
+          pakrevd: false,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        virksomheterSomUtbetalerLonnOgNaturalytelser: {
+          type: "LIST",
+          label: "Hvem utbetaler lønnen og eventuelle naturalytelser?",
+          pakrevd: false,
+          hjelpetekst:
+            "Legg til norske og/eller utenlandske virksomheter som utbetaler lønnen og eventuelle naturalytelser",
+          leggTilLabel: "Legg til virksomhet",
+          fjernLabel: "Fjern",
+          elementDefinisjon: {
+            organisasjonsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer",
+              pakrevd: true,
+            },
+            navn: {
+              type: "TEXT",
+              label: "Virksomhetsnavn",
+              pakrevd: false,
+            },
+            vegnavnOgHusnummer: {
+              type: "TEXT",
+              label: "Vegnavn og husnummer",
+              pakrevd: true,
+            },
+            bygning: {
+              type: "TEXT",
+              label: "Bygning",
+              pakrevd: false,
+            },
+            postkode: {
+              type: "TEXT",
+              label: "Postkode",
+              pakrevd: false,
+            },
+            byStedsnavn: {
+              type: "TEXT",
+              label: "By/stedsnavn",
+              pakrevd: false,
+            },
+            region: {
+              type: "TEXT",
+              label: "Region",
+              pakrevd: false,
+            },
+            land: {
+              type: "COUNTRY_SELECT",
+              label: "Land",
+              pakrevd: true,
+            },
+            tilhorerSammeKonsern: {
+              type: "BOOLEAN",
+              label: "Tilhører samme konsern som norsk arbeidsgiver?",
+              pakrevd: true,
+              jaLabel: "Ja",
+              neiLabel: "Nei",
+            },
+          },
+          itemTypeLabels: {
+            norsk: "Norsk virksomhet",
+            utenlandsk: "Utenlandsk virksomhet",
+          },
+        },
         erSkattepliktigTilNorgeIHeleutsendingsperioden: {
           type: "BOOLEAN",
           label: "Er du skattepliktig til Norge i hele utsendingsperioden?",
@@ -483,6 +553,57 @@ const SKJEMA_DEFINISJON_A1_NB = {
         },
       },
     },
+    arbeidsstedPaLandArbeidstaker: {
+      tittel: "Arbeidssted i utlandet",
+      felter: {
+        navnPaVirksomhet: {
+          type: "TEXT",
+          label: "Navn på virksomheten",
+          pakrevd: true,
+        },
+        fastEllerVekslendeArbeidssted: {
+          type: "SELECT",
+          label:
+            "Har du fast arbeidssted i dette landet, eller veksler det ofte?",
+          pakrevd: true,
+          alternativer: [
+            {
+              verdi: "FAST",
+              label: "Fast arbeidssted",
+            },
+            {
+              verdi: "VEKSLENDE",
+              label: "Veksler ofte",
+            },
+          ],
+        },
+        vegadresse: {
+          type: "TEXT",
+          label: "Gate/vei",
+          pakrevd: false,
+        },
+        nummer: {
+          type: "TEXT",
+          label: "Nummer",
+          pakrevd: false,
+        },
+        postkode: {
+          type: "TEXT",
+          label: "Postkode",
+          pakrevd: false,
+        },
+        bySted: {
+          type: "TEXT",
+          label: "By/sted/region",
+          pakrevd: false,
+        },
+        land: {
+          type: "COUNTRY_SELECT",
+          label: "Land",
+          pakrevd: false,
+        },
+      },
+    },
     arbeidsstedOffshore: {
       tittel: "Arbeidssted offshore",
       felter: {
@@ -613,7 +734,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
         arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: {
           type: "BOOLEAN",
           label:
-            "Utbetaler du som arbeidsgiver all lønn og eventuelle naturalytelser i utsendingsperioden?",
+            "Utbetaler du som arbeidsgiver all lønn og eventuelle naturalytelser i hele utsendingsperioden?",
           pakrevd: true,
           jaLabel: "Ja",
           neiLabel: "Nei",
@@ -717,7 +838,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
 
 const SKJEMA_DEFINISJON_A1_NN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "4",
+  versjon: "5",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utsendingsperiode og land",
@@ -851,6 +972,77 @@ const SKJEMA_DEFINISJON_A1_NN = {
     skatteforholdOgInntekt: {
       tittel: "Skatteforhold og inntekt",
       felter: {
+        arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: {
+          type: "BOOLEAN",
+          label:
+            "Utbetaler arbeidsgivaren din all løn og eventuelle naturalytingar i heile utsendingsperioden?",
+          pakrevd: false,
+          jaLabel: "Ja",
+          neiLabel: "Nei",
+        },
+        virksomheterSomUtbetalerLonnOgNaturalytelser: {
+          type: "LIST",
+          label: "Kven utbetaler løna og eventuelle naturalytingar?",
+          pakrevd: false,
+          hjelpetekst:
+            "Legg til norske og/eller utanlandske verksemder som utbetaler løna og eventuelle naturalytingar",
+          leggTilLabel: "Legg til verksemd",
+          fjernLabel: "Fjern",
+          elementDefinisjon: {
+            organisasjonsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer",
+              pakrevd: true,
+            },
+            navn: {
+              type: "TEXT",
+              label: "Verksemdsnamn",
+              pakrevd: false,
+            },
+            vegnavnOgHusnummer: {
+              type: "TEXT",
+              label: "Vegnamn og husnummer",
+              pakrevd: true,
+            },
+            bygning: {
+              type: "TEXT",
+              label: "Bygning",
+              pakrevd: false,
+            },
+            postkode: {
+              type: "TEXT",
+              label: "Postkode",
+              pakrevd: false,
+            },
+            byStedsnavn: {
+              type: "TEXT",
+              label: "By/stadnamn",
+              pakrevd: false,
+            },
+            region: {
+              type: "TEXT",
+              label: "Region",
+              pakrevd: false,
+            },
+            land: {
+              type: "COUNTRY_SELECT",
+              label: "Land",
+              pakrevd: true,
+            },
+            tilhorerSammeKonsern: {
+              type: "BOOLEAN",
+              label:
+                "Høyrer verksemda til same konsern som den norske arbeidsgivaren?",
+              pakrevd: true,
+              jaLabel: "Ja",
+              neiLabel: "Nei",
+            },
+          },
+          itemTypeLabels: {
+            norsk: "Norsk verksemd",
+            utenlandsk: "Utanlandsk verksemd",
+          },
+        },
         erSkattepliktigTilNorgeIHeleutsendingsperioden: {
           type: "BOOLEAN",
           label: "Er du skattepliktig til Noreg i heile utsendingsperioden?",
@@ -1196,6 +1388,57 @@ const SKJEMA_DEFINISJON_A1_NN = {
         },
       },
     },
+    arbeidsstedPaLandArbeidstaker: {
+      tittel: "Arbeidsstad i utlandet",
+      felter: {
+        navnPaVirksomhet: {
+          type: "TEXT",
+          label: "Namn på verksemda",
+          pakrevd: true,
+        },
+        fastEllerVekslendeArbeidssted: {
+          type: "SELECT",
+          label:
+            "Har du fast arbeidsstad i dette landet, eller vekslar det ofte?",
+          pakrevd: true,
+          alternativer: [
+            {
+              verdi: "FAST",
+              label: "Fast arbeidsstad",
+            },
+            {
+              verdi: "VEKSLENDE",
+              label: "Vekslar ofte",
+            },
+          ],
+        },
+        vegadresse: {
+          type: "TEXT",
+          label: "Gate/veg",
+          pakrevd: false,
+        },
+        nummer: {
+          type: "TEXT",
+          label: "Nummer",
+          pakrevd: false,
+        },
+        postkode: {
+          type: "TEXT",
+          label: "Postkode",
+          pakrevd: false,
+        },
+        bySted: {
+          type: "TEXT",
+          label: "By/stad/region",
+          pakrevd: false,
+        },
+        land: {
+          type: "COUNTRY_SELECT",
+          label: "Land",
+          pakrevd: false,
+        },
+      },
+    },
     arbeidsstedOffshore: {
       tittel: "Arbeidsstad offshore",
       felter: {
@@ -1326,7 +1569,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
         arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: {
           type: "BOOLEAN",
           label:
-            "Utbetaler du som arbeidsgivar all løn og eventuelle naturalytingar i utsendingsperioden?",
+            "Utbetaler du som arbeidsgivar all løn og eventuelle naturalytingar i heile utsendingsperioden?",
           pakrevd: true,
           jaLabel: "Ja",
           neiLabel: "Nei",
@@ -1431,7 +1674,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
 
 const SKJEMA_DEFINISJON_A1_EN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "4",
+  versjon: "5",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Posting Period and Country",
@@ -1565,6 +1808,77 @@ const SKJEMA_DEFINISJON_A1_EN = {
     skatteforholdOgInntekt: {
       tittel: "Tax and income information",
       felter: {
+        arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: {
+          type: "BOOLEAN",
+          label:
+            "Does your employer pay all salary and any benefits in kind during the entire posting period?",
+          pakrevd: false,
+          jaLabel: "Yes",
+          neiLabel: "No",
+        },
+        virksomheterSomUtbetalerLonnOgNaturalytelser: {
+          type: "LIST",
+          label: "Who pays the salary and any benefits in kind?",
+          pakrevd: false,
+          hjelpetekst:
+            "Add Norwegian and/or foreign companies that pay the salary and any benefits in kind",
+          leggTilLabel: "Add company",
+          fjernLabel: "Remove",
+          elementDefinisjon: {
+            organisasjonsnummer: {
+              type: "TEXT",
+              label: "Organisation number",
+              pakrevd: true,
+            },
+            navn: {
+              type: "TEXT",
+              label: "Company name",
+              pakrevd: false,
+            },
+            vegnavnOgHusnummer: {
+              type: "TEXT",
+              label: "Street name and number",
+              pakrevd: true,
+            },
+            bygning: {
+              type: "TEXT",
+              label: "Building",
+              pakrevd: false,
+            },
+            postkode: {
+              type: "TEXT",
+              label: "Postal code",
+              pakrevd: false,
+            },
+            byStedsnavn: {
+              type: "TEXT",
+              label: "City/place name",
+              pakrevd: false,
+            },
+            region: {
+              type: "TEXT",
+              label: "Region",
+              pakrevd: false,
+            },
+            land: {
+              type: "COUNTRY_SELECT",
+              label: "Country",
+              pakrevd: true,
+            },
+            tilhorerSammeKonsern: {
+              type: "BOOLEAN",
+              label:
+                "Is the company part of the same corporate group as the Norwegian employer?",
+              pakrevd: true,
+              jaLabel: "Yes",
+              neiLabel: "No",
+            },
+          },
+          itemTypeLabels: {
+            norsk: "Norwegian company",
+            utenlandsk: "Foreign company",
+          },
+        },
         erSkattepliktigTilNorgeIHeleutsendingsperioden: {
           type: "BOOLEAN",
           label:
@@ -1912,6 +2226,57 @@ const SKJEMA_DEFINISJON_A1_EN = {
         },
       },
     },
+    arbeidsstedPaLandArbeidstaker: {
+      tittel: "Place of work abroad",
+      felter: {
+        navnPaVirksomhet: {
+          type: "TEXT",
+          label: "Name of the company",
+          pakrevd: true,
+        },
+        fastEllerVekslendeArbeidssted: {
+          type: "SELECT",
+          label:
+            "Do you have a fixed place of work in this country, or does it vary frequently?",
+          pakrevd: true,
+          alternativer: [
+            {
+              verdi: "FAST",
+              label: "Fixed place of work",
+            },
+            {
+              verdi: "VEKSLENDE",
+              label: "Varies frequently",
+            },
+          ],
+        },
+        vegadresse: {
+          type: "TEXT",
+          label: "Street address",
+          pakrevd: false,
+        },
+        nummer: {
+          type: "TEXT",
+          label: "Number",
+          pakrevd: false,
+        },
+        postkode: {
+          type: "TEXT",
+          label: "Postal code",
+          pakrevd: false,
+        },
+        bySted: {
+          type: "TEXT",
+          label: "City/place/region",
+          pakrevd: false,
+        },
+        land: {
+          type: "COUNTRY_SELECT",
+          label: "Country",
+          pakrevd: false,
+        },
+      },
+    },
     arbeidsstedOffshore: {
       tittel: "Place of work offshore",
       felter: {
@@ -2042,7 +2407,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
         arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: {
           type: "BOOLEAN",
           label:
-            "Do you as an employer pay all salary and any benefits in kind during the posting period?",
+            "Do you as an employer pay all salary and any benefits in kind during the entire posting period?",
           pakrevd: true,
           jaLabel: "Yes",
           neiLabel: "No",

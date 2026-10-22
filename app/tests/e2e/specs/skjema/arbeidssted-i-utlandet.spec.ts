@@ -7,10 +7,15 @@ import {
   TypeInnretning,
 } from "~/types/melosysSkjemaTypes";
 
-import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
+import {
+  setupApiMocksForArbeidsgiver,
+  setupApiMocksForArbeidstaker,
+} from "../../fixtures/api-mocks";
 import { expect, test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
+  testOffentligArbeidsgiverSkjema,
+  testOffentligTjenestepersonSkjema,
   testOrganization,
   testUserInfo,
 } from "../../fixtures/test-data";
@@ -572,5 +577,86 @@ test.describe("Arbeidssted i utlandet", () => {
         expectedTransformedData,
       );
     });
+  });
+});
+
+const forenkletArbeidsstedPaLand: ArbeidsstedIUtlandetDto = {
+  arbeidsstedType: ArbeidsstedType.PA_LAND,
+  paLand: {
+    navnPaVirksomhet: "Test Virksomhet AS",
+    fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
+    fastArbeidssted: {
+      vegadresse: "Storgata",
+      nummer: "1",
+      postkode: "0123",
+      bySted: "Stockholm",
+    },
+  },
+};
+
+async function fyllUtForenkletArbeidssted(
+  arbeidsstedPage: ArbeidsstedIUtlandetStegPage,
+) {
+  await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+  await arbeidsstedPage.fastEllerVekslendeRadioGroup.FAST.click();
+  await arbeidsstedPage.vegadresseInput.fill("Storgata");
+  await arbeidsstedPage.nummerInput.fill("1");
+  await arbeidsstedPage.postkodeInput.fill("0123");
+  await arbeidsstedPage.byStedInput.fill("Stockholm");
+}
+
+test.describe("Arbeidssted i utlandet - offentlig arbeidsgiver", () => {
+  test("viser bare arbeidssted på land, uten hjemmekontor", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidsgiver(
+      page,
+      testOffentligArbeidsgiverSkjema,
+      [testOrganization],
+      testUserInfo,
+    );
+    const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testOffentligArbeidsgiverSkjema,
+    );
+
+    await arbeidsstedPage.goto();
+    await arbeidsstedPage.assertIsVisible();
+    await arbeidsstedPage.assertArbeidsstedTypeSelectIsHidden();
+
+    await fyllUtForenkletArbeidssted(arbeidsstedPage);
+    await arbeidsstedPage.assertErHjemmekontorIsHidden();
+
+    await arbeidsstedPage.lagreOgFortsettAndExpectPayload(
+      forenkletArbeidsstedPaLand,
+    );
+    await arbeidsstedPage.assertNavigatedToNextStep();
+  });
+
+  test("offentlig tjenesteperson som sender først oppgir arbeidssted selv", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testOffentligTjenestepersonSkjema,
+      testUserInfo,
+    );
+    const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testOffentligTjenestepersonSkjema,
+      { erArbeidstaker: true },
+    );
+
+    await arbeidsstedPage.goto();
+    await arbeidsstedPage.assertIsVisible();
+    await arbeidsstedPage.assertArbeidsstedTypeSelectIsHidden();
+
+    await fyllUtForenkletArbeidssted(arbeidsstedPage);
+    await arbeidsstedPage.assertErHjemmekontorIsHidden();
+
+    await arbeidsstedPage.lagreOgFortsettAndExpectPayload(
+      forenkletArbeidsstedPaLand,
+    );
+    await arbeidsstedPage.assertNavigatedToNextStep();
   });
 });

@@ -29,6 +29,7 @@ export const en = {
       pakrevd: "required",
       forrigeSteg: "Previous step",
       nesteSteg: "Next step",
+      stegNummer: "Step {{steg}}",
       sistOppdatert: "Last updated: {{tidspunkt}}",
       lagreUtkastOgFortsettSenere: "Save draft and continue later",
       avbrytOgSlett: "Cancel and delete",
@@ -160,6 +161,10 @@ export const en = {
     skatteforholdOgInntektSteg: {
       tittel: "Tax and Income Information",
       inntektHeading: "Income",
+      duMaSvarePaOmArbeidsgiverBetalerAllLonn:
+        "You must answer whether your employer pays all salary and any benefits in kind during the posting period",
+      duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn:
+        "You must add at least one business that pays the salary and any benefits in kind",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "You must answer whether you are liable to pay tax to Norway for the entire posting period",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
@@ -255,6 +260,12 @@ export const en = {
         "Description of employment relationship is required",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "You must answer whether the employee will work for the company in Norway after the posting period",
+    },
+    aaregVarsel: {
+      ingenArbeidsforhold:
+        "We could not find an employment relationship between the employee and the business in the Aa register for the entire posting period. The employment relationship must be updated through the a-melding.",
+      ingenArbeidsforholdDu:
+        "We could not find an employment relationship between you and the business in the Aa register for the entire posting period. The employment relationship must be updated through the a-melding.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",

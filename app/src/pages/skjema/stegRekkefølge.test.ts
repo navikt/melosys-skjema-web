@@ -6,19 +6,36 @@ import {
   STEG_REKKEFOLGE,
 } from "~/pages/skjema/stegRekkefølge.ts";
 import {
+  type FlytGrunnlag,
+  getUtsendtArbeidstakerFlyt,
+} from "~/pages/skjema/utsendtArbeidstakerFlyt.ts";
+import {
+  LandKode,
   Skjemadel,
-  UtsendtArbeidstakerSkjemaDto,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes.ts";
 
-const lagSkjema = (skjemadel: Skjemadel, erOffentligArbeidsgiver?: boolean) =>
+const lagSkjema = (
+  skjemadel: Skjemadel,
+  erOffentligArbeidsgiver?: boolean,
+  harArbeidsforholdIAareg?: boolean,
+  forhandsutfyltFraArbeidsgiver = false,
+) =>
   ({
-    metadata: { skjemadel, erOffentligArbeidsgiver },
-  }) as Pick<UtsendtArbeidstakerSkjemaDto, "metadata">;
+    metadata: { skjemadel, erOffentligArbeidsgiver, harArbeidsforholdIAareg },
+    motpartensUtsendingsperiodeOgLand: forhandsutfyltFraArbeidsgiver
+      ? {
+          utsendelseLand: LandKode.SE,
+          utsendelsePeriode: { fraDato: "2026-01-01", tilDato: "2026-12-31" },
+        }
+      : undefined,
+  }) as FlytGrunnlag & Pick<UtsendtArbeidstakerSkjemaDto, "metadata">;
 
-const harVirksomhetssteg = (skjema: ReturnType<typeof lagSkjema>) =>
-  getStegRekkefolge(skjema).some(
-    ({ key }) => key === StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
-  );
+const stegKeys = (skjema: FlytGrunnlag) =>
+  getStegRekkefolge(skjema).map(({ key }) => key);
+
+const harVirksomhetssteg = (skjema: FlytGrunnlag) =>
+  stegKeys(skjema).includes(StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE);
 
 describe("getStegRekkefolge", () => {
   it.each([
@@ -35,18 +52,137 @@ describe("getStegRekkefolge", () => {
     },
   );
 
-  it("endrer aldri arbeidstakerflyten eller grunnlisten", () => {
-    const grunnliste = STEG_REKKEFOLGE[Skjemadel.ARBEIDSTAKERS_DEL];
+  it.each([
+    [Skjemadel.ARBEIDSGIVERS_DEL, false, true],
+    [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, false, true],
+    [Skjemadel.ARBEIDSGIVERS_DEL, true, false],
+    [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, false],
+  ])(
+    "skjemadel %s og offentlig=%s gir utenlandsoppdraget=%s",
+    (skjemadel, offentlig, forventet) => {
+      expect(
+        stegKeys(lagSkjema(skjemadel, offentlig, true)).includes(
+          StegKey.UTENLANDSOPPDRAGET,
+        ),
+      ).toBe(forventet);
+    },
+  );
 
+  it("gir offentlig arbeidsgiver periode, arbeidssted og lønn i arbeidsgivers del", () => {
+    expect(stegKeys(lagSkjema(Skjemadel.ARBEIDSGIVERS_DEL, true))).toEqual([
+      StegKey.UTSENDINGSPERIODE_OG_LAND,
+      StegKey.ARBEIDSSTED_I_UTLANDET,
+      StegKey.ARBEIDSTAKERENS_LONN,
+      StegKey.TILLEGGSOPPLYSNINGER,
+      StegKey.VEDLEGG,
+      StegKey.OPPSUMMERING,
+    ]);
+  });
+
+  it("legger arbeidssted etter arbeidssituasjon når offentlig tjenesteperson sender først", () => {
     expect(
-      getStegRekkefolge(lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true)),
-    ).toEqual(grunnliste);
+      stegKeys(lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true, true)),
+    ).toEqual([
+      StegKey.UTSENDINGSPERIODE_OG_LAND,
+      StegKey.ARBEIDSSITUASJON,
+      StegKey.ARBEIDSSTED_I_UTLANDET,
+      StegKey.SKATTEFORHOLD_OG_INNTEKT,
+      StegKey.FAMILIEMEDLEMMER,
+      StegKey.TILLEGGSOPPLYSNINGER,
+      StegKey.VEDLEGG,
+      StegKey.OPPSUMMERING,
+    ]);
+  });
 
+  it.each([
+    ["arbeidsgiver har sendt først", true, true, true],
+    ["ingen treff i AAREG", true, false, false],
+    ["privat arbeidsgiver", false, true, false],
+  ])(
+    "gir vanlig arbeidstakerflyt når %s",
+    (_, offentlig, harAareg, forhandsutfylt) => {
+      expect(
+        getStegRekkefolge(
+          lagSkjema(
+            Skjemadel.ARBEIDSTAKERS_DEL,
+            offentlig,
+            harAareg,
+            forhandsutfylt,
+          ),
+        ),
+      ).toEqual(STEG_REKKEFOLGE[Skjemadel.ARBEIDSTAKERS_DEL]);
+    },
+  );
+
+  it("endrer aldri grunnlistene", () => {
     getStegRekkefolge(lagSkjema(Skjemadel.ARBEIDSGIVERS_DEL, true));
+    getStegRekkefolge(lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true, true));
+
     expect(STEG_REKKEFOLGE[Skjemadel.ARBEIDSGIVERS_DEL]).toContainEqual(
       expect.objectContaining({
         key: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
       }),
     );
+    expect(
+      STEG_REKKEFOLGE[Skjemadel.ARBEIDSTAKERS_DEL].map(({ key }) => key),
+    ).not.toContain(StegKey.ARBEIDSSTED_I_UTLANDET);
+  });
+});
+
+describe("getUtsendtArbeidstakerFlyt", () => {
+  it.each([
+    [Skjemadel.ARBEIDSTAKERS_DEL, true, undefined, true],
+    [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, undefined, true],
+    [Skjemadel.ARBEIDSGIVERS_DEL, true, undefined, false],
+    [Skjemadel.ARBEIDSTAKERS_DEL, false, undefined, false],
+    [Skjemadel.ARBEIDSTAKERS_DEL, true, false, false],
+    [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, true, false],
+  ])(
+    "skjemadel %s, offentlig=%s og AAREG=%s gir ukjent flyt=%s",
+    (skjemadel, offentlig, harAareg, forventet) => {
+      expect(
+        getUtsendtArbeidstakerFlyt(lagSkjema(skjemadel, offentlig, harAareg))
+          .flytenErUkjent,
+      ).toBe(forventet);
+    },
+  );
+
+  it("forenkler arbeidstakerdelen i kombinert skjema for offentlig tjenesteperson", () => {
+    expect(
+      getUtsendtArbeidstakerFlyt(
+        lagSkjema(Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, true),
+      ),
+    ).toEqual({
+      utenlandsoppdragetSkalOppgis: false,
+      arbeidsstedSkalOppgis: true,
+      forenkletArbeidssted: true,
+      forenkletArbeidstakerdel: true,
+      lonnOppgisISkatteforhold: false,
+      flytenErUkjent: false,
+    });
+  });
+
+  it("lar offentlig tjenesteperson som sender først oppgi arbeidssted og lønn", () => {
+    expect(
+      getUtsendtArbeidstakerFlyt(
+        lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true, true),
+      ),
+    ).toEqual({
+      utenlandsoppdragetSkalOppgis: false,
+      arbeidsstedSkalOppgis: true,
+      forenkletArbeidssted: true,
+      forenkletArbeidstakerdel: true,
+      lonnOppgisISkatteforhold: true,
+      flytenErUkjent: false,
+    });
+  });
+
+  it("reduserer arbeidstakerdelen uten arbeidssted og lønn når arbeidsgiver har sendt først", () => {
+    const flyt = getUtsendtArbeidstakerFlyt(
+      lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true, true, true),
+    );
+    expect(flyt.forenkletArbeidstakerdel).toBe(true);
+    expect(flyt.arbeidsstedSkalOppgis).toBe(false);
+    expect(flyt.lonnOppgisISkatteforhold).toBe(false);
   });
 });

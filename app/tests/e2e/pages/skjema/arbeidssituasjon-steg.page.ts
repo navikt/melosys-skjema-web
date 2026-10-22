@@ -207,6 +207,16 @@ export class ArbeidssituasjonStegPage {
     );
   }
 
+  async assertNavigatedToArbeidssted() {
+    await expect(this.page).toHaveURL(
+      `/skjema/${this.skjema.id}/arbeidssted-i-utlandet`,
+    );
+  }
+
+  async assertHarVaertILonnetArbeidIsHidden() {
+    await expect(this.harVaertILonnetArbeidRadioGroup.JA).toBeHidden();
+  }
+
   async assertStillOnStep() {
     await expect(this.page).toHaveURL(
       `/skjema/${this.skjema.id}/arbeidssituasjon`,

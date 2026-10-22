@@ -406,3 +406,40 @@ export const testVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
     },
   ],
 };
+
+export const testOffentligArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
+  ...testArbeidsgiverSkjema,
+  metadata: {
+    ...testArbeidsgiverSkjema.metadata,
+    erOffentligArbeidsgiver: true,
+  },
+};
+
+/**
+Arbeidstakers del for offentlig arbeidsgiver før AAREG-sjekken har avgjort flyten
+*/
+export const testOffentligArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
+  ...testArbeidstakerSkjema,
+  metadata: {
+    ...testArbeidstakerSkjema.metadata,
+    erOffentligArbeidsgiver: true,
+  },
+};
+
+/**
+Offentlig tjenesteperson som fyller ut før arbeidsgiveren (ikke forhåndsutfylt)
+*/
+export const testOffentligTjenestepersonSkjema: UtsendtArbeidstakerSkjemaDto = {
+  ...testOffentligArbeidstakerSkjema,
+  metadata: {
+    ...testOffentligArbeidstakerSkjema.metadata,
+    harArbeidsforholdIAareg: true,
+  },
+  data: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+    utsendingsperiodeOgLand: {
+      utsendelseLand: LandKode.SE,
+      utsendelsePeriode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+    },
+  },
+};

@@ -256,6 +256,7 @@ export function UtenlandsoppdragetSteg({ id }: { id: string }) {
       ]}
       id={id}
       skjemaQuery={getSkjemaQuery}
+      stepKey={StegKey.UTENLANDSOPPDRAGET}
     >
       {(skjema) => <UtenlandsoppdragetStegContent skjema={skjema} />}
     </SkjemaStegLoader>

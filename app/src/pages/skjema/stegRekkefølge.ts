@@ -6,9 +6,10 @@ import {
   StegRekkefolgeItem,
 } from "~/pages/skjema/components/Fremgangsindikator.tsx";
 import {
-  Skjemadel,
-  UtsendtArbeidstakerSkjemaDto,
-} from "~/types/melosysSkjemaTypes.ts";
+  type FlytGrunnlag,
+  getUtsendtArbeidstakerFlyt,
+} from "~/pages/skjema/utsendtArbeidstakerFlyt.ts";
+import { Skjemadel } from "~/types/melosysSkjemaTypes.ts";
 
 export const ARBEIDSGIVER_IKON: StegIkon = {
   icon: BriefcaseIcon,
@@ -137,16 +138,27 @@ export const STEG_REKKEFOLGE: Record<Skjemadel, StegRekkefolgeItem[]> = {
 };
 
 export const getStegRekkefolge = (
-  skjema: Pick<UtsendtArbeidstakerSkjemaDto, "metadata">,
+  skjema: FlytGrunnlag,
 ): StegRekkefolgeItem[] => {
-  const steg = STEG_REKKEFOLGE[skjema.metadata.skjemadel];
-  const skalHoppeOverVirksomhetssteget =
-    skjema.metadata.erOffentligArbeidsgiver === true &&
-    skjema.metadata.skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL;
+  const { skjemadel } = skjema.metadata;
+  const flyt = getUtsendtArbeidstakerFlyt(skjema);
 
-  return skalHoppeOverVirksomhetssteget
-    ? steg.filter(
-        ({ key }) => key !== StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
-      )
-    : steg;
+  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
+    return flyt.arbeidsstedSkalOppgis
+      ? ARBEIDSTAKER_STEG_REKKEFOLGE.flatMap((steg) =>
+          steg.key === StegKey.ARBEIDSSITUASJON
+            ? [steg, ARBEIDSSTED_I_UTLANDET_STEG]
+            : [steg],
+        )
+      : ARBEIDSTAKER_STEG_REKKEFOLGE;
+  }
+
+  const utelatteSteg = new Set<StegKey>([
+    ...(skjema.metadata.erOffentligArbeidsgiver === true
+      ? [StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE]
+      : []),
+    ...(flyt.utenlandsoppdragetSkalOppgis ? [] : [StegKey.UTENLANDSOPPDRAGET]),
+  ]);
+
+  return STEG_REKKEFOLGE[skjemadel].filter(({ key }) => !utelatteSteg.has(key));
 };

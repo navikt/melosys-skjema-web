@@ -59,10 +59,7 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
 
   const stegRekkefolge = getStegRekkefolge(skjema);
   if (stepKey && stegRekkefolge.every(({ key }) => key !== stepKey)) {
-    const nesteSteg =
-      stegRekkefolge.find(({ key }) => key === StegKey.UTENLANDSOPPDRAGET) ??
-      stegRekkefolge[0];
-    return <Navigate params={{ id }} to={nesteSteg!.route} replace />;
+    return <Navigate params={{ id }} to={stegRekkefolge[0]!.route} replace />;
   }
 
   return (

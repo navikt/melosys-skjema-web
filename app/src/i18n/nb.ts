@@ -29,6 +29,7 @@ export const nb = {
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
+      stegNummer: "Steg {{steg}}",
       sistOppdatert: "Sist oppdatert: {{tidspunkt}}",
       lagreUtkastOgFortsettSenere: "Lagre utkast og fortsett senere",
       avbrytOgSlett: "Avbryt og slett",
@@ -154,6 +155,10 @@ export const nb = {
     skatteforholdOgInntektSteg: {
       tittel: "Skatteforhold og inntekt",
       inntektHeading: "Inntekt",
+      duMaSvarePaOmArbeidsgiverBetalerAllLonn:
+        "Du må svare på om arbeidsgiveren din utbetaler all lønn og eventuelle naturalytelser i utsendingsperioden",
+      duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn:
+        "Du må legge til minst én virksomhet som utbetaler lønn og eventuelle naturalytelser",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
@@ -247,6 +252,12 @@ export const nb = {
         "Beskrivelse av ansettelsesforhold er påkrevd",
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
+    },
+    aaregVarsel: {
+      ingenArbeidsforhold:
+        "Vi fant ikke et arbeidsforhold mellom arbeidstakeren og virksomheten i Aa-registeret for hele utsendingsperioden. Arbeidsforholdet må oppdateres via a-meldingen.",
+      ingenArbeidsforholdDu:
+        "Vi fant ikke et arbeidsforhold mellom deg og virksomheten i Aa-registeret for hele utsendingsperioden. Arbeidsforholdet må oppdateres via a-meldingen.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utsendingsperiode og land",

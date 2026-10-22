@@ -9,6 +9,7 @@ import {
   testUserInfo,
 } from "../../fixtures/test-data";
 import { UtenlandsoppdragetStegPage } from "../../pages/skjema/utenlandsoppdraget-steg.page";
+import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
 
 test.describe("Utenlandsoppdraget", () => {
   test.beforeEach(async ({ page }) => {
@@ -169,7 +170,7 @@ test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
     );
   });
 
-  test("viser utenlandsoppdraget uten registerinfoboks for offentlig arbeidsgiver", async ({
+  test("offentlig arbeidsgiver kan ikke åpne steget direkte", async ({
     page,
   }) => {
     const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
@@ -178,7 +179,9 @@ test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
     );
 
     await utenlandsoppdragetStegPage.goto();
-    await utenlandsoppdragetStegPage.assertIsVisible();
-    await utenlandsoppdragetStegPage.assertIngenRegisterinfoboks();
+    await new UtsendingsperiodeOgLandStegPage(
+      page,
+      offentligSkjema,
+    ).assertIsVisible();
   });
 });

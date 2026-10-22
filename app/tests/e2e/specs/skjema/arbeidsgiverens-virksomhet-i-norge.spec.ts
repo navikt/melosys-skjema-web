@@ -11,6 +11,7 @@ import {
   ArbeidsgiverensVirksomhetINorgeStegPage,
   type SamletVirksomhetData,
 } from "../../pages/skjema/arbeidsgiverens-virksomhet-i-norge-steg.page";
+import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
 
 const samletVirksomhet: SamletVirksomhetData = {
   antallAdministrativtAnsatte: 3,
@@ -247,6 +248,9 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     );
 
     await virksomhetStegPage.goto();
-    await virksomhetStegPage.assertNavigatedToNextStep();
+    await new UtsendingsperiodeOgLandStegPage(
+      page,
+      offentligSkjema,
+    ).assertIsVisible();
   });
 });

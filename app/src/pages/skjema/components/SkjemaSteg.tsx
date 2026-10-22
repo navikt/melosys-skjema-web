@@ -19,6 +19,7 @@ import {
 } from "~/pages/skjema/components/Fremgangsindikator";
 import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
 import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
+import { getUtsendtArbeidstakerFlyt } from "~/pages/skjema/utsendtArbeidstakerFlyt.ts";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 import { formatDatotid } from "~/utils/datoformat.ts";
@@ -64,6 +65,7 @@ export function SkjemaSteg({
       <Fremgangsindikator
         aktivtSteg={stepNumber}
         className="mt-4"
+        stegeneErUkjente={getUtsendtArbeidstakerFlyt(skjema).flytenErUkjent}
         stegRekkefolge={stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">

@@ -18,13 +18,29 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 
 interface PaLandFormProperties {
   utsendelseLand?: LandKode;
+  /**
+  Offentlig arbeidsgiver: hjemmekontor-spørsmålet stilles ikke
+  */
+  forenklet?: boolean;
+  /**
+  Arbeidstakerens egne tekster i du-form
+  */
+  erArbeidstaker?: boolean;
 }
 
-export function PaLandForm({ utsendelseLand }: PaLandFormProperties) {
+export function PaLandForm({
+  utsendelseLand,
+  forenklet = false,
+  erArbeidstaker = false,
+}: PaLandFormProperties) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const { getSeksjon } = useSkjemaDefinisjon();
-  const felter = getSeksjon("arbeidsstedPaLand").felter;
+  const felter = getSeksjon(
+    erArbeidstaker ? "arbeidsstedPaLandArbeidstaker" : "arbeidsstedPaLand",
+  ).felter;
+  const erHjemmekontorFelt =
+    getSeksjon("arbeidsstedPaLand").felter.erHjemmekontor;
   const { control } = useFormContext<ArbeidsstedIUtlandetFormData>();
 
   const fastEllerVekslendeArbeidssted = useWatch({
@@ -36,7 +52,10 @@ export function PaLandForm({ utsendelseLand }: PaLandFormProperties) {
   // We use Controller's fieldState.error for individual field errors when available
   return (
     <div className="mt-6">
-      <NavnPaVirksomhetFormPart formFieldName="paLand.navnPaVirksomhet" />
+      <NavnPaVirksomhetFormPart
+        formFieldName="paLand.navnPaVirksomhet"
+        label={felter.navnPaVirksomhet.label}
+      />
 
       <Controller
         control={control}
@@ -123,11 +142,13 @@ export function PaLandForm({ utsendelseLand }: PaLandFormProperties) {
         </div>
       )}
 
-      <RadioGroupJaNeiFormPart
-        className="mt-6"
-        formFieldName="paLand.erHjemmekontor"
-        legend={felter.erHjemmekontor.label}
-      />
+      {!forenklet && (
+        <RadioGroupJaNeiFormPart
+          className="mt-6"
+          formFieldName="paLand.erHjemmekontor"
+          legend={erHjemmekontorFelt.label}
+        />
+      )}
     </div>
   );
 }

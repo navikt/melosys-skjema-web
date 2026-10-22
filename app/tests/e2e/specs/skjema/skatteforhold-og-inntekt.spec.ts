@@ -6,7 +6,11 @@ import {
 
 import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
-import { testArbeidstakerSkjema, testUserInfo } from "../../fixtures/test-data";
+import {
+  testArbeidstakerSkjema,
+  testOffentligTjenestepersonSkjema,
+  testUserInfo,
+} from "../../fixtures/test-data";
 import { SkatteforholdOgInntektStegPage } from "../../pages/skjema/skatteforhold-og-inntekt-steg.page";
 
 test.describe("Skatteforhold og inntekt", () => {
@@ -90,5 +94,37 @@ test.describe("Skatteforhold og inntekt", () => {
       expectedPayload,
     );
     await skatteforholdOgInntektStegPage.assertNavigatedToNextStep();
+  });
+});
+
+test.describe("Skatteforhold og inntekt - offentlig tjenesteperson", () => {
+  test("spør om lønn i stedet for inntektskilder når arbeidstaker sender først", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testOffentligTjenestepersonSkjema,
+      testUserInfo,
+    );
+    const stegPage = new SkatteforholdOgInntektStegPage(
+      page,
+      testOffentligTjenestepersonSkjema,
+    );
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertInntektsspormalIsHidden();
+
+    await stegPage.arbeidsgiverBetalerAllLonnRadioGroup.JA.click();
+    await stegPage.erSkattepliktigTilNorgeRadioGroup.JA.click();
+    await stegPage.mottarPengestotteFraAnnetEosLandRadioGroup.NEI.click();
+
+    const expectedPayload: SkatteforholdOgInntektDto = {
+      erSkattepliktigTilNorgeIHeleutsendingsperioden: true,
+      mottarPengestotteFraAnnetEosLandEllerSveits: false,
+      arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: true,
+    };
+    await stegPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await stegPage.assertNavigatedToNextStep();
   });
 });

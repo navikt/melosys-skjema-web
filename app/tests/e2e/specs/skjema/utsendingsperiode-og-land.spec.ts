@@ -3,13 +3,18 @@ import {
   UtsendingsperiodeOgLandDto,
 } from "~/types/melosysSkjemaTypes";
 
-import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
+import {
+  mockAaregSjekk,
+  setupApiMocksForArbeidstaker,
+} from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
 import {
   formFieldValues,
   testArbeidstakerSkjema,
   testArbeidstakerSkjemaFraMotpartCta,
   testArbeidstakerSkjemaMedAvvikFraMotpart,
+  testOffentligArbeidstakerSkjema,
+  testOffentligTjenestepersonSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
@@ -160,5 +165,42 @@ test.describe("Utsendingsperiode og land", () => {
     );
 
     await utsendingsperiodeOgLandStegPage.assertNavigatedToNextStep();
+  });
+
+  test("viser AAREG-varsel når arbeidsforholdet ikke finnes for hele perioden", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testOffentligTjenestepersonSkjema,
+      testUserInfo,
+    );
+    await mockAaregSjekk(page, testOffentligTjenestepersonSkjema.id, false);
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testOffentligTjenestepersonSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertAaregVarselIsVisible();
+  });
+
+  test("offentlig arbeidsgiver uten avklart AAREG-treff viser bare stegnummer i fremgangsindikatoren", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testOffentligArbeidstakerSkjema,
+      testUserInfo,
+    );
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testOffentligArbeidstakerSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertFremgangsindikatorViserUkjenteSteg();
   });
 });
