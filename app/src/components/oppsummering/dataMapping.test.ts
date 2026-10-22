@@ -172,6 +172,11 @@ describe.each(["nb", "nn", "en"] as const)("resolveSeksjoner (%s)", (sprak) => {
 
     expect(navn[0]).toBe("utsendingsperiodeOgLand");
     expect(new Set(navn).size).toBe(navn.length);
+    expect(navn).not.toContain("tilleggsopplysningerArbeidsgiver");
+    expect(
+      navn.filter((navn) => navn === "tilleggsopplysningerArbeidstaker"),
+    ).toHaveLength(1);
+    expect(navn.at(-1)).toBe("tilleggsopplysningerArbeidstaker");
   });
 
   it("legger utsendelseslandet på fast arbeidssted i oppsummeringen for kombinert flyt", () => {
