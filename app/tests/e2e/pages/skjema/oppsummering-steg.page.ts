@@ -14,6 +14,7 @@ import type {
   UtsendingsperiodeOgLandDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
+import { formatDato } from "~/utils/datoformat";
 
 import { E2E_SPRAK, translations } from "../../utils/translations";
 
@@ -317,13 +318,13 @@ export class OppsummeringStegPage {
       this.page.locator(
         `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsePeriode.fraDatoLabel}") + dd`,
       ),
-    ).toHaveText(data.utsendelsePeriode.fraDato);
+    ).toHaveText(formatDato(data.utsendelsePeriode.fraDato, E2E_SPRAK));
 
     await expect(
       this.page.locator(
         `dt:has-text("${utsendingsperiodeOgLand.felter.utsendelsePeriode.tilDatoLabel}") + dd`,
       ),
-    ).toHaveText(data.utsendelsePeriode.tilDato);
+    ).toHaveText(formatDato(data.utsendelsePeriode.tilDato, E2E_SPRAK));
   }
 
   async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {
