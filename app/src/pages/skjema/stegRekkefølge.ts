@@ -25,28 +25,24 @@ const ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
   title: "arbeidsgiverensVirksomhetINorgeSteg.tittel",
   route: "/skjema/$id/arbeidsgiverens-virksomhet-i-norge",
-  icon: ARBEIDSGIVER_IKON,
 };
 
 const UTENLANDSOPPDRAGET_STEG: StegRekkefolgeItem = {
   key: StegKey.UTENLANDSOPPDRAGET,
   title: "utenlandsoppdragetSteg.tittel",
   route: "/skjema/$id/utenlandsoppdraget",
-  icon: ARBEIDSGIVER_IKON,
 };
 
 const ARBEIDSSTED_I_UTLANDET_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSSTED_I_UTLANDET,
   title: "arbeidsstedIUtlandetSteg.tittel",
   route: "/skjema/$id/arbeidssted-i-utlandet",
-  icon: ARBEIDSGIVER_IKON,
 };
 
 const ARBEIDSTAKERENS_LONN_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSTAKERENS_LONN,
   title: "arbeidstakerenslonnSteg.tittel",
   route: "/skjema/$id/arbeidstakerens-lonn",
-  icon: ARBEIDSGIVER_IKON,
 };
 
 const UTSENDINGSPERIODE_OG_LAND_STEG: StegRekkefolgeItem = {
@@ -59,21 +55,18 @@ const ARBEIDSSITUASJON_STEG: StegRekkefolgeItem = {
   key: StegKey.ARBEIDSSITUASJON,
   title: "arbeidssituasjonSteg.tittel",
   route: "/skjema/$id/arbeidssituasjon",
-  icon: ARBEIDSTAKER_IKON,
 };
 
 const SKATTEFORHOLD_OG_INNTEKT_STEG: StegRekkefolgeItem = {
   key: StegKey.SKATTEFORHOLD_OG_INNTEKT,
   title: "skatteforholdOgInntektSteg.tittel",
   route: "/skjema/$id/skatteforhold-og-inntekt",
-  icon: ARBEIDSTAKER_IKON,
 };
 
 const FAMILIEMEDLEMMER_STEG: StegRekkefolgeItem = {
   key: StegKey.FAMILIEMEDLEMMER,
   title: "familiemedlemmerSteg.tittel",
   route: "/skjema/$id/familiemedlemmer",
-  icon: ARBEIDSTAKER_IKON,
 };
 
 const TILLEGGSOPPLYSNINGER_STEG: StegRekkefolgeItem = {
@@ -118,13 +111,16 @@ export const ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] = [
 export const ARBEIDSGIVER_OG_ARBEIDSTAKER_STEG_REKKEFOLGE: StegRekkefolgeItem[] =
   [
     UTSENDINGSPERIODE_OG_LAND_STEG,
-    ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE_STEG,
-    UTENLANDSOPPDRAGET_STEG,
-    ARBEIDSSTED_I_UTLANDET_STEG,
-    ARBEIDSTAKERENS_LONN_STEG,
-    ARBEIDSSITUASJON_STEG,
-    SKATTEFORHOLD_OG_INNTEKT_STEG,
-    FAMILIEMEDLEMMER_STEG,
+    {
+      ...ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE_STEG,
+      icon: ARBEIDSGIVER_IKON,
+    },
+    { ...UTENLANDSOPPDRAGET_STEG, icon: ARBEIDSGIVER_IKON },
+    { ...ARBEIDSSTED_I_UTLANDET_STEG, icon: ARBEIDSGIVER_IKON },
+    { ...ARBEIDSTAKERENS_LONN_STEG, icon: ARBEIDSGIVER_IKON },
+    { ...ARBEIDSSITUASJON_STEG, icon: ARBEIDSTAKER_IKON },
+    { ...SKATTEFORHOLD_OG_INNTEKT_STEG, icon: ARBEIDSTAKER_IKON },
+    { ...FAMILIEMEDLEMMER_STEG, icon: ARBEIDSTAKER_IKON },
     TILLEGGSOPPLYSNINGER_STEG,
     VEDLEGG_STEG,
     OPPSUMMERING_STEG,
