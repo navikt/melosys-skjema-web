@@ -92,14 +92,14 @@ function harVirksomhetSomUtbetalerLonn(data: SchemaData): boolean {
 }
 
 /**
- * @param forenklet offentlig tjenesteperson: spørsmålene om inntektskilder og inntekt stilles ikke.
+ * @param statsansattFlyt statsansatt: spørsmålene om inntektskilder og inntekt stilles ikke.
  * @param medLonn arbeidstakeren fyller ut først, og lønnsspørsmålene fra arbeidsgiverdelen stilles her.
  */
 export const lagSkatteforholdOgInntektSchema = ({
-  forenklet,
+  statsansattFlyt,
   medLonn,
 }: {
-  forenklet: boolean;
+  statsansattFlyt: boolean;
   medLonn: boolean;
 }) =>
   baseSchema
@@ -136,7 +136,7 @@ export const lagSkatteforholdOgInntektSchema = ({
     .refine(
       (data) => {
         return (
-          forenklet ||
+          statsansattFlyt ||
           (!!data.inntektFraNorskEllerUtenlandskVirksomhet &&
             data.inntektFraNorskEllerUtenlandskVirksomhet.length > 0)
         );
@@ -149,7 +149,7 @@ export const lagSkatteforholdOgInntektSchema = ({
     .refine(
       (data) => {
         return (
-          forenklet ||
+          statsansattFlyt ||
           (!!data.hvilkeTyperInntektHarDu &&
             data.hvilkeTyperInntektHarDu.length > 0)
         );
@@ -161,7 +161,7 @@ export const lagSkatteforholdOgInntektSchema = ({
     )
     .refine(
       (data) => {
-        if (forenklet || !skalValidereLoennsinntekt(data)) return true;
+        if (statsansattFlyt || !skalValidereLoennsinntekt(data)) return true;
         return data.inntekt?.trim() ? erPositivtBelop(data.inntekt) : false;
       },
       {
@@ -171,7 +171,8 @@ export const lagSkatteforholdOgInntektSchema = ({
     )
     .refine(
       (data) => {
-        if (forenklet || !skalValidereEgenVirksomhetInntekt(data)) return true;
+        if (statsansattFlyt || !skalValidereEgenVirksomhetInntekt(data))
+          return true;
         return data.inntektFraEgenVirksomhet?.trim()
           ? erPositivtBelop(data.inntektFraEgenVirksomhet)
           : false;
@@ -222,18 +223,18 @@ export const lagSkatteforholdOgInntektSchema = ({
         data.pengestotteSomMottasFraAndreLandBelop
           ? normaliserBelopForApi(data.pengestotteSomMottasFraAndreLandBelop)
           : undefined,
-      inntektFraNorskEllerUtenlandskVirksomhet: forenklet
+      inntektFraNorskEllerUtenlandskVirksomhet: statsansattFlyt
         ? undefined
         : data.inntektFraNorskEllerUtenlandskVirksomhet,
-      hvilkeTyperInntektHarDu: forenklet
+      hvilkeTyperInntektHarDu: statsansattFlyt
         ? undefined
         : data.hvilkeTyperInntektHarDu,
       inntekt:
-        !forenklet && skalValidereLoennsinntekt(data) && data.inntekt
+        !statsansattFlyt && skalValidereLoennsinntekt(data) && data.inntekt
           ? normaliserBelopForApi(data.inntekt)
           : undefined,
       inntektFraEgenVirksomhet:
-        !forenklet &&
+        !statsansattFlyt &&
         skalValidereEgenVirksomhetInntekt(data) &&
         data.inntektFraEgenVirksomhet
           ? normaliserBelopForApi(data.inntektFraEgenVirksomhet)
@@ -250,6 +251,6 @@ export const lagSkatteforholdOgInntektSchema = ({
     }));
 
 export const skatteforholdOgInntektSchema = lagSkatteforholdOgInntektSchema({
-  forenklet: false,
+  statsansattFlyt: false,
   medLonn: false,
 });

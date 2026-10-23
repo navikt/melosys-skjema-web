@@ -6,7 +6,7 @@ import { expect, test } from "../../fixtures/test";
 import {
   korrektFormatertOrgnr,
   testArbeidstakerSkjema,
-  testOffentligTjenestepersonSkjema,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidssituasjon-steg.page";
@@ -155,18 +155,18 @@ test.describe("Arbeidssituasjon", () => {
   });
 });
 
-test.describe("Arbeidssituasjon - offentlig tjenesteperson", () => {
+test.describe("Arbeidssituasjon - statsansatt", () => {
   test("spør bare om flere virksomheter og går videre til arbeidssted", async ({
     page,
   }) => {
     await setupApiMocksForArbeidstaker(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
       testUserInfo,
     );
     const arbeidssituasjonPage = new ArbeidssituasjonStegPage(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
     );
 
     await arbeidssituasjonPage.goto();

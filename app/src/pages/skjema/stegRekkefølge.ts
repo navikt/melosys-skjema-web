@@ -150,7 +150,7 @@ export const getStegRekkefolge = (
   }
 
   const utelatteSteg = new Set<StegKey>([
-    ...(skjema.metadata.erOffentligArbeidsgiver === true
+    ...(skjema.metadata.erStatligArbeidsgiver === true
       ? [StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE]
       : []),
     ...(flyt.utenlandsoppdragetSkalOppgis ? [] : [StegKey.UTENLANDSOPPDRAGET]),

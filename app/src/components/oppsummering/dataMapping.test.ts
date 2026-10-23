@@ -166,7 +166,7 @@ describe.each(["nb", "nn", "en"] as const)("resolveSeksjoner (%s)", (sprak) => {
     expect(arbeidsstedPaLand?.data.bySted).toBeUndefined();
   });
 
-  it("arbeidstakers del for offentlig tjenesteperson viser arbeidssted og lønn fra skatteforholdet", () => {
+  it("arbeidstakers del for statsansatt viser arbeidssted og lønn fra skatteforholdet", () => {
     const dto: UtsendtArbeidstakerArbeidstakersSkjemaDataDto = {
       ...arbeidstakersDelDto,
       arbeidssituasjon: { skalJobbeForFlereVirksomheter: false },

@@ -15,11 +15,11 @@ export type FlytGrunnlag = Pick<
 export interface UtsendtArbeidstakerFlyt {
   utenlandsoppdragetSkalOppgis: boolean;
   arbeidsstedSkalOppgis: boolean;
-  forenkletArbeidssted: boolean;
-  forenkletArbeidstakerdel: boolean;
+  arbeidsstedForStatsansatt: boolean;
+  arbeidstakerdelForStatsansatt: boolean;
   lonnOppgisISkatteforhold: boolean;
   /**
-   * Offentlig arbeidsgiver der AAREG-treffet ikke er kjent ennå (perioden er ikke lagret),
+   * Statlig arbeidsgiver der AAREG-treffet ikke er kjent ennå (perioden er ikke lagret),
    * så de neste stegene avhenger av svaret på steg 1.
    */
   flytenErUkjent: boolean;
@@ -29,35 +29,35 @@ export function getUtsendtArbeidstakerFlyt(
   skjema: FlytGrunnlag,
 ): UtsendtArbeidstakerFlyt {
   const { metadata } = skjema;
-  const erOffentligArbeidsgiver = metadata.erOffentligArbeidsgiver === true;
-  const erOffentligTjenesteperson =
-    erOffentligArbeidsgiver && metadata.harArbeidsforholdIAareg === true;
+  const erStatligArbeidsgiver = metadata.erStatligArbeidsgiver === true;
+  const erStatsansatt =
+    erStatligArbeidsgiver && metadata.harArbeidsforholdIAareg === true;
   const flytenErUkjent =
-    erOffentligArbeidsgiver &&
+    erStatligArbeidsgiver &&
     metadata.skjemadel !== Skjemadel.ARBEIDSGIVERS_DEL &&
     typeof metadata.harArbeidsforholdIAareg !== "boolean";
 
   if (metadata.skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
     // Forhåndsutfylt fra en innsendt arbeidsgivers del betyr at arbeidsgiveren sendte først
     const arbeidstakerSenderFoerst =
-      erOffentligTjenesteperson && !skjema.motpartensUtsendingsperiodeOgLand;
+      erStatsansatt && !skjema.motpartensUtsendingsperiodeOgLand;
     return {
       utenlandsoppdragetSkalOppgis: false,
       arbeidsstedSkalOppgis: arbeidstakerSenderFoerst,
-      forenkletArbeidssted: true,
-      forenkletArbeidstakerdel: erOffentligTjenesteperson,
+      arbeidsstedForStatsansatt: true,
+      arbeidstakerdelForStatsansatt: erStatsansatt,
       lonnOppgisISkatteforhold: arbeidstakerSenderFoerst,
       flytenErUkjent,
     };
   }
 
   return {
-    utenlandsoppdragetSkalOppgis: !erOffentligArbeidsgiver,
+    utenlandsoppdragetSkalOppgis: !erStatligArbeidsgiver,
     arbeidsstedSkalOppgis: true,
-    forenkletArbeidssted: erOffentligArbeidsgiver,
-    forenkletArbeidstakerdel:
+    arbeidsstedForStatsansatt: erStatligArbeidsgiver,
+    arbeidstakerdelForStatsansatt:
       metadata.skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL &&
-      erOffentligTjenesteperson,
+      erStatsansatt,
     lonnOppgisISkatteforhold: false,
     flytenErUkjent,
   };

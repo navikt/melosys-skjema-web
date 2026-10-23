@@ -45,7 +45,7 @@ function ArbeidssituasjonStegContent({
   const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidssituasjon(skjema);
   const skjemadel = skjema.metadata.skjemadel;
-  const { forenkletArbeidstakerdel } = getUtsendtArbeidstakerFlyt(skjema);
+  const { arbeidstakerdelForStatsansatt } = getUtsendtArbeidstakerFlyt(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -71,7 +71,9 @@ function ArbeidssituasjonStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(
-      lagArbeidssituasjonSchema({ forenklet: forenkletArbeidstakerdel }),
+      lagArbeidssituasjonSchema({
+        statsansattFlyt: arbeidstakerdelForStatsansatt,
+      }),
     ),
     ...(stegData && { defaultValues: stegData }),
   });
@@ -136,7 +138,7 @@ function ArbeidssituasjonStegContent({
             </Alert>
           )}
 
-          {!forenkletArbeidstakerdel && (
+          {!arbeidstakerdelForStatsansatt && (
             <RadioGroupJaNeiFormPart
               className="mt-4"
               formFieldName="harVaertEllerSkalVaereILonnetArbeidFoerUtsending"
@@ -144,7 +146,7 @@ function ArbeidssituasjonStegContent({
             />
           )}
 
-          {!forenkletArbeidstakerdel &&
+          {!arbeidstakerdelForStatsansatt &&
             harVaertEllerSkalVaereILonnetArbeidFoerUtsending === false && (
               <Textarea
                 className="mt-4"

@@ -3,13 +3,13 @@ import { z } from "zod";
 import { norskeOgUtenlandskeVirksomheterMedAnsettelsesformSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
 /**
- * I den forenklede arbeidstakerdelen (offentlig tjenesteperson) stilles ikke spørsmålene om
+ * I arbeidstakerdelen for statsansatte stilles ikke spørsmålene om
  * lønnet arbeid og aktivitet før utsendingen.
  */
 export const lagArbeidssituasjonSchema = ({
-  forenklet,
+  statsansattFlyt,
 }: {
-  forenklet: boolean;
+  statsansattFlyt: boolean;
 }) =>
   z
     .object({
@@ -29,7 +29,7 @@ export const lagArbeidssituasjonSchema = ({
     })
     .refine(
       (data) =>
-        forenklet ||
+        statsansattFlyt ||
         data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending !== undefined,
       {
         error:
@@ -40,7 +40,7 @@ export const lagArbeidssituasjonSchema = ({
     )
     .refine(
       (data) =>
-        forenklet ||
+        statsansattFlyt ||
         data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending !== false ||
         !!data.aktivitetIMaanedenFoerUtsendingen?.trim(),
       {
@@ -67,12 +67,12 @@ export const lagArbeidssituasjonSchema = ({
       },
     )
     .transform((data) => ({
-      harVaertEllerSkalVaereILonnetArbeidFoerUtsending: forenklet
+      harVaertEllerSkalVaereILonnetArbeidFoerUtsending: statsansattFlyt
         ? undefined
         : data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending,
       skalJobbeForFlereVirksomheter: data.skalJobbeForFlereVirksomheter,
       aktivitetIMaanedenFoerUtsendingen:
-        forenklet || data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
+        statsansattFlyt || data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
           ? undefined
           : data.aktivitetIMaanedenFoerUtsendingen,
       virksomheterArbeidstakerJobberForIutsendelsesPeriode:
@@ -82,5 +82,5 @@ export const lagArbeidssituasjonSchema = ({
     }));
 
 export const arbeidssituasjonSchema = lagArbeidssituasjonSchema({
-  forenklet: false,
+  statsansattFlyt: false,
 });

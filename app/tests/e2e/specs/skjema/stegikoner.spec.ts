@@ -7,8 +7,8 @@ import { test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testKombinertSkjema,
-  testOffentligTjenestepersonSkjema,
   testOrganization,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { ArbeidsstedIUtlandetStegPage } from "../../pages/skjema/arbeidssted-i-utlandet-steg.page";
@@ -33,14 +33,12 @@ test.describe("Rolleikoner i stegtittel og stegvelger", () => {
   }) => {
     await setupApiMocksForArbeidstaker(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
       testUserInfo,
     );
-    const steg = new ArbeidsstedIUtlandetStegPage(
-      page,
-      testOffentligTjenestepersonSkjema,
-      { erArbeidstaker: true },
-    );
+    const steg = new ArbeidsstedIUtlandetStegPage(page, testStatsansattSkjema, {
+      erArbeidstaker: true,
+    });
 
     await steg.goto();
     await steg.assertIsVisible();

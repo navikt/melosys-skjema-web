@@ -74,7 +74,7 @@ function SkatteforholdOgInntektStegContent({
 }) {
   const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getSkatteforholdOgInntekt(skjema);
-  const { forenkletArbeidstakerdel, lonnOppgisISkatteforhold } =
+  const { arbeidstakerdelForStatsansatt, lonnOppgisISkatteforhold } =
     getUtsendtArbeidstakerFlyt(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -139,7 +139,7 @@ function SkatteforholdOgInntektStegContent({
   >({
     resolver: zodResolver(
       lagSkatteforholdOgInntektSchema({
-        forenklet: forenkletArbeidstakerdel,
+        statsansattFlyt: arbeidstakerdelForStatsansatt,
         medLonn: lonnOppgisISkatteforhold,
       }),
     ),
@@ -278,7 +278,7 @@ function SkatteforholdOgInntektStegContent({
             legend={erSkattepliktigFelt.label}
           />
 
-          {!forenkletArbeidstakerdel && (
+          {!arbeidstakerdelForStatsansatt && (
             <>
               <CheckboxGruppeFormPart
                 className="mt-4"

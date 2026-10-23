@@ -2,7 +2,7 @@ import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
 import {
   testArbeidstakerSkjema,
-  testOffentligTjenestepersonSkjema,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { SkatteforholdOgInntektStegPage } from "../../pages/skjema/skatteforhold-og-inntekt-steg.page";
@@ -54,16 +54,16 @@ test.describe("Skatteforhold og inntekt - validering", () => {
   });
 });
 
-test.describe("Skatteforhold og inntekt - validering for offentlig tjenesteperson", () => {
+test.describe("Skatteforhold og inntekt - validering for statsansatt", () => {
   test("krever svar på om arbeidsgiver betaler all lønn", async ({ page }) => {
     await setupApiMocksForArbeidstaker(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
       testUserInfo,
     );
     const stegPage = new SkatteforholdOgInntektStegPage(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
     );
     await stegPage.goto();
     await stegPage.assertIsVisible();

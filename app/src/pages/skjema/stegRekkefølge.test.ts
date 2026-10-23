@@ -19,12 +19,12 @@ import {
 
 const lagSkjema = (
   skjemadel: Skjemadel,
-  erOffentligArbeidsgiver?: boolean,
+  erStatligArbeidsgiver?: boolean,
   harArbeidsforholdIAareg?: boolean,
   forhandsutfyltFraArbeidsgiver = false,
 ) =>
   ({
-    metadata: { skjemadel, erOffentligArbeidsgiver, harArbeidsforholdIAareg },
+    metadata: { skjemadel, erStatligArbeidsgiver, harArbeidsforholdIAareg },
     motpartensUtsendingsperiodeOgLand: forhandsutfyltFraArbeidsgiver
       ? {
           utsendelseLand: LandKode.SE,
@@ -46,9 +46,9 @@ describe("getStegRekkefolge", () => {
     [Skjemadel.ARBEIDSTAKERS_DEL, false],
     [Skjemadel.ARBEIDSTAKERS_DEL, true],
   ])(
-    "viser ingen stegikoner i skjemadel %s med offentlig=%s",
-    (skjemadel, offentlig) => {
-      const steg = getStegRekkefolge(lagSkjema(skjemadel, offentlig, true));
+    "viser ingen stegikoner i skjemadel %s med statlig=%s",
+    (skjemadel, statlig) => {
+      const steg = getStegRekkefolge(lagSkjema(skjemadel, statlig, true));
 
       expect(steg.every(({ icon }) => icon === undefined)).toBe(true);
     },
@@ -92,11 +92,9 @@ describe("getStegRekkefolge", () => {
     [Skjemadel.ARBEIDSGIVERS_DEL, true, false],
     [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, false],
   ])(
-    "skjemadel %s og offentlig=%s gir virksomhetssteg=%s",
-    (skjemadel, offentlig, forventet) => {
-      expect(harVirksomhetssteg(lagSkjema(skjemadel, offentlig))).toBe(
-        forventet,
-      );
+    "skjemadel %s og statlig=%s gir virksomhetssteg=%s",
+    (skjemadel, statlig, forventet) => {
+      expect(harVirksomhetssteg(lagSkjema(skjemadel, statlig))).toBe(forventet);
     },
   );
 
@@ -106,17 +104,17 @@ describe("getStegRekkefolge", () => {
     [Skjemadel.ARBEIDSGIVERS_DEL, true, false],
     [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, false],
   ])(
-    "skjemadel %s og offentlig=%s gir utenlandsoppdraget=%s",
-    (skjemadel, offentlig, forventet) => {
+    "skjemadel %s og statlig=%s gir utenlandsoppdraget=%s",
+    (skjemadel, statlig, forventet) => {
       expect(
-        stegKeys(lagSkjema(skjemadel, offentlig, true)).includes(
+        stegKeys(lagSkjema(skjemadel, statlig, true)).includes(
           StegKey.UTENLANDSOPPDRAGET,
         ),
       ).toBe(forventet);
     },
   );
 
-  it("gir offentlig arbeidsgiver periode, arbeidssted og lønn i arbeidsgivers del", () => {
+  it("gir statlig arbeidsgiver periode, arbeidssted og lønn i arbeidsgivers del", () => {
     expect(stegKeys(lagSkjema(Skjemadel.ARBEIDSGIVERS_DEL, true))).toEqual([
       StegKey.UTSENDINGSPERIODE_OG_LAND,
       StegKey.ARBEIDSSTED_I_UTLANDET,
@@ -127,7 +125,7 @@ describe("getStegRekkefolge", () => {
     ]);
   });
 
-  it("legger arbeidssted etter arbeidssituasjon når offentlig tjenesteperson sender først", () => {
+  it("legger arbeidssted etter arbeidssituasjon når statsansatt sender først", () => {
     expect(
       stegKeys(lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true, true)),
     ).toEqual([
@@ -145,15 +143,15 @@ describe("getStegRekkefolge", () => {
   it.each([
     ["arbeidsgiver har sendt først", true, true, true],
     ["ingen treff i AAREG", true, false, false],
-    ["privat arbeidsgiver", false, true, false],
+    ["ikke-statlig arbeidsgiver", false, true, false],
   ])(
     "gir vanlig arbeidstakerflyt når %s",
-    (_, offentlig, harAareg, forhandsutfylt) => {
+    (_, statlig, harAareg, forhandsutfylt) => {
       expect(
         getStegRekkefolge(
           lagSkjema(
             Skjemadel.ARBEIDSTAKERS_DEL,
-            offentlig,
+            statlig,
             harAareg,
             forhandsutfylt,
           ),
@@ -186,16 +184,16 @@ describe("getUtsendtArbeidstakerFlyt", () => {
     [Skjemadel.ARBEIDSTAKERS_DEL, true, false, false],
     [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, true, false],
   ])(
-    "skjemadel %s, offentlig=%s og AAREG=%s gir ukjent flyt=%s",
-    (skjemadel, offentlig, harAareg, forventet) => {
+    "skjemadel %s, statlig=%s og AAREG=%s gir ukjent flyt=%s",
+    (skjemadel, statlig, harAareg, forventet) => {
       expect(
-        getUtsendtArbeidstakerFlyt(lagSkjema(skjemadel, offentlig, harAareg))
+        getUtsendtArbeidstakerFlyt(lagSkjema(skjemadel, statlig, harAareg))
           .flytenErUkjent,
       ).toBe(forventet);
     },
   );
 
-  it("forenkler arbeidstakerdelen i kombinert skjema for offentlig tjenesteperson", () => {
+  it("tilpasser arbeidstakerdelen til statsansattflyten i kombinert skjema", () => {
     expect(
       getUtsendtArbeidstakerFlyt(
         lagSkjema(Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, true),
@@ -203,14 +201,14 @@ describe("getUtsendtArbeidstakerFlyt", () => {
     ).toEqual({
       utenlandsoppdragetSkalOppgis: false,
       arbeidsstedSkalOppgis: true,
-      forenkletArbeidssted: true,
-      forenkletArbeidstakerdel: true,
+      arbeidsstedForStatsansatt: true,
+      arbeidstakerdelForStatsansatt: true,
       lonnOppgisISkatteforhold: false,
       flytenErUkjent: false,
     });
   });
 
-  it("lar offentlig tjenesteperson som sender først oppgi arbeidssted og lønn", () => {
+  it("lar statsansatt som sender først oppgi arbeidssted og lønn", () => {
     expect(
       getUtsendtArbeidstakerFlyt(
         lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true, true),
@@ -218,8 +216,8 @@ describe("getUtsendtArbeidstakerFlyt", () => {
     ).toEqual({
       utenlandsoppdragetSkalOppgis: false,
       arbeidsstedSkalOppgis: true,
-      forenkletArbeidssted: true,
-      forenkletArbeidstakerdel: true,
+      arbeidsstedForStatsansatt: true,
+      arbeidstakerdelForStatsansatt: true,
       lonnOppgisISkatteforhold: true,
       flytenErUkjent: false,
     });
@@ -229,7 +227,7 @@ describe("getUtsendtArbeidstakerFlyt", () => {
     const flyt = getUtsendtArbeidstakerFlyt(
       lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true, true, true),
     );
-    expect(flyt.forenkletArbeidstakerdel).toBe(true);
+    expect(flyt.arbeidstakerdelForStatsansatt).toBe(true);
     expect(flyt.arbeidsstedSkalOppgis).toBe(false);
     expect(flyt.lonnOppgisISkatteforhold).toBe(false);
   });

@@ -14,9 +14,9 @@ import {
 import { expect, test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
-  testOffentligArbeidsgiverSkjema,
-  testOffentligTjenestepersonSkjema,
   testOrganization,
+  testStatligArbeidsgiverSkjema,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { ArbeidsstedIUtlandetStegPage } from "../../pages/skjema/arbeidssted-i-utlandet-steg.page";
@@ -580,7 +580,7 @@ test.describe("Arbeidssted i utlandet", () => {
   });
 });
 
-const forenkletArbeidsstedPaLand: ArbeidsstedIUtlandetDto = {
+const arbeidsstedForStatsansattPaLand: ArbeidsstedIUtlandetDto = {
   arbeidsstedType: ArbeidsstedType.PA_LAND,
   paLand: {
     navnPaVirksomhet: "Test Virksomhet AS",
@@ -594,7 +594,7 @@ const forenkletArbeidsstedPaLand: ArbeidsstedIUtlandetDto = {
   },
 };
 
-async function fyllUtForenkletArbeidssted(
+async function fyllUtArbeidsstedForStatsansatt(
   arbeidsstedPage: ArbeidsstedIUtlandetStegPage,
 ) {
   await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
@@ -605,45 +605,45 @@ async function fyllUtForenkletArbeidssted(
   await arbeidsstedPage.byStedInput.fill("Stockholm");
 }
 
-test.describe("Arbeidssted i utlandet - offentlig arbeidsgiver", () => {
+test.describe("Arbeidssted i utlandet - statlig arbeidsgiver", () => {
   test("viser bare arbeidssted på land, uten hjemmekontor", async ({
     page,
   }) => {
     await setupApiMocksForArbeidsgiver(
       page,
-      testOffentligArbeidsgiverSkjema,
+      testStatligArbeidsgiverSkjema,
       [testOrganization],
       testUserInfo,
     );
     const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
       page,
-      testOffentligArbeidsgiverSkjema,
+      testStatligArbeidsgiverSkjema,
     );
 
     await arbeidsstedPage.goto();
     await arbeidsstedPage.assertIsVisible();
     await arbeidsstedPage.assertArbeidsstedTypeSelectIsHidden();
 
-    await fyllUtForenkletArbeidssted(arbeidsstedPage);
+    await fyllUtArbeidsstedForStatsansatt(arbeidsstedPage);
     await arbeidsstedPage.assertErHjemmekontorIsHidden();
 
     await arbeidsstedPage.lagreOgFortsettAndExpectPayload(
-      forenkletArbeidsstedPaLand,
+      arbeidsstedForStatsansattPaLand,
     );
     await arbeidsstedPage.assertNavigatedToNextStep();
   });
 
-  test("offentlig tjenesteperson som sender først oppgir arbeidssted selv", async ({
+  test("statsansatt som sender først oppgir arbeidssted selv", async ({
     page,
   }) => {
     await setupApiMocksForArbeidstaker(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
       testUserInfo,
     );
     const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
       { erArbeidstaker: true },
     );
 
@@ -651,11 +651,11 @@ test.describe("Arbeidssted i utlandet - offentlig arbeidsgiver", () => {
     await arbeidsstedPage.assertIsVisible();
     await arbeidsstedPage.assertArbeidsstedTypeSelectIsHidden();
 
-    await fyllUtForenkletArbeidssted(arbeidsstedPage);
+    await fyllUtArbeidsstedForStatsansatt(arbeidsstedPage);
     await arbeidsstedPage.assertErHjemmekontorIsHidden();
 
     await arbeidsstedPage.lagreOgFortsettAndExpectPayload(
-      forenkletArbeidsstedPaLand,
+      arbeidsstedForStatsansattPaLand,
     );
     await arbeidsstedPage.assertNavigatedToNextStep();
   });

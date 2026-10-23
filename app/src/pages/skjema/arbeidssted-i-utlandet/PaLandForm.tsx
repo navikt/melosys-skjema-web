@@ -19,9 +19,9 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 interface PaLandFormProperties {
   utsendelseLand?: LandKode;
   /**
-  Offentlig arbeidsgiver: hjemmekontor-spørsmålet stilles ikke
+  Statlig arbeidsgiver: hjemmekontor-spørsmålet stilles ikke
   */
-  forenklet?: boolean;
+  statsansattFlyt?: boolean;
   /**
   Arbeidstakerens egne tekster i du-form
   */
@@ -30,7 +30,7 @@ interface PaLandFormProperties {
 
 export function PaLandForm({
   utsendelseLand,
-  forenklet = false,
+  statsansattFlyt = false,
   erArbeidstaker = false,
 }: PaLandFormProperties) {
   const { t } = useTranslation();
@@ -142,7 +142,7 @@ export function PaLandForm({
         </div>
       )}
 
-      {!forenklet && (
+      {!statsansattFlyt && (
         <RadioGroupJaNeiFormPart
           className="mt-6"
           formFieldName="paLand.erHjemmekontor"

@@ -152,36 +152,36 @@ test.describe("Utenlandsoppdraget", () => {
   });
 });
 
-test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
-  const offentligSkjema = {
+test.describe("Utenlandsoppdraget - statlig arbeidsgiver", () => {
+  const skjemaMedStatligArbeidsgiver = {
     ...testArbeidsgiverSkjema,
     metadata: {
       ...testArbeidsgiverSkjema.metadata,
-      erOffentligArbeidsgiver: true,
+      erStatligArbeidsgiver: true,
     },
   };
 
   test.beforeEach(async ({ page }) => {
     await setupApiMocksForArbeidsgiver(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
       [testOrganization],
       testUserInfo,
     );
   });
 
-  test("offentlig arbeidsgiver kan ikke åpne steget direkte", async ({
+  test("statlig arbeidsgiver kan ikke åpne steget direkte", async ({
     page,
   }) => {
     const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
     );
 
     await utenlandsoppdragetStegPage.goto();
     await new UtsendingsperiodeOgLandStegPage(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
     ).assertIsVisible();
   });
 });

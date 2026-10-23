@@ -7,14 +7,14 @@ import { paSkipSchema } from "./paSkipSchema.ts";
 
 // Discriminated union on arbeidsstedType, but sub-schemas use refine instead of nested discriminated unions
 export const lagArbeidsstedIUtlandetSchema = ({
-  forenklet,
+  statsansattFlyt,
 }: {
-  forenklet: boolean;
+  statsansattFlyt: boolean;
 }) =>
   z.discriminatedUnion(
     "arbeidsstedType",
     [
-      lagPaLandSchema({ medHjemmekontor: !forenklet }),
+      lagPaLandSchema({ medHjemmekontor: !statsansattFlyt }),
       offshoreSchema,
       paSkipSchema,
       omBordPaFlySchema,
@@ -23,5 +23,5 @@ export const lagArbeidsstedIUtlandetSchema = ({
   );
 
 export const arbeidsstedIUtlandetSchema = lagArbeidsstedIUtlandetSchema({
-  forenklet: false,
+  statsansattFlyt: false,
 });

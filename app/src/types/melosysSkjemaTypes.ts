@@ -166,9 +166,9 @@ export enum Saksstatus {
 }
 
 export interface FeltDefinisjonDto {
-  pakrevd: boolean;
   label: string;
   hjelpetekst?: string;
+  pakrevd: boolean;
   type: string;
 }
 
@@ -232,19 +232,19 @@ export interface VedleggValgDto {
 
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
   harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
@@ -254,19 +254,19 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
   harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
@@ -276,18 +276,18 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
   harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
@@ -352,18 +352,18 @@ export interface ArbeidstakersData {
 
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
   harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
@@ -438,19 +438,19 @@ export interface PeriodeDto {
 
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
   harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
@@ -461,18 +461,18 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
-  | "skjemadel"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
+  | "skjemadel"
   | "metadatatype"
 > & {
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
   harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
@@ -585,19 +585,19 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
 
 export interface UtsendtArbeidstakerMetadata {
   harArbeidsforholdIAareg?: boolean;
-  representasjonstype: Representasjonstype;
-  skjemadel: Skjemadel;
   juridiskEnhetOrgnr: string;
-  /** @format uuid */
-  erstatterSkjemaId?: string;
+  /** @format int32 */
+  antallAnsatte?: number;
+  erStatsansatt?: boolean;
+  representasjonstype: Representasjonstype;
   /** @format uuid */
   kobletSkjemaId?: string;
   arbeidsgiverNavn: string;
+  erStatligArbeidsgiver?: boolean;
   arbeidstakerNavn: string;
-  /** @format int32 */
-  antallAnsatte?: number;
-  erOffentligArbeidsgiver?: boolean;
-  erOffentligTjenesteperson?: boolean;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
+  skjemadel: Skjemadel;
   erNorskregistrertUtenlandskForetak?: boolean;
   metadatatype: string;
 }
@@ -807,7 +807,7 @@ export interface AlternativDefinisjonDto {
 
 export type BooleanFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   jaLabel: string;
@@ -816,7 +816,7 @@ export type BooleanFeltDefinisjon = UtilRequiredKeys<
 
 export type CheckboxGruppeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   alternativer: AlternativDefinisjonDto[];
@@ -824,14 +824,14 @@ export type CheckboxGruppeFeltDefinisjon = UtilRequiredKeys<
 
 export type CountrySelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
 };
 
 export type DateFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
 };
@@ -888,7 +888,7 @@ export interface InnsendtSkjemaResponse {
 
 export type ListeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   leggTilLabel: string;
@@ -911,7 +911,7 @@ export type ListeFeltDefinisjon = UtilRequiredKeys<
 
 export type PeriodeFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   fraDatoLabel: string;
@@ -937,7 +937,7 @@ export interface SeksjonDefinisjonDto {
 
 export type SelectFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   alternativer: AlternativDefinisjonDto[];
@@ -951,7 +951,7 @@ export interface SkjemaDefinisjonDto {
 
 export type TextFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   format?: FeltFormat;
@@ -959,7 +959,7 @@ export type TextFeltDefinisjon = UtilRequiredKeys<
 
 export type TextareaFeltDefinisjon = UtilRequiredKeys<
   FeltDefinisjonDto,
-  "pakrevd" | "label"
+  "label" | "pakrevd"
 > & {
   hjelpetekst?: string;
   /** @format int32 */
@@ -1046,8 +1046,8 @@ export interface OrganisasjonDto {
 }
 
 export interface ArbeidsgiverensVirksomhetINorgeTranslation {
-  offentligVirksomhetSkalIkkeOppgiBemanningsbyraa: string;
-  offentligVirksomhetSkalIkkeOppgiVanligDrift: string;
+  statligVirksomhetSkalIkkeOppgiBemanningsbyraa: string;
+  statligVirksomhetSkalIkkeOppgiVanligDrift: string;
   maaOppgiOmBemanningsbyraa: string;
   maaOppgiOmVanligDrift: string;
   skalIkkeOppgiVanligDrift: string;
@@ -1169,7 +1169,7 @@ export interface UtsendingsperiodeOgLandTranslation {
 export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
-  erOffentligArbeidsgiver: boolean;
+  erStatligArbeidsgiver: boolean;
   erNorskregistrertUtenlandskForetak: boolean;
   /** @format int32 */
   antallAnsatte: number;

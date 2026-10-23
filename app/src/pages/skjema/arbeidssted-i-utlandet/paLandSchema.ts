@@ -13,7 +13,7 @@ const fastArbeidsstedSchema = z.object({
 });
 
 /**
- * Hjemmekontor-spørsmålet stilles ikke i det forenklede arbeidsstedet (offentlig arbeidsgiver),
+ * Hjemmekontor-spørsmålet stilles ikke i arbeidsstedsteget for statsansatte,
  * så `erHjemmekontor` er valgfritt i typen og kreves bare når `medHjemmekontor` er satt.
  */
 export const lagPaLandSchema = ({

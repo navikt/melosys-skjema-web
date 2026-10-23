@@ -226,31 +226,29 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertNavigatedToNextStep();
   });
 
-  test("offentlig virksomhet kan ikke åpne steget direkte", async ({
-    page,
-  }) => {
-    const offentligSkjema = {
+  test("statlig virksomhet kan ikke åpne steget direkte", async ({ page }) => {
+    const skjemaMedStatligArbeidsgiver = {
       ...testArbeidsgiverSkjema,
       metadata: {
         ...testArbeidsgiverSkjema.metadata,
-        erOffentligArbeidsgiver: true,
+        erStatligArbeidsgiver: true,
       },
     };
     await setupApiMocksForArbeidsgiver(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
       [testOrganization],
       testUserInfo,
     );
     const virksomhetStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
     );
 
     await virksomhetStegPage.goto();
     await new UtsendingsperiodeOgLandStegPage(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
     ).assertIsVisible();
   });
 });

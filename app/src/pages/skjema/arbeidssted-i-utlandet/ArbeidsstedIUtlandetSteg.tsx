@@ -51,7 +51,7 @@ function ArbeidsstedIUtlandetStegContent({
 }) {
   const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidsstedIUtlandet(skjema);
-  const { forenkletArbeidssted } = getUtsendtArbeidstakerFlyt(skjema);
+  const { arbeidsstedForStatsansatt } = getUtsendtArbeidstakerFlyt(skjema);
   const erArbeidstaker =
     skjema.metadata.skjemadel === Skjemadel.ARBEIDSTAKERS_DEL;
   const utsendelseLand = getUtsendingsperiodeOgLand(skjema)?.utsendelseLand;
@@ -65,10 +65,12 @@ function ArbeidsstedIUtlandetStegContent({
 
   const formMethods = useForm({
     resolver: zodResolver(
-      lagArbeidsstedIUtlandetSchema({ forenklet: forenkletArbeidssted }),
+      lagArbeidsstedIUtlandetSchema({
+        statsansattFlyt: arbeidsstedForStatsansatt,
+      }),
     ),
-    // Forenklet arbeidssted er alltid på land, så typevalget skjules
-    ...(forenkletArbeidssted
+    // Arbeidssted for statsansatte oppgis alltid som på land, så typevalget skjules
+    ...(arbeidsstedForStatsansatt
       ? {
           defaultValues: {
             arbeidsstedType: ArbeidsstedType.PA_LAND,
@@ -124,7 +126,7 @@ function ArbeidsstedIUtlandetStegContent({
             <NesteStegKnapp loading={registerArbeidsstedMutation.isPending} />
           }
         >
-          {!forenkletArbeidssted && (
+          {!arbeidsstedForStatsansatt && (
             <Select
               className="mt-4"
               error={translateError(errors.arbeidsstedType?.message)}
@@ -146,7 +148,7 @@ function ArbeidsstedIUtlandetStegContent({
           {arbeidsstedType === ArbeidsstedType.PA_LAND && (
             <PaLandForm
               erArbeidstaker={erArbeidstaker}
-              forenklet={forenkletArbeidssted}
+              statsansattFlyt={arbeidsstedForStatsansatt}
               utsendelseLand={utsendelseLand}
             />
           )}

@@ -62,7 +62,7 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
     arbeidsgiverNavn: "Test Bedrift AS",
     arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVERS_DEL,
-    erOffentligArbeidsgiver: false,
+    erStatligArbeidsgiver: false,
     erNorskregistrertUtenlandskForetak: false,
     antallAnsatte: 50,
   } as ArbeidsgiverMetadata,
@@ -324,7 +324,7 @@ Rådgiverfirma org for RADGIVER flow (from ereg lookup)
 */
 export const testRadgiverfirmaOrgnr = korrektFormatertOrgnr2;
 export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
-  erOffentligArbeidsgiver: false,
+  erStatligArbeidsgiver: false,
   erNorskregistrertUtenlandskForetak: false,
   antallAnsatte: 50,
   organisasjon: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiver Filial" },
@@ -335,7 +335,7 @@ export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
 Ereg response for DEG_SELV org search (OrganisasjonSoker)
 */
 export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
-  erOffentligArbeidsgiver: false,
+  erStatligArbeidsgiver: false,
   erNorskregistrertUtenlandskForetak: false,
   antallAnsatte: 50,
   organisasjon: {
@@ -407,32 +407,33 @@ export const testVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
   ],
 };
 
-export const testOffentligArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
+export const testStatligArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
   ...testArbeidsgiverSkjema,
   metadata: {
     ...testArbeidsgiverSkjema.metadata,
-    erOffentligArbeidsgiver: true,
+    erStatligArbeidsgiver: true,
   },
 };
 
 /**
-Arbeidstakers del for offentlig arbeidsgiver før AAREG-sjekken har avgjort flyten
+Arbeidstakers del for statlig arbeidsgiver før AAREG-sjekken har avgjort flyten
 */
-export const testOffentligArbeidstakerSkjema: UtsendtArbeidstakerSkjemaDto = {
-  ...testArbeidstakerSkjema,
-  metadata: {
-    ...testArbeidstakerSkjema.metadata,
-    erOffentligArbeidsgiver: true,
-  },
-};
+export const testArbeidstakerMedStatligArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto =
+  {
+    ...testArbeidstakerSkjema,
+    metadata: {
+      ...testArbeidstakerSkjema.metadata,
+      erStatligArbeidsgiver: true,
+    },
+  };
 
 /**
-Offentlig tjenesteperson som fyller ut før arbeidsgiveren (ikke forhåndsutfylt)
+Statsansatt som fyller ut før arbeidsgiveren (ikke forhåndsutfylt)
 */
-export const testOffentligTjenestepersonSkjema: UtsendtArbeidstakerSkjemaDto = {
-  ...testOffentligArbeidstakerSkjema,
+export const testStatsansattSkjema: UtsendtArbeidstakerSkjemaDto = {
+  ...testArbeidstakerMedStatligArbeidsgiverSkjema,
   metadata: {
-    ...testOffentligArbeidstakerSkjema.metadata,
+    ...testArbeidstakerMedStatligArbeidsgiverSkjema.metadata,
     harArbeidsforholdIAareg: true,
   },
   data: {

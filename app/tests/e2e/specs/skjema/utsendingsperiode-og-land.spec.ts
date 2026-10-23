@@ -10,11 +10,11 @@ import {
 import { test } from "../../fixtures/test";
 import {
   formFieldValues,
+  testArbeidstakerMedStatligArbeidsgiverSkjema,
   testArbeidstakerSkjema,
   testArbeidstakerSkjemaFraMotpartCta,
   testArbeidstakerSkjemaMedAvvikFraMotpart,
-  testOffentligArbeidstakerSkjema,
-  testOffentligTjenestepersonSkjema,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
@@ -172,32 +172,32 @@ test.describe("Utsendingsperiode og land", () => {
   }) => {
     await setupApiMocksForArbeidstaker(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
       testUserInfo,
     );
-    await mockAaregSjekk(page, testOffentligTjenestepersonSkjema.id, false);
+    await mockAaregSjekk(page, testStatsansattSkjema.id, false);
 
     const stegPage = new UtsendingsperiodeOgLandStegPage(
       page,
-      testOffentligTjenestepersonSkjema,
+      testStatsansattSkjema,
     );
     await stegPage.goto();
     await stegPage.assertIsVisible();
     await stegPage.assertAaregVarselIsVisible();
   });
 
-  test("offentlig arbeidsgiver uten avklart AAREG-treff viser bare stegnummer i fremgangsindikatoren", async ({
+  test("statlig arbeidsgiver uten avklart AAREG-treff viser bare stegnummer i fremgangsindikatoren", async ({
     page,
   }) => {
     await setupApiMocksForArbeidstaker(
       page,
-      testOffentligArbeidstakerSkjema,
+      testArbeidstakerMedStatligArbeidsgiverSkjema,
       testUserInfo,
     );
 
     const stegPage = new UtsendingsperiodeOgLandStegPage(
       page,
-      testOffentligArbeidstakerSkjema,
+      testArbeidstakerMedStatligArbeidsgiverSkjema,
     );
     await stegPage.goto();
     await stegPage.assertIsVisible();
