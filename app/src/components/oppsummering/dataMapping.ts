@@ -222,7 +222,7 @@ function mapCombinedSeksjoner(
     ...mapArbeidsgiverSeksjoner(
       {
         ...dto.arbeidsgiversData,
-        tilleggsopplysninger: dto.tilleggsopplysninger,
+        tilleggsopplysninger: undefined,
       } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
       dto.utsendingsperiodeOgLand?.utsendelseLand,
     ),
