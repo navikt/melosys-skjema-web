@@ -116,8 +116,8 @@ function VedleggStegContent({
     mutationFn: (data: VedleggStegFormData) => {
       return postVedleggValg(skjema.id, data as VedleggValgDto);
     },
-    onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(StegKey.VEDLEGG, stegRekkefolge);
       if (nextStep) {
         navigate({

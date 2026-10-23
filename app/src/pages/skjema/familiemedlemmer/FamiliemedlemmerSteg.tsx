@@ -61,8 +61,8 @@ function FamiliemedlemmerStegContent({
     mutationFn: (data: FamiliemedlemmerDto) => {
       return postFamiliemedlemmer(skjema.id, data);
     },
-    onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(StegKey.FAMILIEMEDLEMMER, stegRekkefolge);
       if (nextStep) {
         navigate({

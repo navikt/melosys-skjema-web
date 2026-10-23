@@ -98,8 +98,8 @@ function ArbeidssituasjonStegContent({
     mutationFn: (data: ArbeidssituasjonFormData) => {
       return postArbeidssituasjon(skjema.id, data);
     },
-    onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(StegKey.ARBEIDSSITUASJON, stegRekkefolge);
       if (nextStep) {
         navigate({

@@ -94,8 +94,8 @@ function ArbeidsstedIUtlandetStegContent({
       const apiPayload = data as ArbeidsstedIUtlandetDto;
       return postArbeidsstedIUtlandet(skjema.id, apiPayload);
     },
-    onSuccess: () => {
-      invalidateArbeidsgiverSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidsgiverSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.ARBEIDSSTED_I_UTLANDET,
         stegRekkefolge,

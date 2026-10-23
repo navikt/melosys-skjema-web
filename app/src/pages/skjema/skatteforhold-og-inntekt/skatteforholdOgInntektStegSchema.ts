@@ -111,6 +111,7 @@ export const lagSkatteforholdOgInntektSchema = ({
         error:
           "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
         path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
+        when: () => true,
       },
     )
     .refine(
@@ -121,6 +122,7 @@ export const lagSkatteforholdOgInntektSchema = ({
         error:
           "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
         path: ["landSomUtbetalerPengestotte"],
+        when: () => true,
       },
     )
     .refine(
@@ -131,6 +133,7 @@ export const lagSkatteforholdOgInntektSchema = ({
         error:
           "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
         path: ["pengestotteSomMottasFraAndreLandBelop"],
+        when: () => true,
       },
     )
     .refine(
@@ -144,6 +147,7 @@ export const lagSkatteforholdOgInntektSchema = ({
       {
         error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektKilde",
         path: ["inntektFraNorskEllerUtenlandskVirksomhet"],
+        when: () => true,
       },
     )
     .refine(
@@ -157,6 +161,7 @@ export const lagSkatteforholdOgInntektSchema = ({
       {
         error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektType",
         path: ["hvilkeTyperInntektHarDu"],
+        when: () => true,
       },
     )
     .refine(
@@ -167,6 +172,7 @@ export const lagSkatteforholdOgInntektSchema = ({
       {
         error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
         path: ["inntekt"],
+        when: () => true,
       },
     )
     .refine(
@@ -180,6 +186,7 @@ export const lagSkatteforholdOgInntektSchema = ({
       {
         error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",
         path: ["inntektFraEgenVirksomhet"],
+        when: () => true,
       },
     )
     .refine(
@@ -191,6 +198,7 @@ export const lagSkatteforholdOgInntektSchema = ({
         error:
           "skatteforholdOgInntektSteg.duMaSvarePaOmArbeidsgiverBetalerAllLonn",
         path: ["arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"],
+        when: () => true,
       },
     )
     .refine(
@@ -203,6 +211,7 @@ export const lagSkatteforholdOgInntektSchema = ({
         error:
           "skatteforholdOgInntektSteg.duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn",
         path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
+        when: () => true,
       },
     )
     .transform((data) => ({

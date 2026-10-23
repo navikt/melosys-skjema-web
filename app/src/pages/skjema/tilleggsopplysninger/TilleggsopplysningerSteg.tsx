@@ -6,6 +6,7 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
+import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
   getSkjemaQuery,
@@ -47,6 +48,7 @@ function TilleggsopplysningerStegContent({
   const stegData = getTilleggsopplysninger(skjema);
   const navigate = useNavigate();
   const translateError = useTranslateError();
+  const invalidateSkjemaQuery = useInvalidateSkjemaQuery();
   const { getFelt } = useSkjemaDefinisjon();
 
   // Hent felt-definisjoner - begge seksjonene har identiske labels
@@ -82,7 +84,8 @@ function TilleggsopplysningerStegContent({
         data as TilleggsopplysningerDto,
       );
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await invalidateSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.TILLEGGSOPPLYSNINGER,
         stegRekkefolge,

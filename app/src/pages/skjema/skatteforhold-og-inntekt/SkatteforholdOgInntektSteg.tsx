@@ -206,8 +206,8 @@ function SkatteforholdOgInntektStegContent({
         data as SkatteforholdOgInntektDto,
       );
     },
-    onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.SKATTEFORHOLD_OG_INNTEKT,
         stegRekkefolge,
