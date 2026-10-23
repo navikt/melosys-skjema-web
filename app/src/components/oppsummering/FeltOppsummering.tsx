@@ -6,6 +6,7 @@ import type {
   ListeFeltDefinisjon,
   PeriodeFeltDefinisjon,
 } from "~/types/melosysSkjemaTypes.ts";
+import { formatDato } from "~/utils/datoformat.ts";
 
 import type { FeltUnion } from "./formaterVerdi.ts";
 import { formaterVerdi } from "./formaterVerdi.ts";
@@ -35,13 +36,17 @@ export function FeltOppsummering({ felt, verdi }: FeltOppsummeringProperties) {
         <FormSummary.Answer>
           <FormSummary.Label>{periodeFelt.fraDatoLabel}</FormSummary.Label>
           <FormSummary.Value>
-            {periode?.fraDato ?? "\u{2013}"}
+            {periode?.fraDato
+              ? formatDato(periode.fraDato, i18n.language)
+              : "\u{2013}"}
           </FormSummary.Value>
         </FormSummary.Answer>
         <FormSummary.Answer>
           <FormSummary.Label>{periodeFelt.tilDatoLabel}</FormSummary.Label>
           <FormSummary.Value>
-            {periode?.tilDato ?? "\u{2013}"}
+            {periode?.tilDato
+              ? formatDato(periode.tilDato, i18n.language)
+              : "\u{2013}"}
           </FormSummary.Value>
         </FormSummary.Answer>
       </>
