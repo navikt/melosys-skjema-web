@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { StegKey } from "~/constants/stegKeys.ts";
 import {
+  ARBEIDSGIVER_IKON,
+  ARBEIDSTAKER_IKON,
   getStegRekkefolge,
   STEG_REKKEFOLGE,
 } from "~/pages/skjema/stegRekkefølge.ts";
@@ -38,6 +40,52 @@ const harVirksomhetssteg = (skjema: FlytGrunnlag) =>
   stegKeys(skjema).includes(StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE);
 
 describe("getStegRekkefolge", () => {
+  it.each([
+    [Skjemadel.ARBEIDSGIVERS_DEL, false],
+    [Skjemadel.ARBEIDSGIVERS_DEL, true],
+    [Skjemadel.ARBEIDSTAKERS_DEL, false],
+    [Skjemadel.ARBEIDSTAKERS_DEL, true],
+  ])(
+    "viser ingen stegikoner i skjemadel %s med statlig=%s",
+    (skjemadel, statlig) => {
+      const steg = getStegRekkefolge(lagSkjema(skjemadel, statlig, true));
+
+      expect(steg.every(({ icon }) => icon === undefined)).toBe(true);
+    },
+  );
+
+  it("beholder rolleikonene kun på delspesifikke steg i kombinert skjema", () => {
+    const steg = getStegRekkefolge(
+      lagSkjema(Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, false),
+    );
+
+    expect(
+      steg
+        .filter(({ icon }) => icon === ARBEIDSGIVER_IKON)
+        .map(({ key }) => key),
+    ).toEqual([
+      StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
+      StegKey.UTENLANDSOPPDRAGET,
+      StegKey.ARBEIDSSTED_I_UTLANDET,
+      StegKey.ARBEIDSTAKERENS_LONN,
+    ]);
+    expect(
+      steg
+        .filter(({ icon }) => icon === ARBEIDSTAKER_IKON)
+        .map(({ key }) => key),
+    ).toEqual([
+      StegKey.ARBEIDSSITUASJON,
+      StegKey.SKATTEFORHOLD_OG_INNTEKT,
+      StegKey.FAMILIEMEDLEMMER,
+    ]);
+    expect(steg.filter(({ icon }) => !icon).map(({ key }) => key)).toEqual([
+      StegKey.UTSENDINGSPERIODE_OG_LAND,
+      StegKey.TILLEGGSOPPLYSNINGER,
+      StegKey.VEDLEGG,
+      StegKey.OPPSUMMERING,
+    ]);
+  });
+
   it.each([
     [Skjemadel.ARBEIDSGIVERS_DEL, false, true],
     [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, false, true],

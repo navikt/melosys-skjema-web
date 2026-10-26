@@ -8,7 +8,7 @@ import type {
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 import { mockFetchSkjema } from "../../fixtures/api-mocks";
-import { translations } from "../../utils/translations";
+import { akselTranslations, translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const arbeidsstedIUtlandet =
@@ -285,6 +285,43 @@ export class ArbeidsstedIUtlandetStegPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
+  }
+
+  async assertStegIkonerErSkjult() {
+    await this.page
+      .getByRole("button", {
+        name: akselTranslations.FormProgress.showAllSteps,
+      })
+      .click();
+    const stegvelger = this.page.locator(".aksel-form-progress__stepper");
+    await expect(stegvelger).toBeVisible();
+    await expect(this.heading.getByRole("img")).toHaveCount(0);
+    await expect(stegvelger.getByRole("img")).toHaveCount(0);
+  }
+
+  async assertStegIkonerErSynlige() {
+    await this.page
+      .getByRole("button", {
+        name: akselTranslations.FormProgress.showAllSteps,
+      })
+      .click();
+    await expect(
+      this.heading.getByRole("img", {
+        name: translations.felles.stegGjelderArbeidsgiver,
+      }),
+    ).toBeVisible();
+    const stegvelger = this.page.locator(".aksel-form-progress__stepper");
+    await expect(stegvelger).toBeVisible();
+    await expect(
+      stegvelger.getByRole("img", {
+        name: translations.felles.stegGjelderArbeidsgiver,
+      }),
+    ).toHaveCount(4);
+    await expect(
+      stegvelger.getByRole("img", {
+        name: translations.felles.stegGjelderArbeidstaker,
+      }),
+    ).toHaveCount(3);
   }
 
   async lagreOgFortsett() {
