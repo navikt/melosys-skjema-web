@@ -253,6 +253,12 @@ export const nb = {
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
     },
+    aaregVarsel: {
+      ingenArbeidsforhold:
+        "Vi fant ikke et arbeidsforhold mellom arbeidstakeren og virksomheten i Aa-registeret for hele utsendingsperioden. Arbeidsforholdet må oppdateres via a-meldingen.",
+      ingenArbeidsforholdDu:
+        "Vi fant ikke et arbeidsforhold mellom deg og virksomheten i Aa-registeret for hele utsendingsperioden. Arbeidsforholdet må oppdateres via a-meldingen.",
+    },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utenlandsperiode og land",
       duMaVelgeHvilketLandArbeidetSkalUtforesI:

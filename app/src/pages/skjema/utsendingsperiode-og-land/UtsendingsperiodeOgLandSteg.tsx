@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, BodyShort, Button, Label } from "@navikt/ds-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,9 +12,11 @@ import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
+  getAaregSjekkQuery,
   getSkjemaQuery,
   postUtsendingsperiodeOgLand,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { AaregVarsel } from "~/pages/skjema/components/AaregVarsel.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
@@ -33,6 +35,17 @@ import { utsendingsperiodeOgLandSchema } from "./utsendingsperiodeOgLandStegSche
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
+const ISO_DATO = /^\d{4}-\d{2}-\d{2}$/;
+
+function erGyldigPeriode(fraDato?: string, tilDato?: string): boolean {
+  return (
+    !!fraDato &&
+    !!tilDato &&
+    ISO_DATO.test(fraDato) &&
+    ISO_DATO.test(tilDato) &&
+    fraDato <= tilDato
+  );
+}
 
 function UtsendingsperiodeOgLandStegContent({
   skjema,
@@ -77,6 +90,15 @@ function UtsendingsperiodeOgLandStegContent({
   const formFraDato = watch("utsendelsePeriode.fraDato");
   const formTilDato = watch("utsendelsePeriode.tilDato");
   const formLand = watch("utsendelseLand");
+
+  const aaregPeriode = erGyldigPeriode(formFraDato, formTilDato)
+    ? { fraDato: formFraDato, tilDato: formTilDato }
+    : undefined;
+  const { data: aaregSjekk } = useQuery(
+    getAaregSjekkQuery(skjema.id, aaregPeriode),
+  );
+  const visAaregVarsel =
+    !!aaregPeriode && aaregSjekk?.harArbeidsforhold === false;
 
   const isLandAvviker =
     !!motpartensVerdier &&
@@ -240,6 +262,13 @@ function UtsendingsperiodeOgLandStegContent({
                 </Alert>
               )}
             </>
+          )}
+
+          {visAaregVarsel && (
+            <AaregVarsel
+              className="mt-4"
+              representasjonstype={skjema.metadata.representasjonstype}
+            />
           )}
         </SkjemaSteg>
       </form>

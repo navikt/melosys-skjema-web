@@ -261,6 +261,12 @@ export const en = {
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "You must answer whether the employee will work for the company in Norway after the posting period",
     },
+    aaregVarsel: {
+      ingenArbeidsforhold:
+        "We could not find an employment relationship between the employee and the business in the Aa register for the entire posting period. The employment relationship must be updated through the a-melding.",
+      ingenArbeidsforholdDu:
+        "We could not find an employment relationship between you and the business in the Aa register for the entire posting period. The employment relationship must be updated through the a-melding.",
+    },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",
       duMaVelgeHvilketLandArbeidetSkalUtforesI:
