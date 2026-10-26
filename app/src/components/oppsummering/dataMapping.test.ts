@@ -166,6 +166,31 @@ describe.each(["nb", "nn", "en"] as const)("resolveSeksjoner (%s)", (sprak) => {
     expect(arbeidsstedPaLand?.data.bySted).toBeUndefined();
   });
 
+  it("arbeidsgivers del for statlig arbeidsgiver skjuler arbeidsstedIUtlandet når hjemmekontor ikke er oppgitt", () => {
+    const dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
+      ...arbeidsgiversDelDto,
+      arbeidsstedIUtlandet: {
+        arbeidsstedType: ArbeidsstedType.PA_LAND,
+        paLand: {
+          navnPaVirksomhet: "Departementet",
+          fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
+          fastArbeidssted: {
+            vegadresse: "Testveien",
+            nummer: "1",
+            postkode: "1234",
+            bySted: "Stockholm",
+          },
+        },
+      },
+    };
+
+    const seksjoner = resolveSeksjoner(dto, definisjon);
+    expect(seksjoner.map((s) => s.seksjonNavn)).not.toContain(
+      "arbeidsstedIUtlandet",
+    );
+    expect(seksjoner.map((s) => s.seksjonNavn)).toContain("arbeidsstedPaLand");
+  });
+
   it("arbeidstakers del for statsansatt viser arbeidssted og lønn fra skatteforholdet", () => {
     const dto: UtsendtArbeidstakerArbeidstakersSkjemaDataDto = {
       ...arbeidstakersDelDto,

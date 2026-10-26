@@ -17,7 +17,10 @@ import type {
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
+import {
+  ArbeidsstedType,
+  FastEllerVekslendeArbeidssted,
+} from "~/types/melosysSkjemaTypes.ts";
 
 interface ResolvedSeksjon {
   seksjonNavn: string;
@@ -187,7 +190,11 @@ function mapArbeidsgiverSeksjoner(
     {
       seksjonNavn: "arbeidsstedIUtlandet",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
-      data: dto.arbeidsstedIUtlandet as Record<string, unknown> | undefined,
+      data:
+        dto.arbeidsstedIUtlandet?.arbeidsstedType === ArbeidsstedType.PA_LAND &&
+        dto.arbeidsstedIUtlandet.paLand?.erHjemmekontor === undefined
+          ? undefined
+          : (dto.arbeidsstedIUtlandet as Record<string, unknown> | undefined),
     },
     {
       seksjonNavn: "arbeidsstedPaLand",
