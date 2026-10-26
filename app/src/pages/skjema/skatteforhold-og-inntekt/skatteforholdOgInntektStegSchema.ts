@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { norskeOgUtenlandskeVirksomheterSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 import { normaliserBelopForApi } from "~/utils/belopFormat.ts";
 
 function erPositivtBelop(belop?: string): boolean {
@@ -75,111 +76,190 @@ const baseSchema = z.object({
   hvilkeTyperInntektHarDu: checkboxGroupSchema,
   inntekt: z.string().optional(),
   inntektFraEgenVirksomhet: z.string().optional(),
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: z
+    .boolean()
+    .optional(),
+  virksomheterSomUtbetalerLonnOgNaturalytelser:
+    norskeOgUtenlandskeVirksomheterSchema.optional(),
 });
 
-export const skatteforholdOgInntektSchema = baseSchema
-  .refine(
-    (data) =>
-      !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
-      !!data.pengestotteSomMottasFraAndreLandBeskrivelse?.trim(),
-    {
-      error:
-        "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
-      path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
-    },
-  )
-  .refine(
-    (data) =>
-      !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
-      !!data.landSomUtbetalerPengestotte?.trim(),
-    {
-      error:
-        "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
-      path: ["landSomUtbetalerPengestotte"],
-    },
-  )
-  .refine(
-    (data) =>
-      !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
-      erPositivtBelop(data.pengestotteSomMottasFraAndreLandBelop),
-    {
-      error: "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
-      path: ["pengestotteSomMottasFraAndreLandBelop"],
-    },
-  )
-  .refine(
-    (data) => {
-      return (
-        !!data.inntektFraNorskEllerUtenlandskVirksomhet &&
-        data.inntektFraNorskEllerUtenlandskVirksomhet.length > 0
-      );
-    },
-    {
-      error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektKilde",
-      path: ["inntektFraNorskEllerUtenlandskVirksomhet"],
-    },
-  )
-  .refine(
-    (data) => {
-      return (
-        !!data.hvilkeTyperInntektHarDu &&
-        data.hvilkeTyperInntektHarDu.length > 0
-      );
-    },
-    {
-      error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektType",
-      path: ["hvilkeTyperInntektHarDu"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (!skalValidereLoennsinntekt(data)) return true;
-      return data.inntekt?.trim() ? erPositivtBelop(data.inntekt) : false;
-    },
-    {
-      error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
-      path: ["inntekt"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (!skalValidereEgenVirksomhetInntekt(data)) return true;
-      return data.inntektFraEgenVirksomhet?.trim()
-        ? erPositivtBelop(data.inntektFraEgenVirksomhet)
-        : false;
-    },
-    {
-      error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",
-      path: ["inntektFraEgenVirksomhet"],
-    },
-  )
-  .transform((data) => ({
-    erSkattepliktigTilNorgeIHeleutsendingsperioden:
-      data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
-    mottarPengestotteFraAnnetEosLandEllerSveits:
-      data.mottarPengestotteFraAnnetEosLandEllerSveits,
-    pengestotteSomMottasFraAndreLandBeskrivelse:
-      data.mottarPengestotteFraAnnetEosLandEllerSveits
-        ? data.pengestotteSomMottasFraAndreLandBeskrivelse
+function harVirksomhetSomUtbetalerLonn(data: SchemaData): boolean {
+  const v = data.virksomheterSomUtbetalerLonnOgNaturalytelser;
+  return (
+    (v?.norskeVirksomheter?.length ?? 0) > 0 ||
+    (v?.utenlandskeVirksomheter?.length ?? 0) > 0
+  );
+}
+
+/**
+ * @param statsansattFlyt statsansatt: spørsmålene om inntektskilder og inntekt stilles ikke.
+ * @param medLonn arbeidstakeren fyller ut først, og lønnsspørsmålene fra arbeidsgiverdelen stilles her.
+ */
+export const lagSkatteforholdOgInntektSchema = ({
+  statsansattFlyt,
+  medLonn,
+}: {
+  statsansattFlyt: boolean;
+  medLonn: boolean;
+}) =>
+  baseSchema
+    .refine(
+      (data) =>
+        !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
+        !!data.pengestotteSomMottasFraAndreLandBeskrivelse?.trim(),
+      {
+        error:
+          "skatteforholdOgInntektSteg.duMaBeskriveHvaSlagsPengestotteDuMottar",
+        path: ["pengestotteSomMottasFraAndreLandBeskrivelse"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) =>
+        !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
+        !!data.landSomUtbetalerPengestotte?.trim(),
+      {
+        error:
+          "skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten",
+        path: ["landSomUtbetalerPengestotte"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) =>
+        !data.mottarPengestotteFraAnnetEosLandEllerSveits ||
+        erPositivtBelop(data.pengestotteSomMottasFraAndreLandBelop),
+      {
+        error:
+          "skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0",
+        path: ["pengestotteSomMottasFraAndreLandBelop"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) => {
+        return (
+          statsansattFlyt ||
+          (!!data.inntektFraNorskEllerUtenlandskVirksomhet &&
+            data.inntektFraNorskEllerUtenlandskVirksomhet.length > 0)
+        );
+      },
+      {
+        error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektKilde",
+        path: ["inntektFraNorskEllerUtenlandskVirksomhet"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) => {
+        return (
+          statsansattFlyt ||
+          (!!data.hvilkeTyperInntektHarDu &&
+            data.hvilkeTyperInntektHarDu.length > 0)
+        );
+      },
+      {
+        error: "skatteforholdOgInntektSteg.duMaVelgeMinstEnInntektType",
+        path: ["hvilkeTyperInntektHarDu"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) => {
+        if (statsansattFlyt || !skalValidereLoennsinntekt(data)) return true;
+        return data.inntekt?.trim() ? erPositivtBelop(data.inntekt) : false;
+      },
+      {
+        error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
+        path: ["inntekt"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) => {
+        if (statsansattFlyt || !skalValidereEgenVirksomhetInntekt(data))
+          return true;
+        return data.inntektFraEgenVirksomhet?.trim()
+          ? erPositivtBelop(data.inntektFraEgenVirksomhet)
+          : false;
+      },
+      {
+        error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",
+        path: ["inntektFraEgenVirksomhet"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) =>
+        !medLonn ||
+        data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden !==
+          undefined,
+      {
+        error:
+          "skatteforholdOgInntektSteg.duMaSvarePaOmArbeidsgiverBetalerAllLonn",
+        path: ["arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"],
+        when: () => true,
+      },
+    )
+    .refine(
+      (data) =>
+        !medLonn ||
+        data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden !==
+          false ||
+        harVirksomhetSomUtbetalerLonn(data),
+      {
+        error:
+          "skatteforholdOgInntektSteg.duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn",
+        path: ["virksomheterSomUtbetalerLonnOgNaturalytelser"],
+        when: () => true,
+      },
+    )
+    .transform((data) => ({
+      erSkattepliktigTilNorgeIHeleutsendingsperioden:
+        data.erSkattepliktigTilNorgeIHeleutsendingsperioden,
+      mottarPengestotteFraAnnetEosLandEllerSveits:
+        data.mottarPengestotteFraAnnetEosLandEllerSveits,
+      pengestotteSomMottasFraAndreLandBeskrivelse:
+        data.mottarPengestotteFraAnnetEosLandEllerSveits
+          ? data.pengestotteSomMottasFraAndreLandBeskrivelse
+          : undefined,
+      landSomUtbetalerPengestotte:
+        data.mottarPengestotteFraAnnetEosLandEllerSveits
+          ? data.landSomUtbetalerPengestotte
+          : undefined,
+      pengestotteSomMottasFraAndreLandBelop:
+        data.mottarPengestotteFraAnnetEosLandEllerSveits &&
+        data.pengestotteSomMottasFraAndreLandBelop
+          ? normaliserBelopForApi(data.pengestotteSomMottasFraAndreLandBelop)
+          : undefined,
+      inntektFraNorskEllerUtenlandskVirksomhet: statsansattFlyt
+        ? undefined
+        : data.inntektFraNorskEllerUtenlandskVirksomhet,
+      hvilkeTyperInntektHarDu: statsansattFlyt
+        ? undefined
+        : data.hvilkeTyperInntektHarDu,
+      inntekt:
+        !statsansattFlyt && skalValidereLoennsinntekt(data) && data.inntekt
+          ? normaliserBelopForApi(data.inntekt)
+          : undefined,
+      inntektFraEgenVirksomhet:
+        !statsansattFlyt &&
+        skalValidereEgenVirksomhetInntekt(data) &&
+        data.inntektFraEgenVirksomhet
+          ? normaliserBelopForApi(data.inntektFraEgenVirksomhet)
+          : undefined,
+      arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: medLonn
+        ? data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
         : undefined,
-    landSomUtbetalerPengestotte:
-      data.mottarPengestotteFraAnnetEosLandEllerSveits
-        ? data.landSomUtbetalerPengestotte
-        : undefined,
-    pengestotteSomMottasFraAndreLandBelop:
-      data.mottarPengestotteFraAnnetEosLandEllerSveits &&
-      data.pengestotteSomMottasFraAndreLandBelop
-        ? normaliserBelopForApi(data.pengestotteSomMottasFraAndreLandBelop)
-        : undefined,
-    inntektFraNorskEllerUtenlandskVirksomhet:
-      data.inntektFraNorskEllerUtenlandskVirksomhet,
-    hvilkeTyperInntektHarDu: data.hvilkeTyperInntektHarDu,
-    inntekt:
-      skalValidereLoennsinntekt(data) && data.inntekt
-        ? normaliserBelopForApi(data.inntekt)
-        : undefined,
-    inntektFraEgenVirksomhet:
-      skalValidereEgenVirksomhetInntekt(data) && data.inntektFraEgenVirksomhet
-        ? normaliserBelopForApi(data.inntektFraEgenVirksomhet)
-        : undefined,
-  }));
+      virksomheterSomUtbetalerLonnOgNaturalytelser:
+        medLonn &&
+        data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden ===
+          false
+          ? data.virksomheterSomUtbetalerLonnOgNaturalytelser
+          : undefined,
+    }));
+
+export const skatteforholdOgInntektSchema = lagSkatteforholdOgInntektSchema({
+  statsansattFlyt: false,
+  medLonn: false,
+});

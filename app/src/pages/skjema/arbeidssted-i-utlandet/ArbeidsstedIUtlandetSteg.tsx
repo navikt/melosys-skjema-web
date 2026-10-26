@@ -32,7 +32,11 @@ import {
   getUtsendingsperiodeOgLand,
 } from "../stegDataGetters.ts";
 import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import { arbeidsstedIUtlandetSchema } from "./arbeidsstedIUtlandetStegSchema.ts";
+import { getUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
+import {
+  arbeidsstedIUtlandetSchema,
+  lagArbeidsstedIUtlandetSchema,
+} from "./arbeidsstedIUtlandetStegSchema.ts";
 import { OffshoreForm } from "./OffshoreForm.tsx";
 import { OmBordPaFlyForm } from "./OmBordPaFlyForm.tsx";
 import { PaLandForm } from "./PaLandForm.tsx";
@@ -47,6 +51,9 @@ function ArbeidsstedIUtlandetStegContent({
 }) {
   const stegRekkefolge = getStegRekkefolge(skjema);
   const stegData = getArbeidsstedIUtlandet(skjema);
+  const { arbeidsstedForStatsansatt } = getUtsendtArbeidstakerFlyt(skjema);
+  const erArbeidstaker =
+    skjema.metadata.skjemadel === Skjemadel.ARBEIDSTAKERS_DEL;
   const utsendelseLand = getUtsendingsperiodeOgLand(skjema)?.utsendelseLand;
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -57,8 +64,20 @@ function ArbeidsstedIUtlandetStegContent({
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
 
   const formMethods = useForm({
-    resolver: zodResolver(arbeidsstedIUtlandetSchema),
-    ...(stegData && { defaultValues: stegData }),
+    resolver: zodResolver(
+      lagArbeidsstedIUtlandetSchema({
+        statsansattFlyt: arbeidsstedForStatsansatt,
+      }),
+    ),
+    // Arbeidssted for statsansatte oppgis alltid som på land, så typevalget skjules
+    ...(arbeidsstedForStatsansatt
+      ? {
+          defaultValues: {
+            arbeidsstedType: ArbeidsstedType.PA_LAND,
+            paLand: stegData?.paLand,
+          },
+        }
+      : stegData && { defaultValues: stegData }),
   });
 
   const {
@@ -107,25 +126,31 @@ function ArbeidsstedIUtlandetStegContent({
             <NesteStegKnapp loading={registerArbeidsstedMutation.isPending} />
           }
         >
-          <Select
-            className="mt-4"
-            error={translateError(errors.arbeidsstedType?.message)}
-            label={arbeidsstedTypeFelt.label}
-            style={{ width: "fit-content" }}
-            {...register("arbeidsstedType")}
-          >
-            <option value="">
-              {t("arbeidsstedIUtlandetSteg.velgArbeidssted")}
-            </option>
-            {arbeidsstedTypeFelt.alternativer.map((alt) => (
-              <option key={alt.verdi} value={alt.verdi}>
-                {alt.label}
+          {!arbeidsstedForStatsansatt && (
+            <Select
+              className="mt-4"
+              error={translateError(errors.arbeidsstedType?.message)}
+              label={arbeidsstedTypeFelt.label}
+              style={{ width: "fit-content" }}
+              {...register("arbeidsstedType")}
+            >
+              <option value="">
+                {t("arbeidsstedIUtlandetSteg.velgArbeidssted")}
               </option>
-            ))}
-          </Select>
+              {arbeidsstedTypeFelt.alternativer.map((alt) => (
+                <option key={alt.verdi} value={alt.verdi}>
+                  {alt.label}
+                </option>
+              ))}
+            </Select>
+          )}
 
           {arbeidsstedType === ArbeidsstedType.PA_LAND && (
-            <PaLandForm utsendelseLand={utsendelseLand} />
+            <PaLandForm
+              erArbeidstaker={erArbeidstaker}
+              statsansattFlyt={arbeidsstedForStatsansatt}
+              utsendelseLand={utsendelseLand}
+            />
           )}
 
           {arbeidsstedType === ArbeidsstedType.OFFSHORE && <OffshoreForm />}
@@ -147,9 +172,11 @@ export function ArbeidsstedIUtlandetSteg({ id }: { id: string }) {
       allowedSkjemadeler={[
         Skjemadel.ARBEIDSGIVERS_DEL,
         Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL,
+        Skjemadel.ARBEIDSTAKERS_DEL,
       ]}
       id={id}
       skjemaQuery={getSkjemaQuery}
+      stepKey={StegKey.ARBEIDSSTED_I_UTLANDET}
     >
       {(skjema) => <ArbeidsstedIUtlandetStegContent skjema={skjema} />}
     </SkjemaStegLoader>

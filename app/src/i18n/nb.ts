@@ -155,6 +155,10 @@ export const nb = {
     skatteforholdOgInntektSteg: {
       tittel: "Skatteforhold og inntekt",
       inntektHeading: "Inntekt",
+      duMaSvarePaOmArbeidsgiverBetalerAllLonn:
+        "Du må svare på om arbeidsgiveren din utbetaler all lønn og eventuelle naturalytelser i utsendingsperioden",
+      duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn:
+        "Du må legge til minst én virksomhet som utbetaler lønn og eventuelle naturalytelser",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:

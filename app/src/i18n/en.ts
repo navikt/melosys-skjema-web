@@ -161,6 +161,10 @@ export const en = {
     skatteforholdOgInntektSteg: {
       tittel: "Tax and Income Information",
       inntektHeading: "Income",
+      duMaSvarePaOmArbeidsgiverBetalerAllLonn:
+        "You must answer whether your employer pays all salary and any benefits in kind during the posting period",
+      duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn:
+        "You must add at least one business that pays the salary and any benefits in kind",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "You must answer whether you are liable to pay tax to Norway for the entire posting period",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:

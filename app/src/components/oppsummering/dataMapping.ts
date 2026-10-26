@@ -130,9 +130,28 @@ function mapArbeidstakerSeksjoner(
         : undefined,
     },
     {
+      seksjonNavn: "arbeidsstedPaLandArbeidstaker",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
+      data: flattenPaLand(
+        dto.arbeidsstedIUtlandet?.paLand,
+        dto.utsendingsperiodeOgLand?.utsendelseLand,
+      ),
+    },
+    {
       seksjonNavn: "skatteforholdOgInntekt",
       stegKey: StegKey.SKATTEFORHOLD_OG_INNTEKT,
-      data: dto.skatteforholdOgInntekt as Record<string, unknown> | undefined,
+      data: dto.skatteforholdOgInntekt
+        ? {
+            ...(dto.skatteforholdOgInntekt as unknown as Record<
+              string,
+              unknown
+            >),
+            virksomheterSomUtbetalerLonnOgNaturalytelser: flattenVirksomheter(
+              dto.skatteforholdOgInntekt
+                .virksomheterSomUtbetalerLonnOgNaturalytelser,
+            ),
+          }
+        : undefined,
     },
     {
       seksjonNavn: "familiemedlemmer",
