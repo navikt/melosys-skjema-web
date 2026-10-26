@@ -3,13 +3,18 @@ import {
   UtsendingsperiodeOgLandDto,
 } from "~/types/melosysSkjemaTypes";
 
-import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
+import {
+  mockAaregSjekk,
+  setupApiMocksForArbeidstaker,
+} from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
 import {
   formFieldValues,
+  testArbeidstakerMedStatligArbeidsgiverSkjema,
   testArbeidstakerSkjema,
   testArbeidstakerSkjemaFraMotpartCta,
   testArbeidstakerSkjemaMedAvvikFraMotpart,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
@@ -160,5 +165,42 @@ test.describe("Utsendingsperiode og land", () => {
     );
 
     await utsendingsperiodeOgLandStegPage.assertNavigatedToNextStep();
+  });
+
+  test("viser AAREG-varsel når arbeidsforholdet ikke finnes for hele perioden", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    await mockAaregSjekk(page, testStatsansattSkjema.id, false);
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testStatsansattSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertAaregVarselIsVisible();
+  });
+
+  test("statlig arbeidsgiver uten avklart AAREG-treff viser bare stegnummer i fremgangsindikatoren", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testArbeidstakerMedStatligArbeidsgiverSkjema,
+      testUserInfo,
+    );
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testArbeidstakerMedStatligArbeidsgiverSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertFremgangsindikatorViserUkjenteSteg();
   });
 });

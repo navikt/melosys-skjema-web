@@ -29,6 +29,8 @@ const feilmeldinger = {
     t.skatteforholdOgInntektSteg.duMaVelgeHvilketLandSomUtbetalerPengestotten,
   duMaOppgiEtGyldigBelop:
     t.skatteforholdOgInntektSteg.duMaOppgiEtGyldigBelopSomErStorreEnn0,
+  duMaSvarePaOmArbeidsgiverBetalerAllLonn:
+    t.skatteforholdOgInntektSteg.duMaSvarePaOmArbeidsgiverBetalerAllLonn,
 };
 
 export class SkatteforholdOgInntektStegPage {
@@ -47,6 +49,7 @@ export class SkatteforholdOgInntektStegPage {
   readonly inntektFraEgenVirksomhetCheckbox: Locator;
   readonly inntektInput: Locator;
   readonly inntektFraEgenVirksomhetInput: Locator;
+  readonly arbeidsgiverBetalerAllLonnRadioGroup: RadioButtonGroupJaNeiLocator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
@@ -92,6 +95,19 @@ export class SkatteforholdOgInntektStegPage {
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: translations.felles.lagreOgFortsett,
     });
+
+    const arbeidsgiverBetalerAllLonnGroup = page.getByRole("radiogroup", {
+      name: felter.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
+        .label,
+    });
+    this.arbeidsgiverBetalerAllLonnRadioGroup = {
+      JA: arbeidsgiverBetalerAllLonnGroup.getByRole("radio", {
+        name: translations.felles.ja,
+      }),
+      NEI: arbeidsgiverBetalerAllLonnGroup.getByRole("radio", {
+        name: translations.felles.nei,
+      }),
+    };
 
     const inntektKildeAlternativer =
       felter.inntektFraNorskEllerUtenlandskVirksomhet.alternativer;
@@ -220,6 +236,19 @@ export class SkatteforholdOgInntektStegPage {
     await expect(
       this.page.getByText(
         feilmeldinger.duMaVelgeHvilketLandSomUtbetalerPengestotten,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertInntektsspormalIsHidden() {
+    await expect(this.inntektFraNorskVirksomhetCheckbox).toBeHidden();
+    await expect(this.loennsinntektCheckbox).toBeHidden();
+  }
+
+  async assertDuMaSvarePaOmArbeidsgiverBetalerAllLonnIsVisible() {
+    await expect(
+      this.page.getByText(
+        feilmeldinger.duMaSvarePaOmArbeidsgiverBetalerAllLonn,
       ),
     ).toBeVisible();
   }

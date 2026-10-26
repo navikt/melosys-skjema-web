@@ -1,9 +1,10 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import type {
-  UtsendingsperiodeOgLandDto,
-  UtsendtArbeidstakerSkjemaDto,
+import {
+  Representasjonstype,
+  type UtsendingsperiodeOgLandDto,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
@@ -79,6 +80,22 @@ export class UtsendingsperiodeOgLandStegPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
+  }
+
+  async assertAaregVarselIsVisible() {
+    const varsel =
+      this.skjema.metadata.representasjonstype === Representasjonstype.DEG_SELV
+        ? translations.aaregVarsel.ingenArbeidsforholdDu
+        : translations.aaregVarsel.ingenArbeidsforhold;
+    await expect(this.page.getByText(varsel)).toBeVisible();
+  }
+
+  async assertFremgangsindikatorViserUkjenteSteg() {
+    const indikator = this.page.getByTestId("fremgangsindikator-ukjente-steg");
+    await expect(indikator).toBeVisible();
+    await expect(indikator).toContainText(
+      translations.felles.stegNummer.replace("{{steg}}", "1"),
+    );
   }
 
   async assertPreutfyltInfoboksVisible(

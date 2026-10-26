@@ -123,7 +123,7 @@ test.describe('StegNavn', () => {
 | Færre enn 20 ansatte — infoboks og samlet virksomhet          |
 | Lagrede opplysninger om samlet virksomhet vises               |
 | Skjulte felter for samlet virksomhet sendes ikke              |
-| Offentlig virksomhet kan ikke åpne steget direkte             |
+| Statlig virksomhet kan ikke åpne steget direkte               |
 
 ### `utenlandsoppdraget.spec.ts`
 

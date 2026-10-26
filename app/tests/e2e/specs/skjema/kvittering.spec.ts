@@ -62,4 +62,25 @@ test.describe("Kvittering", () => {
     await kvitteringPage.clickTilOversiktLink();
     await kvitteringPage.assertNavigatedToLandingsside();
   });
+
+  test("viser AAREG-varsel når arbeidsforholdet ikke finnes i AAREG", async ({
+    page,
+  }) => {
+    await mockFetchSkjema(page, {
+      ...skjema,
+      metadata: { ...metadata, harArbeidsforholdIAareg: false },
+    });
+    const kvitteringPage = new KvitteringPage(page, skjemaId);
+    await kvitteringPage.mockKvittering({
+      skjemaId: skjemaId,
+      status: SkjemaStatus.SENDT,
+      referanseId: "ABX1244",
+    });
+
+    await kvitteringPage.goto();
+    await kvitteringPage.assertIsVisible();
+    await kvitteringPage.assertAaregVarselIsVisible(
+      Representasjonstype.DEG_SELV,
+    );
+  });
 });

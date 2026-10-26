@@ -6,6 +6,7 @@ import { expect, test } from "../../fixtures/test";
 import {
   korrektFormatertOrgnr,
   testArbeidstakerSkjema,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidssituasjon-steg.page";
@@ -151,5 +152,33 @@ test.describe("Arbeidssituasjon", () => {
 
     await arbeidssituasjonPage.lagreOgFortsettAndExpectPayload(expectedPayload);
     await arbeidssituasjonPage.assertNavigatedToNextStep();
+  });
+});
+
+test.describe("Arbeidssituasjon - statsansatt", () => {
+  test("spør bare om flere virksomheter og går videre til arbeidssted", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    const arbeidssituasjonPage = new ArbeidssituasjonStegPage(
+      page,
+      testStatsansattSkjema,
+    );
+
+    await arbeidssituasjonPage.goto();
+    await arbeidssituasjonPage.assertIsVisible();
+    await arbeidssituasjonPage.assertHarVaertILonnetArbeidIsHidden();
+
+    await arbeidssituasjonPage.skalJobbeForFlereVirksomheterRadioGroup.NEI.click();
+
+    const expectedPayload: ArbeidssituasjonDto = {
+      skalJobbeForFlereVirksomheter: false,
+    };
+    await arbeidssituasjonPage.lagreOgFortsettAndExpectPayload(expectedPayload);
+    await arbeidssituasjonPage.assertNavigatedToArbeidssted();
   });
 });

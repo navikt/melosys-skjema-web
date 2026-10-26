@@ -54,7 +54,7 @@ test.describe("Velg rådgiverfirma", () => {
   test.beforeEach(async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
     await mockGetEregOrganisasjonMedJuridiskEnhet(page, {
-      erOffentligArbeidsgiver: false,
+      erStatligArbeidsgiver: false,
       erNorskregistrertUtenlandskForetak: false,
       antallAnsatte: 50,
       organisasjon: {
