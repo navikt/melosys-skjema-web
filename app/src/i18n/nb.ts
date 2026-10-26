@@ -29,6 +29,7 @@ export const nb = {
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
+      stegNummer: "Steg {{steg}}",
       sistOppdatert: "Sist oppdatert: {{tidspunkt}}",
       lagreUtkastOgFortsettSenere: "Lagre utkast og fortsett senere",
       avbrytOgSlett: "Avbryt og slett",

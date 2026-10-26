@@ -30,6 +30,7 @@ export const nn = {
       pakrevd: "påkravd",
       forrigeSteg: "Førre steg",
       nesteSteg: "Neste steg",
+      stegNummer: "Steg {{steg}}",
       sistOppdatert: "Sist oppdatert: {{tidspunkt}}",
       lagreUtkastOgFortsettSenere: "Lagre utkast og hald fram seinare",
       avbrytOgSlett: "Avbryt og slett",
