@@ -167,8 +167,8 @@ export enum Saksstatus {
 
 export interface FeltDefinisjonDto {
   label: string;
-  pakrevd: boolean;
   hjelpetekst?: string;
+  pakrevd: boolean;
   type: string;
 }
 
@@ -232,19 +232,20 @@ export interface VedleggValgDto {
 
 export type AnnenPersonMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
+  harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -253,19 +254,20 @@ export type AnnenPersonMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
+  harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -274,18 +276,19 @@ export type ArbeidsgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type ArbeidsgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
+  harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -322,7 +325,7 @@ export interface ArbeidsgiversData {
 }
 
 export interface ArbeidssituasjonDto {
-  harVaertEllerSkalVaereILonnetArbeidFoerUtsending: boolean;
+  harVaertEllerSkalVaereILonnetArbeidFoerUtsending?: boolean;
   aktivitetIMaanedenFoerUtsendingen?: string;
   skalJobbeForFlereVirksomheter: boolean;
   virksomheterArbeidstakerJobberForIutsendelsesPeriode?: NorskeOgUtenlandskeVirksomheterMedAnsettelsesform;
@@ -349,18 +352,19 @@ export interface ArbeidstakersData {
 
 export type DegSelvMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
+  harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -406,7 +410,7 @@ export interface PaLandDto {
   navnPaVirksomhet: string;
   fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted;
   fastArbeidssted?: PaLandFastArbeidsstedDto;
-  erHjemmekontor: boolean;
+  erHjemmekontor?: boolean;
 }
 
 export interface PaLandFastArbeidsstedDto {
@@ -434,19 +438,20 @@ export interface PeriodeDto {
 
 export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
   fullmektigFnr: string;
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
+  harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -456,18 +461,19 @@ export type RadgiverMedFullmaktMetadata = UtilRequiredKeys<
 
 export type RadgiverMetadata = UtilRequiredKeys<
   UtsendtArbeidstakerMetadata,
-  | "representasjonstype"
   | "juridiskEnhetOrgnr"
+  | "representasjonstype"
   | "arbeidsgiverNavn"
   | "arbeidstakerNavn"
   | "skjemadel"
   | "metadatatype"
 > & {
-  erOffentligArbeidsgiver?: boolean;
+  erStatligArbeidsgiver?: boolean;
   erNorskregistrertUtenlandskForetak?: boolean;
   /** @format int32 */
   antallAnsatte?: number;
-  erOffentligTjenesteperson?: boolean;
+  erStatsansatt?: boolean;
+  harArbeidsforholdIAareg?: boolean;
   /** @format uuid */
   kobletSkjemaId?: string;
   /** @format uuid */
@@ -492,6 +498,8 @@ export interface SkatteforholdOgInntektDto {
   hvilkeTyperInntektHarDu?: InntektType[];
   inntekt?: string;
   inntektFraEgenVirksomhet?: string;
+  arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden?: boolean;
+  virksomheterSomUtbetalerLonnOgNaturalytelser?: NorskeOgUtenlandskeVirksomheter;
 }
 
 export interface TilleggsopplysningerDto {
@@ -567,6 +575,7 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
   "type"
 > & {
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
+  arbeidsstedIUtlandet?: ArbeidsstedIUtlandetDto;
   arbeidssituasjon?: ArbeidssituasjonDto;
   skatteforholdOgInntekt?: SkatteforholdOgInntektDto;
   familiemedlemmer?: FamiliemedlemmerDto;
@@ -575,27 +584,28 @@ export type UtsendtArbeidstakerArbeidstakersSkjemaDataDto = UtilRequiredKeys<
 };
 
 export interface UtsendtArbeidstakerMetadata {
-  representasjonstype: Representasjonstype;
-  erOffentligTjenesteperson?: boolean;
+  harArbeidsforholdIAareg?: boolean;
   juridiskEnhetOrgnr: string;
-  /** @format uuid */
-  erstatterSkjemaId?: string;
+  /** @format int32 */
+  antallAnsatte?: number;
+  erStatsansatt?: boolean;
+  representasjonstype: Representasjonstype;
   /** @format uuid */
   kobletSkjemaId?: string;
   arbeidsgiverNavn: string;
+  erStatligArbeidsgiver?: boolean;
   arbeidstakerNavn: string;
-  erNorskregistrertUtenlandskForetak?: boolean;
+  /** @format uuid */
+  erstatterSkjemaId?: string;
   skjemadel: Skjemadel;
-  erOffentligArbeidsgiver?: boolean;
-  /** @format int32 */
-  antallAnsatte?: number;
+  erNorskregistrertUtenlandskForetak?: boolean;
   metadatatype: string;
 }
 
 export interface UtsendtArbeidstakerSkjemaData {
-  vedlegg?: VedleggValgDto;
   utsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   tilleggsopplysninger?: TilleggsopplysningerDto;
+  vedlegg?: VedleggValgDto;
   type: string;
 }
 
@@ -624,6 +634,10 @@ export interface UtsendtArbeidstakerSkjemaDto {
   skjemaDefinisjonVersjon: string;
   motpartensUtsendingsperiodeOgLand?: UtsendingsperiodeOgLandDto;
   utkastReinitialisert: boolean;
+}
+
+export interface AaregSjekkResponse {
+  harArbeidsforhold: boolean;
 }
 
 export interface SkjemaInnsendtKvittering {
@@ -1032,8 +1046,8 @@ export interface OrganisasjonDto {
 }
 
 export interface ArbeidsgiverensVirksomhetINorgeTranslation {
-  offentligVirksomhetSkalIkkeOppgiBemanningsbyraa: string;
-  offentligVirksomhetSkalIkkeOppgiVanligDrift: string;
+  statligVirksomhetSkalIkkeOppgiBemanningsbyraa: string;
+  statligVirksomhetSkalIkkeOppgiVanligDrift: string;
   maaOppgiOmBemanningsbyraa: string;
   maaOppgiOmVanligDrift: string;
   skalIkkeOppgiVanligDrift: string;
@@ -1045,6 +1059,8 @@ export interface ArbeidsgiverensVirksomhetINorgeTranslation {
 export interface ArbeidssituasjonTranslation {
   maaOppgiAktivitetFoerUtsending: string;
   maaOppgiMinstEnVirksomhet: string;
+  lonnetArbeidFoerUtsendingSkalIkkeOppgis: string;
+  aktivitetFoerUtsendingSkalIkkeOppgis: string;
 }
 
 export interface ArbeidsstedIUtlandetTranslation {
@@ -1052,6 +1068,7 @@ export interface ArbeidsstedIUtlandetTranslation {
   maaOppgiOffshoreArbeidssted: string;
   maaOppgiArbeidsstedPaSkip: string;
   maaOppgiArbeidsstedOmBordPaFly: string;
+  arbeidsstedSkalIkkeOppgis: string;
 }
 
 export interface ArbeidstakerensLonnTranslation {
@@ -1098,6 +1115,7 @@ export interface OmBordPaFlyTranslation {
 export interface PaLandTranslation {
   maaOppgiFastArbeidssted: string;
   fastArbeidsstedSkalIkkeOppgis: string;
+  hjemmekontorSkalIkkeOppgis: string;
 }
 
 export interface PaSkipTranslation {
@@ -1122,6 +1140,9 @@ export interface SkatteforholdOgInntektTranslation {
   maaOppgiInntektFraEgenVirksomhet: string;
   inntektSkalIkkeOppgis: string;
   inntektFraEgenVirksomhetSkalIkkeOppgis: string;
+  inntektskildeSkalIkkeOppgis: string;
+  inntektstypeSkalIkkeOppgis: string;
+  lonnSkalIkkeOppgis: string;
 }
 
 export interface TilleggsopplysningerTranslation {
@@ -1138,6 +1159,7 @@ export interface UtenlandsoppdragetTranslation {
   duMaOppgiOmArbeidstakerVilJobbeEtterOppdraget: string;
   duMaOppgiBeskrivelseAvAnsettelsesforhold: string;
   duMaOppgiForrigeArbeidstakerUtsendelsePeriode: string;
+  utenlandsoppdragetSkalIkkeOppgis: string;
 }
 
 export interface UtsendingsperiodeOgLandTranslation {
@@ -1147,7 +1169,7 @@ export interface UtsendingsperiodeOgLandTranslation {
 export interface OrganisasjonMedJuridiskEnhetDto {
   organisasjon: SimpleOrganisasjonDto;
   juridiskEnhet: SimpleOrganisasjonDto;
-  erOffentligArbeidsgiver: boolean;
+  erStatligArbeidsgiver: boolean;
   erNorskregistrertUtenlandskForetak: boolean;
   /** @format int32 */
   antallAnsatte: number;
