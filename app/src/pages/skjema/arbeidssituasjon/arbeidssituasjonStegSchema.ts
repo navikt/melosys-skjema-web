@@ -3,8 +3,8 @@ import { z } from "zod";
 import { norskeOgUtenlandskeVirksomheterMedAnsettelsesformSchema } from "~/components/virksomheter/virksomheterSchema.ts";
 
 /**
- * I arbeidstakerdelen for statsansatte stilles ikke spørsmålene om
- * lønnet arbeid og aktivitet før utsendingen.
+ * Statsansattflyten utelater spørsmål om lønnet arbeid og aktivitet før utsending,
+ * både i arbeidstakers del og i kombinert skjema.
  */
 export const lagArbeidssituasjonSchema = ({
   statsansattFlyt,

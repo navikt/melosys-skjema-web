@@ -13,8 +13,8 @@ const fastArbeidsstedSchema = z.object({
 });
 
 /**
- * Hjemmekontor-spørsmålet stilles ikke i arbeidsstedsteget for statsansatte,
- * så `erHjemmekontor` er valgfritt i typen og kreves bare når `medHjemmekontor` er satt.
+ * Flyten for statlig arbeidsgiver utelater hjemmekontorspørsmålet.
+ * Derfor er svaret valgfritt i typen og fjernes når spørsmålet ikke stilles.
  */
 export const lagPaLandSchema = ({
   medHjemmekontor,
@@ -33,7 +33,6 @@ export const lagPaLandSchema = ({
         fastEllerVekslendeArbeidssted: z.enum(FastEllerVekslendeArbeidssted, {
           error: "arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende",
         }),
-        // FAST fields
         fastArbeidssted: fastArbeidsstedSchema.optional(),
         erHjemmekontor: z.boolean().optional(),
       })
@@ -88,7 +87,6 @@ export const lagPaLandSchema = ({
       })
       .transform((data) => ({
         ...data,
-        // Clear FAST fields when VEKSLENDE
         fastArbeidssted:
           data.fastEllerVekslendeArbeidssted ===
           FastEllerVekslendeArbeidssted.FAST

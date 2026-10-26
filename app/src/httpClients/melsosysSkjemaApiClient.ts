@@ -309,8 +309,8 @@ export async function postUtsendingsperiodeOgLand(
 }
 
 /**
- * Sjekker om arbeidstakeren har arbeidsforhold i AAREG for hele perioden. Lagrer ingenting.
- * Kjøres ikke før perioden er gyldig.
+ * Sjekker om et ordinært arbeidsforhold hos arbeidsgiveren dekker hele perioden, uten å lagre.
+ * Kalleren må utelate perioden inntil den er gyldig, slik at oppslaget ikke kjøres.
  */
 export const getAaregSjekkQuery = (skjemaId: string, periode?: PeriodeDto) =>
   queryOptions<AaregSjekkResponse>({

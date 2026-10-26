@@ -137,7 +137,6 @@ export class ArbeidsstedIUtlandetStegPage {
       name: arbeidsstedIUtlandet.felter.arbeidsstedType.label,
     });
 
-    // Felles - alle seksjoner har navnPaVirksomhet med samme label
     this.navnPaVirksomhetInput = page.getByLabel(
       landFelter.navnPaVirksomhet.label,
     );

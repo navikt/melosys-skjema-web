@@ -92,8 +92,8 @@ function harVirksomhetSomUtbetalerLonn(data: SchemaData): boolean {
 }
 
 /**
- * @param statsansattFlyt statsansatt: spørsmålene om inntektskilder og inntekt stilles ikke.
- * @param medLonn arbeidstakeren fyller ut først, og lønnsspørsmålene fra arbeidsgiverdelen stilles her.
+ * I statsansattflyten utelates inntektskilder, inntektstype og inntektsbeløp, men ikke pengestøtte.
+ * Statsansatte som sender før arbeidsgiver, besvarer også lønnsspørsmålene her når medLonn er satt.
  */
 export const lagSkatteforholdOgInntektSchema = ({
   statsansattFlyt,

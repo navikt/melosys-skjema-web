@@ -19,11 +19,11 @@ type ArbeidsstedIUtlandetFormData = z.infer<typeof arbeidsstedIUtlandetSchema>;
 interface PaLandFormProperties {
   utsendelseLand?: LandKode;
   /**
-  Statlig arbeidsgiver: hjemmekontor-spørsmålet stilles ikke
+  Utelater hjemmekontorspørsmålet i flyten for statlig arbeidsgiver.
   */
   statsansattFlyt?: boolean;
   /**
-  Arbeidstakerens egne tekster i du-form
+  Bruker arbeidstakerdelens tekster i du-form.
   */
   erArbeidstaker?: boolean;
 }

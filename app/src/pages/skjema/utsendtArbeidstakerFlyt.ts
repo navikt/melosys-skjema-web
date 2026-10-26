@@ -21,8 +21,8 @@ export interface UtsendtArbeidstakerFlyt {
   arbeidstakerdelForStatsansatt: boolean;
   lonnOppgisISkatteforhold: boolean;
   /**
-   * Statlig arbeidsgiver der AAREG-treffet ikke er kjent ennå (perioden er ikke lagret),
-   * så de neste stegene avhenger av svaret på steg 1.
+   * Statlig arbeidsgiver der AAREG-treffet ennå ikke er kjent.
+   * Stegene kan derfor først bestemmes når utsendingsperioden er lagret og AAREG-oppslaget er utført.
    */
   flytenErUkjent: boolean;
 }

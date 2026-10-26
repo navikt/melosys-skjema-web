@@ -69,7 +69,7 @@ function ArbeidsstedIUtlandetStegContent({
         statsansattFlyt: arbeidsstedForStatsansatt,
       }),
     ),
-    // Arbeidssted for statsansatte oppgis alltid som på land, så typevalget skjules
+    // Typevalget er skjult i denne flyten, så arbeidsstedstypen settes til på land.
     ...(arbeidsstedForStatsansatt
       ? {
           defaultValues: {

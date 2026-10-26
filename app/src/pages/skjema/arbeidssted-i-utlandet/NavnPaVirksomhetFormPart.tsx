@@ -7,9 +7,6 @@ import { useTranslateError } from "~/utils/translation.ts";
 type NavnPaVirksomhetFormPartProperties = {
   formFieldName: string;
   className?: string;
-  /**
-  Overstyrer standardteksten fra `arbeidsstedPaLand`
-  */
   label?: string;
 };
 
