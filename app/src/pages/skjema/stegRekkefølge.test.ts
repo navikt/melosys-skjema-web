@@ -4,12 +4,12 @@ import { StegKey } from "~/constants/stegKeys.ts";
 import {
   ARBEIDSGIVER_IKON,
   ARBEIDSTAKER_IKON,
-  getStegRekkefolge,
+  getStegRekkefolge as beregnStegRekkefolge,
   STEG_REKKEFOLGE,
 } from "~/pages/skjema/stegRekkefølge.ts";
 import {
   type FlytGrunnlag,
-  getUtsendtArbeidstakerFlyt,
+  getUtsendtArbeidstakerFlyt as beregnFlyt,
 } from "~/pages/skjema/utsendtArbeidstakerFlyt.ts";
 import {
   LandKode,
@@ -24,7 +24,11 @@ const lagSkjema = (
   forhandsutfyltFraArbeidsgiver = false,
 ) =>
   ({
-    metadata: { skjemadel, erStatligArbeidsgiver, harArbeidsforholdIAareg },
+    metadata: {
+      skjemadel,
+      erStatligArbeidsgiver,
+      harArbeidsforholdIAareg,
+    },
     motpartensUtsendingsperiodeOgLand: forhandsutfyltFraArbeidsgiver
       ? {
           utsendelseLand: LandKode.SE,
@@ -33,8 +37,16 @@ const lagSkjema = (
       : undefined,
   }) as FlytGrunnlag & Pick<UtsendtArbeidstakerSkjemaDto, "metadata">;
 
-const stegKeys = (skjema: FlytGrunnlag) =>
-  getStegRekkefolge(skjema).map(({ key }) => key);
+const getStegRekkefolge = (
+  skjema: FlytGrunnlag,
+  statsansattFlytAktivert = true,
+) => beregnStegRekkefolge(skjema, statsansattFlytAktivert);
+const getUtsendtArbeidstakerFlyt = (
+  skjema: FlytGrunnlag,
+  statsansattFlytAktivert = true,
+) => beregnFlyt(skjema, statsansattFlytAktivert);
+const stegKeys = (skjema: FlytGrunnlag, statsansattFlytAktivert = true) =>
+  getStegRekkefolge(skjema, statsansattFlytAktivert).map(({ key }) => key);
 
 const harVirksomhetssteg = (skjema: FlytGrunnlag) =>
   stegKeys(skjema).includes(StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE);
@@ -176,6 +188,42 @@ describe("getStegRekkefolge", () => {
 });
 
 describe("getUtsendtArbeidstakerFlyt", () => {
+  // MIDLERTIDIG MELOSYS-7694: gammel flyt fjernes sammen med utrullingstogglen.
+  it.each(Object.values(Skjemadel))(
+    "beholder gamle spørsmål i %s når statsansattflyten er av",
+    (skjemadel) => {
+      const skjema = lagSkjema(skjemadel, true, true);
+      const harArbeidsgiverdel = skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL;
+
+      expect(getUtsendtArbeidstakerFlyt(skjema, false)).toEqual({
+        utenlandsoppdragetSkalOppgis: harArbeidsgiverdel,
+        arbeidsstedSkalOppgis: harArbeidsgiverdel,
+        arbeidsstedForStatsansatt: false,
+        arbeidstakerdelForStatsansatt: false,
+        lonnOppgisISkatteforhold: false,
+        flytenErUkjent: false,
+      });
+      expect(stegKeys(skjema, false)).toEqual(
+        STEG_REKKEFOLGE[skjemadel]
+          .filter(
+            ({ key }) => key !== StegKey.ARBEIDSGIVERENS_VIRKSOMHET_I_NORGE,
+          )
+          .map(({ key }) => key),
+      );
+    },
+  );
+
+  it("viser vanlig stegvelger når togglen er av selv om AAREG-treffet er ukjent", () => {
+    const skjema = lagSkjema(Skjemadel.ARBEIDSTAKERS_DEL, true);
+
+    expect(getUtsendtArbeidstakerFlyt(skjema, false).flytenErUkjent).toBe(
+      false,
+    );
+    expect(getStegRekkefolge(skjema, false)).toEqual(
+      STEG_REKKEFOLGE[Skjemadel.ARBEIDSTAKERS_DEL],
+    );
+  });
+
   it.each([
     [Skjemadel.ARBEIDSTAKERS_DEL, true, undefined, true],
     [Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL, true, undefined, true],

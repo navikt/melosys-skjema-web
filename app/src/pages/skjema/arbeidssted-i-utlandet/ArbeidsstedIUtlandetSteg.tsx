@@ -31,8 +31,8 @@ import {
   getArbeidsstedIUtlandet,
   getUtsendingsperiodeOgLand,
 } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import { getUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
+import { useUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
 import {
   arbeidsstedIUtlandetSchema,
   lagArbeidsstedIUtlandetSchema,
@@ -49,9 +49,9 @@ function ArbeidsstedIUtlandetStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getArbeidsstedIUtlandet(skjema);
-  const { arbeidsstedForStatsansatt } = getUtsendtArbeidstakerFlyt(skjema);
+  const { arbeidsstedForStatsansatt } = useUtsendtArbeidstakerFlyt(skjema);
   const erArbeidstaker =
     skjema.metadata.skjemadel === Skjemadel.ARBEIDSTAKERS_DEL;
   const utsendelseLand = getUtsendingsperiodeOgLand(skjema)?.utsendelseLand;

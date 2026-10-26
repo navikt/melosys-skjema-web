@@ -47,8 +47,8 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getSkatteforholdOgInntekt } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import { getUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
+import { useUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
 import {
   lagSkatteforholdOgInntektSchema,
   skalInkludereLoennsinntekt,
@@ -72,10 +72,10 @@ function SkatteforholdOgInntektStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getSkatteforholdOgInntekt(skjema);
   const { arbeidstakerdelForStatsansatt, lonnOppgisISkatteforhold } =
-    getUtsendtArbeidstakerFlyt(skjema);
+    useUtsendtArbeidstakerFlyt(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();

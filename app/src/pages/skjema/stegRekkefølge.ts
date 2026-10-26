@@ -1,6 +1,8 @@
 import { BriefcaseIcon, PersonRectangleIcon } from "@navikt/aksel-icons";
 
 import { StegKey } from "~/constants/stegKeys.ts";
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn.ts";
+import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
 import {
   StegIkon,
   StegRekkefolgeItem,
@@ -135,9 +137,10 @@ export const STEG_REKKEFOLGE: Record<Skjemadel, StegRekkefolgeItem[]> = {
 
 export const getStegRekkefolge = (
   skjema: FlytGrunnlag,
+  statsansattFlytAktivert: boolean,
 ): StegRekkefolgeItem[] => {
   const { skjemadel } = skjema.metadata;
-  const flyt = getUtsendtArbeidstakerFlyt(skjema);
+  const flyt = getUtsendtArbeidstakerFlyt(skjema, statsansattFlytAktivert);
 
   if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
     return flyt.arbeidsstedSkalOppgis
@@ -158,3 +161,9 @@ export const getStegRekkefolge = (
 
   return STEG_REKKEFOLGE[skjemadel].filter(({ key }) => !utelatteSteg.has(key));
 };
+
+// MIDLERTIDIG MELOSYS-7694: erstatt hooken med getStegRekkefolge ved avvikling av togglen.
+export function useStegRekkefolge(skjema: FlytGrunnlag) {
+  const statsansattFlytAktivert = useFeatureToggle(STATSANSATT_FLYT) ?? false;
+  return getStegRekkefolge(skjema, statsansattFlytAktivert);
+}

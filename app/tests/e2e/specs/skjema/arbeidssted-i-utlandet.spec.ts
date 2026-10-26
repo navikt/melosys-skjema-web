@@ -1,3 +1,4 @@
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";
 import {
   ArbeidsstedIUtlandetDto,
   ArbeidsstedType,
@@ -8,6 +9,7 @@ import {
 } from "~/types/melosysSkjemaTypes";
 
 import {
+  mockFeatureToggles,
   setupApiMocksForArbeidsgiver,
   setupApiMocksForArbeidstaker,
 } from "../../fixtures/api-mocks";
@@ -66,6 +68,29 @@ test.describe("Arbeidssted i utlandet", () => {
       [testOrganization],
       testUserInfo,
     );
+  });
+
+  test("MIDLERTIDIG MELOSYS-7694 statlig arbeidsgiver får vanlig arbeidssted når togglen er av", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, { [STATSANSATT_FLYT]: false });
+    await setupApiMocksForArbeidsgiver(
+      page,
+      testStatligArbeidsgiverSkjema,
+      [testOrganization],
+      testUserInfo,
+    );
+    const stegPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testStatligArbeidsgiverSkjema,
+    );
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await expect(stegPage.arbeidsstedTypeSelect).toBeVisible();
+    await stegPage.arbeidsstedTypeSelect.selectOption(ArbeidsstedType.PA_LAND);
+    await expect(stegPage.erHjemmekontorRadioGroup.JA).toBeVisible();
+    await expect(stegPage.erHjemmekontorRadioGroup.NEI).toBeVisible();
   });
 
   test("happy case - PA_LAND med fast arbeidssted", async ({ page }) => {

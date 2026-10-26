@@ -1,3 +1,4 @@
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";
 import {
   LandKode,
   UtsendingsperiodeOgLandDto,
@@ -5,9 +6,10 @@ import {
 
 import {
   mockAaregSjekk,
+  mockFeatureToggles,
   setupApiMocksForArbeidstaker,
 } from "../../fixtures/api-mocks";
-import { test } from "../../fixtures/test";
+import { expect, test } from "../../fixtures/test";
 import {
   formFieldValues,
   testArbeidstakerMedStatligArbeidsgiverSkjema,
@@ -202,5 +204,35 @@ test.describe("Utsendingsperiode og land", () => {
     await stegPage.goto();
     await stegPage.assertIsVisible();
     await stegPage.assertFremgangsindikatorViserUkjenteSteg();
+  });
+
+  test("MIDLERTIDIG MELOSYS-7694 viser AAREG-varsel og beholder vanlig navigasjon når statsansattflyten er av", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, { [STATSANSATT_FLYT]: false });
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    await mockAaregSjekk(page, testStatsansattSkjema.id, false);
+    let antallAaregKall = 0;
+    page.on("request", (request) => {
+      if (request.url().includes("/aareg-sjekk")) antallAaregKall++;
+    });
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testStatsansattSkjema,
+    );
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertAaregVarselIsVisible();
+    await stegPage.lagreOgFortsettAndExpectPayload(
+      testStatsansattSkjema.data!.utsendingsperiodeOgLand!,
+    );
+    await stegPage.assertNavigatedToNextStep();
+
+    expect(antallAaregKall).toBe(1);
   });
 });

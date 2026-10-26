@@ -27,7 +27,7 @@ import {
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getFamiliemedlemmer } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
 import { familiemedlemmerSchema } from "./familiemedlemmerStegSchema.ts";
 
 function FamiliemedlemmerStegContent({
@@ -35,7 +35,7 @@ function FamiliemedlemmerStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getFamiliemedlemmer(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();

@@ -28,8 +28,8 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidssituasjon } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
-import { getUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
+import { useUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
 import {
   arbeidssituasjonSchema,
   lagArbeidssituasjonSchema,
@@ -42,10 +42,10 @@ function ArbeidssituasjonStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getArbeidssituasjon(skjema);
   const skjemadel = skjema.metadata.skjemadel;
-  const { arbeidstakerdelForStatsansatt } = getUtsendtArbeidstakerFlyt(skjema);
+  const { arbeidstakerdelForStatsansatt } = useUtsendtArbeidstakerFlyt(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();

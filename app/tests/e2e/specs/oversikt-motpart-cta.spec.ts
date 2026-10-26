@@ -1,3 +1,4 @@
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";
 import { OpprettetVia, Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
@@ -26,11 +27,13 @@ import { SkjemaStartPage } from "../pages/skjema/skjema-start.page";
 import { translations } from "../utils/translations";
 
 const ALLE_TOGGLES_PAA = {
+  [STATSANSATT_FLYT]: true,
   "melosys.skjema.motpart-cta": true,
   "melosys.skjema.innsendt-sammendrag": true,
 };
 
 const MOTPART_CTA_AV = {
+  [STATSANSATT_FLYT]: true,
   "melosys.skjema.motpart-cta": false,
   "melosys.skjema.innsendt-sammendrag": true,
 };

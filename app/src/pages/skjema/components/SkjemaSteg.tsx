@@ -18,8 +18,8 @@ import {
   StegRekkefolgeItem,
 } from "~/pages/skjema/components/Fremgangsindikator";
 import { SkjemaHeader } from "~/pages/skjema/components/SkjemaHeader.tsx";
-import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
-import { getUtsendtArbeidstakerFlyt } from "~/pages/skjema/utsendtArbeidstakerFlyt.ts";
+import { useStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
+import { useUtsendtArbeidstakerFlyt } from "~/pages/skjema/utsendtArbeidstakerFlyt.ts";
 import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts";
 import { toRepresentasjonskontekst } from "~/types/representasjon.ts";
 import { formatDatotid } from "~/utils/datoformat.ts";
@@ -47,7 +47,8 @@ export function SkjemaSteg({
 }: SkjemaStegProperties) {
   const { i18n, t } = useTranslation();
   const { skjema } = config;
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
+  const { flytenErUkjent } = useUtsendtArbeidstakerFlyt(skjema);
   const representasjonskontekst = toRepresentasjonskontekst(skjema.metadata);
 
   const stepNumber = getStepNumber(config.stepKey, stegRekkefolge);
@@ -65,7 +66,7 @@ export function SkjemaSteg({
       <Fremgangsindikator
         aktivtSteg={stepNumber}
         className="mt-4"
-        stegeneErUkjente={getUtsendtArbeidstakerFlyt(skjema).flytenErUkjent}
+        stegeneErUkjente={flytenErUkjent}
         stegRekkefolge={stegRekkefolge}
       />
       <Heading className="mt-8" level="1" size="large">

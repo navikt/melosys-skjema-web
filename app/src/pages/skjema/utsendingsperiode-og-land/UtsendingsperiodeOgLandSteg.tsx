@@ -30,7 +30,7 @@ import { formatDato, parseIsoDato } from "~/utils/datoformat.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtsendingsperiodeOgLand } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
 import { utsendingsperiodeOgLandSchema } from "./utsendingsperiodeOgLandStegSchema.ts";
 
 // Date range constants for assignment period selection
@@ -52,7 +52,7 @@ function UtsendingsperiodeOgLandStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getUtsendingsperiodeOgLand(skjema);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();

@@ -1,7 +1,10 @@
 import type { ArbeidssituasjonDto } from "~/types/melosysSkjemaTypes";
 import { Ansettelsesform, LandKode } from "~/types/melosysSkjemaTypes";
 
-import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
+import {
+  mockFeatureToggles,
+  setupApiMocksForArbeidstaker,
+} from "../../fixtures/api-mocks";
 import { expect, test } from "../../fixtures/test";
 import {
   korrektFormatertOrgnr,
@@ -19,6 +22,30 @@ test.describe("Arbeidssituasjon", () => {
       testArbeidstakerSkjema,
       testUserInfo,
     );
+  });
+
+  test("MIDLERTIDIG MELOSYS-7694 statsansatt får vanlige spørsmål og validering når togglen er av", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, { [STATSANSATT_FLYT]: false });
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    const stegPage = new ArbeidssituasjonStegPage(page, testStatsansattSkjema);
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.skalJobbeForFlereVirksomheterRadioGroup.NEI.click();
+    await stegPage.lagreOgFortsett();
+    await stegPage.assertDuMaSvarePaOmDuHarVertILonnetArbeidIsVisible();
+    await stegPage.harVaertILonnetArbeidRadioGroup.JA.click();
+    await stegPage.lagreOgFortsettAndExpectPayload({
+      harVaertEllerSkalVaereILonnetArbeidFoerUtsending: true,
+      skalJobbeForFlereVirksomheter: false,
+    });
+    await stegPage.assertNavigatedToNextStep();
   });
 
   test("happy case - har vært i arbeid, ikke flere virksomheter", async ({
@@ -182,3 +209,4 @@ test.describe("Arbeidssituasjon - statsansatt", () => {
     await arbeidssituasjonPage.assertNavigatedToArbeidssted();
   });
 });
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";

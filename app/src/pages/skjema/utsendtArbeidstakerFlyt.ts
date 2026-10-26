@@ -1,3 +1,5 @@
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn.ts";
+import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
 import {
   Skjemadel,
   type UtsendtArbeidstakerSkjemaDto,
@@ -27,8 +29,23 @@ export interface UtsendtArbeidstakerFlyt {
 
 export function getUtsendtArbeidstakerFlyt(
   skjema: FlytGrunnlag,
+  statsansattFlytAktivert: boolean,
 ): UtsendtArbeidstakerFlyt {
   const { metadata } = skjema;
+  // MIDLERTIDIG MELOSYS-7694: fjern gammel-flyt-grenen når statsansattflyten er permanent.
+  if (!statsansattFlytAktivert) {
+    const harArbeidsgiverdel =
+      metadata.skjemadel !== Skjemadel.ARBEIDSTAKERS_DEL;
+    return {
+      utenlandsoppdragetSkalOppgis: harArbeidsgiverdel,
+      arbeidsstedSkalOppgis: harArbeidsgiverdel,
+      arbeidsstedForStatsansatt: false,
+      arbeidstakerdelForStatsansatt: false,
+      lonnOppgisISkatteforhold: false,
+      flytenErUkjent: false,
+    };
+  }
+
   const erStatligArbeidsgiver = metadata.erStatligArbeidsgiver === true;
   const erStatsansatt =
     erStatligArbeidsgiver && metadata.harArbeidsforholdIAareg === true;
@@ -61,4 +78,10 @@ export function getUtsendtArbeidstakerFlyt(
     lonnOppgisISkatteforhold: false,
     flytenErUkjent,
   };
+}
+
+// MIDLERTIDIG MELOSYS-7694: erstatt hooken med getUtsendtArbeidstakerFlyt ved avvikling av togglen.
+export function useUtsendtArbeidstakerFlyt(skjema: FlytGrunnlag) {
+  const statsansattFlytAktivert = useFeatureToggle(STATSANSATT_FLYT) ?? false;
+  return getUtsendtArbeidstakerFlyt(skjema, statsansattFlytAktivert);
 }
