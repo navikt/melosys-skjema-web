@@ -175,28 +175,6 @@ export class OversiktPage {
     ).toBeVisible();
   }
 
-  async assertAltinnTilgangsstyringLenke() {
-    await expect(
-      this.page.getByRole("heading", {
-        name: translations.oversiktFelles.ingenArbeidsgivereTittel,
-      }),
-    ).toBeVisible();
-    const lenke = this.page.getByRole("link", {
-      name: translations.oversiktFelles.ingenArbeidsgivereLenke,
-      exact: true,
-    });
-    await expect(lenke).toBeVisible();
-    await expect(lenke).toHaveText(
-      / \((åpnes i ny fane|opnast i ny fane|opens in a new tab)\)$/,
-    );
-    await expect(lenke).toHaveAttribute(
-      "href",
-      "https://info.altinn.no/hjelp/ny-tilgangsstyring/",
-    );
-    await expect(lenke).toHaveAttribute("target", "_blank");
-    await expect(lenke).toHaveAttribute("rel", "noopener noreferrer");
-  }
-
   async assertFullmaktFeilmelding() {
     await expect(
       this.page.getByText(

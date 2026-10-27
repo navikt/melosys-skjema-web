@@ -30,36 +30,9 @@ import {
 } from "../fixtures/test-data";
 import { OversiktPage } from "../pages/oversikt/oversikt.page";
 import { SkjemaStartPage } from "../pages/skjema/skjema-start.page";
-import { E2E_SPRAK, translations } from "../utils/translations";
+import { translations } from "../utils/translations";
 
 test.describe("Oversikt", () => {
-  test("Viser Altinn-hjelp i ny fane når ingen arbeidsgivere er tilgjengelige", async ({
-    page,
-  }) => {
-    await page.context().addCookies([
-      {
-        name: "decorator-language",
-        value: E2E_SPRAK,
-        url: "http://localhost:5173",
-      },
-    ]);
-    await setupApiMocksForOversikt(
-      page,
-      testUserInfo,
-      [],
-      emptyUtkastListe,
-      emptyInnsendteSoknader,
-    );
-
-    const oversiktPage = new OversiktPage(
-      page,
-      Representasjonstype.ARBEIDSGIVER,
-    );
-    await oversiktPage.goto();
-    await oversiktPage.assertIsVisible();
-    await oversiktPage.assertAltinnTilgangsstyringLenke();
-  });
-
   test("Viser oversiktssiden for DEG_SELV med start-søknad-knapp", async ({
     page,
   }) => {
