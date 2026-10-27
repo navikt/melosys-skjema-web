@@ -422,6 +422,8 @@ export const nn = {
         "For å kunne fylle ut søknad på vegner av ein arbeidsgivar, må du ha fått delegert tilgang til verksemda i Altinn.",
       ingenArbeidsgivereLenke:
         "Les meir om korleis du får tilgang i Altinn (opnast i ny fane)",
+      ingenArbeidsgivereLenkeUrl:
+        "https://info.altinn.no/nn/hjelp/tilgangsstyring/",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod ein feil ved henting av arbeidsgivarar frå Altinn. Prøv igjen seinare.",
       feilVedHentingAvFullmakter:

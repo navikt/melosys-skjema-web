@@ -435,6 +435,8 @@ export const en = {
         "To submit an application on behalf of an employer, you must have been delegated authorizations by the company in Altinn",
       ingenArbeidsgivereLenke:
         "Read more about how to get access in Altinn (opens in a new tab)",
+      ingenArbeidsgivereLenkeUrl:
+        "https://info.altinn.no/en/help/access-managment/",
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
       feilVedHentingAvFullmakter:

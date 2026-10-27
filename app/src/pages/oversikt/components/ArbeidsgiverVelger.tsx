@@ -32,7 +32,7 @@ export function ArbeidsgiverVelger({
         </Heading>
         <p className="mb-4">{t("oversiktFelles.ingenArbeidsgivereInfo")}</p>
         <Link
-          href="https://info.altinn.no/hjelp/ny-tilgangsstyring/"
+          href={t("oversiktFelles.ingenArbeidsgivereLenkeUrl")}
           rel="noopener noreferrer"
           target="_blank"
         >
