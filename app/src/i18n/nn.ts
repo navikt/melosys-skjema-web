@@ -420,7 +420,8 @@ export const nn = {
       ingenArbeidsgivereTittel: "Du har ingen arbeidsgivarar tilgjengelege",
       ingenArbeidsgivereInfo:
         "For å kunne fylle ut søknad på vegner av ein arbeidsgivar, må du ha fått delegert tilgang til verksemda i Altinn.",
-      ingenArbeidsgivereLenke: "Les meir om korleis du får tilgang i Altinn",
+      ingenArbeidsgivereLenke:
+        "Les meir om korleis du får tilgang i Altinn (opnast i ny fane)",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod ein feil ved henting av arbeidsgivarar frå Altinn. Prøv igjen seinare.",
       feilVedHentingAvFullmakter:
