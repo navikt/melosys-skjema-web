@@ -206,6 +206,41 @@ test.describe("Utsendingsperiode og land", () => {
     await stegPage.assertFremgangsindikatorViserUkjenteSteg();
   });
 
+  test("AAREG-varsel annonseres som alert uten å flytte fokus", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    let svarPaAaregSjekk!: () => void;
+    // eslint-disable-next-line unicorn/prefer-promise-with-resolvers -- Promise.withResolvers er ikke tilgjengelig i prosjektets ES2023-typer.
+    const ventPaSvar = new Promise<void>((resolve) => {
+      svarPaAaregSjekk = resolve;
+    });
+    await page.route(
+      `/api/skjema/utsendt-arbeidstaker/${testStatsansattSkjema.id}/aareg-sjekk`,
+      async (route) => {
+        await ventPaSvar;
+        await route.fulfill({
+          json: { harArbeidsforhold: false },
+        });
+      },
+    );
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testStatsansattSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertAaregVarselIsNotVisible();
+    await stegPage.focusTilDato();
+    svarPaAaregSjekk();
+    await stegPage.assertAaregVarselBeholderFokus();
+  });
+
   test("MIDLERTIDIG MELOSYS-7694 viser AAREG-varsel og beholder vanlig navigasjon når statsansattflyten er av", async ({
     page,
   }) => {

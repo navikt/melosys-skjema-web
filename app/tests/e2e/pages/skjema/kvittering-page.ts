@@ -45,7 +45,9 @@ export class KvitteringPage {
       representasjonstype === Representasjonstype.DEG_SELV
         ? translations.aaregVarsel.ingenArbeidsforholdDu
         : translations.aaregVarsel.ingenArbeidsforhold;
-    await expect(this.page.getByText(varsel)).toBeVisible();
+    const alert = this.page.getByRole("alert");
+    await expect(alert).toContainText(varsel);
+    await expect(alert.getByRole("heading")).toBeVisible();
   }
 
   async assertInfoOversiktIsVisible() {

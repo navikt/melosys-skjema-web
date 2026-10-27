@@ -34,6 +34,7 @@ export class UtsendingsperiodeOgLandStegPage {
   readonly fraDatoInput: Locator;
   readonly tilDatoInput: Locator;
   readonly lagreOgFortsettButton: Locator;
+  readonly aaregAlert: Locator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
@@ -49,6 +50,7 @@ export class UtsendingsperiodeOgLandStegPage {
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: translations.felles.lagreOgFortsett,
     });
+    this.aaregAlert = page.getByRole("alert");
   }
 
   private preutfyltInfoboksTekst(
@@ -88,6 +90,23 @@ export class UtsendingsperiodeOgLandStegPage {
         ? translations.aaregVarsel.ingenArbeidsforholdDu
         : translations.aaregVarsel.ingenArbeidsforhold;
     await expect(this.page.getByText(varsel)).toBeVisible();
+  }
+
+  async assertAaregVarselIsNotVisible() {
+    await expect(this.aaregAlert).not.toBeAttached();
+  }
+
+  async focusTilDato() {
+    await this.tilDatoInput.focus();
+  }
+
+  async assertAaregVarselBeholderFokus() {
+    await this.assertAaregVarselIsVisible();
+    await expect(this.aaregAlert).toContainText(
+      translations.aaregVarsel.ingenArbeidsforholdDu,
+    );
+    await expect(this.aaregAlert.getByRole("heading")).toBeVisible();
+    await expect(this.tilDatoInput).toBeFocused();
   }
 
   async assertFremgangsindikatorViserUkjenteSteg() {

@@ -16,7 +16,7 @@ export function AaregVarsel({ representasjonstype }: AaregVarselProperties) {
   const { t } = useTranslation();
 
   return (
-    <InfoCard className="mt-4" data-color="warning">
+    <InfoCard className="mt-4" data-color="warning" role="alert">
       <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
         <InfoCard.Title>
           Arbeidsforhold er ikke registrert i Aa-registeret
