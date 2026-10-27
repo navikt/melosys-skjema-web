@@ -1,7 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { VALG_DIGITAL_ELLER_PAPIR_URL } from "~/pages/velgSituasjon/VelgSituasjonPage";
-
 import { translations as alleTranslations } from "../../utils/translations";
 
 const translations = alleTranslations.velgSituasjon;
@@ -50,7 +48,7 @@ export class VelgSituasjonPage {
     );
     await expect(this.gaTilbakeKnapp).toHaveAttribute(
       "href",
-      VALG_DIGITAL_ELLER_PAPIR_URL,
+      translations.gaTilbakeLenke,
     );
   }
 

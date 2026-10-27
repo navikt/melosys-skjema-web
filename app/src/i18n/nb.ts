@@ -276,6 +276,8 @@ export const nb = {
         "Du skal arbeide, eller oppholde deg uten å arbeide, i ett eller flere EØS-land eller Sveits.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital",
       gaTilbake: "Gå tilbake",
+      gaTilbakeLenke:
+        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos",
     },
     landingsside: {
       hei: "Hei",
