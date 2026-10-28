@@ -7,6 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
+import { periodeSchema } from "~/components/date/periodeSchema.ts";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
@@ -35,17 +36,6 @@ import { utsendingsperiodeOgLandSchema } from "./utsendingsperiodeOgLandStegSche
 
 // Date range constants for assignment period selection
 const YEARS_FORWARD_FROM_CURRENT = 100;
-const ISO_DATO = /^\d{4}-\d{2}-\d{2}$/;
-
-function erGyldigPeriode(fraDato?: string, tilDato?: string): boolean {
-  return (
-    !!fraDato &&
-    !!tilDato &&
-    ISO_DATO.test(fraDato) &&
-    ISO_DATO.test(tilDato) &&
-    fraDato <= tilDato
-  );
-}
 
 function UtsendingsperiodeOgLandStegContent({
   skjema,
@@ -91,9 +81,10 @@ function UtsendingsperiodeOgLandStegContent({
   const formTilDato = watch("utsendelsePeriode.tilDato");
   const formLand = watch("utsendelseLand");
 
-  const aaregPeriode = erGyldigPeriode(formFraDato, formTilDato)
-    ? { fraDato: formFraDato, tilDato: formTilDato }
-    : undefined;
+  const aaregPeriode = periodeSchema.safeParse({
+    fraDato: formFraDato,
+    tilDato: formTilDato,
+  }).data;
   const { data: aaregSjekk } = useQuery(
     getAaregSjekkQuery(skjema.id, aaregPeriode),
   );
