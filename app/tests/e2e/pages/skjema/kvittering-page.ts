@@ -40,12 +40,24 @@ export class KvitteringPage {
     await expect(this.melding).toBeVisible();
   }
 
-  async assertAaregVarselIsVisible(representasjonstype: Representasjonstype) {
-    const varsel =
+  async assertAaregVarselIsVisible({
+    representasjonstype,
+    arbeidsgiverNavn,
+    arbeidstakerNavn,
+  }: {
+    representasjonstype: Representasjonstype;
+    arbeidsgiverNavn: string;
+    arbeidstakerNavn: string;
+  }) {
+    const varsel = (
       representasjonstype === Representasjonstype.DEG_SELV
         ? translations.aaregVarsel.ingenArbeidsforholdDu
-        : translations.aaregVarsel.ingenArbeidsforhold;
+        : translations.aaregVarsel.ingenArbeidsforhold
+    )
+      .replaceAll("{{arbeidsgiverNavn}}", () => arbeidsgiverNavn)
+      .replaceAll("{{arbeidstakerNavn}}", () => arbeidstakerNavn);
     const alert = this.page.getByRole("alert");
+    await expect(alert).toContainText(translations.aaregVarsel.tittel);
     await expect(alert).toContainText(varsel);
     await expect(alert.getByRole("heading")).toBeVisible();
   }

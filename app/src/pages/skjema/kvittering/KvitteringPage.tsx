@@ -89,6 +89,8 @@ function KvitteringPageContent({
       <Alert variant="info">{t("kvittering.infoOversikt")}</Alert>
       {skjema.metadata.harArbeidsforholdIAareg === false && (
         <AaregVarsel
+          arbeidsgiverNavn={skjema.metadata.arbeidsgiverNavn}
+          arbeidstakerNavn={skjema.metadata.arbeidstakerNavn}
           representasjonstype={skjema.metadata.representasjonstype}
         />
       )}

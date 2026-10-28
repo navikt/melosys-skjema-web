@@ -68,6 +68,18 @@ export class UtsendingsperiodeOgLandStegPage {
       .replaceAll("{{tilDato}}", () => tilDato);
   }
 
+  private aaregVarselTekst() {
+    const { representasjonstype, arbeidsgiverNavn, arbeidstakerNavn } =
+      this.skjema.metadata;
+    const varsel =
+      representasjonstype === Representasjonstype.DEG_SELV
+        ? translations.aaregVarsel.ingenArbeidsforholdDu
+        : translations.aaregVarsel.ingenArbeidsforhold;
+    return varsel
+      .replaceAll("{{arbeidsgiverNavn}}", () => arbeidsgiverNavn)
+      .replaceAll("{{arbeidstakerNavn}}", () => arbeidstakerNavn);
+  }
+
   private fraDatoFieldWrapper() {
     return this.fraDatoInput.locator("..").locator("..");
   }
@@ -85,11 +97,10 @@ export class UtsendingsperiodeOgLandStegPage {
   }
 
   async assertAaregVarselIsVisible() {
-    const varsel =
-      this.skjema.metadata.representasjonstype === Representasjonstype.DEG_SELV
-        ? translations.aaregVarsel.ingenArbeidsforholdDu
-        : translations.aaregVarsel.ingenArbeidsforhold;
-    await expect(this.page.getByText(varsel)).toBeVisible();
+    await expect(this.page.getByText(this.aaregVarselTekst())).toBeVisible();
+    await expect(
+      this.aaregAlert.getByText(translations.aaregVarsel.tittel),
+    ).toBeVisible();
   }
 
   async assertAaregVarselIsNotVisible() {
@@ -102,9 +113,7 @@ export class UtsendingsperiodeOgLandStegPage {
 
   async assertAaregVarselBeholderFokus() {
     await this.assertAaregVarselIsVisible();
-    await expect(this.aaregAlert).toContainText(
-      translations.aaregVarsel.ingenArbeidsforholdDu,
-    );
+    await expect(this.aaregAlert).toContainText(this.aaregVarselTekst());
     await expect(this.aaregAlert.getByRole("heading")).toBeVisible();
     await expect(this.tilDatoInput).toBeFocused();
   }

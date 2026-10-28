@@ -262,10 +262,12 @@ export const en = {
         "You must answer whether the employee will work for the company in Norway after the posting period",
     },
     aaregVarsel: {
+      tittel:
+        "The employment relationship is not registered in the Employer and Employee Register (Aa register)",
       ingenArbeidsforhold:
-        "We could not find an employment relationship between the employee and the business in the Aa register for the entire posting period. The employment relationship must be updated through the a-melding.",
+        "{{arbeidstakerNavn}} is not registered as employed by {{arbeidsgiverNavn}} in the Aa register for the entire posting period. The employer must update the employment relationship in the a-melding.",
       ingenArbeidsforholdDu:
-        "We could not find an employment relationship between you and the business in the Aa register for the entire posting period. The employment relationship must be updated through the a-melding.",
+        "Your employment with {{arbeidsgiverNavn}} is not registered in the Aa register for the entire posting period. Your employer must update the information in the a-melding.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",

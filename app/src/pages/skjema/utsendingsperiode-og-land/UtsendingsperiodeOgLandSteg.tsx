@@ -257,6 +257,8 @@ function UtsendingsperiodeOgLandStegContent({
 
           {visAaregVarsel && (
             <AaregVarsel
+              arbeidsgiverNavn={skjema.metadata.arbeidsgiverNavn}
+              arbeidstakerNavn={skjema.metadata.arbeidstakerNavn}
               className="mt-4"
               representasjonstype={skjema.metadata.representasjonstype}
             />

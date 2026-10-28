@@ -256,10 +256,12 @@ export const nn = {
         "Du må svare på om arbeidstakaren vil arbeide for verksemda i Noreg etter oppdraget",
     },
     aaregVarsel: {
+      tittel:
+        "Arbeidsforholdet er ikkje registrert i Arbeidsgivar- og arbeidstakarregisteret (Aa-registeret)",
       ingenArbeidsforhold:
-        "Vi fann ikkje eit arbeidsforhold mellom arbeidstakaren og verksemda i Aa-registeret for heile utsendingsperioden. Arbeidsforholdet må oppdaterast via a-meldinga.",
+        "{{arbeidstakerNavn}} er ikkje registrert med eit arbeidsforhold hos {{arbeidsgiverNavn}} i Aa-registeret for heile utsendingsperioden. Arbeidsgivaren må oppdatere arbeidsforholdet i a-meldinga.",
       ingenArbeidsforholdDu:
-        "Vi fann ikkje eit arbeidsforhold mellom deg og verksemda i Aa-registeret for heile utsendingsperioden. Arbeidsforholdet må oppdaterast via a-meldinga.",
+        "Arbeidsforholdet ditt hos {{arbeidsgiverNavn}} er ikkje registrert i Aa-registeret for heile utsendingsperioden. Arbeidsgivaren din må oppdatere opplysningane i a-meldinga.",
     },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utsendingsperiode og land",

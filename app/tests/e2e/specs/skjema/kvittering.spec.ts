@@ -83,9 +83,7 @@ test.describe("Kvittering", () => {
 
     await kvitteringPage.goto();
     await kvitteringPage.assertIsVisible();
-    await kvitteringPage.assertAaregVarselIsVisible(
-      Representasjonstype.DEG_SELV,
-    );
+    await kvitteringPage.assertAaregVarselIsVisible(metadata);
   });
 
   test("MIDLERTIDIG MELOSYS-7694 viser AAREG-varsel også når statsansattflyten er av", async ({
@@ -105,9 +103,7 @@ test.describe("Kvittering", () => {
 
     await kvitteringPage.goto();
     await kvitteringPage.assertIsVisible();
-    await kvitteringPage.assertAaregVarselIsVisible(
-      Representasjonstype.DEG_SELV,
-    );
+    await kvitteringPage.assertAaregVarselIsVisible(metadata);
   });
 });
 import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";
