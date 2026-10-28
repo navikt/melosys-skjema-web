@@ -3,12 +3,6 @@ import { Button, Heading, LinkCard, VStack } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-/**
-nav.no sin mellomside med valget mellom digital innsending og papir.
-*/
-export const VALG_DIGITAL_ELLER_PAPIR_URL =
-  "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos";
-
 export function VelgSituasjonPage() {
   const { t } = useTranslation();
 
@@ -47,7 +41,7 @@ export function VelgSituasjonPage() {
       <div>
         <Button
           as="a"
-          href={VALG_DIGITAL_ELLER_PAPIR_URL}
+          href={t("velgSituasjon.gaTilbakeLenke")}
           icon={<ArrowLeftIcon aria-hidden />}
           variant="secondary"
         >

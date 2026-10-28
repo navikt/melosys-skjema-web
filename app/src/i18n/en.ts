@@ -284,6 +284,8 @@ export const en = {
         "You will work, or stay without working, in one or more EEA countries or Switzerland.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital&lang=en",
       gaTilbake: "Go back",
+      gaTilbakeLenke:
+        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos/en",
     },
     landingsside: {
       hei: "Hello",
@@ -382,7 +384,7 @@ export const en = {
         "Information about your employment relationships from Aa-registeret",
       personvernLinkText:
         "How we process your personal data (opens in a new tab).",
-      personvernLinkUrl: "https://www.nav.no/personvernerklaering",
+      personvernLinkUrl: "https://www.nav.no/personvernerklaering/en",
       intro:
         "It is important that you provide correct information so that we can process your application.",
       linkText:

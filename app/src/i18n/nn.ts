@@ -279,6 +279,8 @@ export const nn = {
       oppholdLenke:
         "https://www.nav.no/fyllut/nav020807?sub=digital&lang=nn-NO",
       gaTilbake: "Gå tilbake",
+      gaTilbakeLenke:
+        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos/nn",
     },
     landingsside: {
       hei: "Hei",
@@ -375,7 +377,7 @@ export const nn = {
         "Det er viktig at du gjev oss riktige opplysningar slik at vi kan behandle saka.",
       linkText:
         "Les meir om kor viktig det er å gje riktige opplysningar (opnast i ny fane).",
-      linkUrl: "https://www.nav.no/endringer",
+      linkUrl: "https://www.nav.no/endringer/nn",
       bekreftAtVilSvareRiktig:
         "Eg stadfestar at eg vil svare så riktig som eg kan",
       arbeidsgiverInfo:
