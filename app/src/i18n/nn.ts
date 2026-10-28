@@ -423,7 +423,7 @@ export const nn = {
       ingenArbeidsgivereLenke:
         "Les meir om korleis du får tilgang i Altinn (opnast i ny fane)",
       ingenArbeidsgivereLenkeUrl:
-        "https://info.altinn.no/nn/hjelp/tilgangsstyring/",
+        "https://info.altinn.no/hjelp/ny-tilgangsstyring/",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod ein feil ved henting av arbeidsgivarar frå Altinn. Prøv igjen seinare.",
       feilVedHentingAvFullmakter:
