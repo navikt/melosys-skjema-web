@@ -9,8 +9,6 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
-import { MOTPART_CTA } from "~/featuretoggle/toggleNavn.ts";
-import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
 import { getVentendeMotpartSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import {
   byggMotpartSoknad,
@@ -29,7 +27,7 @@ interface VentendeMotpartBannerProperties {
 
 /**
  * Oppfordring til arbeidstaker om å fylle ut sin del når arbeidsgiver allerede
- * har sendt inn sin. Vises kun for DEG_SELV og bak toggle `melosys.skjema.motpart-cta`.
+ * har sendt inn sin. Vises kun for DEG_SELV.
  *
  * Knappen sender brukeren rett til introsiden (/skjema/start) med arbeidsgiver,
  * arbeidstaker og prefyll fra arbeidsgivers del; utkastet opprettes etter bekreftelse.
@@ -37,20 +35,16 @@ interface VentendeMotpartBannerProperties {
 export function VentendeMotpartBanner({
   representasjonskontekst,
 }: VentendeMotpartBannerProperties) {
-  const ctaAktiv = useFeatureToggle(MOTPART_CTA) ?? false;
   const erDegSelv =
     representasjonskontekst.representasjonstype ===
     Representasjonstype.DEG_SELV;
 
   const { data } = useQuery({
     ...getVentendeMotpartSoknaderQuery(),
-    enabled: ctaAktiv && erDegSelv,
+    enabled: erDegSelv,
   });
 
-  return !ctaAktiv ||
-    !erDegSelv ||
-    !data ||
-    data.soknader.length === 0 ? null : (
+  return !erDegSelv || !data || data.soknader.length === 0 ? null : (
     <VStack gap="space-16">
       {data.soknader.map((soknad) => (
         <VentendeMotpartAlert key={soknad.skjemaId} soknad={soknad} />

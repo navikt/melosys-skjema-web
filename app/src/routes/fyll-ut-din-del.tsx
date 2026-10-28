@@ -19,8 +19,8 @@ const searchSchema = z.object({
 /**
  * Landingsside for varselet arbeidstaker får når arbeidsgiver har sendt inn sin del.
  * Venter delen fortsatt, går brukeren rett til introsiden som med «Fyll ut din del».
- * Ellers (påbegynt, innsendt, avsluttet, eller motpart-CTA-togglen er av) går brukeren
- * til oversikten med arbeidsgiver forhåndsutfylt, der eventuelle utkast vises.
+ * Ellers (påbegynt, innsendt eller avsluttet) går brukeren til oversikten med
+ * arbeidsgiver forhåndsutfylt, der eventuelle utkast vises.
  */
 export const Route = createFileRoute("/fyll-ut-din-del")({
   validateSearch: (search) => searchSchema.parse(search),
