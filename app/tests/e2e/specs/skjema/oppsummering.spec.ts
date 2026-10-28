@@ -6,6 +6,7 @@ import {
   ArbeidstakerensLonnDto,
   FamiliemedlemmerDto,
   FastEllerVekslendeArbeidssted,
+  PaLandDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
@@ -25,6 +26,7 @@ import {
   testArbeidstakerSkjema,
   testKombinertSkjema,
   testOrganization,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { OppsummeringStegPage } from "../../pages/skjema/oppsummering-steg.page";
@@ -348,6 +350,96 @@ test.describe("Oppsummering", () => {
 
       await oppsummeringStegPage.sendInnAndExpectPost();
       await oppsummeringStegPage.assertNavigatedToKvittering();
+    });
+  });
+
+  test.describe("Arbeidstaker - statsansatt", () => {
+    const arbeidssituasjonData: ArbeidssituasjonDto = {
+      skalJobbeForFlereVirksomheter: false,
+    };
+
+    const paLandData: PaLandDto = {
+      navnPaVirksomhet: "Ambassaden",
+      fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
+      fastArbeidssted: {
+        vegadresse: "Testveien",
+        nummer: "1",
+        postkode: "1234",
+        bySted: "Stockholm",
+      },
+    };
+
+    const arbeidsstedIUtlandetData: ArbeidsstedIUtlandetDto = {
+      arbeidsstedType: ArbeidsstedType.PA_LAND,
+      paLand: paLandData,
+    };
+
+    const skatteforholdOgInntektData: SkatteforholdOgInntektDto = {
+      erSkattepliktigTilNorgeIHeleutsendingsperioden: true,
+      mottarPengestotteFraAnnetEosLandEllerSveits: false,
+      arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: false,
+      virksomheterSomUtbetalerLonnOgNaturalytelser: {
+        norskeVirksomheter: [{ organisasjonsnummer: "987654321" }],
+      },
+    };
+
+    const familiemedlemmerData: FamiliemedlemmerDto = {
+      skalHaMedFamiliemedlemmer: false,
+    };
+
+    const tilleggsopplysningerData: TilleggsopplysningerDto = {
+      harFlereOpplysningerTilSoknaden: false,
+    };
+
+    test.beforeEach(async ({ page }) => {
+      await setupApiMocksForArbeidstaker(
+        page,
+        testStatsansattSkjema,
+        testUserInfo,
+      );
+    });
+
+    test("viser alle utfylte data fra tidligere steg og sender inn", async ({
+      page,
+    }) => {
+      await mockFetchSkjema(page, {
+        ...testStatsansattSkjema,
+        data: {
+          ...testStatsansattSkjema.data,
+          arbeidssituasjon: arbeidssituasjonData,
+          arbeidsstedIUtlandet: arbeidsstedIUtlandetData,
+          skatteforholdOgInntekt: skatteforholdOgInntektData,
+          familiemedlemmer: familiemedlemmerData,
+          tilleggsopplysninger: tilleggsopplysningerData,
+          vedlegg: { harAnnenDokumentasjon: false },
+        } as UtsendtArbeidstakerSkjemaDto["data"],
+      });
+
+      const oppsummeringPage = new OppsummeringStegPage(
+        page,
+        testStatsansattSkjema,
+      );
+
+      await oppsummeringPage.goto();
+      await oppsummeringPage.assertIsVisible();
+
+      await oppsummeringPage.assertArbeidssituasjonData(arbeidssituasjonData);
+      await oppsummeringPage.assertArbeidsstedPaLandArbeidstakerData(
+        paLandData,
+      );
+      await oppsummeringPage.assertEndreSvarLenkerHarHref([
+        `/skjema/${testStatsansattSkjema.id}/arbeidssted-i-utlandet`,
+      ]);
+      await oppsummeringPage.assertSkatteforholdOgInntektData(
+        skatteforholdOgInntektData,
+      );
+      await oppsummeringPage.assertFamiliemedlemmerData(familiemedlemmerData);
+      await oppsummeringPage.assertTilleggsopplysningerData(
+        tilleggsopplysningerData,
+      );
+
+      await oppsummeringPage.sendInnAndExpectPost();
+      await oppsummeringPage.assertNavigatedToKvittering();
     });
   });
 });
