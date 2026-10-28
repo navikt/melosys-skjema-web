@@ -292,6 +292,8 @@ export const nn = {
       oppholdLenke:
         "https://www.nav.no/fyllut/nav020807?sub=digital&lang=nn-NO",
       gaTilbake: "Gå tilbake",
+      gaTilbakeLenke:
+        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos/nn",
     },
     landingsside: {
       hei: "Hei",
@@ -388,7 +390,7 @@ export const nn = {
         "Det er viktig at du gjev oss riktige opplysningar slik at vi kan behandle saka.",
       linkText:
         "Les meir om kor viktig det er å gje riktige opplysningar (opnast i ny fane).",
-      linkUrl: "https://www.nav.no/endringer",
+      linkUrl: "https://www.nav.no/endringer/nn",
       bekreftAtVilSvareRiktig:
         "Eg stadfestar at eg vil svare så riktig som eg kan",
       arbeidsgiverInfo:
@@ -433,7 +435,10 @@ export const nn = {
       ingenArbeidsgivereTittel: "Du har ingen arbeidsgivarar tilgjengelege",
       ingenArbeidsgivereInfo:
         "For å kunne fylle ut søknad på vegner av ein arbeidsgivar, må du ha fått delegert tilgang til verksemda i Altinn.",
-      ingenArbeidsgivereLenke: "Les meir om korleis du får tilgang i Altinn",
+      ingenArbeidsgivereLenke:
+        "Les meir om korleis du får tilgang i Altinn (opnast i ny fane)",
+      ingenArbeidsgivereLenkeUrl:
+        "https://info.altinn.no/hjelp/ny-tilgangsstyring/",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod ein feil ved henting av arbeidsgivarar frå Altinn. Prøv igjen seinare.",
       feilVedHentingAvFullmakter:

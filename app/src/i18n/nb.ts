@@ -289,6 +289,8 @@ export const nb = {
         "Du skal arbeide, eller oppholde deg uten å arbeide, i ett eller flere EØS-land eller Sveits.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital",
       gaTilbake: "Gå tilbake",
+      gaTilbakeLenke:
+        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos",
     },
     landingsside: {
       hei: "Hei",
@@ -429,7 +431,10 @@ export const nb = {
       ingenArbeidsgivereTittel: "Du har ingen arbeidsgivere tilgjengelig",
       ingenArbeidsgivereInfo:
         "For å kunne fylle ut søknad på vegne av en arbeidsgiver, må du ha fått delegert tilgang til virksomheten i Altinn.",
-      ingenArbeidsgivereLenke: "Les mer om hvordan du får tilgang i Altinn",
+      ingenArbeidsgivereLenke:
+        "Les mer om hvordan du får tilgang i Altinn (åpnes i ny fane)",
+      ingenArbeidsgivereLenkeUrl:
+        "https://info.altinn.no/hjelp/ny-tilgangsstyring/",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
       feilVedHentingAvFullmakter:
