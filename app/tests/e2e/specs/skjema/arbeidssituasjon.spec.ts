@@ -149,6 +149,8 @@ test.describe("Arbeidssituasjon", () => {
     await arbeidssituasjonPage.leggTilUtenlandskVirksomhetMedAnsettelsesform({
       navn: "Swedish Corp AB",
       vegnavnOgHusnummer: "Drottninggatan 5",
+      postkode: "111 51",
+      byStedsnavn: "Stockholm",
       land: "SE",
       tilhorerSammeKonsern: true,
       ansettelsesformLabel:
@@ -166,8 +168,8 @@ test.describe("Arbeidssituasjon", () => {
             organisasjonsnummer: "",
             vegnavnOgHusnummer: "Drottninggatan 5",
             bygning: "",
-            postkode: "",
-            byStedsnavn: "",
+            postkode: "111 51",
+            byStedsnavn: "Stockholm",
             region: "",
             land: LandKode.SE,
             tilhorerSammeKonsern: true,

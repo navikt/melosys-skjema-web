@@ -7,6 +7,7 @@ import type {
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
+import { mockFetchSkjema } from "../../fixtures/api-mocks";
 import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
@@ -28,6 +29,11 @@ const feilmeldinger = {
   // Utenlandsk virksomhet modal
   navnPaVirksomhetErPakrevd: t.generellValidering.navnPaVirksomhetErPakrevd,
   vegnavnOgHusnummerErPakrevd: t.generellValidering.vegnavnOgHusnummerErPakrevd,
+  postkodeErPakrevd: t.generellValidering.postkodeErPakrevd,
+  byStedsnavnErPakrevd: t.generellValidering.byStedsnavnErPakrevd,
+  organisasjonsnummerErForLangt:
+    t.generellValidering
+      .organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn,
   landErPakrevd: t.generellValidering.landErPakrevd,
   duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
     t.generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern,
@@ -90,6 +96,18 @@ export class ArbeidstakerensLonnStegPage {
     await this.page.goto(`/skjema/${this.skjema.id}/arbeidstakerens-lonn`);
   }
 
+  async mockArbeidstakerensLonnData(
+    arbeidstakerensLonnData: ArbeidstakerensLonnDto,
+  ) {
+    await mockFetchSkjema(this.page, {
+      ...this.skjema,
+      data: {
+        ...this.skjema.data,
+        arbeidstakerensLonn: arbeidstakerensLonnData,
+      } as UtsendtArbeidstakerSkjemaDto["data"],
+    });
+  }
+
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
   }
@@ -126,6 +144,8 @@ export class ArbeidstakerensLonnStegPage {
   async leggTilUtenlandskVirksomhet(options: {
     navn: string;
     vegnavnOgHusnummer: string;
+    postkode: string;
+    byStedsnavn: string;
     land: string;
     tilhorerSammeKonsern: boolean;
   }) {
@@ -142,6 +162,12 @@ export class ArbeidstakerensLonnStegPage {
         t.utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks,
       )
       .fill(options.vegnavnOgHusnummer);
+    await dialog
+      .getByLabel(t.utenlandskeVirksomheterFormPart.postkode)
+      .fill(options.postkode);
+    await dialog
+      .getByLabel(t.utenlandskeVirksomheterFormPart.byStedsnavn)
+      .fill(options.byStedsnavn);
 
     await dialog
       .getByRole("combobox", {
@@ -246,6 +272,35 @@ export class ArbeidstakerensLonnStegPage {
     await dialog.getByRole("button", { name: t.felles.lagre }).click();
   }
 
+  /**
+   * Opens the "Legg til utenlandsk virksomhet" modal, fills the given text
+   * fields and clicks Lagre, leaving the modal open for validation assertions.
+   */
+  async fyllUtFelterOgLagreInUtenlandskVirksomhetModal(felter: {
+    navn?: string;
+    organisasjonsnummer?: string;
+    postkode?: string;
+    byStedsnavn?: string;
+  }) {
+    await this.leggTilUtenlandskVirksomhetButton.click();
+    const dialog = this.page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+
+    const labels = {
+      navn: t.utenlandskeVirksomheterFormPart.navnPaVirksomhet,
+      organisasjonsnummer:
+        t.utenlandskeVirksomheterFormPart
+          .organisasjonsnummerEllerRegistreringsnummerValgfritt,
+      postkode: t.utenlandskeVirksomheterFormPart.postkode,
+      byStedsnavn: t.utenlandskeVirksomheterFormPart.byStedsnavn,
+    };
+    for (const [felt, verdi] of Object.entries(felter)) {
+      await dialog.getByLabel(labels[felt as keyof typeof labels]).fill(verdi);
+    }
+
+    await dialog.getByRole("button", { name: t.felles.lagre }).click();
+  }
+
   async assertNavnPaVirksomhetErPakrevdIsVisible() {
     const dialog = this.page.getByRole("dialog");
     await expect(
@@ -260,6 +315,27 @@ export class ArbeidstakerensLonnStegPage {
     ).toBeVisible();
   }
 
+  async assertPostkodeErPakrevdIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(feilmeldinger.postkodeErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertByStedsnavnErPakrevdIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(feilmeldinger.byStedsnavnErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertOrganisasjonsnummerErForLangtIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(feilmeldinger.organisasjonsnummerErForLangt),
+    ).toBeVisible();
+  }
+
   async assertLandErPakrevdIsVisible() {
     const dialog = this.page.getByRole("dialog");
     await expect(dialog.getByText(feilmeldinger.landErPakrevd)).toBeVisible();
@@ -270,6 +346,15 @@ export class ArbeidstakerensLonnStegPage {
     await expect(
       dialog.getByText(
         feilmeldinger.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertUtenlandskVirksomhetManglerPakrevdeOpplysningerIsVisible() {
+    await expect(
+      this.page.getByText(
+        t.utenlandskeVirksomheterFormPart
+          .virksomhetenManglerPakrevdeOpplysninger,
       ),
     ).toBeVisible();
   }

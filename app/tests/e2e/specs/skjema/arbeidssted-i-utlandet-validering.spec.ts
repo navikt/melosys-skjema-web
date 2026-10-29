@@ -73,6 +73,20 @@ test.describe("Arbeidssted i utlandet - validering", () => {
       await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
       await stegPage.assertStillOnStep();
     });
+
+    test("viser feilmelding når navn på virksomhet bare inneholder mellomrom", async () => {
+      await stegPage.arbeidsstedTypeSelect.selectOption(
+        ArbeidsstedType.PA_LAND,
+      );
+      await stegPage.navnPaVirksomhetInput.fill(" ".repeat(3));
+      await stegPage.fastEllerVekslendeRadioGroup.VEKSLENDE.click();
+      await stegPage.erHjemmekontorRadioGroup.NEI.click();
+
+      await stegPage.lagreOgFortsett();
+
+      await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
+      await stegPage.assertStillOnStep();
+    });
   });
 
   test.describe("OFFSHORE", () => {
@@ -86,6 +100,22 @@ test.describe("Arbeidssted i utlandet - validering", () => {
       await stegPage.assertNavnPaInnretningErPakrevdIsVisible();
       await stegPage.assertDuMaVelgeTypeInnretningIsVisible();
       await stegPage.assertSokkelLandErPakrevdIsVisible();
+      await stegPage.assertStillOnStep();
+    });
+
+    test("viser feilmelding når navnefeltene bare inneholder mellomrom", async () => {
+      await stegPage.arbeidsstedTypeSelect.selectOption(
+        ArbeidsstedType.OFFSHORE,
+      );
+      await stegPage.navnPaVirksomhetInput.fill(" ".repeat(3));
+      await stegPage.navnPaInnretningInput.fill(" ".repeat(3));
+      await stegPage.typeInnretningRadioGroup.PLATTFORM.click();
+      await stegPage.sokkelLandSelect.selectOption("SE");
+
+      await stegPage.lagreOgFortsett();
+
+      await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
+      await stegPage.assertNavnPaInnretningErPakrevdIsVisible();
       await stegPage.assertStillOnStep();
     });
   });
@@ -133,6 +163,24 @@ test.describe("Arbeidssted i utlandet - validering", () => {
       await stegPage.assertTerritorialfarvannLandErPakrevdIsVisible();
       await stegPage.assertStillOnStep();
     });
+
+    test("viser feilmelding når tekstfeltene bare inneholder mellomrom", async () => {
+      await stegPage.arbeidsstedTypeSelect.selectOption(
+        ArbeidsstedType.PA_SKIP,
+      );
+      await stegPage.navnPaVirksomhetInput.fill(" ".repeat(3));
+      await stegPage.navnPaSkipInput.fill(" ".repeat(3));
+      await stegPage.yrketTilArbeidstakerInput.fill(" ".repeat(3));
+      await stegPage.seilerIRadioGroup.INTERNASJONALT.click();
+      await stegPage.flagglandSelect.selectOption("SE");
+
+      await stegPage.lagreOgFortsett();
+
+      await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
+      await stegPage.assertNavnPaSkipErPakrevdIsVisible();
+      await stegPage.assertYrketTilArbeidstakerErPakrevdIsVisible();
+      await stegPage.assertStillOnStep();
+    });
   });
 
   test.describe("OM_BORD_PA_FLY", () => {
@@ -162,6 +210,22 @@ test.describe("Arbeidssted i utlandet - validering", () => {
       await stegPage.assertHjemmebaseNavnErPakrevdIsVisible();
       await stegPage.assertVanligHjemmebaseLandErPakrevdIsVisible();
       await stegPage.assertVanligHjemmebaseNavnErPakrevdIsVisible();
+      await stegPage.assertStillOnStep();
+    });
+
+    test("viser feilmelding når navnefeltene bare inneholder mellomrom", async () => {
+      await stegPage.arbeidsstedTypeSelect.selectOption(
+        ArbeidsstedType.OM_BORD_PA_FLY,
+      );
+      await stegPage.navnPaVirksomhetInput.fill(" ".repeat(3));
+      await stegPage.hjemmebaseLandSelect.selectOption("SE");
+      await stegPage.hjemmebaseNavnInput.fill(" ".repeat(3));
+      await stegPage.erVanligHjemmebaseRadioGroup.JA.click();
+
+      await stegPage.lagreOgFortsett();
+
+      await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
+      await stegPage.assertHjemmebaseNavnErPakrevdIsVisible();
       await stegPage.assertStillOnStep();
     });
   });

@@ -1,3 +1,5 @@
+import { LandKode } from "~/types/melosysSkjemaTypes";
+
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
 import {
@@ -54,8 +56,60 @@ test.describe("Arbeidstakerens lønn - validering", () => {
 
     await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
     await stegPage.assertVegnavnOgHusnummerErPakrevdIsVisible();
+    await stegPage.assertPostkodeErPakrevdIsVisible();
+    await stegPage.assertByStedsnavnErPakrevdIsVisible();
     await stegPage.assertLandErPakrevdIsVisible();
     await stegPage.assertDuMaSvarePaOmVirksomhetenTilhorerSammeKonsernIsVisible();
     await stegPage.assertUtenlandskVirksomhetModalIsOpen();
+  });
+
+  test("viser feilmeldinger i utenlandsk virksomhet-modal når påkrevde felter bare inneholder mellomrom", async () => {
+    await stegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await stegPage.fyllUtFelterOgLagreInUtenlandskVirksomhetModal({
+      navn: " ".repeat(3),
+      postkode: " ".repeat(3),
+      byStedsnavn: " ".repeat(3),
+    });
+
+    await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
+    await stegPage.assertPostkodeErPakrevdIsVisible();
+    await stegPage.assertByStedsnavnErPakrevdIsVisible();
+    await stegPage.assertUtenlandskVirksomhetModalIsOpen();
+  });
+
+  test("viser feilmelding i utenlandsk virksomhet-modal når organisasjonsnummer er lengre enn 25 tegn", async () => {
+    await stegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await stegPage.fyllUtFelterOgLagreInUtenlandskVirksomhetModal({
+      organisasjonsnummer: "A".repeat(26),
+    });
+
+    await stegPage.assertOrganisasjonsnummerErForLangtIsVisible();
+    await stegPage.assertUtenlandskVirksomhetModalIsOpen();
+  });
+
+  test("viser feilmelding på lagret utenlandsk virksomhet som mangler påkrevde felter", async () => {
+    await stegPage.mockArbeidstakerensLonnData({
+      arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: false,
+      virksomheterSomUtbetalerLonnOgNaturalytelser: {
+        norskeVirksomheter: [],
+        utenlandskeVirksomheter: [
+          {
+            navn: "Foreign Corp AB",
+            vegnavnOgHusnummer: "Kungsgatan 10",
+            land: LandKode.SE,
+            tilhorerSammeKonsern: false,
+          },
+        ],
+      },
+    });
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+
+    await stegPage.lagreOgFortsett();
+
+    await stegPage.assertUtenlandskVirksomhetManglerPakrevdeOpplysningerIsVisible();
+    await stegPage.assertStillOnStep();
   });
 });

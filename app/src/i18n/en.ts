@@ -90,8 +90,10 @@ export const en = {
       vegnavnOgHusnummerEvtPostboks:
         "Street address and house number, or P.O. box",
       bygningValgfritt: "Building (optional)",
-      postkodeValgfritt: "Postal code (optional)",
-      byStednavnValgfritt: "City/place name (optional)",
+      postkode: "Postal code",
+      byStedsnavn: "City/place name",
+      virksomhetenManglerPakrevdeOpplysninger:
+        "The company is missing required information. Select “Edit” to fill it in.",
       regionValgfritt: "Region (optional)",
       land: "Country",
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
@@ -539,6 +541,10 @@ export const en = {
       navnPaVirksomhetErPakrevd: "Company name is required",
       vegnavnOgHusnummerErPakrevd:
         "Street address and house number are required",
+      postkodeErPakrevd: "Postal code is required",
+      byStedsnavnErPakrevd: "City/place name is required",
+      organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
+        "Organisation number or registration number cannot be longer than 25 characters",
       landErPakrevd: "Country is required",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "You must answer whether the company is part of the same corporate group",

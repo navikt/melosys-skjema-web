@@ -63,7 +63,7 @@ export function UtenlandskVirksomhetOppsummering({
       {virksomhet.postkode && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("utenlandskeVirksomheterFormPart.postkodeValgfritt")}
+            {t("utenlandskeVirksomheterFormPart.postkode")}
           </FormSummary.Label>
           <FormSummary.Value>{virksomhet.postkode}</FormSummary.Value>
         </FormSummary.Answer>
@@ -71,7 +71,7 @@ export function UtenlandskVirksomhetOppsummering({
       {virksomhet.byStedsnavn && (
         <FormSummary.Answer>
           <FormSummary.Label>
-            {t("utenlandskeVirksomheterFormPart.byStednavnValgfritt")}
+            {t("utenlandskeVirksomheterFormPart.byStedsnavn")}
           </FormSummary.Label>
           <FormSummary.Value>{virksomhet.byStedsnavn}</FormSummary.Value>
         </FormSummary.Answer>

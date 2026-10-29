@@ -88,8 +88,10 @@ export const nb = {
         "Organisasjonsnummer eller registreringsnummer (valgfritt)",
       vegnavnOgHusnummerEvtPostboks: "Vegnavn og husnummer, evt. postboks",
       bygningValgfritt: "Bygning (valgfritt)",
-      postkodeValgfritt: "Postkode (valgfritt)",
-      byStednavnValgfritt: "By/stedsnavn (valgfritt)",
+      postkode: "Postkode",
+      byStedsnavn: "By/stedsnavn",
+      virksomhetenManglerPakrevdeOpplysninger:
+        "Virksomheten mangler påkrevde opplysninger. Velg «Endre» for å fylle dem ut.",
       regionValgfritt: "Region (valgfritt)",
       land: "Land",
       tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
@@ -520,6 +522,10 @@ export const nb = {
       organisasjonsnummerMaVare9Siffer: "Organisasjonsnummer må være 9 siffer",
       navnPaVirksomhetErPakrevd: "Navn på virksomhet er påkrevd",
       vegnavnOgHusnummerErPakrevd: "Vegnavn og husnummer er påkrevd",
+      postkodeErPakrevd: "Postkode er påkrevd",
+      byStedsnavnErPakrevd: "By/stedsnavn er påkrevd",
+      organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
+        "Organisasjonsnummer eller registreringsnummer kan ikke være lengre enn 25 tegn",
       landErPakrevd: "Land er påkrevd",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "Du må svare på om virksomheten tilhører samme konsern",

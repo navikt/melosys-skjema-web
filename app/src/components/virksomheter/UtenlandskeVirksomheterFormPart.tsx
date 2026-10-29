@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
+  ErrorMessage,
   Label,
   Modal,
   Radio,
@@ -13,6 +14,7 @@ import { useState } from "react";
 import {
   Controller,
   FormProvider,
+  get,
   useFieldArray,
   useForm,
   useFormContext,
@@ -70,6 +72,7 @@ export function UtenlandskeVirksomheterFormPart({
   return (
     <>
       <ValgteUtenlandskeVirksomheter
+        fieldName={fieldName}
         remove={remove}
         update={update}
         virksomheter={fields as Array<UtenlandskVirksomhetField>}
@@ -101,6 +104,7 @@ export function UtenlandskeVirksomheterFormPart({
 }
 
 type ValgteUtenlandskeVirksomheterProperties = {
+  fieldName: string;
   virksomheter: Array<UtenlandskVirksomhetField>;
   update: (
     index: number,
@@ -110,11 +114,15 @@ type ValgteUtenlandskeVirksomheterProperties = {
 };
 
 function ValgteUtenlandskeVirksomheter({
+  fieldName,
   virksomheter,
   update,
   remove,
 }: ValgteUtenlandskeVirksomheterProperties) {
   const { t } = useTranslation();
+  const {
+    formState: { errors },
+  } = useFormContext();
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -145,6 +153,7 @@ function ValgteUtenlandskeVirksomheter({
         <Table.Body>
           {virksomheter.map((virksomhet, index) => (
             <UtenlandskVirksomhetRow
+              harFeil={!!get(errors, `${fieldName}.${index}`)}
               key={virksomhet.id}
               onEdit={() => openEditModal(index)}
               onRemove={() => remove(index)}
@@ -260,7 +269,7 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
 
           <TextField
             error={translateError(modalForm.formState.errors.postkode?.message)}
-            label={t("utenlandskeVirksomheterFormPart.postkodeValgfritt")}
+            label={t("utenlandskeVirksomheterFormPart.postkode")}
             style={{ maxWidth: "120px" }}
             {...modalForm.register("postkode")}
           />
@@ -269,7 +278,7 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
             error={translateError(
               modalForm.formState.errors.byStedsnavn?.message,
             )}
-            label={t("utenlandskeVirksomheterFormPart.byStednavnValgfritt")}
+            label={t("utenlandskeVirksomheterFormPart.byStedsnavn")}
             {...modalForm.register("byStedsnavn")}
           />
 
@@ -335,15 +344,19 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
 
 interface UtenlandskVirksomhetRowProperties {
   virksomhet: UtenlandskVirksomhetField;
+  harFeil: boolean;
   onRemove: () => void;
   onEdit: () => void;
 }
 
 function UtenlandskVirksomhetRow({
   virksomhet,
+  harFeil,
   onRemove,
   onEdit,
 }: UtenlandskVirksomhetRowProperties) {
+  const { t } = useTranslation();
+
   return (
     <Table.ExpandableRow
       content={
@@ -352,7 +365,16 @@ function UtenlandskVirksomhetRow({
         </div>
       }
     >
-      <Table.HeaderCell>{virksomhet.navn}</Table.HeaderCell>
+      <Table.HeaderCell>
+        {virksomhet.navn}
+        {harFeil && (
+          <ErrorMessage size="small">
+            {t(
+              "utenlandskeVirksomheterFormPart.virksomhetenManglerPakrevdeOpplysninger",
+            )}
+          </ErrorMessage>
+        )}
+      </Table.HeaderCell>
       <Table.DataCell>
         <EndreKnapp onClick={onEdit} size="small" />
         <FjernKnapp onClick={onRemove} size="small" />

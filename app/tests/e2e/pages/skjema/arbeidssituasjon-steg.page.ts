@@ -139,6 +139,8 @@ export class ArbeidssituasjonStegPage {
   async leggTilUtenlandskVirksomhetMedAnsettelsesform(options: {
     navn: string;
     vegnavnOgHusnummer: string;
+    postkode: string;
+    byStedsnavn: string;
     land: string;
     tilhorerSammeKonsern: boolean;
     ansettelsesformLabel: string;
@@ -156,6 +158,12 @@ export class ArbeidssituasjonStegPage {
         t.utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks,
       )
       .fill(options.vegnavnOgHusnummer);
+    await dialog
+      .getByLabel(t.utenlandskeVirksomheterFormPart.postkode)
+      .fill(options.postkode);
+    await dialog
+      .getByLabel(t.utenlandskeVirksomheterFormPart.byStedsnavn)
+      .fill(options.byStedsnavn);
 
     await dialog
       .getByRole("combobox", {
