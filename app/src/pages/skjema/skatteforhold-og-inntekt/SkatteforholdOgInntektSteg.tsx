@@ -80,7 +80,7 @@ function SkatteforholdOgInntektStegContent({
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidstakerSkjemaQuery = useInvalidateSkjemaQuery();
-  const { getFelt } = useSkjemaDefinisjon();
+  const { getFelt, getSeksjon } = useSkjemaDefinisjon();
 
   const erSkattepliktigFelt = getFelt(
     "skatteforholdOgInntekt",
@@ -119,10 +119,8 @@ function SkatteforholdOgInntektStegContent({
     "skatteforholdOgInntekt",
     "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
   );
-  const virksomheterSomUtbetalerLonnFelt = getFelt(
-    "skatteforholdOgInntekt",
-    "virksomheterSomUtbetalerLonnOgNaturalytelser",
-  );
+  const virksomheterSomUtbetalerLonnFelt = getSeksjon("skatteforholdOgInntekt")
+    .felter.virksomheterSomUtbetalerLonnOgNaturalytelser;
 
   const inntektKildeAlternativer = (
     inntektKildeFelt as CheckboxGruppeFeltDefinisjon
@@ -264,9 +262,8 @@ function SkatteforholdOgInntektStegContent({
 
               {arbeidsgiverBetalerAllLonn === false && (
                 <NorskeOgUtenlandskeVirksomheterFormPart
-                  description={virksomheterSomUtbetalerLonnFelt.hjelpetekst}
+                  definisjon={virksomheterSomUtbetalerLonnFelt}
                   fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
-                  label={virksomheterSomUtbetalerLonnFelt.label}
                 />
               )}
             </>

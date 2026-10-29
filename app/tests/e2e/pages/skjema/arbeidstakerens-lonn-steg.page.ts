@@ -15,6 +15,9 @@ const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
 const felter = arbeidstakerensLonn.felter;
 const t = translations;
 
+const virksomhetFelter =
+  felter.virksomheterSomUtbetalerLonnOgNaturalytelser.elementDefinisjon;
+
 // Feilmeldinger
 const feilmeldinger = {
   duMaSvarePaOmDuBetalerAllLonn:
@@ -124,7 +127,7 @@ export class ArbeidstakerensLonnStegPage {
     await expect(dialog).toBeVisible();
 
     await dialog
-      .getByLabel(t.norskeVirksomheterFormPart.organisasjonsnummer)
+      .getByLabel(virksomhetFelter.organisasjonsnummer.label)
       .fill(orgnr);
 
     // OrganisasjonSoker auto-searches when 9 digits are typed — wait for result
@@ -154,30 +157,25 @@ export class ArbeidstakerensLonnStegPage {
     const dialog = this.page.getByRole("dialog");
     await expect(dialog).toBeVisible();
 
+    await dialog.getByLabel(virksomhetFelter.navn.label).fill(options.navn);
     await dialog
-      .getByLabel(t.utenlandskeVirksomheterFormPart.navnPaVirksomhet)
-      .fill(options.navn);
-    await dialog
-      .getByLabel(
-        t.utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks,
-      )
+      .getByLabel(virksomhetFelter.vegnavnOgHusnummer.label)
       .fill(options.vegnavnOgHusnummer);
     await dialog
-      .getByLabel(t.utenlandskeVirksomheterFormPart.postkode)
+      .getByLabel(virksomhetFelter.postkode.label)
       .fill(options.postkode);
     await dialog
-      .getByLabel(t.utenlandskeVirksomheterFormPart.byStedsnavn)
+      .getByLabel(virksomhetFelter.byStedsnavn.label)
       .fill(options.byStedsnavn);
 
     await dialog
       .getByRole("combobox", {
-        name: t.utenlandskeVirksomheterFormPart.land,
+        name: virksomhetFelter.land.label,
       })
       .selectOption(options.land);
 
     const konsernGroup = dialog.getByRole("radiogroup", {
-      name: t.utenlandskeVirksomheterFormPart
-        .tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren,
+      name: virksomhetFelter.tilhorerSammeKonsern.label,
     });
     await (options.tilhorerSammeKonsern
       ? konsernGroup.getByRole("radio", { name: t.felles.ja }).click()
@@ -287,12 +285,10 @@ export class ArbeidstakerensLonnStegPage {
     await expect(dialog).toBeVisible();
 
     const labels = {
-      navn: t.utenlandskeVirksomheterFormPart.navnPaVirksomhet,
-      organisasjonsnummer:
-        t.utenlandskeVirksomheterFormPart
-          .organisasjonsnummerEllerRegistreringsnummerValgfritt,
-      postkode: t.utenlandskeVirksomheterFormPart.postkode,
-      byStedsnavn: t.utenlandskeVirksomheterFormPart.byStedsnavn,
+      navn: virksomhetFelter.navn.label,
+      organisasjonsnummer: virksomhetFelter.organisasjonsnummerUtenlandsk.label,
+      postkode: virksomhetFelter.postkode.label,
+      byStedsnavn: virksomhetFelter.byStedsnavn.label,
     };
     for (const [felt, verdi] of Object.entries(felter)) {
       await dialog.getByLabel(labels[felt as keyof typeof labels]).fill(verdi);

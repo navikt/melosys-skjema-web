@@ -78,10 +78,11 @@ function flattenVirksomheter(
     }),
   );
   const utenlandskeVirksomheter = virksomheter.utenlandskeVirksomheter ?? [];
-  for (const v of utenlandskeVirksomheter) {
+  for (const { organisasjonsnummer, ...v } of utenlandskeVirksomheter) {
     result.push({
       __type: VirksomhetTypeKey.UTENLANDSK,
-      ...(v as unknown as Record<string, unknown>),
+      ...v,
+      organisasjonsnummerUtenlandsk: organisasjonsnummer,
     });
   }
 

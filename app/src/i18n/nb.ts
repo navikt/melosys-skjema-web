@@ -1,6 +1,7 @@
 export const nb = {
   translation: {
     felles: {
+      valgfritt: "(valgfritt)",
       laster: "Laster...",
       feil: "Det oppstod en feil",
       feilVedLastingAvSkjema: "Feil ved lasting av skjema",
@@ -74,7 +75,6 @@ export const nb = {
     norskeVirksomheterFormPart: {
       norskVirksomhet: "Norsk virksomhet",
       norskeVirksomheter: "Norske virksomheter",
-      organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk virksomhet",
       endreNorskVirksomhet: "Endre norsk virksomhet",
       kunneIkkeFInneOrganisasjon:
@@ -83,25 +83,10 @@ export const nb = {
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",
       utenlandskeVirksomheter: "Utenlandske virksomheter",
-      navnPaVirksomhet: "Navn på virksomhet",
-      organisasjonsnummerEllerRegistreringsnummerValgfritt:
-        "Organisasjonsnummer eller registreringsnummer (valgfritt)",
-      vegnavnOgHusnummerEvtPostboks: "Vegnavn og husnummer, evt. postboks",
-      bygningValgfritt: "Bygning (valgfritt)",
-      postkode: "Postkode",
-      byStedsnavn: "By/stedsnavn",
       virksomhetenManglerPakrevdeOpplysninger:
         "Virksomheten mangler påkrevde opplysninger. Velg «Endre» for å fylle dem ut.",
-      regionValgfritt: "Region (valgfritt)",
-      land: "Land",
-      tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
-        "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
       endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
-      ansettelsesform: "Hva jobber du som i denne virksomheten?",
-      arbeidstakerEllerFrilanser: "Arbeidstaker eller frilanser",
-      selvstendigNaeringsdrivende: "Selvstendig næringsdrivende",
-      statsansatt: "Statsansatt",
     },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmer",
