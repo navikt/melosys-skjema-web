@@ -296,8 +296,4 @@ export class UtenlandsoppdragetStegPage {
       this.page.getByText(feilmeldinger.periodeErPakrevd).first(),
     ).toBeVisible();
   }
-
-  async assertIngenRegisterinfoboks() {
-    await expect(this.page.getByRole("alert")).toHaveCount(0);
-  }
 }

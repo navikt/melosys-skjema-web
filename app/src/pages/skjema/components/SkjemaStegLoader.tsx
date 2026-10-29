@@ -4,7 +4,11 @@ import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { StegKey } from "~/constants/stegKeys.ts";
-import { FeilSkjemaVersjonError } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn.ts";
+import {
+  FeilSkjemaVersjonError,
+  getFeatureTogglesQuery,
+} from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { getStegRekkefolge } from "~/pages/skjema/stegRekkefølge.ts";
 import {
   Skjemadel,
@@ -27,9 +31,15 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   stepKey,
 }: SkjemaStegLoaderProperties<T>) {
   const { data: skjema, isLoading, error } = useQuery(skjemaQuery(id));
+  // MIDLERTIDIG MELOSYS-7694: vent på togglevalget før steg og validering bestemmes.
+  const {
+    data: toggles,
+    isPending: togglesLaster,
+    error: toggleFeil,
+  } = useQuery(getFeatureTogglesQuery());
   const { t } = useTranslation();
 
-  if (isLoading) {
+  if (isLoading || togglesLaster) {
     return (
       <HStack style={{ gap: "var(--a-spacing-2)" }}>
         <Loader />
@@ -42,7 +52,7 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
     return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
   }
 
-  if (error) {
+  if (error || toggleFeil || typeof toggles?.[STATSANSATT_FLYT] !== "boolean") {
     return <ErrorMessage>{t("felles.feilVedLastingAvSkjema")}</ErrorMessage>;
   }
 
@@ -57,12 +67,9 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
     return <ErrorMessage>{t("felles.stegIkkeTilgjengelig")}</ErrorMessage>;
   }
 
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = getStegRekkefolge(skjema, toggles[STATSANSATT_FLYT]);
   if (stepKey && stegRekkefolge.every(({ key }) => key !== stepKey)) {
-    const nesteSteg =
-      stegRekkefolge.find(({ key }) => key === StegKey.UTENLANDSOPPDRAGET) ??
-      stegRekkefolge[0];
-    return <Navigate params={{ id }} to={nesteSteg!.route} replace />;
+    return <Navigate params={{ id }} to={stegRekkefolge[0]!.route} replace />;
   }
 
   return (

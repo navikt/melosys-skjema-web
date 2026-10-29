@@ -28,7 +28,7 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getArbeidsgiverensVirksomhetINorge } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
 import {
   ANDELFELTER,
   ANTALLFELTER,
@@ -51,7 +51,7 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getArbeidsgiverensVirksomhetINorge(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();

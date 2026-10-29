@@ -8,6 +8,7 @@ import type {
   ArbeidstakerensLonnDto,
   FamiliemedlemmerDto,
   NorskeOgUtenlandskeVirksomheter,
+  PaLandDto,
   SkatteforholdOgInntektDto,
   TilleggsopplysningerDto,
   UtenlandsoppdragetDto,
@@ -26,6 +27,8 @@ const utenlandsoppdraget =
 const arbeidsstedIUtlandet =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet;
 const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
+const paLandArbeidstakerFelter =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLandArbeidstaker.felter;
 const arbeidstakerensLonn = SKJEMA_DEFINISJON_A1.seksjoner.arbeidstakerensLonn;
 const utsendingsperiodeOgLand =
   SKJEMA_DEFINISJON_A1.seksjoner.utsendingsperiodeOgLand;
@@ -327,16 +330,35 @@ export class OppsummeringStegPage {
     ).toHaveText(formatDato(data.utsendelsePeriode.tilDato, E2E_SPRAK));
   }
 
-  async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {
+  async assertArbeidsstedPaLandArbeidstakerData(paLand: PaLandDto) {
     await expect(
       this.page.locator(
-        `dt:has-text("${arbeidssituasjon.felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label}") + dd`,
+        `dt:has-text("${paLandArbeidstakerFelter.navnPaVirksomhet.label}") + dd`,
       ),
-    ).toHaveText(
-      data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
-        ? translations.felles.ja
-        : translations.felles.nei,
+    ).toHaveText(paLand.navnPaVirksomhet);
+
+    if (paLand.fastArbeidssted) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${paLandArbeidstakerFelter.vegadresse.label}") + dd`,
+        ),
+      ).toHaveText(paLand.fastArbeidssted.vegadresse);
+    }
+  }
+
+  async assertArbeidssituasjonData(data: ArbeidssituasjonDto) {
+    const harVaertILonnetArbeid = this.page.locator(
+      `dt:has-text("${arbeidssituasjon.felter.harVaertEllerSkalVaereILonnetArbeidFoerUtsending.label}") + dd`,
     );
+    if (data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending === undefined) {
+      await expect(harVaertILonnetArbeid).toHaveCount(0);
+    } else {
+      await expect(harVaertILonnetArbeid).toHaveText(
+        data.harVaertEllerSkalVaereILonnetArbeidFoerUtsending
+          ? translations.felles.ja
+          : translations.felles.nei,
+      );
+    }
 
     if (data.aktivitetIMaanedenFoerUtsendingen !== undefined) {
       await expect(
@@ -375,6 +397,27 @@ export class OppsummeringStegPage {
         ? translations.felles.ja
         : translations.felles.nei,
     );
+
+    if (
+      data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden !==
+      undefined
+    ) {
+      await expect(
+        this.page.locator(
+          `dt:has-text("${skatteforholdOgInntekt.felter.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden.label}") + dd`,
+        ),
+      ).toHaveText(
+        data.arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden
+          ? translations.felles.ja
+          : translations.felles.nei,
+      );
+    }
+
+    if (data.virksomheterSomUtbetalerLonnOgNaturalytelser !== undefined) {
+      await this.assertVirksomheterSomUtbetalerLonnOgNaturalytelser(
+        data.virksomheterSomUtbetalerLonnOgNaturalytelser,
+      );
+    }
 
     if (data.landSomUtbetalerPengestotte !== undefined) {
       await expect(

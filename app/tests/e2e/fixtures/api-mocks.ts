@@ -367,6 +367,7 @@ export async function setupApiMocksForArbeidstaker(
   await mockFetchSkjema(page, skjema);
   await mockPostArbeidssituasjon(page, skjema.id);
   await mockPostUtsendingsperiodeOgLand(page, skjema.id);
+  await mockPostArbeidsstedIUtlandet(page, skjema.id);
   await mockGetEregOrganisasjon(page);
   await mockGetEregOrganisasjonMedJuridiskEnhet(page);
   await mockPostFamiliemedlemmer(page, skjema.id);
@@ -772,6 +773,23 @@ export async function mockFetchSkjemaVersjonskonflikt(
             }),
           })
         : route.fallback());
+    },
+  );
+}
+
+export async function mockAaregSjekk(
+  page: Page,
+  skjemaId: string,
+  harArbeidsforhold: boolean,
+) {
+  await page.route(
+    `/api/skjema/utsendt-arbeidstaker/${skjemaId}/aareg-sjekk`,
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ harArbeidsforhold }),
+      });
     },
   );
 }

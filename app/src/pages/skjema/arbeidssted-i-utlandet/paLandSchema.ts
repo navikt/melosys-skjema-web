@@ -12,96 +12,87 @@ const fastArbeidsstedSchema = z.object({
   bySted: z.string().optional(),
 });
 
-export const paLandSchema = z.object({
-  arbeidsstedType: z.literal(ArbeidsstedType.PA_LAND),
-  paLand: z
-    .object({
-      navnPaVirksomhet: z
-        .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
-        .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
-      fastEllerVekslendeArbeidssted: z.enum(FastEllerVekslendeArbeidssted, {
-        error: "arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende",
-      }),
-      // FAST fields
-      fastArbeidssted: fastArbeidsstedSchema.optional(),
-      erHjemmekontor: z.boolean({
-        error: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
-      }),
-    })
-    .refine(
-      (data) =>
-        data.fastEllerVekslendeArbeidssted !==
-          FastEllerVekslendeArbeidssted.FAST ||
-        !!data.fastArbeidssted?.vegadresse?.trim(),
-      {
-        message: "arbeidsstedIUtlandetSteg.vegadresseErPakrevd",
-        path: ["fastArbeidssted", "vegadresse"],
-        when: () => true,
-      },
-    )
-    .refine(
-      (data) =>
-        data.fastEllerVekslendeArbeidssted !==
-          FastEllerVekslendeArbeidssted.FAST ||
-        !!data.fastArbeidssted?.nummer?.trim(),
-      {
-        message: "arbeidsstedIUtlandetSteg.nummerErPakrevd",
-        path: ["fastArbeidssted", "nummer"],
-        when: () => true,
-      },
-    )
-    .refine(
-      (data) =>
-        data.fastEllerVekslendeArbeidssted !==
-          FastEllerVekslendeArbeidssted.FAST ||
-        !!data.fastArbeidssted?.postkode?.trim(),
-      {
-        message: "arbeidsstedIUtlandetSteg.postkodeErPakrevd",
-        path: ["fastArbeidssted", "postkode"],
-        when: () => true,
-      },
-    )
-    .refine(
-      (data) =>
-        data.fastEllerVekslendeArbeidssted !==
-          FastEllerVekslendeArbeidssted.FAST ||
-        !!data.fastArbeidssted?.bySted?.trim(),
-      {
-        message: "arbeidsstedIUtlandetSteg.byStedErPakrevd",
-        path: ["fastArbeidssted", "bySted"],
-        when: () => true,
-      },
-    )
-    .refine(
-      (data) =>
-        data.fastEllerVekslendeArbeidssted !==
-          FastEllerVekslendeArbeidssted.FAST ||
-        data.erHjemmekontor !== undefined,
-      {
+/**
+ * Flyten for statlig arbeidsgiver utelater hjemmekontorspørsmålet.
+ * Derfor er svaret valgfritt i typen og fjernes når spørsmålet ikke stilles.
+ */
+export const lagPaLandSchema = ({
+  medHjemmekontor,
+}: {
+  medHjemmekontor: boolean;
+}) =>
+  z.object({
+    arbeidsstedType: z.literal(ArbeidsstedType.PA_LAND),
+    paLand: z
+      .object({
+        navnPaVirksomhet: z
+          .string({
+            error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd",
+          })
+          .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
+        fastEllerVekslendeArbeidssted: z.enum(FastEllerVekslendeArbeidssted, {
+          error: "arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende",
+        }),
+        fastArbeidssted: fastArbeidsstedSchema.optional(),
+        erHjemmekontor: z.boolean().optional(),
+      })
+      .refine(
+        (data) =>
+          data.fastEllerVekslendeArbeidssted !==
+            FastEllerVekslendeArbeidssted.FAST ||
+          !!data.fastArbeidssted?.vegadresse?.trim(),
+        {
+          message: "arbeidsstedIUtlandetSteg.vegadresseErPakrevd",
+          path: ["fastArbeidssted", "vegadresse"],
+          when: () => true,
+        },
+      )
+      .refine(
+        (data) =>
+          data.fastEllerVekslendeArbeidssted !==
+            FastEllerVekslendeArbeidssted.FAST ||
+          !!data.fastArbeidssted?.nummer?.trim(),
+        {
+          message: "arbeidsstedIUtlandetSteg.nummerErPakrevd",
+          path: ["fastArbeidssted", "nummer"],
+          when: () => true,
+        },
+      )
+      .refine(
+        (data) =>
+          data.fastEllerVekslendeArbeidssted !==
+            FastEllerVekslendeArbeidssted.FAST ||
+          !!data.fastArbeidssted?.postkode?.trim(),
+        {
+          message: "arbeidsstedIUtlandetSteg.postkodeErPakrevd",
+          path: ["fastArbeidssted", "postkode"],
+          when: () => true,
+        },
+      )
+      .refine(
+        (data) =>
+          data.fastEllerVekslendeArbeidssted !==
+            FastEllerVekslendeArbeidssted.FAST ||
+          !!data.fastArbeidssted?.bySted?.trim(),
+        {
+          message: "arbeidsstedIUtlandetSteg.byStedErPakrevd",
+          path: ["fastArbeidssted", "bySted"],
+          when: () => true,
+        },
+      )
+      .refine((data) => !medHjemmekontor || data.erHjemmekontor !== undefined, {
         message: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
         path: ["erHjemmekontor"],
         when: () => true,
-      },
-    )
-    .refine(
-      (data) =>
-        data.fastEllerVekslendeArbeidssted !==
-          FastEllerVekslendeArbeidssted.VEKSLENDE ||
-        data.erHjemmekontor !== undefined,
-      {
-        message: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErHjemmekontor",
-        path: ["erHjemmekontor"],
-        when: () => true,
-      },
-    )
-    .transform((data) => ({
-      ...data,
-      // Clear FAST fields when VEKSLENDE
-      fastArbeidssted:
-        data.fastEllerVekslendeArbeidssted ===
-        FastEllerVekslendeArbeidssted.FAST
-          ? data.fastArbeidssted
-          : undefined,
-    }))
-    .optional(),
-});
+      })
+      .transform((data) => ({
+        ...data,
+        fastArbeidssted:
+          data.fastEllerVekslendeArbeidssted ===
+          FastEllerVekslendeArbeidssted.FAST
+            ? data.fastArbeidssted
+            : undefined,
+        erHjemmekontor: medHjemmekontor ? data.erHjemmekontor : undefined,
+      }))
+      .optional(),
+  });

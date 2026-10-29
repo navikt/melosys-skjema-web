@@ -1,3 +1,4 @@
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";
 import {
   ArbeidsstedIUtlandetDto,
   ArbeidsstedType,
@@ -7,11 +8,17 @@ import {
   TypeInnretning,
 } from "~/types/melosysSkjemaTypes";
 
-import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
+import {
+  mockFeatureToggles,
+  setupApiMocksForArbeidsgiver,
+  setupApiMocksForArbeidstaker,
+} from "../../fixtures/api-mocks";
 import { expect, test } from "../../fixtures/test";
 import {
   testArbeidsgiverSkjema,
   testOrganization,
+  testStatligArbeidsgiverSkjema,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { ArbeidsstedIUtlandetStegPage } from "../../pages/skjema/arbeidssted-i-utlandet-steg.page";
@@ -61,6 +68,29 @@ test.describe("Arbeidssted i utlandet", () => {
       [testOrganization],
       testUserInfo,
     );
+  });
+
+  test("MIDLERTIDIG MELOSYS-7694 statlig arbeidsgiver får vanlig arbeidssted når togglen er av", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, { [STATSANSATT_FLYT]: false });
+    await setupApiMocksForArbeidsgiver(
+      page,
+      testStatligArbeidsgiverSkjema,
+      [testOrganization],
+      testUserInfo,
+    );
+    const stegPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testStatligArbeidsgiverSkjema,
+    );
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await expect(stegPage.arbeidsstedTypeSelect).toBeVisible();
+    await stegPage.arbeidsstedTypeSelect.selectOption(ArbeidsstedType.PA_LAND);
+    await expect(stegPage.erHjemmekontorRadioGroup.JA).toBeVisible();
+    await expect(stegPage.erHjemmekontorRadioGroup.NEI).toBeVisible();
   });
 
   test("happy case - PA_LAND med fast arbeidssted", async ({ page }) => {
@@ -572,5 +602,86 @@ test.describe("Arbeidssted i utlandet", () => {
         expectedTransformedData,
       );
     });
+  });
+});
+
+const arbeidsstedForStatsansattPaLand: ArbeidsstedIUtlandetDto = {
+  arbeidsstedType: ArbeidsstedType.PA_LAND,
+  paLand: {
+    navnPaVirksomhet: "Test Virksomhet AS",
+    fastEllerVekslendeArbeidssted: FastEllerVekslendeArbeidssted.FAST,
+    fastArbeidssted: {
+      vegadresse: "Storgata",
+      nummer: "1",
+      postkode: "0123",
+      bySted: "Stockholm",
+    },
+  },
+};
+
+async function fyllUtArbeidsstedForStatsansatt(
+  arbeidsstedPage: ArbeidsstedIUtlandetStegPage,
+) {
+  await arbeidsstedPage.navnPaVirksomhetInput.fill("Test Virksomhet AS");
+  await arbeidsstedPage.fastEllerVekslendeRadioGroup.FAST.click();
+  await arbeidsstedPage.vegadresseInput.fill("Storgata");
+  await arbeidsstedPage.nummerInput.fill("1");
+  await arbeidsstedPage.postkodeInput.fill("0123");
+  await arbeidsstedPage.byStedInput.fill("Stockholm");
+}
+
+test.describe("Arbeidssted i utlandet - statlig arbeidsgiver", () => {
+  test("viser bare arbeidssted på land, uten hjemmekontor", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidsgiver(
+      page,
+      testStatligArbeidsgiverSkjema,
+      [testOrganization],
+      testUserInfo,
+    );
+    const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testStatligArbeidsgiverSkjema,
+    );
+
+    await arbeidsstedPage.goto();
+    await arbeidsstedPage.assertIsVisible();
+    await arbeidsstedPage.assertArbeidsstedTypeSelectIsHidden();
+
+    await fyllUtArbeidsstedForStatsansatt(arbeidsstedPage);
+    await arbeidsstedPage.assertErHjemmekontorIsHidden();
+
+    await arbeidsstedPage.lagreOgFortsettAndExpectPayload(
+      arbeidsstedForStatsansattPaLand,
+    );
+    await arbeidsstedPage.assertNavigatedToNextStep();
+  });
+
+  test("statsansatt som sender først oppgir arbeidssted selv", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    const arbeidsstedPage = new ArbeidsstedIUtlandetStegPage(
+      page,
+      testStatsansattSkjema,
+      { erArbeidstaker: true },
+    );
+
+    await arbeidsstedPage.goto();
+    await arbeidsstedPage.assertIsVisible();
+    await arbeidsstedPage.assertArbeidsstedTypeSelectIsHidden();
+
+    await fyllUtArbeidsstedForStatsansatt(arbeidsstedPage);
+    await arbeidsstedPage.assertErHjemmekontorIsHidden();
+
+    await arbeidsstedPage.lagreOgFortsettAndExpectPayload(
+      arbeidsstedForStatsansattPaLand,
+    );
+    await arbeidsstedPage.assertNavigatedToNextStep();
   });
 });

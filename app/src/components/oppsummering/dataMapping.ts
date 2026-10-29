@@ -17,7 +17,10 @@ import type {
   UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
   UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
 } from "~/types/melosysSkjemaTypes.ts";
-import { FastEllerVekslendeArbeidssted } from "~/types/melosysSkjemaTypes.ts";
+import {
+  ArbeidsstedType,
+  FastEllerVekslendeArbeidssted,
+} from "~/types/melosysSkjemaTypes.ts";
 
 interface ResolvedSeksjon {
   seksjonNavn: string;
@@ -130,9 +133,28 @@ function mapArbeidstakerSeksjoner(
         : undefined,
     },
     {
+      seksjonNavn: "arbeidsstedPaLandArbeidstaker",
+      stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
+      data: flattenPaLand(
+        dto.arbeidsstedIUtlandet?.paLand,
+        dto.utsendingsperiodeOgLand?.utsendelseLand,
+      ),
+    },
+    {
       seksjonNavn: "skatteforholdOgInntekt",
       stegKey: StegKey.SKATTEFORHOLD_OG_INNTEKT,
-      data: dto.skatteforholdOgInntekt as Record<string, unknown> | undefined,
+      data: dto.skatteforholdOgInntekt
+        ? {
+            ...(dto.skatteforholdOgInntekt as unknown as Record<
+              string,
+              unknown
+            >),
+            virksomheterSomUtbetalerLonnOgNaturalytelser: flattenVirksomheter(
+              dto.skatteforholdOgInntekt
+                .virksomheterSomUtbetalerLonnOgNaturalytelser,
+            ),
+          }
+        : undefined,
     },
     {
       seksjonNavn: "familiemedlemmer",
@@ -168,7 +190,11 @@ function mapArbeidsgiverSeksjoner(
     {
       seksjonNavn: "arbeidsstedIUtlandet",
       stegKey: StegKey.ARBEIDSSTED_I_UTLANDET,
-      data: dto.arbeidsstedIUtlandet as Record<string, unknown> | undefined,
+      data:
+        dto.arbeidsstedIUtlandet?.arbeidsstedType === ArbeidsstedType.PA_LAND &&
+        dto.arbeidsstedIUtlandet.paLand?.erHjemmekontor === undefined
+          ? undefined
+          : (dto.arbeidsstedIUtlandet as Record<string, unknown> | undefined),
     },
     {
       seksjonNavn: "arbeidsstedPaLand",

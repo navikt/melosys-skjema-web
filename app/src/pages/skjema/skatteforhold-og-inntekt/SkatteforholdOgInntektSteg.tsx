@@ -16,6 +16,7 @@ import { z } from "zod";
 import { CheckboxGruppeFormPart } from "~/components/CheckboxGruppeFormPart.tsx";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
+import { NorskeOgUtenlandskeVirksomheterFormPart } from "~/components/virksomheter/NorskeOgUtenlandskeVirksomheterFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
@@ -46,8 +47,10 @@ import { useTranslateError } from "~/utils/translation.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getSkatteforholdOgInntekt } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
+import { useUtsendtArbeidstakerFlyt } from "../utsendtArbeidstakerFlyt.ts";
 import {
+  lagSkatteforholdOgInntektSchema,
   skalInkludereLoennsinntekt,
   skatteforholdOgInntektSchema,
 } from "./skatteforholdOgInntektStegSchema.ts";
@@ -69,8 +72,10 @@ function SkatteforholdOgInntektStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getSkatteforholdOgInntekt(skjema);
+  const { arbeidstakerdelForStatsansatt, lonnOppgisISkatteforhold } =
+    useUtsendtArbeidstakerFlyt(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const translateError = useTranslateError();
@@ -110,6 +115,14 @@ function SkatteforholdOgInntektStegContent({
     "skatteforholdOgInntekt",
     "inntektFraEgenVirksomhet",
   );
+  const betalerAllLonnFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+  );
+  const virksomheterSomUtbetalerLonnFelt = getFelt(
+    "skatteforholdOgInntekt",
+    "virksomheterSomUtbetalerLonnOgNaturalytelser",
+  );
 
   const inntektKildeAlternativer = (
     inntektKildeFelt as CheckboxGruppeFeltDefinisjon
@@ -124,7 +137,12 @@ function SkatteforholdOgInntektStegContent({
     unknown,
     SkatteforholdOgInntektFormData
   >({
-    resolver: zodResolver(skatteforholdOgInntektSchema),
+    resolver: zodResolver(
+      lagSkatteforholdOgInntektSchema({
+        statsansattFlyt: arbeidstakerdelForStatsansatt,
+        medLonn: lonnOppgisISkatteforhold,
+      }),
+    ),
     ...(stegData && { defaultValues: stegData }),
   });
 
@@ -155,6 +173,11 @@ function SkatteforholdOgInntektStegContent({
     name: "hvilkeTyperInntektHarDu",
   });
 
+  const arbeidsgiverBetalerAllLonn = useWatch({
+    control,
+    name: "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
+  });
+
   const harLoenn = hvilkeTyperInntektHarDu?.includes("LOENN") ?? false;
   const harEgenVirksomhet =
     hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET") ?? false;
@@ -183,8 +206,8 @@ function SkatteforholdOgInntektStegContent({
         data as SkatteforholdOgInntektDto,
       );
     },
-    onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(
         StegKey.SKATTEFORHOLD_OG_INNTEKT,
         stegRekkefolge,
@@ -231,82 +254,104 @@ function SkatteforholdOgInntektStegContent({
             <NesteStegKnapp loading={postSkatteforholdMutation.isPending} />
           }
         >
+          {lonnOppgisISkatteforhold && (
+            <>
+              <RadioGroupJaNeiFormPart
+                className="mt-4"
+                formFieldName="arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden"
+                legend={betalerAllLonnFelt.label}
+              />
+
+              {arbeidsgiverBetalerAllLonn === false && (
+                <NorskeOgUtenlandskeVirksomheterFormPart
+                  description={virksomheterSomUtbetalerLonnFelt.hjelpetekst}
+                  fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
+                  label={virksomheterSomUtbetalerLonnFelt.label}
+                />
+              )}
+            </>
+          )}
+
           <RadioGroupJaNeiFormPart
             className="mt-4"
             formFieldName="erSkattepliktigTilNorgeIHeleutsendingsperioden"
             legend={erSkattepliktigFelt.label}
           />
 
-          <CheckboxGruppeFormPart
-            className="mt-4"
-            formFieldName="inntektFraNorskEllerUtenlandskVirksomhet"
-            legend={inntektKildeFelt.label}
-            alternativer={inntektKildeAlternativer}
-          />
+          {!arbeidstakerdelForStatsansatt && (
+            <>
+              <CheckboxGruppeFormPart
+                className="mt-4"
+                formFieldName="inntektFraNorskEllerUtenlandskVirksomhet"
+                legend={inntektKildeFelt.label}
+                alternativer={inntektKildeAlternativer}
+              />
 
-          <CheckboxGruppeFormPart
-            className="mt-4"
-            formFieldName="hvilkeTyperInntektHarDu"
-            legend={hvilkenInntektFelt.label}
-            alternativer={hvilkenInntektAlternativer}
-          />
+              <CheckboxGruppeFormPart
+                className="mt-4"
+                formFieldName="hvilkeTyperInntektHarDu"
+                legend={hvilkenInntektFelt.label}
+                alternativer={hvilkenInntektAlternativer}
+              />
 
-          {(visInntektFelt || visInntektFraEgenVirksomhetFelt) && (
-            <Box
-              className="mt-4"
-              background="info-moderateA"
-              borderColor="info-subtleA"
-              borderWidth="1"
-              borderRadius="12"
-              padding="space-24"
-            >
-              <VStack gap="space-16">
-                <div>
-                  <Heading size="xsmall" level="2">
-                    {t("skatteforholdOgInntektSteg.inntektHeading")}
-                  </Heading>
-                  {inntektFelt.hjelpetekst && (
-                    <BodyLong className="mt-1">
-                      {inntektFelt.hjelpetekst}
-                    </BodyLong>
-                  )}
-                </div>
+              {(visInntektFelt || visInntektFraEgenVirksomhetFelt) && (
+                <Box
+                  className="mt-4"
+                  background="info-moderateA"
+                  borderColor="info-subtleA"
+                  borderWidth="1"
+                  borderRadius="12"
+                  padding="space-24"
+                >
+                  <VStack gap="space-16">
+                    <div>
+                      <Heading size="xsmall" level="2">
+                        {t("skatteforholdOgInntektSteg.inntektHeading")}
+                      </Heading>
+                      {inntektFelt.hjelpetekst && (
+                        <BodyLong className="mt-1">
+                          {inntektFelt.hjelpetekst}
+                        </BodyLong>
+                      )}
+                    </div>
 
-                {visInntektFelt && (
-                  <TextField
-                    description={belopFelt.hjelpetekst}
-                    className="max-w-xs"
-                    error={translateError(getFieldError(errors, "inntekt"))}
-                    label={inntektFelt.label}
-                    inputMode="numeric"
-                    maxLength={BELOP_MAX_LENGTH}
-                    {...register("inntekt", {
-                      ...(erBelopFelt(inntektFelt) && {
-                        onBlur: belopOnBlur("inntekt"),
-                      }),
-                    })}
-                  />
-                )}
-
-                {visInntektFraEgenVirksomhetFelt && (
-                  <TextField
-                    description={belopFelt.hjelpetekst}
-                    className="max-w-xs"
-                    error={translateError(
-                      getFieldError(errors, "inntektFraEgenVirksomhet"),
+                    {visInntektFelt && (
+                      <TextField
+                        description={belopFelt.hjelpetekst}
+                        className="max-w-xs"
+                        error={translateError(getFieldError(errors, "inntekt"))}
+                        label={inntektFelt.label}
+                        inputMode="numeric"
+                        maxLength={BELOP_MAX_LENGTH}
+                        {...register("inntekt", {
+                          ...(erBelopFelt(inntektFelt) && {
+                            onBlur: belopOnBlur("inntekt"),
+                          }),
+                        })}
+                      />
                     )}
-                    label={inntektFraEgenVirksomhetFelt.label}
-                    inputMode="numeric"
-                    maxLength={BELOP_MAX_LENGTH}
-                    {...register("inntektFraEgenVirksomhet", {
-                      ...(erBelopFelt(inntektFraEgenVirksomhetFelt) && {
-                        onBlur: belopOnBlur("inntektFraEgenVirksomhet"),
-                      }),
-                    })}
-                  />
-                )}
-              </VStack>
-            </Box>
+
+                    {visInntektFraEgenVirksomhetFelt && (
+                      <TextField
+                        description={belopFelt.hjelpetekst}
+                        className="max-w-xs"
+                        error={translateError(
+                          getFieldError(errors, "inntektFraEgenVirksomhet"),
+                        )}
+                        label={inntektFraEgenVirksomhetFelt.label}
+                        inputMode="numeric"
+                        maxLength={BELOP_MAX_LENGTH}
+                        {...register("inntektFraEgenVirksomhet", {
+                          ...(erBelopFelt(inntektFraEgenVirksomhetFelt) && {
+                            onBlur: belopOnBlur("inntektFraEgenVirksomhet"),
+                          }),
+                        })}
+                      />
+                    )}
+                  </VStack>
+                </Box>
+              )}
+            </>
           )}
 
           <RadioGroupJaNeiFormPart
@@ -373,6 +418,7 @@ export function SkatteforholdOgInntektSteg({ id }: { id: string }) {
       ]}
       id={id}
       skjemaQuery={getSkjemaQuery}
+      stepKey={StegKey.SKATTEFORHOLD_OG_INNTEKT}
     >
       {(skjema) => <SkatteforholdOgInntektStegContent skjema={skjema} />}
     </SkjemaStegLoader>
