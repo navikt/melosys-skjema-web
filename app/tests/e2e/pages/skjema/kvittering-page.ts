@@ -1,6 +1,9 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { SkjemaInnsendtKvittering } from "~/types/melosysSkjemaTypes";
+import {
+  Representasjonstype,
+  SkjemaInnsendtKvittering,
+} from "~/types/melosysSkjemaTypes";
 
 import { translations } from "../../utils/translations";
 
@@ -35,6 +38,28 @@ export class KvitteringPage {
 
   async assertMeldingIsVisible() {
     await expect(this.melding).toBeVisible();
+  }
+
+  async assertAaregVarselIsVisible({
+    representasjonstype,
+    arbeidsgiverNavn,
+    arbeidstakerNavn,
+  }: {
+    representasjonstype: Representasjonstype;
+    arbeidsgiverNavn: string;
+    arbeidstakerNavn: string;
+  }) {
+    const varsel = (
+      representasjonstype === Representasjonstype.DEG_SELV
+        ? translations.aaregVarsel.ingenArbeidsforholdDu
+        : translations.aaregVarsel.ingenArbeidsforhold
+    )
+      .replaceAll("{{arbeidsgiverNavn}}", () => arbeidsgiverNavn)
+      .replaceAll("{{arbeidstakerNavn}}", () => arbeidstakerNavn);
+    const alert = this.page.getByRole("alert");
+    await expect(alert).toContainText(translations.aaregVarsel.tittel);
+    await expect(alert).toContainText(varsel);
+    await expect(alert.getByRole("heading")).toBeVisible();
   }
 
   async assertInfoOversiktIsVisible() {

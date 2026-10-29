@@ -1,4 +1,4 @@
-import { FormProgress, HStack } from "@navikt/ds-react";
+import { BodyShort, FormProgress, HStack, ProgressBar } from "@navikt/ds-react";
 import { ComponentType, ReactNode, SVGProps } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -22,18 +22,41 @@ type FremgangsindikatorProperties = {
   aktivtSteg: number;
   stegRekkefolge: StegRekkefolgeItem[];
   className?: string;
+  /**
+  Viser bare aktivt steg, uten antall og «Vis alle steg», når de neste stegene ikke er kjent ennå
+  */
+  stegeneErUkjente?: boolean;
 };
 
 export const Fremgangsindikator = ({
   aktivtSteg,
   stegRekkefolge,
   className,
+  stegeneErUkjente = false,
 }: FremgangsindikatorProperties) => {
   const { t } = useTranslation();
+  const klasser = className ? `col-span-2 ${className}` : "col-span-2";
+
+  if (stegeneErUkjente) {
+    return (
+      <div className={klasser} data-testid="fremgangsindikator-ukjente-steg">
+        <ProgressBar
+          aria-hidden
+          className="aksel-form-progress__bar"
+          value={aktivtSteg}
+          valueMax={stegRekkefolge.length}
+        />
+        <BodyShort as="span">
+          {t("felles.stegNummer", { steg: aktivtSteg })}
+        </BodyShort>
+      </div>
+    );
+  }
+
   return (
     <FormProgress
       activeStep={aktivtSteg}
-      className={className ? `col-span-2 ${className}` : "col-span-2"}
+      className={klasser}
       interactiveSteps={true}
       totalSteps={stegRekkefolge.length}
     >

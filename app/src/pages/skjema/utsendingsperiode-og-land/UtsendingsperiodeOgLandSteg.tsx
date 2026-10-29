@@ -1,20 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, BodyShort, Button, Label } from "@navikt/ds-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { PeriodeFormPart } from "~/components/date/PeriodeFormPart.tsx";
+import { periodeSchema } from "~/components/date/periodeSchema.ts";
 import { LandVelgerFormPart } from "~/components/LandVelgerFormPart.tsx";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { useInvalidateSkjemaQuery } from "~/hooks/useInvalidateSkjemaQuery.ts";
 import { useSkjemaDefinisjon } from "~/hooks/useSkjemaDefinisjon.ts";
 import {
+  getAaregSjekkQuery,
   getSkjemaQuery,
   postUtsendingsperiodeOgLand,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { AaregVarsel } from "~/pages/skjema/components/AaregVarsel.tsx";
 import { NesteStegKnapp } from "~/pages/skjema/components/NesteStegKnapp.tsx";
 import {
   getNextStep,
@@ -28,7 +31,7 @@ import { formatDato, parseIsoDato } from "~/utils/datoformat.ts";
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getUtsendingsperiodeOgLand } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
 import { utsendingsperiodeOgLandSchema } from "./utsendingsperiodeOgLandStegSchema.ts";
 
 // Date range constants for assignment period selection
@@ -39,7 +42,7 @@ function UtsendingsperiodeOgLandStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const stegData = getUtsendingsperiodeOgLand(skjema);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -77,6 +80,16 @@ function UtsendingsperiodeOgLandStegContent({
   const formFraDato = watch("utsendelsePeriode.fraDato");
   const formTilDato = watch("utsendelsePeriode.tilDato");
   const formLand = watch("utsendelseLand");
+
+  const aaregPeriode = periodeSchema.safeParse({
+    fraDato: formFraDato,
+    tilDato: formTilDato,
+  }).data;
+  const { data: aaregSjekk } = useQuery(
+    getAaregSjekkQuery(skjema.id, aaregPeriode),
+  );
+  const visAaregVarsel =
+    !!aaregPeriode && aaregSjekk?.harArbeidsforhold === false;
 
   const isLandAvviker =
     !!motpartensVerdier &&
@@ -240,6 +253,15 @@ function UtsendingsperiodeOgLandStegContent({
                 </Alert>
               )}
             </>
+          )}
+
+          {visAaregVarsel && (
+            <AaregVarsel
+              arbeidsgiverNavn={skjema.metadata.arbeidsgiverNavn}
+              arbeidstakerNavn={skjema.metadata.arbeidstakerNavn}
+              className="mt-4"
+              representasjonstype={skjema.metadata.representasjonstype}
+            />
           )}
         </SkjemaSteg>
       </form>

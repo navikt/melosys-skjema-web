@@ -9,6 +9,7 @@ import {
   testUserInfo,
 } from "../../fixtures/test-data";
 import { UtenlandsoppdragetStegPage } from "../../pages/skjema/utenlandsoppdraget-steg.page";
+import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
 
 test.describe("Utenlandsoppdraget", () => {
   test.beforeEach(async ({ page }) => {
@@ -151,34 +152,36 @@ test.describe("Utenlandsoppdraget", () => {
   });
 });
 
-test.describe("Utenlandsoppdraget - offentlig arbeidsgiver", () => {
-  const offentligSkjema = {
+test.describe("Utenlandsoppdraget - statlig arbeidsgiver", () => {
+  const skjemaMedStatligArbeidsgiver = {
     ...testArbeidsgiverSkjema,
     metadata: {
       ...testArbeidsgiverSkjema.metadata,
-      erOffentligArbeidsgiver: true,
+      erStatligArbeidsgiver: true,
     },
   };
 
   test.beforeEach(async ({ page }) => {
     await setupApiMocksForArbeidsgiver(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
       [testOrganization],
       testUserInfo,
     );
   });
 
-  test("viser utenlandsoppdraget uten registerinfoboks for offentlig arbeidsgiver", async ({
+  test("statlig arbeidsgiver kan ikke åpne steget direkte", async ({
     page,
   }) => {
     const utenlandsoppdragetStegPage = new UtenlandsoppdragetStegPage(
       page,
-      offentligSkjema,
+      skjemaMedStatligArbeidsgiver,
     );
 
     await utenlandsoppdragetStegPage.goto();
-    await utenlandsoppdragetStegPage.assertIsVisible();
-    await utenlandsoppdragetStegPage.assertIngenRegisterinfoboks();
+    await new UtsendingsperiodeOgLandStegPage(
+      page,
+      skjemaMedStatligArbeidsgiver,
+    ).assertIsVisible();
   });
 });

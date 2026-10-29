@@ -34,7 +34,7 @@ import type {
 
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { getVedleggValg } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
 import { vedleggStegSchema } from "./vedleggStegSchema.ts";
 
 type VedleggStegFormData = z.infer<typeof vedleggStegSchema>;
@@ -60,7 +60,7 @@ function VedleggStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidstakerSkjemaQuery = useInvalidateSkjemaQuery();
@@ -116,8 +116,8 @@ function VedleggStegContent({
     mutationFn: (data: VedleggStegFormData) => {
       return postVedleggValg(skjema.id, data as VedleggValgDto);
     },
-    onSuccess: () => {
-      invalidateArbeidstakerSkjemaQuery(skjema.id);
+    onSuccess: async () => {
+      await invalidateArbeidstakerSkjemaQuery(skjema.id);
       const nextStep = getNextStep(StegKey.VEDLEGG, stegRekkefolge);
       if (nextStep) {
         navigate({

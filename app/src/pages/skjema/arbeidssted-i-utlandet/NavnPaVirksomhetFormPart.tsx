@@ -7,11 +7,13 @@ import { useTranslateError } from "~/utils/translation.ts";
 type NavnPaVirksomhetFormPartProperties = {
   formFieldName: string;
   className?: string;
+  label?: string;
 };
 
 export function NavnPaVirksomhetFormPart({
   formFieldName,
   className,
+  label,
 }: NavnPaVirksomhetFormPartProperties) {
   const translateError = useTranslateError();
   const { control } = useFormContext();
@@ -27,7 +29,7 @@ export function NavnPaVirksomhetFormPart({
           {...field}
           className={className}
           error={translateError(fieldState.error?.message)}
-          label={navnPaVirksomhetFelt.label}
+          label={label ?? navnPaVirksomhetFelt.label}
           value={field.value ?? ""}
         />
       )}

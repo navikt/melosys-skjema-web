@@ -65,6 +65,10 @@ export function getArbeidsstedIUtlandet(
     return (skjema.data as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto)
       .arbeidsstedIUtlandet;
   }
+  if (skjemadel === Skjemadel.ARBEIDSTAKERS_DEL) {
+    return (skjema.data as UtsendtArbeidstakerArbeidstakersSkjemaDataDto)
+      .arbeidsstedIUtlandet;
+  }
   return skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL
     ? (
         skjema.data as UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto
