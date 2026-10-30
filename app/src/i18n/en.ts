@@ -528,7 +528,7 @@ export const en = {
       postkodeErPakrevd: "Postal code is required",
       byStedsnavnErPakrevd: "City/place name is required",
       organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
-        "Organisation number or registration number cannot be longer than 25 characters",
+        "Organization number or registration number cannot be longer than 25 characters",
       landErPakrevd: "Country is required",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "You must answer whether the company is part of the same corporate group",
