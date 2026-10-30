@@ -119,8 +119,7 @@ test.describe("Oversikt — motpart-CTA", () => {
 });
 
 const ventendeSkjemaId = testVentendeMotpartSoknader.soknader[0]!.skjemaId;
-const varselLenke = (skjemaId: string) =>
-  `/fyll-ut-din-del?skjemaId=${skjemaId}&arbeidsgiverOrgnr=${korrektFormatertOrgnr}`;
+const varselLenke = `/fyll-ut-din-del?skjemaId=${ventendeSkjemaId}&arbeidsgiverOrgnr=${korrektFormatertOrgnr}`;
 
 test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
   test.beforeEach(async ({ page }) => {
@@ -144,7 +143,7 @@ test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
       testOpprettSoknadResponseId,
     );
 
-    await page.goto(varselLenke(ventendeSkjemaId));
+    await page.goto(varselLenke);
     await new SkjemaStartPage(page).bekreftOgStart(
       Representasjonstype.DEG_SELV,
     );
@@ -166,7 +165,7 @@ test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
   }) => {
     await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
 
-    await page.goto(varselLenke(ventendeSkjemaId));
+    await page.goto(varselLenke);
 
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
     await oversiktPage.assertIsVisible();
@@ -182,7 +181,7 @@ test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
     await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
 
-    await page.goto(varselLenke(ventendeSkjemaId));
+    await page.goto(varselLenke);
 
     await expect(
       page.getByText(translations.oversiktDegSelv.motpartCtaFeil),

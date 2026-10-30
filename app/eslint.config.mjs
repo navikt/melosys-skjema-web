@@ -16,6 +16,10 @@ const IGNORED_UNICORN_RULES = {
   "unicorn/name-replacements": "off",
   // main.tsx er entry point og må ha top-level side effects
   "unicorn/no-top-level-side-effects": "off",
+  // Behold eksisterende JSDoc-stil med stjerneprefiks.
+  "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
+  // Fallback-verdier trenger ikke flyttes til parameter- eller destruktureringsstandarder.
+  "unicorn/prefer-default-parameters": "off",
 };
 
 export default tseslint.config(
@@ -41,7 +45,7 @@ export default tseslint.config(
       "simple-import-sort/exports": "error",
     },
   },
-  eslintPluginUnicorn.configs["flat/recommended"],
+  eslintPluginUnicorn.configs.recommended,
   {
     rules: {
       eqeqeq: ["error", "always"],

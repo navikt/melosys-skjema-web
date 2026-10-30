@@ -53,9 +53,10 @@ function skalValidereLoennsinntekt(data: SchemaData): boolean {
 }
 
 function skalValidereEgenVirksomhetInntekt(data: SchemaData): boolean {
-  return data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET")
-    ? harNorsk(data) || harUtenlandsk(data)
-    : false;
+  return (
+    !!data.hvilkeTyperInntektHarDu?.includes("INNTEKT_FRA_EGEN_VIRKSOMHET") &&
+    (harNorsk(data) || harUtenlandsk(data))
+  );
 }
 
 const checkboxGroupSchema = z.array(z.string()).optional();
@@ -166,8 +167,11 @@ export const lagSkatteforholdOgInntektSchema = ({
     )
     .refine(
       (data) => {
-        if (statsansattFlyt || !skalValidereLoennsinntekt(data)) return true;
-        return data.inntekt?.trim() ? erPositivtBelop(data.inntekt) : false;
+        return (
+          statsansattFlyt ||
+          !skalValidereLoennsinntekt(data) ||
+          (!!data.inntekt?.trim() && erPositivtBelop(data.inntekt))
+        );
       },
       {
         error: "skatteforholdOgInntektSteg.duMaOppgiLonnsinntekt",
@@ -177,11 +181,12 @@ export const lagSkatteforholdOgInntektSchema = ({
     )
     .refine(
       (data) => {
-        if (statsansattFlyt || !skalValidereEgenVirksomhetInntekt(data))
-          return true;
-        return data.inntektFraEgenVirksomhet?.trim()
-          ? erPositivtBelop(data.inntektFraEgenVirksomhet)
-          : false;
+        return (
+          statsansattFlyt ||
+          !skalValidereEgenVirksomhetInntekt(data) ||
+          (!!data.inntektFraEgenVirksomhet?.trim() &&
+            erPositivtBelop(data.inntektFraEgenVirksomhet))
+        );
       },
       {
         error: "skatteforholdOgInntektSteg.duMaOppgiInntektFraEgenVirksomhet",
