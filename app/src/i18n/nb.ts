@@ -83,8 +83,6 @@ export const nb = {
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utenlandsk virksomhet",
       utenlandskeVirksomheter: "Utenlandske virksomheter",
-      virksomhetenManglerPakrevdeOpplysninger:
-        "Virksomheten mangler påkrevde opplysninger. Velg «Endre» for å fylle dem ut.",
       leggTilUtenlandskVirksomhet: "Legg til utenlandsk virksomhet",
       endreUtenlandskVirksomhet: "Endre utenlandsk virksomhet",
     },

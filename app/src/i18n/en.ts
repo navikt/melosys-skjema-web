@@ -84,8 +84,6 @@ export const en = {
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",
       utenlandskeVirksomheter: "Foreign companies",
-      virksomhetenManglerPakrevdeOpplysninger:
-        "The company is missing required information. Select “Edit” to fill it in.",
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
     },

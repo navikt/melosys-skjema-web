@@ -1,5 +1,3 @@
-import { LandKode } from "~/types/melosysSkjemaTypes";
-
 import { setupApiMocksForArbeidsgiver } from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
 import {
@@ -87,29 +85,5 @@ test.describe("Arbeidstakerens lønn - validering", () => {
 
     await stegPage.assertOrganisasjonsnummerErForLangtIsVisible();
     await stegPage.assertUtenlandskVirksomhetModalIsOpen();
-  });
-
-  test("viser feilmelding på lagret utenlandsk virksomhet som mangler påkrevde felter", async () => {
-    await stegPage.mockArbeidstakerensLonnData({
-      arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: false,
-      virksomheterSomUtbetalerLonnOgNaturalytelser: {
-        norskeVirksomheter: [],
-        utenlandskeVirksomheter: [
-          {
-            navn: "Foreign Corp AB",
-            vegnavnOgHusnummer: "Kungsgatan 10",
-            land: LandKode.SE,
-            tilhorerSammeKonsern: false,
-          },
-        ],
-      },
-    });
-    await stegPage.goto();
-    await stegPage.assertIsVisible();
-
-    await stegPage.lagreOgFortsett();
-
-    await stegPage.assertUtenlandskVirksomhetManglerPakrevdeOpplysningerIsVisible();
-    await stegPage.assertStillOnStep();
   });
 });

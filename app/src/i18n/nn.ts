@@ -84,8 +84,6 @@ export const nn = {
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utanlandsk verksemd",
       utenlandskeVirksomheter: "Utanlandske verksemder",
-      virksomhetenManglerPakrevdeOpplysninger:
-        "Verksemda manglar påkravde opplysningar. Vel «Endre» for å fylle dei ut.",
       leggTilUtenlandskVirksomhet: "Legg til utanlandsk verksemd",
       endreUtenlandskVirksomhet: "Endre utanlandsk verksemd",
     },

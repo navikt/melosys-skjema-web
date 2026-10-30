@@ -7,7 +7,6 @@ import type {
 } from "~/types/melosysSkjemaTypes";
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
-import { mockFetchSkjema } from "../../fixtures/api-mocks";
 import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
@@ -97,18 +96,6 @@ export class ArbeidstakerensLonnStegPage {
 
   async goto() {
     await this.page.goto(`/skjema/${this.skjema.id}/arbeidstakerens-lonn`);
-  }
-
-  async mockArbeidstakerensLonnData(
-    arbeidstakerensLonnData: ArbeidstakerensLonnDto,
-  ) {
-    await mockFetchSkjema(this.page, {
-      ...this.skjema,
-      data: {
-        ...this.skjema.data,
-        arbeidstakerensLonn: arbeidstakerensLonnData,
-      } as UtsendtArbeidstakerSkjemaDto["data"],
-    });
   }
 
   async assertIsVisible() {
@@ -343,15 +330,6 @@ export class ArbeidstakerensLonnStegPage {
     await expect(
       dialog.getByText(
         feilmeldinger.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern,
-      ),
-    ).toBeVisible();
-  }
-
-  async assertUtenlandskVirksomhetManglerPakrevdeOpplysningerIsVisible() {
-    await expect(
-      this.page.getByText(
-        t.utenlandskeVirksomheterFormPart
-          .virksomhetenManglerPakrevdeOpplysninger,
       ),
     ).toBeVisible();
   }
