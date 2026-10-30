@@ -68,7 +68,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organisasjonsnummer eller registreringsnummer",
               pakrevd: false,
@@ -168,7 +168,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organisasjonsnummer eller registreringsnummer",
               pakrevd: false,
@@ -765,7 +765,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organisasjonsnummer eller registreringsnummer",
               pakrevd: false,
@@ -917,7 +917,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organisasjonsnummer eller registreringsnummer",
               pakrevd: false,
@@ -1017,7 +1017,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organisasjonsnummer eller registreringsnummer",
               pakrevd: false,
@@ -1616,7 +1616,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organisasjonsnummer eller registreringsnummer",
               pakrevd: false,
@@ -1768,7 +1768,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
               label: "Organization number",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organization number or registration number",
               pakrevd: false,
@@ -1868,7 +1868,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
               label: "Organization number",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organization number or registration number",
               pakrevd: false,
@@ -2469,7 +2469,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
               label: "Organization number",
               pakrevd: true,
             },
-            organisasjonsnummerUtenlandsk: {
+            organisasjonsnummerEllerRegistreringsnummer: {
               type: "TEXT",
               label: "Organization number or registration number",
               pakrevd: false,

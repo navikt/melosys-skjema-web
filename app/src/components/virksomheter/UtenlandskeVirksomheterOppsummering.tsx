@@ -27,7 +27,7 @@ export function UtenlandskVirksomhetOppsummering({
     <FormSummary.Answers>
       <Svar label={definisjon.navn.label} verdi={virksomhet.navn} />
       <Svar
-        label={definisjon.organisasjonsnummerUtenlandsk.label}
+        label={definisjon.organisasjonsnummerEllerRegistreringsnummer.label}
         verdi={virksomhet.organisasjonsnummer}
       />
       <Svar

@@ -248,7 +248,9 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
             error={translateError(
               modalForm.formState.errors.organisasjonsnummer?.message,
             )}
-            label={feltLabel(definisjon.organisasjonsnummerUtenlandsk)}
+            label={feltLabel(
+              definisjon.organisasjonsnummerEllerRegistreringsnummer,
+            )}
             {...modalForm.register("organisasjonsnummer")}
           />
 

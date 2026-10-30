@@ -82,7 +82,7 @@ function flattenVirksomheter(
     result.push({
       __type: VirksomhetTypeKey.UTENLANDSK,
       ...v,
-      organisasjonsnummerUtenlandsk: organisasjonsnummer,
+      organisasjonsnummerEllerRegistreringsnummer: organisasjonsnummer,
     });
   }
 

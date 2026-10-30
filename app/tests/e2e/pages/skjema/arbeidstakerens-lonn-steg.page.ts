@@ -286,7 +286,8 @@ export class ArbeidstakerensLonnStegPage {
 
     const labels = {
       navn: virksomhetFelter.navn.label,
-      organisasjonsnummer: virksomhetFelter.organisasjonsnummerUtenlandsk.label,
+      organisasjonsnummer:
+        virksomhetFelter.organisasjonsnummerEllerRegistreringsnummer.label,
       postkode: virksomhetFelter.postkode.label,
       byStedsnavn: virksomhetFelter.byStedsnavn.label,
     };

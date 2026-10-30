@@ -15,7 +15,7 @@ interface VirksomhetValgFeltDefinisjon extends VirksomhetFeltDefinisjon {
 export interface VirksomhetElementDefinisjon {
   readonly navn: VirksomhetFeltDefinisjon;
   readonly organisasjonsnummer: VirksomhetFeltDefinisjon;
-  readonly organisasjonsnummerUtenlandsk: VirksomhetFeltDefinisjon;
+  readonly organisasjonsnummerEllerRegistreringsnummer: VirksomhetFeltDefinisjon;
   readonly vegnavnOgHusnummer: VirksomhetFeltDefinisjon;
   readonly bygning: VirksomhetFeltDefinisjon;
   readonly postkode: VirksomhetFeltDefinisjon;
