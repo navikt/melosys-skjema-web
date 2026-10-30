@@ -289,16 +289,14 @@ export function resolveSeksjoner(
     )
       return [];
     const seksjon = definisjon.seksjoner[seksjonNavn];
-    return !seksjon || !data
-      ? []
-      : [
-          {
-            seksjonNavn,
-            seksjon,
-            data: tilpassUtenlandskOrgnrTilDefinisjon(seksjon, data),
-            stegKey,
-          },
-        ];
+    return seksjon && data
+      ? {
+          seksjonNavn,
+          seksjon,
+          data: tilpassUtenlandskOrgnrTilDefinisjon(seksjon, data),
+          stegKey,
+        }
+      : [];
   });
 }
 

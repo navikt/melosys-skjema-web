@@ -1,9 +1,7 @@
-import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";
 import { OpprettetVia, Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
   interceptOpprettSoknad,
-  mockFeatureToggles,
   mockGetEregOrganisasjonMedJuridiskEnhet,
   mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet,
   mockPersonerMedFullmakt,
@@ -26,18 +24,6 @@ import { RepresentasjonPage } from "../pages/representasjon/representasjon.page"
 import { SkjemaStartPage } from "../pages/skjema/skjema-start.page";
 import { translations } from "../utils/translations";
 
-const ALLE_TOGGLES_PAA = {
-  [STATSANSATT_FLYT]: true,
-  "melosys.skjema.motpart-cta": true,
-  "melosys.skjema.innsendt-sammendrag": true,
-};
-
-const MOTPART_CTA_AV = {
-  [STATSANSATT_FLYT]: true,
-  "melosys.skjema.motpart-cta": false,
-  "melosys.skjema.innsendt-sammendrag": true,
-};
-
 test.describe("Oversikt — motpart-CTA", () => {
   test.beforeEach(async ({ page }) => {
     await setupApiMocksForOversikt(
@@ -54,7 +40,6 @@ test.describe("Oversikt — motpart-CTA", () => {
   test("«Fyll ut din del» går rett til introsiden med arbeidsgiver og arbeidstaker utfylt", async ({
     page,
   }) => {
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
     const requestBodyPromise = interceptOpprettSoknad(
       page,
@@ -94,7 +79,6 @@ test.describe("Oversikt — motpart-CTA", () => {
   test("«Fyll ut din del» viser feil og blir på oversikten når arbeidsgiveroppslaget feiler", async ({
     page,
   }) => {
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
     // Registrert etter beforeEach-mocken, så denne vinner (Playwright matcher sist registrerte først)
     await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
@@ -110,20 +94,7 @@ test.describe("Oversikt — motpart-CTA", () => {
     await expect(page).toHaveURL(/\/oversikt/);
   });
 
-  test("Viser ikke banner når toggle er av", async ({ page }) => {
-    await mockFeatureToggles(page, MOTPART_CTA_AV);
-    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
-
-    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
-    const togglesLastet = oversiktPage.ventPaaFeatureToggles();
-    await oversiktPage.goto();
-    await togglesLastet;
-    await oversiktPage.assertIsVisible();
-    await oversiktPage.assertMotpartCtaNotVisible("Test Bedrift AS");
-  });
-
   test("Viser ikke banner uten ventende motpart-søknader", async ({ page }) => {
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
 
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
@@ -135,24 +106,20 @@ test.describe("Oversikt — motpart-CTA", () => {
   });
 
   test("Viser ikke banner for ARBEIDSGIVER-kontekst", async ({ page }) => {
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
 
     const oversiktPage = new OversiktPage(
       page,
       Representasjonstype.ARBEIDSGIVER,
     );
-    const togglesLastet = oversiktPage.ventPaaFeatureToggles();
     await oversiktPage.goto();
-    await togglesLastet;
     await oversiktPage.assertIsVisible();
     await oversiktPage.assertMotpartCtaNotVisible("Test Bedrift AS");
   });
 });
 
 const ventendeSkjemaId = testVentendeMotpartSoknader.soknader[0]!.skjemaId;
-const varselLenke = (skjemaId: string) =>
-  `/fyll-ut-din-del?skjemaId=${skjemaId}&arbeidsgiverOrgnr=${korrektFormatertOrgnr}`;
+const varselLenke = `/fyll-ut-din-del?skjemaId=${ventendeSkjemaId}&arbeidsgiverOrgnr=${korrektFormatertOrgnr}`;
 
 test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
   test.beforeEach(async ({ page }) => {
@@ -165,7 +132,6 @@ test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
     );
     await mockGetEregOrganisasjonMedJuridiskEnhet(page);
     await mockPersonerMedFullmakt(page, []);
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
   });
 
   test("ventende arbeidsgiver-del går rett til introsiden med prefyll", async ({
@@ -177,7 +143,7 @@ test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
       testOpprettSoknadResponseId,
     );
 
-    await page.goto(varselLenke(ventendeSkjemaId));
+    await page.goto(varselLenke);
     await new SkjemaStartPage(page).bekreftOgStart(
       Representasjonstype.DEG_SELV,
     );
@@ -199,7 +165,7 @@ test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
   }) => {
     await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
 
-    await page.goto(varselLenke(ventendeSkjemaId));
+    await page.goto(varselLenke);
 
     const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
     await oversiktPage.assertIsVisible();
@@ -215,7 +181,7 @@ test.describe("Varsel-lenke — /fyll-ut-din-del", () => {
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
     await mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet(page);
 
-    await page.goto(varselLenke(ventendeSkjemaId));
+    await page.goto(varselLenke);
 
     await expect(
       page.getByText(translations.oversiktDegSelv.motpartCtaFeil),
@@ -240,7 +206,6 @@ test.describe("Landingsside — motpart-hint", () => {
   test("Viser «Søknad venter på deg» på DEG_SELV-kortet ved treff", async ({
     page,
   }) => {
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
 
     const representasjonPage = new RepresentasjonPage(page);
@@ -249,20 +214,7 @@ test.describe("Landingsside — motpart-hint", () => {
     await representasjonPage.assertSoknadVenterBadgeVisible();
   });
 
-  test("Viser ikke hint når toggle er av", async ({ page }) => {
-    await mockFeatureToggles(page, MOTPART_CTA_AV);
-    await mockVentendeMotpartSoknader(page, testVentendeMotpartSoknader);
-
-    const representasjonPage = new RepresentasjonPage(page);
-    const togglesLastet = representasjonPage.ventPaaFeatureToggles();
-    await representasjonPage.goto();
-    await togglesLastet;
-    await representasjonPage.assertIsVisible();
-    await representasjonPage.assertSoknadVenterBadgeNotVisible();
-  });
-
   test("Viser ikke hint uten ventende motpart-søknader", async ({ page }) => {
-    await mockFeatureToggles(page, ALLE_TOGGLES_PAA);
     await mockVentendeMotpartSoknader(page, emptyVentendeMotpartSoknader);
 
     const representasjonPage = new RepresentasjonPage(page);

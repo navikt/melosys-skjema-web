@@ -18,8 +18,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 
-import { MOTPART_CTA } from "~/featuretoggle/toggleNavn.ts";
-import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
 import { getVentendeMotpartSoknaderQuery } from "~/httpClients/melsosysSkjemaApiClient.ts";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
@@ -176,11 +174,9 @@ export function RepresentasjonVelger({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const motpartCtaAktiv = useFeatureToggle(MOTPART_CTA) ?? false;
-  const { data: ventendeMotpartSoknader } = useQuery({
-    ...getVentendeMotpartSoknaderQuery(),
-    enabled: motpartCtaAktiv,
-  });
+  const { data: ventendeMotpartSoknader } = useQuery(
+    getVentendeMotpartSoknaderQuery(),
+  );
   const harVentendeMotpartSoknad =
     (ventendeMotpartSoknader?.soknader.length ?? 0) > 0;
 

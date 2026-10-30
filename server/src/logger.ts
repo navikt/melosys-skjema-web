@@ -53,11 +53,9 @@ const warning = (message: string) => {
 };
 
 const error = (message: string, error_: Error) => {
-  if (error_) {
-    stdoutLogger.error(message, { message: `: ${error_.message}` });
-  } else {
-    stdoutLogger.error(message, { message: `: ${error_}` });
-  }
+  stdoutLogger.error(message, {
+    message: `: ${error_ ? error_.message : error_}`,
+  });
 };
 
 const stream = {

@@ -57,15 +57,9 @@ export class RepresentasjonPage {
   }
 
   /**
-   * Start disse FØR goto() — negative badge-assertions er ellers racy mot
-   * featuretoggle-/ventende-queriene som avgjør om badgen rendres.
+   * Start denne FØR goto() — negative badge-assertions er ellers racy mot
+   * ventende-queriet som avgjør om badgen rendres.
    */
-  ventPaaFeatureToggles(): Promise<unknown> {
-    return this.page.waitForResponse((response) =>
-      response.url().includes("/api/featuretoggle"),
-    );
-  }
-
   ventPaaVentendeMotpartSoknader(): Promise<unknown> {
     return this.page.waitForResponse((response) =>
       response.url().includes("/ventende-motpart-soknader"),

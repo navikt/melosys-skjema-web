@@ -15,6 +15,8 @@ const IGNORED_UNICORN_RULES = {
   "unicorn/consistent-boolean-name": "off",
   // Server entry point og logger må ha top-level side effects
   "unicorn/no-top-level-side-effects": "off",
+  // Behold eksisterende JSDoc-stil med stjerneprefiks.
+  "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
 };
 
 export default tseslint.config(
@@ -32,7 +34,7 @@ export default tseslint.config(
       "simple-import-sort/exports": "error",
     },
   },
-  eslintPluginUnicorn.configs["flat/recommended"],
+  eslintPluginUnicorn.configs.recommended,
   {
     rules: {
       eqeqeq: ["error", "always"],
