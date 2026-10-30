@@ -377,6 +377,67 @@ describe.each(["nb", "nn", "en"] as const)("resolveSeksjoner (%s)", (sprak) => {
       });
     });
 
+    it("viser utenlandsk orgnr under organisasjonsnummer for definisjoner uten eget felt for det", () => {
+      const lonnSeksjonDefinisjon = definisjon.seksjoner.arbeidstakerensLonn;
+      const listeFelt = lonnSeksjonDefinisjon?.felter
+        .virksomheterSomUtbetalerLonnOgNaturalytelser as {
+        elementDefinisjon: Record<string, unknown>;
+      };
+      const eldreElementDefinisjon = { ...listeFelt.elementDefinisjon };
+      delete eldreElementDefinisjon.organisasjonsnummerEllerRegistreringsnummer;
+      const eldreDefinisjon = {
+        ...definisjon,
+        seksjoner: {
+          ...definisjon.seksjoner,
+          arbeidstakerensLonn: {
+            ...lonnSeksjonDefinisjon,
+            felter: {
+              ...lonnSeksjonDefinisjon?.felter,
+              virksomheterSomUtbetalerLonnOgNaturalytelser: {
+                ...listeFelt,
+                elementDefinisjon: eldreElementDefinisjon,
+              },
+            },
+          },
+        },
+      } as unknown as SkjemaDefinisjonDto;
+      const dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto = {
+        ...arbeidsgiversDelDto,
+        arbeidstakerensLonn: {
+          arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden: false,
+          virksomheterSomUtbetalerLonnOgNaturalytelser: {
+            norskeVirksomheter: [{ organisasjonsnummer: "987654321" }],
+            utenlandskeVirksomheter: [utenlandskVirksomhet],
+          },
+        },
+      };
+
+      const hentVirksomheter = (d: SkjemaDefinisjonDto) =>
+        resolveSeksjoner(dto, d).find(
+          (s) => s.seksjonNavn === "arbeidstakerensLonn",
+        )?.data.virksomheterSomUtbetalerLonnOgNaturalytelser as Array<
+          Record<string, unknown>
+        >;
+
+      expect(hentVirksomheter(definisjon)[1]).toMatchObject({
+        organisasjonsnummerEllerRegistreringsnummer: "ABC123",
+      });
+      expect(hentVirksomheter(definisjon)[1]).not.toHaveProperty(
+        "organisasjonsnummer",
+      );
+      expect(hentVirksomheter(eldreDefinisjon)[0]).toEqual({
+        __type: VirksomhetTypeKey.NORSK,
+        organisasjonsnummer: "987654321",
+      });
+      expect(hentVirksomheter(eldreDefinisjon)[1]).toMatchObject({
+        __type: VirksomhetTypeKey.UTENLANDSK,
+        organisasjonsnummer: "ABC123",
+      });
+      expect(hentVirksomheter(eldreDefinisjon)[1]).not.toHaveProperty(
+        "organisasjonsnummerEllerRegistreringsnummer",
+      );
+    });
+
     it("itemTypeLabels i definisjonen har samme nøkler som VirksomhetTypeKey", () => {
       const liste =
         definisjon.seksjoner.arbeidstakerensLonn?.felter

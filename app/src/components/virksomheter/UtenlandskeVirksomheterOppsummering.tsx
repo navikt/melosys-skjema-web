@@ -1,151 +1,73 @@
 import { FormSummary } from "@navikt/ds-react";
 import { useTranslation } from "react-i18next";
 
+import type { VirksomhetElementDefinisjon } from "~/components/virksomheter/virksomhetDefinisjon.ts";
 import {
-  Ansettelsesform,
   UtenlandskVirksomhet,
   UtenlandskVirksomhetMedAnsettelsesform,
 } from "~/types/melosysSkjemaTypes";
 import { useBooleanToJaNei } from "~/utils/translation.ts";
 
-const ansettelsesformTilOversettelsesnokkel: Record<Ansettelsesform, string> = {
-  [Ansettelsesform.ARBEIDSTAKER_ELLER_FRILANSER]:
-    "utenlandskeVirksomheterFormPart.arbeidstakerEllerFrilanser",
-  [Ansettelsesform.SELVSTENDIG_NAERINGSDRIVENDE]:
-    "utenlandskeVirksomheterFormPart.selvstendigNaeringsdrivende",
-  [Ansettelsesform.STATSANSATT]: "utenlandskeVirksomheterFormPart.statsansatt",
-};
-
 interface UtenlandskVirksomhetOppsummeringProperties {
+  definisjon: VirksomhetElementDefinisjon;
   virksomhet: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform;
 }
 
 export function UtenlandskVirksomhetOppsummering({
+  definisjon,
   virksomhet,
 }: UtenlandskVirksomhetOppsummeringProperties) {
   const { t } = useTranslation();
   const booleanToJaNei = useBooleanToJaNei();
+  const ansettelsesform =
+    "ansettelsesform" in virksomhet ? virksomhet.ansettelsesform : undefined;
+  const ansettelsesformDefinisjon = definisjon.ansettelsesform;
 
   return (
     <FormSummary.Answers>
-      <FormSummary.Answer>
-        <FormSummary.Label>
-          {t("utenlandskeVirksomheterFormPart.navnPaVirksomhet")}
-        </FormSummary.Label>
-        <FormSummary.Value>{virksomhet.navn}</FormSummary.Value>
-      </FormSummary.Answer>
-      {virksomhet.organisasjonsnummer && (
-        <FormSummary.Answer>
-          <FormSummary.Label>
-            {t(
-              "utenlandskeVirksomheterFormPart.organisasjonsnummerEllerRegistreringsnummerValgfritt",
-            )}
-          </FormSummary.Label>
-          <FormSummary.Value>
-            {virksomhet.organisasjonsnummer}
-          </FormSummary.Value>
-        </FormSummary.Answer>
-      )}
-      <FormSummary.Answer>
-        <FormSummary.Label>
-          {t("utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks")}
-        </FormSummary.Label>
-        <FormSummary.Value>{virksomhet.vegnavnOgHusnummer}</FormSummary.Value>
-      </FormSummary.Answer>
-      {virksomhet.bygning && (
-        <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandskeVirksomheterFormPart.bygningValgfritt")}
-          </FormSummary.Label>
-          <FormSummary.Value>{virksomhet.bygning}</FormSummary.Value>
-        </FormSummary.Answer>
-      )}
-      {virksomhet.postkode && (
-        <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandskeVirksomheterFormPart.postkodeValgfritt")}
-          </FormSummary.Label>
-          <FormSummary.Value>{virksomhet.postkode}</FormSummary.Value>
-        </FormSummary.Answer>
-      )}
-      {virksomhet.byStedsnavn && (
-        <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandskeVirksomheterFormPart.byStednavnValgfritt")}
-          </FormSummary.Label>
-          <FormSummary.Value>{virksomhet.byStedsnavn}</FormSummary.Value>
-        </FormSummary.Answer>
-      )}
-      {virksomhet.region && (
-        <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandskeVirksomheterFormPart.regionValgfritt")}
-          </FormSummary.Label>
-          <FormSummary.Value>{virksomhet.region}</FormSummary.Value>
-        </FormSummary.Answer>
-      )}
-      <FormSummary.Answer>
-        <FormSummary.Label>
-          {t("utenlandskeVirksomheterFormPart.land")}
-        </FormSummary.Label>
-        <FormSummary.Value>{t(`land.${virksomhet.land}`)}</FormSummary.Value>
-      </FormSummary.Answer>
-      <FormSummary.Answer>
-        <FormSummary.Label>
-          {t(
-            "utenlandskeVirksomheterFormPart.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
-          )}
-        </FormSummary.Label>
-        <FormSummary.Value>
-          {booleanToJaNei(virksomhet.tilhorerSammeKonsern)}
-        </FormSummary.Value>
-      </FormSummary.Answer>
-      {"ansettelsesform" in virksomhet && virksomhet.ansettelsesform && (
-        <FormSummary.Answer>
-          <FormSummary.Label>
-            {t("utenlandskeVirksomheterFormPart.ansettelsesform")}
-          </FormSummary.Label>
-          <FormSummary.Value>
-            {t(
-              ansettelsesformTilOversettelsesnokkel[virksomhet.ansettelsesform],
-            )}
-          </FormSummary.Value>
-        </FormSummary.Answer>
+      <Svar label={definisjon.navn.label} verdi={virksomhet.navn} />
+      <Svar
+        label={definisjon.organisasjonsnummerEllerRegistreringsnummer.label}
+        verdi={virksomhet.organisasjonsnummer}
+      />
+      <Svar
+        label={definisjon.vegnavnOgHusnummer.label}
+        verdi={virksomhet.vegnavnOgHusnummer}
+      />
+      <Svar label={definisjon.bygning.label} verdi={virksomhet.bygning} />
+      <Svar label={definisjon.postkode.label} verdi={virksomhet.postkode} />
+      <Svar
+        label={definisjon.byStedsnavn.label}
+        verdi={virksomhet.byStedsnavn}
+      />
+      <Svar label={definisjon.region.label} verdi={virksomhet.region} />
+      <Svar
+        label={definisjon.land.label}
+        verdi={t(`land.${virksomhet.land}`)}
+      />
+      <Svar
+        label={definisjon.tilhorerSammeKonsern.label}
+        verdi={booleanToJaNei(virksomhet.tilhorerSammeKonsern)}
+      />
+      {ansettelsesformDefinisjon && ansettelsesform && (
+        <Svar
+          label={ansettelsesformDefinisjon.label}
+          verdi={
+            ansettelsesformDefinisjon.alternativer.find(
+              (alternativ) => alternativ.verdi === ansettelsesform,
+            )?.label ?? ansettelsesform
+          }
+        />
       )}
     </FormSummary.Answers>
   );
 }
 
-interface UtenlandskeVirksomheterOppsummeringProperties {
-  virksomheter?: Array<
-    UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform
-  >;
-}
-
-export function UtenlandskeVirksomheterOppsummering({
-  virksomheter,
-}: UtenlandskeVirksomheterOppsummeringProperties) {
-  const { t } = useTranslation();
-
-  return !virksomheter || virksomheter.length === 0 ? undefined : (
-    <FormSummary.Answer className="mt-4">
-      <FormSummary.Label>
-        {t("utenlandskeVirksomheterFormPart.utenlandskeVirksomheter")}
-      </FormSummary.Label>
-      <FormSummary.Value
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--a-spacing-2)",
-        }}
-      >
-        {virksomheter.map((virksomhet) => (
-          <UtenlandskVirksomhetOppsummering
-            key={`${virksomhet.navn}-${virksomhet.land}`}
-            virksomhet={virksomhet}
-          />
-        ))}
-      </FormSummary.Value>
+function Svar({ label, verdi }: { label: string; verdi?: string }) {
+  return verdi ? (
+    <FormSummary.Answer>
+      <FormSummary.Label>{label}</FormSummary.Label>
+      <FormSummary.Value>{verdi}</FormSummary.Value>
     </FormSummary.Answer>
-  );
+  ) : null;
 }

@@ -2,6 +2,7 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import type {
+  Ansettelsesform,
   ArbeidssituasjonDto,
   UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
@@ -12,6 +13,9 @@ import { translations } from "../../utils/translations";
 const arbeidssituasjon = SKJEMA_DEFINISJON_A1.seksjoner.arbeidssituasjon;
 const felter = arbeidssituasjon.felter;
 const t = translations;
+
+const virksomhetFelter =
+  felter.virksomheterArbeidstakerJobberForIutsendelsesPeriode.elementDefinisjon;
 
 // Feilmeldinger
 const feilmeldinger = {
@@ -120,7 +124,7 @@ export class ArbeidssituasjonStegPage {
     await expect(dialog).toBeVisible();
 
     await dialog
-      .getByLabel(t.norskeVirksomheterFormPart.organisasjonsnummer)
+      .getByLabel(virksomhetFelter.organisasjonsnummer.label)
       .fill(orgnr);
 
     // OrganisasjonSoker auto-searches when 9 digits are typed — wait for result
@@ -139,33 +143,36 @@ export class ArbeidssituasjonStegPage {
   async leggTilUtenlandskVirksomhetMedAnsettelsesform(options: {
     navn: string;
     vegnavnOgHusnummer: string;
+    postkode: string;
+    byStedsnavn: string;
     land: string;
     tilhorerSammeKonsern: boolean;
-    ansettelsesformLabel: string;
+    ansettelsesform: Ansettelsesform;
   }) {
     await this.leggTilUtenlandskVirksomhetButton.click();
 
     const dialog = this.page.getByRole("dialog");
     await expect(dialog).toBeVisible();
 
+    await dialog.getByLabel(virksomhetFelter.navn.label).fill(options.navn);
     await dialog
-      .getByLabel(t.utenlandskeVirksomheterFormPart.navnPaVirksomhet)
-      .fill(options.navn);
-    await dialog
-      .getByLabel(
-        t.utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks,
-      )
+      .getByLabel(virksomhetFelter.vegnavnOgHusnummer.label)
       .fill(options.vegnavnOgHusnummer);
+    await dialog
+      .getByLabel(virksomhetFelter.postkode.label)
+      .fill(options.postkode);
+    await dialog
+      .getByLabel(virksomhetFelter.byStedsnavn.label)
+      .fill(options.byStedsnavn);
 
     await dialog
       .getByRole("combobox", {
-        name: t.utenlandskeVirksomheterFormPart.land,
+        name: virksomhetFelter.land.label,
       })
       .selectOption(options.land);
 
     const konsernGroup = dialog.getByRole("radiogroup", {
-      name: t.utenlandskeVirksomheterFormPart
-        .tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren,
+      name: virksomhetFelter.tilhorerSammeKonsern.label,
     });
     await (options.tilhorerSammeKonsern
       ? konsernGroup.getByRole("radio", { name: t.felles.ja }).click()
@@ -173,10 +180,14 @@ export class ArbeidssituasjonStegPage {
 
     // Ansettelsesform radio group (only in arbeidssituasjon context)
     const ansettelsesformGroup = dialog.getByRole("radiogroup", {
-      name: t.utenlandskeVirksomheterFormPart.ansettelsesform,
+      name: virksomhetFelter.ansettelsesform.label,
     });
     await ansettelsesformGroup
-      .getByRole("radio", { name: options.ansettelsesformLabel })
+      .getByRole("radio", {
+        name: virksomhetFelter.ansettelsesform.alternativer.find(
+          (alternativ) => alternativ.verdi === options.ansettelsesform,
+        )?.label,
+      })
       .click();
 
     await dialog.getByRole("button", { name: t.felles.lagre }).click();

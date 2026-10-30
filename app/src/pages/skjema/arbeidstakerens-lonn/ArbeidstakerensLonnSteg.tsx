@@ -42,16 +42,14 @@ function ArbeidstakerensLonnStegContent({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const invalidateArbeidsgiverSkjemaQuery = useInvalidateSkjemaQuery();
-  const { getFelt } = useSkjemaDefinisjon();
+  const { getFelt, getSeksjon } = useSkjemaDefinisjon();
 
   const betalerAllLonnFelt = getFelt(
     "arbeidstakerensLonn",
     "arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden",
   );
-  const virksomheterFelt = getFelt(
-    "arbeidstakerensLonn",
-    "virksomheterSomUtbetalerLonnOgNaturalytelser",
-  );
+  const virksomheterFelt = getSeksjon("arbeidstakerensLonn").felter
+    .virksomheterSomUtbetalerLonnOgNaturalytelser;
 
   const formMethods = useForm({
     resolver: zodResolver(arbeidstakerensLonnSchema),
@@ -137,9 +135,8 @@ function ArbeidstakerensLonnStegContent({
           {arbeidsgiverBetalerAllLonnOgNaturaytelserIUtsendingsperioden ===
             false && (
             <NorskeOgUtenlandskeVirksomheterFormPart
-              description={virksomheterFelt.hjelpetekst}
+              definisjon={virksomheterFelt}
               fieldName="virksomheterSomUtbetalerLonnOgNaturalytelser"
-              label={virksomheterFelt.label}
             />
           )}
         </SkjemaSteg>

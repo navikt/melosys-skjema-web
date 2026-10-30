@@ -50,7 +50,7 @@ function ArbeidssituasjonStegContent({
   const { t } = useTranslation();
   const translateError = useTranslateError();
   const invalidateArbeidstakerSkjemaQuery = useInvalidateSkjemaQuery();
-  const { getFelt } = useSkjemaDefinisjon();
+  const { getFelt, getSeksjon } = useSkjemaDefinisjon();
 
   const harVaertFelt = getFelt(
     "arbeidssituasjon",
@@ -64,10 +64,9 @@ function ArbeidssituasjonStegContent({
     "arbeidssituasjon",
     "skalJobbeForFlereVirksomheter",
   );
-  const virksomheterFelt = getFelt(
-    "arbeidssituasjon",
-    "virksomheterArbeidstakerJobberForIutsendelsesPeriode",
-  );
+  const virksomheterFelt =
+    getSeksjon("arbeidssituasjon").felter
+      .virksomheterArbeidstakerJobberForIutsendelsesPeriode;
 
   const formMethods = useForm({
     resolver: zodResolver(
@@ -167,10 +166,8 @@ function ArbeidssituasjonStegContent({
 
           {skalJobbeForFlereVirksomheter && (
             <NorskeOgUtenlandskeVirksomheterFormPart
-              description={virksomheterFelt.hjelpetekst}
+              definisjon={virksomheterFelt}
               fieldName="virksomheterArbeidstakerJobberForIutsendelsesPeriode"
-              includeAnsettelsesform
-              label={virksomheterFelt.label}
             />
           )}
         </SkjemaSteg>

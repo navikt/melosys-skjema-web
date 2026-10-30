@@ -8,9 +8,11 @@ export const offshoreSchema = z.object({
     .object({
       navnPaVirksomhet: z
         .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
+        .trim()
         .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
       navnPaInnretning: z
         .string({ error: "arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd" })
+        .trim()
         .min(1, "arbeidsstedIUtlandetSteg.navnPaInnretningErPakrevd"),
       typeInnretning: z.enum(TypeInnretning, {
         error: "arbeidsstedIUtlandetSteg.duMaVelgeTypeInnretning",

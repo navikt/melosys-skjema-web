@@ -8,14 +8,17 @@ export const paSkipSchema = z.object({
     .object({
       navnPaVirksomhet: z
         .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
+        .trim()
         .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
       navnPaSkip: z
         .string({ error: "arbeidsstedIUtlandetSteg.navnPaSkipErPakrevd" })
+        .trim()
         .min(1, "arbeidsstedIUtlandetSteg.navnPaSkipErPakrevd"),
       yrketTilArbeidstaker: z
         .string({
           error: "arbeidsstedIUtlandetSteg.yrketTilArbeidstakerErPakrevd",
         })
+        .trim()
         .min(1, "arbeidsstedIUtlandetSteg.yrketTilArbeidstakerErPakrevd"),
       seilerI: z.enum(Farvann, {
         error: "arbeidsstedIUtlandetSteg.duMaVelgeHvorSkipetSeiler",

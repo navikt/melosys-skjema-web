@@ -1,6 +1,7 @@
 export const en = {
   translation: {
     felles: {
+      valgfritt: "(optional)",
       laster: "Loading...",
       feil: "An error occurred",
       feilVedLastingAvSkjema: "Error loading form",
@@ -75,7 +76,6 @@ export const en = {
     norskeVirksomheterFormPart: {
       norskVirksomhet: "Norwegian company",
       norskeVirksomheter: "Norwegian companies",
-      organisasjonsnummer: "Organization number",
       leggTilNorskVirksomhet: "Add Norwegian company",
       endreNorskVirksomhet: "Edit Norwegian company",
       kunneIkkeFInneOrganisasjon:
@@ -84,24 +84,8 @@ export const en = {
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Foreign company",
       utenlandskeVirksomheter: "Foreign companies",
-      navnPaVirksomhet: "Company name",
-      organisasjonsnummerEllerRegistreringsnummerValgfritt:
-        "Organization number or registration number (optional)",
-      vegnavnOgHusnummerEvtPostboks:
-        "Street address and house number, or P.O. box",
-      bygningValgfritt: "Building (optional)",
-      postkodeValgfritt: "Postal code (optional)",
-      byStednavnValgfritt: "City/place name (optional)",
-      regionValgfritt: "Region (optional)",
-      land: "Country",
-      tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
-        "Does the company belong to the same corporate group as the Norwegian employer?",
       leggTilUtenlandskVirksomhet: "Add foreign company",
       endreUtenlandskVirksomhet: "Edit foreign company",
-      ansettelsesform: "What is your current position in this company?",
-      arbeidstakerEllerFrilanser: "Employee or freelancer",
-      selvstendigNaeringsdrivende: "Self-employed",
-      statsansatt: "Civil servant",
     },
     familiemedlemmerSteg: {
       tittel: "Family members",
@@ -539,6 +523,10 @@ export const en = {
       navnPaVirksomhetErPakrevd: "Company name is required",
       vegnavnOgHusnummerErPakrevd:
         "Street address and house number are required",
+      postkodeErPakrevd: "Postal code is required",
+      byStedsnavnErPakrevd: "City/place name is required",
+      organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
+        "Organization number or registration number cannot be longer than 25 characters",
       landErPakrevd: "Country is required",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "You must answer whether the company is part of the same corporate group",
