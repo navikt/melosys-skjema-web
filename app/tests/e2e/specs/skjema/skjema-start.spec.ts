@@ -146,16 +146,18 @@ test.describe("Skjema — introside med bekreftelse", () => {
       "/api/skjema/utsendt-arbeidstaker/opprett-med-kontekst",
       async (route) => {
         antallOpprettelser++;
-        await (antallOpprettelser === 1
-          ? route.fulfill({ status: 500 })
-          : route.fulfill({
-              status: 200,
-              contentType: "application/json",
-              body: JSON.stringify({
-                id: testOpprettSoknadResponseId,
-                status: "UTKAST",
-              }),
-            }));
+        await route.fulfill(
+          antallOpprettelser === 1
+            ? { status: 500 }
+            : {
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({
+                  id: testOpprettSoknadResponseId,
+                  status: "UTKAST",
+                }),
+              },
+        );
       },
     );
 
