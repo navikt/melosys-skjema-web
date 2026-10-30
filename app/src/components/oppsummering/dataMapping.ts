@@ -62,13 +62,23 @@ function flattenPaLand(
 /**
  * Flater ut nestet virksomheter-struktur til en flat array
  * som matcher definisjons-elementDefinisjon.
+ * Definisjoner før v6 har ikke eget felt for utenlandsk orgnr, så der vises det under organisasjonsnummer.
  */
 function flattenVirksomheter(
-  virksomheter?:
+  virksomheter:
     | NorskeOgUtenlandskeVirksomheter
-    | NorskeOgUtenlandskeVirksomheterMedAnsettelsesform,
+    | NorskeOgUtenlandskeVirksomheterMedAnsettelsesform
+    | undefined,
+  felt: SeksjonDefinisjonDto["felter"][string] | undefined,
 ): Record<string, unknown>[] | undefined {
   if (!virksomheter) return undefined;
+
+  const utenlandskOrgnrNokkel =
+    felt &&
+    "elementDefinisjon" in felt &&
+    felt.elementDefinisjon.organisasjonsnummerEllerRegistreringsnummer
+      ? "organisasjonsnummerEllerRegistreringsnummer"
+      : "organisasjonsnummer";
 
   const result: Record<string, unknown>[] = Array.from(
     virksomheter.norskeVirksomheter ?? [],
@@ -82,7 +92,7 @@ function flattenVirksomheter(
     result.push({
       __type: VirksomhetTypeKey.UTENLANDSK,
       ...v,
-      organisasjonsnummerEllerRegistreringsnummer: organisasjonsnummer,
+      [utenlandskOrgnrNokkel]: organisasjonsnummer,
     });
   }
 
@@ -116,6 +126,7 @@ function utsendingsperiodeOgLandEntry(
 
 function mapArbeidstakerSeksjoner(
   dto: UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
+  definisjon: SkjemaDefinisjonDto,
 ): SeksjonMappingEntry[] {
   return [
     utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
@@ -128,6 +139,8 @@ function mapArbeidstakerSeksjoner(
             virksomheterArbeidstakerJobberForIutsendelsesPeriode:
               flattenVirksomheter(
                 dto.arbeidssituasjon
+                  .virksomheterArbeidstakerJobberForIutsendelsesPeriode,
+                definisjon.seksjoner.arbeidssituasjon?.felter
                   .virksomheterArbeidstakerJobberForIutsendelsesPeriode,
               ),
           }
@@ -153,6 +166,8 @@ function mapArbeidstakerSeksjoner(
             virksomheterSomUtbetalerLonnOgNaturalytelser: flattenVirksomheter(
               dto.skatteforholdOgInntekt
                 .virksomheterSomUtbetalerLonnOgNaturalytelser,
+              definisjon.seksjoner.skatteforholdOgInntekt?.felter
+                .virksomheterSomUtbetalerLonnOgNaturalytelser,
             ),
           }
         : undefined,
@@ -172,6 +187,7 @@ function mapArbeidstakerSeksjoner(
 
 function mapArbeidsgiverSeksjoner(
   dto: UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+  definisjon: SkjemaDefinisjonDto,
   utsendelseLand: LandKode | undefined = dto.utsendingsperiodeOgLand
     ?.utsendelseLand,
 ): SeksjonMappingEntry[] {
@@ -229,6 +245,8 @@ function mapArbeidsgiverSeksjoner(
             virksomheterSomUtbetalerLonnOgNaturalytelser: flattenVirksomheter(
               dto.arbeidstakerensLonn
                 .virksomheterSomUtbetalerLonnOgNaturalytelser,
+              definisjon.seksjoner.arbeidstakerensLonn?.felter
+                .virksomheterSomUtbetalerLonnOgNaturalytelser,
             ),
           }
         : undefined,
@@ -243,6 +261,7 @@ function mapArbeidsgiverSeksjoner(
 
 function mapCombinedSeksjoner(
   dto: UtsendtArbeidstakerArbeidsgiverOgArbeidstakerSkjemaDataDto,
+  definisjon: SkjemaDefinisjonDto,
 ): SeksjonMappingEntry[] {
   return [
     utsendingsperiodeOgLandEntry(dto.utsendingsperiodeOgLand),
@@ -251,24 +270,31 @@ function mapCombinedSeksjoner(
         ...dto.arbeidsgiversData,
         tilleggsopplysninger: undefined,
       } as UtsendtArbeidstakerArbeidsgiversSkjemaDataDto,
+      definisjon,
       dto.utsendingsperiodeOgLand?.utsendelseLand,
     ),
-    ...mapArbeidstakerSeksjoner({
-      ...dto.arbeidstakersData,
-      tilleggsopplysninger: dto.tilleggsopplysninger,
-    } as UtsendtArbeidstakerArbeidstakersSkjemaDataDto),
+    ...mapArbeidstakerSeksjoner(
+      {
+        ...dto.arbeidstakersData,
+        tilleggsopplysninger: dto.tilleggsopplysninger,
+      } as UtsendtArbeidstakerArbeidstakersSkjemaDataDto,
+      definisjon,
+    ),
   ];
 }
 
-function getSeksjonMappinger(dto: SkjemaData): SeksjonMappingEntry[] {
+function getSeksjonMappinger(
+  dto: SkjemaData,
+  definisjon: SkjemaDefinisjonDto,
+): SeksjonMappingEntry[] {
   if (isArbeidstakersDel(dto)) {
-    return mapArbeidstakerSeksjoner(dto);
+    return mapArbeidstakerSeksjoner(dto, definisjon);
   }
   if (isArbeidsgiversDel(dto)) {
-    return mapArbeidsgiverSeksjoner(dto);
+    return mapArbeidsgiverSeksjoner(dto, definisjon);
   }
   if (isArbeidsgiverOgArbeidstakersDel(dto)) {
-    return mapCombinedSeksjoner(dto);
+    return mapCombinedSeksjoner(dto, definisjon);
   }
   throw new Error(`Ukjent skjematype: ${(dto as SkjemaData).type}`);
 }
@@ -282,49 +308,15 @@ export function resolveSeksjoner(
   definisjon: SkjemaDefinisjonDto,
   options: ResolveSeksjonerOptions = {},
 ): ResolvedSeksjon[] {
-  return getSeksjonMappinger(dto).flatMap(({ seksjonNavn, stegKey, data }) => {
-    if (
-      seksjonNavn === "utsendingsperiodeOgLand" &&
-      options.skjulUtsendingsperiodeOgLand
-    )
-      return [];
-    const seksjon = definisjon.seksjoner[seksjonNavn];
-    return seksjon && data
-      ? {
-          seksjonNavn,
-          seksjon,
-          data: tilpassUtenlandskOrgnrTilDefinisjon(seksjon, data),
-          stegKey,
-        }
-      : [];
-  });
-}
-
-/**
- * Definisjoner før v6 deler organisasjonsnummer-feltet mellom norske og utenlandske
- * virksomheter, så innsendte skjema på disse versjonene viser utenlandsk orgnr der.
- */
-function tilpassUtenlandskOrgnrTilDefinisjon(
-  seksjon: SeksjonDefinisjonDto,
-  data: Record<string, unknown>,
-): Record<string, unknown> {
-  const tilpasset = { ...data };
-  for (const [feltNavn, felt] of Object.entries(seksjon.felter)) {
-    const verdi = data[feltNavn];
-    if (
-      !("elementDefinisjon" in felt) ||
-      felt.elementDefinisjon.organisasjonsnummerEllerRegistreringsnummer ||
-      !Array.isArray(verdi)
-    )
-      continue;
-    tilpasset[feltNavn] = verdi.map((element: Record<string, unknown>) => {
-      if (element.__type !== VirksomhetTypeKey.UTENLANDSK) return element;
-      const { organisasjonsnummerEllerRegistreringsnummer, ...rest } = element;
-      return {
-        ...rest,
-        organisasjonsnummer: organisasjonsnummerEllerRegistreringsnummer,
-      };
-    });
-  }
-  return tilpasset;
+  return getSeksjonMappinger(dto, definisjon).flatMap(
+    ({ seksjonNavn, stegKey, data }) => {
+      if (
+        seksjonNavn === "utsendingsperiodeOgLand" &&
+        options.skjulUtsendingsperiodeOgLand
+      )
+        return [];
+      const seksjon = definisjon.seksjoner[seksjonNavn];
+      return seksjon && data ? { seksjonNavn, seksjon, data, stegKey } : [];
+    },
+  );
 }
