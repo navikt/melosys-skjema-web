@@ -289,6 +289,44 @@ export function resolveSeksjoner(
     )
       return [];
     const seksjon = definisjon.seksjoner[seksjonNavn];
-    return !seksjon || !data ? [] : [{ seksjonNavn, seksjon, data, stegKey }];
+    return !seksjon || !data
+      ? []
+      : [
+          {
+            seksjonNavn,
+            seksjon,
+            data: tilpassUtenlandskOrgnrTilDefinisjon(seksjon, data),
+            stegKey,
+          },
+        ];
   });
+}
+
+/**
+ * Definisjoner før v6 deler organisasjonsnummer-feltet mellom norske og utenlandske
+ * virksomheter, så innsendte skjema på disse versjonene viser utenlandsk orgnr der.
+ */
+function tilpassUtenlandskOrgnrTilDefinisjon(
+  seksjon: SeksjonDefinisjonDto,
+  data: Record<string, unknown>,
+): Record<string, unknown> {
+  const tilpasset = { ...data };
+  for (const [feltNavn, felt] of Object.entries(seksjon.felter)) {
+    const verdi = data[feltNavn];
+    if (
+      !("elementDefinisjon" in felt) ||
+      felt.elementDefinisjon.organisasjonsnummerEllerRegistreringsnummer ||
+      !Array.isArray(verdi)
+    )
+      continue;
+    tilpasset[feltNavn] = verdi.map((element: Record<string, unknown>) => {
+      if (element.__type !== VirksomhetTypeKey.UTENLANDSK) return element;
+      const { organisasjonsnummerEllerRegistreringsnummer, ...rest } = element;
+      return {
+        ...rest,
+        organisasjonsnummer: organisasjonsnummerEllerRegistreringsnummer,
+      };
+    });
+  }
+  return tilpasset;
 }
