@@ -62,7 +62,7 @@ export const testArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
     arbeidsgiverNavn: "Test Bedrift AS",
     arbeidstakerNavn: "Test Bruker",
     skjemadel: Skjemadel.ARBEIDSGIVERS_DEL,
-    erOffentligArbeidsgiver: false,
+    erStatligArbeidsgiver: false,
     erNorskregistrertUtenlandskForetak: false,
     antallAnsatte: 50,
   } as ArbeidsgiverMetadata,
@@ -324,7 +324,7 @@ Rådgiverfirma org for RADGIVER flow (from ereg lookup)
 */
 export const testRadgiverfirmaOrgnr = korrektFormatertOrgnr2;
 export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
-  erOffentligArbeidsgiver: false,
+  erStatligArbeidsgiver: false,
   erNorskregistrertUtenlandskForetak: false,
   antallAnsatte: 50,
   organisasjon: { orgnr: testRadgiverfirmaOrgnr, navn: "Rådgiver Filial" },
@@ -335,7 +335,7 @@ export const testRadgiverfirmaOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
 Ereg response for DEG_SELV org search (OrganisasjonSoker)
 */
 export const testEregOrganisasjon: OrganisasjonMedJuridiskEnhetDto = {
-  erOffentligArbeidsgiver: false,
+  erStatligArbeidsgiver: false,
   erNorskregistrertUtenlandskForetak: false,
   antallAnsatte: 50,
   organisasjon: {
@@ -405,4 +405,42 @@ export const testVentendeMotpartSoknader: VentendeMotpartSoknaderResponse = {
       innsendtDato: "2026-01-15T09:00:00Z",
     },
   ],
+};
+
+export const testStatligArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto = {
+  ...testArbeidsgiverSkjema,
+  metadata: {
+    ...testArbeidsgiverSkjema.metadata,
+    erStatligArbeidsgiver: true,
+  },
+};
+
+/**
+Arbeidstakers del for statlig arbeidsgiver før AAREG-sjekken har avgjort flyten
+*/
+export const testArbeidstakerMedStatligArbeidsgiverSkjema: UtsendtArbeidstakerSkjemaDto =
+  {
+    ...testArbeidstakerSkjema,
+    metadata: {
+      ...testArbeidstakerSkjema.metadata,
+      erStatligArbeidsgiver: true,
+    },
+  };
+
+/**
+Statsansatt som fyller ut før arbeidsgiveren (ikke forhåndsutfylt)
+*/
+export const testStatsansattSkjema: UtsendtArbeidstakerSkjemaDto = {
+  ...testArbeidstakerMedStatligArbeidsgiverSkjema,
+  metadata: {
+    ...testArbeidstakerMedStatligArbeidsgiverSkjema.metadata,
+    harArbeidsforholdIAareg: true,
+  },
+  data: {
+    type: "UTSENDT_ARBEIDSTAKER_ARBEIDSTAKERS_DEL",
+    utsendingsperiodeOgLand: {
+      utsendelseLand: LandKode.SE,
+      utsendelsePeriode: { fraDato: "2026-02-01", tilDato: "2026-08-31" },
+    },
+  },
 };

@@ -7,6 +7,32 @@ Web-applikasjon for digitale skjema for utsendt arbeidstaker (A1-søknad).
 - `/medlemskap-lovvalg/soknad` går alltid til representasjonsvalget, uavhengig av featuretoggles. Eksisterende lenker fra eksterne parter kan fortsatt bruke denne inngangen.
 - `/medlemskap-lovvalg/soknad/velg-situasjon` viser alltid situasjonsvelgeren. Lenker på nav.no som trenger mellomsiden, skal bruke denne URL-en.
 
+## Midlertidig statsansatt-toggle — MELOSYS-7694
+
+`melosys.skjema.statsansatt-flyt` evalueres av melosys-skjema-api og hentes via
+det eksisterende `/api/featuretoggle`-endepunktet. Toggle på gir statsansattflyten;
+toggle av gir vanlig spørsmålsflyt. AAREG-sjekken på periodesteget og varslene
+på periodesteget og kvitteringen brukes uavhengig av togglen.
+Skjemadefinisjon v5 gjelder i begge tilfeller. Det lagres ikke noe togglevalg
+på skjemaet.
+
+Skjemastegene venter på togglevalget før de rendres, slik at navigasjon og
+validering starter med riktig flyt. Feil ved henting vises som feil.
+Togglevalget caches i inntil fem minutter; last siden på nytt etter endring
+under testing. Ikke bytt toggle mens testskjemaer fylles ut.
+
+**Avvikling:** Søk etter `MIDLERTIDIG MELOSYS-7694`, `STATSANSATT_FLYT`,
+`statsansattFlytAktivert`, `useStegRekkefolge` og `useUtsendtArbeidstakerFlyt`.
+Fjern togglen fra `featuretoggle/toggleNavn.ts`, boolean-parameterne og
+gammel-flyt-grenen i `getUtsendtArbeidstakerFlyt`. Erstatt hook-kallene med
+de rene funksjonene `getStegRekkefolge` og `getUtsendtArbeidstakerFlyt`, og
+fjern de to midlertidige hookene. Fjern togglelasting/-feilhåndtering i
+`SkjemaStegLoader` og `SkjemaRedirect`. AAREG-oppslaget og varslene i
+periodesteget og kvitteringen skal beholdes.
+Fjern testene for toggle av og toggleoppsettet i E2E-fixturene; behold
+statsansatt-testene. Fjern togglen i backend samtidig (se backendens README),
+og slett denne seksjonen.
+
 ## Tech Stack
 
 ### Frontend (app/)

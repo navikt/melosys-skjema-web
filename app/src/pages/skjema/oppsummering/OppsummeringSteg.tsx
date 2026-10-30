@@ -16,7 +16,7 @@ import type { UtsendtArbeidstakerSkjemaDto } from "~/types/melosysSkjemaTypes.ts
 import { SkjemaStegLoader } from "../components/SkjemaStegLoader.tsx";
 import { byggHrefMedBasePath, byggSkjemaStegHref } from "../skjemaHref.ts";
 import { finnManglendeSteg } from "../stegDataGetters.ts";
-import { getStegRekkefolge } from "../stegRekkefølge.ts";
+import { useStegRekkefolge } from "../stegRekkefølge.ts";
 import { isArbeidsgiverOgArbeidstakersDel } from "../types.ts";
 
 type ManglendeSteg = ReturnType<typeof finnManglendeSteg>;
@@ -34,7 +34,7 @@ function OppsummeringStegContent({
 }: {
   skjema: UtsendtArbeidstakerSkjemaDto;
 }) {
-  const stegRekkefolge = getStegRekkefolge(skjema);
+  const stegRekkefolge = useStegRekkefolge(skjema);
   const data = skjema.data;
   const { t } = useTranslation();
   const { definisjon } = useSkjemaDefinisjon();

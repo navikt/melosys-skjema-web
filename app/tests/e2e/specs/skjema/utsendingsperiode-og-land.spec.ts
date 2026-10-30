@@ -1,15 +1,22 @@
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";
 import {
   LandKode,
   UtsendingsperiodeOgLandDto,
 } from "~/types/melosysSkjemaTypes";
 
-import { setupApiMocksForArbeidstaker } from "../../fixtures/api-mocks";
-import { test } from "../../fixtures/test";
+import {
+  mockAaregSjekk,
+  mockFeatureToggles,
+  setupApiMocksForArbeidstaker,
+} from "../../fixtures/api-mocks";
+import { expect, test } from "../../fixtures/test";
 import {
   formFieldValues,
+  testArbeidstakerMedStatligArbeidsgiverSkjema,
   testArbeidstakerSkjema,
   testArbeidstakerSkjemaFraMotpartCta,
   testArbeidstakerSkjemaMedAvvikFraMotpart,
+  testStatsansattSkjema,
   testUserInfo,
 } from "../../fixtures/test-data";
 import { UtsendingsperiodeOgLandStegPage } from "../../pages/skjema/utsendingsperiode-og-land-steg.page";
@@ -160,5 +167,107 @@ test.describe("Utsendingsperiode og land", () => {
     );
 
     await utsendingsperiodeOgLandStegPage.assertNavigatedToNextStep();
+  });
+
+  test("viser AAREG-varsel når arbeidsforholdet ikke finnes for hele perioden", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    await mockAaregSjekk(page, testStatsansattSkjema.id, false);
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testStatsansattSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertAaregVarselIsVisible();
+  });
+
+  test("statlig arbeidsgiver uten avklart AAREG-treff viser bare stegnummer i fremgangsindikatoren", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testArbeidstakerMedStatligArbeidsgiverSkjema,
+      testUserInfo,
+    );
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testArbeidstakerMedStatligArbeidsgiverSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertFremgangsindikatorViserUkjenteSteg();
+  });
+
+  test("AAREG-varsel annonseres som alert uten å flytte fokus", async ({
+    page,
+  }) => {
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    let svarPaAaregSjekk!: () => void;
+    // eslint-disable-next-line unicorn/prefer-promise-with-resolvers -- Promise.withResolvers er ikke tilgjengelig i prosjektets ES2023-typer.
+    const ventPaSvar = new Promise<void>((resolve) => {
+      svarPaAaregSjekk = resolve;
+    });
+    await page.route(
+      `/api/skjema/utsendt-arbeidstaker/${testStatsansattSkjema.id}/aareg-sjekk`,
+      async (route) => {
+        await ventPaSvar;
+        await route.fulfill({
+          json: { harArbeidsforhold: false },
+        });
+      },
+    );
+
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testStatsansattSkjema,
+    );
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertAaregVarselIsNotVisible();
+    await stegPage.focusTilDato();
+    svarPaAaregSjekk();
+    await stegPage.assertAaregVarselBeholderFokus();
+  });
+
+  test("MIDLERTIDIG MELOSYS-7694 viser AAREG-varsel og beholder vanlig navigasjon når statsansattflyten er av", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, { [STATSANSATT_FLYT]: false });
+    await setupApiMocksForArbeidstaker(
+      page,
+      testStatsansattSkjema,
+      testUserInfo,
+    );
+    await mockAaregSjekk(page, testStatsansattSkjema.id, false);
+    let antallAaregKall = 0;
+    page.on("request", (request) => {
+      if (request.url().includes("/aareg-sjekk")) antallAaregKall++;
+    });
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testStatsansattSkjema,
+    );
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+    await stegPage.assertAaregVarselIsVisible();
+    await stegPage.lagreOgFortsettAndExpectPayload(
+      testStatsansattSkjema.data!.utsendingsperiodeOgLand!,
+    );
+    await stegPage.assertNavigatedToNextStep();
+
+    expect(antallAaregKall).toBe(1);
   });
 });

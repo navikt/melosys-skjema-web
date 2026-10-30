@@ -29,6 +29,7 @@ export const en = {
       pakrevd: "required",
       forrigeSteg: "Previous step",
       nesteSteg: "Next step",
+      stegNummer: "Step {{steg}}",
       sistOppdatert: "Last updated: {{tidspunkt}}",
       lagreUtkastOgFortsettSenere: "Save draft and continue later",
       avbrytOgSlett: "Cancel and delete",
@@ -160,6 +161,10 @@ export const en = {
     skatteforholdOgInntektSteg: {
       tittel: "Tax and Income Information",
       inntektHeading: "Income",
+      duMaSvarePaOmArbeidsgiverBetalerAllLonn:
+        "You must answer whether your employer pays all salary and any benefits in kind during the posting period",
+      duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn:
+        "You must add at least one business that pays the salary and any benefits in kind",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "You must answer whether you are liable to pay tax to Norway for the entire posting period",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
@@ -256,6 +261,14 @@ export const en = {
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "You must answer whether the employee will work for the company in Norway after the posting period",
     },
+    aaregVarsel: {
+      tittel:
+        "The employment relationship is not registered in the Employer and Employee Register (Aa register)",
+      ingenArbeidsforhold:
+        "{{arbeidstakerNavn}} is not registered as employed by {{arbeidsgiverNavn}} in the Aa register for the entire posting period. The employer must update the employment relationship in the a-melding.",
+      ingenArbeidsforholdDu:
+        "Your employment with {{arbeidsgiverNavn}} is not registered in the Aa register for the entire posting period. Your employer must update the information in the a-melding.",
+    },
     utsendingsperiodeOgLandSteg: {
       tittel: "Posting period and country",
       duMaVelgeHvilketLandArbeidetSkalUtforesI:
@@ -284,6 +297,8 @@ export const en = {
         "You will work, or stay without working, in one or more EEA countries or Switzerland.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital&lang=en",
       gaTilbake: "Go back",
+      gaTilbakeLenke:
+        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos/en",
     },
     landingsside: {
       hei: "Hello",
@@ -382,7 +397,7 @@ export const en = {
         "Information about your employment relationships from Aa-registeret",
       personvernLinkText:
         "How we process your personal data (opens in a new tab).",
-      personvernLinkUrl: "https://www.nav.no/personvernerklaering",
+      personvernLinkUrl: "https://www.nav.no/personvernerklaering/en",
       intro:
         "It is important that you provide correct information so that we can process your application.",
       linkText:
@@ -433,7 +448,10 @@ export const en = {
       ingenArbeidsgivereTittel: "You have no employers available",
       ingenArbeidsgivereInfo:
         "To submit an application on behalf of an employer, you must have been delegated authorizations by the company in Altinn",
-      ingenArbeidsgivereLenke: "Read more about how to get access in Altinn",
+      ingenArbeidsgivereLenke:
+        "Read more about how to get access in Altinn (opens in a new tab)",
+      ingenArbeidsgivereLenkeUrl:
+        "https://info.altinn.no/en/help/access-managment/",
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
       feilVedHentingAvFullmakter:

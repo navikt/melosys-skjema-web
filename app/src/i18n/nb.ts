@@ -29,6 +29,7 @@ export const nb = {
       pakrevd: "påkrevd",
       forrigeSteg: "Forrige steg",
       nesteSteg: "Neste steg",
+      stegNummer: "Steg {{steg}}",
       sistOppdatert: "Sist oppdatert: {{tidspunkt}}",
       lagreUtkastOgFortsettSenere: "Lagre utkast og fortsett senere",
       avbrytOgSlett: "Avbryt og slett",
@@ -154,6 +155,10 @@ export const nb = {
     skatteforholdOgInntektSteg: {
       tittel: "Skatteforhold og inntekt",
       inntektHeading: "Inntekt",
+      duMaSvarePaOmArbeidsgiverBetalerAllLonn:
+        "Du må svare på om arbeidsgiveren din utbetaler all lønn og eventuelle naturalytelser i utsendingsperioden",
+      duMaLeggeTilMinstEnVirksomhetSomUtbetalerLonn:
+        "Du må legge til minst én virksomhet som utbetaler lønn og eventuelle naturalytelser",
       duMaSvarePaOmDuErSkattepliktigTilNorgeIHeleUtsendingsperioden:
         "Du må svare på om du er skattepliktig til Norge i hele utsendingsperioden",
       duMaSvarePaOmDuMottarPengestotteFraEtAnnetEosLandEllerSveits:
@@ -248,6 +253,14 @@ export const nb = {
       duMaSvarePaOmArbeidstakerenVilArbeideForVirksomhetenINorgeEtterOppdraget:
         "Du må svare på om arbeidstakeren vil arbeide for virksomheten i Norge etter oppdraget",
     },
+    aaregVarsel: {
+      tittel:
+        "Arbeidsforholdet er ikke registrert i Arbeidsgiver- og arbeidstakerregisteret (Aa-registeret)",
+      ingenArbeidsforhold:
+        "{{arbeidstakerNavn}} er ikke registrert med et arbeidsforhold hos {{arbeidsgiverNavn}} i Aa-registeret for hele utsendingsperioden. Arbeidsgiver må oppdatere arbeidsforholdet i a-meldingen.",
+      ingenArbeidsforholdDu:
+        "Arbeidsforholdet ditt hos {{arbeidsgiverNavn}} er ikke registrert i Aa-registeret for hele utsendingsperioden. Arbeidsgiveren din må oppdatere opplysningene i a-meldingen.",
+    },
     utsendingsperiodeOgLandSteg: {
       tittel: "Utenlandsperiode og land",
       duMaVelgeHvilketLandArbeidetSkalUtforesI:
@@ -276,6 +289,8 @@ export const nb = {
         "Du skal arbeide, eller oppholde deg uten å arbeide, i ett eller flere EØS-land eller Sveits.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital",
       gaTilbake: "Gå tilbake",
+      gaTilbakeLenke:
+        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos",
     },
     landingsside: {
       hei: "Hei",
@@ -416,7 +431,10 @@ export const nb = {
       ingenArbeidsgivereTittel: "Du har ingen arbeidsgivere tilgjengelig",
       ingenArbeidsgivereInfo:
         "For å kunne fylle ut søknad på vegne av en arbeidsgiver, må du ha fått delegert tilgang til virksomheten i Altinn.",
-      ingenArbeidsgivereLenke: "Les mer om hvordan du får tilgang i Altinn",
+      ingenArbeidsgivereLenke:
+        "Les mer om hvordan du får tilgang i Altinn (åpnes i ny fane)",
+      ingenArbeidsgivereLenkeUrl:
+        "https://info.altinn.no/hjelp/ny-tilgangsstyring/",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
       feilVedHentingAvFullmakter:

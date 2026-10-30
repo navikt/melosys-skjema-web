@@ -8,7 +8,11 @@ import {
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import { mockFetchSkjema, mockUserInfo } from "../../fixtures/api-mocks";
+import {
+  mockFeatureToggles,
+  mockFetchSkjema,
+  mockUserInfo,
+} from "../../fixtures/api-mocks";
 import { test } from "../../fixtures/test";
 import { testUserInfo } from "../../fixtures/test-data";
 import { KvitteringPage } from "../../pages/skjema/kvittering-page";
@@ -62,4 +66,44 @@ test.describe("Kvittering", () => {
     await kvitteringPage.clickTilOversiktLink();
     await kvitteringPage.assertNavigatedToLandingsside();
   });
+
+  test("viser AAREG-varsel når arbeidsforholdet ikke finnes i AAREG", async ({
+    page,
+  }) => {
+    await mockFetchSkjema(page, {
+      ...skjema,
+      metadata: { ...metadata, harArbeidsforholdIAareg: false },
+    });
+    const kvitteringPage = new KvitteringPage(page, skjemaId);
+    await kvitteringPage.mockKvittering({
+      skjemaId: skjemaId,
+      status: SkjemaStatus.SENDT,
+      referanseId: "ABX1244",
+    });
+
+    await kvitteringPage.goto();
+    await kvitteringPage.assertIsVisible();
+    await kvitteringPage.assertAaregVarselIsVisible(metadata);
+  });
+
+  test("MIDLERTIDIG MELOSYS-7694 viser AAREG-varsel også når statsansattflyten er av", async ({
+    page,
+  }) => {
+    await mockFeatureToggles(page, { [STATSANSATT_FLYT]: false });
+    await mockFetchSkjema(page, {
+      ...skjema,
+      metadata: { ...metadata, harArbeidsforholdIAareg: false },
+    });
+    const kvitteringPage = new KvitteringPage(page, skjemaId);
+    await kvitteringPage.mockKvittering({
+      skjemaId,
+      status: SkjemaStatus.SENDT,
+      referanseId: "ABX1244",
+    });
+
+    await kvitteringPage.goto();
+    await kvitteringPage.assertIsVisible();
+    await kvitteringPage.assertAaregVarselIsVisible(metadata);
+  });
 });
+import { STATSANSATT_FLYT } from "~/featuretoggle/toggleNavn";

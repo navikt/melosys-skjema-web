@@ -8,12 +8,14 @@ import type {
 
 import type { RadioButtonGroupJaNeiLocator } from "../../../types/playwright-types";
 import { mockFetchSkjema } from "../../fixtures/api-mocks";
-import { translations } from "../../utils/translations";
+import { akselTranslations, translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const arbeidsstedIUtlandet =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedIUtlandet;
 const paLandFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLand.felter;
+const paLandArbeidstakerFelter =
+  SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaLandArbeidstaker.felter;
 const offshoreFelter =
   SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedOffshore.felter;
 const paSkipFelter = SKJEMA_DEFINISJON_A1.seksjoner.arbeidsstedPaSkip.felter;
@@ -114,9 +116,20 @@ export class ArbeidsstedIUtlandetStegPage {
   readonly vanligHjemmebaseLandSelect: Locator;
   readonly vanligHjemmebaseNavnInput: Locator;
 
-  constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
+  /**
+  Arbeidstakers del bruker egne du-form-tekster for arbeidssted på land
+  */
+  readonly erArbeidstaker: boolean;
+
+  constructor(
+    page: Page,
+    skjema: UtsendtArbeidstakerSkjemaDto,
+    { erArbeidstaker = false }: { erArbeidstaker?: boolean } = {},
+  ) {
     this.page = page;
     this.skjema = skjema;
+    this.erArbeidstaker = erArbeidstaker;
+    const landFelter = erArbeidstaker ? paLandArbeidstakerFelter : paLandFelter;
     this.heading = page.getByRole("heading", {
       name: arbeidsstedIUtlandet.tittel,
     });
@@ -124,28 +137,27 @@ export class ArbeidsstedIUtlandetStegPage {
       name: arbeidsstedIUtlandet.felter.arbeidsstedType.label,
     });
 
-    // Felles - alle seksjoner har navnPaVirksomhet med samme label
     this.navnPaVirksomhetInput = page.getByLabel(
-      paLandFelter.navnPaVirksomhet.label,
+      landFelter.navnPaVirksomhet.label,
     );
 
     // På land
     const fastEllerVekslendeGroup = page.getByRole("radiogroup", {
-      name: paLandFelter.fastEllerVekslendeArbeidssted.label,
+      name: landFelter.fastEllerVekslendeArbeidssted.label,
     });
     this.fastEllerVekslendeRadioGroup = {
       FAST: fastEllerVekslendeGroup.getByRole("radio", {
-        name: paLandFelter.fastEllerVekslendeArbeidssted.alternativer[0].label,
+        name: landFelter.fastEllerVekslendeArbeidssted.alternativer[0].label,
       }),
       VEKSLENDE: fastEllerVekslendeGroup.getByRole("radio", {
-        name: paLandFelter.fastEllerVekslendeArbeidssted.alternativer[1].label,
+        name: landFelter.fastEllerVekslendeArbeidssted.alternativer[1].label,
       }),
     };
 
-    this.vegadresseInput = page.getByLabel(paLandFelter.vegadresse.label);
-    this.nummerInput = page.getByLabel(paLandFelter.nummer.label);
-    this.postkodeInput = page.getByLabel(paLandFelter.postkode.label);
-    this.byStedInput = page.getByLabel(paLandFelter.bySted.label);
+    this.vegadresseInput = page.getByLabel(landFelter.vegadresse.label);
+    this.nummerInput = page.getByLabel(landFelter.nummer.label);
+    this.postkodeInput = page.getByLabel(landFelter.postkode.label);
+    this.byStedInput = page.getByLabel(landFelter.bySted.label);
 
     const erHjemmekontorGroup = page.getByRole("radiogroup", {
       name: paLandFelter.erHjemmekontor.label,
@@ -287,6 +299,43 @@ export class ArbeidsstedIUtlandetStegPage {
     await expect(this.heading).toBeVisible();
   }
 
+  async assertStegIkonerErSkjult() {
+    await this.page
+      .getByRole("button", {
+        name: akselTranslations.FormProgress.showAllSteps,
+      })
+      .click();
+    const stegvelger = this.page.locator(".aksel-form-progress__stepper");
+    await expect(stegvelger).toBeVisible();
+    await expect(this.heading.getByRole("img")).toHaveCount(0);
+    await expect(stegvelger.getByRole("img")).toHaveCount(0);
+  }
+
+  async assertStegIkonerErSynlige() {
+    await this.page
+      .getByRole("button", {
+        name: akselTranslations.FormProgress.showAllSteps,
+      })
+      .click();
+    await expect(
+      this.heading.getByRole("img", {
+        name: translations.felles.stegGjelderArbeidsgiver,
+      }),
+    ).toBeVisible();
+    const stegvelger = this.page.locator(".aksel-form-progress__stepper");
+    await expect(stegvelger).toBeVisible();
+    await expect(
+      stegvelger.getByRole("img", {
+        name: translations.felles.stegGjelderArbeidsgiver,
+      }),
+    ).toHaveCount(4);
+    await expect(
+      stegvelger.getByRole("img", {
+        name: translations.felles.stegGjelderArbeidstaker,
+      }),
+    ).toHaveCount(3);
+  }
+
   async lagreOgFortsett() {
     await this.lagreOgFortsettButton.click();
   }
@@ -308,9 +357,18 @@ export class ArbeidsstedIUtlandetStegPage {
   }
 
   async assertNavigatedToNextStep() {
-    await expect(this.page).toHaveURL(
-      `/skjema/${this.skjema.id}/arbeidstakerens-lonn`,
-    );
+    const nesteSteg = this.erArbeidstaker
+      ? "skatteforhold-og-inntekt"
+      : "arbeidstakerens-lonn";
+    await expect(this.page).toHaveURL(`/skjema/${this.skjema.id}/${nesteSteg}`);
+  }
+
+  async assertArbeidsstedTypeSelectIsHidden() {
+    await expect(this.arbeidsstedTypeSelect).toBeHidden();
+  }
+
+  async assertErHjemmekontorIsHidden() {
+    await expect(this.erHjemmekontorRadioGroup.JA).toBeHidden();
   }
 
   async assertStillOnStep() {

@@ -1,9 +1,10 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
-import type {
-  UtsendingsperiodeOgLandDto,
-  UtsendtArbeidstakerSkjemaDto,
+import {
+  Representasjonstype,
+  type UtsendingsperiodeOgLandDto,
+  type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
 import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
@@ -33,6 +34,7 @@ export class UtsendingsperiodeOgLandStegPage {
   readonly fraDatoInput: Locator;
   readonly tilDatoInput: Locator;
   readonly lagreOgFortsettButton: Locator;
+  readonly aaregAlert: Locator;
 
   constructor(page: Page, skjema: UtsendtArbeidstakerSkjemaDto) {
     this.page = page;
@@ -48,6 +50,7 @@ export class UtsendingsperiodeOgLandStegPage {
     this.lagreOgFortsettButton = page.getByRole("button", {
       name: translations.felles.lagreOgFortsett,
     });
+    this.aaregAlert = page.getByRole("alert");
   }
 
   private preutfyltInfoboksTekst(
@@ -65,6 +68,18 @@ export class UtsendingsperiodeOgLandStegPage {
       .replaceAll("{{tilDato}}", () => tilDato);
   }
 
+  private aaregVarselTekst() {
+    const { representasjonstype, arbeidsgiverNavn, arbeidstakerNavn } =
+      this.skjema.metadata;
+    const varsel =
+      representasjonstype === Representasjonstype.DEG_SELV
+        ? translations.aaregVarsel.ingenArbeidsforholdDu
+        : translations.aaregVarsel.ingenArbeidsforhold;
+    return varsel
+      .replaceAll("{{arbeidsgiverNavn}}", () => arbeidsgiverNavn)
+      .replaceAll("{{arbeidstakerNavn}}", () => arbeidstakerNavn);
+  }
+
   private fraDatoFieldWrapper() {
     return this.fraDatoInput.locator("..").locator("..");
   }
@@ -79,6 +94,36 @@ export class UtsendingsperiodeOgLandStegPage {
 
   async assertIsVisible() {
     await expect(this.heading).toBeVisible();
+  }
+
+  async assertAaregVarselIsVisible() {
+    await expect(this.page.getByText(this.aaregVarselTekst())).toBeVisible();
+    await expect(
+      this.aaregAlert.getByText(translations.aaregVarsel.tittel),
+    ).toBeVisible();
+  }
+
+  async assertAaregVarselIsNotVisible() {
+    await expect(this.aaregAlert).not.toBeAttached();
+  }
+
+  async focusTilDato() {
+    await this.tilDatoInput.focus();
+  }
+
+  async assertAaregVarselBeholderFokus() {
+    await this.assertAaregVarselIsVisible();
+    await expect(this.aaregAlert).toContainText(this.aaregVarselTekst());
+    await expect(this.aaregAlert.getByRole("heading")).toBeVisible();
+    await expect(this.tilDatoInput).toBeFocused();
+  }
+
+  async assertFremgangsindikatorViserUkjenteSteg() {
+    const indikator = this.page.getByTestId("fremgangsindikator-ukjente-steg");
+    await expect(indikator).toBeVisible();
+    await expect(indikator).toContainText(
+      translations.felles.stegNummer.replace("{{steg}}", "1"),
+    );
   }
 
   async assertPreutfyltInfoboksVisible(

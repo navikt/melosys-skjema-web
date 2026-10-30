@@ -1,10 +1,15 @@
-import { keepPreviousData, queryOptions } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  queryOptions,
+  skipToken,
+} from "@tanstack/react-query";
 
 import { API_PROXY_URL } from "~/constants/api.ts";
 import { SKJEMA_DEFINISJON_A1 } from "~/constants/skjemaDefinisjonA1";
 import { StegKey } from "~/constants/stegKeys.ts";
 import { alleToggleNavn } from "~/featuretoggle/toggleNavn.ts";
 import {
+  AaregSjekkResponse,
   ArbeidsgiverensVirksomhetINorgeDto,
   ArbeidssituasjonDto,
   ArbeidsstedIUtlandetDto,
@@ -17,6 +22,7 @@ import {
   OpprettUtsendtArbeidstakerSoknadResponse,
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhetDto,
+  PeriodeDto,
   PersonMedFullmaktDto,
   Representasjonstype,
   SimpleOrganisasjonDto,
@@ -300,6 +306,39 @@ export async function postUtsendingsperiodeOgLand(
   request: UtsendingsperiodeOgLandDto,
 ): Promise<void> {
   return postStegData(skjemaId, StegKey.UTSENDINGSPERIODE_OG_LAND, request);
+}
+
+/**
+ * Sjekker om et ordinært arbeidsforhold hos arbeidsgiveren dekker hele perioden, uten å lagre.
+ * Kalleren må utelate perioden inntil den er gyldig, slik at oppslaget ikke kjøres.
+ */
+export const getAaregSjekkQuery = (skjemaId: string, periode?: PeriodeDto) =>
+  queryOptions<AaregSjekkResponse>({
+    queryKey: ["aareg-sjekk", skjemaId, periode?.fraDato, periode?.tilDato],
+    queryFn: periode ? () => postAaregSjekk(skjemaId, periode) : skipToken,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  });
+
+async function postAaregSjekk(
+  skjemaId: string,
+  periode: PeriodeDto,
+): Promise<AaregSjekkResponse> {
+  const response = await fetch(
+    `${API_PROXY_URL}/skjema/utsendt-arbeidstaker/${skjemaId}/aareg-sjekk`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...A1_VERSJON_HEADER,
+      },
+      body: JSON.stringify(periode),
+    },
+  );
+
+  return response.ok
+    ? response.json()
+    : kastApiFeil(response, skjemaId, "Kunne ikke sjekke Aa-registeret");
 }
 
 export async function postFamiliemedlemmer(
@@ -705,7 +744,7 @@ export async function slettVedlegg(
 
 /**
  * Innsendte arbeidsgiver-deler som venter på at innlogget bruker sender inn sin
- * arbeidstaker-del. Tom liste når toggle `melosys.skjema.motpart-cta` er av i backend.
+ * arbeidstaker-del.
  */
 export const VENTENDE_MOTPART_SOKNADER_QUERY_KEY = [
   "ventende-motpart-soknader",

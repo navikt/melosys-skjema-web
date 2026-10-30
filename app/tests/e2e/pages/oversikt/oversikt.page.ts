@@ -425,15 +425,9 @@ export class OversiktPage {
   // ============ Motpart-CTA ============
 
   /**
-   * Start disse FØR goto() — negative assertions er ellers racy mot
-   * featuretoggle-/ventende-queriene som avgjør om banneret rendres.
+   * Start denne FØR goto() — negative assertions er ellers racy mot
+   * ventende-queriet som avgjør om banneret rendres.
    */
-  ventPaaFeatureToggles(): Promise<unknown> {
-    return this.page.waitForResponse((response) =>
-      response.url().includes("/api/featuretoggle"),
-    );
-  }
-
   ventPaaVentendeMotpartSoknader(): Promise<unknown> {
     return this.page.waitForResponse((response) =>
       response.url().includes("/ventende-motpart-soknader"),

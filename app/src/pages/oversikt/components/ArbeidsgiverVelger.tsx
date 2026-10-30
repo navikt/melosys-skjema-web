@@ -1,4 +1,4 @@
-import { Alert, Heading, UNSAFE_Combobox } from "@navikt/ds-react";
+import { Alert, Heading, Link, UNSAFE_Combobox } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -31,10 +31,13 @@ export function ArbeidsgiverVelger({
           {t("oversiktFelles.ingenArbeidsgivereTittel")}
         </Heading>
         <p className="mb-4">{t("oversiktFelles.ingenArbeidsgivereInfo")}</p>
-        {/* TODO: Legg til faktisk URL til Altinn-dokumentasjon */}
-        <a className="navds-link" href="#">
+        <Link
+          href={t("oversiktFelles.ingenArbeidsgivereLenkeUrl")}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           {t("oversiktFelles.ingenArbeidsgivereLenke")}
-        </a>
+        </Link>
       </Alert>
     );
   }

@@ -17,6 +17,7 @@ import {
   getInnsendtKvitteringQuery,
   getSkjemaQuery,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
+import { AaregVarsel } from "~/pages/skjema/components/AaregVarsel.tsx";
 import type {
   SkjemaInnsendtKvittering,
   UtsendtArbeidstakerSkjemaDto,
@@ -86,6 +87,13 @@ function KvitteringPageContent({
         {t("kvittering.melding")} <strong>{response.referanseId}</strong>.
       </BodyLong>
       <Alert variant="info">{t("kvittering.infoOversikt")}</Alert>
+      {skjema.metadata.harArbeidsforholdIAareg === false && (
+        <AaregVarsel
+          arbeidsgiverNavn={skjema.metadata.arbeidsgiverNavn}
+          arbeidstakerNavn={skjema.metadata.arbeidstakerNavn}
+          representasjonstype={skjema.metadata.representasjonstype}
+        />
+      )}
       <Button
         onClick={handleTilOversikt}
         style={{ width: "fit-content" }}
