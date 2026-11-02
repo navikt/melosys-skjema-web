@@ -8,7 +8,7 @@
 
 const SKJEMA_DEFINISJON_A1_NB = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "5",
+  versjon: "6",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utenlandsperiode og land",
@@ -68,10 +68,15 @@ const SKJEMA_DEFINISJON_A1_NB = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer eller registreringsnummer",
+              pakrevd: false,
+            },
             navn: {
               type: "TEXT",
-              label: "Virksomhetsnavn",
-              pakrevd: false,
+              label: "Navn på virksomheten",
+              pakrevd: true,
             },
             ansettelsesform: {
               type: "SELECT",
@@ -94,7 +99,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Vegnavn og husnummer",
+              label: "Vegnavn og husnummer, evt. postboks",
               pakrevd: true,
             },
             bygning: {
@@ -105,12 +110,12 @@ const SKJEMA_DEFINISJON_A1_NB = {
             postkode: {
               type: "TEXT",
               label: "Postkode",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "By/stedsnavn",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -124,7 +129,8 @@ const SKJEMA_DEFINISJON_A1_NB = {
             },
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
-              label: "Tilhører samme konsern som norsk arbeidsgiver?",
+              label:
+                "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
               pakrevd: true,
               jaLabel: "Ja",
               neiLabel: "Nei",
@@ -162,14 +168,19 @@ const SKJEMA_DEFINISJON_A1_NB = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer eller registreringsnummer",
+              pakrevd: false,
+            },
             navn: {
               type: "TEXT",
-              label: "Virksomhetsnavn",
-              pakrevd: false,
+              label: "Navn på virksomheten",
+              pakrevd: true,
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Vegnavn og husnummer",
+              label: "Vegnavn og husnummer, evt. postboks",
               pakrevd: true,
             },
             bygning: {
@@ -180,12 +191,12 @@ const SKJEMA_DEFINISJON_A1_NB = {
             postkode: {
               type: "TEXT",
               label: "Postkode",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "By/stedsnavn",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -199,7 +210,8 @@ const SKJEMA_DEFINISJON_A1_NB = {
             },
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
-              label: "Tilhører samme konsern som norsk arbeidsgiver?",
+              label:
+                "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
               pakrevd: true,
               jaLabel: "Ja",
               neiLabel: "Nei",
@@ -753,14 +765,19 @@ const SKJEMA_DEFINISJON_A1_NB = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer eller registreringsnummer",
+              pakrevd: false,
+            },
             navn: {
               type: "TEXT",
-              label: "Virksomhetsnavn",
-              pakrevd: false,
+              label: "Navn på virksomheten",
+              pakrevd: true,
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Vegnavn og husnummer",
+              label: "Vegnavn og husnummer, evt. postboks",
               pakrevd: true,
             },
             bygning: {
@@ -771,12 +788,12 @@ const SKJEMA_DEFINISJON_A1_NB = {
             postkode: {
               type: "TEXT",
               label: "Postkode",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "By/stedsnavn",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -790,7 +807,8 @@ const SKJEMA_DEFINISJON_A1_NB = {
             },
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
-              label: "Tilhører samme konsern som norsk arbeidsgiver?",
+              label:
+                "Tilhører virksomheten samme konsern som den norske arbeidsgiveren?",
               pakrevd: true,
               jaLabel: "Ja",
               neiLabel: "Nei",
@@ -838,7 +856,7 @@ const SKJEMA_DEFINISJON_A1_NB = {
 
 const SKJEMA_DEFINISJON_A1_NN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "5",
+  versjon: "6",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Utsendingsperiode og land",
@@ -899,10 +917,15 @@ const SKJEMA_DEFINISJON_A1_NN = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer eller registreringsnummer",
+              pakrevd: false,
+            },
             navn: {
               type: "TEXT",
-              label: "Verksemdsnamn",
-              pakrevd: false,
+              label: "Namn på verksemda",
+              pakrevd: true,
             },
             ansettelsesform: {
               type: "SELECT",
@@ -925,7 +948,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Vegnamn og husnummer",
+              label: "Vegnamn og husnummer, eventuelt postboksadresse",
               pakrevd: true,
             },
             bygning: {
@@ -936,12 +959,12 @@ const SKJEMA_DEFINISJON_A1_NN = {
             postkode: {
               type: "TEXT",
               label: "Postkode",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "By/stadnamn",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -956,7 +979,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
               label:
-                "Høyrer verksemda til same konsern som den norske arbeidsgivaren?",
+                "Tilhøyrer verksemda same konsern som den norske arbeidsgivaren?",
               pakrevd: true,
               jaLabel: "Ja",
               neiLabel: "Nei",
@@ -994,14 +1017,19 @@ const SKJEMA_DEFINISJON_A1_NN = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer eller registreringsnummer",
+              pakrevd: false,
+            },
             navn: {
               type: "TEXT",
-              label: "Verksemdsnamn",
-              pakrevd: false,
+              label: "Namn på verksemda",
+              pakrevd: true,
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Vegnamn og husnummer",
+              label: "Vegnamn og husnummer, eventuelt postboksadresse",
               pakrevd: true,
             },
             bygning: {
@@ -1012,12 +1040,12 @@ const SKJEMA_DEFINISJON_A1_NN = {
             postkode: {
               type: "TEXT",
               label: "Postkode",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "By/stadnamn",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -1032,7 +1060,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
               label:
-                "Høyrer verksemda til same konsern som den norske arbeidsgivaren?",
+                "Tilhøyrer verksemda same konsern som den norske arbeidsgivaren?",
               pakrevd: true,
               jaLabel: "Ja",
               neiLabel: "Nei",
@@ -1588,14 +1616,19 @@ const SKJEMA_DEFINISJON_A1_NN = {
               label: "Organisasjonsnummer",
               pakrevd: true,
             },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organisasjonsnummer eller registreringsnummer",
+              pakrevd: false,
+            },
             navn: {
               type: "TEXT",
-              label: "Verksemdsnamn",
-              pakrevd: false,
+              label: "Namn på verksemda",
+              pakrevd: true,
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Vegnamn og husnummer",
+              label: "Vegnamn og husnummer, eventuelt postboksadresse",
               pakrevd: true,
             },
             bygning: {
@@ -1606,12 +1639,12 @@ const SKJEMA_DEFINISJON_A1_NN = {
             postkode: {
               type: "TEXT",
               label: "Postkode",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "By/stadnamn",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -1626,7 +1659,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
               label:
-                "Høyrer verksemda til same konsern som den norske arbeidsgivaren?",
+                "Tilhøyrer verksemda same konsern som den norske arbeidsgivaren?",
               pakrevd: true,
               jaLabel: "Ja",
               neiLabel: "Nei",
@@ -1674,7 +1707,7 @@ const SKJEMA_DEFINISJON_A1_NN = {
 
 const SKJEMA_DEFINISJON_A1_EN = {
   type: "UTSENDT_ARBEIDSTAKER",
-  versjon: "5",
+  versjon: "6",
   seksjoner: {
     utsendingsperiodeOgLand: {
       tittel: "Posting Period and Country",
@@ -1732,13 +1765,18 @@ const SKJEMA_DEFINISJON_A1_EN = {
           elementDefinisjon: {
             organisasjonsnummer: {
               type: "TEXT",
-              label: "Organisation number",
+              label: "Organization number",
               pakrevd: true,
+            },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organization number or registration number",
+              pakrevd: false,
             },
             navn: {
               type: "TEXT",
-              label: "Company name",
-              pakrevd: false,
+              label: "Name of the company",
+              pakrevd: true,
             },
             ansettelsesform: {
               type: "SELECT",
@@ -1761,7 +1799,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Street name and number",
+              label: "Street address and house number, or P.O. box",
               pakrevd: true,
             },
             bygning: {
@@ -1772,12 +1810,12 @@ const SKJEMA_DEFINISJON_A1_EN = {
             postkode: {
               type: "TEXT",
               label: "Postal code",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "City/place name",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -1792,7 +1830,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
               label:
-                "Is the company part of the same corporate group as the Norwegian employer?",
+                "Does the company belong to the same corporate group as the Norwegian employer?",
               pakrevd: true,
               jaLabel: "Yes",
               neiLabel: "No",
@@ -1827,17 +1865,22 @@ const SKJEMA_DEFINISJON_A1_EN = {
           elementDefinisjon: {
             organisasjonsnummer: {
               type: "TEXT",
-              label: "Organisation number",
+              label: "Organization number",
               pakrevd: true,
+            },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organization number or registration number",
+              pakrevd: false,
             },
             navn: {
               type: "TEXT",
-              label: "Company name",
-              pakrevd: false,
+              label: "Name of the company",
+              pakrevd: true,
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Street name and number",
+              label: "Street address and house number, or P.O. box",
               pakrevd: true,
             },
             bygning: {
@@ -1848,12 +1891,12 @@ const SKJEMA_DEFINISJON_A1_EN = {
             postkode: {
               type: "TEXT",
               label: "Postal code",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "City/place name",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -1868,7 +1911,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
               label:
-                "Is the company part of the same corporate group as the Norwegian employer?",
+                "Does the company belong to the same corporate group as the Norwegian employer?",
               pakrevd: true,
               jaLabel: "Yes",
               neiLabel: "No",
@@ -2423,17 +2466,22 @@ const SKJEMA_DEFINISJON_A1_EN = {
           elementDefinisjon: {
             organisasjonsnummer: {
               type: "TEXT",
-              label: "Organisation number",
+              label: "Organization number",
               pakrevd: true,
+            },
+            organisasjonsnummerEllerRegistreringsnummer: {
+              type: "TEXT",
+              label: "Organization number or registration number",
+              pakrevd: false,
             },
             navn: {
               type: "TEXT",
-              label: "Company name",
-              pakrevd: false,
+              label: "Name of the company",
+              pakrevd: true,
             },
             vegnavnOgHusnummer: {
               type: "TEXT",
-              label: "Street name and number",
+              label: "Street address and house number, or P.O. box",
               pakrevd: true,
             },
             bygning: {
@@ -2444,12 +2492,12 @@ const SKJEMA_DEFINISJON_A1_EN = {
             postkode: {
               type: "TEXT",
               label: "Postal code",
-              pakrevd: false,
+              pakrevd: true,
             },
             byStedsnavn: {
               type: "TEXT",
               label: "City/place name",
-              pakrevd: false,
+              pakrevd: true,
             },
             region: {
               type: "TEXT",
@@ -2464,7 +2512,7 @@ const SKJEMA_DEFINISJON_A1_EN = {
             tilhorerSammeKonsern: {
               type: "BOOLEAN",
               label:
-                "Is the company part of the same corporate group as the Norwegian employer?",
+                "Does the company belong to the same corporate group as the Norwegian employer?",
               pakrevd: true,
               jaLabel: "Yes",
               neiLabel: "No",

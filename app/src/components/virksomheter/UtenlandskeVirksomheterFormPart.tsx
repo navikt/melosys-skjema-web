@@ -26,11 +26,14 @@ import { LeggTilKnapp } from "~/components/LeggTilKnapp.tsx";
 import { RadioGroupJaNeiFormPart } from "~/components/RadioGroupJaNeiFormPart.tsx";
 import { UtenlandskVirksomhetOppsummering } from "~/components/virksomheter/UtenlandskeVirksomheterOppsummering.tsx";
 import {
+  useFeltLabel,
+  type VirksomhetElementDefinisjon,
+} from "~/components/virksomheter/virksomhetDefinisjon.ts";
+import {
   utenlandskVirksomhetMedAnsettelsesformSchema,
   utenlandskVirksomhetSchema,
 } from "~/components/virksomheter/virksomheterSchema.ts";
 import {
-  Ansettelsesform,
   UtenlandskVirksomhet,
   UtenlandskVirksomhetMedAnsettelsesform,
 } from "~/types/melosysSkjemaTypes";
@@ -42,12 +45,12 @@ type UtenlandskVirksomhetField = (
 
 interface UtenlandskeVirksomheterFormPartProperties {
   fieldName: string;
-  includeAnsettelsesform?: boolean;
+  definisjon: VirksomhetElementDefinisjon;
 }
 
 export function UtenlandskeVirksomheterFormPart({
   fieldName,
-  includeAnsettelsesform = false,
+  definisjon,
 }: UtenlandskeVirksomheterFormPartProperties) {
   const { control } = useFormContext();
   const { t } = useTranslation();
@@ -70,6 +73,7 @@ export function UtenlandskeVirksomheterFormPart({
   return (
     <>
       <ValgteUtenlandskeVirksomheter
+        definisjon={definisjon}
         remove={remove}
         update={update}
         virksomheter={fields as Array<UtenlandskVirksomhetField>}
@@ -90,7 +94,7 @@ export function UtenlandskeVirksomheterFormPart({
       >
         {isAddModalOpen && (
           <LeggTilEllerEndreUtenlandskVirksomhetModalContent
-            includeAnsettelsesform={includeAnsettelsesform}
+            definisjon={definisjon}
             onCancel={lukkAddModal}
             onSubmit={append}
           />
@@ -101,6 +105,7 @@ export function UtenlandskeVirksomheterFormPart({
 }
 
 type ValgteUtenlandskeVirksomheterProperties = {
+  definisjon: VirksomhetElementDefinisjon;
   virksomheter: Array<UtenlandskVirksomhetField>;
   update: (
     index: number,
@@ -110,6 +115,7 @@ type ValgteUtenlandskeVirksomheterProperties = {
 };
 
 function ValgteUtenlandskeVirksomheter({
+  definisjon,
   virksomheter,
   update,
   remove,
@@ -130,12 +136,6 @@ function ValgteUtenlandskeVirksomheter({
     setEditingIndex(index);
   };
 
-  const virksomhetSomRedigeres =
-    editingIndex === null ? undefined : virksomheter[editingIndex];
-  const isIncludeAnsettelsesform =
-    virksomhetSomRedigeres !== undefined &&
-    "ansettelsesform" in virksomhetSomRedigeres;
-
   return (
     <>
       <Label className="mt-2">
@@ -145,6 +145,7 @@ function ValgteUtenlandskeVirksomheter({
         <Table.Body>
           {virksomheter.map((virksomhet, index) => (
             <UtenlandskVirksomhetRow
+              definisjon={definisjon}
               key={virksomhet.id}
               onEdit={() => openEditModal(index)}
               onRemove={() => remove(index)}
@@ -166,7 +167,7 @@ function ValgteUtenlandskeVirksomheter({
       >
         {editingIndex !== null && (
           <LeggTilEllerEndreUtenlandskVirksomhetModalContent
-            includeAnsettelsesform={isIncludeAnsettelsesform}
+            definisjon={definisjon}
             onCancel={lukkEditModal}
             onSubmit={(data) => {
               update(editingIndex, data);
@@ -186,19 +187,21 @@ interface LeggTilEllerEndreUtenlandskVirksomhetModalContentProperties {
   ) => void;
   onCancel: () => void;
   virksomhet?: UtenlandskVirksomhet | UtenlandskVirksomhetMedAnsettelsesform;
-  includeAnsettelsesform: boolean;
+  definisjon: VirksomhetElementDefinisjon;
 }
 
 function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
   onSubmit,
   onCancel,
   virksomhet,
-  includeAnsettelsesform,
+  definisjon,
 }: LeggTilEllerEndreUtenlandskVirksomhetModalContentProperties) {
   const { t } = useTranslation();
   const translateError = useTranslateError();
+  const feltLabel = useFeltLabel();
+  const ansettelsesformDefinisjon = definisjon.ansettelsesform;
 
-  const schema = includeAnsettelsesform
+  const schema = ansettelsesformDefinisjon
     ? utenlandskVirksomhetMedAnsettelsesformSchema
     : utenlandskVirksomhetSchema;
 
@@ -228,7 +231,7 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
         <VStack gap="space-6">
           <TextField
             error={translateError(modalForm.formState.errors.navn?.message)}
-            label={t("utenlandskeVirksomheterFormPart.navnPaVirksomhet")}
+            label={feltLabel(definisjon.navn)}
             {...modalForm.register("navn")}
           />
 
@@ -236,8 +239,8 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
             error={translateError(
               modalForm.formState.errors.organisasjonsnummer?.message,
             )}
-            label={t(
-              "utenlandskeVirksomheterFormPart.organisasjonsnummerEllerRegistreringsnummerValgfritt",
+            label={feltLabel(
+              definisjon.organisasjonsnummerEllerRegistreringsnummer,
             )}
             {...modalForm.register("organisasjonsnummer")}
           />
@@ -246,21 +249,19 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
             error={translateError(
               modalForm.formState.errors.vegnavnOgHusnummer?.message,
             )}
-            label={t(
-              "utenlandskeVirksomheterFormPart.vegnavnOgHusnummerEvtPostboks",
-            )}
+            label={feltLabel(definisjon.vegnavnOgHusnummer)}
             {...modalForm.register("vegnavnOgHusnummer")}
           />
 
           <TextField
             error={translateError(modalForm.formState.errors.bygning?.message)}
-            label={t("utenlandskeVirksomheterFormPart.bygningValgfritt")}
+            label={feltLabel(definisjon.bygning)}
             {...modalForm.register("bygning")}
           />
 
           <TextField
             error={translateError(modalForm.formState.errors.postkode?.message)}
-            label={t("utenlandskeVirksomheterFormPart.postkodeValgfritt")}
+            label={feltLabel(definisjon.postkode)}
             style={{ maxWidth: "120px" }}
             {...modalForm.register("postkode")}
           />
@@ -269,52 +270,42 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
             error={translateError(
               modalForm.formState.errors.byStedsnavn?.message,
             )}
-            label={t("utenlandskeVirksomheterFormPart.byStednavnValgfritt")}
+            label={feltLabel(definisjon.byStedsnavn)}
             {...modalForm.register("byStedsnavn")}
           />
 
           <TextField
             error={translateError(modalForm.formState.errors.region?.message)}
-            label={t("utenlandskeVirksomheterFormPart.regionValgfritt")}
+            label={feltLabel(definisjon.region)}
             {...modalForm.register("region")}
           />
 
           <LandVelgerFormPart
             formFieldName="land"
-            label={t("utenlandskeVirksomheterFormPart.land")}
+            label={feltLabel(definisjon.land)}
           />
 
           <RadioGroupJaNeiFormPart
             formFieldName="tilhorerSammeKonsern"
-            legend={t(
-              "utenlandskeVirksomheterFormPart.tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren",
-            )}
+            legend={feltLabel(definisjon.tilhorerSammeKonsern)}
           />
 
-          {includeAnsettelsesform && (
+          {ansettelsesformDefinisjon && (
             <Controller
               control={modalForm.control}
               name="ansettelsesform"
               render={({ field, fieldState }) => (
                 <RadioGroup
                   error={translateError(fieldState.error?.message)}
-                  legend={t("utenlandskeVirksomheterFormPart.ansettelsesform")}
+                  legend={feltLabel(ansettelsesformDefinisjon)}
                   onChange={field.onChange}
                   value={field.value ?? ""}
                 >
-                  <Radio value={Ansettelsesform.ARBEIDSTAKER_ELLER_FRILANSER}>
-                    {t(
-                      "utenlandskeVirksomheterFormPart.arbeidstakerEllerFrilanser",
-                    )}
-                  </Radio>
-                  <Radio value={Ansettelsesform.SELVSTENDIG_NAERINGSDRIVENDE}>
-                    {t(
-                      "utenlandskeVirksomheterFormPart.selvstendigNaeringsdrivende",
-                    )}
-                  </Radio>
-                  <Radio value={Ansettelsesform.STATSANSATT}>
-                    {t("utenlandskeVirksomheterFormPart.statsansatt")}
-                  </Radio>
+                  {ansettelsesformDefinisjon.alternativer.map((alternativ) => (
+                    <Radio key={alternativ.verdi} value={alternativ.verdi}>
+                      {alternativ.label}
+                    </Radio>
+                  ))}
                 </RadioGroup>
               )}
             />
@@ -334,12 +325,14 @@ function LeggTilEllerEndreUtenlandskVirksomhetModalContent({
 }
 
 interface UtenlandskVirksomhetRowProperties {
+  definisjon: VirksomhetElementDefinisjon;
   virksomhet: UtenlandskVirksomhetField;
   onRemove: () => void;
   onEdit: () => void;
 }
 
 function UtenlandskVirksomhetRow({
+  definisjon,
   virksomhet,
   onRemove,
   onEdit,
@@ -348,7 +341,10 @@ function UtenlandskVirksomhetRow({
     <Table.ExpandableRow
       content={
         <div className="-my-4">
-          <UtenlandskVirksomhetOppsummering virksomhet={virksomhet} />
+          <UtenlandskVirksomhetOppsummering
+            definisjon={definisjon}
+            virksomhet={virksomhet}
+          />
         </div>
       }
     >

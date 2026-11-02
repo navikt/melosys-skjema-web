@@ -54,8 +54,36 @@ test.describe("Arbeidstakerens lønn - validering", () => {
 
     await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
     await stegPage.assertVegnavnOgHusnummerErPakrevdIsVisible();
+    await stegPage.assertPostkodeErPakrevdIsVisible();
+    await stegPage.assertByStedsnavnErPakrevdIsVisible();
     await stegPage.assertLandErPakrevdIsVisible();
     await stegPage.assertDuMaSvarePaOmVirksomhetenTilhorerSammeKonsernIsVisible();
+    await stegPage.assertUtenlandskVirksomhetModalIsOpen();
+  });
+
+  test("viser feilmeldinger i utenlandsk virksomhet-modal når påkrevde felter bare inneholder mellomrom", async () => {
+    await stegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await stegPage.fyllUtFelterOgLagreInUtenlandskVirksomhetModal({
+      navn: " ".repeat(3),
+      postkode: " ".repeat(3),
+      byStedsnavn: " ".repeat(3),
+    });
+
+    await stegPage.assertNavnPaVirksomhetErPakrevdIsVisible();
+    await stegPage.assertPostkodeErPakrevdIsVisible();
+    await stegPage.assertByStedsnavnErPakrevdIsVisible();
+    await stegPage.assertUtenlandskVirksomhetModalIsOpen();
+  });
+
+  test("viser feilmelding i utenlandsk virksomhet-modal når organisasjonsnummer er lengre enn 25 tegn", async () => {
+    await stegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await stegPage.fyllUtFelterOgLagreInUtenlandskVirksomhetModal({
+      organisasjonsnummer: "A".repeat(26),
+    });
+
+    await stegPage.assertOrganisasjonsnummerErForLangtIsVisible();
     await stegPage.assertUtenlandskVirksomhetModalIsOpen();
   });
 });

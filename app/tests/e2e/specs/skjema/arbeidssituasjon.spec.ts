@@ -13,7 +13,6 @@ import {
   testUserInfo,
 } from "../../fixtures/test-data";
 import { ArbeidssituasjonStegPage } from "../../pages/skjema/arbeidssituasjon-steg.page";
-import { translations } from "../../utils/translations";
 
 test.describe("Arbeidssituasjon", () => {
   test.beforeEach(async ({ page }) => {
@@ -149,10 +148,11 @@ test.describe("Arbeidssituasjon", () => {
     await arbeidssituasjonPage.leggTilUtenlandskVirksomhetMedAnsettelsesform({
       navn: "Swedish Corp AB",
       vegnavnOgHusnummer: "Drottninggatan 5",
+      postkode: "111 51",
+      byStedsnavn: "Stockholm",
       land: "SE",
       tilhorerSammeKonsern: true,
-      ansettelsesformLabel:
-        translations.utenlandskeVirksomheterFormPart.arbeidstakerEllerFrilanser,
+      ansettelsesform: Ansettelsesform.ARBEIDSTAKER_ELLER_FRILANSER,
     });
 
     const expectedPayload: ArbeidssituasjonDto = {
@@ -166,8 +166,8 @@ test.describe("Arbeidssituasjon", () => {
             organisasjonsnummer: "",
             vegnavnOgHusnummer: "Drottninggatan 5",
             bygning: "",
-            postkode: "",
-            byStedsnavn: "",
+            postkode: "111 51",
+            byStedsnavn: "Stockholm",
             region: "",
             land: LandKode.SE,
             tilhorerSammeKonsern: true,

@@ -3,6 +3,18 @@ import { z } from "zod";
 import { Ansettelsesform } from "~/types/melosysSkjemaTypes";
 import { organisasjonsnummerHarGyldigFormat } from "~/utils/valideringUtils.ts";
 
+/**
+ * Påkrevd tekstfelt som er valgfritt i API-typen. Feltet er optional i
+ * input-typen, men manglende verdi gjøres om til tom streng og valideres, slik
+ * at feltet feiler både når det er blankt og når det mangler i objektet.
+ */
+const paakrevdTekstfelt = (feilmelding: string) =>
+  z
+    .string()
+    .optional()
+    .transform((verdi) => verdi ?? "")
+    .pipe(z.string().trim().min(1, { message: feilmelding }));
+
 export const norskVirksomhetSchema = z.object({
   organisasjonsnummer: z
     .string({
@@ -21,20 +33,29 @@ export const utenlandskVirksomhetSchema = z.object({
     .string({
       message: "generellValidering.navnPaVirksomhetErPakrevd",
     })
+    .trim()
     .min(1, {
       message: "generellValidering.navnPaVirksomhetErPakrevd",
     }),
-  organisasjonsnummer: z.string().optional(),
+  organisasjonsnummer: z
+    .string()
+    .trim()
+    .max(25, {
+      message:
+        "generellValidering.organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn",
+    })
+    .optional(),
   vegnavnOgHusnummer: z
     .string({
       message: "generellValidering.vegnavnOgHusnummerErPakrevd",
     })
+    .trim()
     .min(1, {
       message: "generellValidering.vegnavnOgHusnummerErPakrevd",
     }),
   bygning: z.string().optional(),
-  postkode: z.string().optional(),
-  byStedsnavn: z.string().optional(),
+  postkode: paakrevdTekstfelt("generellValidering.postkodeErPakrevd"),
+  byStedsnavn: paakrevdTekstfelt("generellValidering.byStedsnavnErPakrevd"),
   region: z.string().optional(),
   land: z
     .string({

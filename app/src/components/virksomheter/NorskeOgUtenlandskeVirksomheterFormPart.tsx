@@ -3,20 +3,17 @@ import { useFormContext, useWatch } from "react-hook-form";
 
 import { NorskeVirksomheterFormPart } from "~/components/virksomheter/NorskeVirksomheterFormPart.tsx";
 import { UtenlandskeVirksomheterFormPart } from "~/components/virksomheter/UtenlandskeVirksomheterFormPart.tsx";
+import type { VirksomhetListeDefinisjon } from "~/components/virksomheter/virksomhetDefinisjon.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 interface NorskeOgUtenlandskeVirksomheterFormPartProperties {
   fieldName: string;
-  label?: string;
-  description?: string;
-  includeAnsettelsesform?: boolean;
+  definisjon: VirksomhetListeDefinisjon;
 }
 
 export function NorskeOgUtenlandskeVirksomheterFormPart({
   fieldName,
-  label,
-  description,
-  includeAnsettelsesform = false,
+  definisjon,
 }: NorskeOgUtenlandskeVirksomheterFormPartProperties) {
   const {
     formState: { errors },
@@ -41,16 +38,19 @@ export function NorskeOgUtenlandskeVirksomheterFormPart({
   const shouldShowError = error && !harVirksomheter;
   return (
     <VStack className="mt-4" gap="space-4">
-      {label && <Label>{label}</Label>}
-      {description && <Detail>{description}</Detail>}
+      <Label>{definisjon.label}</Label>
+      {definisjon.hjelpetekst && <Detail>{definisjon.hjelpetekst}</Detail>}
 
       <NorskeVirksomheterFormPart
         fieldName={`${fieldName}.norskeVirksomheter`}
+        organisasjonsnummerLabel={
+          definisjon.elementDefinisjon.organisasjonsnummer.label
+        }
       />
 
       <UtenlandskeVirksomheterFormPart
+        definisjon={definisjon.elementDefinisjon}
         fieldName={`${fieldName}.utenlandskeVirksomheter`}
-        includeAnsettelsesform={includeAnsettelsesform}
       />
 
       {shouldShowError && (

@@ -39,10 +39,12 @@ type NorskVirksomhetField = NorskVirksomhetFormData & { id: string };
 
 interface NorskeVirksomheterFormPartProperties {
   fieldName: string;
+  organisasjonsnummerLabel: string;
 }
 
 export function NorskeVirksomheterFormPart({
   fieldName,
+  organisasjonsnummerLabel,
 }: NorskeVirksomheterFormPartProperties) {
   const { control } = useFormContext();
   const { t } = useTranslation();
@@ -65,6 +67,7 @@ export function NorskeVirksomheterFormPart({
   return (
     <>
       <ValgteNorskeVirksomheter
+        organisasjonsnummerLabel={organisasjonsnummerLabel}
         remove={remove}
         update={update}
         virksomheter={fields as Array<NorskVirksomhetField>}
@@ -85,6 +88,7 @@ export function NorskeVirksomheterFormPart({
         {isAddModalOpen && (
           <LeggTilEllerEndreNorskVirksomhetModalContent
             onCancel={lukkAddModal}
+            organisasjonsnummerLabel={organisasjonsnummerLabel}
             onSubmit={append}
           />
         )}
@@ -95,12 +99,14 @@ export function NorskeVirksomheterFormPart({
 
 type ValgteNorskeVirksomheterProperties = {
   virksomheter: Array<NorskVirksomhetField>;
+  organisasjonsnummerLabel: string;
   update: (index: number, data: NorskVirksomhetFormData) => void;
   remove: (index: number) => void;
 };
 
 function ValgteNorskeVirksomheter({
   virksomheter,
+  organisasjonsnummerLabel,
   update,
   remove,
 }: ValgteNorskeVirksomheterProperties) {
@@ -146,6 +152,7 @@ function ValgteNorskeVirksomheter({
         {editingIndex !== null && (
           <LeggTilEllerEndreNorskVirksomhetModalContent
             onCancel={lukkEditModal}
+            organisasjonsnummerLabel={organisasjonsnummerLabel}
             onSubmit={(data) => {
               update(editingIndex, data);
               lukkEditModal();
@@ -161,12 +168,14 @@ function ValgteNorskeVirksomheter({
 interface LeggTilEllerEndreNorskVirksomhetModalContentProperties {
   onSubmit: (data: NorskVirksomhetFormData) => void;
   onCancel: () => void;
+  organisasjonsnummerLabel: string;
   virksomhet?: NorskVirksomhetFormData;
 }
 
 function LeggTilEllerEndreNorskVirksomhetModalContent({
   onSubmit,
   onCancel,
+  organisasjonsnummerLabel,
   virksomhet,
 }: LeggTilEllerEndreNorskVirksomhetModalContentProperties) {
   const { t } = useTranslation();
@@ -187,7 +196,7 @@ function LeggTilEllerEndreNorskVirksomhetModalContent({
         <OrganisasjonSoker
           formFieldName="organisasjon"
           initialOrgnr={virksomhet?.organisasjonsnummer}
-          label={t("norskeVirksomheterFormPart.organisasjonsnummer")}
+          label={organisasjonsnummerLabel}
         />
       </Modal.Body>
       <Modal.Footer>

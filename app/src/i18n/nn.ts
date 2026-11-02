@@ -1,6 +1,7 @@
 export const nn = {
   translation: {
     felles: {
+      valgfritt: "(valfritt)",
       laster: "Lastar...",
       feil: "Det oppstod ein feil",
       feilVedLastingAvSkjema: "Feil ved lasting av skjema",
@@ -75,7 +76,6 @@ export const nn = {
     norskeVirksomheterFormPart: {
       norskVirksomhet: "Norsk verksemd",
       norskeVirksomheter: "Norske verksemder",
-      organisasjonsnummer: "Organisasjonsnummer",
       leggTilNorskVirksomhet: "Legg til norsk verksemd",
       endreNorskVirksomhet: "Endre norsk verksemd",
       kunneIkkeFInneOrganisasjon:
@@ -84,24 +84,8 @@ export const nn = {
     utenlandskeVirksomheterFormPart: {
       utenlandskVirksomhet: "Utanlandsk verksemd",
       utenlandskeVirksomheter: "Utanlandske verksemder",
-      navnPaVirksomhet: "Namn på verksemd",
-      organisasjonsnummerEllerRegistreringsnummerValgfritt:
-        "Organisasjonsnummer eller registreringsnummer (valfritt)",
-      vegnavnOgHusnummerEvtPostboks:
-        "Vegnamn og husnummer, eventuelt postboksadresse",
-      bygningValgfritt: "Bygning (valfritt)",
-      postkodeValgfritt: "Postkode (valfritt)",
-      byStednavnValgfritt: "By/stadnamn (valfritt)",
-      regionValgfritt: "Region (valfritt)",
-      land: "Land",
-      tilhorerVirksomhetenSammeKonsernSomDenNorskeArbeidsgiveren:
-        "Tilhøyrer verksemda same konsern som den norske arbeidsgivaren?",
       leggTilUtenlandskVirksomhet: "Legg til utanlandsk verksemd",
       endreUtenlandskVirksomhet: "Endre utanlandsk verksemd",
-      ansettelsesform: "Kva jobbar du som i denne verksemda?",
-      arbeidstakerEllerFrilanser: "Arbeidstakar eller frilansar",
-      selvstendigNaeringsdrivende: "Sjølvstendig næringsdrivande",
-      statsansatt: "Statstilsett",
     },
     familiemedlemmerSteg: {
       tittel: "Familiemedlemmar",
@@ -524,6 +508,10 @@ export const nn = {
       organisasjonsnummerMaVare9Siffer: "Organisasjonsnummer må vere 9 siffer",
       navnPaVirksomhetErPakrevd: "Namn på verksemd er påkravd",
       vegnavnOgHusnummerErPakrevd: "Vegnamn og husnummer er påkravd",
+      postkodeErPakrevd: "Postkode er påkravd",
+      byStedsnavnErPakrevd: "By/stadnamn er påkravd",
+      organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
+        "Organisasjonsnummer eller registreringsnummer kan ikkje vere lengre enn 25 teikn",
       landErPakrevd: "Land er påkravd",
       duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
         "Du må svare på om verksemda tilhøyrer same konsern",

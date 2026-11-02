@@ -84,6 +84,8 @@ test.describe("Arbeidstakerens lønn", () => {
     await lonnPage.leggTilUtenlandskVirksomhet({
       navn: "Foreign Corp AB",
       vegnavnOgHusnummer: "Kungsgatan 10",
+      postkode: "111 57",
+      byStedsnavn: "Stockholm",
       land: "SE",
       tilhorerSammeKonsern: false,
     });
@@ -98,8 +100,8 @@ test.describe("Arbeidstakerens lønn", () => {
             organisasjonsnummer: "",
             vegnavnOgHusnummer: "Kungsgatan 10",
             bygning: "",
-            postkode: "",
-            byStedsnavn: "",
+            postkode: "111 57",
+            byStedsnavn: "Stockholm",
             region: "",
             land: LandKode.SE,
             tilhorerSammeKonsern: false,

@@ -29,6 +29,7 @@ export const lagPaLandSchema = ({
           .string({
             error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd",
           })
+          .trim()
           .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
         fastEllerVekslendeArbeidssted: z.enum(FastEllerVekslendeArbeidssted, {
           error: "arbeidsstedIUtlandetSteg.duMaVelgeFastEllerVekslende",

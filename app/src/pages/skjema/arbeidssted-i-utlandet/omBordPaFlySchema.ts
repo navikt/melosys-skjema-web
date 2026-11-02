@@ -8,12 +8,14 @@ export const omBordPaFlySchema = z.object({
     .object({
       navnPaVirksomhet: z
         .string({ error: "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd" })
+        .trim()
         .min(1, "arbeidsstedIUtlandetSteg.navnPaVirksomhetErPakrevd"),
       hjemmebaseLand: z
         .string({ error: "arbeidsstedIUtlandetSteg.hjemmebaseLandErPakrevd" })
         .min(1, "arbeidsstedIUtlandetSteg.hjemmebaseLandErPakrevd"),
       hjemmebaseNavn: z
         .string({ error: "arbeidsstedIUtlandetSteg.hjemmebaseNavnErPakrevd" })
+        .trim()
         .min(1, "arbeidsstedIUtlandetSteg.hjemmebaseNavnErPakrevd"),
       erVanligHjemmebase: z.boolean({
         error: "arbeidsstedIUtlandetSteg.duMaSvarePaOmDetErVanligHjemmebase",
