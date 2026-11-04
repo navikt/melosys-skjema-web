@@ -96,7 +96,7 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.assertNavigatedToNextStep();
   });
 
-  test("færre enn 20 ansatte - viser samlet virksomhet uten infoboks", async ({
+  test("færre enn 20 ansatte - viser samlet virksomhet uten spørsmål om bemanningsbyrå", async ({
     page,
   }) => {
     await setupApiMocksForArbeidsgiver(
@@ -113,20 +113,17 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();
     await virksomhetStegPage.assertIngenRegisterinfoboks();
+    await virksomhetStegPage.assertBemanningsEllerVikarbyraIsHidden();
     await virksomhetStegPage.assertSamletVirksomhetIsVisible();
     await virksomhetStegPage.assertVanligDriftIsHidden();
 
-    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
     await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
 
-    await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
-      erArbeidsgiverenBemanningsEllerVikarbyraa: false,
-      ...samletVirksomhet,
-    });
+    await virksomhetStegPage.lagreOgFortsettAndExpectPayload(samletVirksomhet);
     await virksomhetStegPage.assertNavigatedToNextStep();
   });
 
-  test("NUF med 20 eller flere ansatte - viser samlet virksomhet uten vanlig drift", async ({
+  test("NUF med 20 eller flere ansatte - viser samlet virksomhet uten spørsmål om bemanningsbyrå eller vanlig drift", async ({
     page,
   }) => {
     await setupApiMocksForArbeidsgiver(
@@ -142,18 +139,12 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
 
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();
-    await virksomhetStegPage.assertSamletVirksomhetIsVisible();
-    await virksomhetStegPage.assertVanligDriftIsHidden();
-
-    await virksomhetStegPage.bemanningsEllerVikarbyraRadioGroup.NEI.click();
+    await virksomhetStegPage.assertBemanningsEllerVikarbyraIsHidden();
     await virksomhetStegPage.assertSamletVirksomhetIsVisible();
     await virksomhetStegPage.assertVanligDriftIsHidden();
     await virksomhetStegPage.fyllSamletVirksomhet(samletVirksomhet);
 
-    await virksomhetStegPage.lagreOgFortsettAndExpectPayload({
-      erArbeidsgiverenBemanningsEllerVikarbyraa: false,
-      ...samletVirksomhet,
-    });
+    await virksomhetStegPage.lagreOgFortsettAndExpectPayload(samletVirksomhet);
     await virksomhetStegPage.assertNavigatedToNextStep();
   });
 
@@ -168,10 +159,9 @@ test.describe("Arbeidsgiverens virksomhet i Norge", () => {
       page,
       skjemaMedFaaAnsatte,
     );
-    await virksomhetStegPage.mockArbeidsgiverensVirksomhetINorgeStegData({
-      erArbeidsgiverenBemanningsEllerVikarbyraa: false,
-      ...samletVirksomhet,
-    });
+    await virksomhetStegPage.mockArbeidsgiverensVirksomhetINorgeStegData(
+      samletVirksomhet,
+    );
 
     await virksomhetStegPage.goto();
     await virksomhetStegPage.assertIsVisible();

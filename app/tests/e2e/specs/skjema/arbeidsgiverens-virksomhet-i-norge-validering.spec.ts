@@ -59,4 +59,30 @@ test.describe("Arbeidsgiverens virksomhet i Norge - validering", () => {
     await stegPage.assertAndelMaVaereMellom0Og100IsVisible();
     await stegPage.assertStillOnStep();
   });
+
+  test("færre enn 20 ansatte krever bare opplysninger om samlet virksomhet", async ({
+    page,
+  }) => {
+    const skjemaMedFaaAnsatte = {
+      ...testArbeidsgiverSkjema,
+      metadata: { ...testArbeidsgiverSkjema.metadata, antallAnsatte: 5 },
+    };
+    await setupApiMocksForArbeidsgiver(
+      page,
+      skjemaMedFaaAnsatte,
+      [testOrganization],
+      testUserInfo,
+    );
+    const faaAnsatteStegPage = new ArbeidsgiverensVirksomhetINorgeStegPage(
+      page,
+      skjemaMedFaaAnsatte,
+    );
+    await faaAnsatteStegPage.goto();
+    await faaAnsatteStegPage.assertIsVisible();
+    await faaAnsatteStegPage.lagreOgFortsett();
+
+    await faaAnsatteStegPage.assertSamletVirksomhetPakrevdIsVisible();
+    await faaAnsatteStegPage.assertBemanningsEllerVikarbyraIsHidden();
+    await faaAnsatteStegPage.assertStillOnStep();
+  });
 });
