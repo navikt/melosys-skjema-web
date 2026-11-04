@@ -198,6 +198,10 @@ export class ArbeidsgiverensVirksomhetINorgeStegPage {
     }
   }
 
+  async assertBemanningsEllerVikarbyraIsHidden() {
+    await expect(this.bemanningsEllerVikarbyraFieldset()).toHaveCount(0);
+  }
+
   async assertVanligDriftIsVisible() {
     await expect(this.vanligDriftFieldset()).toBeVisible();
   }

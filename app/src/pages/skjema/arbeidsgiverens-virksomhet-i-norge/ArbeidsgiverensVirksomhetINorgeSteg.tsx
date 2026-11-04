@@ -33,6 +33,7 @@ import {
   ANDELFELTER,
   ANTALLFELTER,
   lagArbeidsgiverensVirksomhetSchema,
+  skalOppgiBemanningsbyraa,
   skalOppgiSamletVirksomhet,
   tallTilFeltverdi,
 } from "./arbeidsgiverensVirksomhetINorgeStegSchema.ts";
@@ -148,11 +149,13 @@ function ArbeidsgiverensVirksomhetINorgeStegContent({
             <NesteStegKnapp loading={registerVirksomhetMutation.isPending} />
           }
         >
-          <RadioGroupJaNeiFormPart
-            className="mt-4"
-            formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
-            legend={erBemanningFelt.label}
-          />
+          {skalOppgiBemanningsbyraa(metadata) && (
+            <RadioGroupJaNeiFormPart
+              className="mt-4"
+              formFieldName="erArbeidsgiverenBemanningsEllerVikarbyraa"
+              legend={erBemanningFelt.label}
+            />
+          )}
 
           {visSamletVirksomhet && (
             <section

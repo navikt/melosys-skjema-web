@@ -10,15 +10,26 @@ import type { UtsendtArbeidstakerMetadata } from "~/types/melosysSkjemaTypes.ts"
  */
 export const ANSATTGRENSE_SAMLET_VIRKSOMHET = 20;
 
+/**
+ * NUF og foretak under ansattgrensen må oppgi samlet virksomhet uansett, så
+ * for dem stilles ikke spørsmålet om bemannings- eller vikarbyrå.
+ */
+export function skalOppgiBemanningsbyraa(
+  metadata: UtsendtArbeidstakerMetadata,
+): boolean {
+  return (
+    metadata.erNorskregistrertUtenlandskForetak !== true &&
+    (metadata.antallAnsatte === undefined ||
+      metadata.antallAnsatte >= ANSATTGRENSE_SAMLET_VIRKSOMHET)
+  );
+}
+
 export function skalOppgiSamletVirksomhet(
   metadata: UtsendtArbeidstakerMetadata,
   erBemanningsEllerVikarbyraa: boolean | undefined,
 ): boolean {
   return (
-    metadata.erNorskregistrertUtenlandskForetak === true ||
-    erBemanningsEllerVikarbyraa === true ||
-    (metadata.antallAnsatte !== undefined &&
-      metadata.antallAnsatte < ANSATTGRENSE_SAMLET_VIRKSOMHET)
+    !skalOppgiBemanningsbyraa(metadata) || erBemanningsEllerVikarbyraa === true
   );
 }
 
@@ -66,10 +77,7 @@ export function tallTilFeltverdi(verdi: number | null | undefined): string {
 }
 
 const baseSchema = z.object({
-  erArbeidsgiverenBemanningsEllerVikarbyraa: z.boolean({
-    error:
-      "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra",
-  }),
+  erArbeidsgiverenBemanningsEllerVikarbyraa: z.boolean().optional(),
   opprettholderArbeidsgiverenVanligDrift: z.boolean().optional(),
   antallAdministrativtAnsatte: z.string().optional(),
   antallUtsendteArbeidstakere: z.string().optional(),
@@ -84,6 +92,7 @@ type SchemaInput = z.input<typeof baseSchema>;
 export function lagArbeidsgiverensVirksomhetSchema(
   metadata: UtsendtArbeidstakerMetadata,
 ) {
+  const bemanningsbyraaSkalOppgis = skalOppgiBemanningsbyraa(metadata);
   const skalOppgi = (data: SchemaInput) =>
     skalOppgiSamletVirksomhet(
       metadata,
@@ -93,6 +102,18 @@ export function lagArbeidsgiverensVirksomhetSchema(
   return baseSchema
     .superRefine(
       (data, context) => {
+        if (
+          bemanningsbyraaSkalOppgis &&
+          data.erArbeidsgiverenBemanningsEllerVikarbyraa === undefined
+        ) {
+          context.addIssue({
+            code: "custom",
+            message:
+              "arbeidsgiverensVirksomhetINorgeSteg.duMaSvarePaOmArbeidsgiverenErEtBemanningsEllerVikarbyra",
+            path: ["erArbeidsgiverenBemanningsEllerVikarbyraa"],
+          });
+        }
+
         if (!skalOppgi(data)) {
           if (data.opprettholderArbeidsgiverenVanligDrift === undefined) {
             context.addIssue({
@@ -141,8 +162,9 @@ export function lagArbeidsgiverensVirksomhetSchema(
         medSamletVirksomhet ? tilHeltall(data[felt]) : undefined;
 
       return {
-        erArbeidsgiverenBemanningsEllerVikarbyraa:
-          data.erArbeidsgiverenBemanningsEllerVikarbyraa,
+        erArbeidsgiverenBemanningsEllerVikarbyraa: bemanningsbyraaSkalOppgis
+          ? data.erArbeidsgiverenBemanningsEllerVikarbyraa
+          : undefined,
         opprettholderArbeidsgiverenVanligDrift: medSamletVirksomhet
           ? undefined
           : data.opprettholderArbeidsgiverenVanligDrift,
