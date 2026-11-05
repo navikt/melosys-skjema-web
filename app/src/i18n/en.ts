@@ -62,6 +62,8 @@ export const en = {
       fraDato: "From date",
       tilDato: "To date",
       datoErPakrevd: "You must enter a valid date",
+      datoErForTidlig: "The date cannot be earlier than {{dato}}",
+      datoErForSen: "The date cannot be later than {{dato}}",
       tilDatoMaVareEtterFraDato: "To date cannot be before from date",
     },
     soknadHeader: {

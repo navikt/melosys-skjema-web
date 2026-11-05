@@ -61,6 +61,8 @@ export const nb = {
       fraDato: "Fra dato",
       tilDato: "Til dato",
       datoErPakrevd: "Du må fylle inn en gyldig dato",
+      datoErForTidlig: "Datoen kan ikke være tidligere enn {{dato}}",
+      datoErForSen: "Datoen kan ikke være senere enn {{dato}}",
       tilDatoMaVareEtterFraDato: "Til-dato kan ikke være før fra-dato",
     },
     soknadHeader: {

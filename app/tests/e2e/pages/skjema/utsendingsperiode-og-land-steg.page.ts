@@ -6,6 +6,7 @@ import {
   type UtsendingsperiodeOgLandDto,
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
+import { formatDato } from "~/utils/datoformat";
 
 import {
   apneKalender,
@@ -13,7 +14,7 @@ import {
   selectDateFromCalendar,
   velgDagIApenKalender,
 } from "../../utils/datepicker-helpers";
-import { translations } from "../../utils/translations";
+import { E2E_SPRAK, translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const utsendingsperiodeOgLand =
@@ -28,6 +29,8 @@ const feilmeldinger = {
   land: translations.utsendingsperiodeOgLandSteg
     .duMaVelgeHvilketLandArbeidetSkalUtforesI,
   datoErPakrevd: translations.periode.datoErPakrevd,
+  datoErForTidlig: translations.periode.datoErForTidlig,
+  datoErForSen: translations.periode.datoErForSen,
   tilDatoForFraDato: translations.periode.tilDatoMaVareEtterFraDato,
 };
 
@@ -249,6 +252,31 @@ export class UtsendingsperiodeOgLandStegPage {
   async fillTilDato(date: string) {
     await this.tilDatoInput.fill(date);
     await this.tilDatoInput.blur();
+  }
+
+  async skrivInnFraDato(date: string) {
+    await this.fraDatoInput.fill(date);
+    await this.fraDatoInput.blur();
+  }
+
+  async assertFraDatoErForTidligIsVisible(isoGrense: string) {
+    await expect(
+      this.fraDatoFieldWrapper().getByText(
+        feilmeldinger.datoErForTidlig.replaceAll("{{dato}}", () =>
+          formatDato(isoGrense, E2E_SPRAK),
+        ),
+      ),
+    ).toBeVisible();
+  }
+
+  async assertFraDatoErForSenIsVisible(isoGrense: string) {
+    await expect(
+      this.fraDatoFieldWrapper().getByText(
+        feilmeldinger.datoErForSen.replaceAll("{{dato}}", () =>
+          formatDato(isoGrense, E2E_SPRAK),
+        ),
+      ),
+    ).toBeVisible();
   }
 
   async assertLandFeilmeldingIsVisible() {

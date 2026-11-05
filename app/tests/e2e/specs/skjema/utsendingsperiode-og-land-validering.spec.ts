@@ -82,4 +82,19 @@ test.describe("Utsendingsperiode og land - validering", () => {
 
     await stegPage.assertTilDatoErPakrevdIsVisible();
   });
+
+  test("viser grensen når inntastet fra-dato er før 1995 eller for langt frem i tid", async () => {
+    const sisteGyldigeAr = new Date().getFullYear() + 100;
+
+    await stegPage.skrivInnFraDato("07.11.1994");
+    await stegPage.assertFraDatoErForTidligIsVisible("1995-01-01");
+    await stegPage.assertFraDatoErPakrevdIsNotVisible();
+
+    await stegPage.skrivInnFraDato(`01.01.${sisteGyldigeAr + 1}`);
+    await stegPage.assertFraDatoErForSenIsVisible(`${sisteGyldigeAr}-12-31`);
+    await stegPage.assertFraDatoErPakrevdIsNotVisible();
+
+    await stegPage.skrivInnFraDato("");
+    await stegPage.assertFraDatoErPakrevdIsVisible();
+  });
 });

@@ -6,7 +6,9 @@ import {
 import { formatISO, getYear, max, min } from "date-fns";
 import { Ref, useImperativeHandle, useRef, useState } from "react";
 import { get, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
+import { formatDato } from "~/utils/datoformat.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
 const ÅR_FØR_OG_ETTER_I_ÅRSVELGER = 5;
@@ -67,7 +69,7 @@ type DatePickerFormPartProperties = {
   Siste år kalenderen lar brukeren bla til. Påvirker ikke validering av inntastet dato.
   */
   sisteKalenderår?: number;
-} & Omit<UseDatepickerOptions, "onDateChange">;
+} & Omit<UseDatepickerOptions, "onDateChange" | "onValidate">;
 
 export function DatePickerFormPart({
   formFieldName,
@@ -87,6 +89,11 @@ export function DatePickerFormPart({
     formState: { errors },
   } = useFormContext();
   const translateError = useTranslateError();
+  const { t, i18n } = useTranslation();
+  const [grensefeil, setGrensefeil] = useState<{
+    nøkkel: "periode.datoErForTidlig" | "periode.datoErForSen";
+    grense: Date;
+  }>();
 
   // Engangssignal: settes når feltet tømmes programmatisk, slik at den
   // påfølgende onDateChange hopper over validering for nettopp den endringen.
@@ -97,9 +104,18 @@ export function DatePickerFormPart({
   register(formFieldName);
 
   const fieldError = get(errors, formFieldName)?.message as string | undefined;
-  const error = translateError(externalError || fieldError);
 
   const datePicker = useDatepicker({
+    onValidate: ({ isBefore, isAfter }) => {
+      const { fromDate, toDate } = datePickerOptions;
+      if (isBefore && fromDate) {
+        setGrensefeil({ nøkkel: "periode.datoErForTidlig", grense: fromDate });
+      } else if (isAfter && toDate) {
+        setGrensefeil({ nøkkel: "periode.datoErForSen", grense: toDate });
+      } else {
+        setGrensefeil(undefined);
+      }
+    },
     onDateChange: (date) => {
       const shouldValidate = !skipValidationRef.current;
       skipValidationRef.current = false;
@@ -128,6 +144,23 @@ export function DatePickerFormPart({
     [datePicker],
   );
 
+  // Aksel tømmer verdien når en inntastet dato er utenfor fromDate/toDate, så
+  // skjemavalideringen ser bare et tomt felt. Da vises grensen i stedet for
+  // den generelle «gyldig dato»-meldingen.
+  const grensefeilTekst =
+    fieldError &&
+    grensefeil &&
+    t(grensefeil.nøkkel, {
+      dato: formatDato(
+        formatISO(grensefeil.grense, { representation: "date" }),
+        i18n.language,
+      ),
+    });
+  const error =
+    translateError(externalError) ||
+    grensefeilTekst ||
+    translateError(fieldError);
+
   const [idag] = useState(() => new Date());
   const årsvelgerVindu = getÅrsvelgerVindu({
     visningsmåned: datePicker.datepickerProps.month ?? idag,
@@ -141,6 +174,7 @@ export function DatePickerFormPart({
       {...datePicker.datepickerProps}
       {...årsvelgerVindu}
       dropdownCaption
+      fixedWeeks={true}
     >
       <DatePicker.Input
         {...datePicker.inputProps}
