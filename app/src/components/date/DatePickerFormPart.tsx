@@ -14,10 +14,10 @@ const ÅR_FØR_OG_ETTER_I_ÅRSVELGER = 5;
 /**
  * Aksel lister alle år mellom fromDate og toDate i års-dropdownen, og bruker
  * samme grenser for navigasjonen. Kalenderen får derfor et glidende vindu på
- * ±5 år rundt året som vises. Vinduet flytter seg når brukeren blar med pilene
- * eller velger ytterste år, slik at hele det gyldige området (fromDate/toDate
- * fra hooken) fortsatt kan nås. Validering av inntastet dato bruker fortsatt
- * hookens fromDate/toDate.
+ * ±5 år rundt året som vises. Vinduet følger året som vises, også når brukeren
+ * blar med pilene eller velger et annet år, slik at hele det gyldige området
+ * (fromDate/toDate fra hooken) fortsatt kan nås. Validering av inntastet dato
+ * bruker fortsatt hookens fromDate/toDate.
  */
 function getÅrsvelgerVindu({
   visningsmåned,

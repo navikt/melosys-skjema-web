@@ -34,10 +34,7 @@ export async function selectDateFromCalendar(
   const monthNumber = Number(month);
   const yearNumber = Number(year);
 
-  // Find and click the calendar button next to this input
-  // The button is a sibling of the input's container
-  const container = dateInput.locator("..");
-  await container.getByRole("button", { name: tekster.openDatePicker }).click();
+  await apneKalender(dateInput, sprak);
 
   // Navigate to correct year and month
   const currentYear = new Date().getFullYear();
@@ -59,9 +56,30 @@ export async function selectDateFromCalendar(
     }
   }
 
-  // Click the day button (button text includes day number and weekday)
+  await velgDagIApenKalender(page, dayNumber);
+}
+
+/**
+ * Åpner kalenderen til datofeltet. Knappen ligger i samme container som input-feltet.
+ */
+export async function apneKalender(
+  dateInput: Locator,
+  sprak: DatePickerSprak = E2E_SPRAK,
+) {
+  await dateInput
+    .locator("..")
+    .getByRole("button", { name: datePickerTekster(sprak).openDatePicker })
+    .click();
+}
+
+/**
+ * Velger en dag i måneden som vises i den åpne kalenderen.
+ * Knappenavnet er ukedag + dagnummer, f.eks. «mandag 15».
+ */
+export async function velgDagIApenKalender(page: Page, dag: number) {
   await page
-    .getByRole("button", { name: new RegExp(String.raw`\b${dayNumber}\b`) })
+    .getByRole("dialog")
+    .getByRole("button", { name: new RegExp(String.raw`\b${dag}\b`) })
     .first()
     .click();
 }

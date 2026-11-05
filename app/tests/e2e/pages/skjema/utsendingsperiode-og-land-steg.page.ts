@@ -8,8 +8,10 @@ import {
 } from "~/types/melosysSkjemaTypes";
 
 import {
+  apneKalender,
   datePickerTekster,
   selectDateFromCalendar,
+  velgDagIApenKalender,
 } from "../../utils/datepicker-helpers";
 import { translations } from "../../utils/translations";
 
@@ -288,17 +290,11 @@ export class UtsendingsperiodeOgLandStegPage {
   }
 
   async apneFraDatoKalender() {
-    await this.fraDatoInput
-      .locator("..")
-      .getByRole("button", { name: datePickerTekster().openDatePicker })
-      .click();
+    await apneKalender(this.fraDatoInput);
   }
 
   async apneTilDatoKalender() {
-    await this.tilDatoInput
-      .locator("..")
-      .getByRole("button", { name: datePickerTekster().openDatePicker })
-      .click();
+    await apneKalender(this.tilDatoInput);
   }
 
   async assertArsvelgerViserAr(forsteAr: number, sisteAr: number) {
@@ -314,9 +310,6 @@ export class UtsendingsperiodeOgLandStegPage {
   }
 
   async velgDagIKalender(dag: number) {
-    await this.page
-      .getByRole("button", { name: new RegExp(String.raw`\b${dag}\b`) })
-      .first()
-      .click();
+    await velgDagIApenKalender(this.page, dag);
   }
 }
