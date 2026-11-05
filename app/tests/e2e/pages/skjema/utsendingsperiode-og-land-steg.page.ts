@@ -7,7 +7,10 @@ import {
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
 
-import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
+import {
+  datePickerTekster,
+  selectDateFromCalendar,
+} from "../../utils/datepicker-helpers";
 import { translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
@@ -82,6 +85,10 @@ export class UtsendingsperiodeOgLandStegPage {
 
   private fraDatoFieldWrapper() {
     return this.fraDatoInput.locator("..").locator("..");
+  }
+
+  private arsvelger() {
+    return this.page.getByRole("combobox", { name: datePickerTekster().year });
   }
 
   private tilDatoFieldWrapper() {
@@ -278,5 +285,38 @@ export class UtsendingsperiodeOgLandStegPage {
     await expect(
       this.page.getByText(feilmeldinger.tilDatoForFraDato),
     ).toBeVisible();
+  }
+
+  async apneFraDatoKalender() {
+    await this.fraDatoInput
+      .locator("..")
+      .getByRole("button", { name: datePickerTekster().openDatePicker })
+      .click();
+  }
+
+  async apneTilDatoKalender() {
+    await this.tilDatoInput
+      .locator("..")
+      .getByRole("button", { name: datePickerTekster().openDatePicker })
+      .click();
+  }
+
+  async assertArsvelgerViserAr(forsteAr: number, sisteAr: number) {
+    const forventedeAr = Array.from(
+      { length: sisteAr - forsteAr + 1 },
+      (_, index) => String(forsteAr + index),
+    );
+    await expect(this.arsvelger().locator("option")).toHaveText(forventedeAr);
+  }
+
+  async velgArIKalender(ar: number) {
+    await this.arsvelger().selectOption(String(ar));
+  }
+
+  async velgDagIKalender(dag: number) {
+    await this.page
+      .getByRole("button", { name: new RegExp(String.raw`\b${dag}\b`) })
+      .first()
+      .click();
   }
 }

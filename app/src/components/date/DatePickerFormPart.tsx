@@ -3,11 +3,47 @@ import {
   useDatepicker,
   UseDatepickerOptions,
 } from "@navikt/ds-react";
-import { formatISO } from "date-fns";
-import { Ref, useImperativeHandle, useRef } from "react";
+import { formatISO, getYear, max, min } from "date-fns";
+import { Ref, useImperativeHandle, useRef, useState } from "react";
 import { get, useFormContext } from "react-hook-form";
 
 import { useTranslateError } from "~/utils/translation.ts";
+
+const ÅR_FØR_OG_ETTER_I_ÅRSVELGER = 5;
+
+/**
+ * Aksel lister alle år mellom fromDate og toDate i års-dropdownen, og bruker
+ * samme grenser for navigasjonen. Kalenderen får derfor et glidende vindu på
+ * ±5 år rundt året som vises. Vinduet flytter seg når brukeren blar med pilene
+ * eller velger ytterste år, slik at hele det gyldige området (fromDate/toDate
+ * fra hooken) fortsatt kan nås. Validering av inntastet dato bruker fortsatt
+ * hookens fromDate/toDate.
+ */
+function getÅrsvelgerVindu({
+  visningsmåned,
+  sisteKalenderår,
+  fromDate,
+  toDate,
+}: {
+  visningsmåned: Date;
+  sisteKalenderår?: number;
+  fromDate?: Date;
+  toDate?: Date;
+}) {
+  const visningsår = getYear(visningsmåned);
+  const førsteÅr = visningsår - ÅR_FØR_OG_ETTER_I_ÅRSVELGER;
+  const sisteÅr = Math.min(
+    visningsår + ÅR_FØR_OG_ETTER_I_ÅRSVELGER,
+    Math.max(sisteKalenderår ?? Infinity, visningsår),
+  );
+  const vinduStart = new Date(førsteÅr, 0, 1);
+  const vinduSlutt = new Date(sisteÅr, 11, 31);
+
+  return {
+    fromDate: fromDate ? max([fromDate, vinduStart]) : vinduStart,
+    toDate: toDate ? min([toDate, vinduSlutt]) : vinduSlutt,
+  };
+}
 
 export type DatePickerFormPartHandle = {
   /**
@@ -27,6 +63,10 @@ type DatePickerFormPartProperties = {
   Kalles i tillegg til den interne lagringen når datoen endres.
   */
   onDateChange?: (date?: Date) => void;
+  /**
+  Siste år kalenderen lar brukeren bla til. Påvirker ikke validering av inntastet dato.
+  */
+  sisteKalenderår?: number;
 } & Omit<UseDatepickerOptions, "onDateChange">;
 
 export function DatePickerFormPart({
@@ -37,6 +77,7 @@ export function DatePickerFormPart({
   error: externalError,
   ref,
   onDateChange,
+  sisteKalenderår,
   ...datePickerOptions
 }: DatePickerFormPartProperties) {
   const {
@@ -87,8 +128,20 @@ export function DatePickerFormPart({
     [datePicker],
   );
 
+  const [idag] = useState(() => new Date());
+  const årsvelgerVindu = getÅrsvelgerVindu({
+    visningsmåned: datePicker.datepickerProps.month ?? idag,
+    sisteKalenderår,
+    fromDate: datePicker.datepickerProps.fromDate,
+    toDate: datePicker.datepickerProps.toDate,
+  });
+
   return (
-    <DatePicker {...datePicker.datepickerProps} dropdownCaption>
+    <DatePicker
+      {...datePicker.datepickerProps}
+      {...årsvelgerVindu}
+      dropdownCaption
+    >
       <DatePicker.Input
         {...datePicker.inputProps}
         className={className}
