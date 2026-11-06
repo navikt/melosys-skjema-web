@@ -1,4 +1,5 @@
-import { Loader, LocalAlert, TextField } from "@navikt/ds-react";
+import { ExclamationmarkTriangleIcon } from "@navikt/aksel-icons";
+import { InfoCard, Loader, TextField } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -122,18 +123,16 @@ export function OrganisasjonSoker({
       )}
 
       {visIngenTreff && !query.isFetching && (
-        <LocalAlert
+        <InfoCard
           className="mt-4"
+          data-color="warning"
           role="status"
           size="small"
-          status="warning"
         >
-          <LocalAlert.Header>
-            <LocalAlert.Title as="div">
-              {t("generellValidering.organisasjonIkkeFunnet")}
-            </LocalAlert.Title>
-          </LocalAlert.Header>
-        </LocalAlert>
+          <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+            {t("generellValidering.organisasjonIkkeFunnet")}
+          </InfoCard.Message>
+        </InfoCard>
       )}
 
       {valgtOrganisasjon && !query.isFetching && (

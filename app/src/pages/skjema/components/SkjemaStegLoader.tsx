@@ -1,11 +1,13 @@
-import { InformationSquareIcon } from "@navikt/aksel-icons";
+import {
+  ExclamationmarkTriangleIcon,
+  InformationSquareIcon,
+} from "@navikt/aksel-icons";
 import {
   Detail,
   ErrorMessage,
   HStack,
   InfoCard,
   Loader,
-  LocalAlert,
 } from "@navikt/ds-react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { Navigate } from "@tanstack/react-router";
@@ -89,13 +91,11 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   return (
     <>
       {skjema.utkastReinitialisert && (
-        <LocalAlert className="mb-4" role="status" status="warning">
-          <LocalAlert.Header>
-            <LocalAlert.Title as="div">
-              {t("felles.utkastReinitialisert")}
-            </LocalAlert.Title>
-          </LocalAlert.Header>
-        </LocalAlert>
+        <InfoCard className="mb-4" data-color="warning" role="status">
+          <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+            {t("felles.utkastReinitialisert")}
+          </InfoCard.Message>
+        </InfoCard>
       )}
       {children(skjema)}
     </>
