@@ -1,6 +1,6 @@
 import { UseDatepickerOptions } from "@navikt/ds-react";
 import { isAfter } from "date-fns";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -8,6 +8,10 @@ import {
   DatePickerFormPart,
   DatePickerFormPartHandle,
 } from "./DatePickerFormPart.tsx";
+
+// Perioder som starter mer enn fem år frem i tid er ikke aktuelle, så
+// fra-dato-kalenderen blar ikke lenger frem enn dette.
+const MAKS_ÅR_FREM_FOR_FRA_DATO = 5;
 
 /**
  * Props for PeriodeFormPart-komponenten
@@ -95,6 +99,9 @@ export function PeriodeFormPart({
   const { t } = useTranslation();
   const { getValues } = useFormContext();
   const tilDatoRef = useRef<DatePickerFormPartHandle>(null);
+  const [sisteKalenderårForFraDato] = useState(
+    () => new Date().getFullYear() + MAKS_ÅR_FREM_FOR_FRA_DATO,
+  );
 
   // Tøm "til dato" hvis "fra dato" settes etter den – uten å vise valideringsfeil.
   const handleFraDatoChange = (fraDato?: Date) => {
@@ -114,6 +121,7 @@ export function PeriodeFormPart({
         formFieldName={`${formFieldName}.fraDato`}
         label={fraDatoLabel ?? t("periode.fraDato")}
         onDateChange={handleFraDatoChange}
+        sisteKalenderår={sisteKalenderårForFraDato}
         {...datePickerOptions}
       />
 

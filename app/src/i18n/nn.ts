@@ -62,6 +62,8 @@ export const nn = {
       fraDato: "Frå dato",
       tilDato: "Til dato",
       datoErPakrevd: "Du må fylle inn ein gyldig dato",
+      datoErForTidlig: "Datoen kan ikkje vere tidlegare enn {{dato}}",
+      datoErForSen: "Datoen kan ikkje vere seinare enn {{dato}}",
       tilDatoMaVareEtterFraDato: "Til-dato kan ikkje vere før frå-dato",
     },
     soknadHeader: {
