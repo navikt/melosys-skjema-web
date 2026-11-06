@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Modal } from "@navikt/ds-react";
+import { BodyLong, Button, LocalAlert, Modal } from "@navikt/ds-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -50,9 +50,11 @@ export function AvbrytOgSlettKnapp({
         <Modal.Body>
           <BodyLong>{t("felles.alleOpplysningerVilBliSlettet")}</BodyLong>
           {slettUtkastMutation.isError && (
-            <Alert className="mt-4" role="alert" size="small" variant="error">
-              {t("felles.feil")}
-            </Alert>
+            <LocalAlert className="mt-4" size="small" status="error">
+              <LocalAlert.Header>
+                <LocalAlert.Title as="div">{t("felles.feil")}</LocalAlert.Title>
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
         </Modal.Body>
         <Modal.Footer>

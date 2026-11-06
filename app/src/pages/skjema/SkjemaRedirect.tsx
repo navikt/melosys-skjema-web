@@ -1,4 +1,11 @@
-import { Alert, Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
+import { InformationSquareIcon } from "@navikt/aksel-icons";
+import {
+  Detail,
+  ErrorMessage,
+  HStack,
+  InfoCard,
+  Loader,
+} from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -35,7 +42,13 @@ export function SkjemaRedirect({ id }: SkjemaRedirectProperties) {
   }
 
   if (error instanceof FeilSkjemaVersjonError) {
-    return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
+    return (
+      <InfoCard data-color="info">
+        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+          {t("felles.skjemaOppdateres")}
+        </InfoCard.Message>
+      </InfoCard>
+    );
   }
 
   if (

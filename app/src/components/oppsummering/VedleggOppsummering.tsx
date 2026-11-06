@@ -1,8 +1,8 @@
 import {
-  Alert,
   BodyShort,
   FormSummary,
   Link as DsLink,
+  LocalAlert,
 } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -80,9 +80,13 @@ export function VedleggOppsummering({
       <FormSummary.Answers>
         {hentVedleggFeil && (
           <FormSummary.Answer>
-            <Alert role="alert" size="small" variant="error">
-              {t("vedleggSteg.feilVedHentingAvVedlegg")}
-            </Alert>
+            <LocalAlert size="small" status="error">
+              <LocalAlert.Header>
+                <LocalAlert.Title as="div">
+                  {t("vedleggSteg.feilVedHentingAvVedlegg")}
+                </LocalAlert.Title>
+              </LocalAlert.Header>
+            </LocalAlert>
           </FormSummary.Answer>
         )}
         {svarLabel !== undefined && harAnnenDokumentasjonFelt && (

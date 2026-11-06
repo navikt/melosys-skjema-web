@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FilesPartitioned } from "@navikt/ds-react";
-import { Alert, ErrorMessage, FileUpload, VStack } from "@navikt/ds-react";
+import { ErrorMessage, FileUpload, LocalAlert, VStack } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -273,15 +273,23 @@ function VedleggStegContent({
           }
         >
           {hentVedleggFeil && (
-            <Alert className="mt-4" role="alert" size="small" variant="error">
-              {t("vedleggSteg.feilVedHentingAvVedlegg")}
-            </Alert>
+            <LocalAlert className="mt-4" size="small" status="error">
+              <LocalAlert.Header>
+                <LocalAlert.Title as="div">
+                  {t("vedleggSteg.feilVedHentingAvVedlegg")}
+                </LocalAlert.Title>
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
 
           {slettVedleggFeil && (
-            <Alert className="mt-4" role="alert" size="small" variant="error">
-              {t("vedleggSteg.feilVedSlettingAvVedlegg")}
-            </Alert>
+            <LocalAlert className="mt-4" size="small" status="error">
+              <LocalAlert.Header>
+                <LocalAlert.Title as="div">
+                  {t("vedleggSteg.feilVedSlettingAvVedlegg")}
+                </LocalAlert.Title>
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
 
           <RadioGroupJaNeiFormPart

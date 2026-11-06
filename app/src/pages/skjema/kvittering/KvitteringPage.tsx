@@ -1,11 +1,12 @@
+import { InformationSquareIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyLong,
   Button,
   Detail,
   ErrorMessage,
   Heading,
   HStack,
+  InfoCard,
   Loader,
   VStack,
 } from "@navikt/ds-react";
@@ -86,7 +87,11 @@ function KvitteringPageContent({
       <BodyLong>
         {t("kvittering.melding")} <strong>{response.referanseId}</strong>.
       </BodyLong>
-      <Alert variant="info">{t("kvittering.infoOversikt")}</Alert>
+      <InfoCard data-color="info">
+        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+          {t("kvittering.infoOversikt")}
+        </InfoCard.Message>
+      </InfoCard>
       {skjema.metadata.harArbeidsforholdIAareg === false && (
         <AaregVarsel
           arbeidsgiverNavn={skjema.metadata.arbeidsgiverNavn}

@@ -1,4 +1,4 @@
-import { Alert, Heading, Link, UNSAFE_Combobox } from "@navikt/ds-react";
+import { Link, LocalAlert, UNSAFE_Combobox } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +13,7 @@ interface ArbeidsgiverVelgerProperties {
  * Arbeidsgiver-velger (RADGIVER/ARBEIDSGIVER).
  *
  * Modi:
- * 1. Tom liste → Alert med warning
+ * 1. Tom liste → LocalAlert med warning
  * 2. Ellers → Combobox
  */
 export function ArbeidsgiverVelger({
@@ -26,19 +26,23 @@ export function ArbeidsgiverVelger({
 
   if (arbeidsgivere.length === 0) {
     return (
-      <Alert variant="warning">
-        <Heading level="3" size="small" spacing>
-          {t("oversiktFelles.ingenArbeidsgivereTittel")}
-        </Heading>
-        <p className="mb-4">{t("oversiktFelles.ingenArbeidsgivereInfo")}</p>
-        <Link
-          href={t("oversiktFelles.ingenArbeidsgivereLenkeUrl")}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {t("oversiktFelles.ingenArbeidsgivereLenke")}
-        </Link>
-      </Alert>
+      <LocalAlert role="status" status="warning">
+        <LocalAlert.Header>
+          <LocalAlert.Title as="h3">
+            {t("oversiktFelles.ingenArbeidsgivereTittel")}
+          </LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          <p className="mb-4">{t("oversiktFelles.ingenArbeidsgivereInfo")}</p>
+          <Link
+            href={t("oversiktFelles.ingenArbeidsgivereLenkeUrl")}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {t("oversiktFelles.ingenArbeidsgivereLenke")}
+          </Link>
+        </LocalAlert.Content>
+      </LocalAlert>
     );
   }
 

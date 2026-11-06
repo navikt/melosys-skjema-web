@@ -1,4 +1,4 @@
-import { Alert, Button, Loader, VStack } from "@navikt/ds-react";
+import { Button, Loader, LocalAlert, VStack } from "@navikt/ds-react";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -67,7 +67,13 @@ function FyllUtDinDelFeil() {
 
   return (
     <VStack align="start" gap="space-16">
-      <Alert variant="error">{t("oversiktDegSelv.motpartCtaFeil")}</Alert>
+      <LocalAlert status="error">
+        <LocalAlert.Header>
+          <LocalAlert.Title as="div">
+            {t("oversiktDegSelv.motpartCtaFeil")}
+          </LocalAlert.Title>
+        </LocalAlert.Header>
+      </LocalAlert>
       <Button
         onClick={() =>
           void navigate({

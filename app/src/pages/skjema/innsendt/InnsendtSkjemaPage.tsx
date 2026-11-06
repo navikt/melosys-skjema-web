@@ -1,11 +1,11 @@
 import {
-  Alert,
   BodyShort,
   Button,
   Detail,
   Heading,
   HStack,
   Loader,
+  LocalAlert,
   Tag,
   VStack,
 } from "@navikt/ds-react";
@@ -60,7 +60,13 @@ export function InnsendtSkjemaPage({ skjemaId }: InnsendtSkjemaPageProperties) {
   }
 
   return innsendtError || skjemaError || !innsendtSkjema || !skjema ? (
-    <Alert variant="error">{t("innsendtSkjema.feilVedLasting")}</Alert>
+    <LocalAlert status="error">
+      <LocalAlert.Header>
+        <LocalAlert.Title as="div">
+          {t("innsendtSkjema.feilVedLasting")}
+        </LocalAlert.Title>
+      </LocalAlert.Header>
+    </LocalAlert>
   ) : (
     <InnsendtSkjemaPageContent response={innsendtSkjema} skjema={skjema} />
   );
