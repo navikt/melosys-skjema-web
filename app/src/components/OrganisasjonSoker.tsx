@@ -1,4 +1,4 @@
-import { Alert, Loader, TextField } from "@navikt/ds-react";
+import { Loader, LocalAlert, TextField } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -122,14 +122,18 @@ export function OrganisasjonSoker({
       )}
 
       {visIngenTreff && !query.isFetching && (
-        <Alert
-          aria-live="polite"
+        <LocalAlert
           className="mt-4"
+          role="status"
           size="small"
-          variant="warning"
+          status="warning"
         >
-          {t("generellValidering.organisasjonIkkeFunnet")}
-        </Alert>
+          <LocalAlert.Header>
+            <LocalAlert.Title as="div">
+              {t("generellValidering.organisasjonIkkeFunnet")}
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
 
       {valgtOrganisasjon && !query.isFetching && (

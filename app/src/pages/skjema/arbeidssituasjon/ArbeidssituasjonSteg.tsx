@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, BodyLong, Heading, Textarea } from "@navikt/ds-react";
+import { InformationSquareIcon } from "@navikt/aksel-icons";
+import { InfoCard, Textarea } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -127,14 +128,16 @@ function ArbeidssituasjonStegContent({
           }
         >
           {skjemadel === Skjemadel.ARBEIDSGIVER_OG_ARBEIDSTAKERS_DEL && (
-            <Alert className="mt-4" variant="info">
-              <Heading level="2" size="small" spacing>
-                {t("arbeidssituasjonSteg.fullmaktFraArbeidstakerTittel")}
-              </Heading>
-              <BodyLong>
+            <InfoCard className="mt-4" data-color="info">
+              <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                <InfoCard.Title as="h2">
+                  {t("arbeidssituasjonSteg.fullmaktFraArbeidstakerTittel")}
+                </InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
                 {t("arbeidssituasjonSteg.fullmaktFraArbeidstakerBeskrivelse")}
-              </BodyLong>
-            </Alert>
+              </InfoCard.Content>
+            </InfoCard>
           )}
 
           {!arbeidstakerdelForStatsansatt && (

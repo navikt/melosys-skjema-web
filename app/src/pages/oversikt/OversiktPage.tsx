@@ -1,10 +1,10 @@
 import {
-  Alert,
   BodyShort,
   GuidePanel,
   Heading,
   Link,
   Loader,
+  LocalAlert,
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
@@ -46,7 +46,13 @@ export function OversiktPage({
     return error instanceof ValideringError ? (
       <Navigate to="/representasjon/velg-radgiverfirma" />
     ) : (
-      <Alert variant="error">{t("generellValidering.feilVedSok")}</Alert>
+      <LocalAlert status="error">
+        <LocalAlert.Header>
+          <LocalAlert.Title as="div">
+            {t("generellValidering.feilVedSok")}
+          </LocalAlert.Title>
+        </LocalAlert.Header>
+      </LocalAlert>
     );
   }
 

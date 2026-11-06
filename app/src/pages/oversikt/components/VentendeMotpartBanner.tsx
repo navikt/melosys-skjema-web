@@ -1,9 +1,9 @@
+import { InformationSquareIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyLong,
   Button,
   ErrorMessage,
-  Heading,
+  InfoCard,
   VStack,
 } from "@navikt/ds-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -68,44 +68,48 @@ function VentendeMotpartAlert({
   });
 
   return (
-    <Alert variant="info">
-      <Heading level="2" size="small" spacing>
-        {t("oversiktDegSelv.motpartCtaTittel", {
-          arbeidsgiverNavn: soknad.arbeidsgiverNavn,
-        })}
-      </Heading>
-      <BodyLong spacing>
-        {soknad.utsendingsperiode
-          ? t("oversiktDegSelv.motpartCtaBeskrivelse", {
-              land: t(
-                soknad.utsendelseLand
-                  ? `land.${soknad.utsendelseLand}`
-                  : "oversiktDegSelv.motpartCtaUtlandetFallback",
-              ),
-              fraDato: formatDato(
-                soknad.utsendingsperiode.fraDato,
-                i18n.language,
-              ),
-              tilDato: formatDato(
-                soknad.utsendingsperiode.tilDato,
-                i18n.language,
-              ),
-            })
-          : t("oversiktDegSelv.motpartCtaBeskrivelseUtenPeriode")}
-      </BodyLong>
-      {startDinDel.isError && (
-        <ErrorMessage className="mb-4" showIcon size="small">
-          {t("oversiktDegSelv.motpartCtaFeil")}
-        </ErrorMessage>
-      )}
-      <Button
-        loading={startDinDel.isPending}
-        onClick={() => startDinDel.mutate()}
-        size="small"
-        variant="primary"
-      >
-        {t("oversiktDegSelv.motpartCtaKnapp")}
-      </Button>
-    </Alert>
+    <InfoCard data-color="info">
+      <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+        <InfoCard.Title as="h2">
+          {t("oversiktDegSelv.motpartCtaTittel", {
+            arbeidsgiverNavn: soknad.arbeidsgiverNavn,
+          })}
+        </InfoCard.Title>
+      </InfoCard.Header>
+      <InfoCard.Content>
+        <BodyLong spacing>
+          {soknad.utsendingsperiode
+            ? t("oversiktDegSelv.motpartCtaBeskrivelse", {
+                land: t(
+                  soknad.utsendelseLand
+                    ? `land.${soknad.utsendelseLand}`
+                    : "oversiktDegSelv.motpartCtaUtlandetFallback",
+                ),
+                fraDato: formatDato(
+                  soknad.utsendingsperiode.fraDato,
+                  i18n.language,
+                ),
+                tilDato: formatDato(
+                  soknad.utsendingsperiode.tilDato,
+                  i18n.language,
+                ),
+              })
+            : t("oversiktDegSelv.motpartCtaBeskrivelseUtenPeriode")}
+        </BodyLong>
+        {startDinDel.isError && (
+          <ErrorMessage className="mb-4" showIcon size="small">
+            {t("oversiktDegSelv.motpartCtaFeil")}
+          </ErrorMessage>
+        )}
+        <Button
+          loading={startDinDel.isPending}
+          onClick={() => startDinDel.mutate()}
+          size="small"
+          variant="primary"
+        >
+          {t("oversiktDegSelv.motpartCtaKnapp")}
+        </Button>
+      </InfoCard.Content>
+    </InfoCard>
   );
 }
