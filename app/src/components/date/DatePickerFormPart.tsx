@@ -90,9 +90,9 @@ export function DatePickerFormPart({
   } = useFormContext();
   const translateError = useTranslateError();
   const { t, i18n } = useTranslation();
-  const [grensefeil, setGrensefeil] = useState<{
-    nøkkel: "periode.datoErForTidlig" | "periode.datoErForSen";
-    grense: Date;
+  const [rangeError, setRangeError] = useState<{
+    key: "periode.datoErForTidlig" | "periode.datoErForSen";
+    dato: Date;
   }>();
 
   // Engangssignal: settes når feltet tømmes programmatisk, slik at den
@@ -109,11 +109,11 @@ export function DatePickerFormPart({
     onValidate: ({ isBefore, isAfter }) => {
       const { fromDate, toDate } = datePickerOptions;
       if (isBefore && fromDate) {
-        setGrensefeil({ nøkkel: "periode.datoErForTidlig", grense: fromDate });
+        setRangeError({ key: "periode.datoErForTidlig", dato: fromDate });
       } else if (isAfter && toDate) {
-        setGrensefeil({ nøkkel: "periode.datoErForSen", grense: toDate });
+        setRangeError({ key: "periode.datoErForSen", dato: toDate });
       } else {
-        setGrensefeil(undefined);
+        setRangeError(undefined);
       }
     },
     onDateChange: (date) => {
@@ -147,18 +147,18 @@ export function DatePickerFormPart({
   // Aksel tømmer verdien når en inntastet dato er utenfor fromDate/toDate, så
   // skjemavalideringen ser bare et tomt felt. Da vises grensen i stedet for
   // den generelle «gyldig dato»-meldingen.
-  const grensefeilTekst =
+  const rangeErrorText =
     fieldError &&
-    grensefeil &&
-    t(grensefeil.nøkkel, {
+    rangeError &&
+    t(rangeError.key, {
       dato: formatDato(
-        formatISO(grensefeil.grense, { representation: "date" }),
+        formatISO(rangeError.dato, { representation: "date" }),
         i18n.language,
       ),
     });
   const error =
     translateError(externalError) ||
-    grensefeilTekst ||
+    rangeErrorText ||
     translateError(fieldError);
 
   const [idag] = useState(() => new Date());
