@@ -6,9 +6,15 @@ import {
   type UtsendingsperiodeOgLandDto,
   type UtsendtArbeidstakerSkjemaDto,
 } from "~/types/melosysSkjemaTypes";
+import { formatDato } from "~/utils/datoformat";
 
-import { selectDateFromCalendar } from "../../utils/datepicker-helpers";
-import { translations } from "../../utils/translations";
+import {
+  apneKalender,
+  datePickerTekster,
+  selectDateFromCalendar,
+  velgDagIApenKalender,
+} from "../../utils/datepicker-helpers";
+import { E2E_SPRAK, translations } from "../../utils/translations";
 
 // Hent felter fra statiske definisjoner
 const utsendingsperiodeOgLand =
@@ -23,6 +29,8 @@ const feilmeldinger = {
   land: translations.utsendingsperiodeOgLandSteg
     .duMaVelgeHvilketLandArbeidetSkalUtforesI,
   datoErPakrevd: translations.periode.datoErPakrevd,
+  datoErForTidlig: translations.periode.datoErForTidlig,
+  datoErForSen: translations.periode.datoErForSen,
   tilDatoForFraDato: translations.periode.tilDatoMaVareEtterFraDato,
 };
 
@@ -82,6 +90,10 @@ export class UtsendingsperiodeOgLandStegPage {
 
   private fraDatoFieldWrapper() {
     return this.fraDatoInput.locator("..").locator("..");
+  }
+
+  private arsvelger() {
+    return this.page.getByRole("combobox", { name: datePickerTekster().year });
   }
 
   private tilDatoFieldWrapper() {
@@ -242,6 +254,31 @@ export class UtsendingsperiodeOgLandStegPage {
     await this.tilDatoInput.blur();
   }
 
+  async skrivInnFraDato(date: string) {
+    await this.fraDatoInput.fill(date);
+    await this.fraDatoInput.blur();
+  }
+
+  async assertFraDatoErForTidligIsVisible(isoGrense: string) {
+    await expect(
+      this.fraDatoFieldWrapper().getByText(
+        feilmeldinger.datoErForTidlig.replaceAll("{{dato}}", () =>
+          formatDato(isoGrense, E2E_SPRAK),
+        ),
+      ),
+    ).toBeVisible();
+  }
+
+  async assertFraDatoErForSenIsVisible(isoGrense: string) {
+    await expect(
+      this.fraDatoFieldWrapper().getByText(
+        feilmeldinger.datoErForSen.replaceAll("{{dato}}", () =>
+          formatDato(isoGrense, E2E_SPRAK),
+        ),
+      ),
+    ).toBeVisible();
+  }
+
   async assertLandFeilmeldingIsVisible() {
     await expect(this.page.getByText(feilmeldinger.land)).toBeVisible();
   }
@@ -278,5 +315,29 @@ export class UtsendingsperiodeOgLandStegPage {
     await expect(
       this.page.getByText(feilmeldinger.tilDatoForFraDato),
     ).toBeVisible();
+  }
+
+  async apneFraDatoKalender() {
+    await apneKalender(this.fraDatoInput);
+  }
+
+  async apneTilDatoKalender() {
+    await apneKalender(this.tilDatoInput);
+  }
+
+  async assertArsvelgerViserAr(forsteAr: number, sisteAr: number) {
+    const forventedeAr = Array.from(
+      { length: sisteAr - forsteAr + 1 },
+      (_, index) => String(forsteAr + index),
+    );
+    await expect(this.arsvelger().locator("option")).toHaveText(forventedeAr);
+  }
+
+  async velgArIKalender(ar: number) {
+    await this.arsvelger().selectOption(String(ar));
+  }
+
+  async velgDagIKalender(dag: number) {
+    await velgDagIApenKalender(this.page, dag);
   }
 }

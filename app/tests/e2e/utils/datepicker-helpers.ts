@@ -8,6 +8,10 @@ import { E2E_SPRAK } from "./translations";
 const AKSEL_LOCALES = { nb, nn, en } as const;
 export type DatePickerSprak = keyof typeof AKSEL_LOCALES;
 
+export function datePickerTekster(sprak: DatePickerSprak = E2E_SPRAK) {
+  return AKSEL_LOCALES[sprak].DatePicker;
+}
+
 /**
  * Helper function to select a date using the NAV Design System date picker calendar
  * @param page - The Playwright page instance
@@ -20,7 +24,7 @@ export async function selectDateFromCalendar(
   date: string,
   sprak: DatePickerSprak = E2E_SPRAK,
 ) {
-  const datePickerTekster = AKSEL_LOCALES[sprak].DatePicker;
+  const tekster = datePickerTekster(sprak);
   // Parse date string (format: DD.MM.YYYY)
   const parts = date.split(".");
   const day = parts[0] ?? "";
@@ -30,12 +34,7 @@ export async function selectDateFromCalendar(
   const monthNumber = Number(month);
   const yearNumber = Number(year);
 
-  // Find and click the calendar button next to this input
-  // The button is a sibling of the input's container
-  const container = dateInput.locator("..");
-  await container
-    .getByRole("button", { name: datePickerTekster.openDatePicker })
-    .click();
+  await apneKalender(dateInput, sprak);
 
   // Navigate to correct year and month
   const currentYear = new Date().getFullYear();
@@ -47,21 +46,40 @@ export async function selectDateFromCalendar(
 
   if (monthsToNavigate > 0) {
     for (let index = 0; index < monthsToNavigate; index++) {
-      await page
-        .getByRole("button", { name: datePickerTekster.goToNextMonth })
-        .click();
+      await page.getByRole("button", { name: tekster.goToNextMonth }).click();
     }
   } else if (monthsToNavigate < 0) {
     for (let index = 0; index < Math.abs(monthsToNavigate); index++) {
       await page
-        .getByRole("button", { name: datePickerTekster.goToPreviousMonth })
+        .getByRole("button", { name: tekster.goToPreviousMonth })
         .click();
     }
   }
 
-  // Click the day button (button text includes day number and weekday)
+  await velgDagIApenKalender(page, dayNumber);
+}
+
+/**
+ * Åpner kalenderen til datofeltet. Knappen ligger i samme container som input-feltet.
+ */
+export async function apneKalender(
+  dateInput: Locator,
+  sprak: DatePickerSprak = E2E_SPRAK,
+) {
+  await dateInput
+    .locator("..")
+    .getByRole("button", { name: datePickerTekster(sprak).openDatePicker })
+    .click();
+}
+
+/**
+ * Velger en dag i måneden som vises i den åpne kalenderen.
+ * Knappenavnet er ukedag + dagnummer, f.eks. «mandag 15».
+ */
+export async function velgDagIApenKalender(page: Page, dag: number) {
   await page
-    .getByRole("button", { name: new RegExp(String.raw`\b${dayNumber}\b`) })
+    .getByRole("dialog")
+    .getByRole("button", { name: new RegExp(String.raw`\b${dag}\b`) })
     .first()
     .click();
 }

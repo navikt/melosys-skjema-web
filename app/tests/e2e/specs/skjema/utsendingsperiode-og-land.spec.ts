@@ -169,6 +169,58 @@ test.describe("Utsendingsperiode og land", () => {
     await utsendingsperiodeOgLandStegPage.assertNavigatedToNextStep();
   });
 
+  test("årsvelgeren for fra-dato glir med ±5 år og stopper fem år frem i tid", async ({
+    page,
+  }) => {
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testArbeidstakerSkjema,
+    );
+    const idag = new Date();
+    const iar = idag.getFullYear();
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+
+    await stegPage.apneFraDatoKalender();
+    await stegPage.assertArsvelgerViserAr(iar - 5, iar + 5);
+
+    await stegPage.velgArIKalender(iar + 5);
+    await stegPage.assertArsvelgerViserAr(iar, iar + 5);
+
+    await stegPage.velgArIKalender(iar);
+    await stegPage.assertArsvelgerViserAr(iar - 5, iar + 5);
+
+    await stegPage.velgArIKalender(iar - 5);
+    await stegPage.assertArsvelgerViserAr(iar - 10, iar);
+
+    await stegPage.velgArIKalender(iar - 10);
+    await stegPage.assertArsvelgerViserAr(iar - 15, iar - 5);
+
+    await stegPage.velgDagIKalender(15);
+    const maned = String(idag.getMonth() + 1).padStart(2, "0");
+    await stegPage.assertFraDatoValue(`15.${maned}.${iar - 10}`);
+  });
+
+  test("årsvelgeren for til-dato glir videre enn fem år frem i tid", async ({
+    page,
+  }) => {
+    const stegPage = new UtsendingsperiodeOgLandStegPage(
+      page,
+      testArbeidstakerSkjema,
+    );
+    const iar = new Date().getFullYear();
+
+    await stegPage.goto();
+    await stegPage.assertIsVisible();
+
+    await stegPage.apneTilDatoKalender();
+    await stegPage.assertArsvelgerViserAr(iar - 5, iar + 5);
+
+    await stegPage.velgArIKalender(iar + 5);
+    await stegPage.assertArsvelgerViserAr(iar, iar + 10);
+  });
+
   test("viser AAREG-varsel når arbeidsforholdet ikke finnes for hele perioden", async ({
     page,
   }) => {
