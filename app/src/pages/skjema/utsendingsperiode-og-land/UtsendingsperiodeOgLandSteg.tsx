@@ -1,5 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, BodyShort, Button, Label } from "@navikt/ds-react";
+import { InformationSquareIcon } from "@navikt/aksel-icons";
+import {
+  BodyShort,
+  Button,
+  InfoCard,
+  InlineMessage,
+  Label,
+} from "@navikt/ds-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -151,20 +158,22 @@ function UtsendingsperiodeOgLandStegContent({
           }
         >
           {motpartensVerdier && (
-            <Alert className="mt-4" variant="info">
-              {t("utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver", {
-                arbeidsgiverNavn: skjema.metadata.arbeidsgiverNavn,
-                land: t(`land.${motpartensVerdier.utsendelseLand}`),
-                fraDato: formatDato(
-                  motpartensVerdier.utsendelsePeriode.fraDato,
-                  i18n.language,
-                ),
-                tilDato: formatDato(
-                  motpartensVerdier.utsendelsePeriode.tilDato,
-                  i18n.language,
-                ),
-              })}
-            </Alert>
+            <InfoCard className="mt-4" data-color="info">
+              <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                {t("utsendingsperiodeOgLandSteg.preutfyltAvArbeidsgiver", {
+                  arbeidsgiverNavn: skjema.metadata.arbeidsgiverNavn,
+                  land: t(`land.${motpartensVerdier.utsendelseLand}`),
+                  fraDato: formatDato(
+                    motpartensVerdier.utsendelsePeriode.fraDato,
+                    i18n.language,
+                  ),
+                  tilDato: formatDato(
+                    motpartensVerdier.utsendelsePeriode.tilDato,
+                    i18n.language,
+                  ),
+                })}
+              </InfoCard.Message>
+            </InfoCard>
           )}
 
           {visLesevisning && stegData ? (
@@ -211,11 +220,11 @@ function UtsendingsperiodeOgLandStegContent({
                 label={utsendelseLandFelt.label}
               />
               {isLandAvviker && (
-                <Alert className="mt-2" inline size="small" variant="info">
+                <InlineMessage className="mt-2" size="small" status="info">
                   {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaLand", {
                     land: t(`land.${motpartensVerdier.utsendelseLand}`),
                   })}
-                </Alert>
+                </InlineMessage>
               )}
 
               <PeriodeFormPart
@@ -239,7 +248,7 @@ function UtsendingsperiodeOgLandStegContent({
                 {...dateLimits}
               />
               {isPeriodeAvviker && (
-                <Alert className="mt-2" inline size="small" variant="info">
+                <InlineMessage className="mt-2" size="small" status="info">
                   {t("utsendingsperiodeOgLandSteg.arbeidsgiverOppgaPeriode", {
                     fraDato: formatDato(
                       motpartensVerdier.utsendelsePeriode.fraDato,
@@ -250,7 +259,7 @@ function UtsendingsperiodeOgLandStegContent({
                       i18n.language,
                     ),
                   })}
-                </Alert>
+                </InlineMessage>
               )}
             </>
           )}

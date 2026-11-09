@@ -1,4 +1,5 @@
-import { Alert, Heading, Link, UNSAFE_Combobox } from "@navikt/ds-react";
+import { ExclamationmarkTriangleIcon } from "@navikt/aksel-icons";
+import { InfoCard, Link, UNSAFE_Combobox } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +14,7 @@ interface ArbeidsgiverVelgerProperties {
  * Arbeidsgiver-velger (RADGIVER/ARBEIDSGIVER).
  *
  * Modi:
- * 1. Tom liste → Alert med warning
+ * 1. Tom liste → InfoCard med warning
  * 2. Ellers → Combobox
  */
 export function ArbeidsgiverVelger({
@@ -26,19 +27,23 @@ export function ArbeidsgiverVelger({
 
   if (arbeidsgivere.length === 0) {
     return (
-      <Alert variant="warning">
-        <Heading level="3" size="small" spacing>
-          {t("oversiktFelles.ingenArbeidsgivereTittel")}
-        </Heading>
-        <p className="mb-4">{t("oversiktFelles.ingenArbeidsgivereInfo")}</p>
-        <Link
-          href={t("oversiktFelles.ingenArbeidsgivereLenkeUrl")}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {t("oversiktFelles.ingenArbeidsgivereLenke")}
-        </Link>
-      </Alert>
+      <InfoCard data-color="warning" role="status">
+        <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+          <InfoCard.Title as="h3">
+            {t("oversiktFelles.ingenArbeidsgivereTittel")}
+          </InfoCard.Title>
+        </InfoCard.Header>
+        <InfoCard.Content>
+          <p className="mb-4">{t("oversiktFelles.ingenArbeidsgivereInfo")}</p>
+          <Link
+            href={t("oversiktFelles.ingenArbeidsgivereLenkeUrl")}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {t("oversiktFelles.ingenArbeidsgivereLenke")}
+          </Link>
+        </InfoCard.Content>
+      </InfoCard>
     );
   }
 

@@ -1,11 +1,11 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyShort,
   Button,
   Heading,
   HGrid,
   HStack,
+  LocalAlert,
   VStack,
 } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
@@ -85,9 +85,13 @@ export function SkjemaSteg({
       </Heading>
       {children}
       {isSubmitError && (
-        <Alert className="mt-4" role="alert" size="small" variant="error">
-          {t("felles.feilVedInnsending")}
-        </Alert>
+        <LocalAlert className="mt-4" size="small" status="error">
+          <LocalAlert.Header>
+            <LocalAlert.Title as="div">
+              {t("felles.feilVedInnsending")}
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
       <VStack className="mt-8" gap="space-4">
         <HGrid columns={2} gap="space-12">

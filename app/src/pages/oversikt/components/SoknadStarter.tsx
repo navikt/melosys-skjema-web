@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Alert,
   BodyLong,
   BodyShort,
   Box,
   Button,
   Heading,
   Loader,
+  LocalAlert,
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
@@ -111,9 +111,13 @@ export function SoknadStarter({
     (arbeidsgivere?.length ?? 0) === 0
   ) {
     return (
-      <Alert variant="error">
-        {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}
-      </Alert>
+      <LocalAlert status="error">
+        <LocalAlert.Header>
+          <LocalAlert.Title as="div">
+            {t("oversiktFelles.feilVedHentingAvArbeidsgivere")}
+          </LocalAlert.Title>
+        </LocalAlert.Header>
+      </LocalAlert>
     );
   }
 
@@ -309,16 +313,20 @@ function SoknadStarterContent({
             )}
 
             {valideringsfeil.length > 0 && (
-              <Alert variant="error">
-                <Heading level="3" size="small" spacing>
-                  {t("oversiktFelles.valideringFeilTittel")}
-                </Heading>
-                <ul className="list-disc pl-5">
-                  {valideringsfeil.map((feil) => (
-                    <li key={feil}>{feil}</li>
-                  ))}
-                </ul>
-              </Alert>
+              <LocalAlert status="error">
+                <LocalAlert.Header>
+                  <LocalAlert.Title as="h3">
+                    {t("oversiktFelles.valideringFeilTittel")}
+                  </LocalAlert.Title>
+                </LocalAlert.Header>
+                <LocalAlert.Content>
+                  <ul className="list-disc pl-5">
+                    {valideringsfeil.map((feil) => (
+                      <li key={feil}>{feil}</li>
+                    ))}
+                  </ul>
+                </LocalAlert.Content>
+              </LocalAlert>
             )}
 
             <Button className="w-fit" type="submit" variant="primary">

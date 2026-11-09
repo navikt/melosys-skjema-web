@@ -1,4 +1,5 @@
-import { Alert, ErrorSummary } from "@navikt/ds-react";
+import { InformationSquareIcon } from "@navikt/aksel-icons";
+import { ErrorSummary, InfoCard, LocalAlert } from "@navikt/ds-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -97,9 +98,11 @@ function OppsummeringStegContent({
         return (
           <Fragment key={seksjonNavn}>
             {erKombinertSkjema && stegKey === StegKey.ARBEIDSSITUASJON && (
-              <Alert className="mt-8" variant="info">
-                {t("oppsummeringSteg.svarPaVegneAvArbeidstaker")}
-              </Alert>
+              <InfoCard className="mt-8" data-color="info">
+                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                  {t("oppsummeringSteg.svarPaVegneAvArbeidstaker")}
+                </InfoCard.Message>
+              </InfoCard>
             )}
             <SeksjonOppsummering
               data={data}
@@ -129,9 +132,13 @@ function OppsummeringStegContent({
               ))}
             </ErrorSummary>
           ) : (
-            <Alert role="alert" variant="error">
-              {t("felles.feilVedInnsending")}
-            </Alert>
+            <LocalAlert status="error">
+              <LocalAlert.Header>
+                <LocalAlert.Title as="div">
+                  {t("felles.feilVedInnsending")}
+                </LocalAlert.Title>
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
         </div>
       )}

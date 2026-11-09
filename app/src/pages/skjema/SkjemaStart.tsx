@@ -1,6 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   Bleed,
   BodyLong,
   Box,
@@ -10,6 +9,7 @@ import {
   Heading,
   Link,
   List,
+  LocalAlert,
   VStack,
 } from "@navikt/ds-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -170,7 +170,13 @@ function SkjemaStartInnhold({ nySoknad }: { nySoknad: NySoknad }) {
             </VStack>
           </Box>
           {opprettSoknadMutation.isError && (
-            <Alert variant="error">{t("skjemaStart.feilVedOpprettelse")}</Alert>
+            <LocalAlert status="error">
+              <LocalAlert.Header>
+                <LocalAlert.Title as="div">
+                  {t("skjemaStart.feilVedOpprettelse")}
+                </LocalAlert.Title>
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
           <Button
             className="w-fit"

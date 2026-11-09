@@ -1,4 +1,5 @@
-import { Alert, Loader, TextField } from "@navikt/ds-react";
+import { ExclamationmarkTriangleIcon } from "@navikt/aksel-icons";
+import { InfoCard, Loader, TextField } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -122,14 +123,16 @@ export function OrganisasjonSoker({
       )}
 
       {visIngenTreff && !query.isFetching && (
-        <Alert
-          aria-live="polite"
+        <InfoCard
           className="mt-4"
+          data-color="warning"
+          role="status"
           size="small"
-          variant="warning"
         >
-          {t("generellValidering.organisasjonIkkeFunnet")}
-        </Alert>
+          <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+            {t("generellValidering.organisasjonIkkeFunnet")}
+          </InfoCard.Message>
+        </InfoCard>
       )}
 
       {valgtOrganisasjon && !query.isFetching && (

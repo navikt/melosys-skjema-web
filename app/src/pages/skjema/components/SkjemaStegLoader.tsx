@@ -1,4 +1,14 @@
-import { Alert, Detail, ErrorMessage, HStack, Loader } from "@navikt/ds-react";
+import {
+  ExclamationmarkTriangleIcon,
+  InformationSquareIcon,
+} from "@navikt/aksel-icons";
+import {
+  Detail,
+  ErrorMessage,
+  HStack,
+  InfoCard,
+  Loader,
+} from "@navikt/ds-react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { Navigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -49,7 +59,13 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   }
 
   if (error instanceof FeilSkjemaVersjonError) {
-    return <Alert variant="info">{t("felles.skjemaOppdateres")}</Alert>;
+    return (
+      <InfoCard data-color="info">
+        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+          {t("felles.skjemaOppdateres")}
+        </InfoCard.Message>
+      </InfoCard>
+    );
   }
 
   if (error || toggleFeil || typeof toggles?.[STATSANSATT_FLYT] !== "boolean") {
@@ -75,9 +91,11 @@ export function SkjemaStegLoader<T extends UtsendtArbeidstakerSkjemaDto>({
   return (
     <>
       {skjema.utkastReinitialisert && (
-        <Alert className="mb-4" variant="warning">
-          {t("felles.utkastReinitialisert")}
-        </Alert>
+        <InfoCard className="mb-4" data-color="warning" role="status">
+          <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+            {t("felles.utkastReinitialisert")}
+          </InfoCard.Message>
+        </InfoCard>
       )}
       {children(skjema)}
     </>

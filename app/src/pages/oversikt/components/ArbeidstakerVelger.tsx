@@ -1,6 +1,5 @@
 import { XMarkIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyShort,
   Box,
   Button,
@@ -9,6 +8,7 @@ import {
   InlineMessage,
   Label,
   Link,
+  LocalAlert,
   TextField,
   UNSAFE_Combobox,
   VStack,
@@ -287,9 +287,13 @@ export function ArbeidstakerVelger({
                   </Box>
                 ) : error && personerMedFullmakt.length === 0 ? (
                   // Feil mot repr-api uten cachede fullmakter: vis feil i stedet for "ingen fullmakter".
-                  <Alert className="mt-2" size="small" variant="error">
-                    {t("oversiktFelles.feilVedHentingAvFullmakter")}
-                  </Alert>
+                  <LocalAlert className="mt-2" size="small" status="error">
+                    <LocalAlert.Header>
+                      <LocalAlert.Title as="div">
+                        {t("oversiktFelles.feilVedHentingAvFullmakter")}
+                      </LocalAlert.Title>
+                    </LocalAlert.Header>
+                  </LocalAlert>
                 ) : !isLoading && personerMedFullmakt.length === 0 ? (
                   <InlineMessage className="mt-2" status="info">
                     {t("oversiktFelles.arbeidstakerIngenFullmakter")}{" "}
@@ -390,9 +394,13 @@ export function ArbeidstakerVelger({
                   </div>
 
                   {verifiseringFeil && (
-                    <Alert size="small" variant="error">
-                      {verifiseringFeil}
-                    </Alert>
+                    <LocalAlert size="small" status="error">
+                      <LocalAlert.Header>
+                        <LocalAlert.Title as="div">
+                          {verifiseringFeil}
+                        </LocalAlert.Title>
+                      </LocalAlert.Header>
+                    </LocalAlert>
                   )}
                 </>
               )}
