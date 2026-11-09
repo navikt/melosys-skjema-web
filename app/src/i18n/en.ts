@@ -282,6 +282,7 @@ export const en = {
       oppholdBeskrivelse:
         "You will work, or stay without working, in one or more EEA countries or Switzerland.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital&lang=en",
+      oppholdSkjemanummer: "NAV 02-08.07",
       gaTilbake: "Go back",
       gaTilbakeLenke:
         "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos/en",
@@ -303,7 +304,8 @@ export const en = {
       avbryt: "Cancel",
     },
     appHeader: {
-      tittel: "Membership and applicable legislation",
+      tittel:
+        "Membership of the National Insurance Scheme during stays in the EEA or Switzerland",
     },
     skjemaParterHeader: {
       arbeidsgiver: "Employer",
