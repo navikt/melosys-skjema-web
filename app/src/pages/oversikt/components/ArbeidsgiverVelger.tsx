@@ -1,4 +1,5 @@
-import { Link, LocalAlert, UNSAFE_Combobox } from "@navikt/ds-react";
+import { ExclamationmarkTriangleIcon } from "@navikt/aksel-icons";
+import { InfoCard, Link, UNSAFE_Combobox } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +14,7 @@ interface ArbeidsgiverVelgerProperties {
  * Arbeidsgiver-velger (RADGIVER/ARBEIDSGIVER).
  *
  * Modi:
- * 1. Tom liste → LocalAlert med warning
+ * 1. Tom liste → InfoCard med warning
  * 2. Ellers → Combobox
  */
 export function ArbeidsgiverVelger({
@@ -26,13 +27,13 @@ export function ArbeidsgiverVelger({
 
   if (arbeidsgivere.length === 0) {
     return (
-      <LocalAlert role="status" status="warning">
-        <LocalAlert.Header>
-          <LocalAlert.Title as="h3">
+      <InfoCard data-color="warning" role="status">
+        <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+          <InfoCard.Title as="h3">
             {t("oversiktFelles.ingenArbeidsgivereTittel")}
-          </LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
+          </InfoCard.Title>
+        </InfoCard.Header>
+        <InfoCard.Content>
           <p className="mb-4">{t("oversiktFelles.ingenArbeidsgivereInfo")}</p>
           <Link
             href={t("oversiktFelles.ingenArbeidsgivereLenkeUrl")}
@@ -41,8 +42,8 @@ export function ArbeidsgiverVelger({
           >
             {t("oversiktFelles.ingenArbeidsgivereLenke")}
           </Link>
-        </LocalAlert.Content>
-      </LocalAlert>
+        </InfoCard.Content>
+      </InfoCard>
     );
   }
 
