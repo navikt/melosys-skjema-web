@@ -1,4 +1,4 @@
-import { Heading, HStack } from "@navikt/ds-react";
+import { Heading, Stack } from "@navikt/ds-react";
 import { useMatchRoute, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
@@ -36,11 +36,21 @@ export function AppHeader() {
       representasjonstype={nySoknad.request.representasjonstype}
     />
   ) : (
-    <HStack align="center" justify="space-between">
-      <Heading level="1" size="medium">
+    <Stack
+      align={{ xs: "end", md: "center" }}
+      direction={{ xs: "column-reverse", md: "row" }}
+      gap="space-4 space-16"
+      justify="space-between"
+      paddingBlock="space-12"
+      style={{ minHeight: "5rem" }}
+      wrap={false}
+    >
+      <Heading className="w-full min-w-0" level="1" size="small">
         {t("appHeader.tittel")}
       </Heading>
-      {representasjonskontekst ? <KontekstVelger /> : <MaalformVelger />}
-    </HStack>
+      <div className="shrink-0">
+        {representasjonskontekst ? <KontekstVelger /> : <MaalformVelger />}
+      </div>
+    </Stack>
   );
 }

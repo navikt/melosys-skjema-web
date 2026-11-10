@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, Heading, LinkCard, VStack } from "@navikt/ds-react";
+import { Button, Heading, LinkCard, Tag, VStack } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
@@ -35,6 +35,11 @@ export function VelgSituasjonPage() {
           <LinkCard.Description>
             {t("velgSituasjon.oppholdBeskrivelse")}
           </LinkCard.Description>
+          <LinkCard.Footer>
+            <Tag size="small" variant="neutral">
+              {t("velgSituasjon.oppholdSkjemanummer")}
+            </Tag>
+          </LinkCard.Footer>
         </LinkCard>
       </VStack>
 

@@ -150,7 +150,7 @@ export function KontekstVelger() {
 
   return (
     <>
-      <HStack align="center" gap="space-8" paddingBlock="space-8">
+      <HStack align="center" gap="space-8" style={{ minHeight: "3rem" }}>
         {displayText && (
           <Label
             as="span"

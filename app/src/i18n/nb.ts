@@ -275,6 +275,7 @@ export const nb = {
       oppholdBeskrivelse:
         "Du skal arbeide, eller oppholde deg uten å arbeide, i ett eller flere EØS-land eller Sveits.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital",
+      oppholdSkjemanummer: "NAV 02-08.07",
       gaTilbake: "Gå tilbake",
       gaTilbakeLenke:
         "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos",
@@ -295,7 +296,7 @@ export const nb = {
       avbryt: "Avbryt",
     },
     appHeader: {
-      tittel: "Medlemskap og lovvalg",
+      tittel: "Medlemskap i folketrygden under opphold i EØS eller Sveits",
     },
     skjemaParterHeader: {
       arbeidsgiver: "Arbeidsgiver",
