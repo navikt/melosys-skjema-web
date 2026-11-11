@@ -1,6 +1,12 @@
+import {
+  ARBEIDSFORHOLD_AAREG,
+  STATSANSATT_FLYT,
+} from "~/featuretoggle/toggleNavn";
 import { Representasjonstype } from "~/types/melosysSkjemaTypes";
 
 import {
+  mockArbeidsgivereIAareg,
+  mockFeatureToggles,
   mockGetEregOrganisasjonMedJuridiskEnhetIkkeFunnet,
   mockHentTilganger,
   mockPersonerMedFullmakt,
@@ -11,6 +17,7 @@ import {
   emptyInnsendteSoknader,
   emptyUtkastListe,
   korrektFormatertOrgnr,
+  testAaregArbeidsgivere,
   testArbeidsgiverOrganization,
   testOrganization,
   testUserInfo,
@@ -35,6 +42,31 @@ test.describe("Oversikt - validering", () => {
 
     await oversiktPage.clickStartSoknad();
 
+    await oversiktPage.assertValideringManglerArbeidsgiverIsVisible();
+    await oversiktPage.assertStillOnPage();
+  });
+
+  test("DEG_SELV med arbeidsforhold fra Aa-registeret: viser feilmelding når ingen arbeidsgiver er valgt", async ({
+    page,
+  }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
+    await mockFeatureToggles(page, {
+      [STATSANSATT_FLYT]: true,
+      [ARBEIDSFORHOLD_AAREG]: true,
+    });
+    await mockArbeidsgivereIAareg(page, testAaregArbeidsgivere);
+
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
+    await oversiktPage.goto();
+    await oversiktPage.clickStartSoknad();
+
+    await oversiktPage.assertArbeidsforholdSelectManglerArbeidsgiverFeil();
     await oversiktPage.assertValideringManglerArbeidsgiverIsVisible();
     await oversiktPage.assertStillOnPage();
   });

@@ -5,6 +5,11 @@
 export const INNSENDT_SAMMENDRAG = "melosys.skjema.innsendt-sammendrag";
 // MIDLERTIDIG MELOSYS-7694: fjernes når statsansattflyten er permanent. Se README.
 export const STATSANSATT_FLYT = "melosys.skjema.statsansatt-flyt";
+export const ARBEIDSFORHOLD_AAREG = "melosys.skjema.arbeidsforhold-aareg";
 
-export const alleToggleNavn = [INNSENDT_SAMMENDRAG, STATSANSATT_FLYT] as const;
+export const alleToggleNavn = [
+  INNSENDT_SAMMENDRAG,
+  STATSANSATT_FLYT,
+  ARBEIDSFORHOLD_AAREG,
+] as const;
 export type ToggleNavn = (typeof alleToggleNavn)[number];

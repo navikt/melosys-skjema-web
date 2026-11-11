@@ -442,6 +442,14 @@ export const en = {
         "https://info.altinn.no/en/help/access-managment/",
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
+      arbeidsforholdVelgerLabel: "Employer",
+      arbeidsforholdVelgerInfo:
+        "The list shows the employers you are actively employed by according to the Employer and Employee Register (Aa-registeret).",
+      arbeidsforholdVelgerPlaceholder: "Select employer",
+      arbeidsforholdVelgerAnnenArbeidsgiver:
+        "Other employer – enter organization number",
+      feilVedHentingAvArbeidsforhold:
+        "An error occurred while fetching your employments from the Employer and Employee Register (Aa-registeret). Please try again later.",
       feilVedHentingAvFullmakter:
         "An error occurred while fetching the people you are authorized to represent. Please try again later.",
       arbeidstakerTittel: "Employee",
