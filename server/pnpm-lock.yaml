@@ -170,8 +170,8 @@ importers:
   .:
     dependencies:
       '@navikt/nav-dekoratoren-moduler':
-        specifier: 4.5.3
-        version: 4.5.3(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)
+        specifier: 4.6.0
+        version: 4.6.0(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)
       '@navikt/oasis':
         specifier: 4.2.2
         version: 4.2.2
@@ -185,8 +185,8 @@ importers:
         specifier: 5.3.0
         version: 5.3.0
       express-rate-limit:
-        specifier: 8.7.2
-        version: 8.7.2(express@5.3.0)
+        specifier: 8.7.3
+        version: 8.7.3(express@5.3.0)
       http-proxy-middleware:
         specifier: 3.0.5
         version: 3.0.5
@@ -325,9 +325,9 @@ packages:
     resolution: {integrity: sha512-bopCvqEogyFcmrJiBxK/Mr25d6yPKF7GR36MGrJqiHCPJYf1rDu6lK4cpooTG4Q//D/1xTkHRom8ZH5BI6dTew==, tarball: https://npm.pkg.github.com/download/@navikt/analytics-types/0.0.9/5919241a6dbb782eb101fff3234ce5c36d16e942}
     engines: {node: '>=20.0.0', npm: '>=9.0.0'}
 
-  '@navikt/nav-dekoratoren-moduler@4.5.3':
-    resolution: {integrity: sha512-mXrR0tq6EuOuG7guYw7BVxTpJmfRDxSlNb+vCEOfcf7FXZmOhIQpKiVbXlbUE9Ke2X2EEKDyirWasxJdNH5r2Q==, tarball: https://npm.pkg.github.com/download/@navikt/nav-dekoratoren-moduler/4.5.3/afe4e953f4de64d0c611ac0f5b4ce25eac3969d5}
-    engines: {node: 24.x}
+  '@navikt/nav-dekoratoren-moduler@4.6.0':
+    resolution: {integrity: sha512-1Yrbbmap/zuC5zGic6/+pOp6hbveoApTyMPQEBHB3a4Ac9mMdKqnLJyDtcYJCVhpMByD4KaRm5NgBaLpy17JmA==, tarball: https://npm.pkg.github.com/download/@navikt/nav-dekoratoren-moduler/4.6.0/6c8cbd3d81091b0eb1e35818598aa81b0fc16295}
+    engines: {node: 24.x || 26.x}
     peerDependencies:
       html-react-parser: '>=5.x'
       react: '>=17.x'
@@ -796,8 +796,8 @@ packages:
   eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
 
-  express-rate-limit@8.7.2:
-    resolution: {integrity: sha512-U1ScocxDD9WI09LaBVypvNkOtNR5yWAmZLkuKJdAzIchA4YKFYF6GT5IKER7epG58oXtjvGlV0/6ii0F83EyZg==}
+  express-rate-limit@8.7.3:
+    resolution: {integrity: sha512-zPLqDI2f0gV2WmGnacLf9XSSqn4VldRyP5LCzOwx0BKH40mO6+2PCFkoSsRO2jePx87/Kf6NUF6P2QOTKXHbQA==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: '>= 4.11'
@@ -1561,7 +1561,7 @@ snapshots:
 
   '@navikt/analytics-types@0.0.9': {}
 
-  '@navikt/nav-dekoratoren-moduler@4.5.3(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)':
+  '@navikt/nav-dekoratoren-moduler@4.6.0(html-react-parser@5.2.17(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@navikt/analytics-types': 0.0.9
       csp-header: 6.4.0
@@ -2074,7 +2074,7 @@ snapshots:
 
   eventemitter3@4.0.7: {}
 
-  express-rate-limit@8.7.2(express@5.3.0):
+  express-rate-limit@8.7.3(express@5.3.0):
     dependencies:
       debug: 4.4.3
       express: 5.3.0
