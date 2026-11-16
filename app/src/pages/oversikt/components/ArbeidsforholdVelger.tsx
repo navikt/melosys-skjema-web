@@ -76,6 +76,7 @@ export function ArbeidsforholdVelger({
               {`${org.navn} (${org.orgnr})`}
             </option>
           ))}
+          {arbeidsgivere.length > 0 && <hr />}
           <option value={ANNEN_ARBEIDSGIVER}>
             {t("oversiktFelles.arbeidsforholdVelgerAnnenArbeidsgiver")}
           </option>

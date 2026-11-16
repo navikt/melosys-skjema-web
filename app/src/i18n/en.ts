@@ -442,10 +442,10 @@ export const en = {
         "https://info.altinn.no/en/help/access-managment/",
       feilVedHentingAvArbeidsgivere:
         "An error occurred while fetching employers from Altinn. Please try again later.",
-      arbeidsforholdVelgerLabel: "Employer",
+      arbeidsforholdVelgerLabel: "Select employer",
       arbeidsforholdVelgerInfo:
-        "The list shows the employers you are actively employed by according to the Employer and Employee Register (Aa-registeret).",
-      arbeidsforholdVelgerPlaceholder: "Select employer",
+        "The list shows employments registered in the Employer and Employee Register (Aa-registeret). If the employer is not in the list, you can register it manually.",
+      arbeidsforholdVelgerPlaceholder: "- Select employer -",
       arbeidsforholdVelgerAnnenArbeidsgiver:
         "Other employer – enter organization number",
       feilVedHentingAvArbeidsforhold:

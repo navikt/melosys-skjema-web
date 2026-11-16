@@ -428,10 +428,10 @@ export const nn = {
         "https://info.altinn.no/hjelp/ny-tilgangsstyring/",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod ein feil ved henting av arbeidsgivarar frå Altinn. Prøv igjen seinare.",
-      arbeidsforholdVelgerLabel: "Arbeidsgivar",
+      arbeidsforholdVelgerLabel: "Vel arbeidsgivar",
       arbeidsforholdVelgerInfo:
-        "Lista viser arbeidsgivarane du har eit aktivt arbeidsforhold hos i Arbeidsgivar- og arbeidstakarregisteret (Aa-registeret).",
-      arbeidsforholdVelgerPlaceholder: "Vel arbeidsgivar",
+        "Lista viser arbeidsforhold som er registrerte i Aa-registeret. Dersom arbeidsgivaren ikkje finst i lista, kan du registrere han manuelt.",
+      arbeidsforholdVelgerPlaceholder: "- Vel arbeidsgivar -",
       arbeidsforholdVelgerAnnenArbeidsgiver:
         "Annan arbeidsgivar – oppgi organisasjonsnummer",
       feilVedHentingAvArbeidsforhold:
