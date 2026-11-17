@@ -5,7 +5,7 @@ import {
 } from "@navikt/ds-react";
 import { formatISO, getYear, max, min } from "date-fns";
 import { Ref, useImperativeHandle, useRef, useState } from "react";
-import { get, useFormContext } from "react-hook-form";
+import { FieldError, get, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { formatDato } from "~/utils/datoformat.ts";
@@ -103,7 +103,10 @@ export function DatePickerFormPart({
   // fra zodResolver legges inn i formState.errors for dette feltet
   register(formFieldName);
 
-  const fieldError = get(errors, formFieldName)?.message as string | undefined;
+  const fieldError = get<typeof errors, FieldError | undefined>(
+    errors,
+    formFieldName,
+  )?.message;
 
   const datePicker = useDatepicker({
     onValidate: ({ isBefore, isAfter }) => {
