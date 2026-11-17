@@ -20,6 +20,8 @@ const IGNORED_UNICORN_RULES = {
   "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
   // Fallback-verdier trenger ikke flyttes til parameter- eller destruktureringsstandarder.
   "unicorn/prefer-default-parameters": "off",
+  // Typealiaser for skjemadata skal ligge på modulnivå, ikke inne i komponenten.
+  "unicorn/prefer-smaller-scope": "off",
 };
 
 export default tseslint.config(

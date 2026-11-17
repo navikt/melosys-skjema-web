@@ -48,7 +48,7 @@ const info = (message: string) => {
   stdoutLogger.info(message.replaceAll(/[\n\r]/g, ""));
 };
 
-const warning = (message: string) => {
+const warn = (message: string) => {
   stdoutLogger.warn(message.replaceAll(/[\n\r]/g, ""));
 };
 
@@ -71,7 +71,7 @@ const morganMiddleware = morgan(vanligFormat, { stream });
 export default {
   debug,
   info,
-  warning,
+  warn,
   error,
   logger: stdoutLogger,
   morganMiddleware,

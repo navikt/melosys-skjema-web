@@ -209,9 +209,7 @@ function addOboTokenToProxyRequest(
     proxyRequest.setHeader("Authorization", `Bearer ${obo}`);
     logger.debug("OBO-token lagt til i proxy-request");
   } else {
-    logger.warning(
-      `Access token was not present in session for scope ${scope}`,
-    );
+    logger.warn(`Access token was not present in session for scope ${scope}`);
   }
 }
 

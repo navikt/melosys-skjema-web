@@ -278,9 +278,6 @@ export const nn = {
       oppholdLenke:
         "https://www.nav.no/fyllut/nav020807?sub=digital&lang=nn-NO",
       oppholdSkjemanummer: "NAV 02-08.07",
-      gaTilbake: "Gå tilbake",
-      gaTilbakeLenke:
-        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos/nn",
     },
     landingsside: {
       hei: "Hei",

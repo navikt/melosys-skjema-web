@@ -283,9 +283,6 @@ export const en = {
         "You will work, or stay without working, in one or more EEA countries or Switzerland.",
       oppholdLenke: "https://www.nav.no/fyllut/nav020807?sub=digital&lang=en",
       oppholdSkjemanummer: "NAV 02-08.07",
-      gaTilbake: "Go back",
-      gaTilbakeLenke:
-        "https://www.nav.no/start/arbeidsgiver/bekreftelse-utsendt-arbeidstaker-eos/en",
     },
     landingsside: {
       hei: "Hello",

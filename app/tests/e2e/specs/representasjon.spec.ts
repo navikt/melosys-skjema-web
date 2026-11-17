@@ -83,19 +83,6 @@ test.describe("Velg rådgiverfirma", () => {
   });
 });
 
-test.describe("Representasjon — Gå tilbake", () => {
-  test.beforeEach(async ({ page }) => {
-    await mockUserInfo(page, testUserInfo);
-  });
-
-  test("viser ikke tilbakeknapp ved direkte inngang", async ({ page }) => {
-    const representasjonPage = new RepresentasjonPage(page);
-    await representasjonPage.gotoDirekte();
-    await representasjonPage.assertIsVisible();
-    await representasjonPage.assertGaTilbakeKnappIkkeFinnes();
-  });
-});
-
 test.describe("Velg rådgiverfirma — Avbryt", () => {
   test("går til «Hvem skal du opptre som?»", async ({ page }) => {
     await mockUserInfo(page, testUserInfo);
