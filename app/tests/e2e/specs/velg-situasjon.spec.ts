@@ -1,8 +1,15 @@
 import { expect } from "@playwright/test";
 
-import { mockUserInfo } from "../fixtures/api-mocks";
+import { Representasjonstype } from "~/types/melosysSkjemaTypes";
+
+import { mockUserInfo, setupApiMocksForOversikt } from "../fixtures/api-mocks";
 import { test } from "../fixtures/test";
-import { testUserInfo } from "../fixtures/test-data";
+import {
+  emptyInnsendteSoknader,
+  emptyUtkastListe,
+  testUserInfo,
+} from "../fixtures/test-data";
+import { OversiktPage } from "../pages/oversikt/oversikt.page";
 import { RepresentasjonPage } from "../pages/representasjon/representasjon.page";
 import { VelgSituasjonPage } from "../pages/velg-situasjon/velg-situasjon.page";
 import { E2E_SPRAK } from "../utils/translations";
@@ -50,13 +57,22 @@ test.describe("Velg situasjon", () => {
     await velgSituasjonPage.assertOppholdLenkePekerRiktig();
   });
 
-  test("kortet for utsendt arbeidstaker går til «Hvem skal du opptre som?»", async ({
+  test("kortet for utsendt arbeidstaker går til oversikten for DEG_SELV", async ({
     page,
   }) => {
+    await setupApiMocksForOversikt(
+      page,
+      testUserInfo,
+      [],
+      emptyUtkastListe,
+      emptyInnsendteSoknader,
+    );
     const velgSituasjonPage = new VelgSituasjonPage(page);
-    const representasjonPage = new RepresentasjonPage(page);
+    const oversiktPage = new OversiktPage(page, Representasjonstype.DEG_SELV);
     await velgSituasjonPage.goto();
     await velgSituasjonPage.velgUtsendt();
-    await representasjonPage.assertIsVisible();
+    await expect(page).toHaveURL(/\/oversikt\?representasjonstype=DEG_SELV$/);
+    await oversiktPage.assertIsVisible();
+    await oversiktPage.assertDegSelvInfoVisible();
   });
 });

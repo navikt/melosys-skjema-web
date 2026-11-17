@@ -2,6 +2,8 @@ import { Heading, LinkCard, Tag, VStack } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { Representasjonstype } from "~/types/melosysSkjemaTypes.ts";
+
 export function VelgSituasjonPage() {
   const { t } = useTranslation();
 
@@ -15,7 +17,10 @@ export function VelgSituasjonPage() {
         <LinkCard arrowPosition="center" data-color="accent">
           <LinkCard.Title as="h2">
             <LinkCard.Anchor asChild>
-              <Link to="/representasjon">
+              <Link
+                search={{ representasjonstype: Representasjonstype.DEG_SELV }}
+                to="/oversikt"
+              >
                 {t("velgSituasjon.utsendtTittel")}
               </Link>
             </LinkCard.Anchor>
