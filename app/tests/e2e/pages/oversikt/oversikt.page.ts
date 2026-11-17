@@ -1,6 +1,9 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-import { Representasjonstype } from "~/types/melosysSkjemaTypes";
+import {
+  Representasjonstype,
+  type SimpleOrganisasjonDto,
+} from "~/types/melosysSkjemaTypes";
 
 import { akselTranslations, translations } from "../../utils/translations";
 
@@ -35,6 +38,7 @@ export class OversiktPage {
   // SoknadStarter form elements
   readonly arbeidsgiverOrgnrInput: Locator;
   readonly arbeidsgiverCombobox: Locator;
+  readonly arbeidsforholdSelect: Locator;
   readonly skalFylleUtJaRadio: Locator;
   readonly skalFylleUtNeiRadio: Locator;
   readonly arbeidstakerFnrInput: Locator;
@@ -87,6 +91,12 @@ export class OversiktPage {
     // ARBEIDSGIVER/RADGIVER: Combobox for selecting arbeidsgiver from Altinn list
     this.arbeidsgiverCombobox = page.getByRole("combobox", {
       name: translations.oversiktFelles.arbeidsgiverVelgerLabel,
+    });
+
+    // DEG_SELV med Aa-reg-toggle: nedtrekksliste med arbeidsgivere fra Aa-registeret
+    this.arbeidsforholdSelect = page.getByRole("combobox", {
+      name: translations.oversiktFelles.arbeidsforholdVelgerLabel,
+      exact: true,
     });
 
     // Fullmakt radio buttons (Ja/Nei)
@@ -206,6 +216,56 @@ export class OversiktPage {
   */
   async fillArbeidsgiverOrgnr(orgnr: string) {
     await this.arbeidsgiverOrgnrInput.fill(orgnr);
+  }
+
+  /**
+  DEG_SELV: Velg arbeidsgiver fra Aa-reg-listen
+  */
+  async selectArbeidsforhold(arbeidsgiver: SimpleOrganisasjonDto) {
+    await this.arbeidsforholdSelect.selectOption(arbeidsgiver.orgnr);
+  }
+
+  /**
+  DEG_SELV: Velg «Annen arbeidsgiver» i Aa-reg-listen for å oppgi org.nr. manuelt
+  */
+  async selectAnnenArbeidsgiver() {
+    await this.arbeidsforholdSelect.selectOption({
+      label: translations.oversiktFelles.arbeidsforholdVelgerAnnenArbeidsgiver,
+    });
+  }
+
+  async assertArbeidsforholdValg(arbeidsgivere: SimpleOrganisasjonDto[]) {
+    await expect(this.arbeidsforholdSelect.locator("option")).toHaveText([
+      translations.oversiktFelles.arbeidsforholdVelgerPlaceholder,
+      ...arbeidsgivere.map((org) => `${org.navn} (${org.orgnr})`),
+      translations.oversiktFelles.arbeidsforholdVelgerAnnenArbeidsgiver,
+    ]);
+  }
+
+  async assertArbeidsforholdSelectNotVisible() {
+    await expect(this.arbeidsforholdSelect).toHaveCount(0);
+  }
+
+  async assertArbeidsgiverOrgnrInputVisible() {
+    await expect(this.arbeidsgiverOrgnrInput).toBeVisible();
+  }
+
+  async assertArbeidsgiverOrgnrInputNotVisible() {
+    await expect(this.arbeidsgiverOrgnrInput).toHaveCount(0);
+  }
+
+  async assertArbeidsforholdFeilmelding() {
+    await expect(
+      this.page.getByText(
+        translations.oversiktFelles.feilVedHentingAvArbeidsforhold,
+      ),
+    ).toBeVisible();
+  }
+
+  async assertArbeidsforholdSelectManglerArbeidsgiverFeil() {
+    await expect(this.arbeidsforholdSelect).toHaveAccessibleDescription(
+      new RegExp(feilmeldinger.valideringManglerArbeidsgiver),
+    );
   }
 
   /**

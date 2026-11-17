@@ -15,6 +15,7 @@ import {
   type PersonMedFullmaktDto,
   Representasjonstype,
   Saksstatus,
+  type SimpleOrganisasjonDto,
   Skjemadel,
   type SkjemaInnsendtKvittering,
   SkjemaStatus,
@@ -318,6 +319,19 @@ export const testArbeidsgiverOrganization: OrganisasjonDto = {
   navn: "Arbeidsgiveren AS",
   organisasjonsform: "AS",
 };
+
+/**
+Arbeidsgivere der innlogget bruker har aktive arbeidsforhold i Aa-registeret (DEG_SELV)
+*/
+export const testAaregArbeidsgiver: SimpleOrganisasjonDto = {
+  orgnr: "923456789",
+  navn: "Havbris Rådgivning AS",
+};
+
+export const testAaregArbeidsgivere: SimpleOrganisasjonDto[] = [
+  { orgnr: "912345678", navn: "Nordlys Bygg AS" },
+  testAaregArbeidsgiver,
+];
 
 /**
 Rådgiverfirma org for RADGIVER flow (from ereg lookup)

@@ -7,6 +7,7 @@ import type {
   OrganisasjonDto,
   OrganisasjonMedJuridiskEnhetDto,
   PersonMedFullmaktDto,
+  SimpleOrganisasjonDto,
   UtkastListeResponse,
   UtsendtArbeidstakerSkjemaDto,
   VedleggDto,
@@ -43,6 +44,29 @@ export async function mockHentTilganger(
 
 export async function mockHentTilgangerFeiler(page: Page) {
   await page.route("/api/hentTilganger", async (route) => {
+    await route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({ message: "Det oppstod en uventet feil" }),
+    });
+  });
+}
+
+export async function mockArbeidsgivereIAareg(
+  page: Page,
+  arbeidsgivere: SimpleOrganisasjonDto[],
+) {
+  await page.route("/api/arbeidstaker/arbeidsgivere-i-aareg", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(arbeidsgivere),
+    });
+  });
+}
+
+export async function mockArbeidsgivereIAaregFeiler(page: Page) {
+  await page.route("/api/arbeidstaker/arbeidsgivere-i-aareg", async (route) => {
     await route.fulfill({
       status: 500,
       contentType: "application/json",

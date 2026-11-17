@@ -14,8 +14,12 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { OrganisasjonSoker } from "~/components/OrganisasjonSoker.tsx";
+import { ARBEIDSFORHOLD_AAREG } from "~/featuretoggle/toggleNavn.ts";
+import { useFeatureToggle } from "~/featuretoggle/useFeatureToggle.ts";
 import { getUserInfo } from "~/httpClients/dekoratorenClient.ts";
 import {
+  getArbeidsgivereIAaregQuery,
+  getFeatureTogglesQuery,
   getOrganisasjonMedJuridiskEnhetQuery,
   listAltinnTilganger,
 } from "~/httpClients/melsosysSkjemaApiClient.ts";
@@ -23,10 +27,12 @@ import { useGaTilSkjemaStart } from "~/pages/skjema/nySoknad.ts";
 import {
   OrganisasjonDto,
   Representasjonstype,
+  SimpleOrganisasjonDto,
 } from "~/types/melosysSkjemaTypes.ts";
 import type { Representasjonskontekst } from "~/types/representasjon.ts";
 import { useTranslateError } from "~/utils/translation.ts";
 
+import { ArbeidsforholdVelger } from "./ArbeidsforholdVelger.tsx";
 import { ArbeidsgiverVelger } from "./ArbeidsgiverVelger.tsx";
 import { ArbeidstakerVelger } from "./ArbeidstakerVelger.tsx";
 import {
@@ -42,6 +48,10 @@ interface SoknadStarterProperties {
 interface SoknadStarterContentProperties {
   defaultData: SoknadStarterFormData;
   altinnArbeidsgivere: OrganisasjonDto[];
+  /**
+  Arbeidsgivere fra Aa-registeret (DEG_SELV), undefined når togglen er av.
+  */
+  aaregArbeidsgivere?: SimpleOrganisasjonDto[];
   initialArbeidsgiverOrgnr?: string;
 }
 
@@ -56,6 +66,10 @@ export function SoknadStarter({
   representasjonskontekst,
 }: SoknadStarterProperties) {
   const { t } = useTranslation();
+
+  const erDegSelv =
+    representasjonskontekst.representasjonstype ===
+    Representasjonstype.DEG_SELV;
 
   const skalHenteArbeidsgivere =
     representasjonskontekst.representasjonstype ===
@@ -78,6 +92,21 @@ export function SoknadStarter({
     retry: false,
   });
 
+  const { isLoading: isLoadingToggles } = useQuery(getFeatureTogglesQuery());
+  const arbeidsforholdAaregAktivert =
+    useFeatureToggle(ARBEIDSFORHOLD_AAREG) ?? false;
+  const skalHenteAaregArbeidsgivere = erDegSelv && arbeidsforholdAaregAktivert;
+
+  // Hent arbeidsgivere fra Aa-registeret for DEG_SELV
+  const {
+    data: aaregArbeidsgivere,
+    isLoading: isLoadingAaregArbeidsgivere,
+    isError: isErrorAaregArbeidsgivere,
+  } = useQuery({
+    ...getArbeidsgivereIAaregQuery(),
+    enabled: skalHenteAaregArbeidsgivere,
+  });
+
   // Slå opp rådgiverfirma-navn for RADGIVER-representasjonskontekst
   const { data: radgiverOrganisasjon, isLoading: isLoadingRadgiver } = useQuery(
     {
@@ -93,9 +122,8 @@ export function SoknadStarter({
 
   // Vent på nødvendig data før vi rendrer skjemaet
   if (
-    (isLoadingUserInfo &&
-      representasjonskontekst.representasjonstype ===
-        Representasjonstype.DEG_SELV) ||
+    (erDegSelv &&
+      (isLoadingUserInfo || isLoadingToggles || isLoadingAaregArbeidsgivere)) ||
     (isLoadingArbeidsgivere && skalHenteArbeidsgivere) ||
     (isLoadingRadgiver &&
       representasjonskontekst.representasjonstype ===
@@ -121,6 +149,26 @@ export function SoknadStarter({
     );
   }
 
+  // Aa-registeret brukes også senere i søknaden, så brukeren kan ikke starte uten oppslaget.
+  if (skalHenteAaregArbeidsgivere && isErrorAaregArbeidsgivere) {
+    return (
+      <LocalAlert status="error">
+        <LocalAlert.Header>
+          <LocalAlert.Title as="div">
+            {t("oversiktFelles.feilVedHentingAvArbeidsforhold")}
+          </LocalAlert.Title>
+        </LocalAlert.Header>
+      </LocalAlert>
+    );
+  }
+
+  const arbeidsgivereFraAareg = skalHenteAaregArbeidsgivere
+    ? aaregArbeidsgivere
+    : undefined;
+  const initialAaregArbeidsgiver = arbeidsgivereFraAareg?.find(
+    (org) => org.orgnr === representasjonskontekst.arbeidsgiverOrgnr,
+  );
+
   // Bygg radgiverfirma-objekt fra API-oppslag
   const radgiverfirma =
     radgiverOrganisasjon &&
@@ -141,15 +189,21 @@ export function SoknadStarter({
       Representasjonstype.RADGIVER && {
       skalFylleUtForArbeidstaker: true,
     }),
-    ...(representasjonskontekst.representasjonstype ===
-      Representasjonstype.DEG_SELV &&
+    ...(erDegSelv &&
       userInfo && {
         arbeidstaker: { fnr: userInfo.userId, etternavn: userInfo.name },
       }),
+    ...(initialAaregArbeidsgiver && {
+      arbeidsgiver: {
+        orgnr: initialAaregArbeidsgiver.orgnr,
+        navn: initialAaregArbeidsgiver.navn,
+      },
+    }),
   };
 
   return (
     <SoknadStarterContent
+      aaregArbeidsgivere={arbeidsgivereFraAareg}
       altinnArbeidsgivere={arbeidsgivere ?? []}
       defaultData={defaultData}
       initialArbeidsgiverOrgnr={representasjonskontekst.arbeidsgiverOrgnr}
@@ -164,6 +218,7 @@ export function SoknadStarter({
 function SoknadStarterContent({
   defaultData,
   altinnArbeidsgivere,
+  aaregArbeidsgivere,
   initialArbeidsgiverOrgnr,
 }: SoknadStarterContentProperties) {
   const { t } = useTranslation();
@@ -200,6 +255,20 @@ function SoknadStarterContent({
   }
 
   function renderArbeidsgiverValg() {
+    if (
+      aaregArbeidsgivere &&
+      aaregArbeidsgivere.length > 0 &&
+      representasjonstype === Representasjonstype.DEG_SELV
+    ) {
+      return (
+        <ArbeidsforholdVelger
+          arbeidsgivere={aaregArbeidsgivere}
+          formFieldName="arbeidsgiver"
+          initialOrgnr={initialArbeidsgiverOrgnr}
+        />
+      );
+    }
+
     if (
       representasjonstype === Representasjonstype.DEG_SELV ||
       representasjonstype === Representasjonstype.ANNEN_PERSON

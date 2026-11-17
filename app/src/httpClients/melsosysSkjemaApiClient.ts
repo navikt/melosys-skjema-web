@@ -408,6 +408,29 @@ async function fetchOrganisasjon(
   return response.json();
 }
 
+export const getArbeidsgivereIAaregQuery = () =>
+  queryOptions<SimpleOrganisasjonDto[]>({
+    queryKey: ["aareg", "arbeidsgivere"],
+    queryFn: fetchArbeidsgivereIAareg,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: false,
+  });
+
+async function fetchArbeidsgivereIAareg(): Promise<SimpleOrganisasjonDto[]> {
+  const response = await fetch(
+    `${API_PROXY_URL}/arbeidstaker/arbeidsgivere-i-aareg`,
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Kunne ikke hente arbeidsgivere fra Aa-registeret: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  return response.json();
+}
+
 export const getPersonerMedFullmaktQuery = () =>
   queryOptions<PersonMedFullmaktDto[]>({
     queryKey: ["representasjon", "personer"],

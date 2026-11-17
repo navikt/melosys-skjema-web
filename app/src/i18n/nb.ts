@@ -422,6 +422,14 @@ export const nb = {
         "https://info.altinn.no/hjelp/ny-tilgangsstyring/",
       feilVedHentingAvArbeidsgivere:
         "Det oppstod en feil ved henting av arbeidsgivere fra Altinn. Prøv igjen senere.",
+      arbeidsforholdVelgerLabel: "Velg arbeidsgiver",
+      arbeidsforholdVelgerInfo:
+        "Listen viser arbeidsforhold som er registrert i Aa-registeret. Hvis arbeidsgiveren ikke finnes i listen, kan du registrere den manuelt.",
+      arbeidsforholdVelgerPlaceholder: "- Velg arbeidsgiver -",
+      arbeidsforholdVelgerAnnenArbeidsgiver:
+        "Annen arbeidsgiver – oppgi organisasjonsnummer",
+      feilVedHentingAvArbeidsforhold:
+        "Det oppstod en feil ved henting av arbeidsforholdene dine fra Aa-registeret. Prøv igjen senere.",
       feilVedHentingAvFullmakter:
         "Det oppstod en feil ved henting av personer du har fullmakt for. Prøv igjen senere.",
       arbeidstakerTittel: "Arbeidstaker",
