@@ -1,5 +1,4 @@
-import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, Heading, LinkCard, Tag, VStack } from "@navikt/ds-react";
+import { Heading, LinkCard, Tag, VStack } from "@navikt/ds-react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
@@ -42,17 +41,6 @@ export function VelgSituasjonPage() {
           </LinkCard.Footer>
         </LinkCard>
       </VStack>
-
-      <div>
-        <Button
-          as="a"
-          href={t("velgSituasjon.gaTilbakeLenke")}
-          icon={<ArrowLeftIcon aria-hidden />}
-          variant="secondary"
-        >
-          {t("velgSituasjon.gaTilbake")}
-        </Button>
-      </div>
     </VStack>
   );
 }

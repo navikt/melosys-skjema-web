@@ -11,7 +11,6 @@ export class RepresentasjonPage {
   readonly arbeidsgiverLenke: Locator;
   readonly radgiverLenke: Locator;
   readonly annenPersonLenke: Locator;
-  readonly gaTilbakeKnapp: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -34,10 +33,6 @@ export class RepresentasjonPage {
       name: translations.annenPerson,
       exact: true,
     });
-    // Aksel Button med as-prop får role="button"
-    this.gaTilbakeKnapp = page.getByRole("button", {
-      name: alleTranslations.velgSituasjon.gaTilbake,
-    });
   }
 
   private kortFor(lenke: Locator): Locator {
@@ -46,10 +41,6 @@ export class RepresentasjonPage {
 
   async goto() {
     await this.page.goto("/");
-  }
-
-  async gotoDirekte() {
-    await this.page.goto("/representasjon");
   }
 
   async assertIsVisible() {
@@ -96,10 +87,6 @@ export class RepresentasjonPage {
 
   async velgAnnenPerson() {
     await this.annenPersonLenke.click();
-  }
-
-  async assertGaTilbakeKnappIkkeFinnes() {
-    await expect(this.gaTilbakeKnapp).toHaveCount(0);
   }
 
   async assertNavigatedToOversikt() {

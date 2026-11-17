@@ -31,7 +31,6 @@ test.describe("Velg situasjon", () => {
     await representasjonPage.goto();
     await expect(page).toHaveURL(/\/representasjon$/);
     await representasjonPage.assertIsVisible();
-    await representasjonPage.assertGaTilbakeKnappIkkeFinnes();
   });
 
   test("/velg-situasjon er tilgjengelig uten tilgjengelige toggles", async ({
@@ -42,13 +41,13 @@ test.describe("Velg situasjon", () => {
     await velgSituasjonPage.assertIsVisible();
   });
 
-  test("kortet for opphold og «Gå tilbake» lenker til riktige eksterne sider", async ({
+  test("kortet for opphold lenker til riktig ekstern side", async ({
     page,
   }) => {
     const velgSituasjonPage = new VelgSituasjonPage(page);
     await velgSituasjonPage.goto();
     await velgSituasjonPage.assertIsVisible();
-    await velgSituasjonPage.assertLenkerPekerRiktig();
+    await velgSituasjonPage.assertOppholdLenkePekerRiktig();
   });
 
   test("kortet for utsendt arbeidstaker går til «Hvem skal du opptre som?»", async ({
@@ -59,6 +58,5 @@ test.describe("Velg situasjon", () => {
     await velgSituasjonPage.goto();
     await velgSituasjonPage.velgUtsendt();
     await representasjonPage.assertIsVisible();
-    await representasjonPage.assertGaTilbakeKnappIkkeFinnes();
   });
 });
