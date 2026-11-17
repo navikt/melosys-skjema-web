@@ -9,7 +9,6 @@ export class VelgSituasjonPage {
   readonly heading: Locator;
   readonly utsendtLenke: Locator;
   readonly oppholdLenke: Locator;
-  readonly gaTilbakeKnapp: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,10 +22,6 @@ export class VelgSituasjonPage {
     this.oppholdLenke = page.getByRole("link", {
       name: translations.oppholdTittel,
     });
-    // Aksel Button as="a" får role="button"
-    this.gaTilbakeKnapp = page.getByRole("button", {
-      name: translations.gaTilbake,
-    });
   }
 
   async goto() {
@@ -38,17 +33,12 @@ export class VelgSituasjonPage {
     await expect(this.heading).toBeVisible();
     await expect(this.utsendtLenke).toBeVisible();
     await expect(this.oppholdLenke).toBeVisible();
-    await expect(this.gaTilbakeKnapp).toBeVisible();
   }
 
-  async assertLenkerPekerRiktig() {
+  async assertOppholdLenkePekerRiktig() {
     await expect(this.oppholdLenke).toHaveAttribute(
       "href",
       translations.oppholdLenke,
-    );
-    await expect(this.gaTilbakeKnapp).toHaveAttribute(
-      "href",
-      translations.gaTilbakeLenke,
     );
   }
 
