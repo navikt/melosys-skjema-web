@@ -4,6 +4,7 @@ import {
   ArbeidsstedType,
   FastEllerVekslendeArbeidssted,
 } from "~/types/melosysSkjemaTypes.ts";
+import { MAKS_LENGDE_POSTKODE } from "~/utils/valideringUtils.ts";
 
 const fastArbeidsstedSchema = z.object({
   vegadresse: z.string().optional(),
@@ -66,6 +67,17 @@ export const lagPaLandSchema = ({
           !!data.fastArbeidssted?.postkode?.trim(),
         {
           message: "arbeidsstedIUtlandetSteg.postkodeErPakrevd",
+          path: ["fastArbeidssted", "postkode"],
+          when: () => true,
+        },
+      )
+      .refine(
+        (data) =>
+          data.fastEllerVekslendeArbeidssted !==
+            FastEllerVekslendeArbeidssted.FAST ||
+          (data.fastArbeidssted?.postkode?.length ?? 0) <= MAKS_LENGDE_POSTKODE,
+        {
+          message: "generellValidering.postkodeKanIkkeVaereLengreEnn25Tegn",
           path: ["fastArbeidssted", "postkode"],
           when: () => true,
         },

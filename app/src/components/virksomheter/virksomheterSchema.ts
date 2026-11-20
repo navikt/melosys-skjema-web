@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 import { Ansettelsesform } from "~/types/melosysSkjemaTypes";
-import { organisasjonsnummerHarGyldigFormat } from "~/utils/valideringUtils.ts";
+import {
+  MAKS_LENGDE_POSTKODE,
+  organisasjonsnummerHarGyldigFormat,
+} from "~/utils/valideringUtils.ts";
 
 /**
  * Påkrevd tekstfelt som er valgfritt i API-typen. Feltet er optional i
@@ -54,7 +57,11 @@ export const utenlandskVirksomhetSchema = z.object({
       message: "generellValidering.vegnavnOgHusnummerErPakrevd",
     }),
   bygning: z.string().optional(),
-  postkode: paakrevdTekstfelt("generellValidering.postkodeErPakrevd"),
+  postkode: paakrevdTekstfelt("generellValidering.postkodeErPakrevd").pipe(
+    z.string().max(MAKS_LENGDE_POSTKODE, {
+      message: "generellValidering.postkodeKanIkkeVaereLengreEnn25Tegn",
+    }),
+  ),
   byStedsnavn: paakrevdTekstfelt("generellValidering.byStedsnavnErPakrevd"),
   region: z.string().optional(),
   land: z

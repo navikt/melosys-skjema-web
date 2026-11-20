@@ -61,6 +61,24 @@ test.describe("Arbeidssted i utlandet - validering", () => {
       await stegPage.assertStillOnStep();
     });
 
+    test("viser feilmelding når postkode er lengre enn 25 tegn", async () => {
+      await stegPage.arbeidsstedTypeSelect.selectOption(
+        ArbeidsstedType.PA_LAND,
+      );
+      await stegPage.navnPaVirksomhetInput.fill("Virksomhet AB");
+      await stegPage.fastEllerVekslendeRadioGroup.FAST.click();
+      await stegPage.vegadresseInput.fill("Storgatan");
+      await stegPage.nummerInput.fill("1");
+      await stegPage.postkodeInput.fill("A".repeat(26));
+      await stegPage.byStedInput.fill("Stockholm");
+      await stegPage.erHjemmekontorRadioGroup.NEI.click();
+
+      await stegPage.lagreOgFortsett();
+
+      await stegPage.assertPostkodeErForLangIsVisible();
+      await stegPage.assertStillOnStep();
+    });
+
     test("viser feilmelding på basisfelt når VEKSLENDE er valgt", async () => {
       await stegPage.arbeidsstedTypeSelect.selectOption(
         ArbeidsstedType.PA_LAND,

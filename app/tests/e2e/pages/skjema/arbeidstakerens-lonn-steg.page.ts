@@ -36,6 +36,7 @@ const feilmeldinger = {
   organisasjonsnummerErForLangt:
     t.generellValidering
       .organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn,
+  postkodeErForLang: t.generellValidering.postkodeKanIkkeVaereLengreEnn25Tegn,
   landErPakrevd: t.generellValidering.landErPakrevd,
   duMaSvarePaOmVirksomhetenTilhorerSammeKonsern:
     t.generellValidering.duMaSvarePaOmVirksomhetenTilhorerSammeKonsern,
@@ -310,6 +311,13 @@ export class ArbeidstakerensLonnStegPage {
     const dialog = this.page.getByRole("dialog");
     await expect(
       dialog.getByText(feilmeldinger.byStedsnavnErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertPostkodeErForLangIsVisible() {
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByText(feilmeldinger.postkodeErForLang),
     ).toBeVisible();
   }
 

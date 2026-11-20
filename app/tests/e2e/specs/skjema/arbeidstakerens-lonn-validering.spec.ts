@@ -86,4 +86,15 @@ test.describe("Arbeidstakerens lønn - validering", () => {
     await stegPage.assertOrganisasjonsnummerErForLangtIsVisible();
     await stegPage.assertUtenlandskVirksomhetModalIsOpen();
   });
+
+  test("viser feilmelding i utenlandsk virksomhet-modal når postkode er lengre enn 25 tegn", async () => {
+    await stegPage.arbeidsgiverBetalerAllLonnOgNaturaytelserRadioGroup.NEI.click();
+
+    await stegPage.fyllUtFelterOgLagreInUtenlandskVirksomhetModal({
+      postkode: "A".repeat(26),
+    });
+
+    await stegPage.assertPostkodeErForLangIsVisible();
+    await stegPage.assertUtenlandskVirksomhetModalIsOpen();
+  });
 });

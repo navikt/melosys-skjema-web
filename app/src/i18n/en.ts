@@ -534,6 +534,8 @@ export const en = {
         "Street address and house number are required",
       postkodeErPakrevd: "Postal code is required",
       byStedsnavnErPakrevd: "City/place name is required",
+      postkodeKanIkkeVaereLengreEnn25Tegn:
+        "Postal code cannot be longer than 25 characters. Enter the city or place in its own field.",
       organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
         "Organization number or registration number cannot be longer than 25 characters",
       landErPakrevd: "Country is required",

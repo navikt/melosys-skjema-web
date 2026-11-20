@@ -518,6 +518,8 @@ export const nn = {
       vegnavnOgHusnummerErPakrevd: "Vegnamn og husnummer er påkravd",
       postkodeErPakrevd: "Postkode er påkravd",
       byStedsnavnErPakrevd: "By/stadnamn er påkravd",
+      postkodeKanIkkeVaereLengreEnn25Tegn:
+        "Postkode kan ikkje vere lengre enn 25 teikn. Skriv by eller stad i eige felt.",
       organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
         "Organisasjonsnummer eller registreringsnummer kan ikkje vere lengre enn 25 teikn",
       landErPakrevd: "Land er påkravd",

@@ -39,6 +39,8 @@ const feilmeldinger = {
     translations.arbeidsstedIUtlandetSteg.vegadresseErPakrevd,
   nummerErPakrevd: translations.arbeidsstedIUtlandetSteg.nummerErPakrevd,
   postkodeErPakrevd: translations.arbeidsstedIUtlandetSteg.postkodeErPakrevd,
+  postkodeErForLang:
+    translations.generellValidering.postkodeKanIkkeVaereLengreEnn25Tegn,
   byStedErPakrevd: translations.arbeidsstedIUtlandetSteg.byStedErPakrevd,
   // Offshore
   navnPaInnretningErPakrevd:
@@ -424,6 +426,12 @@ export class ArbeidsstedIUtlandetStegPage {
   async assertPostkodeErPakrevdIsVisible() {
     await expect(
       this.page.getByText(feilmeldinger.postkodeErPakrevd),
+    ).toBeVisible();
+  }
+
+  async assertPostkodeErForLangIsVisible() {
+    await expect(
+      this.page.getByText(feilmeldinger.postkodeErForLang),
     ).toBeVisible();
   }
 

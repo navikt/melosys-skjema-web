@@ -515,6 +515,8 @@ export const nb = {
       vegnavnOgHusnummerErPakrevd: "Vegnavn og husnummer er påkrevd",
       postkodeErPakrevd: "Postkode er påkrevd",
       byStedsnavnErPakrevd: "By/stedsnavn er påkrevd",
+      postkodeKanIkkeVaereLengreEnn25Tegn:
+        "Postkode kan ikke være lengre enn 25 tegn. Skriv by eller sted i eget felt.",
       organisasjonsnummerEllerRegistreringsnummerKanIkkeVaereLengreEnn25Tegn:
         "Organisasjonsnummer eller registreringsnummer kan ikke være lengre enn 25 tegn",
       landErPakrevd: "Land er påkrevd",

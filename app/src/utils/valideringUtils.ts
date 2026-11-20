@@ -34,3 +34,8 @@ export function organisasjonsnummerHarGyldigFormat(orgnr: string): boolean {
     (kontrollsiffer === 11 ? 0 : kontrollsiffer) === siffer[8]
   );
 }
+
+/**
+EESSI avviser SED-er med postkode (postalCode) over 25 tegn.
+*/
+export const MAKS_LENGDE_POSTKODE = 25;
