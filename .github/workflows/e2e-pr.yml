@@ -110,7 +110,7 @@ jobs:
       # repoers e2e-kjøringer. nais/docker-build-push legger i tillegg på en dato-tag.
       # Uten salsa trengs ikke frontend-SBOM-en fra deploy-dev.
       - name: Build and push Docker image
-        uses: nais/docker-build-push@v0
+        uses: nais/docker-build-push@v1
         with:
           team: teammelosys
           docker_context: .

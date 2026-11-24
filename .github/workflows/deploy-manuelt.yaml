@@ -91,7 +91,7 @@ jobs:
           output: 'frontend-sbom.json'
           version: 'v0.70.0'
       - name: Build and push Docker image
-        uses: nais/docker-build-push@v0
+        uses: nais/docker-build-push@v1
         with:
           team: teammelosys
           docker_context: .
